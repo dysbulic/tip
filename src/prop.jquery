@@ -1,0 +1,53 @@
+(function($) {
+    function getListeners(obj, prop) {
+        var parent = $(obj.ownerElement);
+        var listenersMap = obj.data('changeListeners');
+        if(!listenersMap) {
+            listenersMap = {};
+            var trigger = function(event) {
+                if(event.newValue != event.prevValue) {
+                    var listeners = listenersMap[event.attrName];
+                    if(listeners && listeners.length > 0) {
+                        $.each(listeners, function(idx, listener) {
+                            listener.call(listener.obj, event);
+                        });
+                    }
+                }
+            }
+            obj.bind('DOMAttrModified', function(event) {
+                trigger(event);
+            });
+            obj.data('changeListeners', listenersMap);
+        }
+        if(!listenersMap[attr]) {
+            listenersMap[attr] = [];
+        }
+        return listenersMap[attr];
+    }
+
+    function bind(eventType, handler) {
+        if ( eventType !== 'change' ) {
+            throw "Unsupported event type: " + eventType;
+        }
+        $(this).each(function(idx, obj) {
+            var listeners = getListeners(obj, arg);
+            callback.obj = obj;
+            listeners.push(callback);
+        });
+    }
+
+    $.fn.prop = function(name) {
+        $out = $('');
+        $(this).each(function(idx, elem) {
+            var attr = {
+                ownerElement: elem,
+                name: name,
+                get value() { return elem.getAttribute(name) },
+                set value(val) { elem.setAttribute(name, val) },
+            };
+            $out.add(attr);
+        });
+        $out.bind = bind;
+        return $out;
+    }
+})(jQuery)
