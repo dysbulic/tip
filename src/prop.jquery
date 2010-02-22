@@ -1,7 +1,44 @@
 (function($) {
-    function getListeners(obj, prop) {
-        var parent = $(obj.ownerElement);
-        var listenersMap = obj.data('changeListeners');
+    $.fn.prop = function(name) {
+        // jQuery objects only hold DOM elements
+        var out = new AttrList();
+
+        // Process the incoming jquery list
+        $(this).each(function(idx, elem) {
+            out.add({
+                ownerElement: elem,
+                name: name,
+                get value() { return this.ownerElement.getAttribute(name) },
+                set value(val) { this.ownerElement.setAttribute(name, val) },
+            });
+        });
+        return out;
+    }
+
+    function AttrList() {
+        var attrs = [];
+        this.__defineGetter__('length', function() { return attrs.length });
+
+        this.add = function( attr ) {
+            attrs.push(attr);
+        }
+
+        this.each = function( callback ) {
+            $.each(attrs, callback);
+        }
+
+        this.change = function( handler ) {
+            this.each(function(idx, attr) {
+                var listeners = getListeners(attr);
+                handler.attr = attr;
+                listeners.push(handler);
+            });
+        }
+    }
+
+    function getListeners(attr) {
+        var $parent = $(attr.ownerElement);
+        var listenersMap = $parent.data('changeListeners');
         if(!listenersMap) {
             listenersMap = {};
             var trigger = function(event) {
@@ -9,45 +46,19 @@
                     var listeners = listenersMap[event.attrName];
                     if(listeners && listeners.length > 0) {
                         $.each(listeners, function(idx, listener) {
-                            listener.call(listener.obj, event);
+                            listener.call(listener.attr, event);
                         });
                     }
                 }
             }
-            obj.bind('DOMAttrModified', function(event) {
+            $parent.bind('DOMAttrModified', function(event) {
                 trigger(event);
             });
-            obj.data('changeListeners', listenersMap);
+            $parent.data('changeListeners', listenersMap);
         }
-        if(!listenersMap[attr]) {
-            listenersMap[attr] = [];
+        if(!listenersMap[attr.name]) {
+            listenersMap[attr.name] = [];
         }
-        return listenersMap[attr];
-    }
-
-    function bind(eventType, handler) {
-        if ( eventType !== 'change' ) {
-            throw "Unsupported event type: " + eventType;
-        }
-        $(this).each(function(idx, obj) {
-            var listeners = getListeners(obj, arg);
-            callback.obj = obj;
-            listeners.push(callback);
-        });
-    }
-
-    $.fn.prop = function(name) {
-        $out = $('');
-        $(this).each(function(idx, elem) {
-            var attr = {
-                ownerElement: elem,
-                name: name,
-                get value() { return elem.getAttribute(name) },
-                set value(val) { elem.setAttribute(name, val) },
-            };
-            $out.add(attr);
-        });
-        $out.bind = bind;
-        return $out;
+        return listenersMap[attr.name];
     }
 })(jQuery)

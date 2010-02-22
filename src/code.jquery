@@ -5,7 +5,8 @@ $(function() {
             if( $.fn.chili ) {
                 $code.chili();
             }
-            arguments.callee.$sourceElem.replaceWith($('<pre/>').append($code));
+            var $src = arguments.callee.$sourceElem;
+            $src.replaceWith($('<pre/>').attr('id', $src.attr('id') || '').append($code));
         }
         callback.$sourceElem = $(this);
         $.get($(this).attr('href'), callback);
