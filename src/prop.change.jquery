@@ -1,0 +1,93 @@
+(function($) {
+    if( ! $.fn.prop ) throw "prop.change requires $.fn.prop";
+
+    $.fn.prop.PropList.prototype.change = function( handler ) {
+        this.each(function(idx, prop) {
+            prop.change(handler);
+        });
+    }
+
+    $.fn.prop.Prop.prototype.change = function( handler ) {
+        var listeners = getListeners(this);
+        handler.prop = this;
+        listeners.push(handler);
+    }
+
+    function getListeners(prop) {
+        if( prop.ownerElement.nodeType == Node.ELEMENT_NODE ) {
+            return getDOMListeners(prop);
+        } else {
+            return getObjectListeners(prop);
+        }
+    }
+
+    // Returns the listeners for an attribute to a DOM element
+    function getDOMListeners(attr) {
+        var $parent = $(attr.ownerElement);
+        var listenersMap = $parent.data('changeListeners');
+        if(!listenersMap) {
+            listenersMap = {};
+            var trigger = function(event) {
+                if(event.newValue != event.prevValue) {
+                    var listeners = listenersMap[event.attrName];
+                    if(listeners && listeners.length > 0) {
+                        $.each(listeners, function(idx, listener) {
+                            listener.call(listener.prop, event);
+                        });
+                    }
+                }
+            }
+            $parent.bind('DOMAttrModified', function(event) {
+                trigger(event);
+            });
+            $parent.data('changeListeners', listenersMap);
+        }
+        if(!listenersMap[attr.name]) {
+            listenersMap[attr.name] = [];
+        }
+        return listenersMap[attr.name];
+    }
+
+    // Returns the listeners for an attribute to an object
+    function getObjectListeners(prop) {
+        var obj = prop.ownerElement;
+        var propName = prop.name;
+
+        // Wrap access to object properties in getters and setters to allow
+        // the change listeners to function
+        var setter = obj.__lookupSetter__(propName);
+        if( setter === undefined ) {
+            var getter = obj.__lookupGetter__(propName);
+            if( getter !== undefined ) {
+                setter = function(val) {
+                    throw 'Error: Attemped to set ' + propName + ' which has a getter, but no setter';
+                }
+            } else {
+                var value = obj[propName];
+                obj.__defineGetter__(propName, function() { return value; });
+                setter = function(val) { value = val };
+            }
+        }
+
+        // Wrap setter access to call listeners on change
+        if( setter.listeners === undefined ) {
+            var origSetter = setter;
+            var newSetter = function(newValue) {
+                var prevValue = obj[propName];
+                if(prevValue != newValue) {
+                    origSetter(newValue);
+                    var listeners = arguments.callee.listeners;
+                    var event = { newValue: newValue, prevValue: prevValue };
+                    $.each(listeners,
+                           function(idx, listener) {
+                               listener.call(listener.prop, event);
+                           });
+                }
+            }
+            obj.__defineSetter__(propName, newSetter);
+            setter = newSetter;
+            setter.listeners = [];
+        }
+        return setter.listeners;
+    }
+})(jQuery)

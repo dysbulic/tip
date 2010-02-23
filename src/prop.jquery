@@ -1,130 +1,73 @@
 (function($) {
-    $.fn.prop = function(name, val) {
+    $.fn.prop = function(propName, val) {
         // jQuery objects only hold DOM elements
-        var attrs = new AttrList();
+        var props = new PropList();
 
         // Process the incoming jquery list
         // ToDo: Add caching
         $(this).each(function(idx, elem) {
-            var attr = { ownerElement: elem,
-                         name: name }
+            // ToDo: Handle array of property names
+            if( propName === undefined ) { // Link all properties in from
+                propName = [];
+                // If it is a DOM node with attributes, use them
+                if( elem.nodeType == Node.ELEMENT_NODE && elem.attributes ) {
+                    $.each(elem.attributes, function(attr, val) { propName.push(attr.nodeName) });
+                } else {
+                    $.each(from, function(attr, val) { propName.push(attr) });
+                }
+            }
+            
+            var prop = new Prop(elem, propName);
             var value; // $.extend calls the getter rather than copying it
             if( elem.nodeType == Node.ELEMENT_NODE ) {
                 value = { get: function() { return this.ownerElement.getAttribute(this.name) },
                           set: function(val) { this.ownerElement.setAttribute(this.name, val) } }
             } else if( typeof elem === 'object' ) {
-                value = { get: function() { return this.ownerElement[this.name] },
-                          set: function(val) { this.ownerElement[this.name] = val } }
+                value = { get: elem.__lookupGetter__(prop),
+                          set: elem.__lookupSetter__(prop) };
+                if( value.get === undefined && value.set === undefined ) {
+                    value = { get: function() { return this.ownerElement[this.name] },
+                              set: function(val) { this.ownerElement[this.name] = val } }
+                }
             } else {
                 throw "Unknown argument type: " + elem;
             }
-            attr.__defineGetter__('value', value['get']);
-            attr.__defineSetter__('value', value['set']);
-            attrs.add(attr);
+            prop.__defineGetter__('value', value['get']);
+            prop.__defineSetter__('value', value['set']);
+            props.add(prop);
         });
         if( val !== undefined ) {
-            attrs.each(function(idx, attr) { attr.value = val });
+            props.each(function(idx, prop) { prop.value = val });
         }
-        return attrs;
+        return props;
+    }
+
+    function Prop(owner, name) {
+        this.ownerElement = owner;
+        this.name = name;
     }
 
     // Holder class for the attributes
-    function AttrList() {
-        var attrs = [];
-        this.__defineGetter__('length', function() { return attrs.length });
+    function PropList() {
+        var props = [];
+        this.__defineGetter__('length', function() { return props.length });
 
-        this.add = function( attr ) {
-            attrs.push(attr);
+        this.add = function( prop ) {
+            props.push(prop);
         }
 
         this.each = function( callback ) {
-            $.each(attrs, callback);
+            $.each(props, callback);
         }
 
-        this.change = function( handler ) {
-            this.each(function(idx, attr) {
-                var listeners = getListeners(attr);
-                handler.attr = attr;
-                listeners.push(handler);
-            });
-        }
-    }
-
-    function getListeners(attr) {
-        if( attr.ownerElement.nodeType == Node.ELEMENT_NODE ) {
-            return getDOMListeners(attr);
-        } else {
-            return getObjectListeners(attr);
-        }
-    }
-
-    // Returns the listeners for an attribute to a DOM element
-    function getDOMListeners(attr) {
-        var $parent = $(attr.ownerElement);
-        var listenersMap = $parent.data('changeListeners');
-        if(!listenersMap) {
-            listenersMap = {};
-            var trigger = function(event) {
-                if(event.newValue != event.prevValue) {
-                    var listeners = listenersMap[event.attrName];
-                    if(listeners && listeners.length > 0) {
-                        $.each(listeners, function(idx, listener) {
-                            listener.call(listener.attr, event);
-                        });
-                    }
-                }
+        this.get = function( idx ) {
+            if( ! idx ) {
+                idx = 0;
             }
-            $parent.bind('DOMAttrModified', function(event) {
-                trigger(event);
-            });
-            $parent.data('changeListeners', listenersMap);
+            return props[idx];
         }
-        if(!listenersMap[attr.name]) {
-            listenersMap[attr.name] = [];
-        }
-        return listenersMap[attr.name];
     }
 
-    // Returns the listeners for an attribute to an object
-    function getObjectListeners(attr) {
-        var obj = attr.ownerElement;
-        var prop = attr.name;
-
-        // Wrap access to object properties in getters and setters to allow
-        // the change listeners to function
-        var setter = obj.__lookupSetter__(prop);
-        if( setter === undefined ) {
-            var getter = obj.__lookupGetter__(prop);
-            if( getter !== undefined ) {
-                setter = function(val) {
-                    throw 'Error: Attemped to set ' + prop + ' which has a getter, but no setter';
-                }
-            } else {
-                var value = obj[prop];
-                obj.__defineGetter__(prop, function() { return value; });
-                setter = function(val) { value = val };
-            }
-        }
-
-        // Wrap setter access to call listeners on change
-        if( setter.listeners === undefined ) {
-            var origSetter = setter;
-            var newSetter = function(newValue) {
-                var prevValue = obj[prop];
-                if(prevValue != newValue) {
-                    origSetter(newValue);
-                    var listeners = arguments.callee.listeners;
-                    var event = { newValue: newValue, prevValue: prevValue };
-                    $.each(listeners,
-                           function(idx, listener) {
-                               listener.call(listener.attr, event);
-                           });
-                }
-            }
-            obj.__defineSetter__(prop, newSetter);
-            setter = newSetter;
-            setter.listeners = [];
-        }
-        return setter.listeners;
-    }
+    $.fn.prop.Prop = Prop;
+    $.fn.prop.PropList = PropList;
 })(jQuery)
