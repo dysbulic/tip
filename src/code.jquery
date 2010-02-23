@@ -1,7 +1,6 @@
 $(function() {
     $.tip.$('tip:code').each(function() {
         var callback = function(data, status) {
-            alert(data);
             var $code = $('<code/>').addClass('javascript').text(data);
             if( $.fn.chili ) {
                 $code.chili();
