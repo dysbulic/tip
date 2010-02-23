@@ -1,20 +1,30 @@
 (function($) {
     $.fn.prop = function(name) {
         // jQuery objects only hold DOM elements
-        var out = new AttrList();
+        var attrs = new AttrList();
 
         // Process the incoming jquery list
         $(this).each(function(idx, elem) {
-            out.add({
-                ownerElement: elem,
-                name: name,
-                get value() { return this.ownerElement.getAttribute(name) },
-                set value(val) { this.ownerElement.setAttribute(name, val) }
-            });
+            var attr = { ownerElement: elem,
+                         name: name }
+            var value; // $.extend calls the getter rather than copying it
+            if( elem.nodeType == Node.ELEMENT_NODE ) {
+                value = { get: function() { return this.ownerElement.getAttribute(this.name) },
+                          set: function value(val) { this.ownerElement.setAttribute(this.name, val) } }
+            } else if( typeof elem === 'object' ) {
+                value = { get: function() { return this.ownerElement[this.name] },
+                          set: function(val) { this.ownerElement[this.name] = val } }
+            } else {
+                throw "Unknown argument type: " + elem;
+            }
+            attr.__defineGetter__('value', value['get']);
+            attr.__defineSetter__('value', value['set']);
+            attrs.add(attr);
         });
-        return out;
+        return attrs;
     }
 
+    // Holder class for the attributes
     function AttrList() {
         var attrs = [];
         this.__defineGetter__('length', function() { return attrs.length });
@@ -37,6 +47,15 @@
     }
 
     function getListeners(attr) {
+        if( attr.ownerElement.nodeType == Node.ELEMENT_NODE ) {
+            return getDOMListeners(attr);
+        } else {
+            return getObjectListeners(attr);
+        }
+    }
+
+    // Returns the listeners for an attribute to a DOM element
+    function getDOMListeners(attr) {
         var $parent = $(attr.ownerElement);
         var listenersMap = $parent.data('changeListeners');
         if(!listenersMap) {
@@ -60,5 +79,48 @@
             listenersMap[attr.name] = [];
         }
         return listenersMap[attr.name];
+    }
+
+    // Returns the listeners for an attribute to an object
+    function getObjectListeners(attr) {
+        var obj = attr.ownerElement;
+        var prop = attr.name;
+
+        // Wrap access to object properties in getters and setters to allow
+        // the change listeners to function
+        var setter = obj.__lookupSetter__(prop);
+        if( setter === undefined ) {
+            var getter = obj.__lookupGetter__(prop);
+            if( getter !== undefined ) {
+                setter = function(val) {
+                    throw 'Error: Attemped to set ' + prop + ' which has a getter, but no setter';
+                }
+            } else {
+                var value = obj[prop];
+                obj.__defineGetter__(prop, function() { return value; });
+                setter = function(val) { value = val };
+            }
+        }
+
+        // Wrap setter access to call listeners on change
+        if( setter.listeners === undefined ) {
+            var origSetter = setter;
+            var newSetter = function(newValue) {
+                var prevValue = obj[prop];
+                if(prevValue != newValue) {
+                    origSetter(newValue);
+                    var listeners = arguments.callee.listeners;
+                    var event = { newValue: newValue, prevValue: prevValue };
+                    $.each(listeners,
+                           function(idx, listener) {
+                               listener.call(listener.attr, event);
+                           });
+                }
+            }
+            obj.__defineSetter__(prop, newSetter);
+            setter = newSetter;
+            setter.listeners = [];
+        }
+        return setter.listeners;
     }
 })(jQuery)
