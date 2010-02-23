@@ -1,16 +1,17 @@
 (function($) {
-    $.fn.prop = function(name) {
+    $.fn.prop = function(name, val) {
         // jQuery objects only hold DOM elements
         var attrs = new AttrList();
 
         // Process the incoming jquery list
+        // ToDo: Add caching
         $(this).each(function(idx, elem) {
             var attr = { ownerElement: elem,
                          name: name }
             var value; // $.extend calls the getter rather than copying it
             if( elem.nodeType == Node.ELEMENT_NODE ) {
                 value = { get: function() { return this.ownerElement.getAttribute(this.name) },
-                          set: function value(val) { this.ownerElement.setAttribute(this.name, val) } }
+                          set: function(val) { this.ownerElement.setAttribute(this.name, val) } }
             } else if( typeof elem === 'object' ) {
                 value = { get: function() { return this.ownerElement[this.name] },
                           set: function(val) { this.ownerElement[this.name] = val } }
@@ -21,6 +22,9 @@
             attr.__defineSetter__('value', value['set']);
             attrs.add(attr);
         });
+        if( val !== undefined ) {
+            attrs.each(function(idx, attr) { attr.value = val });
+        }
         return attrs;
     }
 

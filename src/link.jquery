@@ -1,0 +1,30 @@
+/**
+ * Keep two values in sync using mutual event listeners.
+ */
+(function($) {
+    $.fn.link = function(to, arg) {
+        $.each(this, function(idx, from) {
+            if( arg === undefined ) { // Link all properties in from
+                arg = [];
+                if(from.attributes) { // If it is a DOM node with attributes, use them
+                    $.each(from.attributes, function(attr, val) { arg.push(attr.nodeName) });
+                } else {
+                    $.each(from, function(prop, val) { arg.push(prop) });
+                }
+            }
+            if(typeof arg == 'string') { // A single property with the same name in both
+                makeLink(from, to, arg, arg);
+            } else if($.isArray(arg)) { // A list of properties to link
+                $.each(arg, function(idx, prop) { makeLink(from, to, prop, prop) });
+            } else { // Otherwise the argument is a map of properties
+                $.each(arg, function(fromProp, toProp) { makeLink(from, to, fromProp, toProp) });
+            }
+        });
+    }
+
+    function makeLink(from, to, fromProp, toProp) {
+        $(to).prop(toProp, from[fromProp]); // Set initial value from origin
+        $(from).prop(fromProp).change(function() { $(to).prop(toProp, this.value) });
+        $(to).prop(toProp).change(function() { $(from).prop(fromProp, this.value) });
+    }
+})(jQuery);
