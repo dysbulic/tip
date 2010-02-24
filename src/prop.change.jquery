@@ -1,6 +1,14 @@
 (function($) {
     if( ! $.fn.prop ) throw "prop.change requires $.fn.prop";
 
+    $.support.DOMAttrModified = false;
+    var listener = function() { $.support.DOMAttrModified = true };
+    var doc = $(document.documentElement);
+    doc.bind('DOMAttrModified', listener);
+    doc.attr('___TEST___', true);
+    doc.attr('___TEST___', null);
+    doc.unbind('DOMAttrModified', listener);
+
     $.fn.prop.PropList.prototype.change = function( handler ) {
         this.each(function(idx, prop) {
             prop.change(handler);
@@ -24,6 +32,20 @@
     // Returns the listeners for an attribute to a DOM element
     function getDOMListeners(attr) {
         var $parent = $(attr.ownerElement);
+        // Chrome 5 does not support DOMAttrModified
+        if( ! $.support.DOMAttrModified && attr.name in attr.ownerElement ) {
+            var setter = attr.ownerElement.__lookupSetter__(attr.name);
+            var funcId = 'DOMAttrModified wrapper';
+            // Prevent multiple wrappings
+            if( ! setter || setter.functionId != funcId ) {
+                // Pass through setAttribute to allow workaround to catch the setting
+                var newSetter = function(newVal) {
+                    attr.value = newVal;
+                }
+                newSetter.functionId = funcId;
+                attr.ownerElement.__defineSetter__(attr.name, newSetter);
+            }
+        }
         var listenersMap = $parent.data('changeListeners');
         if(!listenersMap) {
             listenersMap = {};

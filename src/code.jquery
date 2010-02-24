@@ -12,6 +12,21 @@ $(function() {
                              .append($code));
         }
         callback.$sourceElem = $(this);
-        $.get($(this).attr('href'), callback);
+
+        var src = $(this).attr('href');
+        if( src[0] == '#' ) { // Local script
+            var data = $(src).text();
+            // Remove leading newlines and //<![CDATA[ comment
+            data = data.replace(/^\n*(\/\/)?\n*/, '');
+            data = data.replace(/\s*(\/\/)?\s*$/g, '');
+            // Remove a consistent indent
+            if( indentMatch = data.match(/^\n*(\s+)/) ) {
+                var indent = indentMatch[1];
+                data = data.replace(new RegExp('^' + indent, 'gm'), '');
+            }
+            callback(data);
+        } else {
+            $.get($(this).attr('href'), callback);
+        }
     });
 })
