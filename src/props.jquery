@@ -1,0 +1,54 @@
+(function($) {
+    if( ! $.fn.prop ) throw 'props requires $.fn.prop';
+
+    $.fn.props = function(arg) {
+        // jQuery objects only hold DOM elements
+        var props = new PropList();
+
+        // Process the incoming jquery list
+        // ToDo: Add caching
+        $(this).each(function(idx, elem) {
+            // ToDo: Handle array of property names
+            if( arg === undefined ) { // Link all properties in from
+                arg = [];
+                // If it is a DOM node with attributes, use them
+                if( elem.nodeType == Node.ELEMENT_NODE && elem.attributes ) {
+                    $.each(elem.attributes, function(attr, val) { arg.push(attr.nodeName) });
+                } else {
+                    $.each(elem, function(attr, val) { arg.push(attr) });
+                }
+            }
+            
+            $.each(arg, function(idx, propName) {
+                props.__.add($(elem).prop(propName));
+            });
+        });
+        return props;
+    }
+
+    // Holder class for the attributes
+    function PropList() {
+        var props = [];
+        var obj = this;
+
+        this.__ = {
+            add: function( prop ) {
+                props.push(prop);
+                obj[prop.name] = prop;
+            },
+
+            each: function( callback ) {
+                $.each(props, callback);
+            },
+
+            get: function( idx ) {
+                if( ! idx ) {
+                    idx = 0;
+                }
+                return props[idx];
+            }
+        }
+    }
+
+    $.fn.props.PropList = PropList;
+})(jQuery)

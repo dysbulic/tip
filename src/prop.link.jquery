@@ -7,16 +7,24 @@
     if( ! $.fn.prop ) throw "link requires $.fn.prop";
     if( ! $.fn.prop.Prop.prototype.change ) throw "link requires $.fn.prop.change";
 
-    $.fn.prop.PropList.prototype.link = function(to) {
-        this.each(function(idx, prop) {
-            prop.link(to);
-        });
+    if( $.fn.props !== undefined ) {
+        $.fn.props.PropList.prototype.link = function(to, map) {
+            if( to instanceof jQuery && map !== undefined ) {
+                this.__.each(function(idx, prop) {
+                    prop.link(to.prop(map[prop.name]));
+                });
+            } else {
+                this.__.each(function(idx, prop) {
+                    prop.link(to);
+                });
+            }
+        }
     }
 
     $.fn.prop.Prop.prototype.link = function(to) {
         // If to is an object, then the property to link to is the same name as origin
         if( to.name === undefined && to.value === undefined && typeof to.prop == 'function' ) {
-            to = to.prop(this.name).get();
+            to = to.prop(this.name);
         }
         var from = this;
         to.value = from.value; // Set initial value from origin

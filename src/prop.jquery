@@ -1,73 +1,50 @@
 (function($) {
-    $.fn.prop = function(propName, val) {
-        // jQuery objects only hold DOM elements
-        var props = new PropList();
+    $.fn.prop = function(propName) {
+        if( $(this).length < 1 ) throw 'No argument passed to $.fn.prop'
 
-        // Process the incoming jquery list
+        var $this = $(this).eq(0); // only process the first element
+        var elem = $this.get(0);
+
         // ToDo: Add caching
-        $(this).each(function(idx, elem) {
-            // ToDo: Handle array of property names
-            if( propName === undefined ) { // Link all properties in from
-                propName = [];
-                // If it is a DOM node with attributes, use them
-                if( elem.nodeType == Node.ELEMENT_NODE && elem.attributes ) {
-                    $.each(elem.attributes, function(attr, val) { propName.push(attr.nodeName) });
-                } else {
-                    $.each(from, function(attr, val) { propName.push(attr) });
-                }
+        var prop = new Prop(elem, propName);
+        var valueAccess; // $.extend calls the getter rather than copying it
+        if( elem.nodeType == Node.ELEMENT_NODE ) {
+            valueAccess = { get: function() { return this.ownerElement.getAttribute(this.name) },
+                            set: function(val) { this.ownerElement.setAttribute(this.name, val) } }
+        } else if( typeof elem === 'object' ) {
+            valueAccess = { get: elem.__lookupGetter__(prop),
+                            set: elem.__lookupSetter__(prop) };
+            if( valueAccess.get === undefined && valueAccess.set === undefined ) {
+                valueAccess = { get: function() { return this.ownerElement[this.name] },
+                                set: function(val) { this.ownerElement[this.name] = val } }
             }
-            
-            var prop = new Prop(elem, propName);
-            var value; // $.extend calls the getter rather than copying it
-            if( elem.nodeType == Node.ELEMENT_NODE ) {
-                value = { get: function() { return this.ownerElement.getAttribute(this.name) },
-                          set: function(val) { this.ownerElement.setAttribute(this.name, val) } }
-            } else if( typeof elem === 'object' ) {
-                value = { get: elem.__lookupGetter__(prop),
-                          set: elem.__lookupSetter__(prop) };
-                if( value.get === undefined && value.set === undefined ) {
-                    value = { get: function() { return this.ownerElement[this.name] },
-                              set: function(val) { this.ownerElement[this.name] = val } }
-                }
-            } else {
-                throw "Unknown argument type: " + elem;
-            }
-            prop.__defineGetter__('value', value['get']);
-            prop.__defineSetter__('value', value['set']);
-            props.add(prop);
-        });
-        if( val !== undefined ) {
-            props.each(function(idx, prop) { prop.value = val });
+        } else {
+            throw "Unknown argument type to $.fn.prop: " + elem;
         }
-        return props;
+        prop.addProp('value', valueAccess);
+
+        return prop;
     }
 
     function Prop(owner, name) {
         this.ownerElement = owner;
         this.name = name;
-    }
 
-    // Holder class for the attributes
-    function PropList() {
-        var props = [];
-        this.__defineGetter__('length', function() { return props.length });
-
-        this.add = function( prop ) {
-            props.push(prop);
-        }
-
-        this.each = function( callback ) {
-            $.each(props, callback);
-        }
-
-        this.get = function( idx ) {
-            if( ! idx ) {
-                idx = 0;
+        this.addProp = function(name, access) {
+            if( Object.defineProperty !== undefined ) {
+                Object.defineProperty(this, name, access);
+            } else if( this.__defineGetter__ !== undefined ) {
+                this.__defineGetter__(name, access['get']);
+                this.__defineSetter__(name, access['set']);
+            } else {
+                throw 'Error: no method for defining setters available'
             }
-            return props[idx];
+        }
+
+        this.toString = function() {
+            return '{' + this.name + ': ' + this.value + '}';
         }
     }
 
     $.fn.prop.Prop = Prop;
-    $.fn.prop.PropList = PropList;
 })(jQuery)

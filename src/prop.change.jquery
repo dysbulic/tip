@@ -1,6 +1,9 @@
 (function($) {
     if( ! $.fn.prop ) throw "prop.change requires $.fn.prop";
 
+    // If DOMAttrModified.js is already defined, this will succeed with
+    // a buggy false positive because the elem[attr] syntax is used to
+    // set when a predefined attribute is set (which __TEST__ is not).
     $.support.DOMAttrModified = false;
     var listener = function() { $.support.DOMAttrModified = true };
     var doc = $(document.documentElement);
@@ -9,10 +12,13 @@
     doc.attr('___TEST___', null);
     doc.unbind('DOMAttrModified', listener);
 
-    $.fn.prop.PropList.prototype.change = function( handler ) {
-        this.each(function(idx, prop) {
-            prop.change(handler);
-        });
+    // Requires $.fn.props
+    if( $.fn.props !== undefined ) {
+        $.fn.props.PropList.prototype.change = function( handler ) {
+            this.__.each(function(idx, prop) {
+                prop.change(handler);
+            });
+        }
     }
 
     $.fn.prop.Prop.prototype.change = function( handler ) {
@@ -35,24 +41,23 @@
         // Chrome 5 does not support DOMAttrModified
         if( ! $.support.DOMAttrModified && attr.name in attr.ownerElement ) {
             var setter = attr.ownerElement.__lookupSetter__(attr.name);
-            var funcId = 'DOMAttrModified wrapper';
             // Prevent multiple wrappings
-            if( ! setter || setter.functionId != funcId ) {
+            if( ! setter || ! setter.isDOMAttrModifiedWrapper ) {
                 // Pass through setAttribute to allow workaround to catch the setting
                 var newSetter = function(newVal) {
                     attr.value = newVal;
                 }
-                newSetter.functionId = funcId;
+                newSetter.isDOMAttrModifiedWrapper = true;
                 attr.ownerElement.__defineSetter__(attr.name, newSetter);
             }
         }
         var listenersMap = $parent.data('changeListeners');
-        if(!listenersMap) {
+        if( ! listenersMap ) {
             listenersMap = {};
             var trigger = function(event) {
-                if(event.newValue != event.prevValue) {
+                if( event.newValue != event.prevValue ) {
                     var listeners = listenersMap[event.attrName];
-                    if(listeners && listeners.length > 0) {
+                    if( listeners && listeners.length > 0 ) {
                         $.each(listeners, function(idx, listener) {
                             listener.call(listener.prop, event);
                         });
@@ -64,7 +69,7 @@
             });
             $parent.data('changeListeners', listenersMap);
         }
-        if(!listenersMap[attr.name]) {
+        if( ! listenersMap[attr.name] ) {
             listenersMap[attr.name] = [];
         }
         return listenersMap[attr.name];
