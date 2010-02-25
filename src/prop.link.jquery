@@ -10,11 +10,11 @@
     if( $.fn.props !== undefined ) {
         $.fn.props.PropList.prototype.link = function(to, map) {
             if( to instanceof jQuery && map !== undefined ) {
-                this.__.each(function(idx, prop) {
+                this.__.iter(function(idx, prop) {
                     prop.link(to.prop(map[prop.name]));
                 });
             } else {
-                this.__.each(function(idx, prop) {
+                this.__.iter(function(idx, prop) {
                     prop.link(to);
                 });
             }

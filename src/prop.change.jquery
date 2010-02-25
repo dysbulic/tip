@@ -15,23 +15,40 @@
     // Requires $.fn.props
     if( $.fn.props !== undefined ) {
         $.fn.props.PropList.prototype.change = function( handler ) {
-            this.__.each(function(idx, prop) {
+            this.__.iter(function(idx, prop) {
                 prop.change(handler);
             });
         }
     }
 
     $.fn.prop.Prop.prototype.change = function( handler ) {
-        var listeners = getListeners(this);
-        handler.prop = this;
+        var listeners = this.listeners('change');
+        if( ! handler.props ) {
+            handler.props = [];
+        }
+        handler.props.push(this);
         listeners.push(handler);
     }
 
-    function getListeners(prop) {
-        if( prop.ownerElement.nodeType == Node.ELEMENT_NODE ) {
-            return getDOMListeners(prop);
-        } else {
-            return getObjectListeners(prop);
+    $.fn.prop.Prop.prototype.listeners = function(event) {
+        if( event == 'change' ) {
+            if( this.ownerElement.nodeType == Node.ELEMENT_NODE ) {
+                return getDOMListeners(this);
+            } else {
+                return getObjectListeners(this);
+            }
+        }
+        return undefined;
+    }
+
+    $.fn.prop.Prop.prototype.trigger = function(event, data) {
+        var listeners = this.listeners(event);
+        if( listeners && listeners.length > 0 ) {
+            $.each(listeners, function(idx, listener) {
+                $.each(listener.props, function(idx, prop) {
+                    listener.call(prop, event);
+                });
+            });
         }
     }
 
@@ -56,12 +73,7 @@
             listenersMap = {};
             var trigger = function(event) {
                 if( event.newValue != event.prevValue ) {
-                    var listeners = listenersMap[event.attrName];
-                    if( listeners && listeners.length > 0 ) {
-                        $.each(listeners, function(idx, listener) {
-                            listener.call(listener.prop, event);
-                        });
-                    }
+                    attr.trigger('change', event);
                 }
             }
             $parent.bind('DOMAttrModified', function(event) {
@@ -101,14 +113,10 @@
             var origSetter = setter;
             var newSetter = function(newValue) {
                 var prevValue = obj[propName];
+                origSetter(newValue);
                 if(prevValue != newValue) {
-                    origSetter(newValue);
-                    var listeners = arguments.callee.listeners;
                     var event = { newValue: newValue, prevValue: prevValue };
-                    $.each(listeners,
-                           function(idx, listener) {
-                               listener.call(listener.prop, event);
-                           });
+                    prop.trigger('change', event);
                 }
             }
             obj.__defineSetter__(propName, newSetter);

@@ -38,6 +38,14 @@
             },
 
             each: function( callback ) {
+                $.each(obj, function(name, prop) {
+                    if( name != '__' ) {
+                        callback.call(prop, name, prop.value);
+                    }
+                })
+            },
+
+            iter: function( callback ) {
                 $.each(props, callback);
             },
 
