@@ -16,7 +16,14 @@
                             set: elem.__lookupSetter__(prop) };
             if( valueAccess.get === undefined && valueAccess.set === undefined ) {
                 valueAccess = { get: function() { return this.ownerElement[this.name] },
-                                set: function(val) { this.ownerElement[this.name] = val } }
+                                set: function(val) {
+                                    // Assume that numbers will stay numbers
+                                    if( this.type == 'number' && typeof val == 'string' ) {
+                                        val = parseFloat(val);
+                                    }
+                                    this.ownerElement[this.name] = val;
+                                }
+                              }
             }
         } else {
             throw "Unknown argument type to $.fn.prop: " + elem;
@@ -29,8 +36,10 @@
     function Prop(owner, name) {
         this.ownerElement = owner;
         this.name = name;
+        this.type;
 
         this.addProp = function(name, access) {
+            this.type = typeof access['get'].call(this);
             if( Object.defineProperty !== undefined ) {
                 Object.defineProperty(this, name, access);
             } else if( this.__defineGetter__ !== undefined ) {
