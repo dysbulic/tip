@@ -1,31 +1,102 @@
 Array.prototype.__defineGetter__(-1, function() { return this[this.length - 1] });
+Array.prototype.clone = function() { return this.slice(0) };
 
-(function($) {
-    var listeners = [];
+// The __ namespace holds system values
+if( ! __ ) {
+    var __ = {};
+}
+
+(function( $, __ ) {
+    // Default values for tip configuration
+    if( ! __.tip ) {
+        __.tip = {
+            namespace: 'tip:',
+            lib: { types: [ 'tipscript', 'jquery', 'js' ] },
+            root: '.../sys/lib/tip'
+        }
+    }
+    
+    var readyListeners = [];     // Callback functions for onload
+    var isLibLoaded = undefined; // Library loading tracker
+
+    // Attempt to load a library using the publis URI
+    __.tip.load = function( src, remaining ) {
+        if( isLibLoaded[src] == true ) {
+            return true;
+        }
+        if( ! remaining ) {
+            remaining = $.map( __.tip.lib.types, function( type, idx ) {
+                return __.tip.root + '/' + src + '.' + type;
+            });
+            remaining.reverse();
+            src = remaining.pop();
+        }
+        isLibLoaded[src] = false;
+        $.ajax({ dataType: 'script',
+                 url: src,
+                 error: function( xhr, status, error ) {
+                     if( remaining.length == 0 ) {
+                         throw error;
+                     } else {
+                         var nextAttempt = remaining.pop();
+                         isLibLoaded[nextAttempt] = false;
+                         delete isLibLoaded[src];
+                         __.tip.load( nextAttempt , remaining );
+                     }
+                 },
+                 success: function( data, status, xhr ) {
+                     isLibLoaded[this.url] = true;
+                 }
+               });
+    }
 
     var namespaces = {};
-    $($.each(document.documentElement.attributes, function(idx, attr) {
-        if( match = /^(?:xmlns:?)(.*)/.exec(attr.nodeName) ) {
-            namespaces[match[1]] = attr.nodeValue;
-        }
-    }));
+    $(function() {
+        $.each(document.documentElement.attributes, function( idx, attr ) {
+            if( match = /^(?:xmlns:?)(.*)/.exec( attr.nodeName ) ) {
+                namespaces[match[1]] = attr.nodeValue;
+            }
+        });
+        var namespace = __.tip.namespace;
+        isLibLoaded = { };
+        $.each(namespaces, function( name, uri ) {
+            if( uri.substr(0, 4) == namespace ) {
+                __.tip.load( uri.substr( namespace.length ) );
+            }
+        });
+        isLibLoaded[''] = true;
+    });
 
     $.tip = {
-        isReady: false,
-        ready: function(listener) {
+        readyTriggered: false,
+        readyListeners: [],
+        get isReady() {
+            $.each( nsLibLoaded, function( lib, isLoaded ) {
+                if( ! isLoaded ) {
+                    return false;
+                }
+            });
+            return true;
+        },
+        ready: function( listener ) {
             if( listener ) {
-                listeners.push(listener);
+                readyListeners.push( listener );
             }
             if( $.tip.isReady ) {
-                $.each(listeners, function(idx, listener) {
-                    listener.call($);
+                this.readyListeners = $.map( this.readyListeners, function( idx, listener ) {
+                    // A listener can return true to remain in the listen queue
+                    return listener.call( $, __ ) === true ? listener: null;
                 });
+                this.readyTriggered = true;
             }
         },
         $: function(arg) {
+            // Special case for the document element
             if( arg == '#' ) {
                 return $(document.documentElement);
-            }else if( tagMatch = /<((?:(\w+):)?(\w+))([^>]*)(?:\/>|([^<]*)<\/\1>)/.exec(arg) ) {
+
+            // Match a single tag with optional namespace, attributes and content text
+            } else if( tagMatch = /<((?:(\w+):)?(\w+))([^>]*)(?:\/>|([^<]*)<\/\1>)/.exec(arg) ) {
                 elem = $(document.createElementNS(namespaces[tagMatch[2] ? tagMatch[2] : ''], tagMatch[3]));
                 while(attrMatch = /(\w+)\s*=\s*(?:\'([^\']*)\'|\"([^\"]*)\")/g.exec(tagMatch[4])) {
                     elem.attr(attrMatch[1], attrMatch[2] ? attrMatch[2] : attrMatch[3]);
@@ -34,11 +105,15 @@ Array.prototype.__defineGetter__(-1, function() { return this[this.length - 1] }
                   elem.text(tagMatch[5]);
                 }
                 return elem;
+
+            // Match a namespaced tag name
             } else if( nameMatch = /(?:(\w+):)?(\w+)/.exec(arg) ) {
                 return $(document.getElementsByTagNameNS(namespaces[nameMatch[1]], nameMatch[2]));
+
+            // Otherwise pass on to jQuery
             } else {
                 return $.apply(this, arguments);
             }
         }
     }
-})(jQuery);
+})(jQuery, __);
