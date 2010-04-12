@@ -1,0 +1,59 @@
+(function($) {
+    $.fn.prop = function(propName) {
+        if( $(this).length < 1 ) throw 'No argument passed to $.fn.prop'
+
+        var $this = $(this).eq(0); // only process the first element
+        var elem = $this.get(0);
+
+        // ToDo: Add caching
+        var prop = new Prop(elem, propName);
+        var valueAccess; // $.extend calls the getter rather than copying it
+        if( elem.nodeType == Node.ELEMENT_NODE ) {
+            valueAccess = { get: function() { return this.ownerElement.getAttribute(this.name) },
+                            set: function(val) { this.ownerElement.setAttribute(this.name, val) } }
+        } else if( typeof elem === 'object' ) {
+            valueAccess = { get: elem.__lookupGetter__(prop),
+                            set: elem.__lookupSetter__(prop) };
+            if( valueAccess.get === undefined && valueAccess.set === undefined ) {
+                valueAccess = { get: function() { return this.ownerElement[this.name] },
+                                set: function(val) {
+                                    // Assume that numbers will stay numbers
+                                    if( this.type == 'number' && typeof val == 'string' ) {
+                                        val = parseFloat(val);
+                                    }
+                                    this.ownerElement[this.name] = val;
+                                }
+                              }
+            }
+        } else {
+            throw "Unknown argument type to $.fn.prop: " + elem;
+        }
+        prop.addProp('value', valueAccess);
+
+        return prop;
+    }
+
+    function Prop(owner, name) {
+        this.ownerElement = owner;
+        this.name = name;
+        this.type;
+
+        this.addProp = function(name, access) {
+            this.type = typeof access['get'].call(this);
+            if( Object.defineProperty !== undefined ) {
+                Object.defineProperty(this, name, access);
+            } else if( this.__defineGetter__ !== undefined ) {
+                this.__defineGetter__(name, access['get']);
+                this.__defineSetter__(name, access['set']);
+            } else {
+                throw 'Error: no method for defining setters available'
+            }
+        }
+
+        this.toString = function() {
+            return '{' + this.name + ': ' + this.value + '}';
+        }
+    }
+
+    $.fn.prop.Prop = Prop;
+})(jQuery)
