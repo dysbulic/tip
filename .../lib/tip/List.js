@@ -160,12 +160,12 @@ function List( ) {
         if( typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
             console.log( self.asString + ':' + key + ':' + itm );
         }
-        var uid = this.add( itm, key );
+        var uid = add( itm, key );
         if( typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
             console.log( self.asString
                          + ':' + key + ':' + itm
-                         + '=' + uid + ':' + ( this.get
-                                               ? this.get( uid )
+                         + '=' + uid + ':' + ( get
+                                               ? get( uid )
                                                : '¬get'
                                              )
                        )
@@ -300,7 +300,7 @@ function List( ) {
                 vals.push( val )
             } )
             return vals
-        }
+        },
         get clone() { return new List( this ) },
         get asMap() {
             var map = {}
