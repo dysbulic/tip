@@ -15,17 +15,23 @@ function List( ) {
         if( keys.indexOf( key ) < 0 ) {
             ptr( key, itm );
             keys.push( key );
-            //console.log('a:'+key+':'+get(key));
+            console.log('a:'+key+':'+get(key));
         }
         return key;
     }
     this.add = add;
 
     function ptr( key, itm ) {
-        if( typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
+        if( true || typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
             console.log( 'θ:⒧:' + key + ' ⬌ ' + itm );
         }
-        self.__defineGetter__( key, function() { return get( key ) } );
+        var get = function() {
+            var key = arguments.callee.key
+            console.log( 'g:' + key )
+            return get( key )
+        }
+        get.key = key
+        self.__defineGetter__( key, get );
         return itms[ key ] = new Pointer( itm );
     }
     
