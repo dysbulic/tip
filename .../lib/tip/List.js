@@ -7,7 +7,6 @@ function List( ) {
     var itms = {};
     var store = this;
     var id = 0;
-    var builtin = {};
     var self = this;
 
     function add( itm, uid ) {
@@ -15,27 +14,26 @@ function List( ) {
         if( keys.indexOf( key ) < 0 ) {
             ptr( key, itm );
             keys.push( key );
-            console.log('a:'+key+':'+get(key));
+            //console.log('a:'+key+':'+get(key));
         }
         return key;
     }
-    this.add = add;
 
     function ptr( key, itm ) {
-        if( true || typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
+        if( typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
             console.log( 'θ:⒧:' + key + ' ⬌ ' + itm );
         }
-        var get = function() {
+        var getter = function() {
             var key = arguments.callee.key
             console.log( 'g:' + key )
             return get( key )
         }
-        get.key = key
-        self.__defineGetter__( key, get );
+        getter.key = key
+        self.__defineGetter__( key, getter );
         return itms[ key ] = new Pointer( itm );
     }
     
-    this.swap = function( a, b ) {
+    function swap( a, b ) {
         var tmp = itms[ a ];
         itms[ a ] = itms[ b ];
         itms[ b ] = tmp;
@@ -64,7 +62,6 @@ function List( ) {
         }
         return this
     }
-    this.merge = merge;
     merge.apply( this, arguments );
 
     function entangle( obj ) {
@@ -92,10 +89,11 @@ function List( ) {
         return this
     }
     
-    this.join = function() {
+    function join() {
+        throw undefined
     }
 
-    this.on = function( key, f ) {
+    function on( key, f ) {
         var orig = this[ key ];
         this[ key ] = function() {
             var self = arguments.callee;
@@ -126,7 +124,7 @@ function List( ) {
         } );
     }
 
-    this.deref = function( id, regex ) {
+    function deref( id, regex ) {
         regex = regex || new RegExp( '^([^\.]+)\.' );
         return get( id, regex )
     }
@@ -156,8 +154,7 @@ function List( ) {
         var itm = ptr !== undefined ? ptr.val : undefined 
         return itm
     }
-    this.get = get
-
+    
     function set( key, itm ) {
         var self = arguments.callee;
         if( typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
@@ -175,26 +172,22 @@ function List( ) {
         }
         return this;
     }
-    this.set = set;
-    this.set.__defineGetter__( 'asString', function() { return 'θ:⒧:↧'; } );
+
+    set.__defineGetter__( 'asString', function() { return 'θ:⒧:↧'; } );
     
-    this.let = function( key, itm ) {
+    function let( key, itm ) {
         if( this.get( key ) === undefined ) {
             this.set( key, itm );
         }
     }
 
-    this.__defineGetter__( 'count', function() {
-        return keys.length;
-    } );
-
-    this.__defineGetter__( 'vals', function() {
-        var vals = []
-        this.each( function( val, key ) {
-            vals.push( val )
-        } )
-        return vals
-    } );
+    function each( f ) {
+        keys.each( function( key, idx ) {
+            if( key !== undefined ) {
+                f.apply( this, [ get( key ), key ] )
+            }
+        } );
+    }
 
     // true if each relationship and value in a is in b
     function isSubobjectOf( a, b ) {
@@ -289,51 +282,49 @@ function List( ) {
             return typeof val == 'number' && val / num || val
         }, 'mirror' )
     }
-
-    this.__defineGetter__( 'clone', function() {
-        return new List( this );
-    } );
-
-    this.__defineGetter__( 'asMap', function() {
-        var map = {};
-        this.each( function( itm, key ) {
-            map[key] = itm;
-        } );
-        return map;
-    } );
-
-    this.__defineSetter__( 'top', function( itm ) {
-        this.add( itm )
-    } );
-
-    this.__defineGetter__( 'top', function() {
-        return this.get( -1 )
-    } );
-
-    this.__defineGetter__( 'pop', function( ) {
-        var out = this.get( keys.pop() );
-        return out;
-    } );
-
-    this.each = function( f ) {
-        keys.each( function( key, idx ) {
-            if( key !== undefined ) {
-                f.apply( this, [ get( key ), key ] )
-            }
-        } );
-    }
-
-    this.__defineGetter__( 'asString', function() {
-        try {
-            return 'List'; //JSON.stringify( itmLst )
-        } catch(e) {
-            console.log( '!:θ:⒧:asString:' )
+    
+    var exports = {
+        add : add,
+        on : on,
+        swap : swap,
+        merge : merge,
+        deref : deref,
+        get : get,
+        set : set,
+        let : let,
+        each : each,
+        get count() { return keys.length },
+        get vals() {
+            var vals = []
+            this.each( function( val, key ) {
+                vals.push( val )
+            } )
+            return vals
         }
-    } );
-
-    this.toString = function() {
-        return this.asString
+        get clone() { return new List( this ) },
+        get asMap() {
+            var map = {}
+            this.each( function( itm, key ) {
+                map[key] = itm
+            } )
+            return map
+        },
+        set top( itm ) { this.add( itm ); return this },
+        get top( ) { return this.get( -1 ) },
+        get pop( ) {
+            var out = this.get( keys.pop() )
+            return out
+        },
+        get asString() {
+            try {
+                return 'List'; //JSON.stringify( itmLst )
+            } catch(e) {
+                console.log( '!:θ:⒧:asString:' )
+            }
+        },
+        traverse : traverse,
     }
+    this.__defineGetter__( '__', function() { return exports } )
 
     // Checks if a variable with
     // the given name is defined
@@ -358,11 +349,6 @@ function List( ) {
                 item.traverse( f, depth + 1, ++subindex )
             }
         } );
-    }
-    this.traverse = traverse;
-
-    for( prop in this ) {
-        builtin[ prop ] = true;
     }
 }
 List.prototype = new Array
