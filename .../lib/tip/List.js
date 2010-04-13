@@ -25,7 +25,6 @@ function List( ) {
         }
         var getter = function() {
             var key = arguments.callee.key
-            console.log( 'g:' + key )
             return get( key )
         }
         getter.key = key
