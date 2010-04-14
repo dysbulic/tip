@@ -41,8 +41,12 @@ Array.prototype.__defineGetter__( 'empty', function() {
     return this.length === 0;
 } );
 
+//Array.prototype.__defineGetter__( 1, function() {
+//    return ! this.empty && this[ 0 ]
+//} )
+
 Array.prototype.__defineGetter__( -1, function() {
-    return this.length > 0 && this[this.length - 1] || undefined;
+    return this.length > 0 && this[ this.length - 1 ] || undefined;
 } );
 
 Array.prototype.__defineSetter__( -1, function( val ) {
