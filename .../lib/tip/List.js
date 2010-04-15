@@ -92,7 +92,7 @@ function List( ) {
     }
 
     function impress( ) {
-        each.apply( this, [ function( val, key ) {
+        peach.apply( this, [ function( val, key ) {
             if( ( key == 'impress'
                   && typeof val == 'function' ) ) {
                 val.apply( this, arguments )
@@ -193,17 +193,18 @@ function List( ) {
     }
 
     function each( f ) {
-        keys.each.apply( function( key, idx ) {
+        keys.each( function( key, idx ) {
             if( key !== undefined ) {
-                f.apply( this, [ get( key ), key ] )
+                f.apply( f, [ get( key ), key ] )
             }
         } )
     }
 
     function peach( f ) {
-        keys.each.apply( function( key, idx ) {
+        var store = this
+        keys.each( function( key, idx ) {
             if( key !== undefined ) {
-                f.apply( this, [ get( key ), key ] )
+                f.apply( store, [ get( key ), key ] )
             }
         } )
     }
