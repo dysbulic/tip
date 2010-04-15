@@ -92,16 +92,18 @@ function List( ) {
     }
 
     function impress( ) {
-        peach.apply( this, [ function( val, key ) {
+        var store = this
+        var args = Array.prototype.slice.call( arguments )
+        each( function( val, key ) {
             if( ( key == 'impress'
                   && typeof val == 'function' ) ) {
-                val.apply( this, arguments )
+                val.apply( store, args )
             }
             if( ( val.impress
-                  && typeof val.impress.apply == 'function' ) ) {
-                val.impress.apply( this, arguments )
+                  && typeof val.impress == 'function' ) ) {
+                val.impress.apply( store, args )
             }
-        } ] )
+        } )
     }
 
     function on( key, f ) {
