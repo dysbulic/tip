@@ -171,23 +171,26 @@ function List( ) {
     }
     
     function set( key, itm ) {
-        del( key )
+        if( key.each ) {
+            key.each( function( val, key′ ) { del( key′ ) } )
+        }
         return let( key, itm )
     }
     
     function let( key, itm ) {
-        var self = arguments.callee;
-        if( typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
-            console.log( self.asString + ':' + key + ':' + itm )
+        if( key.each ) {
+            key.each( function( val, key′ ) {
+                let( key′, val )
+            } )
+        } else {
+            var current = get( key )
+            if( current === undefined ) {
+                var uid = add( itm, key )
+                current = get( key )
+            }
+            return current
         }
-        var current = get( key )
-        if( current === undefined ) {
-            var uid = add( itm, key )
-            current = get( key )
-        }
-        return current
     }
-    let.__defineGetter__( 'asString', function() { return 'θ:⒧:↧' } )
 
     function del( key ) {
         var idx = keys.indexOf( key )
