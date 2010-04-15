@@ -62,7 +62,6 @@
         // Match a single tag with optional namespace, attributes and content text
         } else if( tagMatch = /<(?:(?:(\w+):)?(\w+))([^>]*)(?:\/>|([^<]*)<\/\1>)/.exec( arg ) ) {
             var ns = tagMatch[1] || ''
-            console.log( ns + ':' + tagMatch[2] )
             var $elem = $( document.createElementNS( namespaces[ns], tagMatch[2] ) )
             while( attrMatch = /(\w+)\s*=\s*(?:\'([^\']*)\'|\"([^\"]*)\")/g.exec( tagMatch[3] ) ) {
                 $elem.attr( attrMatch[1],
