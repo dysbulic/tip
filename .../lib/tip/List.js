@@ -169,29 +169,23 @@ function List( ) {
     }
     
     function set( key, itm ) {
+        del( key )
+        return let.apply( key, itm )
+    }
+    
+    function let( key, itm ) {
         var self = arguments.callee;
         if( typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
             console.log( self.asString + ':' + key + ':' + itm )
         }
-        var uid = add( itm, key )
-        if( typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
-            console.log( self.asString
-                         + ':' + key + ':' + itm
-                         + '=' + uid + ':' + ( get
-                                               ? get( uid )
-                                               : '¬get'
-                                             )
-                       )
+        var current = get( key )
+        if( current === undefined ) {
+            var uid = add( itm, key )
+            current = get( key )
         }
-        return this;
+        return current
     }
-    set.__defineGetter__( 'asString', function() { return 'θ:⒧:↧' } )
-    
-    function let( key, itm ) {
-        if( this.get( key ) === undefined ) {
-            this.set( key, itm );
-        }
-    }
+    let.__defineGetter__( 'asString', function() { return 'θ:⒧:↧' } )
 
     function del( key ) {
         var idx = keys.indexOf( key )
