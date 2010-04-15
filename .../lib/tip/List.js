@@ -236,9 +236,9 @@ function List( ) {
         return found;
     }
 
-    this.id = function( key ) {
+    function id( key ) {
         try {
-            this.each( function( obj, id ) {
+            each( function( obj, id ) {
                 if( typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
                     console.log( 'θ:⒧:⊆:⇄' + id )
                 }
@@ -255,7 +255,7 @@ function List( ) {
         return undefined;
     }
 
-    this.trans = function( func ) {
+    function transform( func ) {
         var next = {}
         this.each( function() {
             func.apply( next, arguments )
@@ -263,22 +263,22 @@ function List( ) {
         return next
     }
 
-    this.map = function( func, type ) {
+    function map( func, type ) {
         type = type || 'straight'
-        return this.map[ type ].apply( this, arguments )
+        return map[ type ].apply( this, arguments )
     }
 
-    this.map.straight = function( func ) {
+    map.straight = function( func ) {
         var out = new List()
-        this.each( function( val, key ) {
+        each( function( val, key ) {
             out.set( key, func.apply( this, [ val, key ] ) )
         } )
         return out
     }
 
-    this.map.tangle = function( func ) {
+    map.tangle = function( func ) {
         var out = new List()
-        this.each( function( val, key ) {
+        each( function( val, key ) {
             if( typeof val == 'function' ) {
                 out.set( key, val )
             } else {
@@ -289,10 +289,10 @@ function List( ) {
     }
 
     // ToDo:
-    this.map.mirror = function( func ) {
+    map.mirror = function( func ) {
         var out = new List()
         var self = this
-        this.each( function( val, key ) {
+        each( function( val, key ) {
             var get = self.__lookupGetter__( key )
             var set = self.__lookupSetter__( key )
             if( get && set ) {
@@ -305,7 +305,7 @@ function List( ) {
         return out
     }
 
-    this.div = function( num ) {
+    function div( num ) {
         return this.map( function( val ) {
             return typeof val == 'number' && val / num || val
         }, 'mirror' )
