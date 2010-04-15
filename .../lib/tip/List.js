@@ -172,15 +172,15 @@ function List( ) {
     
     function set( key, itm ) {
         if( key.each ) {
-            key.each( function( val, key′ ) { del( key′ ) } )
+            key.each( function( val, key ) { del( key ) } )
         }
         return let( key, itm )
     }
     
     function let( key, itm ) {
         if( key.each ) {
-            key.each( function( val, key′ ) {
-                let( key′, val )
+            key.each( function( val, key ) {
+                let( key, val )
             } )
         } else {
             var current = get( key )
