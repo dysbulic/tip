@@ -172,7 +172,10 @@ function List( ) {
     
     function set( key ) {
         if( key.__ && key.__.each ) {
-            key.__.each( function( val, key ) { console.log( 'k:'+key ); del( key ) } )
+            key.__.each( function( val, key ) {
+                console.log( 'k:'+key )
+                del( key )
+            } )
         }
         return let.apply( this, arguments )
     }
