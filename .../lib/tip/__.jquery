@@ -38,7 +38,7 @@
     $( function() {
         $.each( document.documentElement.attributes, function( idx, attr ) {
             if( match = /^(?:xmlns:?)(.*)/.exec( attr.nodeName ) ) {
-                namespaces[match[1]] = attr.nodeValue;
+                namespaces[ match[1] ] = attr.nodeValue;
             }
         })
         $.each( namespaces, function( name, uri ) {
