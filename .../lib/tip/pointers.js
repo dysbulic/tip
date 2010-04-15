@@ -1,7 +1,7 @@
 function Pointer( obj ) {
     this.__defineGetter__( 'val', function() {
         return obj instanceof Pointer ? obj.val : obj
-    } );
+    } )
 }
 
 function MapPointer( map, key ) {
@@ -16,7 +16,7 @@ function MapPointer( map, key ) {
             ret = ret.val
         }
         return ret
-    } );
+    } )
     
     this.__defineGetter__( 'viable', function() {
         return ( pMap.val
