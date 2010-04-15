@@ -170,7 +170,7 @@ function List( ) {
     
     function set( key, itm ) {
         del( key )
-        return let.apply( key, itm )
+        return let( key, itm )
     }
     
     function let( key, itm ) {
