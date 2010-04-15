@@ -170,16 +170,18 @@ function List( ) {
         return itm
     }
     
-    function set( key, itm ) {
+    function set( key ) {
         if( key.each ) {
             key.each( function( val, key ) { del( key ) } )
         }
-        return let( key, itm )
+        return let.apply( this, arguments )
     }
     
     function let( key, itm ) {
         if( key.each ) {
+                console.log( key )
             key.each( function( val, key ) {
+                console.log( key )
                 let( key, val )
             } )
         } else {
