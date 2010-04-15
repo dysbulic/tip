@@ -193,7 +193,15 @@ function List( ) {
     }
 
     function each( f ) {
-        keys.each( function( key, idx ) {
+        keys.each.apply( function( key, idx ) {
+            if( key !== undefined ) {
+                f.apply( this, [ get( key ), key ] )
+            }
+        } )
+    }
+
+    function peach( f ) {
+        keys.each.apply( function( key, idx ) {
             if( key !== undefined ) {
                 f.apply( this, [ get( key ), key ] )
             }
@@ -305,6 +313,7 @@ function List( ) {
         let : let,
         each : each,
         impress : impress,
+        peach : peach,
         get count() { return keys.length },
         get vals() {
             var vals = []
