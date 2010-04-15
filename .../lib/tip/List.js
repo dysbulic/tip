@@ -202,6 +202,13 @@ function List( ) {
         } )
     }
 
+    function copy( src, dst ) {
+        if( dst[0] == '.' ) {
+            dst = src + dst
+        }
+        return add( dst, get( src ) )
+    }
+
     // true if each relationship and value in a is in b
     function isSubobjectOf( a, b ) {
         var found = true
@@ -373,3 +380,11 @@ NamedNodeMap.prototype.each = function( f ) {
         f.apply( attr, [ attr.nodeValue, attr.name ] )
     } ] )
 }
+
+function Sublist() {
+}
+Sublist.prototype = new List
+
+function Suplist() {
+}
+Suplist.prototype = new List
