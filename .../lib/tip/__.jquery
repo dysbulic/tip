@@ -19,7 +19,9 @@
             return store
         } )
     }
-} )();
+} )()
+
+;
 
 ( function( $ ) {
     function load( src ) {
@@ -34,16 +36,17 @@
         } )
     }
     
-    var namespaces = {};
+    var namespaces = new List( )
     $( function() {
-        $.each( document.documentElement.attributes, function( idx, attr ) {
-            if( match = /^(?:xmlns:?)(.*)/.exec( attr.nodeName ) ) {
-                namespaces[ match[1] ] = attr.nodeValue;
+        var root = document.documentElement
+        root.attributes.each( function( ) {
+            if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
+                namespaces[ match[1] ] = this.nodeValue
             }
         })
-        $.each( namespaces, function( name, uri ) {
-            if( uri[ 0 ] == 'Θ:' ) {
-                load( uri.substr( 2 ) );
+        namespaces, function( name, uri ) {
+            if( uri.substr( 0, 2 ) == 'Θ:' ) {
+                load( uri.substr( 2 ) )
             }
         })
     } )
