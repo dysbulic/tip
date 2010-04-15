@@ -206,7 +206,7 @@ function List( ) {
         if( dst[0] == '.' ) {
             dst = src + dst
         }
-        return add( dst, get( src ) )
+        itms[ dst ] = itms[ src ]
     }
 
     // true if each relationship and value in a is in b
