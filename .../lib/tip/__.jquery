@@ -19,7 +19,7 @@
             return store
         } )
     }
-} )()
+} )();
 
 ( function( $ ) {
     function load( src ) {
@@ -61,15 +61,15 @@
                                                                 : ''],
                                                    tagMatch[3] ) )
             while( attrMatch = /(\w+)\s*=\s*(?:\'([^\']*)\'|\"([^\"]*)\")/g.exec( tagMatch[4] ) ) {
-                elem.attr( attrMatch[1],
-                           attrMatch[2]
-                             ? attrMatch[2]
-                             : attrMatch[3] )
+                $elem.attr( attrMatch[1],
+                            attrMatch[2]
+                              ? attrMatch[2]
+                              : attrMatch[3] )
             }
             if( tagMatch[5] ) {
-                elem.text( tagMatch[5] )
+                $elem.text( tagMatch[5] )
             }
-            return elem
+            return $elem
 
         // Match a namespaced tag name
         } else if( nameMatch = /(?:(\w+):)?(\w+)/.exec( arg ) ) {

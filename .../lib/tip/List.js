@@ -92,6 +92,15 @@ function List( ) {
         throw undefined
     }
 
+    function impress( ) {
+        each( function( val ) {
+            if( ( val.impress
+                  && typeof val.impress.apply == 'function' ) ) {
+                val.impress.apply( this, arguments )
+            }
+        } )
+    }
+
     function on( key, f ) {
         var orig = this[ key ];
         this[ key ] = function() {
