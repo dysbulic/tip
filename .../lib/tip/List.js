@@ -181,9 +181,9 @@ function List( ) {
     }
     
     function let( key, itm ) {
-        if( key.each ) {
+        if( key.__ && key.__.each ) {
                 console.log( key )
-            key.each( function( val, key ) {
+            key.__.each( function( val, key ) {
                 console.log( key )
                 let( key, val )
             } )
