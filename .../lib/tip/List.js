@@ -7,12 +7,14 @@ function List( ) {
     var itms = {}
     var store = this
     var id = 0
+    var count = 0
 
     function add( itm, uid ) {
         var key = uid !== undefined ? uid : ++id
         if( keys.indexOf( key ) < 0 ) {
             ptr( key, itm )
             keys.push( key )
+            ++count
             //console.log('a:'+key+':'+get(key));
         }
         return key
@@ -189,8 +191,9 @@ function List( ) {
 
     function del( key ) {
         var idx = keys.indexOf( key )
-        if( idx >= 0 ) {
+        if( idx >= 0 && keys[ idx ] !== undefined ) {
             keys[ idx ] = undefined
+            --count
         }
     }
 
@@ -315,7 +318,7 @@ function List( ) {
         let : let,
         each : each,
         impress : impress,
-        get count() { return keys.length },
+        get count() { return count },
         get vals() {
             var vals = []
             this.each( function( val, key ) {
@@ -335,6 +338,7 @@ function List( ) {
         set top( itm ) { this.add( itm ); return this },
         get pop( ) {
             var out = this.get( keys.pop() )
+            --count
             return out
         },
         get asString() {
