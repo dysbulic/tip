@@ -153,14 +153,14 @@ function List( ) {
             }
         }
 
-        var ptr;
+        var ptr
         if( typeof id == 'number' ) {
             if( id > 0 ) {
                 id = id - 1      // index to offset
             } else if( id < 0 ) {
                 id += this.count // end-based index
             }
-            ptr = new MapPointer( itms, keys[ id ] );
+            ptr = new MapPointer( itms, keys[ id ] )
         } else if( typeof id == 'string' ||
                    id instanceof String ) {
             ptr = itms[ id ]
