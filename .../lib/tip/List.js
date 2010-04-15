@@ -185,7 +185,6 @@ function List( ) {
         }
         return this;
     }
-
     set.__defineGetter__( 'asString', function() { return 'θ:⒧:↧' } )
     
     function let( key, itm ) {
@@ -194,19 +193,17 @@ function List( ) {
         }
     }
 
+    function del( key ) {
+        var idx = keys.indexOf( key )
+        if( idx >= 0 ) {
+            keys[ idx ] = undefined
+        }
+    }
+
     function each( f ) {
         keys.each( function( key, idx ) {
             if( key !== undefined ) {
                 f.apply( f, [ get( key ), key ] )
-            }
-        } )
-    }
-
-    function peach( f ) {
-        var store = this
-        keys.each( function( key, idx ) {
-            if( key !== undefined ) {
-                f.apply( store, [ get( key ), key ] )
             }
         } )
     }
@@ -308,6 +305,7 @@ function List( ) {
     var exports = {
         add : add,
         on : on,
+        del : del,
         swap : swap,
         merge : merge,
         deref : deref,
@@ -316,7 +314,6 @@ function List( ) {
         let : let,
         each : each,
         impress : impress,
-        peach : peach,
         get count() { return keys.length },
         get vals() {
             var vals = []
