@@ -38,16 +38,18 @@
     
     var namespaces = new List( )
     $( function() {
-        var namespaces = new List( )
         var root = document.documentElement
         root.attributes.each( function( ) {
             if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
-                namespaces.__.set( match[1], this.nodeValue )
+                var name = match[1] || ''
+                console.log(name)
+                namespaces.__.set( name, this.nodeValue )
             }
         })
-        namespaces.each( function( name, uri ) {
-            if( uri.substr( 0, 2 ) == 'Θ:' ) {
-                load( uri.substr( 2 ) )
+        namespaces.__.each( function( uri, name ) {
+            console.log(name)
+            if( uri.substring( 0, 2 ) == 'Θ:' ) {
+                load( uri.substring( 2 ) )
             }
         } )
     } )

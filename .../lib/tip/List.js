@@ -9,7 +9,7 @@ function List( ) {
     var id = 0
 
     function add( itm, uid ) {
-        var key = uid || id++
+        var key = uid !== undefined ? uid : ++id
         if( keys.indexOf( key ) < 0 ) {
             ptr( key, itm )
             keys.push( key )
