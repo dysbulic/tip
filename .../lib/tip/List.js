@@ -171,8 +171,8 @@ function List( ) {
     }
     
     function set( key ) {
-        if( key.each ) {
-            key.each( function( val, key ) { console.log( key ); del( key ) } )
+        if( key.__ && key.__.each ) {
+            key.__.each( function( val, key ) { console.log( 'k:'+key ); del( key ) } )
         }
         return let.apply( this, arguments )
     }
