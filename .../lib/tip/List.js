@@ -173,7 +173,6 @@ function List( ) {
     function set( key ) {
         if( key.__ && key.__.each ) {
             key.__.each( function( val, key ) {
-                console.log( 'k:'+key )
                 del( key )
             } )
         }
@@ -182,9 +181,7 @@ function List( ) {
     
     function let( key, itm ) {
         if( key.__ && key.__.each ) {
-                console.log( key )
             key.__.each( function( val, key ) {
-                console.log( key )
                 let( key, val )
             } )
         } else {
