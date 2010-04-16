@@ -45,7 +45,11 @@ function List( ) {
             if( typeof obj == 'string' && obj.test( /^{.*}$/ )  ) {
                 obj = JSON.parse( obj )
             }
-            if( obj.each ) {
+            if( obj instanceof Array ) {
+                obj.each( function( val ) {
+                    add( val )
+                } )
+            } else if( obj.each ) {
                 obj.each( function( val, key ) {
                     set.apply( store, [ key, val ] )
                 } )
