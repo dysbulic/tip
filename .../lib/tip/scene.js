@@ -17,16 +17,15 @@ var scene = new List()
         function config( ) {
             var $this = $(this)
             var state = $this.data( 'state' ) || new List()
-            $this.data( 'state', state )
-            if( state.__ && typeof state.__.set == 'function' ) {
-                state.__.set( 'caller', this )
-            }
+            state.$parent = $(this)
+            state.$parent.data( 'state', state )
             var cfg = $this.data( 'config' )
             if( typeof cfg == 'function'
                 && cfg != undefined ) {
                 cfg.apply( state, arguments )
             }
         }
+
         $.__.$('#').each( function traverse( ) {
             config.apply( this, arguments )
             $(this).children().each( traverse ) 
@@ -43,10 +42,13 @@ var scene = new List()
 
         function display( ) {
             var $this = $(this)
+            var state = $this.data( 'state' ) || new List()
+            state.$parent = $this
+            state.$parent.data( 'state', state )
             var scr = $this.data( 'display' )
             if( typeof scr == 'function'
                 && scr != undefined ) {
-                scr.apply( this, arguments )
+                scr.apply( state, arguments )
             }
         }
         $.__.$('#').each( function traverse( ) {
