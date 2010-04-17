@@ -16,7 +16,8 @@ var scene = new List()
 
         function config( ) {
             var $this = $(this)
-            state = state || {}
+            var state = $this.data( 'state' ) || new List()
+            $this.data( 'state', state )
             if( state.__ && typeof state.__.set == 'function' ) {
                 state.__.set( 'caller', this )
             }
