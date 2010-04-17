@@ -179,6 +179,8 @@ function List( ) {
             key.__.each( function( val, key ) {
                 del( key )
             } )
+        } else {
+            del( key )
         }
         return let.apply( this, arguments )
     }
@@ -201,7 +203,7 @@ function List( ) {
     function del( key ) {
         var idx = keys.indexOf( key )
         if( idx >= 0 && keys[ idx ] !== undefined ) {
-            keys[ idx ] = undefined
+            keys[ idx ] = itms[ keys[ idx ] ] = undefined
             --count
         }
     }
