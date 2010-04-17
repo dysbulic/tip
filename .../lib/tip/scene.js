@@ -7,16 +7,19 @@ var scene = new List()
         //        and attempt to learn impression.display.time
         //        which is the time that the first 'display'
         //        event will pass through
-        state.__.let( 'tixels', new List( ) )
-        state.__.set( new List( {
-            'time.impression.configuration.start' : ( new Date() ).getTime(),
-            'time.impression.display.predicted' : ( new Date() ).getTime() + 20,
-            'state.impression' : 'configuration',
-        } ) )
-
+        var time = {
+            start : ( new Date() ).getTime(),
+            predicted : ( new Date() ).getTime() + 30,
+        }
+        
         function config( ) {
             var $this = $(this)
             var state = $this.data( 'state' ) || new List()
+            state.__.set( new List( {
+                'time.impression.configuration.start' : time.start,
+                'time.impression.display.predicted' : time.predicted,
+            } ) )
+
             state.$parent = $(this)
             state.$parent.data( 'state', state )
             var cfg = $this.data( 'config' )
