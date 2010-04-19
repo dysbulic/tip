@@ -390,12 +390,6 @@ function List( ) {
 }
 List.prototype = new Array
 
-NamedNodeMap.prototype.each = function( f ) {
-    Array.prototype.each.apply( this, [ function( attr, idx ) {
-        f.apply( attr, [ attr.nodeValue, attr.name ] )
-    } ] )
-}
-
 function Sublist() {
 }
 Sublist.prototype = new List

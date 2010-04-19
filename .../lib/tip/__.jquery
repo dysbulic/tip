@@ -41,18 +41,13 @@
     $.__.$ = function(arg) {
         var root = document.documentElement
         if( namespaces === undefined ) {
-            namespaces = new List( )
+            namespaces = {}
             root.attributes.each( function( ) {
                 if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
                     var name = match[1] || ''
-                    namespaces.__.set( name, this.nodeValue )
+                    namespaces[ name ] = this.nodeValue
                 }
             })
-            namespaces.__.each( function( uri, name ) {
-                if( uri.substring( 0, 2 ) == 'Θ:' ) {
-                    load( uri.substring( 2 ) )
-                }
-            } )
         }
 
         // Special case for the document element

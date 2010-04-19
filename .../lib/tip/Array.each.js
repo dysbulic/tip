@@ -48,3 +48,9 @@ Array.prototype.__defineSetter__( -1, function( val ) {
 //Array.prototype.clone = function() { return this.slice(0) };
 
 NodeList.prototype.each = Array.prototype.each
+
+NamedNodeMap.prototype.each = function( f ) {
+    Array.prototype.each.apply( this, [ function( attr, idx ) {
+        f.apply( attr, [ attr.nodeValue, attr.name ] )
+    } ] )
+}
