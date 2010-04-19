@@ -20,10 +20,9 @@ var scene = new List()
         //        which is the time that the first 'display'
         //        event will pass through
         var time = {
-            offset : ( ( new Date() ).getTime() - state.__.get( 'time.epoch' ) ) * 2
-                // state.__.get( 'tixel.to.scene.time.ratio' ) ),
+            offset : ( ( ( new Date() ).getTime() - state.__.get( 'time.epoch' ) )
+                       * state.__.get( 'tixel.to.scene.time.ratio' ) ),
         }
-        console.log( time.offset )
 
         function config( ) {
             var $this = $(this)
