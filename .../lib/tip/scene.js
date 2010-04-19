@@ -73,7 +73,6 @@ var scene = new List()
         if( interval.id === undefined ) {
             var self = this
             var freq = state.__.get( 'tixel.capture.frequency.mHz' ) || 100
-            console.log( freq )
             interval.id =
                 setInterval( function() {
                     once.apply( self, arguments )
