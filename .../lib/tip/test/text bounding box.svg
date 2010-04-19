@@ -20,7 +20,8 @@
             height : bbox.height,
           } ) )
 
-          var style = window.getComputedStyle( $('#style').get(0) )
+          var style = window.getComputedStyle( $('#style').parent().get(0), null )
+          document.style = style
           bbox = {
             x : style.left,
             y : style.top,
@@ -46,7 +47,7 @@
       </style>
   </defs>
   <text id="bbox">Bordered by text.getBBox()</text>
-  <text y="15">
+  <text y="20">
     <tspan id="style">Bordered by text.computedStyle</tspan>
   </text>
 </svg>
