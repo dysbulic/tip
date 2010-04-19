@@ -1,8 +1,11 @@
 var scene = new List()
 ;
 ( function() {
+    var state = new List( {
+        'tixel.capture.frequency.mHz' : .01 * 1000,
+    } )
+
     function once() {
-        var state = new List()
         // ToDo: capture metrics about execution times
         //        and attempt to learn impression.display.time
         //        which is the time that the first 'display'
@@ -69,11 +72,12 @@ var scene = new List()
     scene.__defineGetter__( 'go', function() {
         if( interval.id === undefined ) {
             var self = this
+            var freq = state.__.get( 'tixel.capture.frequency.mHz' ) || 100
             interval.id =
                 setInterval( function() {
                     once.apply( self, arguments )
                 },
-                             state.__.get( 'tixel.capture.frequency.mHz' ) )
+                             freq )
         }
         return this
     } )
