@@ -2,7 +2,7 @@ var scene = new List()
 ;
 ( function() {
     var state = new List( {
-        'tixel.capture.frequency.mHz' : .01 * 1000,
+        'tixel.capture.frequency.mHz' : .1 * 1000,
     } )
 
     function once() {
@@ -73,6 +73,7 @@ var scene = new List()
         if( interval.id === undefined ) {
             var self = this
             var freq = state.__.get( 'tixel.capture.frequency.mHz' ) || 100
+            console.log( freq )
             interval.id =
                 setInterval( function() {
                     once.apply( self, arguments )
