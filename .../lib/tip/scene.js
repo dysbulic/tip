@@ -6,13 +6,22 @@ var scene = new List()
         'time.epoch' : ( new Date() ).getTime(),
     } )
 
+    state.__.set( 'tixel.to.scene.time.ratio', 1 )
+    scene.__defineGetter__( 'rate', function( ) {
+        return state.__.get( 'tixel.to.scene.time.ratio' )
+    } )
+    scene.__defineSetter__( 'rate', function( val ) {
+        state.__.set( 'tixel.to.scene.time.ratio', val )
+    } )
+
     function once() {
         // ToDo: capture metrics about execution times
         //        and attempt to learn impression.display.time
         //        which is the time that the first 'display'
         //        event will pass through
         var time = {
-            offset : ( new Date() ).getTime() - state.__.get( 'time.epoch' ),
+            offset : ( ( new Date() ).getTime() - state.__.get( 'time.epoch' )
+                       / state.__.get( 'tixel.to.scene.time.ratio' ) ),
         }
         
         function config( ) {
