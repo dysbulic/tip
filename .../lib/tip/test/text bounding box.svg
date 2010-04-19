@@ -20,18 +20,18 @@
             height : bbox.height,
           } ) )
 
-          var $text = $('#style')
-          var style = {
-            x : $text.css( 'left' ),
-            y : $text.css( 'top' ),
-            width : $text.width(),
-            height : $text.height(),
-          }
-          $.__.$('#').prepend( $.__.$('<rect/>').attr( {
-            x : style.x, 
-            y : style.y,
+          var style = window.getComputedStyle( $('#style').get(0) )
+          bbox = {
+            x : style.left,
+            y : style.top,
             width : style.width,
             height : style.height,
+          }
+          $.__.$('#').prepend( $.__.$('<rect/>').attr( {
+            x : bbox.x,
+            y : bbox.y,
+            width : bbox.width,
+            height : bbox.height,
           } ) )
 
         } )
@@ -45,8 +45,8 @@
                stroke-width: .3; stroke: black; stroke-opacity: .5 }
       </style>
   </defs>
-  <text>
-    <tspan id="bbox">Bordered by text.getBBox()</tspan>
+  <text id="bbox">Bordered by text.getBBox()</text>
+  <text y="15">
     <tspan id="style">Bordered by text.computedStyle</tspan>
   </text>
 </svg>
