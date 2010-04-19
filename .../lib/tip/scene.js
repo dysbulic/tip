@@ -2,7 +2,8 @@ var scene = new List()
 ;
 ( function() {
     var state = new List( {
-        'tixel.capture.frequency.mHz' : .1 * 1000,
+        'tixel.capture.frequency.mHz' : .01 * 1000,
+        'time.epoch' : ( new Date() ).getTime(),
     } )
 
     function once() {
@@ -11,16 +12,15 @@ var scene = new List()
         //        which is the time that the first 'display'
         //        event will pass through
         var time = {
-            start : ( new Date() ).getTime(),
-            predicted : ( new Date() ).getTime() + 30,
+            offset : ( new Date() ).getTime() - state.__.get( 'time.epoch' ),
         }
         
         function config( ) {
             var $this = $(this)
             var state = $this.data( 'state' ) || new List()
+            
             state.__.set( new List( {
-                'time.impression.configuration.start' : time.start,
-                'time.impression.display.predicted' : time.predicted,
+                'display.time.offset' : time.offset,
             } ) )
 
             state.$parent = $(this)
