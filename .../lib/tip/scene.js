@@ -100,4 +100,15 @@ var scene = new List()
         }
         return this
     } )
+    scene.__defineGetter__( 'running', function() {
+        return interval.id !== undefined
+    } )
+    scene.__defineGetter__( 'pause', function() {
+        if( this.running ) {
+            this.stop
+        } else {
+            this.go
+        }
+        return this
+    } )
 } )()
