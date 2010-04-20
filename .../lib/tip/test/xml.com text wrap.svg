@@ -2,249 +2,236 @@
 <!-- From: http://www.xml.com/2002/09/11/examples/TextWrap.svg -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
  "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg 	xmlns="http://www.w3.org/2000/svg"
-			xmlns:text="http://xmlns.graougraou.com/svg/text/"
-			xmlns:a3="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
-			a3:scriptImplementation="Adobe" onload="TextWrap._init()">
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:text="http://xmlns.graougraou.com/svg/text/"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:a3="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+     a3:scriptImplementation="Adobe" onload="TextWrap._init()">
 
-	<title>Simple SVG Text Wrapping</title>
+  <title>Simple SVG Text Wrapping</title>
 
-	<defs>
-		<style type="text/css">
-		<![CDATA[
-			.lines {
-				fill: none;
-				stroke: #000000;
-				stroke-dasharray: 1;
-			}
+  <defs>
+    <style type="text/css"><![CDATA[
+      .lines {
+        fill: none;
+        stroke: #000000;
+        stroke-dasharray: 1;
+      }
+      .off {
+        display: none;
+      }
+      .events {
+        opacity: 0;
+      }
+      .over {
+        fill: none;
+        stroke: #A3A3A3;
+      }
+      .on {
+        fill: black;
+        stroke: #5A5A5A;
+        fill-opacity: 0.4;
+      }
+      .signs {
+        fill: none;
+        stroke: #000000;
+        stroke-width: 1px;	
+      }
+    ]]></style>
+    <script type="text/ecmascript" xlink:href="xml.com text wrap.es"
+            a3:scriptImplementation="Adobe" />
+    <script a3:scriptImplementation="Adobe" type="text/ecmascript"><![CDATA[
+        var active = document.getElementsByTagNameNS(SVG.ns, 'use').item(9);
 	
-			.off {
-				display: none;
-			}
+        function alignMouseout (evt) {
+            var frame = getFrame(evt);
+            if (active != frame) {
+                frame.setAttribute('class', 'off');
+            }				
+        }
+	function alignMouseover (evt) {
+	    var frame = getFrame(evt);
+	    if (active != frame) {
+		frame.setAttribute('class', 'over');
+	    }				
+	}
+        
+	function alignClick (evt) {
+	    var frame = getFrame(evt);
+	    var state = frame.getAttribute('class');
+	    if (state == 'on' && active != frame) {
+		frame.setAttribute('class', 'off');
+		active = null;
+	    } else {
+		if (active) {
+		    active.setAttribute('class', 'off');
+		}
+		frame.setAttribute('class', 'on');
+		active = frame;
+		updateLayout(frame);
+	    }
+	}
+        
+	function incrementMouseout (evt) {
+	    var frame = getFrame(evt);
+	    frame.setAttribute('class', 'off');
+	}
+        
+	function incrementMouseover (evt) {
+	    var frame = getFrame(evt);
+	    frame.setAttribute('class', 'over');
+	}
+        
+	function incrementMousedown (evt) {
+	    var frame = getFrame(evt);
+	    frame.setAttribute('class', 'on');
+	    updateLayout(frame);
+	}
+        
+	function incrementMouseup (evt) {
+	    var frame = getFrame(evt);
+	    frame.setAttribute('class', 'over');
+	}
+	
+	function getFrame (evt) {
+	    return evt.target.parentNode.getElementsByTagNameNS(SVG.ns, 'use').item(0);
+	}
+        
+	function updateLayout (frame) {
+	    var text = TextWrap._instances[0];
+	    var action = frame.parentNode.getElementsByTagNameNS(SVG.ns, 'use').item(1).getAttribute('xlink:href').substr(1);
+	    if (action == 'plus') {
+		text.setFontSize( (parseInt(text.getFontSize()) + 2) + 'px' );
+	    } else if (action == 'minus') {
+		text.setFontSize( (parseInt(text.getFontSize()) - 2) + 'px' );
+	    } else {
+		text.setTextAlign(action);
+	    }
+	}
+    ]]></script>
+    
+    <rect id="frame" rx="3" ry="3" width="26" height="26" />
+    <g id="lines">
+      <g id="left" transform="translate(5 7)">
+        <line x1="0" y1="0" x2="16" y2="0" />
+        <line x1="0" y1="3" x2="12" y2="3" />
+        <line x1="0" y1="6" x2="16" y2="6" />
+        <line x1="0" y1="9" x2="8" y2="9" />
+        <line x1="0" y1="12" x2="14" y2="12" />
+      </g>
+      <g id="center" transform="translate(5 7)">
+        <line x1="0" y1="0" x2="16" y2="0" />
+        <line x1="2" y1="3" x2="14" y2="3" />
+        <line x1="0" y1="6" x2="16" y2="6" />
+        <line x1="4" y1="9" x2="12" y2="9" />
+        <line x1="1" y1="12" x2="15" y2="12" />
+      </g>			
+      <g id="right" transform="translate(5 7)">
+        <line x1="0" y1="0" x2="16" y2="0" />
+        <line x1="4" y1="3" x2="16" y2="3" />
+        <line x1="0" y1="6" x2="16" y2="6" />
+        <line x1="8" y1="9" x2="16" y2="9" />
+        <line x1="2" y1="12" x2="16" y2="12" />
+      </g>
+      <g id="justify" transform="translate(5 7)">
+        <line x1="0" y1="0" x2="16" y2="0" />
+        <line x1="0" y1="3" x2="16" y2="3" />
+        <line x1="0" y1="6" x2="16" y2="6" />
+        <line x1="0" y1="9" x2="16" y2="9" />
+        <line x1="0" y1="12" x2="16" y2="12" />
+      </g>				
+    </g>		
+    <g 	id="plus" transform="translate(9.5 9.5)">
+      <line x1="0" y1="3.5" x2="7" y2="3.5" />
+      <line x1="3.5" y1="0" x2="3.5" y2="7" />
+    </g>				
+    <g id="minus" transform="translate(9.5 9.5)">
+      <line x1="0" y1="3.5" x2="7" y2="3.5" />
+    </g>				
+    
+  </defs>
 
-			.events {
-				opacity: 0;
-			}
-			
-			.over {
-				fill: none;
-				stroke: #A3A3A3;
-			}
-			
-			.on {
-				fill: black;
-				stroke: #5A5A5A;
-				fill-opacity: 0.4;
-			}
-			
-			.signs {
-				fill: none;
-				stroke: #000000;
-				stroke-width: 1px;	
-			}
-		]]>
-		</style>
-
-	  <script type="text/ecmascript" xlink:href="TextWrap.es"
-	  				a3:scriptImplementation="Adobe" />
-		<script a3:scriptImplementation="Adobe" type="text/ecmascript">
-		<![CDATA[
-
-			var active = document.getElementsByTagNameNS(SVG.ns, 'use').item(9);
+  <g id="buttons" transform="translate(10.5 10.5)">
+    
+    <g onmouseover="alignMouseover(evt)" onmouseout="alignMouseout(evt)"
+       onclick="alignClick(evt)">
+      <g>
+        <use xlink:href="#frame" class="off" />
+        <use xlink:href="#left" class="lines" />
+        <use xlink:href="#frame" class="events" />
+      </g>
+      
+      <g transform="translate(29)">
+        <use xlink:href="#frame" class="off" />
+        <use xlink:href="#center" class="lines" />
+        <use xlink:href="#frame" class="events" />
+      </g>
+      
+      <g transform="translate(58)">
+        <use xlink:href="#frame" class="off" />
+        <use xlink:href="#right" class="lines" />
+        <use xlink:href="#frame" class="events" />
+      </g>
+      
+      <g transform="translate(87)">
+        <use xlink:href="#frame" class="on" />
+        <use xlink:href="#justify" class="lines" />
+        <use xlink:href="#frame" class="events" />
+      </g>
+    </g>
 		
-			function alignMouseout (evt) {
-				var frame = getFrame(evt);
-				if (active != frame) {
-					frame.setAttribute('class', 'off');
-				}				
-			}
+    <g onmouseover="incrementMouseover(evt)" onmouseout="incrementMouseout(evt)"
+       onmousedown="incrementMousedown(evt)" onmouseup="incrementMouseup(evt)">
+      <g transform="translate(116)">
+        <use xlink:href="#frame" class="off" />
+        <use xlink:href="#plus" class="signs" />
+        <use xlink:href="#frame" class="events" />
+      </g>
+      
+      <g transform="translate(145)">
+        <use xlink:href="#frame" class="off" />
+        <use xlink:href="#minus" class="signs" />
+        <use xlink:href="#frame" class="events" />
+      </g>
+    </g>
+    
+  </g>
+  
+  <g id="title">
+    <line x1="230" y1="10.5" x2="450.5" y2="10.5" class="lines" />
+    <text transform="matrix(1 0 0 1 450.5 30)"
+          style="text-anchor: end; font-size: 18px;
+                 font-family: Helvetica; font-weight: bold;
+                 fill: #ff00ff">Simple SVG Text Wrapper</text>
+    <line x1="230" y1="37.5" x2="450.5" y2="37.5" class="lines" />
+  </g>
+  
+  
+  <text:wrap x="10.5" y="47.5" width="440"
+             style="font-family: arial;
+                    font-size: 11px;
+                    text-rendering: optimizeLegibility;
+                    text-align: justify;
+                    line-interval: 1.5em">SVG is a language for describing two-dimensional graphics in XML. SVG allows for three types of graphic objects: vector graphic shapes (e.g., paths consisting of straight lines and curves), images and text. Graphical objects can be grouped, styled, transformed and composited into previously rendered objects. The feature set includes nested transformations, clipping paths, alpha masks, filter effects and template objects. SVG drawings can be interactive and dynamic. Animations can be defined and triggered either declaratively (i.e., by embedding SVG animation elements in SVG content) or via scripting. Sophisticated applications of SVG are possible by use of a supplemental scripting language which accesses SVG Document Object Model (DOM), which provides complete access to all elements, attributes and properties. A rich set of event handlers such as onmouseover and onclick can be assigned to any SVG graphical object. Because of its compatibility and leveraging of other Web standards, features like scripting can be done on XHTML and SVG elements simultaneously within the same Web page.</text:wrap>
 
-			function alignMouseover (evt) {
-				var frame = getFrame(evt);
-				if (active != frame) {
-					frame.setAttribute('class', 'over');
-				}				
-			}
-
-			function alignClick (evt) {
-				var frame = getFrame(evt);
-				var state = frame.getAttribute('class');
-				if (state == 'on' && active != frame) {
-					frame.setAttribute('class', 'off');
-					active = null;
-				} else {
-					if (active) {
-						active.setAttribute('class', 'off');
-					}
-					frame.setAttribute('class', 'on');
-					active = frame;
-					updateLayout(frame);
-				}
-			}
-
-			function incrementMouseout (evt) {
-				var frame = getFrame(evt);
-				frame.setAttribute('class', 'off');
-			}
-
-			function incrementMouseover (evt) {
-				var frame = getFrame(evt);
-				frame.setAttribute('class', 'over');
-			}
-
-			function incrementMousedown (evt) {
-				var frame = getFrame(evt);
-				frame.setAttribute('class', 'on');
-				updateLayout(frame);
-			}
-
-			function incrementMouseup (evt) {
-				var frame = getFrame(evt);
-				frame.setAttribute('class', 'over');
-			}
-			
-			function getFrame (evt) {
-				return evt.target.parentNode.getElementsByTagNameNS(SVG.ns, 'use').item(0);
-			}
-
-			function updateLayout (frame) {
-				var text = TextWrap._instances[0];
-				var action = frame.parentNode.getElementsByTagNameNS(SVG.ns, 'use').item(1).getAttribute('xlink:href').substr(1);
-				if (action == 'plus') {
-					text.setFontSize( (parseInt(text.getFontSize()) + 2) + 'px' );
-				} else if (action == 'minus') {
-					text.setFontSize( (parseInt(text.getFontSize()) - 2) + 'px' );
-				} else {
-					text.setTextAlign(action);
-				}
-			}
-		
-		]]>
-		</script>
-		
-		<rect id="frame" rx="3" ry="3" width="26" height="26" />
-		<g id="lines">
-			<g id="left" transform="translate(5 7)">
-				<line x1="0" y1="0" x2="16" y2="0" />
-				<line x1="0" y1="3" x2="12" y2="3" />
-				<line x1="0" y1="6" x2="16" y2="6" />
-				<line x1="0" y1="9" x2="8" y2="9" />
-				<line x1="0" y1="12" x2="14" y2="12" />
-			</g>
-			<g id="center" transform="translate(5 7)">
-				<line x1="0" y1="0" x2="16" y2="0" />
-				<line x1="2" y1="3" x2="14" y2="3" />
-				<line x1="0" y1="6" x2="16" y2="6" />
-				<line x1="4" y1="9" x2="12" y2="9" />
-				<line x1="1" y1="12" x2="15" y2="12" />
-			</g>			
-			<g id="right" transform="translate(5 7)">
-				<line x1="0" y1="0" x2="16" y2="0" />
-				<line x1="4" y1="3" x2="16" y2="3" />
-				<line x1="0" y1="6" x2="16" y2="6" />
-				<line x1="8" y1="9" x2="16" y2="9" />
-				<line x1="2" y1="12" x2="16" y2="12" />
-			</g>
-			<g id="justify" transform="translate(5 7)">
-				<line x1="0" y1="0" x2="16" y2="0" />
-				<line x1="0" y1="3" x2="16" y2="3" />
-				<line x1="0" y1="6" x2="16" y2="6" />
-				<line x1="0" y1="9" x2="16" y2="9" />
-				<line x1="0" y1="12" x2="16" y2="12" />
-			</g>				
-		</g>		
-		<g 	id="plus" transform="translate(9.5 9.5)">
-			<line x1="0" y1="3.5" x2="7" y2="3.5" />
-			<line x1="3.5" y1="0" x2="3.5" y2="7" />
-		</g>				
-		<g id="minus" transform="translate(9.5 9.5)">
-			<line x1="0" y1="3.5" x2="7" y2="3.5" />
-		</g>				
-
-	</defs>
-
-	<g id="buttons" transform="translate(10.5 10.5)">
-	
-		<g onmouseover="alignMouseover(evt)" onmouseout="alignMouseout(evt)"
-			 onclick="alignClick(evt)">
-			<g>
-				<use xlink:href="#frame" class="off" />
-				<use xlink:href="#left" class="lines" />
-				<use xlink:href="#frame" class="events" />
-			</g>
-	
-			<g transform="translate(29)">
-				<use xlink:href="#frame" class="off" />
-				<use xlink:href="#center" class="lines" />
-				<use xlink:href="#frame" class="events" />
-			</g>
-
-			<g transform="translate(58)">
-				<use xlink:href="#frame" class="off" />
-				<use xlink:href="#right" class="lines" />
-				<use xlink:href="#frame" class="events" />
-			</g>
-	
-			<g transform="translate(87)">
-				<use xlink:href="#frame" class="on" />
-				<use xlink:href="#justify" class="lines" />
-				<use xlink:href="#frame" class="events" />
-			</g>
-		</g>
-		
-		<g onmouseover="incrementMouseover(evt)" onmouseout="incrementMouseout(evt)"
-			 onmousedown="incrementMousedown(evt)" onmouseup="incrementMouseup(evt)">
-			<g transform="translate(116)">
-				<use xlink:href="#frame" class="off" />
-				<use xlink:href="#plus" class="signs" />
-				<use xlink:href="#frame" class="events" />
-			</g>
-	
-			<g transform="translate(145)">
-				<use xlink:href="#frame" class="off" />
-				<use xlink:href="#minus" class="signs" />
-				<use xlink:href="#frame" class="events" />
-			</g>
-		</g>
-		
-	</g>
-
-	<g id="title">
-		<line x1="230" y1="10.5" x2="450.5" y2="10.5" class="lines" />
-		<text transform="matrix(1 0 0 1 450.5 30)"
-					style="	text-anchor: end; font-size: 18px;
-									font-family: Helvetica; font-weight: bold;
-									fill: #ff00ff">Simple SVG Text Wrapper</text>
-		<line x1="230" y1="37.5" x2="450.5" y2="37.5" class="lines" />
-	</g>
-	
-
-  <text:wrap 	x="10.5" y="47.5" width="440"
-  						style="	font-family: arial;
-  										font-size: 11px;
-  										text-rendering: optimizeLegibility;
-  										text-align: justify;
-  										line-interval: 1.5em">SVG is a language for describing two-dimensional graphics in XML. SVG allows for three types of graphic objects: vector graphic shapes (e.g., paths consisting of straight lines and curves), images and text. Graphical objects can be grouped, styled, transformed and composited into previously rendered objects. The feature set includes nested transformations, clipping paths, alpha masks, filter effects and template objects. SVG drawings can be interactive and dynamic. Animations can be defined and triggered either declaratively (i.e., by embedding SVG animation elements in SVG content) or via scripting. Sophisticated applications of SVG are possible by use of a supplemental scripting language which accesses SVG Document Object Model (DOM), which provides complete access to all elements, attributes and properties. A rich set of event handlers such as onmouseover and onclick can be assigned to any SVG graphical object. Because of its compatibility and leveraging of other Web standards, features like scripting can be done on XHTML and SVG elements simultaneously within the same Web page.</text:wrap>
-
-	<defs>
-	  <font id="FontID0" fullFontName="Helvetica" fontVariant="normal" fontWeight="700">
-			<font-face font-family="Helvetica" />
-   		<missing-glyph><path d="M0 0z"/></missing-glyph>
-		  <glyph unicode=" " horiz-adv-x="277"><path d="M12 429"/></glyph>
-   		<glyph unicode="G" horiz-adv-x="778"><path d="M561 495c-12,51 -39,84 -84,102 -24,12 -51,18 -84,18 -57,0 -105,-21 -141,-66 -39,-45 -57,-111 -57,-198 0,-87 21,-150 60,-189 42,-36 87,-54 138,-54 51,0 93,15 126,45 30,27 51,66 57,114l-165 0 0 120 300 0 0 -387 -99 0 -15 90c-30,-33 -57,-57 -78,-72 -42,-24 -90,-36 -147,-36 -96,0 -174,33 -234,99 -66,66 -96,156 -96,273 0,114 33,210 96,279 63,69 150,105 255,105 90,0 165,-24 219,-69 57,-45 87,-105 96,-174l-147 0z"/></glyph>
-   		<glyph unicode="W" horiz-adv-x="944"><path d="M174 720l96 -411 21 -117 21 114 81 414 159 0 84 -411 21 -117 24 111 96 417 153 0 -204 -720 -144 0 -87 420 -24 141 -24 -141 -87 -420 -141 0 -204 720 159 0z"/></glyph>
-   		<glyph unicode="V" horiz-adv-x="667"><path d="M498 720l156 0 -246 -720 -141 0 -243 720 159 0 156 -546 159 546z"/></glyph>
-	   	<glyph unicode="S" horiz-adv-x="667"><path d="M186 222c3,-33 12,-57 27,-72 24,-30 66,-45 126,-45 33,0 63,3 84,12 42,15 63,42 63,81 0,24 -9,45 -30,57 -21,12 -54,24 -99,33l-75 18c-75,15 -126,36 -156,54 -48,33 -72,87 -72,156 0,66 24,117 69,162 48,42 117,63 207,63 75,0 141,-21 195,-60 54,-42 81,-99 84,-174l-144 0c-3,42 -21,72 -57,90 -24,12 -54,18 -87,18 -39,0 -72,-6 -93,-21 -24,-18 -36,-39 -36,-66 0,-27 12,-45 36,-60 12,-6 45,-18 93,-27l123 -30c54,-15 96,-33 123,-54 45,-33 66,-81 66,-147 0,-66 -27,-120 -75,-162 -51,-45 -123,-66 -213,-66 -96,0 -168,21 -222,63 -54,45 -81,102 -81,177l144 0z"/></glyph>
-   		<glyph unicode="a" horiz-adv-x="556"><path d="M360 258c-9,-3 -18,-9 -27,-12 -9,-3 -21,-6 -39,-9l-30 -6c-30,-6 -51,-12 -63,-21 -21,-12 -33,-30 -33,-57 0,-24 6,-42 21,-51 12,-12 30,-18 48,-18 30,0 57,9 81,27 27,18 39,51 42,96l0 51zm-87 66c27,3 45,6 57,12 18,9 30,21 30,39 0,24 -9,39 -24,45 -15,9 -36,12 -66,12 -33,0 -57,-6 -69,-24 -12,-12 -18,-27 -21,-48l-135 0c3,48 18,84 39,114 39,48 102,72 192,72 57,0 108,-12 153,-36 45,-24 69,-66 69,-129l0 -246c0,-15 0,-36 0,-60 3,-18 6,-33 9,-39 6,-6 12,-12 21,-15l0 -21 -153 0c-3,12 -6,21 -9,30 0,9 0,21 -3,33 -18,-21 -42,-39 -66,-54 -30,-18 -63,-27 -102,-27 -48,0 -87,15 -120,42 -30,27 -45,66 -45,117 0,66 24,114 75,144 27,15 69,27 123,33l45 6z"/></glyph>
-   		<glyph unicode="e" horiz-adv-x="556"><path d="M276 432c-33,0 -57,-9 -75,-30 -18,-21 -30,-48 -33,-81l216 0c-3,36 -15,63 -33,81 -21,21 -45,30 -75,30zm0 114c42,0 84,-9 120,-24 33,-18 63,-42 87,-78 21,-33 33,-69 39,-111 6,-24 6,-60 6,-105l-366 0c3,-54 21,-90 51,-114 21,-12 42,-18 69,-18 30,0 54,9 72,24 9,9 18,21 24,36l144 0c-6,-30 -21,-63 -51,-96 -45,-51 -108,-78 -192,-78 -66,0 -126,21 -177,66 -54,45 -78,114 -78,213 0,93 24,162 69,213 48,48 108,72 183,72z"/></glyph>
-   		<glyph unicode="l" horiz-adv-x="277"><path d="M207 0l-138 0 0 720 138 0 0 -720z"/></glyph>
-   		<glyph unicode="m" horiz-adv-x="889"><path d="M660 543c24,0 45,-3 69,-12 24,-9 45,-27 63,-48 15,-18 24,-42 30,-69 3,-18 3,-45 3,-78l0 -336 -141 0 0 339c0,21 -3,36 -12,51 -12,24 -33,36 -66,36 -39,0 -66,-15 -81,-48 -6,-18 -12,-36 -12,-60l0 -318 -138 0 0 318c0,30 -3,54 -12,69 -12,24 -33,39 -69,39 -39,0 -66,-15 -78,-39 -9,-15 -12,-36 -12,-66l0 -321 -141 0 0 531 135 0 0 -78c18,30 33,48 48,60 27,21 63,30 105,30 42,0 75,-9 99,-27 21,-15 36,-36 45,-63 21,33 42,54 69,69 30,15 60,21 96,21z"/></glyph>
-   		<glyph unicode="i" horiz-adv-x="277"><path d="M207 597l-141 0 0 126 141 0 0 -126zm-141 -66l141 0 0 -531 -141 0 0 531z"/></glyph>
-   		<glyph unicode="r" horiz-adv-x="389"><path d="M354 546c3,0 6,0 6,0 3,0 6,0 12,-3l0 -141c-9,0 -15,0 -24,3 -6,0 -12,0 -15,0 -57,0 -93,-18 -114,-57 -9,-18 -15,-51 -15,-93l0 -255 -141 0 0 531 135 0 0 -90c21,33 39,57 54,72 27,21 60,33 102,33z"/></glyph>
-   		<glyph unicode="x" horiz-adv-x="556"><path d="M12 0l183 270 -174 261 171 0 87 -153 87 153 165 0 -174 -258 183 -273 -174 0 -93 159 -90 -159 -171 0z"/></glyph>
-   		<glyph unicode="t" horiz-adv-x="333"><path d="M12 429l0 99 72 0 0 147 138 0 0 -147 87 0 0 -99 -87 0 0 -282c0,-21 3,-36 9,-42 6,-3 21,-6 51,-6 3,0 9,0 12,0 6,0 9,0 15,0l0 -105 -66 -3c-66,0 -111,12 -135,36 -15,15 -24,42 -24,75l0 327 -72 0z"/></glyph>
-   		<glyph unicode="p" horiz-adv-x="611"><path d="M432 267c0,39 -9,78 -27,108 -21,33 -51,48 -93,48 -51,0 -84,-24 -102,-72 -12,-27 -15,-57 -15,-96 0,-63 15,-105 48,-132 21,-15 42,-21 69,-21 39,0 69,15 90,45 21,30 30,69 30,120zm-78 276c60,0 114,-21 156,-69 45,-45 66,-111 66,-201 0,-93 -21,-165 -63,-213 -42,-51 -96,-75 -165,-75 -42,0 -75,9 -105,33 -15,12 -30,27 -45,51l0 -279 -138 0 0 741 135 0 0 -78c15,24 30,42 48,57 30,21 66,33 111,33z"/></glyph>
-  	</font>
-	</defs>
-
+  <defs>
+    <font id="FontID0" fullFontName="Helvetica" fontVariant="normal" fontWeight="700">
+      <font-face font-family="Helvetica" />
+      <missing-glyph><path d="M0 0z"/></missing-glyph>
+      <glyph unicode=" " horiz-adv-x="277"><path d="M12 429"/></glyph>
+      <glyph unicode="G" horiz-adv-x="778"><path d="M561 495c-12,51 -39,84 -84,102 -24,12 -51,18 -84,18 -57,0 -105,-21 -141,-66 -39,-45 -57,-111 -57,-198 0,-87 21,-150 60,-189 42,-36 87,-54 138,-54 51,0 93,15 126,45 30,27 51,66 57,114l-165 0 0 120 300 0 0 -387 -99 0 -15 90c-30,-33 -57,-57 -78,-72 -42,-24 -90,-36 -147,-36 -96,0 -174,33 -234,99 -66,66 -96,156 -96,273 0,114 33,210 96,279 63,69 150,105 255,105 90,0 165,-24 219,-69 57,-45 87,-105 96,-174l-147 0z"/></glyph>
+      <glyph unicode="W" horiz-adv-x="944"><path d="M174 720l96 -411 21 -117 21 114 81 414 159 0 84 -411 21 -117 24 111 96 417 153 0 -204 -720 -144 0 -87 420 -24 141 -24 -141 -87 -420 -141 0 -204 720 159 0z"/></glyph>
+      <glyph unicode="V" horiz-adv-x="667"><path d="M498 720l156 0 -246 -720 -141 0 -243 720 159 0 156 -546 159 546z"/></glyph>
+      <glyph unicode="S" horiz-adv-x="667"><path d="M186 222c3,-33 12,-57 27,-72 24,-30 66,-45 126,-45 33,0 63,3 84,12 42,15 63,42 63,81 0,24 -9,45 -30,57 -21,12 -54,24 -99,33l-75 18c-75,15 -126,36 -156,54 -48,33 -72,87 -72,156 0,66 24,117 69,162 48,42 117,63 207,63 75,0 141,-21 195,-60 54,-42 81,-99 84,-174l-144 0c-3,42 -21,72 -57,90 -24,12 -54,18 -87,18 -39,0 -72,-6 -93,-21 -24,-18 -36,-39 -36,-66 0,-27 12,-45 36,-60 12,-6 45,-18 93,-27l123 -30c54,-15 96,-33 123,-54 45,-33 66,-81 66,-147 0,-66 -27,-120 -75,-162 -51,-45 -123,-66 -213,-66 -96,0 -168,21 -222,63 -54,45 -81,102 -81,177l144 0z"/></glyph>
+      <glyph unicode="a" horiz-adv-x="556"><path d="M360 258c-9,-3 -18,-9 -27,-12 -9,-3 -21,-6 -39,-9l-30 -6c-30,-6 -51,-12 -63,-21 -21,-12 -33,-30 -33,-57 0,-24 6,-42 21,-51 12,-12 30,-18 48,-18 30,0 57,9 81,27 27,18 39,51 42,96l0 51zm-87 66c27,3 45,6 57,12 18,9 30,21 30,39 0,24 -9,39 -24,45 -15,9 -36,12 -66,12 -33,0 -57,-6 -69,-24 -12,-12 -18,-27 -21,-48l-135 0c3,48 18,84 39,114 39,48 102,72 192,72 57,0 108,-12 153,-36 45,-24 69,-66 69,-129l0 -246c0,-15 0,-36 0,-60 3,-18 6,-33 9,-39 6,-6 12,-12 21,-15l0 -21 -153 0c-3,12 -6,21 -9,30 0,9 0,21 -3,33 -18,-21 -42,-39 -66,-54 -30,-18 -63,-27 -102,-27 -48,0 -87,15 -120,42 -30,27 -45,66 -45,117 0,66 24,114 75,144 27,15 69,27 123,33l45 6z"/></glyph>
+      <glyph unicode="e" horiz-adv-x="556"><path d="M276 432c-33,0 -57,-9 -75,-30 -18,-21 -30,-48 -33,-81l216 0c-3,36 -15,63 -33,81 -21,21 -45,30 -75,30zm0 114c42,0 84,-9 120,-24 33,-18 63,-42 87,-78 21,-33 33,-69 39,-111 6,-24 6,-60 6,-105l-366 0c3,-54 21,-90 51,-114 21,-12 42,-18 69,-18 30,0 54,9 72,24 9,9 18,21 24,36l144 0c-6,-30 -21,-63 -51,-96 -45,-51 -108,-78 -192,-78 -66,0 -126,21 -177,66 -54,45 -78,114 -78,213 0,93 24,162 69,213 48,48 108,72 183,72z"/></glyph>
+      <glyph unicode="l" horiz-adv-x="277"><path d="M207 0l-138 0 0 720 138 0 0 -720z"/></glyph>
+      <glyph unicode="m" horiz-adv-x="889"><path d="M660 543c24,0 45,-3 69,-12 24,-9 45,-27 63,-48 15,-18 24,-42 30,-69 3,-18 3,-45 3,-78l0 -336 -141 0 0 339c0,21 -3,36 -12,51 -12,24 -33,36 -66,36 -39,0 -66,-15 -81,-48 -6,-18 -12,-36 -12,-60l0 -318 -138 0 0 318c0,30 -3,54 -12,69 -12,24 -33,39 -69,39 -39,0 -66,-15 -78,-39 -9,-15 -12,-36 -12,-66l0 -321 -141 0 0 531 135 0 0 -78c18,30 33,48 48,60 27,21 63,30 105,30 42,0 75,-9 99,-27 21,-15 36,-36 45,-63 21,33 42,54 69,69 30,15 60,21 96,21z"/></glyph>
+      <glyph unicode="i" horiz-adv-x="277"><path d="M207 597l-141 0 0 126 141 0 0 -126zm-141 -66l141 0 0 -531 -141 0 0 531z"/></glyph>
+      <glyph unicode="r" horiz-adv-x="389"><path d="M354 546c3,0 6,0 6,0 3,0 6,0 12,-3l0 -141c-9,0 -15,0 -24,3 -6,0 -12,0 -15,0 -57,0 -93,-18 -114,-57 -9,-18 -15,-51 -15,-93l0 -255 -141 0 0 531 135 0 0 -90c21,33 39,57 54,72 27,21 60,33 102,33z"/></glyph>
+      <glyph unicode="x" horiz-adv-x="556"><path d="M12 0l183 270 -174 261 171 0 87 -153 87 153 165 0 -174 -258 183 -273 -174 0 -93 159 -90 -159 -171 0z"/></glyph>
+      <glyph unicode="t" horiz-adv-x="333"><path d="M12 429l0 99 72 0 0 147 138 0 0 -147 87 0 0 -99 -87 0 0 -282c0,-21 3,-36 9,-42 6,-3 21,-6 51,-6 3,0 9,0 12,0 6,0 9,0 15,0l0 -105 -66 -3c-66,0 -111,12 -135,36 -15,15 -24,42 -24,75l0 327 -72 0z"/></glyph>
+      <glyph unicode="p" horiz-adv-x="611"><path d="M432 267c0,39 -9,78 -27,108 -21,33 -51,48 -93,48 -51,0 -84,-24 -102,-72 -12,-27 -15,-57 -15,-96 0,-63 15,-105 48,-132 21,-15 42,-21 69,-21 39,0 69,15 90,45 21,30 30,69 30,120zm-78 276c60,0 114,-21 156,-69 45,-45 66,-111 66,-201 0,-93 -21,-165 -63,-213 -42,-51 -96,-75 -165,-75 -42,0 -75,9 -105,33 -15,12 -30,27 -45,51l0 -279 -138 0 0 741 135 0 0 -78c15,24 30,42 48,57 30,21 66,33 111,33z"/></glyph>
+    </font>
+  </defs>
 </svg>
