@@ -30,6 +30,7 @@ var scene = new List()
             var now = time.now
             state.__.let( 'time.epoch', now )
             
+            console.log(state.__.get( 'time.epoch' ))
             state.__.set( 'display.time.offset',
                           ( ( now - state.__.get( 'time.epoch' ) )
                             * state.__.get( 'tixel.to.scene.time.ratio' ) ) )
