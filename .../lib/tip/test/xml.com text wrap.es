@@ -147,7 +147,7 @@ TextWrap.prototype._layout = function () {
 		if (this._align == 'justify') {
 			var space = (this._width - line._width) / (line._words.length - 1);
 			space = (i != lines.length - 1) ? space : 0;
-			tspan.style.setProperty('word-spacing', space + 'px');
+			tspan.style.setProperty('word-spacing', space + 'px', null);
 		} else if (this._align == 'center') {
 			anchor = 'middle';
 			x = this._width / 2;
@@ -159,7 +159,7 @@ TextWrap.prototype._layout = function () {
 		tspan.setAttribute('dy', i ? this._interval : '1em');
 		this._svg.appendChild(tspan);
 	}	
-	this._svg.style.setProperty('text-anchor', anchor);
+	this._svg.style.setProperty('text-anchor', anchor, null);
 	this._show();
 }
 
@@ -170,11 +170,11 @@ TextWrap.prototype._layout = function () {
  **/
 
 TextWrap.prototype._hide = function () {
-	this._svg.style.setProperty('opacity', '0');
+	this._svg.style.setProperty('opacity', '0', null);
 }
 
 TextWrap.prototype._show = function () {
-	this._svg.style.setProperty('opacity', '1');
+	this._svg.style.setProperty('opacity', '1', null);
 }
 
 TextWrap.prototype._clear = function () {
@@ -263,7 +263,7 @@ TextWrap.prototype.getFontFamily = function () {
 TextWrap.prototype.setFontFamily = function (font) {
 	if (font != this._font) {
 		this._font = font;
-		this._svg.style.setProperty('font-family', this._font);
+		this._svg.style.setProperty('font-family', this._font, null);
 		if (this._initialized) {
 			this._splitString();
 			this._layout();
@@ -278,7 +278,7 @@ TextWrap.prototype.getFontSize = function () {
 TextWrap.prototype.setFontSize = function (size) {
 	if (size != this._size) {
 		this._size = size;
-		this._svg.style.setProperty('font-size', this._size);
+		this._svg.style.setProperty('font-size', this._size, null);
 		if (this._initialized) {
 			this._splitString();
 			this._layout();
@@ -293,7 +293,7 @@ TextWrap.prototype.getTextRendering = function () {
 TextWrap.prototype.setTextRendering = function (quality) {
 	if (quality != this._quality) {
 		this._quality = quality;
-		this._svg.style.setProperty('text-rendering', this._quality);
+		this._svg.style.setProperty('text-rendering', this._quality, null);
 		if (this._initialized) {
 			this._splitString();
 			this._layout();
