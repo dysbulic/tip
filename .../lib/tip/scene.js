@@ -17,22 +17,30 @@ var scene = new List()
     function once() {
         // ToDo: capture metrics about execution times
         //        and attempt to learn impression.display.time
-        //        which is the time that the first 'display'
-        //        event will pass through
+        //        which is the time that the next 'display'
+        //        iteration will pass through
         var time = {
-            offset : ( ( ( new Date() ).getTime() - state.__.get( 'time.epoch' ) )
-                       * state.__.get( 'tixel.to.scene.time.ratio' ) ),
+            get now() { return ( new Date() ).getTime() }
         }
 
         function config( ) {
             var $this = $(this)
             var state = $this.data( 'state' ) || new List()
+
+            //state.__.let.lazy( 'time.epoch', time.__lookupGetter__( 'now' ) )
+            var now = time.now
+            state.__.let( 'time.epoch', now )
+
+            var time = {
+                offset : ( ( now - state.__.get( 'time.epoch' ) )
+                           * state.__.get( 'tixel.to.scene.time.ratio' ) ),
+            }
             
             state.__.set( new List( {
                 'display.time.offset' : time.offset,
             } ) )
 
-            state.$parent = $(this)
+            state.$parent = $this
             state.$parent.data( 'state', state )
             var cfg = $this.data( 'config' )
             if( typeof cfg == 'function'
