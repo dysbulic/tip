@@ -2,7 +2,7 @@ var scene = new List()
 ;
 ( function() {
     var state = new List( {
-        'tixel.capture.frequency.mHz' : .1 * 1000,
+        'tixel.capture.frequency.mHz' : .01 * 1000,
         'time.epoch' : ( new Date() ).getTime(),
     } )
 
