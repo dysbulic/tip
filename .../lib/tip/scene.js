@@ -2,7 +2,7 @@ var scene = new List()
 ;
 ( function() {
     var state = new List( {
-        'tixel.capture.frequency.mHz' : .01 * 1000,
+        'tixel.capture.frequency.mHz' : 1 * 1000,
         'time.epoch' : ( new Date() ).getTime(),
     } )
 
@@ -25,21 +25,24 @@ var scene = new List()
 
         function config( ) {
             var $this = $(this)
-            var state = $this.data( 'state' ) || new List()
-
-            var now = time.now
-            state.__.let( 'time.epoch', now )
-            
-            console.log(state.__.get( 'time.epoch' ))
-            state.__.set( 'display.time.offset',
-                          ( ( now - state.__.get( 'time.epoch' ) )
-                            * state.__.get( 'tixel.to.scene.time.ratio' ) ) )
-
-            state.$parent = $this
-            state.$parent.data( 'state', state )
             var cfg = $this.data( 'config' )
             if( typeof cfg == 'function' ) {
-                cfg.apply( state, arguments )
+                var local = $this.data( 'state' ) || ( function() {
+                    var state = new List()
+                    state.$parent = $this
+                    state.$parent.data( 'state', state )
+                    return state
+                } )()
+
+                var now = time.now
+                local.__.let( 'time.epoch', now )
+            
+                //console.log(state.__.get( 'time.epoch' ))
+                local.__.set( 'display.time.offset',
+                              ( ( now - local.__.get( 'time.epoch' ) )
+                                * state.__.get( 'tixel.to.scene.time.ratio' ) ) )
+
+                cfg.apply( local, arguments )
             }
         }
 
