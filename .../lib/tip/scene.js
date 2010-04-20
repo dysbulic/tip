@@ -30,18 +30,14 @@ var scene = new List()
             var now = time.now
             state.__.let( 'time.epoch', now )
             
-            state.__.set( new List( {
-                'display.time.offset' : (
-                    ( now - state.__.get( 'time.epoch' ) )
-                        * state.__.get( 'tixel.to.scene.time.ratio' )
-                ),
-            } ) )
+            state.__.set( 'display.time.offset',
+                          ( ( now - state.__.get( 'time.epoch' ) )
+                            * state.__.get( 'tixel.to.scene.time.ratio' ) ) )
 
             state.$parent = $this
             state.$parent.data( 'state', state )
             var cfg = $this.data( 'config' )
-            if( typeof cfg == 'function'
-                && cfg != undefined ) {
+            if( typeof cfg == 'function' ) {
                 cfg.apply( state, arguments )
             }
         }
@@ -60,19 +56,17 @@ var scene = new List()
             'impression.state' : 'display',
         } )
 
-        function display( ) {
+        function show( ) {
             var $this = $(this)
-            var state = $this.data( 'state' ) || new List()
-            state.$parent = $this
-            state.$parent.data( 'state', state )
-            var scr = $this.data( 'display' )
-            if( typeof scr == 'function'
-                && scr != undefined ) {
-                scr.apply( state, arguments )
+            var state = $this.data( 'state' )
+            var display = $this.data( 'display' )
+            if( typeof display == 'function'
+                && state != undefined ) {
+                display.apply( state, arguments )
             }
         }
         $.__.$('#').each( function traverse( ) {
-            display.apply( this, arguments )
+            show.apply( this, arguments )
             $(this).children().each( traverse ) 
         } )
         return state
