@@ -27,17 +27,14 @@ var scene = new List()
             var $this = $(this)
             var state = $this.data( 'state' ) || new List()
 
-            //state.__.let.lazy( 'time.epoch', time.__lookupGetter__( 'now' ) )
             var now = time.now
             state.__.let( 'time.epoch', now )
-
-            var time = {
-                offset : ( ( now - state.__.get( 'time.epoch' ) )
-                           * state.__.get( 'tixel.to.scene.time.ratio' ) ),
-            }
             
             state.__.set( new List( {
-                'display.time.offset' : time.offset,
+                'display.time.offset' : (
+                    ( now - state.__.get( 'time.epoch' ) )
+                        * state.__.get( 'tixel.to.scene.time.ratio' )
+                ),
             } ) )
 
             state.$parent = $this
