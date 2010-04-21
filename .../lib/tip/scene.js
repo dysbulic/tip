@@ -5,7 +5,10 @@ var scene = new List()
         'tixel.capture.frequency.mHz' : .01 * 1000,
         'time.epoch' : ( new Date() ).getTime(),
     } )
-
+    var time = {
+        get now() { return ( new Date() ).getTime() }
+    }
+    
     state.__.set( 'tixel.to.scene.time.ratio', 1 )
     scene.__defineGetter__( 'rate', function( ) {
         return state.__.get( 'tixel.to.scene.time.ratio' )
@@ -14,15 +17,7 @@ var scene = new List()
         state.__.set( 'tixel.to.scene.time.ratio', val )
     } )
 
-    function once() {
-        // ToDo: capture metrics about execution times
-        //        and attempt to learn impression.display.time
-        //        which is the time that the next 'display'
-        //        iteration will pass through
-        var time = {
-            get now() { return ( new Date() ).getTime() }
-        }
-
+    scene.__defineGetter__( 'init', function( ) {
         function config( ) {
             var $this = $(this)
             var cfg = $this.data( 'config' )
@@ -33,15 +28,32 @@ var scene = new List()
                     state.$parent.data( 'state', state )
                     return state
                 } )()
+                local.__.set( 'time.epoch', time.now )
+            }
+        }
+        $.__.$('#').each( function traverse( ) {
+            config.apply( this, arguments )
+            $(this).children().each( traverse ) 
+        } )
+        return state
+    } )
 
+
+    function once() {
+        // ToDo: capture metrics about execution times
+        //        and attempt to learn impression.display.time
+        //        which is the time that the next 'display'
+        //        iteration will pass through
+
+        function config( ) {
+            var $this = $(this)
+            var cfg = $this.data( 'config' )
+            if( typeof cfg == 'function' ) {
+                var local = $this.data( 'state' )
                 var now = time.now
-                local.__.let( 'time.epoch', now )
-            
-                //console.log(state.__.get( 'time.epoch' ))
                 local.__.set( 'display.time.offset',
                               ( ( now - local.__.get( 'time.epoch' ) )
                                 * state.__.get( 'tixel.to.scene.time.ratio' ) ) )
-
                 cfg.apply( local, arguments )
             }
         }
