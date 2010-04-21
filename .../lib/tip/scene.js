@@ -19,7 +19,7 @@ var scene = new List()
 
     scene.__defineGetter__( 'epoch', function( ) {
         function config( ) {
-            var local = $this.data( 'state' )
+            var local = $(this).data( 'state' )
             if( local ) {
                 local.__.set( 'time.epoch', time.now )
             }
