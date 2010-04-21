@@ -17,19 +17,13 @@ var scene = new List()
         state.__.set( 'tixel.to.scene.time.ratio', val )
     } )
 
-    scene.__defineGetter__( 'init', function( ) {
+    scene.__defineGetter__( 'epoch', function( ) {
         function config( ) {
-            var $this = $(this)
-            var cfg = $this.data( 'config' )
-            if( typeof cfg == 'function' ) {
-                var local = $this.data( 'state' ) || ( function() {
-                    var state = new List()
-                    state.$parent = $this
-                    state.$parent.data( 'state', state )
-                    return state
-                } )()
+            var local = $this.data( 'state' )
+            if( local ) {
                 local.__.set( 'time.epoch', time.now )
             }
+            
         }
         $.__.$('#').each( function traverse( ) {
             config.apply( this, arguments )
@@ -49,7 +43,14 @@ var scene = new List()
             var $this = $(this)
             var cfg = $this.data( 'config' )
             if( typeof cfg == 'function' ) {
-                var local = $this.data( 'state' )
+                var local = $this.data( 'state' ) || ( function() {
+                    var state = new List()
+                    state.$parent = $this
+                    state.$parent.data( 'state', state )
+                    return state
+                } )()
+                local.__.let( 'time.epoch', time.now )
+
                 var now = time.now
                 local.__.set( 'display.time.offset',
                               ( ( now - local.__.get( 'time.epoch' ) )
