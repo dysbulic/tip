@@ -81,39 +81,11 @@
             } )
             $holder.css( 'visibility', 'visible' )
             
-            var $line = ( function() {
-                var $line = $.__.$('<line/>')
-                $line.__defineSetter__( 'x', function( x ) {
-                    this.attr( 'x1', x )
-                    this.attr( 'x2', x )
-                } )
-                $line.__defineSetter__( 'y', function( y ) {
-                    this.attr( 'y1', y )
-                    this.attr( 'y2', y )
-                } )
-                $line.__defineGetter__( 'start', function() {
-                    this.start_obj = this.start_obj || {
-                        get x( ) { return parseFloat( $line.attr( 'x1' ) ) },
-                        get y( ) { return parseFloat( $line.attr( 'y1' ) ) },
-                        set x( x ) { $line.attr( 'x1', x ) },
-                        set y( y ) { $line.attr( 'y1', y ) },
-                    }
-                    return this.start_obj
-                } )
-                $line.__defineSetter__( 'start', function( start ) {
-                    this.start.x = start.x
-                    this.start.y = start.y
-                } )
-                $line.__defineGetter__( 'end', function() {
-                    this.end_obj = this.end_obj || {
-                        set x( x ) { $line.attr( 'x2', x ) },
-                        set y( y ) { $line.attr( 'y2', y ) },
-                    }
-                    return this.end_obj
-                } )
-                return $line
+            var $bg = ( function() {
+                var $rect = $.__.$('<rect/>')
+                return $rect
             } )()
-            $root.append( $line )
+            $root.append( $bg )
 
             var $work = ( $.__.$('<g/>')
                           .attr( 'visibility', 'hidden' )
@@ -157,14 +129,12 @@
                     'font-weight' : $input.css( 'font-weight' ),
                 } )
 
-                $line.y = ( parseFloat( $holder.attr( 'y' ) ) +
-                            parseFloat( $holder.attr( 'height' ) ) + 1 )
-
-                var pad = ( $.browser.mozilla ? .5 : 0 )
-                var width = $text.bbox.width + pad
-
-                $line.start.x = - width / 2
-                $line.end.x = ( $line.start.x + width )
+                $bg.attr( {
+                    x : $holder.attr( 'x' ),
+                    y : $holder.attr( 'y' ),
+                    width : $holder.attr( 'width' ),
+                    height : $holder.attr( 'height' ),
+                } )
             } )
             $input.value = 'text'
         } )
