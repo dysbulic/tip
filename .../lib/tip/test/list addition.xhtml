@@ -5,12 +5,33 @@
 <head>
   <title>List Addition</title>
   <script type="application/javascript" src=".../lib/jquery/jquery.js"/>
-  <script type="application/javascript" src=".../lib/strophe/strophe.js"/>
   <script type="application/javascript" src=".../lib/tip/Array.each.js"/>
   <script type="application/javascript" src=".../lib/tip/pointers.js"/>
   <script type="application/javascript" src=".../lib/tip/List.js"/>
+  <script type="application/javascript" src=".../lib/tip/__.jquery"/>
   <script type="application/javascript"><![CDATA[
+      $( function() {
+          var list = new List()
+          list.__.set( 'test.sublist.name', 'test' )
+          var $list = $('<ul/>')
+          $.__.$('#').append( $list )
+          $list.append( $('<li/>').text( 'list.test.sublist.name = '
+                                         list.test.sublist.name ) )
+      } )
   ]]></script>
 </head>
-<body></body>
+<body>
+  <p><em>In progress</em></p>
+  <p>Trying to figure out a way to have:</p>
+  <pre>list.__.set( 'test.sublist.name', 'test' )</pre>
+  <p>set:</p>
+  <pre>list.test.sublist.name</pre>
+  <p>This issue isn't setting up the object, it is what if someone then wants to have a primitive value for:</p>
+  <pre>list.test</pre>
+  <p>Having it dereference to a list causes a conflict. Ways to avoid it:</p>
+  <ul>
+    <li>Throw an exception when overriding part of a path</li>
+    <li>Dereference primitives as <code>list.test.sublist.name['']</code></li>
+  </ul>
+</body>
 </html>
