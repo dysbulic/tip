@@ -39,11 +39,18 @@
                            height : window.innerHeight,
                          }
             var $input = $.__.$('<html:input/>')
-            $root.append( $.__.$('<foreignObject/>').attr( $root.view )
-                          .append( $input ) )
+            var $holder = ( $.__.$('<foreignObject/>')
+                            .css( 'visibility', 'hidden' ) )
+            $root.append( $holder.append( $input ) )
+            $holder.attr( {
+                x : - $input.width() / 2,
+                width : $input.width(),
+                y : - $input.height() / 2,
+                height : $input.height(),
+            } )
+            $holder.css( 'visibility', 'visible' )
+
             $input.attr( 'value', 'text' )
-            $input.attr( { x : 0, y : 0 } )
-            console.log( window.innerWidth + ':' + $root.width() )
             $root.append( $.__.$('<circle r="1"/>') )
         } )
       ]]></script>
