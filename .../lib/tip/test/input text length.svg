@@ -54,9 +54,9 @@
                     }
                     return this
                 } )
-                $input.get(0).addEventListener( 'keyup', function( event ) {
+                $input.keyup( function( event ) {
                     $input.change()
-                }, false )
+                } )
                 return $input
             } )()
             var $holder = ( $.__.$('<foreignObject/>')
@@ -154,6 +154,7 @@
                 // The alignment is off for an unknown reason
                 var offset = ( $.browser.mozilla || $.browser.webkit
                                ? 1 : 0 )
+                console.log( $input.css( 'outline-width' ) )
                 $line.start.x = ( parseFloat( $input.css( 'border-left-width' ) ) +
                                   parseFloat( $input.css( 'padding-left' ) ) +
                                   parseFloat( $input.css( 'margin-left' ) ) +
@@ -172,7 +173,7 @@
         text { text-anchor: middle }
         rect { fill: #F0F0F0; fill-opacity: .75;
                stroke-width: .3; stroke: black; stroke-opacity: .5 }
-        input { border: none }
+input, input:focus { border: none; outline: none }
         line { stroke: blue }
       </style>
   </defs>
