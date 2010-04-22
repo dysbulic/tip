@@ -8,6 +8,7 @@
       <script type="text/javascript" xlink:href=".../lib/jquery/jquery.js"/>
       <script type="application/javascript" xlink:href=".../lib/tip/Array.each.js"/>
       <script type="application/javascript" xlink:href=".../lib/tip/__.jquery"/>
+      <script type="application/javascript" xlink:href=".../lib/tip/scene.jquery"/>
       <script type="text/javascript"><![CDATA[
           scene.__.add( {
               config : function( state, set ) {
@@ -141,7 +142,7 @@
                               'font-size' : $input.css( 'font-size' ),
                               'font-weight' : $input.css( 'font-weight' ),
                           } )
-                          $text.text = '█'
+                          $text.text = '█' // full block
                           var fullHeight = $text.bbox.height
 
                           $text.text = $input.value.replace( / /g, '\u00A0' )
