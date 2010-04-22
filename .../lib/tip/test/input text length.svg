@@ -128,14 +128,14 @@
             $root.append( $line )
             $line.y = ( parseFloat( $holder.attr( 'y' ) ) +
                         $holder.attr( 'height' ) * 1.1 )
-            console.log( parseFloat( $input.css( 'border-left-width' ) ) )
+            var offset = 1
             $line.start.x = ( parseFloat( $input.css( 'border-left-width' ) ) +
                               parseFloat( $input.css( 'padding-left' ) ) +
                               parseFloat( $input.css( 'margin-left' ) ) +
-                              parseFloat( $holder.attr( 'x' ) ) )
-            console.log( input.offsetWidth + ':' + input.clientWidth )
+                              parseFloat( $holder.attr( 'x' ) ) +
+                              offset )
             $line.end.x = ( $line.start.x +
-                            $text.bbox.width )
+                            $text.bbox.width + .5 )
         } )
       ]]></script>
 
