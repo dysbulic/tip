@@ -84,6 +84,7 @@
                 } )
                 return $line
             } )()
+
             var $work = $.__.$('<g visibility="visible"/>')
             var $text = ( function() {
                 var $text = $.__.$('<text/>')
@@ -93,16 +94,19 @@
                 $text.__defineSetter__( 'x', function( x ) {
                     this.attr( 'x', x )
                 } )
+                $text.__defineGetter__( 'y', function( x ) {
+                    return this.attr( 'x' )
+                } )
                 $text.__defineSetter__( 'y', function( y ) {
                     this.attr( 'y', y )
                 } )
                 
                 var $text_text = $text.text
                 $text.__defineGetter__( 'text', function( ) {
-                    $txt_text.apply( $text, arguments )
+                    $text_text.apply( $text, arguments )
                 } )
                 $text.__defineSetter__( 'text', function( ) {
-                    $txt_text.apply( $text, arguments )
+                    $text_text.apply( $text, arguments )
                 } )
                 $text.__defineGetter__( 'bbox', function() {
                     return $text.get(0).getBBox()
@@ -110,6 +114,7 @@
                 return $text
             } )()
             $root.append( $work.append( $text ) )
+            $text.text = 'text'
 
             $root.append( $line )
             $line.y = ( parseFloat( $holder.attr( 'y' ) ) +
