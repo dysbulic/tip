@@ -7,10 +7,12 @@
   <defs>
       <script type="text/javascript" xlink:href=".../lib/jquery/jquery.js"/>
       <script type="application/javascript" xlink:href=".../lib/tip/Array.each.js"/>
+      <script type="application/javascript" xlink:href=".../lib/tip/pointers.js"/>
+      <script type="application/javascript" xlink:href=".../lib/tip/List.js"/>
       <script type="application/javascript" xlink:href=".../lib/tip/__.jquery"/>
       <script type="application/javascript" xlink:href=".../lib/tip/scene.jquery"/>
       <script type="text/javascript"><![CDATA[
-          scene.__.add( {
+          scene.tixels.__.set( 'label', {
               config : function( state, set ) {
                   if( ! state.done ) {
                       var $root = state.$root =
@@ -179,8 +181,8 @@
               },
           } )
           $(window).bind( 'load', function() {
-            $input.value = 'text'
-        } )
+              scene.tixels.label.$input.value = 'text'
+          } )
       ]]></script>
 
       <style type="text/css">
