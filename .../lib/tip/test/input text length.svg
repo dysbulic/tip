@@ -11,20 +11,39 @@
       <script type="text/javascript"><![CDATA[
         $(window).bind( 'load', function() {
             var $root = $.__.$('#')
-            var view = ( function() {
-                var view = $root.attr( 'viewBox' ).split( ' ' )
-                return {
-                    x : view[0],
-                    y : view[1],
-                    width : view[2],
-                    height : view[3],
-                }
-            } )()
+            $root.__defineGetter__( 'view', function() {
+                this.view_obj =
+                    ( this.view_obj || ( function( attr ) {
+                        var view = attr.split( ' ' )
+                        return {
+                            x : view[0],
+                            y : view[1],
+                            width : view[2],
+                            height : view[3],
+                        }
+                    } )( this.attr( 'viewBox' ) ) )
+                return this.view_obj
+            } )
+            $root.__defineSetter__( 'view', function( view ) {
+                this.view_obj = view
+                this.attr( 'viewBox', ( view.x + ' ' +
+                                        view.y + ' ' +
+                                        view.width + ' ' +
+                                        view.height ) )
+                return this.view_obj
+            } )
+
+            $root.view = { x : - window.innerWidth / 2,
+                           width : window.innerWidth,
+                           y : - window.innerHeight / 2,
+                           height : window.innerHeight,
+                         }
             var $input = $.__.$('<html:input/>')
-            $root.append( $.__.$('<foreignObject/>').attr( view )
+            $root.append( $.__.$('<foreignObject/>').attr( $root.view )
                           .append( $input ) )
             $input.attr( 'value', 'text' )
-            console.log( $input.css( 'top' ) )
+            $input.attr( { x : 0, y : 0 } )
+            console.log( window.innerWidth + ':' + $root.width() )
         } )
       ]]></script>
 
