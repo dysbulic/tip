@@ -15,8 +15,17 @@
           list.__.set( 'test.sublist.name', 'test' )
           var $list = $('<ul/>')
           $.__.$('#').append( $list )
-          $list.append( $('<li/>').text( 'list.test.sublist.name = '
-                                         list.test.sublist.name ) )
+          function lst() {
+            this.valueOf = function() {
+              return 5
+            }
+          }
+          var test = new lst()
+          test.sub = 'sub'
+          $list.append( $('<li/>').text( 'test = ' + test ) )
+          $list.append( $('<li/>').text( 'test.sub = ' + test.sub ) )
+//          $list.append( $('<li/>').text( 'list.test.sublist.name = '
+//                                         list.test.sublist.name ) )
       } )
   ]]></script>
 </head>
@@ -33,5 +42,6 @@
     <li>Throw an exception when overriding part of a path</li>
     <li>Dereference primitives as <code>list.test.sublist.name['']</code></li>
   </ul>
+  <p>The ability to intercept <code>obj.<em>val</em></code> for undefined <em>val</em>s would be incredibly helpful.</p>
 </body>
 </html>
