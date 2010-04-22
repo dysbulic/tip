@@ -40,16 +40,17 @@
                          }
             var $input = $.__.$('<html:input/>')
             var $holder = ( $.__.$('<foreignObject/>')
-                            .css( 'visibility', 'hidden' ) )
+                            .css( 'visibility', 'hidden' )
+                            .attr( $root.view ) )
             $root.append( $holder.append( $input ) )
+            var input = $input.get(0)
             $holder.attr( {
-                x : - $input.width() / 2,
-                width : $input.width(),
-                y : - $input.height() / 2,
-                height : $input.height(),
+                x : - input.scrollWidth / 2,
+                width : input.scrollWidth,
+                y : - input.scrollHeight / 2,
+                height : input.scrollHeight,
             } )
             $holder.css( 'visibility', 'visible' )
-
             $input.attr( 'value', 'text' )
             $root.append( $.__.$('<circle r="1"/>') )
         } )
