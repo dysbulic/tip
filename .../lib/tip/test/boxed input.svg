@@ -137,7 +137,8 @@
                 // Shift necessary to center the box
                 var shift = {
                     x : 0,
-                    y : $.browser.webkit ? 3 : 1,
+                    y : $.browser.webkit ? 3
+                        : $.browser.mozilla ? 2 : 0,
                 }
                 var pad = {
                     width : 3,
