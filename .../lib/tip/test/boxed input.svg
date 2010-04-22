@@ -80,11 +80,12 @@
             $root.append( $holder.append( $input ) )
             var input = $input.get(0)
             var shift = 0 //( $.browser.webkit ? -3 : 0 )
+            var pad = $.browser.mozilla ? 1 : 0
             $holder.attr( {
                 x : - input.offsetWidth / 2,
                 width : input.offsetWidth,
                 y : - input.offsetHeight / 2 + shift,
-                height : input.offsetHeight,
+                height : input.offsetHeight + pad,
             } )
             $holder.css( 'visibility', 'visible' )
             
@@ -122,25 +123,29 @@
             $root.append( $work.append( $text ) )
 
             $input.change( function() {
-                $text.text = $input.value
                 $text.css( {
                     'font-family' : $input.css( 'font-family' ),
                     'font-size' : $input.css( 'font-size' ),
                     'font-weight' : $input.css( 'font-weight' ),
                 } )
+                $text.text = '█'
+                var fullHeight = $text.bbox.height
+
+                $text.text = $input.value.replace( / /g, '\u00A0' )
+
                 var box = $text.bbox
                 // Shift necessary to center the box
                 var shift = {
                     x : 0,
-                    y : $.browser.webkit ? 3 : 0,
+                    y : $.browser.webkit ? 3 : 1,
                 }
                 var pad = {
                     width : 3,
-                    height : 0,
+                    height : $.browser.mozilla ? 4 : 0,
                 }
                 var size = {
                     width : box.width + pad.width,
-                    height : box.height + pad.height,
+                    height : fullHeight + pad.height,
                 }
                 $bg.attr( {
                     x : - size.width / 2 + shift.x,
