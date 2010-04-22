@@ -45,14 +45,49 @@
             $root.append( $holder.append( $input ) )
             var input = $input.get(0)
             $holder.attr( {
-                x : - input.scrollWidth / 2,
-                width : input.scrollWidth,
-                y : - input.scrollHeight / 2,
-                height : input.scrollHeight,
+                x : - input.offsetWidth / 2,
+                width : input.offsetWidth,
+                y : - input.offsetHeight / 2,
+                height : input.offsetHeight,
             } )
             $holder.css( 'visibility', 'visible' )
             $input.attr( 'value', 'text' )
             $root.append( $.__.$('<circle r="1"/>') )
+            
+            var $line = ( function() {
+                var $line = $.__.$('<line/>')
+                $line.__defineSetter__( 'x', function( x ) {
+                    this.attr( 'x1', x )
+                    this.attr( 'x2', x )
+                } )
+                $line.__defineSetter__( 'y', function( y ) {
+                    this.attr( 'y1', y )
+                    this.attr( 'y2', y )
+                } )
+                $line.__defineGetter__( 'start', function() {
+                    this.start_obj = this.start_obj || {
+                        set x( x ) { $line.attr( 'x1', x ) },
+                        set y( y ) { $line.attr( 'y1', y ) },
+                    }
+                    return this.start_obj
+                } )
+                $line.__defineSetter__( 'start', function( start ) {
+                    this.start.x = start.x
+                    this.start.y = start.y
+                } )
+                $line.__defineGetter__( 'end', function() {
+                    this.end_obj = this.end_obj || {
+                        set x( x ) { $line.attr( 'x2', x ) },
+                        set y( y ) { $line.attr( 'y2', y ) },
+                    }
+                    return this.end_obj
+                } )
+                return $line
+            } )()
+            $root.append( $line )
+            $line.y = $holder.attr( 'height' )
+            $line.start.x = 0
+            $line.end.x = 10
         } )
       ]]></script>
 
