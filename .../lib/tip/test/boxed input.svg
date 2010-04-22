@@ -67,6 +67,13 @@
                 } )
                 return $input
             } )()
+
+            var $bg = ( function() {
+                var $rect = $.__.$('<rect/>')
+                return $rect
+            } )()
+            $root.append( $bg )
+
             var $holder = ( $.__.$('<foreignObject/>')
                             .css( 'visibility', 'hidden' )
                             .attr( $root.view ) )
@@ -81,12 +88,6 @@
             } )
             $holder.css( 'visibility', 'visible' )
             
-            var $bg = ( function() {
-                var $rect = $.__.$('<rect/>')
-                return $rect
-            } )()
-            $root.append( $bg )
-
             var $work = ( $.__.$('<g/>')
                           .attr( 'visibility', 'hidden' )
                         )
@@ -119,7 +120,6 @@
                 return $text
             } )()
             $root.append( $work.append( $text ) )
-            $root.append( $.__.$('<circle r="1"/>') )
 
             $input.change( function() {
                 $text.text = $input.value
@@ -128,12 +128,12 @@
                     'font-size' : $input.css( 'font-size' ),
                     'font-weight' : $input.css( 'font-weight' ),
                 } )
-
+                var box = $text.bbox
                 $bg.attr( {
-                    x : $holder.attr( 'x' ),
-                    y : $holder.attr( 'y' ),
-                    width : $holder.attr( 'width' ),
-                    height : $holder.attr( 'height' ),
+                    x : - box.width / 2,
+                    width : box.width,
+                    y : - box.height / 2,
+                    height : box.height,
                 } )
             } )
             $input.value = 'text'
@@ -144,7 +144,7 @@
         text { text-anchor: middle }
         rect { fill: #F0F0F0; fill-opacity: .75;
                stroke-width: .3; stroke: black; stroke-opacity: .5 }
-input, input:focus { border: none; text-align: center; padding: 0; margin: 0; outline: none }
+input, input:focus { border: none; text-align: center; padding: 0; margin: 0; outline: none; background-color: transparent }
         line { stroke: blue }
       </style>
   </defs>
