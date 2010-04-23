@@ -20,21 +20,32 @@ function List( ) {
 
     function add( itm, uid ) {
         var key = uid === undefined ? ++id : uid
-        console.log( 'a:' + key )
         keys.push( key )
         if( key == '' ) {
             val = itm
         } else {
             var subkey = key.substring( 0, key.indexOf( '.' ) )
             subkey = subkey == '' ? key : subkey
-            var sublist = sublists[ subkey ] =
-                sublists[ subkey ] || new List
-            store.__defineGetter__( subkey, function() {
-                return sublist
-            } )
             var remaining = ( subkey == ''
                               ? subkey
                               : key.substring( subkey.length + 1 ) )
+
+            var sublist = sublists[ subkey ]
+            if( itm instanceof List ) {
+                if( sublist === undefined ) {
+                    sublist = itm
+                } else {
+                    itm.__.each( function() {
+                        sublist.__.add.apply( this, arguments )
+                    } )
+                }
+            } else if( sublist === undefined ) {
+                sublist = new List
+            }
+            sublists[ subkey ] = sublist
+            store.__defineGetter__( subkey, function() {
+                return sublist
+            } )
             sublist.__.add( itm, remaining )
         }
         return key

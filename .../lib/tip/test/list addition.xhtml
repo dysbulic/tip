@@ -31,6 +31,22 @@
           list.__.each( function( val, key ) {
               $list.append( $('<li/>').text( 'list.' + key + ' = ' + val ) )
           } )
+
+          var sublist = new List( { type : 'list' } )
+          $list.append( $('<li/>').text( 'sublist.__.get( "type" ) = ' +
+                                         sublist.__.get( 'type' ) ) )
+          $list.append( $('<li/>').text( 'sublist.type = ' +
+                                         sublist.type ) )
+
+          list.__.add( sublist, 'sublist' )
+          $list.append( $('<li/>').text( 'list.sublist.type = ' +
+                                         list.sublist.type ) )
+
+          sublist = new List( { type : 'overwrite' } )
+          list.__.add( sublist, 'sublist' )
+          $list.append( $('<li/>').text( 'list.sublist.type = ' +
+                                         list.sublist.type ) )
+
       } )
   ]]></script>
 </head>
