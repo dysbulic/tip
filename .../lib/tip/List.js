@@ -68,7 +68,7 @@ function List( ) {
         console.log( id )
         if( ( id instanceof Array && id.length == 0 )
             || id == '' ) {
-            return this
+            return val
         }
         if( typeof id.shift == 'function' ) {
             var sublist = get( id.shift() )
@@ -87,8 +87,6 @@ function List( ) {
         } else if( typeof id =='string'
                    || id instanceof String ) {
             var path = id.split( '.' )
-            console.log( 'p:' + id )
-
             return ( path.length == 1
                      ? sublists[ id ]
                      : get( path ) )
