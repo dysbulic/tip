@@ -16,6 +16,8 @@
           var $list = $('<ul/>')
           $.__.$('#').append( $list )
           document.list = list
+          $list.append( $('<li/>').text( 'list.__.get( "test" ) = ' +
+                                         list.__.get( 'test' ) ) )
           $list.append( $('<li/>').text( 'list.__.get( "test.sublist.name" ) = ' +
                                          list.__.get( 'test.sublist.name' ) ) )
           $list.append( $('<li/>').text( 'list.test.sublist.name = ' +

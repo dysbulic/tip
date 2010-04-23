@@ -5,13 +5,17 @@ if( ! Array.prototype.each ) {
 function List( ) {
     var keys = []
     var sublists = {}
-    var val
+    var val = this
     var store = this
     var id = 0
     var count = 0
 
     this.valueOf = function() {
         return val
+    }
+
+    this.toString = function() {
+        return 'List'
     }
 
     function add( itm, uid ) {
@@ -22,7 +26,9 @@ function List( ) {
         } else {
             var subkey = key.substring( 0, key.indexOf( '.' ) )
             var sublist = sublists[ subkey ] =
-                sublists[ subkey ] || new List()
+                sublists[ subkey ] || new List
+            console.log( 'a:' + subkey + ':' + sublist + ':' + sublists[ subkey ] )
+            
             var remaining = ( subkey == ''
                               ? subkey
                               : key.substring( subkey.length + 1 ) )
@@ -77,7 +83,9 @@ function List( ) {
         } else if( typeof id =='string'
                    || id instanceof String ) {
             var path = id.split( '.' )
-            console.log( id )
+            for( prop in sublists ) {
+                console.log( 'g:' + prop + ':' + sublists[prop] )
+            }
             return ( path.length == 1
                      ? sublists[ id ]
                      : get( path ) )
