@@ -20,18 +20,19 @@ function List( ) {
 
     function add( itm, uid ) {
         var key = uid === undefined ? ++id : uid
-        console.log( 'a:' + key )
         keys.push( key )
         if( key == '' ) {
             val = itm
         } else {
             var subkey = key.substring( 0, key.indexOf( '.' ) )
+            subkey = subkey == '' ? key : subkey
             var sublist = sublists[ subkey ] =
                 sublists[ subkey ] || new List
             var remaining = ( subkey == ''
                               ? subkey
                               : key.substring( subkey.length + 1 ) )
             sublist.__.add( itm, remaining )
+            console.log( 'a:' + key + ':' + sublist + ':' + remaining )
         }
         return key
     }
@@ -65,13 +66,13 @@ function List( ) {
     merge.apply( this, arguments )
 
     function get( id ) {
-        console.log( id )
         if( ( id instanceof Array && id.length == 0 )
             || id == '' ) {
             return val
         }
         if( typeof id.shift == 'function' ) {
             var sublist = get( id.shift() )
+            console.log( id + ':' + sublist )
             if( sublist !== undefined ) {
                 return sublist.__.get( id )
             }
