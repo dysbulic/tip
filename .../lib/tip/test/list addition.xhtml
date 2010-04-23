@@ -23,8 +23,10 @@
           }
           $list.append( $('<li/>').text( 'test = ' + test ) )
           $list.append( $('<li/>').text( 'test.sub = ' + test.sub ) )
-//          $list.append( $('<li/>').text( 'list.test.sublist.name = '
-//                                         list.test.sublist.name ) )
+          $list.append( $('<li/>').text( 'list.__.get( "test.sublist.name" ) = ' +
+                                         list.__.get( 'test.sublist.name' ) ) )
+          $list.append( $('<li/>').text( 'list.test.sublist.name = ' +
+                                         list.test.sublist.name ) )
       } )
   ]]></script>
 </head>

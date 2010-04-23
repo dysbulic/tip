@@ -16,15 +16,16 @@ function List( ) {
 
     function add( itm, uid ) {
         var key = uid === undefined ? ++id : uid
-        console.log( key )
         keys.push( key )
         if( key == '' ) {
             val = itm
         } else {
-            var subkey = key.substring( key.indexOf( '.' ) )
+            var subkey = key.substring( 0, key.indexOf( '.' ) )
             var sublist = sublists[ subkey ] =
                 sublists[ subkey ] || new List()
-            var remaining = key.substring( subkey.length )
+            var remaining = ( subkey == ''
+                              ? subkey
+                              : key.substring( subkey.length + 1 ) )
             sublist.__.add( itm, remaining )
         }
         return key
@@ -61,8 +62,9 @@ function List( ) {
     function get( id ) {
         if( typeof id.pop == 'function' ) {
             var step = get( id.pop() )
-            if( step !== undefined )
+            if( step !== undefined ) {
                 return step.get( id )
+            }
         }
 
         if( typeof id == 'number' ) {
@@ -72,8 +74,13 @@ function List( ) {
                 id += this.count // end-based index
             }
             return sublists[ keys[ id ] ]
-        } else if( id instanceof String ) {
-            return get( id.split( '.' ) )
+        } else if( typeof id =='string'
+                   || id instanceof String ) {
+            id = id.split( '.' )
+            console.log( id )
+            return ( id.length == 1
+                     ? sublists[ id ]
+                     : get( id ) )
         }
         return undefined
     }
