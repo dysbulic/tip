@@ -76,11 +76,11 @@ function List( ) {
             return sublists[ keys[ id ] ]
         } else if( typeof id =='string'
                    || id instanceof String ) {
-            id = id.split( '.' )
+            var path = id.split( '.' )
             console.log( id )
-            return ( id.length == 1
+            return ( path.length == 1
                      ? sublists[ id ]
-                     : get( id ) )
+                     : get( path ) )
         }
         return undefined
     }
