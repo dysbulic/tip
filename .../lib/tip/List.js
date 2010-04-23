@@ -16,14 +16,15 @@ function List( ) {
 
     function add( itm, uid ) {
         var key = uid === undefined ? ++id : uid
+        console.log( key )
         keys.push( key )
         if( key == '' ) {
             val = itm
         } else {
-            var subkey = key.substring( key.indexOf( '.' ) + 1 )
+            var subkey = key.substring( key.indexOf( '.' ) )
             var sublist = sublists[ subkey ] =
                 sublists[ subkey ] || new List()
-            var remaining = key.substring( 0, key.length - subkey.length )
+            var remaining = key.substring( subkey.length )
             sublist.__.add( itm, remaining )
         }
         return key
