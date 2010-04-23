@@ -15,13 +15,12 @@
           list.__.set( 'test.sublist.name', 'test' )
           var $list = $('<ul/>')
           $.__.$('#').append( $list )
-          function lst() {
-            this.valueOf = function() {
+          var test = {
+            valueOf : function() {
               return 5
-            }
+            },
+            sub : 'sub'
           }
-          var test = new lst()
-          test.sub = 'sub'
           $list.append( $('<li/>').text( 'test = ' + test ) )
           $list.append( $('<li/>').text( 'test.sub = ' + test.sub ) )
 //          $list.append( $('<li/>').text( 'list.test.sublist.name = '
