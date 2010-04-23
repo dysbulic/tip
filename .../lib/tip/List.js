@@ -20,6 +20,7 @@ function List( ) {
 
     function add( itm, uid ) {
         var key = uid === undefined ? ++id : uid
+        console.log( 'a:' + key )
         keys.push( key )
         if( key == '' ) {
             val = itm
@@ -27,8 +28,6 @@ function List( ) {
             var subkey = key.substring( 0, key.indexOf( '.' ) )
             var sublist = sublists[ subkey ] =
                 sublists[ subkey ] || new List
-            console.log( 'a:' + subkey + ':' + sublist + ':' + sublists[ subkey ] )
-            
             var remaining = ( subkey == ''
                               ? subkey
                               : key.substring( subkey.length + 1 ) )
@@ -66,10 +65,15 @@ function List( ) {
     merge.apply( this, arguments )
 
     function get( id ) {
-        if( typeof id.pop == 'function' ) {
-            var step = get( id.pop() )
-            if( step !== undefined ) {
-                return step.get( id )
+        console.log( id )
+        if( ( id instanceof Array && id.length == 0 )
+            || id == '' ) {
+            return this
+        }
+        if( typeof id.shift == 'function' ) {
+            var sublist = get( id.shift() )
+            if( sublist !== undefined ) {
+                return sublist.__.get( id )
             }
         }
 
@@ -83,9 +87,8 @@ function List( ) {
         } else if( typeof id =='string'
                    || id instanceof String ) {
             var path = id.split( '.' )
-            for( prop in sublists ) {
-                console.log( 'g:' + prop + ':' + sublists[prop] )
-            }
+            console.log( 'p:' + id )
+
             return ( path.length == 1
                      ? sublists[ id ]
                      : get( path ) )
