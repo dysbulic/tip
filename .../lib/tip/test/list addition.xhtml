@@ -11,23 +11,42 @@
   <script type="application/javascript" src=".../lib/tip/__.jquery"/>
   <script type="application/javascript"><![CDATA[
       $( function() {
-          var list = new List()
-          list.__.set( 'test.sublist.name', 'test' )
-          list.__.set( 'test.sub.sublist.name', 'test' )
-          list.__.set( 'test', 'testing' )
           var $list = $('<ul/>')
           $.__.$('#').append( $list )
-          document.list = list
+
+          var obj = {
+              prop : 'prop',
+              valueOf : function() {
+                  return 4
+              },
+          }
+          $list.append( $('<li/>').text( 'obj = ' + obj ) )
+          $list.append( $('<li/>').text( 'obj.prop = ' + obj.prop ) )
+
+          var obj = {
+              valueOf : function() {
+                  return function() { return 4 }
+              },
+          }
+          $list.append( $('<li/>').text( 'obj = ' + obj ) )
+
+          var list = new List()
+          list.__.set( 'test.sublist.name', 'test' )
           $list.append( $('<li/>').text( 'list.__.get( "test" ) = ' +
                                          list.__.get( 'test' ) ) )
           $list.append( $('<li/>').text( 'list.__.get( "test.sublist" ) = ' +
                                          list.__.get( 'test.sublist' ) ) )
           $list.append( $('<li/>').text( 'list.__.get( "test.sublist.name" ) = ' +
                                          list.__.get( 'test.sublist.name' ) ) )
+
+          list.__.set( 'test', 'testing' )
           $list.append( $('<li/>').text( 'list.test = ' +
                                          list.test ) )
+
+          list.__.set( 'test.sub.sublist.name', 'test' )
           $list.append( $('<li/>').text( 'list.test.sublist.name = ' +
                                          list.test.sublist.name ) )
+
           list.__.each( function( val, key ) {
               $list.append( $('<li/>').text( 'list.' + key + ' = ' + val ) )
           } )
@@ -46,23 +65,31 @@
           list.__.add( sublist, 'sublist' )
           $list.append( $('<li/>').text( 'list.sublist.type = ' +
                                          list.sublist.type ) )
+          $list.append( $('<li/>').text( 'list.sublist = ' +
+                                         list.sublist ) )
+
+          sublist = new List( { type : function() { return 'func' } } )
+          list.__.add( sublist, 'sublist' )
+          $list.append( $('<li/>').text( 'sublist.type = ' +
+                                         sublist.type ) )
+          $list.append( $('<li/>').text( 'list.sublist.type = ' +
+                                         list.sublist.type ) )
+          $list.append( $('<li/>').text( 'list.sublist = ' +
+                                         list.sublist ) )
 
       } )
   ]]></script>
 </head>
 <body>
   <p><em>In progress&hellip;</em></p>
-  <p>Trying to figure out a way to have:</p>
-  <pre>list.__.set( 'test.sublist.name', 'test' )</pre>
-  <p>set:</p>
-  <pre>list.test.sublist.name</pre>
-  <p>This issue isn't setting up the object, it is what if someone then wants to have a primitive value for:</p>
-  <pre>list.test</pre>
-  <p>Having it dereference to a list causes a conflict. Ways to avoid it:</p>
-  <ul>
-    <li>Throw an exception when overriding part of a path</li>
-    <li>Dereference primitives as <code>list.test.sublist.name['']</code></li>
-  </ul>
   <p>The ability to intercept <code>obj.<em>val</em></code> for undefined <em>val</em>s would be incredibly helpful.</p>
+  <p>The issue that I am struggling with currently is:</p>
+  <pre>var obj = { valueOf : function() { return 3 } }
+console.log( obj )</pre>
+  <p>prints <code>3</code> while:</p>
+  <pre>var obj = { valueOf : function() { return function() { return 3 } } }
+console.log( obj )</pre>
+  <p>prints <code>Object</code>.</p>
+  <p><code>valueOf</code> must return a primitive type or it is not evaluated.</p>
 </body>
 </html>
