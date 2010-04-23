@@ -20,6 +20,7 @@ function List( ) {
 
     function add( itm, uid ) {
         var key = uid === undefined ? ++id : uid
+        console.log( 'a:' + key )
         keys.push( key )
         if( key == '' ) {
             val = itm
@@ -49,8 +50,8 @@ function List( ) {
                     add( val )
                 } )
             } else if( obj instanceof List ) {
-                obj.__.each( function( val, key ) {
-                    set.apply( store, [ key, val ] )
+                obj.__.each( function( ) {
+                    add.apply( store, arguments )
                 } )
             } else {
                 for( prop in obj ) {

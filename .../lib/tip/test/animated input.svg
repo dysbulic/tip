@@ -12,8 +12,9 @@
       <script type="application/javascript" xlink:href=".../lib/tip/__.jquery"/>
       <script type="application/javascript" xlink:href=".../lib/tip/scene.jquery"/>
       <script type="text/javascript"><![CDATA[
-          scene.__.set( 'label', new List( {
+          var label = new List( {
               config : function( ) {
+                  console.log( 'config' )
                   if( ! this.done ) {
                       var $root = this.$root =
                           this.$root || ( function() {
@@ -176,13 +177,16 @@
                       //set( '$bg.width', )
                   }
               },
-              display : function( state ) {
-                  
+              display : function( ) {
+                  console.log( 'display' )
               },
           } )
+          scene.__.set( 'label', label )
+          console.log( label.config )
+          console.log( scene.label )
           $(window).bind( 'load', function() {
-              scene.once
-              scene.__.set( 'label.$input.value', 'text' )
+              //scene.once
+              //scene.__.set( 'label.text', 'test' )
           } )
       ]]></script>
 
