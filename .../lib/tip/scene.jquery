@@ -41,8 +41,8 @@ scene.tixels = new List()
         //        iteration will pass through
 
         function config( ) {
-            var $this = $(this)
-            var cfg = $this.data( 'config' )
+            var cfg = this.config
+            console.log( cfg )
             if( typeof cfg == 'function' ) {
                 var local = $this.data( 'state' ) || ( function() {
                     var state = new List()
@@ -60,7 +60,7 @@ scene.tixels = new List()
             }
         }
 
-        $.__.$('#').each( function traverse( ) {
+        scene.__.each( function traverse( ) {
             config.apply( this, arguments )
             $(this).children().each( traverse ) 
         } )

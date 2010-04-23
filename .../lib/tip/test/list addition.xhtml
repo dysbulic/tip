@@ -13,6 +13,7 @@
       $( function() {
           var list = new List()
           list.__.set( 'test.sublist.name', 'test' )
+          list.__.set( 'test.sub.sublist.name', 'test' )
           list.__.set( 'test', 'testing' )
           var $list = $('<ul/>')
           $.__.$('#').append( $list )
@@ -27,6 +28,9 @@
                                          list.test ) )
           $list.append( $('<li/>').text( 'list.test.sublist.name = ' +
                                          list.test.sublist.name ) )
+          list.__.each( function( val, key ) {
+              $list.append( $('<li/>').text( 'list.' + key + ' = ' + val ) )
+          } )
       } )
   ]]></script>
 </head>

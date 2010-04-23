@@ -35,7 +35,6 @@ function List( ) {
                               ? subkey
                               : key.substring( subkey.length + 1 ) )
             sublist.__.add( itm, remaining )
-            console.log( 'a:' + key + ':' + sublist + ':' + remaining )
         }
         return key
     }
@@ -75,7 +74,6 @@ function List( ) {
         }
         if( typeof id.shift == 'function' ) {
             var sublist = get( id.shift() )
-            console.log( id + ':' + sublist )
             if( sublist !== undefined ) {
                 return sublist.__.get( id )
             }
