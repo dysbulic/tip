@@ -12,11 +12,11 @@
       <script type="application/javascript" xlink:href=".../lib/tip/__.jquery"/>
       <script type="application/javascript" xlink:href=".../lib/tip/scene.jquery"/>
       <script type="text/javascript"><![CDATA[
-          scene.__.set( 'label', {
-              config : function( state, set ) {
-                  if( ! state.done ) {
-                      var $root = state.$root =
-                          state.$root || ( function() {
+          scene.__.set( 'label', new List( {
+              config : function( ) {
+                  if( ! this.done ) {
+                      var $root = this.$root =
+                          this.$root || ( function() {
                               var $root = $.__.$('#')
                               $root.__defineGetter__( 'view', function() {
                                   this.view_obj =
@@ -43,8 +43,8 @@
                           } )()
 
                       var $base = this.$base = this.$base || $root
-                      var $input = state.$input =
-                          state.$input || ( function() {
+                      var $input = this.$input =
+                          this.$input || ( function() {
                               var $input = $.__.$('<html:input/>')
                               $input.__defineGetter__( 'value', function( ) {
                                   return this.val.apply( this, arguments )
@@ -172,7 +172,7 @@
                           } )
                       } )
                       
-                      var percent = Math.min( 1, state.time.offset / 1000 )
+                      var percent = Math.min( 1, this.time.offset / 1000 )
                       //set( '$bg.width', )
                   }
               },
@@ -181,6 +181,7 @@
               },
           } )
           $(window).bind( 'load', function() {
+              scene.once
               scene.__.set( 'label.$input.value', 'text' )
           } )
       ]]></script>

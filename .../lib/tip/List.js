@@ -126,7 +126,20 @@ function List( ) {
     function each( f ) {
         keys.each( function( key, idx ) {
             if( key !== undefined ) {
-                f.apply( f, [ get( key ), key ] )
+                var val = get( key ).valueOf()
+                f.apply( val, [ val, key ] )
+            }
+        } )
+    }
+
+    function traverse( f, depth, index ) {
+        depth = depth || 1
+        index = index || 1
+        f.apply( this, { depth: depth, index: index } )
+        var subindex = 0
+        this.__.each( function( item, key ) {
+            if( item instanceof List ) {
+                item.traverse( f, depth + 1, ++subindex )
             }
         } )
     }
@@ -210,18 +223,6 @@ function List( ) {
         traverse : traverse,
     }
     this.__defineGetter__( '__', function() { return exports } )
-
-    function traverse( f, depth, index ) {
-        depth = depth || 1
-        index = index || 1
-        f.apply( this, { depth: depth, index: index } )
-        var subindex = 0;
-        this.each( function( item, key ) {
-            if( item instanceof List ) {
-                item.traverse( f, depth + 1, ++subindex )
-            }
-        } );
-    }
 }
 List.prototype = new Array
 
