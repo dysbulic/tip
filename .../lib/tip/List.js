@@ -28,6 +28,9 @@ function List( ) {
             subkey = subkey == '' ? key : subkey
             var sublist = sublists[ subkey ] =
                 sublists[ subkey ] || new List
+            store.__defineGetter__( subkey, function() {
+                return sublist
+            } )
             var remaining = ( subkey == ''
                               ? subkey
                               : key.substring( subkey.length + 1 ) )

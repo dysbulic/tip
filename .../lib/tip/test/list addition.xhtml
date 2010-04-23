@@ -13,6 +13,7 @@
       $( function() {
           var list = new List()
           list.__.set( 'test.sublist.name', 'test' )
+          list.__.set( 'test', 'testing' )
           var $list = $('<ul/>')
           $.__.$('#').append( $list )
           document.list = list
@@ -22,13 +23,15 @@
                                          list.__.get( 'test.sublist' ) ) )
           $list.append( $('<li/>').text( 'list.__.get( "test.sublist.name" ) = ' +
                                          list.__.get( 'test.sublist.name' ) ) )
+          $list.append( $('<li/>').text( 'list.test = ' +
+                                         list.test ) )
           $list.append( $('<li/>').text( 'list.test.sublist.name = ' +
                                          list.test.sublist.name ) )
       } )
   ]]></script>
 </head>
 <body>
-  <p><em>In progress</em></p>
+  <p><em>In progress&hellip;</em></p>
   <p>Trying to figure out a way to have:</p>
   <pre>list.__.set( 'test.sublist.name', 'test' )</pre>
   <p>set:</p>
