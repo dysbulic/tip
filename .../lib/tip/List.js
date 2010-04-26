@@ -11,6 +11,9 @@ function List( ) {
     var count = 0
 
     this.valueOf = function() {
+        if( typeof val == 'function' ) {
+            throw val
+        }
         return val
     }
 

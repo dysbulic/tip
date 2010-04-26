@@ -23,15 +23,25 @@
           $list.append( $('<li/>').text( 'obj = ' + obj ) )
           $list.append( $('<li/>').text( 'obj.prop = ' + obj.prop ) )
 
-          var obj = {
-              valueOf : function() {
-                  return function() { return 4 }
-              },
+          try {
+              obj = {
+                  valueOf : function() {
+                      throw function() { return 4 }
+                  },
+              }
+          } catch( f ) {
+              $list.append( $('<li/>').text( 'caught obj init = ' + obj ) )
           }
-          $list.append( $('<li/>').text( 'obj = ' + obj ) )
+          try {
+              $list.append( $('<li/>').text( 'obj = ' + obj ) )
+          } catch( f ) {
+              $list.append( $('<li/>').text( 'caught obj = ' + f ) )
+          }
 
           var list = new List()
           list.__.set( 'test.sublist.name', 'test' )
+          $list.append( $('<li/>').text( 'typeof list = ' + typeof list ) )
+          $list.append( $('<li/>').text( 'list.prototype = ' + list.prototype ) )
           $list.append( $('<li/>').text( 'list.__.get( "test" ) = ' +
                                          list.__.get( 'test' ) ) )
           $list.append( $('<li/>').text( 'list.__.get( "test.sublist" ) = ' +
@@ -51,27 +61,53 @@
               $list.append( $('<li/>').text( 'list.' + key + ' = ' + val ) )
           } )
 
-          var sublist = new List( { type : 'list' } )
+          var sublist = new List( {
+              type : 'list',
+              position : 2,
+          } )
           $list.append( $('<li/>').text( 'sublist.__.get( "type" ) = ' +
                                          sublist.__.get( 'type' ) ) )
           $list.append( $('<li/>').text( 'sublist.type = ' +
                                          sublist.type ) )
+          $list.append( $('<li/>').text( 'sublist.position = ' +
+                                         sublist.position ) )
 
           list.__.add( sublist, 'sublist' )
           $list.append( $('<li/>').text( 'list.sublist.type = ' +
                                          list.sublist.type ) )
 
           sublist = new List( { type : 'overwrite' } )
+          sublist = new List( { type : 'overwrite' } )
           list.__.add( sublist, 'sublist' )
           $list.append( $('<li/>').text( 'list.sublist.type = ' +
                                          list.sublist.type ) )
+          $list.append( $('<li/>').text( 'list.sublist.position = ' +
+                                         list.sublist.position ) )
           $list.append( $('<li/>').text( 'list.sublist = ' +
                                          list.sublist ) )
 
-          sublist = new List( { type : function() { return 'func' } } )
-          list.__.add( sublist, 'sublist' )
-          $list.append( $('<li/>').text( 'sublist.type = ' +
-                                         sublist.type ) )
+          try {
+              sublist = new List( { type : function() { return 'func' } } )
+          } catch( type ) {
+              $list.append( $('<li/>').text( 'caught sublist.type init = ' +
+                                             type ) )
+          }
+              
+          try {
+              list.__.add( sublist, 'sublist' )
+          } catch( type ) {
+              $list.append( $('<li/>').text( 'caught sublist add = ' +
+                                             type ) )
+          }
+
+          try {
+              $list.append( $('<li/>').text( 'sublist.type = ' +
+                                             sublist.type ) )
+          } catch( type ) {
+              $list.append( $('<li/>').text( 'caught sublist.type = ' +
+                                             type ) )
+          }
+
           $list.append( $('<li/>').text( 'list.sublist.type = ' +
                                          list.sublist.type ) )
           $list.append( $('<li/>').text( 'list.sublist = ' +
