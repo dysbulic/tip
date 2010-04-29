@@ -25,6 +25,12 @@
                 } )
             } )
         } )
+        $( '#t1' ).bind( 'beginEvent', function() {
+            console.log( 'begin' )
+        } )
+        $( '#ty' ).bind( 'beginEvent', function() {
+            console.log( 'begin' )
+        } )
     ]]></script>
     <style type="text/css">
       rect { fill: #F0F0F0; fill-opacity: .75 }
@@ -37,7 +43,7 @@
   <rect x="0" y="0" width="0" height="0">
     <animate attributeName="x" attributeType="XML"
              begin="0s" dur="$t" fill="freeze" from="0" to="-25" />
-    <animate attributeName="y" attributeType="XML"
+    <animate id="ty" attributeName="y" attributeType="XML"
              begin="0s" dur="$t" fill="freeze" from="0" to="-25" />
     <animate attributeName="width" attributeType="XML"
              begin="0s" dur="$t" fill="freeze" from="0" to="50" />
@@ -48,7 +54,7 @@
      <animate attributeName="x" attributeType="XML"
               begin="0s" dur="$t" fill="freeze" from="0" to="-25" />
      <html:input id="label" type="text" value="Hell">
-       <set xlink:href="#label" attributeName="value" to="H" begin="0" dur=".25s" fill="remove" />
+       <set id="t1" attributeName="value" to="H" begin="0" dur=".25s" fill="remove" />
        <set attributeName="value" to="Hello" begin="5s" dur=".25s" fill="remove" />
        <set attributeName="value" to="Hello World" begin="1s" dur=".25s" fill="freeze" />
      </html:input>
