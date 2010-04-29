@@ -32,6 +32,9 @@
         $( '#ty' ).bind( 'beginEvent', function() {
             console.log( 'begin' )
         } )
+        $( '#fo' ).bind( 'begin', function() {
+            console.log( 'begin' )
+        } )
     ]]></script>
     <style type="text/css">
       rect { fill: #F0F0F0; fill-opacity: .75 }
@@ -55,11 +58,12 @@
     <animate attributeName="stroke" attributeType="CSS"
              begin="0s" dur="1s" from="black" to="white" fill="freeze" />
    </rect>
-   <foreignObject>
+   
+   <foreignObject id="fo">
      <animate attributeName="x" attributeType="XML"
               begin="0s" dur="$t" fill="freeze" from="0" to="-25" />
      <html:input id="label" type="text" value="Hell">
-       <set id="t1" attributeName="value" to="H" begin="0" dur=".25s" fill="remove" />
+       <set id="t1" attributeName="value" to="H" begin="0s" dur=".25s" fill="remove" />
        <set attributeName="value" to="Hello" begin="5s" dur=".25s" fill="remove" />
        <set attributeName="value" to="Hello World" begin="1s" dur=".25s" fill="freeze" />
      </html:input>
