@@ -32,9 +32,12 @@
         $( '#ty' ).bind( 'beginEvent', function() {
             console.log( 'begin' )
         } )
-        $( '#fo' ).bind( 'begin', function() {
-            console.log( 'begin' )
-        } )
+        $( '#fo' ).get(0).addEventListener( 'change', function() {
+            console.log( 'change' )
+        }, false )
+        $( '#fo' ).get(0).addEventListener( 'DOMAttrModified', function() {
+            console.log( 'change' )
+        }, false )
     ]]></script>
     <style type="text/css">
       rect { fill: #F0F0F0; fill-opacity: .75 }
