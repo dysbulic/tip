@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg viewBox="-50 -50 100 100" width="100%" height="100%"
      xmlns="http://www.w3.org/2000/svg"
+     xmlns:tip=".../lib/tip/2010/05/05/"
      xmlns:html="http://www.w3.org/1999/xhtml"
      xmlns:smil="http://www.w3.org/2001/SMIL20"
      xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -14,30 +15,41 @@
     <script type="text/javascript" xlink:href=".../lib/tip/tip.jquery"/>
 
     <script type="text/javascript"><![CDATA[
+        var console = console || { log : function() { } }
+        console.log( document.implementation.hasFeature( 'TimeControl', null ) )
         $(window).bind( 'load', function() {
             var vars = {}
-            vars[ 't' ] = '.5s'
+            vars[ 't' ] = '0.5'
             $( 'animate' ).each( function() {
                 var $elem = $(this)
                 this.attributes.each( function( val, name ) {
+                    if( name.substring( 0, 4 ) == 'tip:' ) {
+                        name = name.substring( 4 )
+                    }
                     if( match = val.match( /^\$([^ ]+)$/ ) ) {
                         $elem.attr( name, vars[ match[ 1 ] ] )
                     }
                 } )
             } )
+            $( '#t1' ).bind( 'beginEvent', function() {
+                console.log( 'begin' )
+            } )
+            $( '#ty' ).bind( 'beginEvent', function() {
+                console.log( 'begin' )
+            } )
+            $( '#ty' ).bind( 'begin', function() {
+                console.log( 'begin' )
+            } )
+            $( '#ty' ).bind( 'change', function() {
+                console.log( 'begin' )
+            } )
+            $( '#fo' ).get(0).addEventListener( 'change', function() {
+                console.log( 'change' )
+            }, false )
+            $( '#fo' ).get(0).addEventListener( 'DOMAttrModified', function() {
+                console.log( 'change' )
+            }, false )
         } )
-        $( '#t1' ).bind( 'beginEvent', function() {
-            console.log( 'begin' )
-        } )
-        $( '#ty' ).bind( 'beginEvent', function() {
-            console.log( 'begin' )
-        } )
-        $( '#fo' ).get(0).addEventListener( 'change', function() {
-            console.log( 'change' )
-        }, false )
-        $( '#fo' ).get(0).addEventListener( 'DOMAttrModified', function() {
-            console.log( 'change' )
-        }, false )
     ]]></script>
     <style type="text/css">
       rect { fill: #F0F0F0; fill-opacity: .75 }
@@ -49,26 +61,42 @@
   </defs>
   <rect x="0" y="0" width="0" height="0">
     <animate attributeName="x" attributeType="XML"
-             begin="0s" dur="$t" fill="freeze" from="0" to="-25" />
-    <animate id="ty" attributeName="y" attributeType="XML"
-             begin="0s" dur="$t" fill="freeze" from="0" to="-25" />
+             begin="0s" dur="1s" fill="freeze" from="0" to="-25" />
+    <animate attributeName="y" attributeType="XML"
+             begin="0s" dur="1s" fill="freeze" from="0" to="-25" />
     <animate attributeName="width" attributeType="XML"
-             begin="0s" dur="$t" fill="freeze" from="0" to="50" />
+             begin="0s" dur="1s" fill="freeze" from="0" to="50" />
     <animate attributeName="height" attributeType="XML"
-             begin="0s" dur="$t" fill="freeze" from="0" to="50" />
+             begin="0s" dur="1s" fill="freeze" from="0" to="50" />
+    <animate attributeName="fill" attributeType="CSS"
+             begin="0s" dur="1s" from="white" to="black" fill="freeze" />
+    <animate attributeName="stroke" attributeType="CSS"
+             begin="0s" dur="1s" from="black" to="white" fill="freeze" />
+  </rect>
+  <text src="data:,Willemijn's%2011th%20Birthday%20Party" 
+        region="Title" dur="10s"/>
+  <rect x="0" y="0" width="0" height="0">
+    <animate attributeName="x" attributeType="XML"
+             begin="0s" tip:dur="$t" fill="freeze" from="0" to="-25" />
+    <animate id="ty" attributeName="y" attributeType="XML"
+             begin="0s" tip:dur="$t" fill="freeze" from="0" to="-25" />
+    <animate attributeName="width" attributeType="XML"
+             begin="0s" tip:dur="$t" fill="freeze" from="0" to="50" />
+    <animate attributeName="height" attributeType="XML"
+             begin="0s" tip:dur="$t" fill="freeze" from="0" to="50" />
     <animate attributeName="fill" attributeType="CSS"
              begin="0s" dur="1s" from="white" to="black" fill="freeze" />
     <animate attributeName="stroke" attributeType="CSS"
              begin="0s" dur="1s" from="black" to="white" fill="freeze" />
    </rect>
-   
+
    <foreignObject id="fo">
      <animate attributeName="x" attributeType="XML"
-              begin="0s" dur="$t" fill="freeze" from="0" to="-25" />
+              begin="0s" tip:dur="$t" fill="freeze" from="0" to="-25" />
      <html:input id="label" type="text" value="Hell">
-       <set id="t1" attributeName="value" to="H" begin="0s" dur=".25s" fill="remove" />
-       <set attributeName="value" to="Hello" begin="5s" dur=".25s" fill="remove" />
-       <set attributeName="value" to="Hello World" begin="1s" dur=".25s" fill="freeze" />
+       <set id="t1" attributeName="value" to="H" begin="0s" dur="0.25" fill="remove" />
+       <set attributeName="value" to="Hello" begin="5s" dur="0.25" fill="remove" />
+       <set attributeName="value" to="Hello World" begin="1s" dur="0.25" fill="freeze" />
      </html:input>
    </foreignObject>
 </svg>
