@@ -1,7 +1,11 @@
-t0: center.x,y = 50%
-    box.x,y = center
-    box.width,height = 0
+t0: box = new Rectangle
+    label = new Text
+    box.center.x,y = 50%
 
-t1: 
+t2: label.text = "Hello World"
+    label.width = 100%
+                  
+t1: box.height = t2:label.height
+    box.width = Math.min( t2:label.height,width )
 
-t2: box.x,y = center.x,y - box.width,height / 2
+t2: box.x,y.offset = - box.width,height / 2
