@@ -11,7 +11,12 @@
     <script type="text/javascript" xlink:href=".../lib/jquery/jquery.js"/>
     <script type="text/javascript"><![CDATA[
       $(window).ready( function() {
-      
+        var vars = {}
+        $( 'animate' ).each( function() {
+          this.attributes.each( function( attr ) {
+            console.log( attr.name + ' = ' + attr.val )
+          } )
+        } )
       } )
     ]]></script>
     <style type="text/css">
