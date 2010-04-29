@@ -1,0 +1,433 @@
+<HTML><HEAD>
+<style>
+	input{background-color:#d0f8f8;text-align:center}
+	input.n{
+		background-color:#8f8;
+		text-align:center;
+		innerText:"happy";
+		color:#040;
+  		 font-family:'trebuchet ms',helvetica,sans-serif;
+   		font-size:80%;
+   		font-weight:bold;
+	}
+   
+	textarea {
+		border-width:1;
+		border-color:red;
+		overflow:auto;
+		font-family: arial, verdana, ms sans serif;
+		font-size: 10pt;
+		color: #006000;
+	}
+	p.p{
+	font-size: 10pt;
+	font-weight: bold;
+	text-align:center;
+	
+	}
+	div.p{
+		visibility:hidden;
+	}
+	div.m{
+	text-align:center;
+		background:#eda;
+	}
+</style>
+<TITLE>polygons</TITLE>
+
+<SCRIPT>
+translatex=50
+points=3
+textnum=1
+maxtext=6
+multistar="M 100 110 L 50 140, 100 100, 60 80, 110 90, 100 40, 130 90, "
+multistar+="300 110, 250 80, 305 90, 350 70, 310 120, "
+multistar+="215 110, 240 200, 205 115, 170 230, 180 115 z"
+var path;
+var starG
+A=new Array("0 10","220 10","160 250", "200 200")
+//A is the array of points in the polygon
+function prepare(){
+	if (document.all){
+		rightedge=document.body.clientWidth
+		bottomedge=document.body.clientHeight-50
+		T1H=document.getElementById("Q1").clientHeight
+	}else{
+		rightedge=window.innerWidth
+		bottomedge=window.innerHeight-50
+		T1H=document.getElementById("Q1").innerHeight
+	}
+	
+	T1H=180
+	//alert(T1H)
+	nexttext()
+	svgright=rightedge-150
+	svO=document.getElementById("sv")
+	svO.width=svgright
+	midx=Math.ceil(svgright/2)
+	high=bottomedge-T1H
+	document.getElementById("sv").height=high
+	midy=Math.ceil(high/2)
+	document.getElementById("gee").style.top=T1H
+	svgdoc = svO.getSVGDocument();
+	svgRoot = svgdoc.documentElement;
+	path=svgdoc.getElementById("P")
+	C=svgdoc.getElementById("center")
+	C.setAttribute("cx",midx)
+	C.setAttribute("cy",midy)
+	PM=svgdoc.getElementById("PM")
+	car=svgdoc.getElementById("TD")
+	PTH=path.getAttribute("d")
+	document.f.pathP.value=PTH
+}
+
+built=false
+function freshstar(n){
+	if (built) svgRoot.removeChild(starG)
+
+	P=new Array(n)
+	A=new Array(n)
+	for (i=0;i<n;i++){
+		P[i]=new point()
+	}
+	P.sort(compare) // sort points by angle made with midpoint of viewport
+	starG= svgdoc.createElement("g");
+	svgRoot.appendChild(starG);
+	built=true
+	makestar(P)
+
+	labels(P)
+	newd=buildpath(A)
+	draw(newd, "#dff")
+	if (n>11)n=2;
+
+	try{document.getElementById("stara").value="star "+(n+1);
+	}
+	catch(err){alert(document.getElementById("stara").id)}
+	document.f.starb.value="star "+(n+1)
+}
+function makestar(P){
+	//given an array of points, this builds and draws the star (lines connecting center to polygon)
+	
+	for (i=0;i<P.length;i++){
+		A[i]=P[i].x+" "+P[i].y+" "
+		//var p1 = svgdoc.createElement("path");
+		var p1 = svgdoc.createElement("line");
+		p1.setAttribute("x1", midx)
+		p1.setAttribute("x2", P[i].x)
+		p1.setAttribute("y1", midy)
+		p1.setAttribute("y2", P[i].y)
+  		//p1.setAttribute("d","M "+midx+" "+midy+" L "+P[i].x+" "+P[i].y);
+  		p1.setAttribute("stroke","#f88");
+		p1.setAttribute("stroke-width",1);
+		starG.appendChild(p1)
+		
+	}
+}
+function point(){
+	this.x=Math.ceil(Math.random()*svgright)
+	this.y=Math.ceil(Math.random()*high)
+	dx=(this.x-midx)
+	dy=(this.y-midy)
+	this.alpha=Math.acos(dx/Math.sqrt(dx*dx+dy*dy))
+	if ((dy<0)) this.alpha=2*Math.PI-this.alpha
+}
+function compare(x,y){
+		if (x.alpha<y.alpha) return -1
+		else return 1
+	}
+function fresh(n){
+	P=new Array(n) //P is array of point objects
+	A=new Array(n)  //A is array of strings of x y coordinates for SVG
+	for (i=0;i<n;i++){
+		P[i]=new point()
+		A[i]=P[i].x+" "+P[i].y+" "
+	}
+	
+	if (built){svgRoot.removeChild(starG); built=false}
+	newd=buildpath(A)
+	draw(newd, color())
+}
+function labels(P){
+	if (!built) {
+		starG= svgdoc.createElement("g");
+		svgRoot.appendChild(starG);
+	}
+	for (i=0;i<P.length;i++){
+		var node=svgdoc.createElement('text');
+		var t1=svgdoc.createTextNode(i);
+		node.setAttribute("x",P[i].x);
+		node.setAttribute("y",P[i].y);
+		node.appendChild(t1);
+		starG.appendChild(node)
+	}
+	built=true;
+}
+function permute(){
+	
+	var n=A.length
+	B=new Array(n)
+	C=new Array(n)
+	for (i=0;i<A.length;i++)C[i]=A[i]
+	while (C.length>0){
+		r=Math.floor(C.length*Math.random());
+		B.push(C[r])
+		C.splice(r,1) // remove r-th element from list
+	}
+	i=0
+	while(B[i]==null) B.shift()
+	newd=B.join(" ")
+	
+	buildpath(B)
+	draw(newd, "#dff")
+}
+function poly7(){
+	//if (built){svgRoot.removeChild(starG); built=false}
+	fresh(7);
+	labels(P)
+}
+function startconvex(){
+	if (!built) {
+		
+		fresh(7)
+		labels(P)
+		build=true
+	}
+	convex(P)
+}
+function convex(P){
+	Copy=new Array(P.length)
+	if (built){svgRoot.removeChild(starG); built=false}
+	for (i in P) Copy[i]=P[i]
+	p=findextreme(P) //p is number of the point highest on x axis
+	o=new point() 
+	o.x=P[p].x+100
+	o.y=P[p].y	
+	q=-1
+	current=p
+	CH=new Array()
+	CH.push(p)
+	tries=0
+	while ((q!=p)&&(tries<20)){
+		tries++
+		angles=anglesort(P,current,o)
+		var mostangle=angles[0]
+		CH.push(mostangle)
+		Copy.splice(mostangle,1)
+		var leastangle=angles[1]
+		q=mostangle
+		o=P[current]
+		current=mostangle
+	}
+	A=new Array(CH.length)
+	for (i=0;i<CH.length;i++){
+		A[i]=P[CH[i]].x+" "+P[CH[i]].y+" "
+	}
+	
+	labels(P)
+	newd=buildpath(A)
+	draw(newd, color())
+	built=true
+	if (Copy.length>2) if(confirm("again?")) convex(Copy)
+}
+function anglesort(P,p,o){
+	var mostleast=new Array(2) 
+		//mostleast returns point in P forming max (mostleast[0]) and min (mostleast[1]) degree angles oPp
+	mostleast[1]=361
+	mostleast[0]=-1
+	minnum=361
+	maxnum=0
+	var qx=P[p].x
+	var qy=P[p].y
+	for (i=0;i<P.length;i++){
+		if (i==p) continue
+		alpha=angle(o,P[p],P[i])
+		if (alpha<minnum) {minnum=alpha; mostleast[1]=i}
+		if (alpha>maxnum) {maxnum=alpha; mostleast[0]=i}
+	}
+	return mostleast
+}
+
+function findextreme(P){
+	var xmax=-1
+	for (i=0;i<P.length;i++){
+		q=P[i].x
+		if (q>xmax) {
+			xmax=q
+			remember=i
+		}
+	}
+	return remember
+}
+function angle(P1,P2,P3){
+	P12angle=slant(P1,P2)
+	P12deg=Math.floor(180*P12angle/Math.PI)
+	P23angle=slant(P3,P2)
+	P23deg=Math.floor(180*P23angle/Math.PI)
+	a=P23deg-P12deg
+	if (a<0) a=360+a
+	return a
+}
+function slant(P1,P2){
+	dx=(P1.x-P2.x)
+	dy=(P1.y-P2.y)
+	if ((dx*dx+dy*dy)==0) alpha=0
+	else	alpha=Math.acos(dx/Math.sqrt(dx*dx+dy*dy))
+	if (dy<0) alpha=2*Math.PI-alpha
+	return alpha
+}
+function repoly(){
+	PTH=path.getAttribute("d")
+	path.setAttribute("stroke", color())
+	A=PTH.split(/[, ]/)
+	pairs=Math.floor((A.length-5)/2)
+	pair=Math.floor(Math.random()*pairs)
+	A[5+2*pair]+=" "+Math.floor(Math.random()*svgright-translatex)+" "+Math.floor(Math.random()*(bottomedge-T1H-50))
+	
+	newd=A.join(" ")
+	draw(newd, color())
+}
+function buildpath(A){
+	newd="M "+A[0]+" L "
+	for (i=1;i<A.length;i++){
+		newd+=A[i]+" "
+	}
+	newd+="z"
+	return newd
+}
+function multi(){
+	if (built) {svgRoot.removeChild(starG);built=false}
+	draw(multistar, "#dff")
+}
+function draw(newd,c){
+
+	
+	path.setAttribute("d",newd)
+	path.setAttribute("fill",c);
+	path.setAttribute("opacity","0.75");
+	car.setAttribute("fill",color())
+	//note PM is an animateMotion not available in some browsers
+	try{PM.setAttribute("path",newd)}
+	catch(err){}
+
+	document.f.pathP.value=newd
+}
+
+
+function remove(U){
+	L=svgdoc.getElementById(U);
+	svgRoot.removeChild(L)
+}
+function color(){
+return "rgb("+parseInt(Math.random()*255)+","+parseInt(Math.random()*255)+","+parseInt(Math.random()*255)+")";
+}
+function morelines(t){
+	if (t==3) fresh(t)
+	else repoly()
+	document.f.more.value=(t+1)+"-gon"
+}
+function nexttext(){
+	if (textnum<1)textnum=1
+	if (textnum>maxtext) textnum=maxtext
+	var s=document.getElementById("Q"+textnum++).innerHTML
+	//if (textnum>4) s=Dialogue[textnum-1]
+	//alert(s+textnum)
+	document.getElementById("displaytext").innerHTML=s
+}
+</SCRIPT>
+</HEAD>
+<BODY  bgcolor="#eeddbb" onload="prepare()" leftmargin="0" topmargin="0" bottommargin="0" rightmargin="10">
+<form name="f">
+<div id="displaytext" style="position:absolute">
+</div>
+<DIV id="gee" style="position:absolute;top:300"><table><tr><td>
+<EMBED id="sv" src="polygon.svg" width="480" height="360" />
+</td><td>
+<table>
+
+<tr><td class="m">path <textarea name="pathP" id="pathP" cols=15 rows=3>start</textarea></td></tr>
+<tr><td class="m"><input type=button value="restart" onclick="fresh(3)"></td></tr>
+<tr><td class="m"><input name="starb" type=button value="star 3" onclick="freshstar(eval(this.value.split(' ')[1]))"></td></tr>
+<tr><td class="m"><input type=button value="labels" onclick="labels(A)"></td></tr>
+<tr><td class="m"><input type=button value="addedge" onclick="repoly()"></td></tr>
+<tr><td class="m"><input type=button value=permute onclick="permute()"></td></tr>
+<tr><td class="m"><input type=button value="convex hull" onclick="startconvex()"></td></tr>
+<tr><td><hr></td></tr>
+<tr><td align="middle">Read:<br>
+<input type=button value="next" class="n"  onclick="nexttext()">
+<input type=button value="back" onclick="textnum=textnum-2;nexttext()">
+</td></tr>
+</table>
+</form></td>
+</tr></table>
+</DIV></form>
+<div id="Q1" class="p"><P class="p">Some techniques of drawing random polygons.
+</P>
+<P>A friend and former colleague of mine, Leonard Zusne, wrote a book: 
+<i>Visual Perception of Form</i> Academic Press - 1970. The book was a collection 
+of studies on the  psychophysics surrounding the perception of shapes. 
+<br><br>I recall one study which
+generated random polygons for use as stimuli in perceptual research: Given a positive integer, n, a 
+collection of n pairs of the form P<sub>i</sub>=(alpha<sub>i</sub>, d<sub>i</sub>) is generated in 
+which 0&le; alpha<SUB>i </SUB>&lt; 2&#960; represents an angle, 
+and d represents a distance from the origin.<input type="button" value="next"  class="n" onclick="nexttext()">
+</div>
+<div id="Q2" class="p">
+<P class="p">P2</p>
+<p>Borrowing from the terminology of the later-posed
+art gallery lighting problem, the polygons thus constructed are those lightable by a single lamp. </p>
+Click here repeatedly <input id="stara" name="stara" type="button" value="star 3" onclick="freshstar(eval(this.value.split(' ')[1]))">
+to generate polygons of increasing complexity, but all lit by a single lamp.
+Provided, the center point is located <i>inside</i> the polygon, the polygon has no crossing lines.
+<input type=button value=next class="n" onclick="multi();nexttext()"></div>
+<div id="Q3" class="p"><p class="p">P3</b>
+<input type="button"  class="n" value="next" onclick="nexttext()"></P>
+Not all polygons are thusly constructable. The one below requires three lights. 
+Some require arbitrarily many inside lights. 
+Hence, one is forced to think of other ways to proceed. Chvatal demonstrated in the
+early 1970's that while all n-gons can be lit with n/3 lights, some do require that many. Alternatively,
+therefore to generate all n-gons, we could consider positioning n/3 lights randomly in the plane, and then
+building a star from each. It is not obvious (to me) how we would connect the various stars, so
+this approach seems, although <i>doable</i>, to be a wee bit unwieldy.</div>
+<div id="Q4" class="p"><p class="p">P4</p>
+<input type="button"  class="n" value="next" onclick="nexttext()">
+Another way would be to generate n random points in the plane and then figure some way to draw
+a path through all of them exactly once returning to the beginning, without any crossing lines.
+There will be on the order of n! different paths through the n points; some will have no crossing lines.
+But how might we make sure that we sample fairly from all of these, without explicity enumerating them?
+
+Try building a random collection of 7 points in the plane:<input type=button value="poly 7" onclick="poly7()">
+
+Now try a random path through them:<input type=button value=permute onclick="permute()">
+
+If this is going to be easy, I don't see it -- it looks rather like the <i>traveling salesman problem</i>
+</div>
+<div id="Q5" class="p">
+<p class="p">P5
+<input type="button" class="n" value="next" onclick="nexttext()"></P>
+Another approach might be to find a convex hull H: a convex polygon on k&lt;n points for which the remaining
+n-k points are all on the interior of H. We may note that if we label the points of H in clockwise order, then 
+no two non-adjacent points in H may be connected. Therefore it seems, the degrees of freedom in
+the drawing of a simple polygon will be reduced, presumably, therefore, improving our ability to find one.
+We could partition the points into a series of concentric convex hulls, and later stitch together the points of
+these hulls with some sort of needlework.(Note my code is not quite right yet.)
+<input type=button value="convex hull" onclick="startconvex()"> or build
+<input name="qn" size=2 maxlength=2 value=12> <input type=button value="new points" onclick="fresh(qn.value);labels(P)">
+</div>
+<div id="Q6" class="p">
+<p class="p">P6
+<input type="button" class="n" value="next" onclick="nexttext()"></P>
+A final approach worthy of consideration would be to start with a triangle, and work inductively from n-1-gons to 
+n-gons, by, at each stage, selecting one edge at random and replacing it by two (chosen so as not to cross any other edges). 
+It seems obvious that all n-gons may be thusly constructed (is it obvious?). In the following technique, we might imagine 
+restricting the newly built point such that we move the point along a line perpendicular to the replaced edge until neither
+of the two new lines crosses any others. The process resembles the construction of the Koch curve, familiar to many,
+because of its frequent use in introducing fractals.
+<input type=button name="more" value="3-gon" onclick="morelines(eval(this.value.split('-')[0]));"></div>
+
+</BODY></HTML>
+
+
+
+
+
