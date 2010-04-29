@@ -13,14 +13,18 @@
     <script type="text/javascript" xlink:href=".../lib/tip/tip.jquery"/>
 
     <script type="text/javascript"><![CDATA[
-      $(window).bind( 'load', function() {
-        var vars = {}
-        $( 'animate' ).each( function() {
-          this.attributes.each( function( attr ) {
-            console.log( attr.name + ' = ' + attr.val )
-          } )
+        $(window).bind( 'load', function() {
+            var vars = {}
+            vars[ 't' ] = '1s'
+            $( 'animate' ).each( function() {
+                var $elem = $(this)
+                this.attributes.each( function( val, name ) {
+                    if( match = /^\$[^ ]+$/ ) {
+                        $elem.attr( name, vars[ match[ 1 ] ] )
+                    }
+                } )
+            } )
         } )
-      } )
     ]]></script>
     <style type="text/css">
       rect { fill: #F0F0F0; fill-opacity: .75 }
