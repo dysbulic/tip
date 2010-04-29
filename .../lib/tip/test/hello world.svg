@@ -43,7 +43,13 @@
             $( '#r' ).get(0).addEventListener( 'begin', function() {
                 console.log( 'begin' )
             }, false )
-            console.log( typeof ElementTimeControl )
+            if( typeof ElementTimeControl != 'undefined' ) {
+                var begin = ElementTimeControl.prototype.beginElement
+                ElementTimeControl.prototype.beginElement = function() {
+                    console.log( 'beginning' )
+                    begin.apply( this, arguments )
+                }
+            }
             window.addEventListener( 'beginEvent', function() {
                 console.log( 'begin' )
             }, false )
