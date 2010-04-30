@@ -25,14 +25,15 @@
                 height : parseFloat( str[3] ),
             } )
             var update = function() {
-                $.__.$('#').attr( 'viewBox', viewbox.join( ' ' ) )
+                $.__.$('#').attr( attr, viewbox.join( ' ' ) )
             }
             var view = { }
             viewbox.each( function( val, prop ) {
                 this.__defineGetter__( prop, function() {
-                    return 
+                    return viewbox[ prop ]
                 } )
-                this.__defineSetter__( prop, function() {
+                this.__defineSetter__( prop, function( val ) {
+                    return viewbox[ prop ] = val
                 } )
                 update.apply( this, arguments )
             } )
