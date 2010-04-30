@@ -11,9 +11,6 @@ function List( ) {
     var count = 0
 
     this.valueOf = function() {
-        if( typeof val == 'function' ) {
-            throw val
-        }
         return val
     }
 
@@ -206,6 +203,7 @@ function List( ) {
         let : let,
         each : each,
         get count() { return count },
+        get val() { return val },
         get vals() {
             var vals = []
             this.each( function( val, key ) {

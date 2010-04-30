@@ -28,12 +28,13 @@
                 $.__.$('#').attr( attr, viewbox.join( ' ' ) )
             }
             var view = { }
-            viewbox.each( function( val, prop ) {
+            viewbox.__.each( function( val, prop ) {
+                console.log( prop )
                 view.__defineGetter__( prop, function() {
-                    return viewbox[ prop ]
+                    return viewbox.__.get( prop ).__.val
                 } )
                 view.__defineSetter__( prop, function( val ) {
-                    return viewbox[ prop ] = val
+                    return viewbox.__.set( prop, val )
                 } )
                 update.apply( this, arguments )
             } )
