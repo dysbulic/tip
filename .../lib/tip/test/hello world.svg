@@ -16,9 +16,11 @@
     <script type="text/javascript"><![CDATA[
         var view = ( function() {
             var viewbox = $.__.$('#').attr( 'viewBox' ).split( ' ' )
-            var set = $.__.$('#').attr( 'viewBox', view.join( ' ' )
+            var set = function() {
+                $.__.$('#').attr( 'viewBox', view.join( ' ' ) )
+            }
             var view = {
-                get x() { return parseFloat( viewbox[0] ) },
+                get x() { parseFloat( viewbox[0] ) },
                 get y() { return parseFloat( viewbox[1] ) },
                 get width() { return parseFloat( viewbox[2] ) },
                 get height() { return parseFloat( viewbox[3] ) },
