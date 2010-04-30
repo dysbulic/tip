@@ -12,7 +12,7 @@ function List( ) {
 
     this.valueOf = function() {
         return ( val instanceof List && val != store
-                 ? val.valueOf()
+                 ? val.__.val
                  : val )
     }
 
@@ -140,7 +140,7 @@ function List( ) {
     function each( f ) {
         keys.each( function( key, idx ) {
             if( key !== undefined ) {
-                var val = get( key ).valueOf()
+                var val = get( key )
                 f.apply( val, [ val, key ] )
             }
         } )
