@@ -29,10 +29,10 @@
             }
             var view = { }
             viewbox.each( function( val, prop ) {
-                this.__defineGetter__( prop, function() {
+                view.__defineGetter__( prop, function() {
                     return viewbox[ prop ]
                 } )
-                this.__defineSetter__( prop, function( val ) {
+                view.__defineSetter__( prop, function( val ) {
                     return viewbox[ prop ] = val
                 } )
                 update.apply( this, arguments )
