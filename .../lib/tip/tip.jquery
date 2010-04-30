@@ -1,5 +1,5 @@
 ( function( $ ) {
-    var tip = {
+    var tip = ( {
         load : function( url, callback ) {
             $.ajax( { async : true,
                       dataType: 'script',
@@ -28,8 +28,8 @@
                 set( key, val )
             }
         },
-    }
-
+    } )
+    ;
     [ window, $ ].each( function( global ) {
         global.__defineGetter__( '__', function() { return tip  } )
     } )
