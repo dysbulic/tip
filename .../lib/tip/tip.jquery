@@ -15,11 +15,6 @@
                       },
                     } )
         },
-    }
-    window.__defineGetter__( '__', function() { return tip  } )
-
-( function() {
-    var store = {
         get : function( key ) {
             var str = localStorage[ key ]
             return JSON.parse( val )
@@ -34,34 +29,16 @@
             }
         },
     }
-    if( window.__lookupGetter__( '__' ) === undefined ) {
-        window.__defineGetter__( '__', function() {
-            return store
-        } )
-    }
-} )()
 
-;
+    [ window, $ ].each( function( global ) {
+        global.__defineGetter__( '__', function() { return tip  } )
+    } )
 
-( function( $ ) {
-    function load( src ) {
-        $.ajax( {
-            dataType: 'script',
-            url: src,
-            error: function( xhr, status, error ) {
-                throw error;
-            },
-            success: function( data, status, xhr ) {
-            }
-        } )
-    }
+    var namespaces = {}
 
-    var namespaces
-    $.__ = window.__
     $.__.$ = function(arg) {
         var root = document.documentElement
         if( namespaces === undefined ) {
-            namespaces = {}
             root.attributes.each( function( ) {
                 if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
                     var name = match[1] || ''
