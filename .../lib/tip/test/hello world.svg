@@ -46,9 +46,13 @@
   </defs>
   <tip:script>
     <rect id="box">
-      <animate begin="0s" dur="1s" fill="freeze" from="0" to="-25">
-        <animate attr="x"/>
-        <animate attr="y"/>
+      <animate begin="0s" dur="1s" fill="freeze">
+        <animate from="0" to="-25">
+          <animate attr="x,y"/>
+        </animate>
+        <animate from="0" to="50">
+          <animate attr="width,height"/>
+        </animate>
       </animate>
     </rect>
   </tip:script>
