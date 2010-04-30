@@ -8,105 +8,33 @@
   <title>Hello World</title>
   <defs>
     <style type="text/css">
-      text { text-anchor: middle }
     </style>
     <script type="text/javascript" xlink:href=".../lib/tip/Array.each.js"/>
     <script type="text/javascript" xlink:href=".../lib/jquery/jquery.js"/>
     <script type="text/javascript" xlink:href=".../lib/tip/tip.jquery"/>
 
     <script type="text/javascript"><![CDATA[
-        var console = console || { log : function( str ) { alert( str ) } }
-        //console.log( document.implementation.hasFeature( 'TimeControl', null ) )
-        $(window).bind( 'load', function() {
-            var vars = {}
-            vars[ 't' ] = '0.5s'
-            $( 'animate' ).each( function() {
-                var $elem = $(this)
-                this.attributes.each( function( val, name ) {
-                    if( name.substring( 0, 4 ) == 'tip:' ) {
-                        name = name.substring( 4 )
-                    }
-                    if( match = val.match( /^\$([^ ]+)$/ ) ) {
-                        $elem.attr( name, vars[ match[ 1 ] ] )
-                    }
-                } )
-            } )
-/*
-            document.getElementById('ty').addEventListener( 'beginEvent', function() {
-                console.log( 'begin' )
-            }, false )
-*/
-            document.getElementById('ty').addEventListener( 'endEvent', function() {
-                console.log( 'end' )
-            }, false )
-/*
-            document.getElementById('r').addEventListener( 'begin', function() {
-                console.log( 'begin' )
-            }, false )
-*/
-            document.getElementById('r').addEventListener( 'beginEvent', function() {
-                console.log( 'begin' )
-            }, false )
-            document.getElementById('r').addEventListener( 'endEvent', function() {
-                console.log( 'begin' )
-            }, false )
-/*
-            window.addEventListener( 'beginEvent', function() {
-                console.log( 'begin' )
-            }, false )
-            document.addEventListener( 'beginEvent', function() {
-                console.log( 'begin' )
-            }, false )
-*/
-        } )
+        var view = ( function() {
+            var viewbox = $.__.$('#').attr( 'viewBox' ).split( ' ' )
+            var view = {
+                get x() { return parseFloat( viewbox[0] ) },
+                y : parseFloat( viewbox[1] ),
+                width : parseFloat( viewbox[2] ),
+                height : parseFloat( viewbox[3] ),
+            }
+            return view
+        } )()
+        console.log( view.x )
     ]]></script>
     <style type="text/css">
-      rect { fill: #F0F0F0; fill-opacity: .75 }
-      input { border: none; background-color: transparent }
-              foreignObject { overflow: visible }
-      rect, line { stroke-width: .3; stroke: black; stroke-opacity: .5 }
-      line { stroke: red }
     </style>
   </defs>
-  <rect id="r" x="0" y="0" width="0" height="0">
-    <animate attributeName="x" attributeType="XML"
-             begin="0s" dur="1s" fill="freeze" from="0" to="-25" />
-    <animate id="ty" attributeName="y" attributeType="XML"
-             begin="1s" dur="1s" fill="freeze" from="0" to="-25" />
-    <animate attributeName="width" attributeType="XML"
-             begin="0s" dur="1s" fill="freeze" from="0" to="50" />
-    <animate attributeName="height" attributeType="XML"
-             begin="0s" dur="1s" fill="freeze" from="0" to="50" />
-    <animate attributeName="fill" attributeType="CSS"
-             begin="0s" dur="1s" from="white" to="black" fill="freeze" />
-    <animate attributeName="stroke" attributeType="CSS"
-             begin="0s" dur="1s" from="black" to="white" fill="freeze" />
-  </rect>
-
-  <rect x="0" y="0" width="0" height="0">
-    <animate attributeName="x" attributeType="XML"
-             begin="0s" tip:dur="$t" fill="freeze" from="0" to="-25" />
-    <animate attributeName="y" attributeType="XML"
-             begin="0s" tip:dur="$t" fill="freeze" from="0" to="-25" />
-    <animate attributeName="width" attributeType="XML"
-             begin="0s" tip:dur="$t" fill="freeze" from="0" to="50" />
-    <animate attributeName="height" attributeType="XML"
-             begin="0s" tip:dur="$t" fill="freeze" from="0" to="50" />
-    <animate attributeName="fill" attributeType="CSS"
-             begin="0s" dur="1s" from="white" to="black" fill="freeze" />
-    <animate attributeName="stroke" attributeType="CSS"
-             begin="0s" dur="1s" from="black" to="white" fill="freeze" />
-   </rect>
-
-   <foreignObject id="fo" x="0" y="0" width="50" height="50">
-     <animate attributeName="x" attributeType="XML"
-              begin="0s" tip:dur="$t" fill="freeze" from="0" to="-25" />
-<!--
-     <html:input id="label" type="text" value="Hell">
-       <set attributeName="value" to="H" begin="0s" dur="0.25" fill="remove" />
-       <set attributeName="value" to="Hello" begin="5s" dur="0.25" fill="remove" />
-       <set attributeName="value" to="Hello World" begin="1s" dur="0.25" fill="freeze" />
-     </html:input>
--->
-   </foreignObject>
+  <tip:script>
+    <rect id="box">
+      <animate begin="0s" dur="1s" fill="freeze" from="0" to="-25">
+        <animate attr="x"/>
+        <animate attr="y"/>
+      </animate>
+    </rect>
+  </tip:script>
 </svg>

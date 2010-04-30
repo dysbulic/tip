@@ -1,4 +1,4 @@
-( function() {
+( function( $ ) {
     var tip = {
         load : function( url, callback ) {
             $.ajax( { async : true,
@@ -39,10 +39,10 @@
     $.__.$ = function(arg) {
         var root = document.documentElement
         if( namespaces === undefined ) {
-            root.attributes.each( function( ) {
-                if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
-                    var name = match[1] || ''
-                    namespaces[ name ] = this.nodeValue
+            root.attributes.each( function( val, name ) {
+                if( match = /^(?:xmlns:?)(.*)/.exec( name ) ) {
+                    var ns = match[1] || ''
+                    namespaces[ ns ] = val
                 }
             })
         }
@@ -76,5 +76,3 @@
         }
     }
 } )( jQuery )
-
-} )()
