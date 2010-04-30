@@ -3,7 +3,7 @@
      xmlns="http://www.w3.org/2000/svg"
      xmlns:tip=".../lib/tip/2010/05/05/"
      xmlns:html="http://www.w3.org/1999/xhtml"
-     xmlns:smil="http://www.w3.org/2001/SMIL20"
+     xmlns:smil="http://www.w3.org/ns/SMIL30"
      xmlns:xlink="http://www.w3.org/1999/xlink">
   <title>Hello World</title>
   <defs>
@@ -31,31 +31,33 @@
                     }
                 } )
             } )
-            $( '#t1' ).bind( 'beginEvent', function() {
-                console.log( 'begin' )
-            } )
-            $( '#ty' ).bind( 'beginEvent', function() {
-                console.log( 'begin' )
-            } )
-            $( '#ty' ).get(0).addEventListener( 'begin', function() {
+/*
+            document.getElementById('ty').addEventListener( 'beginEvent', function() {
                 console.log( 'begin' )
             }, false )
-            $( '#r' ).get(0).addEventListener( 'begin', function() {
+*/
+            document.getElementById('ty').addEventListener( 'endEvent', function() {
+                console.log( 'end' )
+            }, false )
+/*
+            document.getElementById('r').addEventListener( 'begin', function() {
                 console.log( 'begin' )
             }, false )
-            if( typeof ElementTimeControl != 'undefined' ) {
-                var begin = ElementTimeControl.prototype.beginElement
-                ElementTimeControl.prototype.beginElement = function() {
-                    console.log( 'beginning' )
-                    begin.apply( this, arguments )
-                }
-            }
+*/
+            document.getElementById('r').addEventListener( 'beginEvent', function() {
+                console.log( 'begin' )
+            }, false )
+            document.getElementById('r').addEventListener( 'endEvent', function() {
+                console.log( 'begin' )
+            }, false )
+/*
             window.addEventListener( 'beginEvent', function() {
                 console.log( 'begin' )
             }, false )
-            document.addEventListener( 'begin', function() {
+            document.addEventListener( 'beginEvent', function() {
                 console.log( 'begin' )
             }, false )
+*/
         } )
     ]]></script>
     <style type="text/css">
@@ -99,10 +101,12 @@
    <foreignObject id="fo" x="0" y="0" width="50" height="50">
      <animate attributeName="x" attributeType="XML"
               begin="0s" tip:dur="$t" fill="freeze" from="0" to="-25" />
+<!--
      <html:input id="label" type="text" value="Hell">
-       <set id="t1" attributeName="value" to="H" begin="0s" dur="0.25" fill="remove" />
+       <set attributeName="value" to="H" begin="0s" dur="0.25" fill="remove" />
        <set attributeName="value" to="Hello" begin="5s" dur="0.25" fill="remove" />
        <set attributeName="value" to="Hello World" begin="1s" dur="0.25" fill="freeze" />
      </html:input>
+-->
    </foreignObject>
 </svg>
