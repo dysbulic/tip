@@ -5,13 +5,15 @@ if( ! Array.prototype.each ) {
 function List( ) {
     var keys = []
     var sublists = {}
-    var val = this
     var store = this
+    var val = store
     var id = 0
     var count = 0
 
     this.valueOf = function() {
-        return val
+        return ( val instanceof List && val != store
+                 ? val.valueOf()
+                 : val )
     }
 
     this.toString = function() {
