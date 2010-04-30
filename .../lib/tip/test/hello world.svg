@@ -10,21 +10,32 @@
     <style type="text/css">
     </style>
     <script type="text/javascript" xlink:href=".../lib/tip/Array.each.js"/>
+    <script type="text/javascript" xlink:href=".../lib/tip/List.js"/>
     <script type="text/javascript" xlink:href=".../lib/jquery/jquery.js"/>
     <script type="text/javascript" xlink:href=".../lib/tip/tip.jquery"/>
 
     <script type="text/javascript"><![CDATA[
         var view = ( function() {
-            var viewbox = $.__.$('#').attr( 'viewBox' ).split( ' ' )
-            var set = function() {
-                $.__.$('#').attr( 'viewBox', view.join( ' ' ) )
+            var attr = 'viewBox'
+            var str = $.__.$('#').attr( attr ).split( ' ' )
+            var viewbox = new List( {
+                x : parseFloat( str[0] ),
+                y : parseFloat( str[1] ),
+                width : parseFloat( str[2] ),
+                height : parseFloat( str[3] ),
+            } )
+            var update = function() {
+                $.__.$('#').attr( 'viewBox', viewbox.join( ' ' ) )
             }
-            var view = {
-                get x() { parseFloat( viewbox[0] ) },
-                get y() { return parseFloat( viewbox[1] ) },
-                get width() { return parseFloat( viewbox[2] ) },
-                get height() { return parseFloat( viewbox[3] ) },
-            }
+            var view = { }
+            viewbox.each( function( val, prop ) {
+                this.__defineGetter__( prop, function() {
+                    return 
+                } )
+                this.__defineSetter__( prop, function() {
+                } )
+                update.apply( this, arguments )
+            } )
             return view
         } )()
         console.log( view.x )
