@@ -1,0 +1,20 @@
+( function() {
+    var tip = {
+        load : function( url, callback ) {
+            $.ajax( { async : true,
+                      dataType: 'script',
+                      url: src,
+                      beforeSend : function( xhr ) {
+                          callback.apply( xhr, [ xhr, 'pre' ] )
+                      },
+                      error: function( xhr, status, error ) {
+                          callback.apply( xhr, [ xhr, status, error ] )
+                      },
+                      success : function( data, status, xhr ) {
+                          callback.apply( xhr, [ xhr, status, data ] )
+                      },
+                    } )
+        },
+    }
+    window.__defineGetter__( '__', function() { return tip  } )
+} )()
