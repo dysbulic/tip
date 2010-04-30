@@ -8,14 +8,15 @@
   <defs>
     <script type="text/javascript"><![CDATA[
         var console = console || { log : function( msg ) {
-            var out = document.getElementById( 'log' )
             var item = document.createElementNS(
                          'http://www.w3.org/1999/xhtml',
                          'li' )
-            item.childNodes.appendChild( document.createTextNode( msg ) )
-            out.childNodes.appendChild( item )
+            item.appendChild( document.createTextNode( msg ) )
+            var out = document.getElementById( 'log' )
+            out.appendChild( item )
         } }
         window.addEventListener( 'load', function() {
+            console.log( 'load' )
             function listen( id ) {
                 console.log( 'listening on: ' + id )
                 var elem = document.getElementById( id )
