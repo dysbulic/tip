@@ -18,10 +18,10 @@
             var viewbox = $.__.$('#').attr( 'viewBox' ).split( ' ' )
             var set = $.__.$('#').attr( 'viewBox', view.join( ' ' )
             var view = {
-                get x() { parseFloat( viewbox[0] ) },
-                get y() { parseFloat( viewbox[1] ) },
-                get width() { parseFloat( viewbox[2] ) },
-                get height() { parseFloat( viewbox[3] ) },
+                get x() { return parseFloat( viewbox[0] ) },
+                get y() { return parseFloat( viewbox[1] ) },
+                get width() { return parseFloat( viewbox[2] ) },
+                get height() { return parseFloat( viewbox[3] ) },
             }
             return view
         } )()
