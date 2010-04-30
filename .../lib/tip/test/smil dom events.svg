@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="-50 -50 100 100" width="100%" height="100%"
+<svg id="root"
+     viewBox="-50 -50 100 100" width="100%" height="100%"
      xmlns="http://www.w3.org/2000/svg"
      xmlns:html="http://www.w3.org/1999/xhtml"
      xmlns:smil="http://www.w3.org/ns/SMIL30"
@@ -15,8 +16,7 @@
             var out = document.getElementById( 'log' )
             out.appendChild( item )
         } }
-        window.addEventListener( 'load', function() {
-            console.log( 'load' )
+        document.addEventListener( 'load', function() {
             function listen( id ) {
                 console.log( 'listening on: ' + id )
                 var elem = document.getElementById( id )
@@ -26,15 +26,26 @@
                 elem.addEventListener( 'endEvent', function() {
                     console.log( 'end ' + id )
                 }, false )
+                elem.onbegin = function() {
+                    console.log( 'onbegin ' + id )
+                }
+                elem.onbegin = function() {
+                    console.log( 'onend ' + id )
+                }
+                elem.addEventListener( 'click', function() {
+                    console.log( 'click ' + id )
+                }, false )
             }
             listen( 'rect' )
             listen( 'dy' )
+            listen( 'root' )
         }, false )
     ]]></script>
     <style type="text/css">
       rect { fill: #F0F0F0; fill-opacity: .75;
              stroke-width: .3; stroke: black; stroke-opacity: .5 }
-      p { font-size: 5px; }
+      p, li { font-size: 4px; }
+      ul { margin: 0; padding: 0 }
     </style>
   </defs>
   <rect id="rect" x="0" y="0" width="0" height="1">
@@ -44,7 +55,7 @@
              begin="0s" dur="1s" fill="freeze" from="0" to="50" />
     <animate id="dy" attributeName="y" attributeType="XML"
              begin="dx.end" dur="1s" fill="freeze" from="0" to="-25" />
-    <animate attributeName="height" attributeType="XML"
+    <animate attributeName="height" attributeType="XML" onbegin="alert('hi')"
              begin="dy.end" dur="1s" fill="freeze" from="0" to="50" />
   </rect>
   <foreignObject x="-20" y="-20" width="40" height="40">
