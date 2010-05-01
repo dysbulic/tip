@@ -93,21 +93,23 @@ function List( ) {
             }
         }
 
+        var sublist
         if( typeof id == 'number' ) {
             if( id > 0 ) {
                 id = id - 1      // index to offset
             } else if( id < 0 ) {
                 id += this.count // end-based index
             }
-            return sublists[ keys[ id ] ]
+            sublist = sublists[ keys[ id ] ]
         } else if( typeof id =='string'
                    || id instanceof String ) {
             var path = id.split( '.' )
-            return ( path.length == 1
-                     ? sublists[ id ]
-                     : get( path ) )
+            sublist = ( path.length == 1
+                        ? sublists[ id ]
+                        : get( path ) )
         }
-        return undefined
+        sublist = sublist && sublist.valueOf()
+        return sublist
     }
     
     function set( key, itm ) {
@@ -144,6 +146,12 @@ function List( ) {
                 f.apply( val, [ val, key ] )
             }
         } )
+    }
+
+    function join() {
+        console.log( keys )
+        console.log( exports.vals )
+        return Array.join.apply( exports.vals, arguments )
     }
 
     function traverse( f, depth, index ) {
@@ -204,6 +212,7 @@ function List( ) {
         set : set,
         let : let,
         each : each,
+        join : join,
         get count() { return count },
         get val() { return val },
         get vals() {
