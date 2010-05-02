@@ -91,6 +91,7 @@
                                         end : state.end,
                                         from : state.from,
                                         to : state.to,
+                                        elem : state.elem,
                                         attr : attr,
                                     } )
                                     console.log( scene.tixels[-1].attr )
@@ -102,14 +103,13 @@
                 }
                 
                 scene.last = scene.last || scene.begin
-                scene.tixels.each( function() {
-                    console.log( 'a:' + this.attr )
-                    if( this.begin < now && this.end > scene.last ) {
-                        this.elem[ this.attr ] =
-                            this.from
-                            + ( (this.to - this.from)
-                                * (now - this.begin)
-                                / (this.end - this.begin) )
+                scene.tixels.each( function( tixel ) {
+                    if( tixel.begin < now && tixel.end > scene.last ) {
+                        tixel.elem[ tixel.attr ] =
+                            tixel.from
+                            + ( (tixel.to - tixel.from)
+                                * (now - tixel.begin)
+                                / (tixel.end - tixel.begin) )
                     }
                 } )
                 scene.last = now
@@ -180,7 +180,8 @@
                         while( dest.localName == 'animate' ) {
                             dest = dest.parentNode
                         }
-                        animation.elem = elems[ dest.localName ].apply( dest )
+                        // Since order matters for evaluation this needs to be earlier in the list
+                        animation.__.set( 'elem', elems[ dest.localName ].apply( dest ) )
                         scene.push( new List( animation ) )
                     }
                 } else {
