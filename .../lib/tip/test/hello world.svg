@@ -55,15 +55,18 @@
         $( window ).bind( 'load', function() {
             console.log($.__.$( 'tip:script' ).children().size())
             $.__.$( 'tip:script' ).children().each( function traverse() {
-                console.log( this )
+                var $this = $( this )
                 if( this.localName == 'animate' ) {
                     var parsers = {
-                        json : function() { return JSON.parse( $(this).text() ) },
+                        json : function() { return JSON.parse( $this.text() ) },
                     }
                     var animation =
-                        parsers[ $(this).attr( 'type' ) ].apply( this )
+                        parsers[ $this.attr( 'type' ) ].apply( this )
                     console.log( animation )
+                } else {
+                    $.__.$( '#' ).append( $this )
                 }
+                $this.children().each( traverse )
             } )
         } )
     ]]></script>
