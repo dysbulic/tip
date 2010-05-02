@@ -53,12 +53,14 @@
         view.tx
 
         var scene = ( function() {
+            var scene = []
+            scene.capture = { frequency : { mHz : 100 } }
+
             function once() {
+                console.log( scene.length )
             }
 
             var interval = { id : undefined }
-            var scene = []
-            scene.capture = { frequency : { mHz : 100 } }
 
             scene.__defineGetter__( 'once', once )
             scene.__defineGetter__( 'go', function() {
@@ -95,7 +97,6 @@
 
 
         $( window ).bind( 'load', function() {
-            console.log($.__.$( 'tip:script' ).children().size())
             $.__.$( 'tip:script' ).children().each( function traverse() {
                 var $this = $( this )
                 if( this.localName == 'animate' ) {
@@ -118,6 +119,7 @@
                 }
                 $this.children().each( traverse )
             } )
+            scene.once
         } )
     ]]></script>
     <style type="text/css">
