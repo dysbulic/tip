@@ -58,7 +58,12 @@
                 var $this = $( this )
                 if( this.localName == 'animate' ) {
                     var parsers = {
-                        json : function() { console.log( $this.text() ); return JSON.parse( $this.text() ) },
+                        json : function() {
+                            return JSON.parse( $this.text() )
+                        },
+                        javascript : function() {
+                            return eval( $this.text() )
+                        },
                     }
                     var animation =
                         parsers[ $this.attr( 'type' ) ].apply( this )
@@ -75,9 +80,7 @@
   </defs>
   <tip:script>
     <rect id="box">
-    <animate type="json">{ begin : 0 }</animate>
-
-      <animate type="json">
+      <animate type="javascript">
     {
         begin : 0,
         duration : "1s",
