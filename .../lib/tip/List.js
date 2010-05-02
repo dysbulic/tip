@@ -230,6 +230,7 @@ function List( ) {
         push : push,
         traverse : traverse,
         get count() { return count },
+        get keys() { return keys },
         get val() { return val },
         get vals() {
             var vals = []

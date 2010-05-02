@@ -81,9 +81,6 @@
                                     ( new List( animation ) ).__.each( walk )
                                 } )
                                 break
-                            case 'to': case 'from':
-                                state[ key ] = val
-                                break
                             case 'attr':
                                 val.each( function( attr ) {
                                     scene.tixels.push( {
@@ -97,6 +94,10 @@
                                     console.log( scene.tixels[-1].attr )
                                 } )
                                 break
+                            default:
+                                state[ key ] = val
+                                break
+
                             }
                         } )
                     } )
@@ -182,7 +183,6 @@
                         animation = new List( animation )
                         // Since order matters for evaluation this needs to be earlier in the list
                         animation.__.push( elems[ dest.localName ].apply( dest ), 'elem' )
-                        console.log( animation.__.vals )
                         scene.push( animation )
                     }
                 } else {
