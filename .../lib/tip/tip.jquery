@@ -34,11 +34,12 @@
         global.__defineGetter__( '__', function() { return tip  } )
     } )
 
-    var namespaces = {}
+    var namespaces
 
     $.__.$ = function(arg) {
         var root = document.documentElement
         if( namespaces === undefined ) {
+            namespaces = {}
             root.attributes.each( function( val, name ) {
                 if( match = /^(?:xmlns:?)(.*)/.exec( name ) ) {
                     var ns = match[1] || ''
@@ -68,6 +69,7 @@
 
         // Match a namespaced tag name
         } else if( nameMatch = /(?:(\w+):)?(\w+)/.exec( arg ) ) {
+            console.log(namespaces[nameMatch[1]])
             return $(document.getElementsByTagNameNS( namespaces[nameMatch[1]], nameMatch[2] ))
 
         // Otherwise pass on to jQuery
