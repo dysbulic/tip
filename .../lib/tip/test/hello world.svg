@@ -78,8 +78,10 @@
                                 state.end = now + 1000
                                 break
                             case 'animate':
-                                val.each( function( val ) {
-                                    ( new List( this ) ).each( walk )
+                                val.each( function( animation ) {
+                                    var lst = new List( animation )
+                                    console.log( lst )
+                                    ( new List( animation ) ).each( walk )
                                 } )
                                 break
                             case 'to': case 'from':
