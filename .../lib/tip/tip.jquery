@@ -50,7 +50,7 @@
 
         // Special case for the document element
         if( arg == '#' ) {
-            return $(root)
+            return $( root )
 
         // Match a single tag with optional namespace, attributes and content text
         } else if( tagMatch = /<(?:(?:(\w+):)?(\w+))([^>]*)(?:\/>|([^<]*)<\/\1>)/.exec( arg ) ) {
@@ -69,8 +69,7 @@
 
         // Match a namespaced tag name
         } else if( nameMatch = /(?:(\w+):)?(\w+)/.exec( arg ) ) {
-            console.log(namespaces[nameMatch[1]])
-            return $(document.getElementsByTagNameNS( namespaces[nameMatch[1]], nameMatch[2] ))
+            return $( document.getElementsByTagNameNS( namespaces[ nameMatch[1] ], nameMatch[2] ) )
 
         // Otherwise pass on to jQuery
         } else {

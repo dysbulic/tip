@@ -52,17 +52,19 @@
         view.height = win.height
         view.tx
 
-        console.log($.__.$( 'tip:script' ).children().size())
-        $.__.$( 'tip:script' ).children().each( function traverse() {
-            console.log( this )
-            if( this.localName == 'animate' ) {
-                var parsers = {
-                    json : function() { return JSON.parse( $(this).text() ) },
+        $( window ).bind( 'load', function() {
+            console.log($.__.$( 'tip:script' ).children().size())
+            $.__.$( 'tip:script' ).children().each( function traverse() {
+                console.log( this )
+                if( this.localName == 'animate' ) {
+                    var parsers = {
+                        json : function() { return JSON.parse( $(this).text() ) },
+                    }
+                    var animation =
+                        parsers[ $(this).attr( 'type' ) ].apply( this )
+                    console.log( animation )
                 }
-                var animation =
-                    parsers[ $(this).attr( 'type' ) ].apply( this )
-                console.log( animation )
-            }
+            } )
         } )
     ]]></script>
     <style type="text/css">
