@@ -86,7 +86,6 @@
                                 break
                             case 'attr':
                                 val.each( function( attr ) {
-                                    console.log( attr )
                                     scene.tixels.push( {
                                         begin : state.begin,
                                         end : state.end,
@@ -94,6 +93,7 @@
                                         to : state.to,
                                         attr : attr,
                                     } )
+                                    console.log( scene.tixels[-1].attr )
                                 } )
                                 break
                             }
