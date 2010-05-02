@@ -83,7 +83,6 @@
             scene.__defineGetter__( 'once', once )
             scene.__defineGetter__( 'go', function() {
                 if( interval.id === undefined ) {
-                    var scene = this
                     interval.id =
                         setInterval( function() {
                             once.apply( scene, arguments )
