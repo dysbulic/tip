@@ -69,7 +69,6 @@
                     var state = {}
                     scene.each( function( animation ) {
                         animation.__.each( function walk( val, key ) {
-                            console.log( key )
                             switch( key ) {
                             case 'begin':
                                 state.begin = now
@@ -80,8 +79,8 @@
                             case 'animate':
                                 val.each( function( animation ) {
                                     var lst = new List( animation )
-                                    console.log( lst )
-                                    ( new List( animation ) ).each( walk )
+                                    console.log( lst.__.asMap )
+                                    ( new List( animation ) ).__.each( walk )
                                 } )
                                 break
                             case 'to': case 'from':
@@ -89,6 +88,7 @@
                                 break
                             case 'attr':
                                 val.each( function( attr ) {
+                                    console.log( attr )
                                     scene.tixels.push( {
                                         begin : state.begin,
                                         end : state.end,
