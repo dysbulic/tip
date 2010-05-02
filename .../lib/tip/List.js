@@ -206,6 +206,18 @@ function List( ) {
         return undefined
     }
 
+    function push( itm, key ) {
+        var idx = keys.indexOf( key )
+        if( idx > 0 ) {
+            keys = keys.splice( idx, 1 )
+        }
+        if( idx != 0 ) {
+            keys.unshift( key )
+        }
+        add.apply( this, arguments )
+        return this
+    }
+
     var exports = {
         add : add,
         del : del,
@@ -215,6 +227,8 @@ function List( ) {
         let : let,
         each : each,
         join : join,
+        push : push,
+        traverse : traverse,
         get count() { return count },
         get val() { return val },
         get vals() {
@@ -233,7 +247,9 @@ function List( ) {
             return map
         },
         get top( ) { return this.get( -1 ) },
-        set top( itm ) { this.add( itm ); return this },
+        set top() {
+            return push.apply( this, arguments )
+        },
         get pop( ) {
             var out = this.get( keys.pop() )
             --count
@@ -246,7 +262,6 @@ function List( ) {
                 console.log( '!:θ:⒧:asString:' )
             }
         },
-        traverse : traverse,
     }
     this.__defineGetter__( '__', function() { return exports } )
 }

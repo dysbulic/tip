@@ -149,7 +149,6 @@
             return scene
         } )()
 
-
         $( window ).bind( 'load', function() {
             $.__.$( 'tip:script' ).children().each( function traverse() {
                 var $this = $( this )
@@ -180,9 +179,10 @@
                         while( dest.localName == 'animate' ) {
                             dest = dest.parentNode
                         }
+                        animation = new List( animation )
                         // Since order matters for evaluation this needs to be earlier in the list
-                        animation.__.set( 'elem', elems[ dest.localName ].apply( dest ) )
-                        scene.push( new List( animation ) )
+                        animation.__.push( elems[ dest.localName ].apply( dest ), 'elem' )
+                        scene.push( animation )
                     }
                 } else {
                     $.__.$( '#' ).append( $this )
