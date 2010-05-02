@@ -17,10 +17,11 @@
     <script type="text/javascript"><![CDATA[
         var win = ( function() {
             return {
-                get width() { return window.scrollWidth },
-                get height() { return window.scrollHeight },
+                get width() { return window.innerWidth },
+                get height() { return window.innerHeight },
             }
         } )()
+        console.log( window.scrollWidth )
         var view = ( function() {
             var attr = 'viewBox'
             var str = $.__.$('#').attr( attr ).split( ' ' )
