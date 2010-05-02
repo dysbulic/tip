@@ -28,7 +28,6 @@ function List( ) {
         if( key == '' ) {
             val = itm
         } else {
-            console.log( key )
             var subkey = key.substring( 0, key.indexOf( '.' ) )
             subkey = subkey == '' ? key : subkey // next to last list
             var remaining = ( subkey == ''
