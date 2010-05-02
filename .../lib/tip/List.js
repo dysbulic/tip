@@ -84,7 +84,6 @@ function List( ) {
         return this
     }
     merge.apply( this, arguments )
-    console.log( sublists['x'] )
 
     function get( id ) {
         if( ( id instanceof Array && id.length == 0 )
@@ -155,7 +154,7 @@ function List( ) {
 
     function join() {
         console.log( keys )
-        console.log( exports.vals )
+        console.log( sublists['x'].valueOf() )
         return Array.prototype.join.apply( exports.vals, arguments )
     }
 
