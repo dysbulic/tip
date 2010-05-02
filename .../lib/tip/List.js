@@ -76,7 +76,7 @@ function List( ) {
                     if( cur instanceof List ) {
                         cur.__.merge.apply( cur, [ obj[ prop ] ] )
                     } else {
-                        set.apply( store, [ prop, obj[prop] ] )
+                        set.apply( store, [ prop, obj[ prop ] ] )
                     }
                 }
             }
@@ -84,6 +84,7 @@ function List( ) {
         return this
     }
     merge.apply( this, arguments )
+    console.log( this )
 
     function get( id ) {
         if( ( id instanceof Array && id.length == 0 )

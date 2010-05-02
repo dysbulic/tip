@@ -55,6 +55,12 @@
         $.__.$( 'tip:script' ).children().each( function traverse() {
             console.log( this )
             if( this.localName == 'animate' ) {
+                var parsers = {
+                    json : function() { return JSON.parse( $(this).text() ) },
+                }
+                var animation =
+                    parsers[ $(this).attr( 'type' ) ].apply( this )
+                console.log( animation )
             }
         } )
     ]]></script>
