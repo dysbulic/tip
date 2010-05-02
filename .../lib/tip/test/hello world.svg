@@ -21,7 +21,6 @@
                 get height() { return window.innerHeight },
             }
         } )()
-        console.log( window.scrollWidth )
         var view = ( function() {
             var attr = 'viewBox'
             var str = $.__.$('#').attr( attr ).split( ' ' )
@@ -31,9 +30,7 @@
                 width : parseFloat( str[2] ),
                 height : parseFloat( str[3] ),
             } )
-            console.log( 'v:' + viewbox.__.vals )
             var update = function() {
-                console.log( 'j:' + viewbox.__.join( ' ' ) )
                 return $.__.$('#').attr( attr, viewbox.join( ' ' ) )
             }
             var view = { }
@@ -48,7 +45,6 @@
             } )
             return view
         } )()
-        console.log( 'w:' + win.width )
         view.x = - win.width / 2
         view.y = - win.height / 2
         view.width = win.width
