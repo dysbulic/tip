@@ -58,7 +58,7 @@
                 var $this = $( this )
                 if( this.localName == 'animate' ) {
                     var parsers = {
-                        json : function() { return JSON.parse( $this.text() ) },
+                        json : function() { console.log( $this.text() ); return JSON.parse( $this.text() ) },
                     }
                     var animation =
                         parsers[ $this.attr( 'type' ) ].apply( this )
@@ -97,7 +97,8 @@
                     "height"
                 ],
             }
-        }
+        ]
+    }
       </animate>
     </rect>
   </tip:script>
