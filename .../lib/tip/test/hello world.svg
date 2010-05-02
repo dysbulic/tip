@@ -62,20 +62,53 @@
 
             function once() {
                 var now = time.now
-
+                scene.begin = scene.begin || now
+                
                 if( scene.tixels === undefined ) {
                     scene.tixels = []
+                    var state = {}
                     scene.each( function( animation ) {
-                        animation.elem.x = 10
-                        animation.elem.y = 10
+                        animation.each( function walk( val, key ) {
+                            switch( key ) {
+                            case 'begin':
+                                state.begin = now
+                                break
+                            case 'duration':
+                                state.end = now + 1000
+                                break
+                            case 'animate':
+                                val.each( walk )
+                                break
+                            case 'to': case 'from':
+                                state[ key ] = val
+                                break
+                            case 'attr':
+                                val.each( function( attr ) {
+                                    scene.tixels.push( {
+                                        begin : state.begin,
+                                        end : state.end,
+                                        from : state.from,
+                                        to : state.to,
+                                        attr : val
+                                    } )
+                                } )
+                                break
+                            }
+                        } )
                     } )
                 }
                 
+                scene.last = scene.last || scene.begin
                 scene.tixels.each( function() {
-                    if( this.start > now && this.end < now ) {
+                    if( this.begin < now && this.end > scene.last ) {
+                        this.elem[ this.attr ] =
+                            this.from
+                            + ( (this.to - this.from)
+                                * (now - this.begin)
+                                / (this.end - this.begin) )
                     }
                 } )
-
+                scene.last = now
             }
 
             var interval = { id : undefined }
@@ -144,16 +177,15 @@
                             dest = dest.parentNode
                         }
                         animation.elem = elems[ dest.localName ].apply( dest )
-                        animation.elem.width = 10
-                        animation.elem.height = 10
-                        console.log( animation.elem )
-                        scene.push( animation )
+                        scene.push( new List( animation ) )
                     }
                 } else {
                     $.__.$( '#' ).append( $this )
                 }
                 $this.children().each( traverse )
             } )
+            scene.once
+            scene.once
             scene.once
         } )
     ]]></script>
