@@ -57,7 +57,13 @@
             scene.capture = { frequency : { mHz : 100 } }
 
             function once() {
-                scene.each( function() {
+                if( scene.tixels === undefined ) {
+                    scene.tixels = []
+                    scene.each( function() {
+                        
+                    } )
+                }
+                scene.tixels.each( function() {
                     
                 } )
             }
@@ -113,7 +119,18 @@
                     var animation =
                         parsers[ $this.attr( 'type' ) ].apply( this )
                     if( animation ) {
-                        animation.$elem = $this
+                        var elems = {
+                            rect : function() {
+                                var $rect = $( this )
+                                return {
+                                    set x( x ) { $rect.attr( 'x', x ) },
+                                    set y( y ) { $rect.attr( 'y', y ) },
+                                    set width( width ) { $rect.attr( 'width', width ) },
+                                    set height( height ) { $rect.attr( 'height', height ) },
+                                }
+                            }
+                        }
+                        animation.elem = elems[ this.localName ].apply( this )
                         scene.push( animation )
                     }
                 } else {
