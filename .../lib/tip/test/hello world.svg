@@ -30,18 +30,17 @@
                 width : parseFloat( str[2] ),
                 height : parseFloat( str[3] ),
             } )
-            var update = function() {
-                console.log( 'j:' + viewbox.__.join( ' ' ) )
-                return $.__.$('#').attr( attr, viewbox.__.join( ' ' ) )
+            var view = { 
+                get tx() {
+                    return $.__.$('#').attr( attr, viewbox.__.join( ' ' ) )
+                },
             }
-            var view = { }
             viewbox.__.each( function( val, prop ) {
                 view.__defineGetter__( prop, function() {
                     return viewbox.__.get( prop )
                 } )
                 view.__defineSetter__( prop, function( val ) {
-                    viewbox.__.set( prop, val )
-                    return update.apply( this, arguments )
+                    return viewbox.__.set( prop, val )
                 } )
             } )
             return view
@@ -51,6 +50,7 @@
         view.y = - win.height / 2
         view.width = win.width
         view.height = win.height
+        view.tx
 
         $.__.$( 'tip:script' ).children().each( function traverse() {
             console.log( this )
