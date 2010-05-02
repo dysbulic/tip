@@ -52,6 +52,48 @@
         view.height = win.height
         view.tx
 
+        var scene = ( function() {
+            function once() {
+            }
+
+            var interval = { id : undefined }
+            var scene = []
+            scene.capture = { frequency : { mHz : 100 } }
+
+            scene.__defineGetter__( 'once', once )
+            scene.__defineGetter__( 'go', function() {
+                if( interval.id === undefined ) {
+                    var scene = this
+                    interval.id =
+                        setInterval( function() {
+                            once.apply( scene, arguments )
+                        },
+                                   scene.capture.frequency.mHz )
+                }
+                return this
+            } )
+            scene.__defineGetter__( 'stop', function() {
+                if( interval.id !== undefined ) {
+                    clearInterval( interval.id )
+                    interval.id = undefined
+                }
+                return this
+            } )
+            scene.__defineGetter__( 'running', function() {
+                return interval.id !== undefined
+            } )
+            scene.__defineGetter__( 'pause', function() {
+                if( this.running ) {
+                    this.stop
+                } else {
+                    this.go
+                }
+                return this
+            } )
+            return scene
+        } )()
+
+
         $( window ).bind( 'load', function() {
             console.log($.__.$( 'tip:script' ).children().size())
             $.__.$( 'tip:script' ).children().each( function traverse() {
@@ -62,12 +104,15 @@
                             return JSON.parse( $this.text() )
                         },
                         javascript : function() {
-                            return eval( '(function() { return ' + $this.text() + '})()' )
+                            return eval( '(function() { return ' + $this.text().trim() + ' })()' )
                         },
                     }
                     var animation =
                         parsers[ $this.attr( 'type' ) ].apply( this )
-                    console.log( animation )
+                    if( animation ) {
+                        animation.$elem = $this
+                        scene.push( animation )
+                    }
                 } else {
                     $.__.$( '#' ).append( $this )
                 }
@@ -80,7 +125,8 @@
   </defs>
   <tip:script>
     <rect id="box">
-    <animate type="javascript">{
+      <animate type="javascript">
+    {
         begin : 0,
         duration : "1s",
         fill : "freeze",
@@ -102,33 +148,8 @@
                 ],
             }
         ]
-    }</animate>
-
-      <animate type="javascript">
-    {
-        begin : 0,
-        duration : "1s",
-        fill : "freeze",
-        animate : [
-            { 
-                from : 0,
-                to : -25,
-                attr : [
-                    "x",
-                    "y"
-                ],
-            },
-            { 
-                from : 0,
-                to : 50,
-                attr : [
-                    "width",
-                    "height"
-                ],
-            }
-        ],
     }
-      </animate>
+    </animate>
     </rect>
   </tip:script>
 </svg>
