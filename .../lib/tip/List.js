@@ -84,7 +84,7 @@ function List( ) {
         return this
     }
     merge.apply( this, arguments )
-    console.log( sublists[ "x" ] )
+    console.log( sublists['x'] )
 
     function get( id ) {
         if( ( id instanceof Array && id.length == 0 )
