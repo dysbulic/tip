@@ -64,8 +64,10 @@
                     } )
                 }
                 scene.tixels.each( function() {
-                    
+                    this.dest.x = 10
+                    this.dest.y = 10
                 } )
+
             }
 
             var interval = { id : undefined }
@@ -128,9 +130,13 @@
                                     set width( width ) { $rect.attr( 'width', width ) },
                                     set height( height ) { $rect.attr( 'height', height ) },
                                 }
-                            }
+                            },
                         }
-                        animation.elem = elems[ this.localName ].apply( this )
+                        var dest = this
+                        while( dest.localName == 'animate' ) {
+                            dest = dest.parentNode
+                        }
+                        animation.elem = elems[ dest.localName ].apply( dest )
                         scene.push( animation )
                     }
                 } else {
