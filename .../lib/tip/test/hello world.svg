@@ -78,8 +78,6 @@
                                 break
                             case 'animate':
                                 val.each( function( animation ) {
-                                    var lst = new List( animation )
-                                    console.log( lst.__.asMap )
                                     ( new List( animation ) ).__.each( walk )
                                 } )
                                 break
@@ -94,7 +92,7 @@
                                         end : state.end,
                                         from : state.from,
                                         to : state.to,
-                                        attr : val
+                                        attr : attr,
                                     } )
                                 } )
                                 break
