@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="-50 -50 100 100" width="100%" height="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:tip=".../lib/tip/2010/05/05/"
+     xmlns:html="http://www.w3.org/1999/xhtml"
+     xmlns:smil="http://www.w3.org/ns/SMIL30"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>Hello World</title>
+  <defs>
+    <style type="text/css">
+    </style>
+    <script type="text/javascript" xlink:href=".../lib/tip/Array.each.js"/>
+    <script type="text/javascript" xlink:href=".../lib/tip/List.js"/>
+    <script type="text/javascript" xlink:href=".../lib/jquery/jquery.js"/>
+    <script type="text/javascript" xlink:href=".../lib/tip/tip.jquery"/>
+
+    <script type="text/javascript"><![CDATA[
+        var win = ( function() {
+            return {
+                get width() { return window.scrollWidth },
+                get height() { return window.scrollHeight },
+            }
+        } )()
+        var view = ( function() {
+            var attr = 'viewBox'
+            var str = $.__.$('#').attr( attr ).split( ' ' )
+            var viewbox = new List( {
+                x : parseFloat( str[0] ),
+                y : parseFloat( str[1] ),
+                width : parseFloat( str[2] ),
+                height : parseFloat( str[3] ),
+            } )
+            console.log( viewbox.__.vals )
+            var update = function() {
+                console.log( viewbox.__.join( ' ' ) )
+                return $.__.$('#').attr( attr, viewbox.join( ' ' ) )
+            }
+            var view = { }
+            viewbox.__.each( function( val, prop ) {
+                view.__defineGetter__( prop, function() {
+                    return viewbox.__.get( prop )
+                } )
+                view.__defineSetter__( prop, function( val ) {
+                    viewbox.__.set( prop, val )
+                    return update.apply( this, arguments )
+                } )
+            } )
+            return view
+        } )()
+        view.x = - win.width / 2
+        view.y = - win.height / 2
+        view.width = win.width
+        view.height = win.height
+
+        $.__.$( 'tip:script' ).children().each( function traverse() {
+            console.log( this )
+            if( this.localName == 'animate' ) {
+            }
+        } )
+    ]]></script>
+    <style type="text/css">
+    </style>
+  </defs>
+  <tip:script>
+    <rect id="box">
+      <animate type="json">
+    {
+        begin : 0,
+        duration : "1s",
+        fill : "freeze",
+        animate : [
+            { 
+                from : 0,
+                to : -25,
+                attr : [
+                    "x",
+                    "y"
+                ],
+            },
+            { 
+                from : 0,
+                to : 50,
+                attr : [
+                    "width",
+                    "height"
+                ],
+            }
+        }
+      </animate>
+    </rect>
+  </tip:script>
+</svg>

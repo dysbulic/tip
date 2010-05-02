@@ -4,40 +4,57 @@ if( ! Array.prototype.each ) {
 
 function List( ) {
     var keys = []
-    var itms = {}
+    var sublists = {}
     var store = this
+    var val = store
     var id = 0
     var count = 0
 
-    function add( itm, uid ) {
-        var key = uid !== undefined ? uid : ++id
-        if( keys.indexOf( key ) < 0 ) {
-            ptr( key, itm )
-            keys.push( key )
-            ++count
-            //console.log('a:'+key+':'+get(key));
-        }
-        return key
+    this.valueOf = function() {
+        return ( val instanceof List && val != store
+                 ? val.__.val
+                 : val )
     }
 
-    function ptr( key, itm ) {
-        if( typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
-            console.log( 'θ:⒧:' + key + ' ⬌ ' + itm )
-        }
-        var getter = function() {
-            var key = arguments.callee.key
-            return get( key )
-        }
-        getter.key = key
-        store.__defineGetter__( key, getter )
-        return itms[ key ] = new Pointer( itm )
+    this.toString = function() {
+        return 'List'
     }
-    
-    function swap( a, b ) {
-        var tmp = itms[ a ]
-        itms[ a ] = itms[ b ]
-        itms[ b ] = tmp
-        return this
+
+    function add( itm, uid ) {
+        var key = uid === undefined ? ++id : uid
+        if( keys.indexOf( key ) < 0 ) {
+            keys.push( key )
+        }
+        if( key == '' ) {
+            val = itm
+        } else {
+            var subkey = key.substring( 0, key.indexOf( '.' ) )
+            subkey = subkey == '' ? key : subkey // next to last list
+            var remaining = ( subkey == ''
+                              ? ''
+                              : key.substring( subkey.length + 1 ) )
+
+            var sublist = sublists[ subkey ]
+            if( itm instanceof List ) {
+                if( sublist === undefined ) {
+                    sublist = itm
+                    store.__defineGetter__( subkey, function() {
+                        return sublists[ subkey ]
+                    } )
+                } else {
+                    itm.__.each( function() {
+                        sublist.__.add.apply( this, arguments )
+                    } )
+                }
+            } else {
+                if( sublist === undefined ) {
+                    sublist = new List
+                }
+                sublist.__.add( itm, remaining )
+            }
+            sublists[ subkey ] = sublist
+        }
+        return key
     }
 
     function merge( obj ) {
@@ -49,15 +66,15 @@ function List( ) {
                 obj.each( function( val ) {
                     add( val )
                 } )
-            } else if( obj.each ) {
-                obj.each( function( val, key ) {
-                    set.apply( store, [ key, val ] )
+            } else if( obj instanceof List ) {
+                obj.__.each( function( ) {
+                    add.apply( store, arguments )
                 } )
             } else {
                 for( prop in obj ) {
                     var cur = get( prop )
                     if( cur instanceof List ) {
-                        cur.merge.apply( cur, [ obj[ prop ] ] )
+                        cur.__.merge.apply( cur, [ obj[ prop ] ] )
                     } else {
                         set.apply( store, [ prop, obj[prop] ] )
                     }
@@ -68,139 +85,57 @@ function List( ) {
     }
     merge.apply( this, arguments )
 
-    function entangle( obj ) {
-        if( obj !== undefined ) {
-            if( typeof obj == 'string' && obj.test( /^{.*}$/ )  ) {
-                obj = JSON.parse( obj )
-            }
-            if( obj.each ) {
-                obj.each( function( val, key ) {
-                    var ptr = new MapPointer( obj, key )
-                    add( ptr, key )
-                } )
-            } else {
-                for( prop in obj ) {
-                    var cur = get( prop )
-                    if( cur instanceof List ) {
-                        cur.merge( obj[ prop ] )
-                    } else {
-                        var ptr = new MapPointer( obj, prop )
-                        add( ptr, prop )
-                    }
-                }
-            }
+    function get( id ) {
+        if( ( id instanceof Array && id.length == 0 )
+            || id == '' ) {
+            return val
         }
-        return this
-    }
-    
-    function join() {
-        throw undefined
-    }
-
-    function impress( ) {
-        var store = this
-        var args = Array.prototype.slice.call( arguments )
-        each( function( val, key ) {
-            if( ( key == 'impress'
-                  && typeof val == 'function' ) ) {
-                val.apply( store, args )
-            }
-            if( ( val.impress
-                  && typeof val.impress == 'function' ) ) {
-                val.impress.apply( store, args )
-            }
-        } )
-    }
-
-    function on( key, f ) {
-        var orig = this[ key ]
-        this[ key ] = function() {
-            var self = arguments.callee
-            var args = Array.prototype.slice.call( arguments )
-
-            if( f.pre ) f.pre.apply( this, arguments )
-            if( typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
-                console.log( self.asString + ':' + key )
-            }
-            var ret = orig.apply( this, arguments )
-            if( typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
-                console.log( self.asString + 'ʹ:' + key + ':' + ret )
-            }
-            try {
-                args.push( ret )
-                f.apply( this, args )
-            } catch( e ) {
-                if( e && e['return'] ) {
-                    ret = e['return']
-                } else {
-                    throw e;
-                }
-            }
-            return ret;
-        }
-        this[ key ].__defineGetter__( 'asString', function() {
-            return orig.asString + 'ʹ'
-        } )
-    }
-
-    function deref( id, regex ) {
-        regex = regex || new RegExp( '^([^\.]+)\.' )
-        return get( id, regex )
-    }
-
-    function get( id, regex ) {
-        if( regex ) {
-            var path = new MutableString( id )
-            var step = get( path.chomp( regex ) )
-            if( step && step.get ) {
-                return step.get( path, regex )
+        if( typeof id.shift == 'function' ) {
+            var sublist = get( id.shift() )
+            if( sublist !== undefined ) {
+                return sublist.__.get( id )
             }
         }
 
-        var ptr
+        var sublist
         if( typeof id == 'number' ) {
             if( id > 0 ) {
                 id = id - 1      // index to offset
             } else if( id < 0 ) {
                 id += this.count // end-based index
             }
-            ptr = new MapPointer( itms, keys[ id ] )
-        } else if( typeof id == 'string' ||
-                   id instanceof String ) {
-            ptr = itms[ id ]
+            sublist = sublists[ keys[ id ] ]
+        } else if( typeof id =='string'
+                   || id instanceof String ) {
+            var path = id.split( '.' )
+            sublist = ( path.length == 1
+                        ? sublists[ id ]
+                        : get( path ) )
         }
-
-        var itm = ptr !== undefined ? ptr.val : undefined 
-        return itm
+        sublist = sublist && sublist.valueOf()
+        return sublist
     }
     
-    function set( key ) {
-        if( key.__ && key.__.each ) {
-            key.__.each( function( val, key ) {
-                del( key )
-            } )
-        } else {
-            del( key )
-        }
-        return let.apply( this, arguments )
+    function set( key, itm ) {
+        return add( itm, key )
     }
     
     function let( key, itm ) {
-        if( key.__ && key.__.each ) {
-            key.__.each( function( val, key ) {
-                let( key, val )
-            } )
-        } else {
-            var current = get( key )
-            if( current === undefined ) {
-                var uid = add( itm, key )
-                current = get( key )
-            }
-            return current
+        var current = get( key )
+        if( current === undefined ) {
+            var uid = add( itm, key )
+            current = get( uid )
         }
+        return current
     }
 
     function del( key ) {
+        if( key instanceof List ) {
+            key.__.each( function( val, key ) {
+                del( key )
+            } )
+        }
+        throw 'unimplemented'
         var idx = keys.indexOf( key )
         if( idx >= 0 && keys[ idx ] !== undefined ) {
             keys[ idx ] = itms[ keys[ idx ] ] = undefined
@@ -211,16 +146,28 @@ function List( ) {
     function each( f ) {
         keys.each( function( key, idx ) {
             if( key !== undefined ) {
-                f.apply( f, [ get( key ), key ] )
+                var val = get( key )
+                f.apply( val, [ val, key ] )
             }
         } )
     }
 
-    function copy( src, dst ) {
-        if( dst[0] == '.' ) {
-            dst = src + dst
-        }
-        itms[ dst ] = itms[ src ]
+    function join() {
+        console.log( keys )
+        console.log( exports.vals )
+        return Array.prototype.join.apply( exports.vals, arguments )
+    }
+
+    function traverse( f, depth, index ) {
+        depth = depth || 1
+        index = index || 1
+        f.apply( this, { depth: depth, index: index } )
+        var subindex = 0
+        this.__.each( function( item, key ) {
+            if( item instanceof List ) {
+                item.traverse( f, depth + 1, ++subindex )
+            }
+        } )
     }
 
     // true if each relationship and value in a is in b
@@ -249,87 +196,29 @@ function List( ) {
                     console.log( 'θ:⒧:⊆:⇄' + id )
                 }
                 if( isSubobjectOf( key, obj ) ) {
-                    throw id;
+                    throw id
                 }
             } )
         } catch( e ) {
             if( typeof silent != 'undefined' && ! silent && typeof console != 'undefined' ) {
                 console.log( 'θ:⒧:⊆:e:⇄:' + e )
             }
-            return e;
+            return e
         }
-        return undefined;
+        return undefined
     }
 
-    function transform( func ) {
-        var next = {}
-        this.each( function() {
-            func.apply( next, arguments )
-        } )
-        return next
-    }
-
-    function map( func, type ) {
-        type = type || 'straight'
-        return map[ type ].apply( this, arguments )
-    }
-
-    map.straight = function( func ) {
-        var out = new List()
-        each( function( val, key ) {
-            out.set( key, func.apply( this, [ val, key ] ) )
-        } )
-        return out
-    }
-
-    map.tangle = function( func ) {
-        var out = new List()
-        each( function( val, key ) {
-            if( typeof val == 'function' ) {
-                out.set( key, val )
-            } else {
-                out.set( key, func.apply( this, [ val, key ] ) )
-            }
-        } )
-        return out
-    }
-
-    // ToDo:
-    map.mirror = function( func ) {
-        var out = new List()
-        var self = this
-        each( function( val, key ) {
-            var get = self.__lookupGetter__( key )
-            var set = self.__lookupSetter__( key )
-            if( get && set ) {
-                out.__defineGetter__( get )
-                out.__defineSetter__( set )
-            } else {
-                out.set( key, func.apply( self, [ val, key ] ) )
-            }
-        } )
-        return out
-    }
-
-    function div( num ) {
-        return this.map( function( val ) {
-            return typeof val == 'number' && val / num || val
-        }, 'mirror' )
-    }
-    
     var exports = {
         add : add,
-        on : on,
         del : del,
-        swap : swap,
         merge : merge,
-        deref : deref,
         get : get,
         set : set,
         let : let,
         each : each,
-        impress : impress,
+        join : join,
         get count() { return count },
+        get val() { return val },
         get vals() {
             var vals = []
             this.each( function( val, key ) {
@@ -341,7 +230,7 @@ function List( ) {
         get asMap() {
             var map = {}
             this.each( function( itm, key ) {
-                map[key] = itm
+                map[ key ] = itm
             } )
             return map
         },
@@ -362,39 +251,8 @@ function List( ) {
         traverse : traverse,
     }
     this.__defineGetter__( '__', function() { return exports } )
-
-    // Checks if a variable with
-    // the given name is defined
-    function exists( variable ) {
-        var key = new MutableString( variable )
-        var baseId = key['.']
-        eval( 'var val = ' + baseId )
-        console.log( 'p:' + baseId + val )
-        while( val && ( prop = key['.'] ) ) {
-            val = val[ prop ]
-        }
-        return key.empty && val !== undefined
-    }
-
-    function traverse( f, depth, index ) {
-        depth = depth || 1
-        index = index || 1
-        f.apply( this, { depth: depth, index: index } )
-        var subindex = 0;
-        this.each( function( item, key ) {
-            if( item instanceof List ) {
-                item.traverse( f, depth + 1, ++subindex )
-            }
-        } );
-    }
 }
 List.prototype = new Array
-
-NamedNodeMap.prototype.each = function( f ) {
-    Array.prototype.each.apply( this, [ function( attr, idx ) {
-        f.apply( attr, [ attr.nodeValue, attr.name ] )
-    } ] )
-}
 
 function Sublist() {
 }

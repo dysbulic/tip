@@ -1,5 +1,20 @@
-( function() {
-    var store = {
+( function( $ ) {
+    var tip = ( {
+        load : function( url, callback ) {
+            $.ajax( { async : true,
+                      dataType: 'script',
+                      url: src,
+                      beforeSend : function( xhr ) {
+                          callback.apply( xhr, [ xhr, 'pre' ] )
+                      },
+                      error: function( xhr, status, error ) {
+                          callback.apply( xhr, [ xhr, status, error ] )
+                      },
+                      success : function( data, status, xhr ) {
+                          callback.apply( xhr, [ xhr, status, data ] )
+                      },
+                    } )
+        },
         get : function( key ) {
             var str = localStorage[ key ]
             return JSON.parse( val )
@@ -13,39 +28,21 @@
                 set( key, val )
             }
         },
-    }
-    if( window.__lookupGetter__( '__' ) === undefined ) {
-        window.__defineGetter__( '__', function() {
-            return store
-        } )
-    }
-} )()
+    } )
+    ;
+    [ window, $ ].each( function( global ) {
+        global.__defineGetter__( '__', function() { return tip  } )
+    } )
 
-;
+    var namespaces = {}
 
-( function( $ ) {
-    function load( src ) {
-        $.ajax( {
-            dataType: 'script',
-            url: src,
-            error: function( xhr, status, error ) {
-                throw error;
-            },
-            success: function( data, status, xhr ) {
-            }
-        } )
-    }
-
-    var namespaces
-    $.__ = window.__
     $.__.$ = function(arg) {
         var root = document.documentElement
         if( namespaces === undefined ) {
-            namespaces = {}
-            root.attributes.each( function( ) {
-                if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
-                    var name = match[1] || ''
-                    namespaces[ name ] = this.nodeValue
+            root.attributes.each( function( val, name ) {
+                if( match = /^(?:xmlns:?)(.*)/.exec( name ) ) {
+                    var ns = match[1] || ''
+                    namespaces[ ns ] = val
                 }
             })
         }
