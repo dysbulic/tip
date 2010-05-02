@@ -68,7 +68,8 @@
                     scene.tixels = []
                     var state = {}
                     scene.each( function( animation ) {
-                        animation.each( function walk( val, key ) {
+                        animation.__.each( function walk( val, key ) {
+                            console.log( key )
                             switch( key ) {
                             case 'begin':
                                 state.begin = now
@@ -77,7 +78,9 @@
                                 state.end = now + 1000
                                 break
                             case 'animate':
-                                val.each( walk )
+                                val.each( function( val ) {
+                                    ( new List( this ) ).each( walk )
+                                } )
                                 break
                             case 'to': case 'from':
                                 state[ key ] = val
@@ -100,6 +103,7 @@
                 
                 scene.last = scene.last || scene.begin
                 scene.tixels.each( function() {
+                    console.log( 'a:' + this.attr )
                     if( this.begin < now && this.end > scene.last ) {
                         this.elem[ this.attr ] =
                             this.from
