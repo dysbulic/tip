@@ -80,7 +80,29 @@
   </defs>
   <tip:script>
     <rect id="box">
-    <animate type="javascript">{ begin : 0, end : 10 }</animate>
+    <animate type="javascript">{
+        begin : 0,
+        duration : "1s",
+        fill : "freeze",
+        animate : [
+            { 
+                from : 0,
+                to : -25,
+                attr : [
+                    "x",
+                    "y"
+                ],
+            },
+            {
+                from : 0,
+                to : 50,
+                attr : [
+                    "width",
+                    "height"
+                ],
+            }
+        ]
+    }</animate>
 
       <animate type="javascript">
     {
