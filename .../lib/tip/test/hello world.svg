@@ -56,7 +56,13 @@
             var scene = []
             scene.capture = { frequency : { mHz : 100 } }
 
+            var time = {
+                get now() { return ( new Date() ).getTime() }
+            }
+
             function once() {
+                var now = time.now
+
                 if( scene.tixels === undefined ) {
                     scene.tixels = []
                     scene.each( function() {
@@ -64,9 +70,10 @@
                         this.elem.y = 10
                     } )
                 }
+                
                 scene.tixels.each( function() {
-                    this.elem.x = 10
-                    this.elem.y = 10
+                    if( this.start > now && this.end < now ) {
+                    }
                 } )
 
             }
@@ -138,6 +145,8 @@
                             dest = dest.parentNode
                         }
                         animation.elem = elems[ dest.localName ].apply( dest )
+                        animation.elem.width = 10
+                        animation.elem.height = 10
                         console.log( animation.elem )
                         scene.push( animation )
                     }
