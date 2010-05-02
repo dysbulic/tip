@@ -60,12 +60,13 @@
                 if( scene.tixels === undefined ) {
                     scene.tixels = []
                     scene.each( function() {
-                        
+                        this.elem.x = 10
+                        this.elem.y = 10
                     } )
                 }
                 scene.tixels.each( function() {
-                    this.dest.x = 10
-                    this.dest.y = 10
+                    this.elem.x = 10
+                    this.elem.y = 10
                 } )
 
             }
@@ -137,6 +138,7 @@
                             dest = dest.parentNode
                         }
                         animation.elem = elems[ dest.localName ].apply( dest )
+                        console.log( animation.elem )
                         scene.push( animation )
                     }
                 } else {
