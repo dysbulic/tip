@@ -54,7 +54,7 @@
 
         var scene = ( function() {
             var scene = []
-            scene.capture = { frequency : { mHz : 100 } }
+            scene.capture = { frequency : { mHz : 10 } }
 
             var time = {
                 get now() { return ( new Date() ).getTime() }
@@ -91,26 +91,30 @@
                                         elem : state.elem,
                                         attr : attr,
                                     } )
-                                    console.log( scene.tixels[-1].attr )
                                 } )
                                 break
                             default:
                                 state[ key ] = val
                                 break
-
                             }
                         } )
                     } )
+                }
+
+                var interpolators = {
+                    number : function() {
+                        return this.from
+                            + ( (this.to - this.from)
+                                * (now - this.begin)
+                                / (this.end - this.begin) )
+                    },
                 }
                 
                 scene.last = scene.last || scene.begin
                 scene.tixels.each( function( tixel ) {
                     if( tixel.begin < now && tixel.end > scene.last ) {
                         tixel.elem[ tixel.attr ] =
-                            tixel.from
-                            + ( (tixel.to - tixel.from)
-                                * (now - tixel.begin)
-                                / (tixel.end - tixel.begin) )
+                            interpolators[ typeof tixel.from ].apply( tixel )
                     }
                 } )
                 scene.last = now
@@ -168,12 +172,16 @@
                         var elems = {
                             rect : function() {
                                 var $rect = $( this )
-                                return {
+                                var rect = {
                                     set x( x ) { $rect.attr( 'x', x ) },
                                     set y( y ) { $rect.attr( 'y', y ) },
                                     set width( width ) { $rect.attr( 'width', width ) },
                                     set height( height ) { $rect.attr( 'height', height ) },
                                 }
+                                rect.__defineSetter__( 'fill-opacity', function( val ) {
+                                    $rect.css( 'fill-opacity', val )
+                                } )
+                                return rect
                             },
                         }
                         var dest = this
@@ -219,7 +227,14 @@
                     "width",
                     "height"
                 ],
-            }
+            },
+            {
+                from : 0,
+                to : 1,
+                attr : [
+                    "fill-opacity",
+                ],
+            },
         ]
     }
     </animate>
