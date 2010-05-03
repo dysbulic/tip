@@ -6,11 +6,10 @@
 <head>
   <title>localStore Script Loading</title>
   <script type="application/javascript" src=".../lib/jquery/jquery.js"/>
-  <script type="application/javascript">
+  <script type="application/javascript"><![CDATA[
     ( function loadScript( script ) {
         var content = localStorage[ script ]
-        console.log( content )
-        if( content !== undefined ) {
+        if( content !== undefined && content !== null ) {
             eval( content )
         } else {
             $.ajax( { async : true,
@@ -27,7 +26,7 @@
                     } )
         }
     } )( '.../lib/tip/test/hello world.js' )
-  </script>
+   ]]></script>
 </head>
 <body>
 </body>
