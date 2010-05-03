@@ -15,43 +15,6 @@
     <script type="text/javascript" xlink:href=".../lib/tip/tip.jquery"/>
 
     <script type="text/javascript"><![CDATA[
-        var win = ( function() {
-            return {
-                get width() { return window.innerWidth },
-                get height() { return window.innerHeight },
-            }
-        } )()
-        var view = ( function() {
-            var attr = 'viewBox'
-            var str = $.__.$('#').attr( attr ).split( ' ' )
-            var viewbox = new List( {
-                x : parseFloat( str[0] ),
-                y : parseFloat( str[1] ),
-                width : parseFloat( str[2] ),
-                height : parseFloat( str[3] ),
-            } )
-            var view = { 
-                get tx() {
-                    return $.__.$('#').attr( attr, viewbox.__.join( ' ' ) )
-                },
-            }
-            viewbox.__.each( function( val, prop ) {
-                view.__defineGetter__( prop, function() {
-                    return viewbox.__.get( prop )
-                } )
-                view.__defineSetter__( prop, function( val ) {
-                    return viewbox.__.set( prop, val )
-                } )
-            } )
-            return view
-        } )()
-
-        view.x = - win.width / 2
-        view.y = - win.height / 2
-        view.width = win.width
-        view.height = win.height
-        view.tx
-
         var scene = ( function() {
             var scene = []
             scene.capture = { frequency : { mHz : 10 } }
@@ -205,39 +168,37 @@
     </style>
   </defs>
   <tip:script>
+    <with>
+      <var><id>.../lib/tip/win.js</id><as>win</as></var>
+      <var><id>.../lib/tip/view.jquery</id><as>view</as></var>
+      <do>
+        <set><var>view.x</var><to>-win.width / 2</to></set>
+        <set><var>view.y</var><to>-win.height / 2</to></set>
+        <set><var>view.width</var><to>win.width</to></set>
+        <set><var>view.height</var><to>win.height</to></set>
+      </do>
+    </with>
     <rect id="box">
-      <animate type="javascript">
-    {
-        begin : 0,
-        duration : "1s",
-        fill : "freeze",
-        animate : [
-            { 
-                from : 0,
-                to : -25,
-                attr : [
-                    "x",
-                    "y"
-                ],
-            },
-            {
-                from : 0,
-                to : 50,
-                attr : [
-                    "width",
-                    "height"
-                ],
-            },
-            {
-                from : 0,
-                to : 1,
-                attr : [
-                    "fill-opacity",
-                ],
-            },
-        ]
-    }
-    </animate>
+      <animate>
+        <begin>0</begin>
+        <duration>1s</duration>
+        <animate>
+          <from>0</from>
+          <to>-25</to>
+          <attr>x</attr>
+          <attr>y</attr>
+        </animate>
+        <animate>
+          <to>50</to>
+          <attr>width</attr>
+          <attr>height</attr>
+        </animate>
+        <animate>
+          <from>0</from>
+          <to>1</to>
+          <attr>fill opacity</attr>
+        </animate>
+      </animate>
     </rect>
   </tip:script>
 </svg>

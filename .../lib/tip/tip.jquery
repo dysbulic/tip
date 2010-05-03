@@ -3,7 +3,7 @@
         load : function( url, callback ) {
             $.ajax( { async : true,
                       dataType: 'script',
-                      url: src,
+                      url: url,
                       beforeSend : function( xhr ) {
                           callback.apply( xhr, [ xhr, 'pre' ] )
                       },
