@@ -168,34 +168,41 @@
     </style>
   </defs>
   <tip:script>
-    <with>
-      <var><id>.../lib/tip/win.js</id><as>win</as></var>
-      <var><id>.../lib/tip/view.jquery</id><as>view</as></var>
-      <do>
-        <set><var>view.x</var><to>-win.width / 2</to></set>
-        <set><var>view.y</var><to>-win.height / 2</to></set>
-        <set><var>view.width</var><to>win.width</to></set>
-        <set><var>view.height</var><to>win.height</to></set>
-      </do>
-    </with>
-    <rect id="box">
+    <sequence>
+      <id>resize</id>
+      <with>
+        <var>
+          <id>win</id>
+          <ref>.../lib/tip/win.js</ref>
+        </var>
+        <var>
+          <id>view</id>
+          <ref>.../lib/tip/view.jquery</ref>
+        </var>
+        <do>
+          <set><var>view.x</var><to>-win.width / 2</to></set>
+          <set><var>view.y</var><to>-win.height / 2</to></set>
+          <set><var>view.width</var><to>win.width</to></set>
+          <set><var>view.height</var><to>win.height</to></set>
+        </do>
+      </with>
+      <remove><id>resize</id></remove>
+    </sequence>
+    <rect>
+      <as>box</as>
       <animate>
         <begin>0</begin>
         <duration>1s</duration>
         <animate>
-          <from>0</from>
-          <to>-25</to>
-          <attr>x</attr>
-          <attr>y</attr>
+          <from>0</from><to>-25</to>
+          <attr>x</attr><attr>y</attr>
         </animate>
         <animate>
           <to>50</to>
-          <attr>width</attr>
-          <attr>height</attr>
+          <attr>width</attr><attr>height</attr>
         </animate>
         <animate>
-          <from>0</from>
-          <to>1</to>
+          <from>0</from><to>1</to>
           <attr>fill opacity</attr>
         </animate>
       </animate>
