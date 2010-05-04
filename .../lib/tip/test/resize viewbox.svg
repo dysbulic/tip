@@ -120,25 +120,20 @@
         $( window ).bind( 'load', function() {
             var parsers = {
                 json : function() {
-                    return JSON.parse( $this.text() )
+                    return JSON.parse( this.text() )
                 },
                 javascript : function() {
-                    return eval( '(function() { return ' + $this.text().trim() + ' })()' )
+                    return eval( '(function() { return ' + this.text().trim() + ' })()' )
                 },
             }
             $.__.$( 'tip:script' ).children().each( function traverse() {
-                var animation = parsers[ this.localName ].apply( this )
+                var animation = parsers[ this.localName ].apply( $( this ) )
                 if( animation ) {
                     animation = new List( animation )
-                        animation.__.push( elems[ dest.localName ].apply( dest ), 'elem' )
-                        scene.push( animation )
-                    }
-                } else {
-                    $.__.$( '#' ).append( $this )
+                    scene.push( animation )
                 }
-                $this.children().each( traverse )
             } )
-            scene.go
+            scene.once
         } )
     ]]></script>
     <style type="text/css">
@@ -147,25 +142,18 @@
   <tip:script>
     <javascript>
     {
-        sequence : [
-            {
-                resize : {
-                    with : {
-                        win : '.../lib/tip/win.js',
-                        view : '.../lib/tip/view.jquery',
-                    },
-                    do : function() {
-                        view.x = -win.width / 2
-                        view.y = -win.height / 2
-                        view.width = win.width
-                        view.height = win.height
-                    }
-                }
+        resize : {
+            with : {
+                win : '.../lib/tip/win.js',
+                view : '.../lib/tip/view.jquery',
             },
-            {
-                remove : 'resize',
+            do : function() {
+                view.x = -win.width / 2
+                view.y = -win.height / 2
+                view.width = win.width
+                view.height = win.height
             }
-        ]
+        }
     }
     </javascript>
   </tip:script>
