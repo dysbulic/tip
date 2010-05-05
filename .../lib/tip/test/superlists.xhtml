@@ -18,6 +18,9 @@
           superlist.__.set( 'b', 'bee' )
           superlist.__.set( 'c', 'sea' )
 
+          var suplist = new Superlist( list )
+          suplist.__.set( 'b', 'be' )
+
           var supersuperlist = new Superlist( superlist )
           supersuperlist.__.set( 'c', 'see' )
           
@@ -25,6 +28,9 @@
           $.__.$('#').append( $list )
           list.__.each( function( val, key ) {
               $list.append( $('<li/>').text( 'list.' + key + ' = ' + val ) )
+          } )
+          suplist.__.each( function( val, key ) {
+              $list.append( $('<li/>').text( 'suplist.' + key + ' = ' + val ) )
           } )
           superlist.__.each( function( val, key ) {
               $list.append( $('<li/>').text( 'superlist.' + key + ' = ' + val ) )

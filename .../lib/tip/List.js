@@ -270,8 +270,9 @@ function List( ) {
 List.prototype = new Array
 
 function Superlist( sublist ) {
+    var list = new List
     var subexports = sublist.__
-    var exports = this.__
+    var exports = list.__
     var newexports = {}
     for( prop in exports ) {
         var get = exports.__lookupGetter__( prop )
