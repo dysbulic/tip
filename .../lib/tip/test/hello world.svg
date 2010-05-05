@@ -26,13 +26,10 @@
             function once() {
                 var now = time.now
                 scene.begin = scene.begin || now
-                
-                
                 scene.last = scene.last || scene.begin
-                scene.tixels.each( function( tixel ) {
+
+                scene.__.each( function( tixel ) {
                     if( tixel.begin < now && tixel.end > scene.last ) {
-                        tixel.elem[ tixel.attr ] =
-                            interpolators[ typeof tixel.from ].apply( tixel )
                     }
                 } )
                 scene.last = now
@@ -94,10 +91,11 @@
 
         var interpolators = {
             number : function() {
-                return this.from
-                    + ( (this.to - this.from)
-                        * (now - this.begin)
-                        / (this.end - this.begin) )
+                var val = ( this.from
+                            + ( (this.to - this.from)
+                                * (now - this.begin)
+                                / (this.end - this.begin) ) )
+                return this.elem[ this.attr ] = val
             },
         }
 
