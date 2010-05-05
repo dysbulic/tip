@@ -27,43 +27,6 @@
                 var now = time.now
                 scene.begin = scene.begin || now
                 
-                if( scene.tixels === undefined ) {
-                    scene.tixels = []
-                    var state = {}
-                    scene.each( function( animation ) {
-                        animation.__.each( function walk( val, key ) {
-                            switch( key ) {
-                            case 'begin':
-                                state.begin = now
-                                break
-                            case 'duration':
-                                state.end = now + 1000
-                                break
-                            case 'animate':
-                                val.each( function( animation ) {
-                                    ( new List( animation ) ).__.each( walk )
-                                } )
-                                break
-                            case 'attr':
-                                val.each( function( attr ) {
-                                    scene.tixels.push( {
-                                        begin : state.begin,
-                                        end : state.end,
-                                        from : state.from,
-                                        to : state.to,
-                                        elem : state.elem,
-                                        attr : attr,
-                                    } )
-                                } )
-                                break
-                            default:
-                                state[ key ] = val
-                                break
-                            }
-                        } )
-                    } )
-                }
-
                 var interpolators = {
                     number : function() {
                         return this.from
@@ -82,6 +45,10 @@
                 } )
                 scene.last = now
             }
+
+            scene.__defineGetter__( 'clear', function() {
+                this.__.clear
+            } )
 
             var interval = { id : undefined }
 
@@ -120,17 +87,24 @@
         $( window ).bind( 'load', function() {
             $.__.$( 'tip:script' ).children().each( function traverse() {
                 var $this = $( this )
-                if( this.localName == 'function' ) {
+                var parsers = {
+                    json : function() {
+                        return JSON.parse( $this.text() )
+                    },
+                    javascript : function() {
+                        return eval( '(function() { return ' + $this.text().trim() + ' })()' )
+                    },
                 }
-                if( this.localName == 'animate' ) {
-                    var parsers = {
-                        json : function() {
-                            return JSON.parse( $this.text() )
-                        },
-                        javascript : function() {
-                            return eval( '(function() { return ' + $this.text().trim() + ' })()' )
-                        },
-                    }
+                if( this.localName == 'function' ) {
+                    var func = eval( '(function() { return function() { '
+                                     + $this.text().trim()
+                                     + ' } })()' )
+                    scene.__.push( {
+                        begin : true,
+                        end : true,
+                        snap : func,
+                    } )
+                } else if( this.localName == 'animate' ) {
                     var animation =
                         parsers[ $this.attr( 'type' ) ].apply( this )
                     if( animation ) {

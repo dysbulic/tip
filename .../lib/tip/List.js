@@ -21,7 +21,7 @@ function List( ) {
     }
 
     function add( itm, uid ) {
-        var key = uid === undefined ? ++id : uid
+        var key = uid === undefined ? new String( ++id ) : uid
         if( keys.indexOf( key ) < 0 ) {
             keys.push( key )
         }
@@ -269,10 +269,38 @@ function List( ) {
 }
 List.prototype = new Array
 
-function Sublist() {
+function Superlist( sublist ) {
+    var subexports = sublist.__
+    var exports = this.__
+    var newexports = {}
+    for( prop in exports ) {
+        var get = exports.__lookupGetter__( prop )
+        var set = exports.__lookupSetter__( prop )
+        if( get || set ) {
+            if( get ) {
+                newexports.__defineGetter__( prop, get )
+            }
+            if( set ) {
+                newexports.__defineSetter__( prop, set )
+            }
+        } else {
+            newexports[ prop ] = exports[ prop ]
+        }
+    }
+    newexports.get = function( key ) {
+        return exports.get( key ) || subexports.get( key )
+    }
+    newexports.each = function( f ) {
+        var seen = {}
+        var wrap = function( val, key ) {
+            if( seen[ key ] === undefined ) {
+                seen[ key ] = true
+                f.apply( this, arguments )
+            }
+        }
+        exports.each( wrap )
+        subexports.each( wrap )
+    }
+    this.__defineGetter__( '__', function() { return newexports } )
 }
-Sublist.prototype = new List
-
-function Suplist() {
-}
-Suplist.prototype = new List
+Superlist.prototype = new List
