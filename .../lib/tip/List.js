@@ -229,34 +229,35 @@ function List( ) {
         join : join,
         push : push,
         traverse : traverse,
-        get count() { return count },
-        get keys() { return keys },
-        get val() { return val },
-        get vals() {
+        get count( ) { return count },
+        get keys( ) { return keys },
+        get val( ) { return val },
+        get vals( ) {
             var vals = []
-            this.each( function( val, key ) {
+            each( function( val, key ) {
                 vals.push( val )
             } )
             return vals
         },
-        get clone() { return new List( this ) },
-        get asMap() {
+        get clone( ) { return new List( this ) },
+        get asMap( ) {
             var map = {}
-            this.each( function( itm, key ) {
+            each( function( itm, key ) {
                 map[ key ] = itm
             } )
             return map
         },
-        get top( ) { return this.get( -1 ) },
-        set top() {
+        get clear( ) { keys = [] },
+        get top( ) { return get( -1 ) },
+        set top( ) {
             return push.apply( this, arguments )
         },
         get pop( ) {
-            var out = this.get( keys.pop() )
+            var out = get( keys.pop() )
             --count
             return out
         },
-        get asString() {
+        get asString( ) {
             try {
                 return 'List'; //JSON.stringify( itmLst )
             } catch(e) {

@@ -16,7 +16,7 @@
 
     <script type="text/javascript"><![CDATA[
         var scene = ( function() {
-            var scene = []
+            var scene = new List
             scene.capture = { frequency : { mHz : 10 } }
 
             var time = {
@@ -120,6 +120,8 @@
         $( window ).bind( 'load', function() {
             $.__.$( 'tip:script' ).children().each( function traverse() {
                 var $this = $( this )
+                if( this.localName == 'function' ) {
+                }
                 if( this.localName == 'animate' ) {
                     var parsers = {
                         json : function() {
@@ -168,23 +170,22 @@
     </style>
   </defs>
   <tip:script>
-    <javascript id="resize"><![CDATA[
-      function( port ) {
-        var win = __.load( '.../lib/tip/win.js' )
-        var view = __.load( '.../lib/tip/view.jquery' )
-        if( win && view ) {
-          view.x = -win.width / 2
-          view.y = -win.height / 2
-          view.width = win.width
-          view.height = win.height
-          view.tx
-          $( '#resize' ).remove()
-          port.postMessage( 'done' )
-        }
+    <function id="resize"><![CDATA[
+      var win = __.load( '.../lib/tip/win.js' )
+      var view = __.load( '.../lib/tip/view.jquery' )
+      if( ! win || ! view ) {
+        throw 'loading'
+      } else {
+        view.x = -win.width / 2
+        view.y = -win.height / 2
+        view.width = win.width
+        view.height = win.height
+        view.tx
+        $( '#resize' ).remove()
       }
-    ]]></javascript>
+    ]]></function>
     <rect id="box">
-      <animate begin="resize.done" duration="1s">
+      <animate begin="resize.end" duration="1s">
         <animate from="0" to="-25" attr="x,y"/>
         <animate to="50" attr="width,height"/>
         <animate from="0" to="1" attr="fill opacity"/>
