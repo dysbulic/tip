@@ -5,7 +5,7 @@
      xmlns:html="http://www.w3.org/1999/xhtml"
      xmlns:smil="http://www.w3.org/ns/SMIL30"
      xmlns:xlink="http://www.w3.org/1999/xlink">
-  <title>Hello World</title>
+  <title>Resize Viewbox</title>
   <defs>
     <style type="text/css">
     </style>
@@ -18,61 +18,40 @@
         var scene = ( function() {
             var scene = []
             scene.capture = { frequency : { mHz : 10 } }
+            scene.tixels = []
 
             var time = {
                 get now() { return ( new Date() ).getTime() }
+            }
+
+            var parsers = {
+                json : function() {
+                    return JSON.parse( this.text() )
+                },
+                javascript : function() {
+                    var content = ( this.data( 'content' )
+                                    || eval( '(function() { return ' + this.text().trim() + ' })()' ) )
+                    this.data( 'content', content )
+                    return content
+                },
             }
 
             function once() {
                 var now = time.now
                 scene.begin = scene.begin || now
                 
-                if( scene.tixels === undefined ) {
-                    scene.tixels = []
-                    var state = {}
-                    scene.each( function( animation ) {
-                        animation.__.each( function walk( val, key ) {
-                            switch( key ) {
-                            case 'begin':
-                                state.begin = now
-                                break
-                            case 'duration':
-                                state.end = now + 1000
-                                break
-                            case 'animate':
-                                val.each( function( animation ) {
-                                    ( new List( animation ) ).__.each( walk )
-                                } )
-                                break
-                            case 'attr':
-                                val.each( function( attr ) {
-                                    scene.tixels.push( {
-                                        begin : state.begin,
-                                        end : state.end,
-                                        from : state.from,
-                                        to : state.to,
-                                        elem : state.elem,
-                                        attr : attr,
-                                    } )
-                                } )
-                                break
-                            default:
-                                state[ key ] = val
-                                break
-                            }
-                        } )
-                    } )
-                }
+                scene.clear
+                $.__.$( 'tip:script' ).children().each( function traverse() {
+                    var animation = parsers[ this.localName ].apply( $( this ) )
+                    if( animation ) {
+                        scene.push( animation )
+                    }
+                } )
 
-                var interpolators = {
-                    number : function() {
-                        return this.from
-                            + ( (this.to - this.from)
-                                * (now - this.begin)
-                                / (this.end - this.begin) )
-                    },
-                }
-                
+                scene.each( function( anim ) {
+                    anim.apply( this )
+                } )
+
                 scene.last = scene.last || scene.begin
                 scene.tixels.each( function( tixel ) {
                     if( tixel.begin < now && tixel.end > scene.last ) {
@@ -84,6 +63,10 @@
             }
 
             var interval = { id : undefined }
+
+            scene.__defineGetter__( 'clear', function() {
+                this.length = 0
+            } )
 
             scene.__defineGetter__( 'once', once )
             scene.__defineGetter__( 'go', function() {
@@ -107,54 +90,33 @@
                 return interval.id !== undefined
             } )
             scene.__defineGetter__( 'pause', function() {
-                if( this.running ) {
-                    this.stop
-                } else {
-                    this.go
-                }
-                return this
+                return this.running ? this.stop : this.go
             } )
             return scene
         } )()
 
         $( window ).bind( 'load', function() {
-            var parsers = {
-                json : function() {
-                    return JSON.parse( this.text() )
-                },
-                javascript : function() {
-                    return eval( '(function() { return ' + this.text().trim() + ' })()' )
-                },
-            }
-            $.__.$( 'tip:script' ).children().each( function traverse() {
-                var animation = parsers[ this.localName ].apply( $( this ) )
-                if( animation ) {
-                    animation = new List( animation )
-                    scene.push( animation )
-                }
-            } )
-            scene.once
+            scene.go
         } )
     ]]></script>
     <style type="text/css">
     </style>
   </defs>
   <tip:script>
-    <javascript>
-    {
-        resize : {
-            with : {
-                win : '.../lib/tip/win.js',
-                view : '.../lib/tip/view.jquery',
-            },
-            do : function() {
-                view.x = -win.width / 2
-                view.y = -win.height / 2
-                view.width = win.width
-                view.height = win.height
-            }
+    <javascript id="resize"><![CDATA[
+      function() {
+        var win = __.load( '.../lib/tip/win.js' )
+        var view = __.load( '.../lib/tip/view.jquery' )
+        if( win && view ) {
+          view.x = -win.width / 2
+          view.y = -win.height / 2
+          view.width = win.width
+          view.height = win.height
+          $( '#resize' ).remove()
         }
-    }
+      }
+    ]]></javascript>
+    <javascript>
     </javascript>
   </tip:script>
 </svg>

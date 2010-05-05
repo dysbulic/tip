@@ -1,19 +1,44 @@
 ( function( $ ) {
+    var libs = {}
+    var requests = {}
+
     var tip = ( {
-        load : function( url, callback ) {
-            $.ajax( { async : true,
-                      dataType: 'script',
-                      url: url,
-                      beforeSend : function( xhr ) {
-                          callback.apply( xhr, [ xhr, 'pre' ] )
-                      },
-                      error: function( xhr, status, error ) {
-                          callback.apply( xhr, [ xhr, status, error ] )
-                      },
-                      success : function( data, status, xhr ) {
-                          callback.apply( xhr, [ xhr, status, data ] )
-                      },
-                    } )
+        load : function( ) {
+            var args = Array.prototype.slice.apply( arguments )
+            var urn = args.shift()
+
+            // Libraries are functions which are called
+            // when the library is instantiated
+            var lib = libs[ urn ]
+
+            if( lib === undefined ) {
+                // Copies are cached locally (eventually to be
+                // managed in a more complex manner
+                var cached = localStorage[ urn ]
+                if( cached ) {
+                    lib = libs[ urn ] =
+                        eval( '(function() { return ' + cached + ' })()' )
+                }
+            }
+
+            if( lib !== undefined ) {
+                return lib.apply( this, args )
+            }
+
+            // Otherwise the library is retrieved from the server
+            if( requests[ urn ] === undefined ) {
+                requests[ urn ] === true
+                $.ajax( { async : true,
+                          dataType: 'script',
+                          url: urn,
+                          error: function( xhr, status, error ) {
+                              requests[ urn ] = false
+                          },
+                          success : function( data, status, xhr ) {
+                              localStorage[ urn ] = data
+                          },
+                        } )
+            }
         },
         get : function( key ) {
             var str = localStorage[ key ]
