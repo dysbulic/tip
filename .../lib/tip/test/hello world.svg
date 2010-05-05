@@ -17,7 +17,7 @@
     <script type="text/javascript"><![CDATA[
         var scene = ( function() {
             var scene = new List
-            scene.capture = { frequency : { mHz : 10 } }
+            scene.capture = { frequency : { mHz : 1000 } }
 
             var time = {
                 get now() { return ( new Date() ).getTime() }
@@ -27,14 +27,6 @@
                 var now = time.now
                 scene.begin = scene.begin || now
                 
-                var interpolators = {
-                    number : function() {
-                        return this.from
-                            + ( (this.to - this.from)
-                                * (now - this.begin)
-                                / (this.end - this.begin) )
-                    },
-                }
                 
                 scene.last = scene.last || scene.begin
                 scene.tixels.each( function( tixel ) {
@@ -84,7 +76,33 @@
             return scene
         } )()
 
+        var elems = {
+            rect : function() {
+                var $rect = $( this )
+                var rect = {
+                    set x( x ) { $rect.attr( 'x', x ) },
+                    set y( y ) { $rect.attr( 'y', y ) },
+                    set width( width ) { $rect.attr( 'width', width ) },
+                    set height( height ) { $rect.attr( 'height', height ) },
+                }
+                rect.__defineSetter__( 'fill-opacity', function( val ) {
+                    $rect.css( 'fill-opacity', val )
+                } )
+                return rect
+            },
+        }
+
+        var interpolators = {
+            number : function() {
+                return this.from
+                    + ( (this.to - this.from)
+                        * (now - this.begin)
+                        / (this.end - this.begin) )
+            },
+        }
+
         $( window ).bind( 'load', function() {
+            var scope = new List()
             $.__.$( 'tip:script' ).children().each( function traverse() {
                 var $this = $( this )
                 var parsers = {
@@ -105,34 +123,16 @@
                         snap : func,
                     } )
                 } else if( this.localName == 'animate' ) {
-                    var animation =
-                        parsers[ $this.attr( 'type' ) ].apply( this )
-                    if( animation ) {
-                        var elems = {
-                            rect : function() {
-                                var $rect = $( this )
-                                var rect = {
-                                    set x( x ) { $rect.attr( 'x', x ) },
-                                    set y( y ) { $rect.attr( 'y', y ) },
-                                    set width( width ) { $rect.attr( 'width', width ) },
-                                    set height( height ) { $rect.attr( 'height', height ) },
-                                }
-                                rect.__defineSetter__( 'fill-opacity', function( val ) {
-                                    $rect.css( 'fill-opacity', val )
-                                } )
-                                return rect
-                            },
-                        }
-                        var dest = this
-                        while( dest.localName == 'animate' ) {
-                            dest = dest.parentNode
-                        }
-                        animation = new List( animation )
-                        // Since order matters for evaluation this needs to be earlier in the list
-                        animation.__.push( elems[ dest.localName ].apply( dest ), 'elem' )
-                        scene.push( animation )
-                    }
+                    this.attributes.each( function( val, key ) {
+                        console.log( key )
+                    } )
+                    scene.__.push( {
+                        begin : scope.begin,
+                        end : scope.end,
+                        snap : interpolators[ 'number' ],
+                    } )
                 } else {
+                    scope.__.set( 'elem', elems[ this.localName ].apply( this ) )
                     $.__.$( '#' ).append( $this )
                 }
                 $this.children().each( traverse )
