@@ -113,6 +113,8 @@
         $( window ).bind( 'load', function() {
             var scope = new List()
             $.__.$( 'tip:script' ).children().each( function traverse() {
+                var parentScope = scope
+                scope = new Superlist( scope )
                 var $this = $( this )
                 if( this.localName == 'function' ) {
                     var func = eval( '(function() { return function() { '
@@ -125,7 +127,7 @@
                     } )
                 } else if( this.localName == 'animate' ) {
                     this.attributes.each( function( val, key ) {
-                        console.log( key )
+                        scope.__.set( key, val )
                     } )
                     scene.__.push( {
                         begin : scope.begin,
@@ -137,6 +139,7 @@
                     $.__.$( '#' ).append( $this )
                 }
                 $this.children().each( traverse )
+                scope = parentScope
             } )
             scene.go
         } )
