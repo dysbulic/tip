@@ -29,7 +29,9 @@
                 scene.last = scene.last || scene.begin
 
                 scene.__.each( function( tixel ) {
-                    if( tixel.begin < now && tixel.end > scene.last ) {
+                    if( tixel.begin === true || tixel.end === true ||
+                        ( tixel.begin < now && tixel.end > scene.last ) ) {
+                        tixel.snap.apply( tixel )
                     }
                 } )
                 scene.last = now
@@ -99,18 +101,19 @@
             },
         }
 
+        var parsers = {
+            json : function() {
+                return JSON.parse( $this.text() )
+            },
+            javascript : function() {
+                return eval( '(function() { return ' + $this.text().trim() + ' })()' )
+            },
+        }
+
         $( window ).bind( 'load', function() {
             var scope = new List()
             $.__.$( 'tip:script' ).children().each( function traverse() {
                 var $this = $( this )
-                var parsers = {
-                    json : function() {
-                        return JSON.parse( $this.text() )
-                    },
-                    javascript : function() {
-                        return eval( '(function() { return ' + $this.text().trim() + ' })()' )
-                    },
-                }
                 if( this.localName == 'function' ) {
                     var func = eval( '(function() { return function() { '
                                      + $this.text().trim()
