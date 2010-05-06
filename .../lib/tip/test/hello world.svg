@@ -11,6 +11,7 @@
     </style>
     <script type="text/javascript" xlink:href=".../lib/tip/Array.each.js"/>
     <script type="text/javascript" xlink:href=".../lib/tip/List.js"/>
+    <script type="text/javascript" xlink:href=".../lib/tip/pointers.js"/>
     <script type="text/javascript" xlink:href=".../lib/jquery/jquery.js"/>
     <script type="text/javascript" xlink:href=".../lib/tip/tip.jquery"/>
 
@@ -22,6 +23,7 @@
             var time = {
                 get now() { return ( new Date() ).getTime() }
             }
+
 
             function once() {
                 var now = time.now
@@ -65,12 +67,7 @@
                 return interval.id !== undefined
             } )
             scene.__defineGetter__( 'pause', function() {
-                if( this.running ) {
-                    this.stop
-                } else {
-                    this.go
-                }
-                return this
+                return this.running ? this.stop : this.go
             } )
             return scene
         } )()
@@ -110,8 +107,13 @@
             },
         }
 
+        String.prototype.endsWith = function(str) {
+            return this.match( str + '$' ) == str
+        }
+
         $( window ).bind( 'load', function() {
             var scope = new List()
+            var events = {}
             $.__.$( 'tip:script' ).children().each( function traverse() {
                 var parentScope = scope
                 scope = new Superlist( scope )
@@ -120,19 +122,49 @@
                     var func = eval( '(function() { return function() { '
                                      + $this.text().trim()
                                      + ' } })()' )
-                    scene.__.push( {
+                    scene.__.add( {
                         begin : true,
                         end : true,
                         snap : func,
                     } )
                 } else if( this.localName == 'animate' ) {
                     this.attributes.each( function( val, key ) {
+                        switch( key ) {
+                        case 'begin':
+                        case 'end':
+                        case 'duration':
+                            // event
+                            if( match = val.match( /([a-z]+)\.(begin|end)/ ) ) {
+                                events[ match[1] ] = events[ match[1] ] || {}
+                                val = new MapPointer( events[ match[1] ],
+                                                      match[2] )
+                            } else if( match = val.match( /([+-]*(?:[0-9]+\.?[0-9]*|[0-9]*\.?[0-9]+))(h|m|s)/ ) ) {
+                                var quantity = parseFloat( match[1] )
+                                switch( match[2] ) {
+                                case 'h':
+                                    quantity *= 60
+                                case 'm':
+                                    quantity *= 60
+                                case 's':
+                                    quantity *= 1000
+                                }
+                                val = quantity
+                            }
+                            break
+                        case attr:
+                            var attrs = val.split( ',' )
+                            attrs.each( function( attr ) {
+                                scene.__.push( {
+                                    begin : scope.begin,
+                                    end : scope.end,
+                                    elem : scope.elem,
+                                    attr : attr,
+                                    snap : interpolators[ 'number' ],
+                                } )
+                            } )
+                            break
+                        }
                         scope.__.set( key, val )
-                    } )
-                    scene.__.push( {
-                        begin : scope.begin,
-                        end : scope.end,
-                        snap : interpolators[ 'number' ],
                     } )
                 } else {
                     scope.__.set( 'elem', elems[ this.localName ].apply( this ) )
@@ -166,7 +198,7 @@
       <animate begin="resize.end" duration="1s">
         <animate from="0" to="-25" attr="x,y"/>
         <animate to="50" attr="width,height"/>
-        <animate from="0" to="1" attr="fill opacity"/>
+        <animate from="0" to="1" attr="fill-opacity"/>
       </animate>
     </rect>
   </tip:script>
