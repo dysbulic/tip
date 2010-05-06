@@ -16,6 +16,7 @@
     <script type="text/javascript" xlink:href=".../lib/tip/tip.jquery"/>
 
     <script type="text/javascript"><![CDATA[
+        var events = {}
         var scene = ( function() {
             var scene = new List
             scene.capture = { frequency : { mHz : 1000 } }
@@ -30,10 +31,17 @@
                 scene.begin = scene.begin || now
                 scene.last = scene.last || scene.begin
 
-                scene.__.each( function( tixel ) {
+                scene.__.each( function( tixel, id ) {
                     if( tixel.begin === true || tixel.end === true ||
                         ( tixel.begin < now && tixel.end > scene.last ) ) {
-                        tixel.snap.apply( tixel )
+                        try {
+                            tixel.snap.apply( tixel )
+                            if( events[ id ] &&
+                                ( tixel.end === true || tixel.end <= now ) ) {
+                                events[ id ][ 'end' ] = now
+                            }
+                        } catch(e) {
+                        }
                     }
                 } )
                 scene.last = now
@@ -113,7 +121,6 @@
 
         $( window ).bind( 'load', function() {
             var scope = new List()
-            var events = {}
             $.__.$( 'tip:script' ).children().each( function traverse() {
                 var parentScope = scope
                 scope = new Superlist( scope )
@@ -122,7 +129,8 @@
                     var func = eval( '(function() { return function() { '
                                      + $this.text().trim()
                                      + ' } })()' )
-                    scene.__.add( {
+                    var id = $this.attr( 'id' )
+                    scene.__.set( id, {
                         begin : true,
                         end : true,
                         snap : func,
@@ -164,7 +172,9 @@
                             } )
                             break
                         }
-                        scope.__.set( key, val )
+                        if( val !== undefined ) {
+                            scope.__.set( key, val )
+                        }
                     } )
                 } else {
                     scope.__.set( 'elem', elems[ this.localName ].apply( this ) )
