@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20000303 Stylable//EN"
  "http://www.w3.org/TR/2000/03/WD-SVG-20000303/DTD/svg-20000303-stylable.dtd">
-<svg viewBox="-16 -1 12 16" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="-16 -1 12 16"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:tip=".../lib/tip/">
+  <title>Seven Segment Display</title>
   <defs>
-    <linearGradient id="on-gradient">
-      <stop offset="5%" style="stop-color: orange">
+    <linearGradient id="on">
+      <stop id="start" offset="5%" style="stop-color: orange">
         <animateColor attributeName="stop-color" attributeType="CSS"
-         values="yellow;green;blue;yellow" dur="10s"
-         begin="SVGLoad;mousedown" repeatCount="1"/>
+                      values="yellow; green; blue; yellow" dur="10s"
+                      begin="SVGLoad; mousedown" repeatCount="1"/>
       </stop>
       <stop offset="95%" style="stop-color: red">
         <animateColor attributeName="stop-color" attributeType="CSS"
-         values="red;orange;red;purple;red" dur="9s"
-         repeatCount="1"/>
+                      values="red; orange; red; purple; red" dur="9s"
+                      repeatCount="1"/>
       </stop>
     </linearGradient>
     <script type="text/javascript"><![CDATA[
@@ -41,16 +44,22 @@
                 this.bits = bits
             } )
 
-            var segments = new Array
+            var segments
+                
+            $( function() {
+                var segments = ( function() {
+                    return new Array
+                } )
+            } )
 
             this.__defineSetter( 'bits', function( bits ) {
-                bits.each( function
-                           segments.push(bits[i] != '0');
-                         }
-                updateSegments(segments);
+                segments.clear
+                bits.each( function( bit ) {
+                    segments.top = bit !== '0' && bit !== 0
+                } )
+            } )
       }
 
-      var segments = new Array();
       function updateSegments(isOn) {
         if(segments.length == 0) {
           var polygons = document.getElementsByTagName('polygon');
