@@ -48,7 +48,6 @@
                 
             $( function() {
                 var segments = ( function() {
-                    var segments = new List
                     var marks = {
                         'binary' : function() {
                             var mark = ''
@@ -65,17 +64,23 @@
                         form : 'binary',
                         get next() {
                             ++count
-                            return marks[ form ].apply( this ) {
+                            return marks[ form ].apply( this )
                         }
                     }
+                    var segments = new List
                     $( 'seven_segment' ).children().each( function() {
-                        segments.push( $( this ) )
+                        for( i = 1; i <= 7; i++ ) {
+                            segments.set( marker.next, $( this ) )
+                        }
+                    } )
+                    segments.__defineGetter__( 'clear', function() {
+                        
                     } )
                     return segments
-                } )
+                } )()
             } )
 
-            this.__defineSetter( 'bits', function( bits ) {
+            this.__defineSetter__( 'bits', function( bits ) {
                 segments.clear
                 bits.each( function( bit ) {
                     segments.top = bit !== '0' && bit !== 0
@@ -133,13 +138,13 @@
     .on { fill: #730000; fill: url(#on-gradient); }
     .off { fill: #F3F3F3; stroke: #DDD; }
   </style>
-  <seven_segment>
-    <polygon id="00000001" points='-14,1 -13,2 -7,2 -6,1 -7,0 -13,0' />
-    <polygon id="00000010" points='-6,1 -7,2 -7,6 -6,7 -5,6 -5,2' />
-    <polygon id='00000100' points='-6,7 -7,8 -7,12 -6,13 -5,12 -5,8' />
-    <polygon id='0000000' points='-14,13 -13,14 -7,14 -6,13 -7,12 -13,12' />
-    <polygon id='00100000' points='-14,7 -15,8 -15,12 -14,13 -13,12 -13,8' />
-    <polygon id='01000000' points='-14,1 -15,2 -15,6 -14,7 -13,6 -13,2' />
-    <polygon id='10000000' points='-14,7 -13,8 -7,8 -6,7 -7,6 -13,6' />
-  </seven_segment>
+  <g tip:name="seven_segment">
+    <polygon points='-14,1 -13,2 -7,2 -6,1 -7,0 -13,0' />
+    <polygon points='-6,1 -7,2 -7,6 -6,7 -5,6 -5,2' />
+    <polygon points='-6,7 -7,8 -7,12 -6,13 -5,12 -5,8' />
+    <polygon points='-14,13 -13,14 -7,14 -6,13 -7,12 -13,12' />
+    <polygon points='-14,7 -15,8 -15,12 -14,13 -13,12 -13,8' />
+    <polygon points='-14,1 -15,2 -15,6 -14,7 -13,6 -13,2' />
+    <polygon points='-14,7 -13,8 -7,8 -6,7 -7,6 -13,6' />
+  </g>
 </svg>
