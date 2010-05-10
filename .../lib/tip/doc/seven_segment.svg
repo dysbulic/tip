@@ -48,7 +48,32 @@
                 
             $( function() {
                 var segments = ( function() {
-                    return new Array
+                    var segments = new List
+                    var marks = {
+                        'binary' : function() {
+                            var mark = ''
+                            var count = this.count
+                            for( i = 1; i <= 8; i++ ) {
+                                mark += count >> (i - 1) 
+                            } 
+                        }
+                    }
+                    var marker = {
+                        count : 0,
+                        form : 'binary',
+                        get next() {
+                            ++count
+                            return marks[ form ].apply( this ) {
+                            default:
+                            case 'byte':
+                                out = ''
+                            }
+                        }
+                    }
+                    $( 'seven_segment' ).children().each( function() {
+                        segments.push( $( this ) )
+                    } )
+                    return segments
                 } )
             } )
 
