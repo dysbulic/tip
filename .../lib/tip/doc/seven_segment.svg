@@ -65,7 +65,7 @@
             $( function() {
                 segments = ( function() {
                     var marks = {
-                        'binary' : function() {
+                        'flag field' : function() {
                             var mark = ''
                             var count = this.count
                             for( i = 1; i <= 8; i++ ) {
@@ -78,7 +78,7 @@
                     }
                     var marker = {
                         count : 0,
-                        form : 'binary',
+                        form : 'flag field',
                         get next() {
                             ++this.count
                             return marks[ this.form ].apply( this )
@@ -86,7 +86,6 @@
                     }
                     var segments = new List
                     $( '[name = "seven segment"]' ).children().each( function() {
-                        console.log( marker.next )
                         segments.__.set( marker.next, ( function() {
                             var $segment = $( this )
                             return {
