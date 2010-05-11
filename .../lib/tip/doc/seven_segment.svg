@@ -84,7 +84,9 @@
                         }
                     }
                     var segments = new List
-                    $( '[name = "seven segment"]' ).children().each( function() {
+                    var $segments = $( '[name = "seven segment"]' ).clone()
+                    $.__.$( '#' ).append( $segments )
+                    $segments.children().each( function() {
                         segments.__.set( marker.next, ( function() {
                             var $segment = $( this )
                             return {
@@ -141,19 +143,19 @@
             } )
         } )
     ]]></script>
+    <g name="seven segment">
+      <polygon points='-14,1 -13,2 -7,2 -6,1 -7,0 -13,0' />
+      <polygon points='-6,1 -7,2 -7,6 -6,7 -5,6 -5,2' />
+      <polygon points='-6,7 -7,8 -7,12 -6,13 -5,12 -5,8' />
+      <polygon points='-14,13 -13,14 -7,14 -6,13 -7,12 -13,12' />
+      <polygon points='-14,7 -15,8 -15,12 -14,13 -13,12 -13,8' />
+      <polygon points='-14,1 -15,2 -15,6 -14,7 -13,6 -13,2' />
+      <polygon points='-14,7 -13,8 -7,8 -6,7 -7,6 -13,6' />
+    </g>
   </defs>
   <style type='text/css'>
-    polygon { stroke-width: 0.1; stroke: black; }
-    [state="on"] { fill: #730000; fill: url(#on); }
-    [state="off"] { fill: #F3F3F3; stroke: #DDD; }
+    polygon { stroke-width: 0.1; stroke: black }
+    [state="on"] { fill: #730000; fill: url(#on) }
+    [state="off"] { fill: #F3F3F3; stroke: #DDD }
   </style>
-  <g name="seven segment">
-    <polygon points='-14,1 -13,2 -7,2 -6,1 -7,0 -13,0' />
-    <polygon points='-6,1 -7,2 -7,6 -6,7 -5,6 -5,2' />
-    <polygon points='-6,7 -7,8 -7,12 -6,13 -5,12 -5,8' />
-    <polygon points='-14,13 -13,14 -7,14 -6,13 -7,12 -13,12' />
-    <polygon points='-14,7 -15,8 -15,12 -14,13 -13,12 -13,8' />
-    <polygon points='-14,1 -15,2 -15,6 -14,7 -13,6 -13,2' />
-    <polygon points='-14,7 -13,8 -7,8 -6,7 -7,6 -13,6' />
-  </g>
 </svg>
