@@ -71,20 +71,22 @@
                     $( 'seven_segment' ).children().each( function() {
                         segments.__.set( marker.next, ( function() {
                             var $segment = $( this )
-                            var segment = {
+                            return {
                                 set state( state ) {
                                     switch( state ) {
                                     case 'on': case true:
                                         $segment.attr( 'state', 'on' )
                                         break
-                                    default:
                                     case 'off': case false:
                                         $segment.attr( 'state', 'off' )
                                         break
+                                    default:
+                                        $segment.removeAttr( 'state' )
                                     }
                                 },
+                                get on() { this.state = 'on' },
+                                get off() { this.state = 'off' },
                             }
-                            return segment
                         } ).apply( this ) )
                     } )
                     var count = 0
