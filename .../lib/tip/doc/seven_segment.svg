@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20000303 Stylable//EN"
  "http://www.w3.org/TR/2000/03/WD-SVG-20000303/DTD/svg-20000303-stylable.dtd">
-<svg viewBox="-11 -21 22 42"
+<svg viewBox="-12 -22 24 44"
      xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink"
      xmlns:tip=".../lib/tip/">
@@ -123,9 +123,10 @@
                     return segments
                 } )()
             } )
+            return this
         }
 
-        $( function() {
+        $( window ).bind( 'load', function() {
             var args = new List
             var argStrs = window.location.search.substring(1).split( /&/ )
             argStrs.each( function( arg ) {
@@ -136,9 +137,11 @@
                 }
             } )
 
-            var segment = new SevenSegment()
+            var segment = new SevenSegment
             segment.clear
+            
             args.__.each( function( val, name ) {
+                console.log( name )
                 segment[ name ] = val
             } )
         } )
