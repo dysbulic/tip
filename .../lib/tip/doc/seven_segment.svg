@@ -27,6 +27,8 @@
 
     <script type="text/javascript"><![CDATA[
         function SevenSegment() {
+            var segments
+
             function number( number ) {
                 var bits
                 switch( number ) {
@@ -53,10 +55,15 @@
             this.__defineSetter__( 'number', number )
             this.__defineSetter__( 'num', number )
 
-            var segments
-                
+            this.__defineSetter__( 'bits', function( bits ) {
+                segments.clear
+                bits.each( function( bit ) {
+                    segments.top = bit
+                } )
+            } )
+            
             $( function() {
-                var segments = ( function() {
+                segments = ( function() {
                     var marks = {
                         'binary' : function() {
                             var mark = ''
@@ -114,13 +121,6 @@
                     return segments
                 } )()
             } )
-
-            this.__defineSetter__( 'bits', function( bits ) {
-                segments.clear
-                bits.each( function( bit ) {
-                    segments.top = bit
-                } )
-            } )
         }
 
         $( function() {
@@ -138,8 +138,6 @@
             args.__.each( function( val, name ) {
                 segment[ name ] = val
             } )
-
-            console.log( 'hi' )
         } )
     ]]></script>
   </defs>

@@ -24,8 +24,9 @@
             }
         }
     }
-} )()
 
+    String.prototype.each = Array.prototype.each
+} )()
 
 Array.prototype.__defineGetter__( 'empty', function() {
     return this.length === 0
