@@ -84,7 +84,8 @@
                         }
                     }
                     var segments = new List
-                    $( '[tip:name = "seven segment"]' ).children().each( function() {
+                    $( '[name = "seven segment"]' ).children().each( function() {
+                        console.log( this )
                         segments.__.set( marker.next, ( function() {
                             var $segment = $( this )
                             return {
@@ -147,7 +148,7 @@
     .on { fill: #730000; fill: url(#on-gradient); }
     .off { fill: #F3F3F3; stroke: #DDD; }
   </style>
-  <g tip:name="seven_segment">
+  <g name="seven_segment">
     <polygon points='-14,1 -13,2 -7,2 -6,1 -7,0 -13,0' />
     <polygon points='-6,1 -7,2 -7,6 -6,7 -5,6 -5,2' />
     <polygon points='-6,7 -7,8 -7,12 -6,13 -5,12 -5,8' />
