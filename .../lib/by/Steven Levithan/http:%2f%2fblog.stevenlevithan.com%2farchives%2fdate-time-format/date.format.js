@@ -5,26 +5,28 @@
  * The mask defaults to dateFormat.masks.default.
  */
 ( function() {
-    var dateFormat = function () {
+    function formatDate() {
         var token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|\"[^\"]*\"|\'[^\']*\'/g
         var timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g
         var timezoneClip = /[^-+\dA-Z]/g
-        var pad = function (val, len) {
-            var val = String(val)
 
-            len = len || 2;
-            while (val.length < len) val = "0" + val;
-            return val;
-        };
+        var pad = function( val, len, chr ) {
+            val = ( typeof val == 'string' || val instanceof String
+                        ? val : new String( val ) )
+            len = len || 2
+            chr = chr === undefined ? ' ' : chr
+            while( val.length < len ) {
+                val = chr + val
+            }
+            return val
+        }
 
-    // Regexes and supporting functions are cached through closure
-    return function (date, mask, utc) {
-        var dF = dateFormat;
+        return function( date, mask, utc ) {
 
-        // You can't provide utc if you skip other args (use the "UTC:" mask prefix)
-        if (arguments.length == 1 && Object.prototype.toString.call(date) == "[object String]" && !/\d/.test(date)) {
-            mask = date;
-            date = undefined;
+            // You can't provide utc if you skip other args (use the "UTC:" mask prefix)
+            if( arguments.length == 1 && Object.prototype.toString.call(date) == "[object String]" && !/\d/.test(date)) {
+                mask = date
+                date = undefined
         }
 
         // Passing date through Date applies Date.parse, if necessary
