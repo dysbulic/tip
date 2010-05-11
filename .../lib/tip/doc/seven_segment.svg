@@ -56,9 +56,9 @@
             this.__defineSetter__( 'num', number )
 
             this.__defineSetter__( 'bits', function( bits ) {
-                segments.clear
+                this.clear
                 bits.each( function( bit ) {
-                    segments.top = bit
+                    this.top = bit
                 } )
             } )
             
