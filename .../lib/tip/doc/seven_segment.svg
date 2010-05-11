@@ -79,12 +79,13 @@
                         count : 0,
                         form : 'binary',
                         get next() {
-                            ++count
+                            ++this.count
                             return marks[ this.form ].apply( this )
                         }
                     }
                     var segments = new List
                     $( '[name = "seven segment"]' ).children().each( function() {
+                        console.log( marker.next )
                         segments.__.set( marker.next, ( function() {
                             var $segment = $( this )
                             return {
@@ -108,7 +109,7 @@
                     var count = 0
                     var max = 7
 
-                    console.log( segments.__.length )
+                    segments.__.each( function() { console.log( this ) } )
                     segments.__defineSetter__ ( 'top', function( state ) {
                         this.__.get( ++count % max ).state =
                             ( state == '0' || state == 0 || state === false )
