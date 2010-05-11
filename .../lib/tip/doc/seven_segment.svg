@@ -19,8 +19,8 @@
       </stop>
     </linearGradient>
     <script type="text/javascript"><![CDATA[
-        function Segment() {
-            this.__defineSetter__( 'number', function( number ) {
+        function SevenSegment() {
+            this.__defineSetter__( 'number', function number( number ) {
                 var bits
                 switch( number ) {
                 case 0: case '0': bits = '1111110'; break
@@ -43,6 +43,7 @@
                 }
                 this.bits = bits
             } )
+            this.__defineSetter__( 'num', number )
 
             var segments
                 
@@ -74,14 +75,14 @@
                             return {
                                 set state( state ) {
                                     switch( state ) {
-                                    case 'on': case true:
-                                        $segment.attr( 'state', 'on' )
-                                        break
-                                    case 'off': case false:
-                                        $segment.attr( 'state', 'off' )
-                                        break
-                                    default:
+                                    case true:  state = 'on'  break
+                                    case false: state = 'off' break
+                                    }
+                                    
+                                    if( state === undefined ) {
                                         $segment.removeAttr( 'state' )
+                                    } else {
+                                        $segment.attr( 'state', state )
                                     }
                                 },
                                 get on() { this.state = 'on' },
@@ -109,54 +110,27 @@
             this.__defineSetter__( 'bits', function( bits ) {
                 segments.clear
                 bits.each( function( bit ) {
-                    segments.top = bit !== '0' && bit !== 0
+                    segments.top = bit
                 } )
             } )
-      }
+        }
 
-      function updateSegments(isOn) {
-        if(segments.length == 0) {
-          var polygons = document.getElementsByTagName('polygon');
-          for(var i = 0; i < polygons.length; i++) {
-            segments[i] = polygons.item(i);
-          }
-        }
-        for(var i = 0; i < isOn.length; i++) {
-          segments[i].setAttribute('class', isOn[i] ? 'on' : 'off');
-        }
-        for(; i < segments.length; i++) {
-          segments[i].setAttribute('class', isOn[i] ? 'on' : 'off');
-        }
-      }
-      
-      function checkURL() {
-        var valueSet = false;
-        var search = document.location ? document.location.search : window.location.search;
-        if(search != '') {
-          var params = search.substring(1).split(/&/);
-          for(var i = 0; i < params.length; i++) {
-            params[i] = params[i].replace(/\+/gi, ' ');
-            var equal_index = params[i].indexOf('=');
-            if(equal_index >= 0) {
-              params[unescape(params[i].substring(0, equal_index))] =
-                unescape(params[i].substring(equal_index + 1));
-            }
-          }
-          if(typeof(params['num']) != 'undefined') { setNumber(params['num']); valueSet = true; }
-          if(typeof(params['bits']) != 'undefined') { setBitField(parseInt(params['bits'])); valueSet = true; }
-        }
-        if((typeof(params) != 'undefined' && typeof(params['anim']) != 'undefined')
-           || (!valueSet && window.parent == window)) {
-          var autorun = function() {
-            setNumber(this.count);
-            this.count = (this.count + 1) % 16;
-            setTimeout(function() { autorun.call(autorun); }, 1000);
-          }
-          autorun.count = 0;
-          autorun.call(autorun);
-        }
-      }
-      this.addEventListener('load', checkURL, true);
+        $( function() {
+            var args = new List
+            var argStrs = window.location.search.substring(1).split( /&/ )
+            argStrs.each( function( arg ) {
+                arg = arg.replace( /\+/gi, ' ' )
+                if( match = arg.match( /(.*?)=(.*)/ ) ) {
+                    args.__.set( unescape( match[ 1 ] ),
+                                 unescape( match[ 2 ] ) )
+                }
+            } )
+
+            var segment = new SevenSegment()
+            args.__.each( function( val, name ) {
+                segment[ name ] = val
+            } )
+        } )
     ]]></script>
   </defs>
   <style type='text/css'>
