@@ -109,7 +109,7 @@
                     var max = 7
 
                     segments.__defineSetter__ ( 'top', function( state ) {
-                        this.__.get( ++count % max ).state =
+                        this.__.get( count++ % max ).state =
                             ( state == '1' || state == 1 || state === true )
                     } )
                     segments.__defineGetter__( 'clear', function() {
