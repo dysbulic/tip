@@ -13,7 +13,7 @@
 
             if( lib === undefined ) {
                 // Copies are cached locally (eventually to be
-                // managed in a more complex manner
+                // managed in a more complex manner)
                 var cached = localStorage[ urn ]
                 if( cached ) {
                     lib = libs[ urn ] =
@@ -55,9 +55,13 @@
         },
     } )
     ;
+    // ToDo: load scene
+
+/*
     [ window, $ ].each( function( global ) {
         global.__defineGetter__( '__', function() { return tip  } )
     } )
+*/
 
     var namespaces
 

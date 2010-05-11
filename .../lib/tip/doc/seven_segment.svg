@@ -27,8 +27,6 @@
 
     <script type="text/javascript"><![CDATA[
         function SevenSegment() {
-            var segments
-
             function number( number ) {
                 var bits
                 switch( number ) {
@@ -62,8 +60,9 @@
                 } )
             } )
             
-            $( function() {
-                segments = ( function() {
+            var _segments
+            this.__defineGetter__( 'segments', function() {
+                return _segments = _segments || ( function() {
                     var marks = {
                         'flag field' : function() {
                             var mark = ''
@@ -83,10 +82,31 @@
                             return marks[ this.form ].apply( this )
                         }
                     }
+
                     var segments = new List
                     var $segments = $( '[name = "seven segment"]' ).clone()
+                    console.log( 'hi' )
+                    $.__.$( '#' ).append( $('<rect width="10" height="10"/>') )
                     $.__.$( '#' ).append( $segments )
+                    //$( 'svg' ).append( $segments )
+                    var uid = 'id.' + Math.random()
+                    var tags = {
+                        use : function( ) {
+                            var src = this.attr( 'xlink:href' )
+                            if( src.substring( 0, 3 ) == '#./' ) {
+                                this.attr( 'xlink:href',
+                                           '#./' + uid + '-' + src.substring( 3 ) )
+                            }
+                        },
+                        polygon : function( ) {
+                            var id = this.attr( 'id' )
+                            if( id.substring( 0, 2 ) == './' ) {
+                                this.attr( 'id', './' + uid + '-' + id.substring( 2 ) )
+                            }
+                        },
+                    } 
                     $segments.children().each( function() {
+                        tags[ this.nodeName ].apply( $( this ) )
                         segments.__.set( marker.next, ( function() {
                             var $segment = $( this )
                             return {
@@ -123,8 +143,8 @@
                     return segments
                 } )()
             } )
-            return this
-        }
+        return this
+    }
 
         $( window ).bind( 'load', function() {
             var args = new List
@@ -141,19 +161,18 @@
             segment.clear
             
             args.__.each( function( val, name ) {
-                console.log( name )
                 segment[ name ] = val
             } )
         } )
     ]]></script>
     <g name="seven segment">
-      <use xlink:href="#segment" transform="translate( 0, -20 )"/>
-      <use xlink:href="#segment" transform="rotate( 90 ) translate( -10, -10 )"/>
-      <use xlink:href="#segment" transform="rotate( 90 ) translate( 10, -10 )"/>
-      <use xlink:href="#segment" transform="translate( 0, 20 )"/>
-      <use xlink:href="#segment" transform="rotate( 90 ) translate( 10, 10 )"/>
-      <use xlink:href="#segment" transform="rotate( 90 ) translate( -10, 10 )"/>
-      <polygon id="segment" points='-10,0 -8,2 8,2 10,0 8,-2 -8,-2' />
+      <use xlink:href="#./segment" transform="translate( 0, -20 )"/>
+      <use xlink:href="#./segment" transform="rotate( 90 ) translate( -10, -10 )"/>
+      <use xlink:href="#./segment" transform="rotate( 90 ) translate( 10, -10 )"/>
+      <use xlink:href="#./segment" transform="translate( 0, 20 )"/>
+      <use xlink:href="#./segment" transform="rotate( 90 ) translate( 10, 10 )"/>
+      <use xlink:href="#./segment" transform="rotate( 90 ) translate( -10, 10 )"/>
+      <polygon id="./segment" points='-10,0 -8,2 8,2 10,0 8,-2 -8,-2' />
     </g>
     <style type='text/css'>
       polygon { stroke-width: 0.1; stroke: black }
