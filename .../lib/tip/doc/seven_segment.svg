@@ -67,20 +67,19 @@
                     var marks = {
                         'flag field' : function() {
                             var mark = ''
-                            var count = this.count
-                            for( i = 1; i <= 8; i++ ) {
-                                mark += ( count >> (i - 1) === 0x1
+                            for( i = 1; i <= this.max; i++ ) {
+                                mark += ( i == this.position
                                           ? '1' : '0' )
                             }
-                            console.log( count + ' = ' + mark )
                             return mark
                         }
                     }
                     var marker = {
-                        count : 0,
+                        position : 0,
                         form : 'flag field',
+                        max : 7,
                         get next() {
-                            ++this.count
+                            ++this.position
                             return marks[ this.form ].apply( this )
                         }
                     }
