@@ -57,6 +57,7 @@
 
             this.__defineSetter__( 'bits', function( bits ) {
                 segments.clear
+                console.log( bits )
                 bits.each( function( bit ) {
                     segments.top = bit
                 } )
@@ -108,7 +109,6 @@
                     var count = 0
                     var max = 7
 
-                    segments.__.each( function() { console.log( this ) } )
                     segments.__defineSetter__ ( 'top', function( state ) {
                         this.__.get( ++count % max ).state =
                             ( state == '0' || state == 0 || state === false )
