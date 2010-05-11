@@ -3,6 +3,7 @@
  "http://www.w3.org/TR/2000/03/WD-SVG-20000303/DTD/svg-20000303-stylable.dtd">
 <svg viewBox="-16 -1 12 16"
      xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
      xmlns:tip=".../lib/tip/">
   <title>Seven Segment Display</title>
   <defs>
@@ -18,7 +19,13 @@
                       repeatCount="1"/>
       </stop>
     </linearGradient>
-    <script type="text/javascript"><![CDATA[
+    <script type="text/javascript" xlink:href=".../lib/tip/Array.each.js"/>
+    <script type="text/javascript" xlink:href=".../lib/tip/List.js"/>
+    <script type="text/javascript" xlink:href=".../lib/tip/pointers.js"/>
+    <script type="text/javascript" xlink:href=".../lib/jquery/jquery.js"/>
+    <script type="text/javascript" xlink:href=".../lib/tip/tip.jquery"/>
+
+    <script type="application/javascript"><![CDATA[
         function SevenSegment() {
             this.__defineSetter__( 'number', function number( number ) {
                 var bits
@@ -75,8 +82,8 @@
                             return {
                                 set state( state ) {
                                     switch( state ) {
-                                    case true:  state = 'on'  break
-                                    case false: state = 'off' break
+                                    case true:  state = 'on';  break
+                                    case false: state = 'off'; break
                                     }
                                     
                                     if( state === undefined ) {
