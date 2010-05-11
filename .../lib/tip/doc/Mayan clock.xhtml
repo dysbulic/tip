@@ -9,9 +9,10 @@
     <script type="application/javascript"><![CDATA[
         $( function() {
             var $time = $( '<span name="time"/>' )
+            $( 'body' ).append( $time )
             setInterval( function() {
                 $time.text( ( new Date ).toString() )
-            }, 1000 )
+            }, 100 )
         } )
     ]]></script>
   </head>
