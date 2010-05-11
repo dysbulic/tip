@@ -57,7 +57,6 @@
 
             this.__defineSetter__( 'bits', function( bits ) {
                 segments.clear
-                console.log( bits )
                 bits.each( function( bit ) {
                     segments.top = bit
                 } )
@@ -111,7 +110,7 @@
 
                     segments.__defineSetter__ ( 'top', function( state ) {
                         this.__.get( ++count % max ).state =
-                            ( state == '0' || state == 0 || state === false )
+                            ( state == '1' || state == 1 || state === true )
                     } )
                     segments.__defineGetter__( 'clear', function() {
                         this.__.each( function() {
@@ -136,6 +135,7 @@
             } )
 
             var segment = new SevenSegment()
+            segment.clear
             args.__.each( function( val, name ) {
                 segment[ name ] = val
             } )
@@ -144,8 +144,8 @@
   </defs>
   <style type='text/css'>
     polygon { stroke-width: 0.1; stroke: black; }
-    .on { fill: #730000; fill: url(#on-gradient); }
-    .off { fill: #F3F3F3; stroke: #DDD; }
+    [state="on"] { fill: #730000; fill: url(#on); }
+    [state="off"] { fill: #F3F3F3; stroke: #DDD; }
   </style>
   <g name="seven segment">
     <polygon points='-14,1 -13,2 -7,2 -6,1 -7,0 -13,0' />
