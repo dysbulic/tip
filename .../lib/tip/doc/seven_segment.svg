@@ -84,7 +84,7 @@
                         }
                     }
                     var segments = new List
-                    $( 'seven_segment' ).children().each( function() {
+                    $( '[tip:name = "seven segment"]' ).children().each( function() {
                         segments.__.set( marker.next, ( function() {
                             var $segment = $( this )
                             return {
@@ -109,11 +109,12 @@
                     var max = 7
 
                     segments.__defineSetter__ ( 'top', function( state ) {
-                        segments[ ++count % max ].state =
+                        console.log( this.__.length )
+                        this.__.get( ++count % max ).state =
                             ( state == '0' || state == 0 || state === false )
                     } )
                     segments.__defineGetter__( 'clear', function() {
-                        segments.__.each( function() {
+                        this.__.each( function() {
                             this.off
                         } )
                         count = 0

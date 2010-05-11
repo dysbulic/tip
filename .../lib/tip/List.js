@@ -184,7 +184,7 @@ function List( ) {
         } else {
             found = found && a == b
         }
-        return found;
+        return found
     }
 
     function id( key ) {
@@ -230,6 +230,7 @@ function List( ) {
         push : push,
         traverse : traverse,
         get count( ) { return count },
+        get length( ) { return count },
         get keys( ) { return keys },
         get val( ) { return val },
         get vals( ) {
