@@ -20,7 +20,7 @@
     </linearGradient>
     <script type="text/javascript"><![CDATA[
         function Segment() {
-            this.__defineSetter( 'number', function( number ) {
+            this.__defineSetter__( 'number', function( number ) {
                 var bits
                 switch( number ) {
                 case 0: case '0': bits = '1111110'; break
@@ -69,12 +69,36 @@
                     }
                     var segments = new List
                     $( 'seven_segment' ).children().each( function() {
-                        for( i = 1; i <= 7; i++ ) {
-                            segments.set( marker.next, $( this ) )
-                        }
+                        segments.__.set( marker.next, ( function() {
+                            var $segment = $( this )
+                            var segment = {
+                                set state( state ) {
+                                    switch( state ) {
+                                    case 'on': case true:
+                                        $segment.attr( 'state', 'on' )
+                                        break
+                                    default:
+                                    case 'off': case false:
+                                        $segment.attr( 'state', 'off' )
+                                        break
+                                    }
+                                },
+                            }
+                            return segment
+                        } ).apply( this ) )
+                    } )
+                    var count = 0
+                    var max = 7
+
+                    segments.__defineSetter__ ( 'top', function( state ) {
+                        segments[ ++count % max ].state =
+                            ( state == '0' || state == 0 || state === false )
                     } )
                     segments.__defineGetter__( 'clear', function() {
-                        
+                        segments.__.each( function() {
+                            this.off
+                        } )
+                        count = 0
                     } )
                     return segments
                 } )()
