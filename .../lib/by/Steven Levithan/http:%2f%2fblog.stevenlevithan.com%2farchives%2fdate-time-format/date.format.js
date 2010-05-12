@@ -51,74 +51,99 @@
     function format( str ) {
         var lexemes = {
             H : {
-                name : 'hour',
-                description : '24-hour time',
-                val : function( date ) { return date.getUTCHour() }
+                name : [ 'hour', '24-hour time' ],
+                val : function( date ) { return date.getUTCHour() },
+                divides : 'd',
             },
             h : {
-                is : 'h'
-                description : '12-hour time',
+                name : [ undefined, '12-hour time' ],
                 val : function() {
                     return this.H.val.apply( this, arguments ) % 12 + 1
-                }
+                },
+                is : 'h',
+            },
+            M : {
+                name : 'minute',
+                val : function( date ) { return date.getUTCMinutes() },
+                divides : 'H',
+            },
+            s : {
+                name : 'second',
+                val : function( date ) { return date.getUTCSecond() },
+                divides : 'm',
             },
             m : {
-                name : 
+                name : 'millisecond',
+                val : function( date ) { return date.getUTCMilliseconds() },
+                divides : 's',
+            },
+            d : {
+                name : 'day',
+                val : function( date ) { return date.getUTCMonth() + 1 },
+                divides : 'year',
+            },
+            ddd : {
+                is : 'd',
+                val : function( date ) { return i18n.day.short[ this.lang ][ this.d ] },
+            },
+            dddd : {
+                is : 'd',
+                val : function( date ) { return i18n.day.long[ this.lang ][ this.d ] },
+            },
+            n : {
+                name : 'month',
+                val : function( date ) { return date.getUTCMonth() + 1 },
+                divides : 'year',
+            },
+            nnn : {
+                is : 'd',
+                val : function( date ) { return i18n.day.short[ this.lang ][ this.d ] },
+            },
+            dddd : {
+                is : 'd',
+                val : function( date ) { return i18n.day.long[ this.lang ][ this.d ] },
+            },
+            j : {
+                name : [ 'Julian year', 'year' ],
+                val : function( date, size ) { return date.getUTCYear() },
+            },
+            t : {
+                
+            },
         }
-        var tokens = new RegExp( ( '[Hh{1,4}'
-                                   + '|m{1,4}'
-                                   + '|yy(?:yy)?'
-                                   + '|([HhMsTt])\1?'
-                                   + '|[LloSZ]'
-                                   + '|\"[^\"]*\"'
-                                   + '|\'[^\']*\'' ),
-                                 'g' )
-        //var timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g
-        //var timezoneClip = /[^-+\dA-Z]/g
 
-        var pad = function( val, len, chr ) {
+        function pad( val, len, chr ) {
             val = ( typeof val == 'string' || val instanceof String
                         ? val : new String( val ) )
             len = len || 2
             chr = chr === undefined ? ' ' : chr
-            while( val.length < len ) {
-                val = chr + val
-            }
-            return val
+
+            return ( ( new Array( ( val.length - len ) / len ) ).join( chr )
+                     + val )
         }
 
-        /*
-            // You can't provide utc if you skip other args (use the "UTC:" mask prefix)
-            if( arguments.length == 1 && typeof date == 'string' && !/\d/.test( date ) ) {
-                mask = date
-                date = undefined
+        [ 'H', 'h', 'm', 'n', 's' ].each( function( ltr ) {
+            var dual = ltr + ltr
+            lexemes[ dual ] = lexemes[ dual ] || function( ) {
+                return pad.apply( this, [ this[ ltr ], dual.length, '0' ] )
+            }
+        } )
+
+        [ 'd', 'n' ].each( function( ltr ) {
+            var dual = ltr + ltr
+            var triple = dual + ltr
+            var quad = dual + dual
+
+            lexemes[ triple ] = lexemes[ triple ] || function( ) {
+                return i18n.day.short[ this.lang ][ this[ ltr ] ]
             }
 
-            // Passing date through Date applies Date.parse, if necessary
-            date = date ? new Date( date ) : new Date
-            if( isNaN( date ) ) {
-                throw SyntaxError( 'invalid date' )
+            lexemes[ quad ] = lexemes[ quad ] || function( ) {
+                return i18n.day.long[ this.lang ][ this[ ltr ] ]
             }
+        } )
+            
 
-            mask = String(dF.masks[mask] || mask || dF.masks['default']);
-
-            // Allow setting the utc argument via the mask
-            if (mask.slice(0, 4) == 'UTC:') {
-                mask = mask.slice(4);
-                utc = true;
-            }
-*/
-
-        var flags = {
-            lang : 'en',
-            get d()    { return this.getDay() },
-            get dd()   { return pad( this.d, 2, '0' ) },
-            get ddd()  { return i18n.day.short[ this.lang ][ this.d ] },
-            get dddd() { return i18n.day.long[ this.lang ][ this.d ] },
-            get m()    { return this.getMonth() + 1 },
-            get mm()   { return pad( this.m, 2, '0' ) },
-            get mmm()  { return i18n.month.short[ this.lang ][ this.m ] },
-            get mmmm() { return i18n.month[ this.lang ][ this.m ] },
             get yy()   { return this.y.toString().slice( 2 ) },
             get yyyy() { return this.getYear() },
             get h()    { return this.H % 12 || 12 },
@@ -148,6 +173,44 @@
                 return ( [ 'th', 'st', 'nd', 'rd' ]
                          [ d % 10 > 3 ? 0 : ( d % 100 - d % 10 != 10 ) * d % 10 ] )
             }
+
+
+        var tokens = new RegExp( ( '[Hh{1,4}'
+                                   + '|m{1,4}'
+                                   + '|yy(?:yy)?'
+                                   + '|([HhMsTt])\1?'
+                                   + '|[LloSZ]'
+                                   + '|\"[^\"]*\"'
+                                   + '|\'[^\']*\'' ),
+                                 'g' )
+        //var timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g
+        //var timezoneClip = /[^-+\dA-Z]/g
+
+
+        /*
+            // You can't provide utc if you skip other args (use the "UTC:" mask prefix)
+            if( arguments.length == 1 && typeof date == 'string' && !/\d/.test( date ) ) {
+                mask = date
+                date = undefined
+            }
+
+            // Passing date through Date applies Date.parse, if necessary
+            date = date ? new Date( date ) : new Date
+            if( isNaN( date ) ) {
+                throw SyntaxError( 'invalid date' )
+            }
+
+            mask = String(dF.masks[mask] || mask || dF.masks['default']);
+
+            // Allow setting the utc argument via the mask
+            if (mask.slice(0, 4) == 'UTC:') {
+                mask = mask.slice(4);
+                utc = true;
+            }
+*/
+
+        var flags = {
+            lang : 'en',
 
             return mask.replace( token, function ($0) {
                 return $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);
