@@ -50,9 +50,10 @@
 
     function format( str ) {
         var lexemes = {
+            date : this,
             H : {
                 name : [ 'hour', '24-hour time' ],
-                val : function( date ) { return date.getUTCHour() },
+                val : function( ) { return this.date.getUTCHour() },
                 divides : 'd',
             },
             h : {
@@ -64,50 +65,58 @@
             },
             M : {
                 name : 'minute',
-                val : function( date ) { return date.getUTCMinutes() },
+                val : function( ) { return this.date.getUTCMinutes() },
                 divides : 'H',
             },
             s : {
                 name : 'second',
-                val : function( date ) { return date.getUTCSecond() },
+                val : function( ) { return this.date.getUTCSecond() },
                 divides : 'm',
             },
             m : {
                 name : 'millisecond',
-                val : function( date ) { return date.getUTCMilliseconds() },
+                val : function( ) { return this.date.getUTCMilliseconds() },
                 divides : 's',
             },
             d : {
                 name : 'day',
-                val : function( date ) { return date.getUTCMonth() + 1 },
+                val : function( ) { return this.date.getUTCMonth() + 1 },
                 divides : 'year',
             },
             ddd : {
                 is : 'd',
-                val : function( date ) { return i18n.day.short[ this.lang ][ this.d ] },
+                val : function( ) { return i18n.day.short[ this.lang ][ this.d ] },
             },
             dddd : {
                 is : 'd',
-                val : function( date ) { return i18n.day.long[ this.lang ][ this.d ] },
+                val : function( ) { return i18n.day.long[ this.lang ][ this.d ] },
             },
             n : {
                 name : 'month',
-                val : function( date ) { return date.getUTCMonth() + 1 },
+                val : function( ) { return date.getUTCMonth() + 1 },
                 divides : 'year',
             },
             nnn : {
                 is : 'd',
-                val : function( date ) { return i18n.day.short[ this.lang ][ this.d ] },
+                val : function( ) { return i18n.day.short[ this.lang ][ this.d ] },
             },
             dddd : {
                 is : 'd',
-                val : function( date ) { return i18n.day.long[ this.lang ][ this.d ] },
+                val : function( ) { return i18n.day.long[ this.lang ][ this.d ] },
             },
             j : {
                 name : [ 'Julian year', 'year' ],
-                val : function( date, size ) { return date.getUTCYear() },
+                val : function( ) { return date.getUTCYear() },
             },
-            t : {
+            p : {
+                name : 'period',
+                
+                val : function() { return this.H < 12 ? 'a' : 'p' },
+            },
+            o : {
+                name : 'offset' return ( ( o > 0 ? '-' : '+' )
+                                  + pad( Math.floor( Math.abs( o ) / 60 ) * 100 + Math.abs( o ) % 60, 4 ) )
+                       },
                 
             },
         }
@@ -142,32 +151,7 @@
                 return i18n.day.long[ this.lang ][ this[ ltr ] ]
             }
         } )
-            
-
-            get yy()   { return this.y.toString().slice( 2 ) },
-            get yyyy() { return this.getYear() },
-            get h()    { return this.H % 12 || 12 },
-            get hh()   { return pad( this.h, 2, '0' ) },
-            get H()    { return return this.getHour() },
-            get HH()   { return pad( this.H, 2, '0' ) },
-            get M()    { return this.getMinutes() },
-            get MM()   { return pad( this.M, 2, '0' ) },
-            get s()    { return s },
-            get ss()   { return pad( this.s, 2, '0' ) },
-            get l()    { return pad( this.L, 3 ) },
-            get L()    { return return this.getMilliseconds() },
-            get t()    { return this.H < 12 ? 'a' : 'p' },
-            get tt()   { return this.H < 12 ? 'am' : 'pm' },
-            get T()    { return H < 12 ? 'A'  : 'P' },
-            get TT()   { return H < 12 ? 'AM' : 'PM' },
-            get Z()    { return ( utc
-                                  ? 'UTC'
-                                  : ( ( String( date ).match( timezone ) || [ '' ] ).pop()
-                                      .replace( timezoneClip, '' ) ) )
-                       },
-            get o()    { return ( ( o > 0 ? '-' : '+' )
-                                  + pad( Math.floor( Math.abs( o ) / 60 ) * 100 + Math.abs( o ) % 60, 4 ) )
-                       },
+        
             get S()    {
                 var d = this.d
                 return ( [ 'th', 'st', 'nd', 'rd' ]
