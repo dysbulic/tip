@@ -9,10 +9,8 @@
     var i18n = {
         day : {
             short : {
-                en : [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ]
+                
             },
-            long : {
-                en : [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ]
             },
         ],
         month : {
@@ -79,10 +77,32 @@
             d : {
                 name : 'day',
                 val : function( ) { return this.date.getUTCDay() + 1 },
-                divides : 'year',
+                divides : 'month',
+            },
+            w : {
+                name : 'week',
+                ids : {
+                    english : {
+                        short : [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
+                        long : [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
+                    },
+                }
+
+                val : [
+                    function( ) { return this.date.getUTCDay() + 1 },
+                    
+                divides : 'month',
+                double : function( ) {
+                    return i18n.week.short[ this.lang ][ this[ ltr ] - 1 ]
             },
             n : {
                 name : 'month',
+                ids : {
+                    english : {
+                        short : [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
+                        long : [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+                    }
+                },
                 val : function( ) { return date.getUTCMonth() + 1 },
                 divides : 'year',
             },
@@ -101,6 +121,12 @@
                        },
                 
             },
+            get S()    {
+                var d = this.d
+                return ( [ 'th', 'st', 'nd', 'rd' ]
+                         [ d % 10 > 3 ? 0 : ( d % 100 - d % 10 != 10 ) * d % 10 ] )
+            }
+
         }
 
         function pad( val, len, chr ) {
@@ -126,7 +152,7 @@
             var quad = dual + dual
 
             lexemes[ triple ] = lexemes[ triple ] || function( ) {
-                return i18n.day.short[ this.lang ][ this[ ltr ] - 1 ]
+                this[ ltr ][ 'triple' ]
             }
 
             lexemes[ quad ] = lexemes[ quad ] || function( ) {
@@ -134,11 +160,6 @@
             }
         } )
         
-            get S()    {
-                var d = this.d
-                return ( [ 'th', 'st', 'nd', 'rd' ]
-                         [ d % 10 > 3 ? 0 : ( d % 100 - d % 10 != 10 ) * d % 10 ] )
-            }
 
 
         var tokens = new RegExp( ( '[Hh{1,4}'
