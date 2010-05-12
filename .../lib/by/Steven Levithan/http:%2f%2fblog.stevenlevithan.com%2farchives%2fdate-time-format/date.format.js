@@ -49,14 +49,30 @@
     }
 
     function format( str ) {
-        var token = new RegExp( ( 'd{1,4}'
-                                  + '|m{1,4}'
-                                  + '|yy(?:yy)?'
-                                  + '|([HhMsTt])\1?'
-                                  + '|[LloSZ]'
-                                  + '|\"[^\"]*\"'
-                                  + '|\'[^\']*\'' ),
-                                'g' )
+        var lexemes = {
+            H : {
+                name : 'hour',
+                description : '24-hour time',
+                val : function( date ) { return date.getUTCHour() }
+            },
+            h : {
+                is : 'h'
+                description : '12-hour time',
+                val : function() {
+                    return this.H.val.apply( this, arguments ) % 12 + 1
+                }
+            },
+            m : {
+                name : 
+        }
+        var tokens = new RegExp( ( '[Hh{1,4}'
+                                   + '|m{1,4}'
+                                   + '|yy(?:yy)?'
+                                   + '|([HhMsTt])\1?'
+                                   + '|[LloSZ]'
+                                   + '|\"[^\"]*\"'
+                                   + '|\'[^\']*\'' ),
+                                 'g' )
         //var timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g
         //var timezoneClip = /[^-+\dA-Z]/g
 
