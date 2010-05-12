@@ -58,9 +58,7 @@
             },
             h : {
                 name : [ undefined, '12-hour time' ],
-                val : function() {
-                    return this.H.val.apply( this, arguments ) % 12 + 1
-                },
+                val : function() { return this.H % 12 + 1 },
                 is : 'h',
             },
             M : {
@@ -80,29 +78,13 @@
             },
             d : {
                 name : 'day',
-                val : function( ) { return this.date.getUTCMonth() + 1 },
+                val : function( ) { return this.date.getUTCDay() + 1 },
                 divides : 'year',
-            },
-            ddd : {
-                is : 'd',
-                val : function( ) { return i18n.day.short[ this.lang ][ this.d ] },
-            },
-            dddd : {
-                is : 'd',
-                val : function( ) { return i18n.day.long[ this.lang ][ this.d ] },
             },
             n : {
                 name : 'month',
                 val : function( ) { return date.getUTCMonth() + 1 },
                 divides : 'year',
-            },
-            nnn : {
-                is : 'd',
-                val : function( ) { return i18n.day.short[ this.lang ][ this.d ] },
-            },
-            dddd : {
-                is : 'd',
-                val : function( ) { return i18n.day.long[ this.lang ][ this.d ] },
             },
             j : {
                 name : [ 'Julian year', 'year' ],
@@ -144,11 +126,11 @@
             var quad = dual + dual
 
             lexemes[ triple ] = lexemes[ triple ] || function( ) {
-                return i18n.day.short[ this.lang ][ this[ ltr ] ]
+                return i18n.day.short[ this.lang ][ this[ ltr ] - 1 ]
             }
 
             lexemes[ quad ] = lexemes[ quad ] || function( ) {
-                return i18n.day.long[ this.lang ][ this[ ltr ] ]
+                return i18n.day.long[ this.lang ][ this[ ltr ] - 1 ]
             }
         } )
         
