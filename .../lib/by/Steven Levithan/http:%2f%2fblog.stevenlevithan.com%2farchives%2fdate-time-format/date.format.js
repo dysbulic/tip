@@ -32,6 +32,22 @@
                  : format ).apply( this, arguments )
     }
 
+    // Common format strings
+    var masks = {
+        'default':      'ddd mmm dd yyyy HH:MM:ss',
+        shortDate:      'm/d/yy',
+        mediumDate:     'mmm d, yyyy',
+        longDate:       'mmmm d, yyyy',
+        fullDate:       'dddd, mmmm d, yyyy',
+        shortTime:      'h:MM TT',
+        mediumTime:     'h:MM:ss TT',
+        longTime:       'h:MM:ss TT Z',
+        isoDate:        'yyyy-mm-dd',
+        isoTime:        'HH:MM:ss',
+        isoDateTime:    'yyyy-mm-dd HH:MM:ssTT',
+        isoUtcDateTime: 'UTC:yyyy-mm-dd HH:MM:ssZ'
+    }
+
     function format( str ) {
         var token = new RegExp( ( 'd{1,4}'
                                   + '|m{1,4}'
@@ -113,29 +129,13 @@
                        },
             get S()    {
                 var d = this.d
-                [ 'th', 'st', 'nd', 'rd' ][ d % 10 > 3 ? 0 : ( d % 100 - d % 10 != 10 ) * d % 10 ]
+                return ( [ 'th', 'st', 'nd', 'rd' ]
+                         [ d % 10 > 3 ? 0 : ( d % 100 - d % 10 != 10 ) * d % 10 ] )
             }
 
             return mask.replace( token, function ($0) {
                 return $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);
             })
         }
-    }()
-
-// Some common format strings
-dateFormat.masks = {
-    'default':      'ddd mmm dd yyyy HH:MM:ss',
-    shortDate:      'm/d/yy',
-    mediumDate:     'mmm d, yyyy',
-    longDate:       'mmmm d, yyyy',
-    fullDate:       'dddd, mmmm d, yyyy',
-    shortTime:      'h:MM TT',
-    mediumTime:     'h:MM:ss TT',
-    longTime:       'h:MM:ss TT Z',
-    isoDate:        'yyyy-mm-dd',
-    isoTime:        'HH:MM:ss',
-    isoDateTime:    'yyyy-mm-dd'T'HH:MM:ss',
-    isoUtcDateTime: 'UTC:yyyy-mm-dd'T'HH:MM:ss'Z''
-};
-
-
+    }
+} )()
