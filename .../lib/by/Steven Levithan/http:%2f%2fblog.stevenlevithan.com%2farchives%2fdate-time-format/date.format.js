@@ -90,10 +90,9 @@
 
                 val : [
                     function( ) { return this.date.getUTCDay() + 1 },
-                    
+                ],
                 divides : 'month',
-                double : function( ) {
-                    return i18n.week.short[ this.lang ][ this[ ltr ] - 1 ]
+
             },
             n : {
                 name : 'month',
@@ -152,6 +151,7 @@
             var quad = dual + dual
 
             lexemes[ triple ] = lexemes[ triple ] || function( ) {
+                return this[ ltr ].ids.short[ this.lang ][ this - 1 ]
                 this[ ltr ][ 'triple' ]
             }
 
