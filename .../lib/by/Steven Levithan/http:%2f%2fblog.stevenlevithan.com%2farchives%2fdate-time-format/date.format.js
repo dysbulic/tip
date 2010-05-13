@@ -7,8 +7,7 @@
 ( function() {
     var Date_toString = Date.prototype.toString
     Date.prototype.toString = function( ) {
-        console.log( arguments.length )
-        return ( arguments.length == 1
+        return ( arguments.length == 0
                  ? Date_toString
                  : format ).apply( this, arguments )
     }
