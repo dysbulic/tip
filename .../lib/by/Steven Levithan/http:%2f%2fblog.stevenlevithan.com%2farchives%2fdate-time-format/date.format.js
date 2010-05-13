@@ -95,7 +95,7 @@
             },
             o : {
                 name : 'offset',
-                valueOf : function() {
+                valueOf : function( ) {
                     var off = lexemes.date.getTimezoneOffset()
                     // Convert from minutes to hours
                     return ( ( off > 0 ? '-' : '+' )
@@ -119,12 +119,11 @@
             pad = typeof pad == 'string' ? pad : ' '
 
             var reps = Math.max( 0, Math.round( ( width - val.length ) / pad.length ) )
-            var column = ( ( new Array( reps ) ).join( pad ) + val )
-            console.log( 'p:' + reps + '⨉' + pad + '+' + val + ' = ' + column )
+            var column = ( ( new Array( reps + 1 ) ).join( pad ) + val )
             return column
         }
 
-        [ 'j', 'n', 'd', 'H', 'h', 'm', 's' ].each( function( ltr ) {
+        [ 'j', 'n', 'd', 'H', 'h', 'M', 's' ].each( function( ltr ) {
             var dual = ltr + ltr
             lexemes[ dual ] = lexemes[ dual ] || {
                 valueOf : function( ) {
