@@ -116,7 +116,7 @@
             len = len || 2
             chr = chr === undefined ? ' ' : chr
             
-            var pad = Math.max( 0, ( val.length - len ) / len )
+            var pad = Math.max( 0, Math.round( ( val.length - len ) / len ) )
             return ( ( new Array( pad ) ).join( chr ) + val )
         }
 
