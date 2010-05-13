@@ -126,10 +126,8 @@
                 return pad.apply( this, [ this[ ltr ], dual.length, '0' ] )
             }
         } )
-
-            console.log( str )
+        ;
         [ 'd', 'n' ].each( function( ltr ) {
-            console.log( str )
             var dual = ltr + ltr
             var triple = dual + ltr
             var quad = dual + dual
@@ -144,13 +142,9 @@
                 }
             } )
         } )
-        console.log( str )
         
-        var tokens = new RegExp( ( '[Hh{1,4}'
-                                   + '|m{1,4}'
-                                   + '|yy(?:yy)?'
-                                   + '|([HhMsTt])\1?'
-                                   + '|[LloSZ]'
+        var tokens = new RegExp( ( '([HhMmn])\1'
+                                   + '|j{2,4}'
                                    + '|\"[^\"]*\"'
                                    + '|\'[^\']*\'' ),
                                  'g' )
