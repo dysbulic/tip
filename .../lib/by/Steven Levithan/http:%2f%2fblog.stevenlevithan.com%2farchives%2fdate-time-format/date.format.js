@@ -115,9 +115,9 @@
                         ? val : new String( val ) )
             len = len || 2
             chr = chr === undefined ? ' ' : chr
-
-            return ( ( new Array( ( val.length - len ) / len ) ).join( chr )
-                     + val )
+            
+            var pad = Math.max( 0, ( val.length - len ) / len )
+            return ( ( new Array( pad ) ).join( chr ) + val )
         }
 
         [ 'j', 'n', 'd', 'H', 'h', 'm', 's' ].each( function( ltr ) {
@@ -153,11 +153,9 @@
                                  'g' )
         return mask.replace( tokens, function( lex ) {
             console.log( lex )
-            return 's'
-/*            return ( lex in lexemes
-                     ? lexemes[ lex ]
+            return ( lex in lexemes
+                     ? lexemes[ lex ].valueOf()
                      : lex.slice( 1, lex.length - 1 ) )
-*/
         })
     }
 } )()
