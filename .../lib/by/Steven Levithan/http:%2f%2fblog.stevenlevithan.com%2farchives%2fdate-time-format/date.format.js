@@ -48,7 +48,7 @@
             },
             s : {
                 name : 'second',
-                valueOf : function( ) { return lexemes.date.getUTCSecond() },
+                valueOf : function( ) { return lexemes.date.getUTCSeconds() },
                 divides : 'm',
             },
             m : {
