@@ -145,7 +145,7 @@
             } )
         } )
         
-        var tokens = new RegExp( ( '([ndHhMs])\\1'
+        var tokens = new RegExp( ( '([ndHhMs])\\1?'
                                    + '|m{1,3}'
                                    + '|j{2,4}'
                                    + '|\"[^\"]*\"'
@@ -154,7 +154,7 @@
         return mask.replace( tokens, function( lex ) {
             console.log( lex )
             return ( lex in lexemes
-                     ? lexemes[ lex ].valueOf()
+                     ? lexemes[ lex ].valueOf( )
                      : lex.slice( 1, lex.length - 1 ) )
         })
     }
