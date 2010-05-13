@@ -112,14 +112,15 @@
             },
         }
 
-        function pad( val, len, chr ) {
+        function column( val, width, pad ) {
             val = ( typeof val == 'string' || val instanceof String
-                        ? val : new String( val ) )
-            len = len || 2
-            chr = chr === undefined ? ' ' : chr
+                    ? val : new String( val ) )
+            width = typeof width == 'number' ? width : 0
+            pad = typeof pad == 'string' ? pad : ' '
+
+            var reps = Math.max( 0, Math.round( ( width - val.length ) / pad.length ) )
             console.log( 'p:' + val + ':' + len + ':' + chr )
-            var pad = Math.max( 0, Math.round( ( val.length - len ) / len ) )
-            return ( ( new Array( pad ) ).join( chr ) + val )
+            return ( ( new Array( reps ) ).join( pad ) + val )
         }
 
         [ 'j', 'n', 'd', 'H', 'h', 'm', 's' ].each( function( ltr ) {
