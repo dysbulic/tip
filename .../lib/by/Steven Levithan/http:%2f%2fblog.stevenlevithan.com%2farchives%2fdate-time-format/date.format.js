@@ -109,21 +109,23 @@
             },
             p : {
                 name : 'period',
-                
-                val : function() { return this.H < 12 ? 'a' : 'p' },
+                valueOf : function() { return this.H < 12 ? 'a' : 'p' },
             },
             o : {
-                name : 'offset' return ( ( o > 0 ? '-' : '+' )
-                                  + pad( Math.floor( Math.abs( o ) / 60 ) * 100 + Math.abs( o ) % 60, 4 ) )
-                       },
-                
+                name : 'offset',
+                valueOf : function() {
+                    return ( ( o > 0 ? '-' : '+' )
+                             + pad( Math.floor( Math.abs( o ) / 60 ) * 100 + Math.abs( o ) % 60, 4 ) )
+                },
             },
-            get S()    {
-                var d = this.d
-                return ( [ 'th', 'st', 'nd', 'rd' ]
-                         [ d % 10 > 3 ? 0 : ( d % 100 - d % 10 != 10 ) * d % 10 ] )
-            }
-
+            S : {
+                name : 'ordinal suffix',
+                valueOf : function() {
+                    var d = this.d
+                    return ( [ 'th', 'st', 'nd', 'rd' ]
+                             [ d % 10 > 3 ? 0 : ( d % 100 - d % 10 != 10 ) * d % 10 ] )
+                },
+            },
         }
 
         function pad( val, len, chr ) {
