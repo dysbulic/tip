@@ -28,7 +28,7 @@
         isoUtcDateTime: 'UTC:yyyy-mm-dd HH:MM:ssZ'
     }
 
-    function format( str ) {
+    function format( mask ) {
         var lexemes = {
             date : this,
             H : {
@@ -136,9 +136,9 @@
             type[ triple ] = 'short'
             type[ quad ] = 'long'
             ;
-            [ triple, quad ].each( function( str ) {
-                lexemes[ str ] = lexemes[ str ] || function( ) {
-                    return this[ ltr ].types[ type[ str ] ][ this.lang ][ this - 1 ]
+            [ triple, quad ].each( function( lex ) {
+                lexemes[ lex ] = lexemes[ lex ] || function( ) {
+                    return this[ ltr ].types[ type[ lex ] ][ this.lang ][ this - 1 ]
                 }
             } )
         } )
@@ -148,14 +148,9 @@
                                    + '|\"[^\"]*\"'
                                    + '|\'[^\']*\'' ),
                                  'g' )
-        str.split( tokens ).each( function( token ) {
-            console.log( 't:' + token )
-        } )
-
-/*
-            return mask.replace( token, function ($0) {
-                return $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);
-            })
+        return mask.replace( tokens, function( lex ) {
+            return lex in lexemes ? lexemes[ lex ] : lex.slice( 1, lex.length - 1 )
+        })
 */
         return 's'
     }
