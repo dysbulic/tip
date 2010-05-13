@@ -65,8 +65,9 @@
 
     var namespaces
 
-    tip.$ = function(arg) {
+    tip.$ = function( arg ) {
         var root = document.documentElement
+        console.log( 'h:' + arg )
         if( namespaces === undefined ) {
             namespaces = {}
             root.attributes.each( function( val, name ) {
@@ -76,7 +77,6 @@
                 }
             })
         }
-
         // Special case for the document element
         if( arg == '#' ) {
             return $( root )
@@ -106,7 +106,8 @@
         }
     }
 
-    console.log( 'hi' )
+    console.log( typeof tip.$( '#' ) )
+    tip.$( '#' ).append( $( '<h1>Test</h1>' ) )
     tip.$( '#' ).append( $( '<script/>' ).attr( {
         type : 'application/javascript',
         src : '.../lib/tip/Array.each.js',
