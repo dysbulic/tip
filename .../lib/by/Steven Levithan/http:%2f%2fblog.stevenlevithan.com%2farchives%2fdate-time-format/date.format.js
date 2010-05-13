@@ -120,10 +120,12 @@
                      + val )
         }
 
-        [ 'H', 'h', 'm', 'n', 's' ].each( function( ltr ) {
+        [ 'j', 'n', 'd', 'H', 'h', 'm', 's' ].each( function( ltr ) {
             var dual = ltr + ltr
-            lexemes[ dual ] = lexemes[ dual ] || function( ) {
-                return pad.apply( this, [ this[ ltr ], dual.length, '0' ] )
+            lexemes[ dual ] = lexemes[ dual ] || {
+                valueOf : function( ) {
+                    return pad.apply( this, [ this[ ltr ], dual.length, '0' ] )
+                },
             }
         } )
         ;
@@ -143,7 +145,8 @@
             } )
         } )
         
-        var tokens = new RegExp( ( '([HhMmn])\1??'
+        var tokens = new RegExp( ( '([ndHhMs])\\1'
+                                   + '|m{1,3}'
                                    + '|j{2,4}'
                                    + '|\"[^\"]*\"'
                                    + '|\'[^\']*\'' ),
