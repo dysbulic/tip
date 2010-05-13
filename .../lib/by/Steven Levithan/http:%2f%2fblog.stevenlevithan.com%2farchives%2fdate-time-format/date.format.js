@@ -126,7 +126,7 @@
             var dual = ltr + ltr
             lexemes[ dual ] = lexemes[ dual ] || {
                 valueOf : function( ) {
-                    return pad.apply( this, [ this[ ltr ], dual.length, '0' ] )
+                    return pad.apply( this, [ lexemes[ ltr ].valueOf(), dual.length, '0' ] )
                 },
             }
         } )
