@@ -33,12 +33,12 @@
             date : this,
             H : {
                 name : [ 'hour', '24-hour time' ],
-                valueOf : function( ) { return this.date.getUTCHour() },
+                valueOf : function( ) { return lexemes.date.getUTCHour() },
                 divides : 'd',
             },
             h : {
                 name : [ undefined, '12-hour time' ],
-                valueOf : function() { return this.H % 12 + 1 },
+                valueOf : function() { return lexemes.H % 12 + 1 },
                 is : 'h',
             },
             M : {
@@ -53,12 +53,12 @@
             },
             m : {
                 name : 'millisecond',
-                valueOf : function( ) { return this.date.getUTCMilliseconds() },
+                valueOf : function( ) { return lexemes.date.getUTCMilliseconds() },
                 divides : 's',
             },
             d : {
                 name : 'day',
-                valueOf : function( ) { return this.date.getUTCDay() + 1 },
+                valueOf : function( ) { return lexemes.date.getUTCDay() + 1 },
                 divides : 'month',
             },
             w : {
@@ -70,7 +70,7 @@
                     },
                 },
                 valueOf : [
-                    function( ) { return this.date.getUTCDay() + 1 },
+                    function( ) { return lexemes.date.getUTCDay() + 1 },
                 ],
                 divides : 'month',
             },
@@ -82,28 +82,30 @@
                         long : [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
                     }
                 },
-                valueOf : function( ) { return date.getUTCMonth() + 1 },
+                valueOf : function( ) { return lexemes.date.getUTCMonth() + 1 },
                 divides : 'year',
             },
             j : {
                 name : [ 'Julian year', 'year' ],
-                valueOf : function( ) { return date.getUTCYear() },
+                valueOf : function( ) { return lexemes.date.getUTCYear() },
             },
             p : {
                 name : 'period',
-                valueOf : function() { return this.H < 12 ? 'a' : 'p' },
+                valueOf : function() { return lexemes.H < 12 ? 'a' : 'p' },
             },
             o : {
                 name : 'offset',
                 valueOf : function() {
-                    return ( ( o > 0 ? '-' : '+' )
-                             + pad( Math.floor( Math.abs( o ) / 60 ) * 100 + Math.abs( o ) % 60, 4 ) )
+                    var off = lexemes.date.getTimezoneOffset()
+                    // Convert from minutes to hours
+                    return ( ( off > 0 ? '-' : '+' )
+                             + pad( Math.floor( Math.abs( off ) / 60 ) * 100 + Math.abs( off ) % 60, 4 ) )
                 },
             },
             S : {
                 name : 'ordinal suffix',
                 valueOf : function() {
-                    var d = this.d
+                    var d = lexemes.d
                     return ( [ 'th', 'st', 'nd', 'rd' ]
                              [ d % 10 > 3 ? 0 : ( d % 100 - d % 10 != 10 ) * d % 10 ] )
                 },
