@@ -51,43 +51,42 @@
             date : this,
             H : {
                 name : [ 'hour', '24-hour time' ],
-                val : function( ) { return this.date.getUTCHour() },
+                valueOf : function( ) { return this.date.getUTCHour() },
                 divides : 'd',
             },
             h : {
                 name : [ undefined, '12-hour time' ],
-                val : function() { return this.H % 12 + 1 },
+                valueOf : function() { return this.H % 12 + 1 },
                 is : 'h',
             },
             M : {
                 name : 'minute',
-                val : function( ) { return this.date.getUTCMinutes() },
+                valueOf : function( ) { return this.date.getUTCMinutes() },
                 divides : 'H',
             },
             s : {
                 name : 'second',
-                val : function( ) { return this.date.getUTCSecond() },
+                valueOf : function( ) { return this.date.getUTCSecond() },
                 divides : 'm',
             },
             m : {
                 name : 'millisecond',
-                val : function( ) { return this.date.getUTCMilliseconds() },
+                valueOf : function( ) { return this.date.getUTCMilliseconds() },
                 divides : 's',
             },
             d : {
                 name : 'day',
-                val : function( ) { return this.date.getUTCDay() + 1 },
+                valueOf : function( ) { return this.date.getUTCDay() + 1 },
                 divides : 'month',
             },
             w : {
                 name : 'week',
-                ids : {
+                types : {
                     english : {
                         short : [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
                         long : [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
                     },
-                }
-
+                },
                 val : [
                     function( ) { return this.date.getUTCDay() + 1 },
                 ],
@@ -150,14 +149,15 @@
             var triple = dual + ltr
             var quad = dual + dual
 
-            lexemes[ triple ] = lexemes[ triple ] || function( ) {
-                return this[ ltr ].ids.short[ this.lang ][ this - 1 ]
-                this[ ltr ][ 'triple' ]
-            }
+            var type = {}
+            type[ triple ] = 'short'
+            type[ quad ] = 'long'
 
-            lexemes[ quad ] = lexemes[ quad ] || function( ) {
-                return i18n.day.long[ this.lang ][ this[ ltr ] - 1 ]
-            }
+            [ triple, quad ].each( function( str ) {
+                lexemes[ str ] = lexemes[ str ] || function( ) {
+                    return this[ ltr ].types[ type[ str ] ][ this.lang ][ this - 1 ]
+                }
+            } )
         } )
         
 
