@@ -5,25 +5,8 @@
  * The mask defaults to dateFormat.masks.default.
  */
 ( function() {
-    // Internationalization strings
-    var i18n = {
-        day : {
-            short : {
-                
-            },
-            },
-        ],
-        month : {
-            short : {
-                en : [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
-            },
-            long : {
-                en : [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
-            },
-        }
-    }
-    
-  console.log( 'hi' )
+    console.log( 'hi' )
+
     var Date_toString = Date.prototype.toString
     Date.prototype.toString = function( ) {
         return ( arguments.length == 1
@@ -146,7 +129,7 @@
                 return pad.apply( this, [ this[ ltr ], dual.length, '0' ] )
             }
         } )
-
+        
         [ 'd', 'n' ].each( function( ltr ) {
             var dual = ltr + ltr
             var triple = dual + ltr
@@ -207,4 +190,4 @@
 */
         return 's'
     }
-)()
+} )()
