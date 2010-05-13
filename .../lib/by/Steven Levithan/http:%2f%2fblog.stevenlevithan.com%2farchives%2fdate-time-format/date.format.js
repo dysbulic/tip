@@ -161,8 +161,6 @@
             } )
         } )
         
-
-
         var tokens = new RegExp( ( '[Hh{1,4}'
                                    + '|m{1,4}'
                                    + '|yy(?:yy)?'
@@ -171,6 +169,9 @@
                                    + '|\"[^\"]*\"'
                                    + '|\'[^\']*\'' ),
                                  'g' )
+        str.split( tokens ).each( function( token ) {
+            console.log( token )
+        } )
         //var timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g
         //var timezoneClip = /[^-+\dA-Z]/g
 
