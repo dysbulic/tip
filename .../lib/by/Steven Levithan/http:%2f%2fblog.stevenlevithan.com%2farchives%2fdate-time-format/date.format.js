@@ -119,15 +119,16 @@
             pad = typeof pad == 'string' ? pad : ' '
 
             var reps = Math.max( 0, Math.round( ( width - val.length ) / pad.length ) )
-            console.log( 'p:' + val + ':' + len + ':' + chr )
-            return ( ( new Array( reps ) ).join( pad ) + val )
+            var column = ( ( new Array( reps ) ).join( pad ) + val )
+            console.log( 'p:' + reps + '⨉' + pad + '+' + val + ' = ' + column )
+            return column
         }
 
         [ 'j', 'n', 'd', 'H', 'h', 'm', 's' ].each( function( ltr ) {
             var dual = ltr + ltr
             lexemes[ dual ] = lexemes[ dual ] || {
                 valueOf : function( ) {
-                    return pad.apply( this, [ lexemes[ ltr ].valueOf(), dual.length, '0' ] )
+                    return column.apply( this, [ lexemes[ ltr ].valueOf(), dual.length, '0' ] )
                 },
             }
         } )
