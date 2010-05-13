@@ -149,9 +149,8 @@
                                    + '|\'[^\']*\'' ),
                                  'g' )
         return mask.replace( tokens, function( lex ) {
+            console.log( lex )
             return lex in lexemes ? lexemes[ lex ] : lex.slice( 1, lex.length - 1 )
         })
-*/
-        return 's'
     }
 } )()
