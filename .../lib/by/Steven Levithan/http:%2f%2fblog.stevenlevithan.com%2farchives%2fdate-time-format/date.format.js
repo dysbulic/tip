@@ -5,10 +5,9 @@
  * The mask defaults to dateFormat.masks.default.
  */
 ( function() {
-    console.log( 'hi' )
-
     var Date_toString = Date.prototype.toString
     Date.prototype.toString = function( ) {
+        console.log( arguments.length )
         return ( arguments.length == 1
                  ? Date_toString
                  : format ).apply( this, arguments )
