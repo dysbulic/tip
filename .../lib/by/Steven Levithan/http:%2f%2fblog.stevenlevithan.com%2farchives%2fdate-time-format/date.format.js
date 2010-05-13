@@ -23,6 +23,7 @@
         }
     }
     
+  console.log( 'hi' )
     var Date_toString = Date.prototype.toString
     Date.prototype.toString = function( ) {
         return ( arguments.length == 1
@@ -47,6 +48,7 @@
     }
 
     function format( str ) {
+        console.log( str )
         var lexemes = {
             date : this,
             H : {
@@ -198,12 +200,11 @@
             }
 */
 
-        var flags = {
-            lang : 'en',
-
+/*
             return mask.replace( token, function ($0) {
                 return $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);
             })
-        }
+*/
+        return 's'
     }
-} )()
+)()
