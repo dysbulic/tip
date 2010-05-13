@@ -143,14 +143,18 @@
             } )
         } )
         
-        var tokens = new RegExp( ( '([HhMmn])\1'
+        var tokens = new RegExp( ( '([HhMmn])\1??'
                                    + '|j{2,4}'
                                    + '|\"[^\"]*\"'
                                    + '|\'[^\']*\'' ),
                                  'g' )
         return mask.replace( tokens, function( lex ) {
             console.log( lex )
-            return lex in lexemes ? lexemes[ lex ] : lex.slice( 1, lex.length - 1 )
+            return 's'
+/*            return ( lex in lexemes
+                     ? lexemes[ lex ]
+                     : lex.slice( 1, lex.length - 1 ) )
+*/
         })
     }
 } )()
