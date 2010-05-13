@@ -87,26 +87,25 @@
                         long : [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
                     },
                 },
-                val : [
+                valueOf : [
                     function( ) { return this.date.getUTCDay() + 1 },
                 ],
                 divides : 'month',
-
             },
             n : {
                 name : 'month',
-                ids : {
+                types : {
                     english : {
                         short : [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
                         long : [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
                     }
                 },
-                val : function( ) { return date.getUTCMonth() + 1 },
+                valueOf : function( ) { return date.getUTCMonth() + 1 },
                 divides : 'year',
             },
             j : {
                 name : [ 'Julian year', 'year' ],
-                val : function( ) { return date.getUTCYear() },
+                valueOf : function( ) { return date.getUTCYear() },
             },
             p : {
                 name : 'period',
