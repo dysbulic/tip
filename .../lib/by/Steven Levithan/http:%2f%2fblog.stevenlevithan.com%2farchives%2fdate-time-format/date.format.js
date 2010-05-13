@@ -43,12 +43,12 @@
             },
             M : {
                 name : 'minute',
-                valueOf : function( ) { return this.date.getUTCMinutes() },
+                valueOf : function( ) { return lexemes.date.getUTCMinutes() },
                 divides : 'H',
             },
             s : {
                 name : 'second',
-                valueOf : function( ) { return this.date.getUTCSecond() },
+                valueOf : function( ) { return lexemes.date.getUTCSecond() },
                 divides : 'm',
             },
             m : {
