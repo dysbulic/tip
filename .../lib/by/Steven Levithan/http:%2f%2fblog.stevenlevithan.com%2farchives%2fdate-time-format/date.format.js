@@ -135,7 +135,7 @@
             var type = {}
             type[ triple ] = 'short'
             type[ quad ] = 'long'
-
+            ;
             [ triple, quad ].each( function( str ) {
                 lexemes[ str ] = lexemes[ str ] || function( ) {
                     return this[ ltr ].types[ type[ str ] ][ this.lang ][ this - 1 ]
@@ -149,33 +149,8 @@
                                    + '|\'[^\']*\'' ),
                                  'g' )
         str.split( tokens ).each( function( token ) {
-            console.log( token )
+            console.log( 't:' + token )
         } )
-        //var timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g
-        //var timezoneClip = /[^-+\dA-Z]/g
-
-
-        /*
-            // You can't provide utc if you skip other args (use the "UTC:" mask prefix)
-            if( arguments.length == 1 && typeof date == 'string' && !/\d/.test( date ) ) {
-                mask = date
-                date = undefined
-            }
-
-            // Passing date through Date applies Date.parse, if necessary
-            date = date ? new Date( date ) : new Date
-            if( isNaN( date ) ) {
-                throw SyntaxError( 'invalid date' )
-            }
-
-            mask = String(dF.masks[mask] || mask || dF.masks['default']);
-
-            // Allow setting the utc argument via the mask
-            if (mask.slice(0, 4) == 'UTC:') {
-                mask = mask.slice(4);
-                utc = true;
-            }
-*/
 
 /*
             return mask.replace( token, function ($0) {
