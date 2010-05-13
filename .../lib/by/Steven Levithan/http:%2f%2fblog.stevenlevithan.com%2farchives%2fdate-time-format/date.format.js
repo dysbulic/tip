@@ -33,7 +33,7 @@
             date : this,
             H : {
                 name : [ 'hour', '24-hour time' ],
-                valueOf : function( ) { return lexemes.date.getUTCHour() },
+                valueOf : function( ) { return lexemes.date.getUTCHours() },
                 divides : 'd',
             },
             h : {
