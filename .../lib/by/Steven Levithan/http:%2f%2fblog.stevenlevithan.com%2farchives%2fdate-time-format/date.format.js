@@ -168,10 +168,7 @@
         return mask.replace( tokens, function( lex ) {
             return ( lex in lexemes
                      ? lexemes[ lex ].valueOf( )
-                     : ( function() {
-                         console.log( lex )           
-                         return lex
-                     } )() )
+                     : lex )
         })
     }
 } )()
