@@ -9,9 +9,10 @@
     <script type="application/javascript" src=".../lib/by/Steven Levithan/http:%252f%252fblog.stevenlevithan.com%252farchives%252fdate-time-format/date.format.js"/>
     <script type="application/javascript"><![CDATA[
         $( function() {
+            document.__ = {}
             var $time = $( '<iframe src="seven_segment.svg"/>' )
             $time.bind( 'load', function() {
-                console.log( this.contentDocument.__ )
+              //console.log( this.contentDocument )
             } )
             $( 'body' ).append( $time )
             setInterval( function() {
