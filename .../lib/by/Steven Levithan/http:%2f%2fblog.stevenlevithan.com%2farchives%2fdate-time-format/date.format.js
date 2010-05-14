@@ -170,7 +170,7 @@
                      ? lexemes[ lex ].valueOf( )
                      : ( function() {
                          console.log( lex )           
-                         return lex.slice( 1, lex.length - 1 )
+                         return lex
                      } )() )
         })
     }
