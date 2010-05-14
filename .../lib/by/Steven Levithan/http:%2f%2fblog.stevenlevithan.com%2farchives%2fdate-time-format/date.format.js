@@ -58,7 +58,7 @@
             },
             d : {
                 name : 'day',
-                valueOf : function( ) { return lexemes.date.getUTCDay() + 1 },
+                valueOf : function( ) { return lexemes.date.getUTCDate() + 1 },
                 divides : 'month',
             },
             w : {
@@ -147,7 +147,18 @@
                 }
             } )
         } )
-        
+        ;
+        [ 'm' ].each( function( ltr ) {
+            var dual = ltr + ltr
+            var triple = dual + ltr
+
+            lexemes[ triple ] = lexemes[ triple ] || {
+                valueOf : function( ) {
+                    return column.apply( this, [ lexemes[ ltr ].valueOf(), triple.length, '0' ] )
+                },
+            }
+        } )
+
         var tokens = new RegExp( ( '([ndHhMs])\\1?'
                                    + '|m{1,3}'
                                    + '|j{2,4}'
@@ -155,10 +166,12 @@
                                    + '|\'[^\']*\'' ),
                                  'g' )
         return mask.replace( tokens, function( lex ) {
-            //console.log( lex )
             return ( lex in lexemes
                      ? lexemes[ lex ].valueOf( )
-                     : lex.slice( 1, lex.length - 1 ) )
+                     : ( function() {
+                         console.log( lex )           
+                         return lex.slice( 1, lex.length - 1 )
+                     } )() )
         })
     }
 } )()
