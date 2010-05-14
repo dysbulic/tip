@@ -85,9 +85,9 @@
                 valueOf : function( ) { return lexemes.date.getUTCMonth() + 1 },
                 divides : 'year',
             },
-            j : {
+            jjjj : {
                 name : [ 'Julian year', 'year' ],
-                valueOf : function( ) { return lexemes.date.getUTCYear() },
+                valueOf : function( ) { return lexemes.date.getUTCFullYear() },
             },
             p : {
                 name : 'period',
@@ -155,6 +155,16 @@
             lexemes[ triple ] = lexemes[ triple ] || {
                 valueOf : function( ) {
                     return column.apply( this, [ lexemes[ ltr ].valueOf(), triple.length, '0' ] )
+                },
+            }
+        } )
+        ;
+        [ 'j' ].each( function( ltr ) {
+            var dual = ltr + ltr
+
+            lexemes[ dual ] = lexemes[ dual ] || {
+                valueOf : function( ) {
+                    return column.apply( this, [ lexemes[ ltr ].valueOf() % 100, dual.length, '0' ] )
                 },
             }
         } )
