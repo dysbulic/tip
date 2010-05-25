@@ -1,0 +1,57 @@
+<HTML>
+<HEAD>
+
+</HEAD>
+<body background='bground1.jpg' bgcolor="#2F0300" text="#F2C094" link="#F3C961" vlink="#F3C961" alink="#F3C961">
+
+<center>
+
+<font face="Arial" size = 3 color="#F3C961">
+Today's Date:
+</font>
+<br>
+<script language=JavaScript>
+
+  var monthName = new Array("January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December")
+
+  var newDate = new Date()
+  var y = newDate.getYear()
+  var m = newDate.getMonth() + 1
+  var d = newDate.getDate()
+
+  y1 = y - 10*Math.floor(y/10)
+  dt = Math.floor(d/10)
+
+
+  document.write('<IMG SRC="num01.gif" alt="1" border=0 hspace=2>')
+  document.write('<IMG SRC="num09.gif" alt="9" border=0 hspace=2>')
+  document.write('<IMG SRC="num09.gif" alt="9" border=0 hspace=2>')
+  document.write('<IMG SRC="http://www.stat.berkeley.edu/users/deegan/num0'+y1+'.gif" alt="'+y1+'" border=0 hspace=2>')
+  document.write('<IMG SRC="nian.gif" alt="nian2 = year" border=0 hspace=2>')
+
+  if(m>=10)
+    document.write('<IMG SRC="num10.gif" alt="10" border=0 hspace=2>')
+  if(m>10)
+    document.write('<IMG SRC="http://www.stat.berkeley.edu/users/deegan/num0'+(m-10)+'.gif" alt="'+(m-10)+'" border=0 hspace=2>')
+  else if(m<10)
+    document.write('<IMG SRC="num0'+m+'.gif" alt="'+m+'" border=0 hspace=2>')
+  document.write('<IMG SRC="yue.gif" alt="yue4 = month" border=0 hspace=2>')
+
+  if(d>=20)
+    document.write('<IMG SRC="http://www.stat.berkeley.edu/users/deegan/num0'+dt+'.gif" alt="'+dt+'" border=0 hspace=2>')
+  if(d>=10)
+    document.write('<IMG SRC="num10.gif" alt="10" border=0 hspace=2>')
+  if(d-dt*10 != 0)
+    document.write('<IMG SRC="http://www.stat.berkeley.edu/users/deegan/num0'+(d-dt*10)+'.gif" alt="'+(d-dt*10)+'" border=0 hspace=2>')
+  document.write('<IMG SRC="hao.gif" alt="hao4 = day number" border=0 hspace=2>')
+
+  document.writeln('<br><font face="arial" size=2 color="#F3C961">')
+  document.writeln('('+monthName[m-1]+' '+d+', 19'+y+')')
+  document.writeln('</font>')
+
+</script>
+
+</BODY>
+</HTML>
+

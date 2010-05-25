@@ -1,0 +1,266 @@
+<html>
+<head>
+<title>Chinese Character/Pinyin Test</title>
+
+<script language="JavaScript">
+
+var picSet = new Array ("g1mt.gif","g2mt.gif","g3mt.gif","g4mt.gif","g5mt.gif","g6mt.gif","g7mt.gif","g8mt.gif","g9mt.gif","g10mt.gif","g11mt.gif","g12mt.gif","g13mt.gif","g14mt.gif","g15mt.gif","g16mt.gif","g17mt.gif","g18mt.gif","g19mt.gif","g20mt.gif","g21mt.gif","g22mt.gif","g23mt.gif","g24mt.gif","g25mt.gif","g26mt.gif","g27mt.gif","g28mt.gif","g29mt.gif","g30mt.gif","g31mt.gif","g32mt.gif","g33mt.gif","g34mt.gif","g35mt.gif","g36mt.gif","g37mt.gif","g38mt.gif","g35mt.gif","g39mt.gif","g40mt.gif","g41mt.gif","g22mt.gif","g42mt.gif","g43mt.gif","g44mt.gif","g45mt.gif","g46mt.gif","g47mt.gif","g48mt.gif","g49mt.gif","g50mt.gif","g51mt.gif","g52mt.gif","g53mt.gif","g54mt.gif","g55mt.gif","g56mt.gif","g57mt.gif","g58mt.gif","g59mt.gif","g60mt.gif","g61mt.gif","g62mt.gif","g63mt.gif","g64mt.gif","g65mt.gif","g66mt.gif","g67mt.gif","g68mt.gif","g69mt.gif","g70mt.gif","g71mt.gif","g72mt.gif","g73mt.gif","g74mt.gif")
+var simSet = new Array ("","","","","","","","","","","","","","","","","","","","","","","","g24ms.gif","","g26ms.gif","","","","","g31ms.gif","g32ms.gif","g33ms.gif","","","","","","","g39ms.gif","","","","","","","","","","g48ms.gif","","","","","g53ms.gif","","","","","","","","","g62ms.gif","","","","","g67ms.gif","","","","g71ms.gif","g72ms.gif","","g74ms.gif")
+var pinyinSet = new Array ("ling","yi","er","san","si","wu","liu","qi","ba","jiu","shi","kou","shan","nuu","nan","ren","min","li","tian","an","da","zhong","xiao","xue","gong","chang","pin","dian","ru","chu","men","kai","guan","ri","yue","tian","ming","nian","yue","hao","shang","xia","zhong","zuo","you","chuan","huo","yun","shi","feng","mu","lin","shui","hai","dian","wo","ni","ta","ta","ta","shi","yao","you","ai","chi","he","xiao","zou","shi","yong","shou","jiao","tou","lian","zui","wei")
+var toneSet = new Array (2,1,4,1,4,3,4,1,1,3,2,3,1,3,2,2,2,4,2,1,4,1,3,2,1,3,3,4,4,1,2,1,1,4,4,1,2,2,4,4,4,4,1,3,4,1,3,2,2,1,4,2,3,3,4,3,3,1,1,1,4,4,3,4,1,1,4,3,4,4,3,3,2,3,3,4)
+
+var scoreSet = new Array(' 0/5 Study your characters!', ' 1/5 "Baaaaaaad!"', ' 2/5 You can do better.',
+  ' 3/5 Not bad.', " 4/5 You're alright by me.", ' 5/5 "Goooooood!"')
+
+var maxdigits   = picSet.length
+var maxques     = scoreSet.length - 1
+var rdigits     = new Array()
+var testOver    = 0
+var madeChanges = 0
+
+function RandomDigits(number, maxdigit)
+{
+  digits = new Array();
+  n=0;
+  digits[n] = Math.floor(Math.random() * maxdigit);
+  while(n<number-1) {
+    newdigit = Math.floor(Math.random() * maxdigit);
+    isunique=1;
+    for(i=0; i<=n; i++)
+      if(picSet[newdigit] == picSet[digits[i]])
+        isunique=0;
+    if(isunique) {
+      n++;
+      digits[n] = newdigit;
+    }
+  }
+  return(digits);
+}
+
+function putPic(n)
+{
+  if(simSet[n] == "" || Math.random() < 0.5)
+    return picSet[n]
+  else
+    return simSet[n]
+}
+
+function handleChanges()
+{
+  if(testOver) {
+    madeChanges=1
+    printTryAgain()
+  }
+  if(document.test.hint.checked)
+    doRight()
+}
+
+function handleHint()
+{
+  if(document.test.hint.checked)
+    doRight()
+  else if(!testOver)
+    for(i=0; i<maxques; i++)
+      eval('document.test.right'+i+'.checked=false')
+  if(testOver)
+    printTryAgain()
+}
+
+function doRight()
+{
+  for(i=0; i<maxques; i++)
+    if(eval('document.test.pinyin'+i+'.value.toLowerCase()==pinyinSet[rdigits['+i+']] && document.test.tone'+i+'.value == toneSet[rdigits['+i+']]'))
+      eval('document.test.right'+i+'.checked=true')
+    else
+      eval('document.test.right'+i+'.checked=false')
+}
+
+function handleScore()
+{
+  testOver=1
+  doRight()
+  doAns()
+  if(madeChanges)
+    printTryAgain()
+  else {
+    tot = 0
+    for(i=0; i<maxques; i++)
+      tot = tot + eval('document.test.pinyin'+i+'.value.toLowerCase()==pinyinSet[rdigits['+i+']] && document.test.tone'+i+'.value == toneSet[rdigits['+i+']]')
+    document.test.field3.value=scoreSet[tot]
+  }
+}
+
+function handleClear()
+{
+  if(testOver)
+    madeChanges=1
+}
+
+function handlePeek()
+{
+  testOver=1
+  if(document.test.peek.checked)
+    doAns()
+  else
+    document.test.peek.checked = true
+  printTryAgain()
+}
+
+function doAns()
+{
+  for(i=0; i<maxques; i++) {
+    eval('document.test.pans'+i+'.value = pinyinSet[rdigits['+i+']]')
+    eval('document.test.tans'+i+'.value = toneSet[rdigits['+i+']]')
+  }
+}
+
+function Trim(cstring)
+{
+  newstring = ""
+  for(i=0; i<cstring.length; i++)
+    if(cstring.substring(i, i + 1) != " ")
+      newstring = newstring + cstring.substring(i, i+1)
+  return newstring
+}
+
+function staySame(n)
+{
+  eval('document.test.right'+n+'.checked = !document.test.right'+n+'.checked')
+}
+
+function printTryAgain()
+{
+  document.test.field3.value=" Click below to take another test."
+}
+</script>
+</head>
+
+<body background='bground1.jpg' bgcolor="#2F0300" text="#F2C094" link="#F3C961" vlink="#F3C961" alink="#F3C961">
+<img src="putonghua.gif" alt="Pu3 tong1 hua4" align=left border=0 hspace=15>
+<font face="Arial" size = 5 color="F3C961">Mini-Projects with Mandarin</font><br>
+<font face="Arial" size = 4 color="F3C961"><i>Chinese Character/Pinyin Test</i></font>
+<br clear="all"><br>
+
+<font face="Arial" size = 2>
+Are you up for the challenge?  This test quizzes you on some basic character/Pinyin combinations, which can found in
+my <a href="clist.htm">Basic List of Chinese Characters</a>.  Let's see how good you are.
+</font>
+
+<form name="test">
+
+<script language="JavaScript">
+
+  rdigits = RandomDigits(maxques, maxdigits);
+
+</script>
+
+<center>
+<table width= 540 cellspacing=2 border=0>
+  <tr align=center>
+    <td colspan=3 bgcolor="#F9C084"><b><font face="Arial" size=2 color="#2F0300">Place Responses Here</font></td>
+    <td width=80 rowspan=8><img src="blank.gif"></td>
+    <td colspan=2 bgcolor="#F9C084"><b><font face="Arial" size=2 color="#2F0300">Results Section</b></font></td>
+  </tr><tr align=center>
+    <td bgcolor="#F9C084"><font face="Arial" size=1 color="#2F0300"><b>Character</b></font></td>
+    <td width=100 bgcolor="#F9C084"><font face="Arial" size=1 color="#2F0300"><b>Pinyin</b></font></td>
+    <td width= 35 bgcolor="#F9C084"><font face="Arial" size=1 color="#2F0300"><b>Tone</b></font></td>
+    <td width= 35 bgcolor="#F9C084"><font face="Arial" size=1 color="#2F0300"><b>Right</b></font></td>
+    <td width=90 bgcolor="#F9C084"><font face="Arial" size=1 color="#2F0300"><b>Answers</b></font></td>
+  </tr>
+<TR align=center valign=center><TD bgcolor="#FFFFFF">
+<script language="JavaScript">document.writeln('<img src="http://www.stat.berkeley.edu/users/deegan/'+putPic(rdigits[0])+'"></td>')</script>
+<TD><INPUT type=text name="pinyin0" onChange="handleChanges()" size=7></TD>
+<TD><INPUT type=int name="tone0" onChange="handleChanges()" maxlength=1 size=1></TD>
+<TD><INPUT type=checkbox name="right0" onfocus="document.test.pinyin1.focus()" onClick="staySame(0)"></TD>
+<TD><INPUT type=text name="pans0" value onfocus="this.blur()" size=7> <INPUT type=int name="tans0" maxlength="1" value onfocus="this.blur(); document.test.tone0.focus()" size="1"></TD>
+</TR>
+<TR align=center valign=center><TD bgcolor="#FFFFFF">
+<script language="JavaScript">document.writeln('<img src="http://www.stat.berkeley.edu/users/deegan/'+putPic(rdigits[1])+'"></td>')</script>
+<TD><INPUT type=text name="pinyin1" onChange="handleChanges()" size=7></TD>
+<TD><INPUT type=int name="tone1" onChange="handleChanges()" maxlength=1 size=1></TD>
+<TD><INPUT type=checkbox name="right1" onfocus="document.test.pinyin2.focus()" onClick="staySame(1)"></TD>
+<TD><INPUT type=text name="pans1" value onfocus="this.blur()" size=7> <INPUT type=int name="tans1" maxlength="1" value onfocus="this.blur(); document.test.tone1.focus()" size="1"></TD>
+</TR>
+<TR align=center valign=center><TD bgcolor="#FFFFFF">
+<script language="JavaScript">document.writeln('<img src="http://www.stat.berkeley.edu/users/deegan/'+putPic(rdigits[2])+'"></td>')</script>
+<TD><INPUT type=text name="pinyin2" onChange="handleChanges()" size=7></TD>
+<TD><INPUT type=int name="tone2" onChange="handleChanges()" maxlength=1 size=1></TD>
+<TD><INPUT type=checkbox name="right2" onfocus="document.test.pinyin3.focus()" onClick="staySame(2)"></TD>
+<TD><INPUT type=text name="pans2" value onfocus="this.blur()" size=7> <INPUT type=int name="tans2" maxlength="1" value onfocus="this.blur(); document.test.tone2.focus()" size="1"></TD>
+</TR>
+<TR align=center valign=center><TD bgcolor="#FFFFFF">
+<script language="JavaScript">document.writeln('<img src="http://www.stat.berkeley.edu/users/deegan/'+putPic(rdigits[3])+'"></td>')</script>
+<TD><INPUT type=text name="pinyin3" onChange="handleChanges()" size=7></TD>
+<TD><INPUT type=int name="tone3" onChange="handleChanges()" maxlength=1 size=1></TD>
+<TD><INPUT type=checkbox name="right3" onfocus="document.test.pinyin4.focus()" onClick="staySame(3)"></TD>
+<TD><INPUT type=text name="pans3" value onfocus="this.blur()" size=7> <INPUT type=int name="tans3" maxlength="1" value onfocus="this.blur(); document.test.tone3.focus()" size="1"></TD>
+</TR>
+<TR align=center valign=center><TD bgcolor="#FFFFFF">
+<script language="JavaScript">document.writeln('<img src="http://www.stat.berkeley.edu/users/deegan/'+putPic(rdigits[4])+'"></td>')</script>
+<TD><INPUT type=text name="pinyin4" onChange="handleChanges()" size=7></TD>
+<TD><INPUT type=int name="tone4" onChange="handleChanges()" maxlength=1 size=1></TD>
+<TD><INPUT type=checkbox name="right4" onfocus="document.test.score.focus()" onClick="staySame(4)"></TD>
+<TD><INPUT type=text name="pans4" value onfocus="this.blur()" size=7> <INPUT type=int name="tans4" maxlength="1" value onfocus="this.blur(); document.test.tone4.focus()" size="1"></TD>
+</TR>
+<TR><TD HEIGHT=3 COLSPAN=3 bgcolor="#F9C084"><img src="blank.gif"></TD>
+    <TD HEIGHT=3 COLSPAN=2 bgcolor="#F9C084"><img src="blank.gif"></TD></TR>
+</TABLE><BR>
+
+<TABLE align="center" BORDER="0">
+  <TR><TD>
+    <INPUT type=checkbox name="hint" onclick="handleHint()">
+    <FONT face="Arial" size=2 color="#F9C084"><B>"Give me a hint!"</B></font>
+    <font face="Arial" size=2> Show which responses are right so far.</FONT><BR>
+  </TD></TR>
+  <TR><TD>
+    <INPUT type=checkbox name="peek" onclick="handlePeek()">
+    <FONT face="Arial" size=2 color="#F9C084"><B>"I give up!"</B></font>
+    <FONT face="Arial" size=2> Show the answers </font><FONT face="Arial" size=2 color="#F9C084"><B><I>now</I></B>.</FONT><BR><BR>
+  </TD></TR>
+</TABLE>
+
+<FONT face="Arial" size=2>
+<INPUT type=reset value="Clear All" onClick="handleClear()">
+<INPUT type=button name="score" value="Score Test" onClick="handleScore()">
+</FONT>
+<FONT face="arial" size=3><INPUT type=text name="field3" size=29 onfocus="this.blur()"></FONT>
+</CENTER>
+</FORM>
+
+<CENTER>
+<TABLE>
+<TR>
+  <TD>
+    <FONT face="arial" size=3><B><A href="clist.htm">Let Me Study!</FONT></A></B>
+  </TD><TD width=20>
+  </TD><TD>
+    <FONT face="arial" size=3><B><A href="test1.htm">Test Me Again!</FONT></A></B>
+  </TD>
+</TR></TABLE>
+</CENTER>
+
+<script language="JavaScript">
+<!--
+  document.test.reset()
+  document.test.pinyin0.focus()
+//-->
+</script> 
+
+
+<CENTER>
+<FONT face="Arial" size=2>
+<BR><BR>
+[
+<A href="home.htm">Home</A>
+|| <A href="about.htm#tester">About This Tester</A>
+|| <A href="links1.htm#pinyin">About Pinyin</A>
+]
+<BR><BR>
+<script language="JavaScript">
+<!--
+    document.writeln("<i>Last updated: "+document.lastModified+"</i>");
+//-->
+</script> 
+<br><i><a href="mailto:leodeegan@hotmail.com">leodeegan@hotmail.com</i></a>
+</font></center></body></html>
+
