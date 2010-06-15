@@ -93,7 +93,7 @@ function List( ) {
         if( typeof id.shift == 'function' ) {
             var sublist = get( id.shift() )
             if( sublist !== undefined ) {
-                return sublist.__.get( id )
+                return sublist.__ && sublist.__.get( id ) || sublist
             }
         }
 
