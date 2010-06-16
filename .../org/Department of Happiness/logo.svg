@@ -199,36 +199,58 @@
     <script type="application/javascript"><![CDATA[
         function Value( val, id ) {
             var container = new Container()
-            var value = new Label( val )
-            var id = new Label( id )
-            container.add( value )
-            container.add( id )
-            this.__defineGetter__( '$root', function() { return container.$root } )
-            this.__defineSetter__( 'x', container.transform.__lookupSetter__( 'x' ) ) 
-            this.__defineSetter__( 'y', container.transform.__lookupSetter__( 'y' ) ) 
-            this.__defineGetter__( 'height', function() {
-                return Math.max( value.height, id.height )
-            } )
-
             var hover = {
                 start: false,
                 duration: .5 * 1000,
-                exec: function( percent ) {
-                    value.x = this.percent * value.width / 2
-                    id.x = this.percent * - id.width / 2
-                },
+            }
+
+            if( typeof val == 'function' ) {
+            } else {
+                var value = new Label( val )
+                var id = new Label( id )
+                container.add( value )
+                container.add( id )
+                this.__defineGetter__( '$root', function() { return container.$root } )
+                this.__defineSetter__( 'x', container.transform.__lookupSetter__( 'x' ) ) 
+                this.__defineSetter__( 'y', container.transform.__lookupSetter__( 'y' ) ) 
+                this.__defineGetter__( 'height', function() {
+                    return Math.max( value.height, id.height )
+                } )
+                
+                var slide = {
+                    extent: function( scale ) {
+                        scale = scale !== 0 && ! scale ? 1 : scale
+                        return function( elem ) {
+                            return this.percent.capped * scale * ( elem.width / 2 )
+                        }
+                    }
+                }
+
+                scene.add( {
+                    elem: value,
+                    attr: 'x',
+                    get start() { return hover.start },
+                    val: slide.extent()
+                } )
+
+                scene.add( {
+                    elem: id,
+                    attr: 'x',
+                    get start() { return hover.start },
+                    val: slide.extent( -1 )
+                } )
             }
             scene.add( hover )
-
+                
             var duration = hover.duration
             container.$root.hover(
                 function() {
                     hover.start = time.now
-                    hover.duration = duration
+                    hover.speed = 1
                 },
                 function() {
                     hover.start = time.now + duration
-                    hover.duration = - duration
+                    hover.speed = -1
                 }
             )
         }
