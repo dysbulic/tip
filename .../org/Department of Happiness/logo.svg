@@ -42,13 +42,12 @@
                     if( ( last < tixel.start && now >= tixel.start )
                         || ( last > tixel.end && now <= tixel.end )
                         || ( tixel.percent > 0 && tixel.percent < 1 ) ) {
-                        var percent = ( ( now - tixel.start ) / tixel.duration * tixel.speed
-                                        + tixel.speed < 0 ? 1 : 0 )
-                        console.log(percent)
+                        var percent = ( ( tixel.speed * ( now - tixel.start ) / tixel.duration )
+                                        + ( tixel.speed < 0 ? 1 : 0 ) )
                         tixel.percent = {
                             valueOf: function() { return percent },
                             get raw() { return percent },
-                            get capped() { return Math.max( -1, Math.min( 1, percent ) ) },
+                            get capped() { return Math.max( 0, Math.min( 1, percent ) ) },
                         }
                         tixel.elem[ tixel.attr ] = tixel.val.call( tixel, tixel.elem )
                     }
@@ -240,6 +239,7 @@
                     elem: value,
                     attr: 'x',
                     get start() { return hover.start },
+                    get speed() { return hover.speed },
                     get duration() { return hover.duration },
                     val: slide.extent()
                 } )
@@ -248,6 +248,7 @@
                     elem: id,
                     attr: 'x',
                     get start() { return hover.start },
+                    get speed() { return hover.speed },
                     get duration() { return hover.duration },
                     val: slide.extent( -1 )
                 } )
@@ -259,7 +260,7 @@
                     hover.speed = 1
                 },
                 function() {
-                    hover.start = time.now + duration
+                    hover.start = time.now
                     hover.speed = -1
                 }
             )
