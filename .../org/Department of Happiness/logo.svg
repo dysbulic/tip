@@ -288,13 +288,48 @@
                 } )
                 y -= pad.between - pad.bottom
                 container.transform.y = - y / 2
+
                 $('#body').append( container.$root )
             },
         }
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
+        function Circle() {
+            var $root = $.__.$( '<circle/>' )
+            
+            this.__defineSetter__( 'radius', function( radius ) {
+                $root.attr( 'r', radius )
+            } )
+            this.__defineSetter__( 'stroke-width', function( strokeWidth ) {
+                $root.css( 'stroke-width', strokeWidth )
+            } )
+        }
+
+        function linear( min, max ) {
+            return function( percent ) {
+                return min + ( max - min ) * percent
+            }
+        }
+
+        var border = new Circle
+        $('#body').append( border.$root )
+
+        scene.add( {
+            elem: border,
+            attr: 'radius',
+            get start() { return hover.start },
+            get speed() { return hover.speed },
+            get duration() { return hover.duration },
+            val: linear( 0, 50 )
+        } )
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
         $( function() {
             display.JSON( new List( {
-                username: 'bob@localhost',
-                password: 'bob\'spass',
+                //username: 'bob@localhost',
+                //password: 'bob\'spass',
                 connect: function() {
                     alert( 'hi' )
                 },
