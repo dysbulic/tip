@@ -47,7 +47,7 @@
                             valueOf: function() { return percent },
                             get capped() { Math.max( 0, Math.min( 1, percent ) ) },
                         }
-                        tixel.elem[ tixel.attr ] = tixel.val.call( tixel, elem )
+                        tixel.elem[ tixel.attr ] = tixel.val.call( tixel, tixel.elem )
                     }
                 } )
                 last = now
@@ -223,6 +223,7 @@
                     extent: function( scale ) {
                         scale = scale !== 0 && ! scale ? 1 : scale
                         return function( elem ) {
+                            alert ( this.percent.capped * scale * ( elem.width / 2 ) )
                             return this.percent.capped * scale * ( elem.width / 2 )
                         }
                     }
