@@ -45,7 +45,8 @@
                         var percent = ( now - tixel.start ) / tixel.duration
                         tixel.percent = {
                             valueOf: function() { return percent },
-                            get capped() { Math.max( 0, Math.min( 1, percent ) ) },
+                            get raw() { return percent },
+                            get capped() { return Math.max( 0, Math.min( 1, percent ) ) },
                         }
                         tixel.elem[ tixel.attr ] = tixel.val.call( tixel, tixel.elem )
                     }
@@ -199,6 +200,10 @@
     <script type="application/javascript"><![CDATA[
         function Value( val, id ) {
             var container = new Container()
+            this.__defineGetter__( '$root', function() { return container.$root } )
+            this.__defineSetter__( 'x', container.transform.__lookupSetter__( 'x' ) ) 
+            this.__defineSetter__( 'y', container.transform.__lookupSetter__( 'y' ) ) 
+
             var hover = {
                 start: false,
                 duration: .5 * 1000,
@@ -206,15 +211,14 @@
 
             if( typeof val == 'function' ) {
                 var id = new Label( id )
-                
+                container.add( id )
+
+                container.$root.click( val )                
             } else {
                 var value = new Label( val )
                 var id = new Label( id )
                 container.add( value )
                 container.add( id )
-                this.__defineGetter__( '$root', function() { return container.$root } )
-                this.__defineSetter__( 'x', container.transform.__lookupSetter__( 'x' ) ) 
-                this.__defineSetter__( 'y', container.transform.__lookupSetter__( 'y' ) ) 
                 this.__defineGetter__( 'height', function() {
                     return Math.max( value.height, id.height )
                 } )
@@ -223,7 +227,6 @@
                     extent: function( scale ) {
                         scale = scale !== 0 && ! scale ? 1 : scale
                         return function( elem ) {
-                            alert ( this.percent )
                             return this.percent.capped * scale * ( elem.width / 2 )
                         }
                     }
@@ -233,6 +236,7 @@
                     elem: value,
                     attr: 'x',
                     get start() { return hover.start },
+                    get duration() { return hover.duration },
                     val: slide.extent()
                 } )
 
@@ -240,11 +244,11 @@
                     elem: id,
                     attr: 'x',
                     get start() { return hover.start },
+                    get duration() { return hover.duration },
                     val: slide.extent( -1 )
                 } )
             }
-                
-            var duration = hover.duration
+            
             container.$root.hover(
                 function() {
                     hover.start = time.now
@@ -287,6 +291,7 @@
                 username: 'bob@localhost',
                 password: 'bob\'spass',
                 connect: function() {
+                    alert( 'hi' )
                 },
             } ) )
         } )
