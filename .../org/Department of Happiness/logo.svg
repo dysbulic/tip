@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="-50 -50 100 100" width="100%" height="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:html="http://www.w3.org/1999/xhtml"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>Department of Happiness Logo</title>
+  <defs>
+    <script type='application/javascript' xlink:href='.../lib/jquery/jquery.js'></script>
+
+    <script type="application/javascript" xlink:href=".../lib/tip/Array.each.js"/>
+    <script type="application/javascript" xlink:href=".../lib/tip/List.js"/>
+
+    <script type="application/javascript"><![CDATA[
+        var win = { width: window.innerWidth,
+                    height: window.innerHeight, }
+        var viewBox = [ - win.width / 2, - win.height / 2, win.width, win.height ].join( ' ' )
+        $.__.$( '#' ).attr( 'viewBox', viewBox )
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
+        var time = {
+            get now() { return ( new Date() ).getTime() }
+        }
+
+        function Scene() {
+            var state = new List( {
+                'tixel.capture.frequency.mHz' : .1 * 1000,
+                'time.epoch' : time.now,
+            } )
+            var interval = {
+                id: undefined,
+            }
+
+            var contents = new List()
+
+            var last = time.now
+            function once() {
+                var now = time.now
+                contents.__.each( function( tixel ) {
+                    var end = tixel.start + tixel.duration
+                    if( ( tixel.start <= now && end >= now )
+                        || ( end <= now && tixel.start >= now )
+                        || ( tixel.percent > 0 && tixel.percent < 1 ) ) {
+                        var percent = ( now - tixel.start ) / tixel.duration
+                        tixel.percent = {
+                            valueOf: function() { return percent },
+                            get capped() { Math.max( 0, Math.min( 1, percent ) ) },
+                        }
+                        tixel.exec.call( tixel )
+                    }
+                } )
+                last = now
+            }
+
+            this.__defineGetter__( 'once', once )
+
+            this.__defineGetter__( 'go', function() {
+                if( interval.id === undefined ) {
+                    var self = this
+                    var freq = state.__.get( 'tixel.capture.frequency.mHz' ) || 100
+                    interval.id =
+                        setInterval( function() {
+                            once.apply( self, arguments )
+                        },
+                                     freq )
+                }
+                return this
+            } )
+
+            this.__defineGetter__( 'stop', function() {
+                if( interval.id !== undefined ) {
+                    clearInterval( interval.id )
+                    interval.id = undefined
+                }
+                return this
+            } )
+
+            this.__defineGetter__( 'running', function() {
+                return interval.id !== undefined
+            } )
+
+            this.__defineGetter__( 'pause', function() {
+                return this.running ? this.stop : this.go
+            } )
+            
+            this.add = function( tixel ) {
+                contents.__.add( tixel )
+            }
+        }
+
+        var scene = new Scene
+        scene.go
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
+        function Container() {
+            var $container = $.__.$( '<g/>' )
+            var transform = {
+                x: 0,
+                y: 0,
+                update: function() {
+                    $container.attr( 'transform',
+                                     'translate(' + this.x + ',' + this.y + ')' )
+                },
+            }
+            var elems = []
+
+            function add( elem ) {
+                elems.push( elem )
+                if( elem && elem.$root ) {
+                    elem = elem.$root
+                }
+                $container.append( elem )
+            }
+            this.add = add
+
+            this.each = function( f ) {
+                elems.each( f )
+            }
+
+            this.__defineGetter__( '$root', function() { return $container } )
+
+            this.__defineGetter__( 'transform', function() { return {
+                set x( x ) {
+                    transform.x = x
+                    transform.update()
+                },
+                set y( y ) {
+                    transform.y = y
+                    transform.update()
+                },
+            } } )
+        }
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
+        function Label( text ) {
+            var container = new Container()
+
+            var $bg = $.__.$( '<rect/>' )
+            container.add( $bg )
+
+            var $text = ( $.__.$( '<html:input/>' )
+                          .attr( 'class', 'value' )
+                          .attr( 'value', text ) )
+            var $obj = ( $.__.$( '<foreignObject/>' )
+                         .append( $text ) )
+            container.add( $obj )
+            
+            this.__defineGetter__( 'width', function() {
+                return ( parseFloat( $text.width() )
+                         + parseFloat( $text.css( 'padding-left' ) )
+                         + parseFloat( $text.css( 'padding-right' ) )
+                         + parseFloat( $text.css( 'border-left-width' ) )
+                         + parseFloat( $text.css( 'border-right-width' ) )
+                       ) } )
+            this.__defineGetter__( 'height', function() {
+                return ( parseFloat( $text.height() )
+                         + parseFloat( $text.css( 'padding-top' ) )
+                         + parseFloat( $text.css( 'padding-bottom' ) )
+                         + parseFloat( $text.css( 'border-top-width' ) )
+                         + parseFloat( $text.css( 'border-bottom-width' ) )
+                       ) } )
+            this.__defineSetter__( 'x', container.transform.__lookupSetter__( 'x' ) ) 
+            this.__defineSetter__( 'y', container.transform.__lookupSetter__( 'y' ) ) 
+            this.__defineGetter__( '$root', container.__lookupGetter__( '$root' ) ) 
+
+            this.__defineGetter__( 'text', function() {
+                return $text.text()
+            } )
+            this.__defineSetter__( 'text', function( text ) {
+                $text.text( text )
+            } )
+
+            this.__defineGetter__( 'background', function() {
+                return {
+                    set radius( r ) {
+                        $bg.attr( 'rx', r )
+                        $bg.attr( 'ry', r )
+                    }, 
+                }
+            } )
+            this.background.radius = 4
+
+            $work.append( this.$root )
+
+            var size = {
+                x: - this.width / 2,
+                y: 0,
+                width: this.width,
+                height: this.height,
+            }
+            $obj.attr( size )
+            $bg.attr( size )
+        }
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
+        function Value( val, id ) {
+            var container = new Container()
+            var value = new Label( val )
+            var id = new Label( id )
+            container.add( value )
+            container.add( id )
+            this.__defineGetter__( '$root', function() { return container.$root } )
+            this.__defineSetter__( 'x', container.transform.__lookupSetter__( 'x' ) ) 
+            this.__defineSetter__( 'y', container.transform.__lookupSetter__( 'y' ) ) 
+            this.__defineGetter__( 'height', function() {
+                return Math.max( value.height, id.height )
+            } )
+
+            var hover = {
+                start: false,
+                duration: .5 * 1000,
+                exec: function( percent ) {
+                    value.x = this.percent * value.width / 2
+                    id.x = this.percent * - id.width / 2
+                },
+            }
+            scene.add( hover )
+
+            var duration = hover.duration
+            container.$root.hover(
+                function() {
+                    hover.start = time.now
+                    hover.duration = duration
+                },
+                function() {
+                    hover.start = time.now + duration
+                    hover.duration = - duration
+                }
+            )
+        }
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
+        var $work = $.__.$( '<g/>' ).css( 'visibility', 'hidden' )
+        $.__.$( '#' ).append( $work )
+        var pad = { top: 5, between: 5, bottom: 5, left: 5, right: 5 }
+        var display = {
+            JSON: function( list ) {
+                var lines = []
+                var container = new Container()
+                $work.append( container.$root )
+
+                list.__.each( function( line, id ) {
+                    var val = new Value( line, id )
+                    container.add( val )
+                } )
+                var y = pad.top
+                container.each( function( line ) {
+                    line.y = y
+                    alert( line.height )
+                    y += line.height + pad.between
+                } )
+                y -= pad.between - pad.bottom
+                container.transform.y = - y / 2
+                $('#body').append( container.$root )
+            },
+        }
+        $( function() {
+            display.JSON( new List( {
+                username: 'bob@localhost',
+                password: 'bob\'spass',
+                connect: function() {
+                },
+            } ) )
+        } )
+    ]]></script>
+
+    <style type="text/css">
+    rect { fill: lightblue; stroke: darkgray }
+    #log { text-anchor: middle }
+input { text-align: center; font-size: 13pt; border: none }
+foreignObject { overflow: visible; }
+[class~='value'] { background-color: transparent; padding: .25em .5em }
+    </style>
+  </defs>
+    <g id="body"/>
+</svg>
