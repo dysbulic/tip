@@ -42,11 +42,13 @@
                     if( ( last < tixel.start && now >= tixel.start )
                         || ( last > tixel.end && now <= tixel.end )
                         || ( tixel.percent > 0 && tixel.percent < 1 ) ) {
-                        var percent = ( now - tixel.start ) / tixel.duration
+                        var percent = ( ( now - tixel.start ) / tixel.duration * tixel.speed
+                                        + tixel.speed < 0 ? 1 : 0 )
+                        console.log(percent)
                         tixel.percent = {
                             valueOf: function() { return percent },
                             get raw() { return percent },
-                            get capped() { return Math.max( 0, Math.min( 1, percent ) ) },
+                            get capped() { return Math.max( -1, Math.min( 1, percent ) ) },
                         }
                         tixel.elem[ tixel.attr ] = tixel.val.call( tixel, tixel.elem )
                     }
@@ -86,6 +88,7 @@
             } )
             
             this.add = function( tixel ) {
+                tixel.speed = tixel.speed || 1
                 contents.__.add( tixel )
             }
         }
@@ -212,6 +215,7 @@
             if( typeof val == 'function' ) {
                 var id = new Label( id )
                 container.add( id )
+                this.__defineGetter__( 'height', id.__lookupGetter__( 'height' ) )
 
                 container.$root.click( val )                
             } else {
