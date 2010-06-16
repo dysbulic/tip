@@ -47,7 +47,7 @@
                             valueOf: function() { return percent },
                             get capped() { Math.max( 0, Math.min( 1, percent ) ) },
                         }
-                        tixel.exec.call( tixel )
+                        tixel.elem[ tixel.attr ] = tixel.val.call( tixel, elem )
                     }
                 } )
                 last = now
@@ -205,6 +205,8 @@
             }
 
             if( typeof val == 'function' ) {
+                var id = new Label( id )
+                
             } else {
                 var value = new Label( val )
                 var id = new Label( id )
@@ -240,7 +242,6 @@
                     val: slide.extent( -1 )
                 } )
             }
-            scene.add( hover )
                 
             var duration = hover.duration
             container.$root.hover(
@@ -273,7 +274,6 @@
                 var y = pad.top
                 container.each( function( line ) {
                     line.y = y
-                    alert( line.height )
                     y += line.height + pad.between
                 } )
                 y -= pad.between - pad.bottom
