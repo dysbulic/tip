@@ -39,8 +39,8 @@
                 var now = time.now
                 contents.__.each( function( tixel ) {
                     var end = tixel.start + tixel.duration
-                    if( ( tixel.start <= now && end >= now )
-                        || ( end <= now && tixel.start >= now )
+                    if( ( last < tixel.start && now >= tixel.start )
+                        || ( last > tixel.end && now <= tixel.end )
                         || ( tixel.percent > 0 && tixel.percent < 1 ) ) {
                         var percent = ( now - tixel.start ) / tixel.duration
                         tixel.percent = {
