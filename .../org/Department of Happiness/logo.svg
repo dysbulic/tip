@@ -26,27 +26,28 @@
                 }
             } )()
 
-            ids.__.each( function( val, prop ) {
-                ids[ prop ] = parseFloat( str.shift() )
+            ids.__.each( function( val, id ) {
+                if( str.length > 0 ) {
+                    ids.__.set( id, parseFloat( str.shift() ) )
+                }
             } )
 
             var updatable = true
-
             function update() {
                 return ( updatable
                          && ( function() {
-                             return $root.attr( attr, viewbox.__.join( ' ' ) )
+                             return $root.attr( attr, self.self )
                          } )() )
             }
             this.update = update
 
             var self = this
-            viewbox.__.each( function( val, prop ) {
+            ids.__.each( function( val, prop ) {
                 self.__defineGetter__( prop, function() {
-                    return viewbox.__.get( prop )
+                    return ids.__.get( prop )
                 } )
                 self.__defineSetter__( prop, function( val ) {
-                    viewbox.__.set( prop, val )
+                    ids.__.set( prop, val )
                     return update()
                 } )
             } )
@@ -56,18 +57,23 @@
             }
 
             this.__defineGetter__( 'self', function() {
-                return viewbox.__.join( ' ' )
+                return ids.__.join( ' ' )
             } )
-            this.__defineSetter__( 'self', function( view ) {
+            this.__defineSetter__( 'self', function( config ) {
                 updatable = false
-                viewbox.__.each( function( val, prop ) {
-                    if( view[ prop ] !== undefined ) {
-                        self[ prop ] = view[ prop ]
+                ids.__.each( function( val, id ) {
+                    if( config[ id ] !== undefined ) {
+                        self[ id ] = config[ id ]
                     }
                 } )
                 updatable = true
                 return update()
             } )
+
+            if( arguments.length > 0
+                && arguments[ 0 ] instanceof Object ) {
+                self.self = arguments[ 0 ]
+            }
         }
     ]]></script>
 
@@ -494,10 +500,6 @@
                 updatable = true
                 return update()
             } )
-            if( arguments.length > 0
-                && arguments[ 0 ] instanceof Object ) {
-                this.self = arguments[ 0 ]
-            }
         }
     ]]></script>
 
