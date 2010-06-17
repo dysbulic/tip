@@ -29,20 +29,25 @@
             }
             this.update = update
 
+            var self = this
             viewbox.__.each( function( val, prop ) {
-                this.__defineGetter__( prop, function() {
+                self.__defineGetter__( prop, function() {
                     return viewbox.__.get( prop )
                 } )
-                this.__defineSetter__( prop, function( val ) {
+                self.__defineSetter__( prop, function( val ) {
+                    console.log( val )
                     viewbox.__.set( prop, val )
                     return update()
                 } )
             } )
 
+            this.__defineGetter__( 'self', function() {
+                return viewbox.__.join( ' ' )
+            } )
             this.__defineSetter__( 'self', function( view ) {
-                console.log(view)
                 updatable = false
                 viewbox.__.each( function( val, prop ) {
+                    console.log(view[prop])
                     if( view[ prop ] !== undefined ) {
                         this[ prop ] = val
                     }
@@ -61,13 +66,13 @@
     <script type="application/javascript"><![CDATA[
         var win = { width: window.innerWidth,
                     height: window.innerHeight, }
-        var v = view.self = {
+        view.self = {
             x: - win.width / 2,
             y: - win.height / 2,
             width: win.width,
             height: win.height,
         }
-        console.log( v )
+        console.log( view.self )
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
