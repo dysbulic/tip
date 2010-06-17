@@ -51,10 +51,6 @@
                     return update()
                 } )
             } )
-            if( arguments.length > 0
-                && arguments[ 0 ] instanceof Object ) {
-                this.self = arguments[ 0 ]
-            }
 
             this.__defineGetter__( 'self', function() {
                 return ids.__.join( ' ' )
@@ -70,9 +66,8 @@
                 return update()
             } )
 
-            if( arguments.length > 0
-                && arguments[ 0 ] instanceof Object ) {
-                self.self = arguments[ 0 ]
+            if( config instanceof Object ) {
+                this.self = config
             }
         }
     ]]></script>
@@ -177,7 +172,7 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
-        function Container() {
+        function Container( config ) {
             var $root = $.__.$( '<g/>' )
             $work.append( $root )
 
@@ -536,9 +531,7 @@
                 } )
             } )
 
-            if( arguments.length > 0
-                && arguments[ 0 ] instanceof Object ) {
-                var config = arguments[ 0 ]
+            if( config instanceof Object ) {
                 for( prop in self ) {
                     if( config[ prop ] !== undefined ) {
                         self[ prop ] = config[ prop ]
@@ -586,11 +579,8 @@
             } )
             
             var self = this
-            if( arguments.length > 0
-                && arguments[ 0 ] instanceof Object ) {
-                var config = arguments[ 0 ]
+            if( config instanceof Object ) {
                 for( prop in self ) {
-
                     if( config[ prop ] !== undefined ) {
                         self[ prop ] = config[ prop ]
                     }
