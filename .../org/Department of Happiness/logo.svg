@@ -34,11 +34,9 @@
 
             var contents = new List()
 
-            var snap = {
-                last: time.now,
-            }
+            var last = time.now
             function once() {
-                snap.now = time.now
+                var now = time.now
                 
                 contents.__.each( function( tixel ) {
                     var start = tixel.start || tixel.end - tixel.duration
@@ -110,6 +108,8 @@
                                      'translate(' + this.x + ',' + this.y + ')' )
                 },
             }
+            transform.update()
+
             var elems = []
 
             function add( elem ) {
@@ -132,10 +132,13 @@
                     transform.x = x
                     transform.update()
                 },
+                // This assumes transform will not be externally set
+                get x() { return transform.x },
                 set y( y ) {
                     transform.y = y
                     transform.update()
                 },
+                get y() { return transform.y },
             } } )
         }
     ]]></script>
@@ -169,7 +172,9 @@
                          + parseFloat( $text.css( 'border-bottom-width' ) )
                        ) } )
             this.__defineSetter__( 'x', container.transform.__lookupSetter__( 'x' ) ) 
+            this.__defineGetter__( 'x', container.transform.__lookupGetter__( 'x' ) ) 
             this.__defineSetter__( 'y', container.transform.__lookupSetter__( 'y' ) ) 
+            this.__defineGetter__( 'y', container.transform.__lookupGetter__( 'y' ) ) 
             this.__defineGetter__( '$root', container.__lookupGetter__( '$root' ) ) 
 
             this.__defineGetter__( 'text', function() {
@@ -206,10 +211,18 @@
         var slide = {
             linear: function( min, max ) {
                 return function( delta ) {
+                    // The transition is rate based rather than percentage based
+                    //   in an attempt to prevent jumps when transitions are
+                    //   joined unexpectedly.
+                    // 
                     this.last = this.last || {}
-                    this.last.value = ( this.last.value ||
-                                         min + ( max - min ) * this.percent.capped )
-                    return this.last.value + delta * ( max - min ) / this.duration
+                    this.last.value = ( this.last.value === undefined
+                                        ? this.elem[ this.attr ]
+                                        : this.last.value )
+                    this.last.value += delta * ( max - min ) / this.duration
+                    this.last.value = Math.min( max, Math.max( min, this.last.value ) )
+                    console.log( this.attr  + '=' + this.elem[ this.attr ])
+                    return this.last.value
                 }
             },
         }
@@ -220,7 +233,9 @@
             var container = new Container()
             this.__defineGetter__( '$root', function() { return container.$root } )
             this.__defineSetter__( 'x', container.transform.__lookupSetter__( 'x' ) ) 
+            this.__defineGetter__( 'x', container.transform.__lookupGetter__( 'x' ) ) 
             this.__defineSetter__( 'y', container.transform.__lookupSetter__( 'y' ) ) 
+            this.__defineGetter__( 'y', container.transform.__lookupGetter__( 'y' ) ) 
 
             var hover = {
                 start: false,
@@ -306,13 +321,29 @@
             var $root = $.__.$( '<circle/>' ).attr( {
                 cx: 0,
                 cy: 0,
+                r: 0,
             } )
 
             this.__defineGetter__( '$root', function() { return $root } )
             
+            this.__defineGetter__( 'radius', function() {
+                return parseFloat( $root.attr( 'r' ) )
+            } )
             this.__defineSetter__( 'radius', function( radius ) {
                 $root.attr( 'r', radius )
             } )
+
+            var center = {
+                get x() { return parseFloat( $root.attr( 'cx' ) ) },
+                set x( x ) { return $root.attr( 'cx', x ) },
+                get y() { return parseFloat( $root.attr( 'cy' ) ) },
+                set y( y ) { return $root.attr( 'cy', y ) },
+            }
+                    
+            this.__defineGetter__( 'center', function() {
+                return center
+            } )
+            
             this.__defineSetter__( 'stroke-width', function( strokeWidth ) {
                 $root.css( 'stroke-width', strokeWidth )
             } )
@@ -335,27 +366,23 @@
 
             var hover = {
                 start: false,
-                speed: 1,
                 duration: 1000,
             }
 
             json.$root.hover(
                 function() {
                     hover.start = time.now
-                    hover.speed = 1
                 },
                 function() {
                     hover.start = time.now
-                    hover.speed = -1
                 } )
 
             scene.add( {
                 elem: border,
                 attr: 'radius',
                 get start() { return hover.start },
-                get speed() { return hover.speed },
                 get duration() { return hover.duration },
-                val: slide.linear( 0, 500 )
+                val: slide.linear( 0, 100 )
             } )
         } )
     ]]></script>
