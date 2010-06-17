@@ -226,6 +226,16 @@
                 transform.scale = scale
                 transform.update()
             } )
+
+            var self = this
+            if( config instanceof Object ) {
+                for( prop in self ) {
+                    console.log(prop)
+                    if( config[ prop ] !== undefined ) {
+                        self[ prop ] = config[ prop ]
+                    }
+                }
+            }
         }
     ]]></script>
 
@@ -542,7 +552,7 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
-        function Text() {
+        function Text( config ) {
             var $path
             var $root = ( $.__.$( '<text/>' )
                           .append( $text )
