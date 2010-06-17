@@ -35,8 +35,8 @@
                     return viewbox.__.get( prop )
                 } )
                 self.__defineSetter__( prop, function( val ) {
-                    console.log( val )
                     viewbox.__.set( prop, val )
+                    console.log( viewbox.__.get( prop ) )
                     return update()
                 } )
             } )
