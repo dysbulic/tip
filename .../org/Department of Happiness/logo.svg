@@ -12,9 +12,13 @@
     <script type="application/javascript" xlink:href=".../lib/tip/__.jquery"/>
 
     <script type="application/javascript"><![CDATA[
-        function View() {
-            var $root = $.__.$('#')
-            var attr = 'viewBox'
+        function Attribute( config ) {
+            var $root = config.$root || $.__.$('#')
+            var attr = config.attribute || ( function() {
+                throw {
+                    message: 'Missing Required Attribute: attribute'
+                }
+            } )()
             var str = $root.attr( attr ).split( ' ' )
             var viewbox = new List( {
                 x : parseFloat( str[0] ),
@@ -64,7 +68,10 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
-        var view = new View
+        var view = new Attribute( {
+            attribute: 'viewBox',
+        } )
+            
         var win = { width: window.innerWidth,
                     height: window.innerHeight, }
         view.self = {
