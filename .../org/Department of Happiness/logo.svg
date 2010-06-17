@@ -445,9 +445,7 @@
 
     <script type="application/javascript"><![CDATA[
         function Arc() {
-            var $root = $.__.$( '<path/>' ).attr( {
-                d: ''
-            } ) 
+            var $root = $.__.$( '<path/>' )
             this.__defineGetter__( '$root', function() { return $root } )
            
             var arc = new List( {
@@ -459,9 +457,11 @@
           
             function update() {
                 $root.attr( 'd',
-                            'a ' + self.self )
+                            'm 0,0 l 30,30' )
+                //'a ' + self.self )
             }
             this.update = update
+            update()
 
             var self = this
             arc.__.each( function( val, prop ) {
@@ -511,7 +511,7 @@
             $('#body').append( trigger.$root )
 
             var hover = {
-                start: false,
+                start: time.now,
                 duration: 1000,
             }
 
@@ -590,6 +590,7 @@
     ]]></script>
 
     <style type="text/css">
+    path { stroke: red; stroke-width: 10 }
     rect { fill: lightblue; stroke: darkgray }
 #trigger { fill: lightblue; stroke: darkgray }
     #log { text-anchor: middle }
