@@ -427,14 +427,14 @@
                 },
                 large : { arc : true },
                 positive : { arc : true },
-                sweep : 360,
+                sweep : 259,
                 update : function() {
                     $root.attr( 'd', [
                         'm', this.center.x, this.center.y,
                         'a', this.radius, this.radius,
+                        this.sweep,
                         this.large.arc ? 1 : 0,
                         this.positive.arc ? 1 : 0,
-                        this.sweep,
                         this.center.x, this.center.y
                     ].join( ' ' ) )
                 }
@@ -681,7 +681,7 @@
     ]]></script>
 
     <style type="text/css">
-    path { stroke: red; stroke-width: 10 }
+    path { stroke: red; stroke-width: 5 }
     rect { fill: lightblue; stroke: darkgray }
 #trigger { fill: lightblue; stroke: darkgray }
     #log { text-anchor: middle }
@@ -694,6 +694,11 @@ text { fill: black }
   </defs>
     <g id="body"/>
     <circle id="d" cx="0" cy="0" r="40"/>
-    <path id="c" d="m 0,0 a 40 40 ,-30 0 1 1 -30,0"/>
+    <path id="c" d="M0,0 
+           a25,25 0 0,1 50,-25
+           a30,30 0 0,1 60,-30
+M 0 0 a 30,40 300 1,1 0,0"/>
+<!--
     <text><textPath xlink:href="#c">Test</textPath></text>
+-->
 </svg>
