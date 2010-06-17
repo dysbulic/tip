@@ -25,7 +25,7 @@
 
         function Scene() {
             var state = new List( {
-                'tixel.capture.frequency.mHz' : .1 * 1000,
+                'tixel.capture.frequency.mHz' : .025 * 1000,
                 'time.epoch' : time.now,
             } )
             var interval = {
@@ -34,22 +34,25 @@
 
             var contents = new List()
 
-            var last = time.now
+            var snap = {
+                last: time.now,
+            }
             function once() {
-                var now = time.now
+                snap.now = time.now
+                
                 contents.__.each( function( tixel ) {
-                    var end = tixel.start + tixel.duration
-                    if( ( last < tixel.start && now >= tixel.start )
-                        || ( last > tixel.end && now <= tixel.end )
+                    var start = tixel.start || tixel.end - tixel.duration
+                    var end = tixel.end || start + tixel.duration
+                    if( ( last < start && now >= start )
+                        || ( last > end && now <= end )
                         || ( tixel.percent > 0 && tixel.percent < 1 ) ) {
-                        var percent = ( ( tixel.speed * ( now - tixel.start ) / tixel.duration )
-                                        + ( tixel.speed < 0 ? 1 : 0 ) )
+                        var percent = ( now - start ) / tixel.duration
                         tixel.percent = {
                             valueOf: function() { return percent },
                             get raw() { return percent },
                             get capped() { return Math.max( 0, Math.min( 1, percent ) ) },
                         }
-                        tixel.elem[ tixel.attr ] = tixel.val.call( tixel, tixel.elem )
+                        tixel.elem[ tixel.attr ] = tixel.val.call( tixel, now - last )
                     }
                 } )
                 last = now
@@ -200,6 +203,19 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
+        var slide = {
+            linear: function( min, max ) {
+                return function( delta ) {
+                    this.last = this.last || {}
+                    this.last.value = ( this.last.value ||
+                                         min + ( max - min ) * this.percent.capped )
+                    return this.last.value + delta * ( max - min ) / this.duration
+                }
+            },
+        }
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
         function Value( val, id ) {
             var container = new Container()
             this.__defineGetter__( '$root', function() { return container.$root } )
@@ -226,31 +242,22 @@
                     return Math.max( value.height, id.height )
                 } )
                 
-                var slide = {
-                    extent: function( scale ) {
-                        scale = scale !== 0 && ! scale ? 1 : scale
-                        return function( elem ) {
-                            return this.percent.capped * scale * ( elem.width / 2 )
-                        }
-                    }
-                }
-
                 scene.add( {
                     elem: value,
                     attr: 'x',
                     get start() { return hover.start },
                     get speed() { return hover.speed },
                     get duration() { return hover.duration },
-                    val: slide.extent()
+                    val: slide.linear( value.x, value.x + value.width / 2 )
                 } )
 
                 scene.add( {
                     elem: id,
                     attr: 'x',
                     get start() { return hover.start },
-                    get speed() { return hover.speed },
+                    get speed() { return - hover.speed },
                     get duration() { return hover.duration },
-                    val: slide.extent( -1 )
+                    val: slide.linear( id.x, id.x + id.width / 2 )
                 } )
             }
             
@@ -310,12 +317,6 @@
                 $root.css( 'stroke-width', strokeWidth )
             } )
         }
-
-        function linear( min, max ) {
-            return function( elem ) {
-                return min + ( max - min ) * this.percent.capped
-            }
-        }
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
@@ -354,7 +355,7 @@
                 get start() { return hover.start },
                 get speed() { return hover.speed },
                 get duration() { return hover.duration },
-                val: linear( 0, 500 )
+                val: slide.linear( 0, 500 )
             } )
         } )
     ]]></script>
