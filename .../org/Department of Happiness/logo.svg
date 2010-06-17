@@ -481,12 +481,12 @@
         function Text() {
             var $text = $.__.$( '<textPath/>' )
             var $root = ( $.__.$( '<text/>' )
-                          .append( $text )
-                          .text( text )
+                          //.append( $text )
                           .attr( {
                               x : 0,
                               y : 0,
                           } ) )
+            $text = $root
 
             this.__defineGetter__( '$root', function() { return $root } )
 
