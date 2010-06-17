@@ -502,7 +502,7 @@
                     
                     return $path
                 } )()
-                $path.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'href', path )
+                $path.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', path )
             } )
             
             var self = this
@@ -579,6 +579,7 @@
             var head = {
                 text : new Text( {
                     text : 'Department of Happiness',
+                    text : 'tst',
                 } ),
                 path : new Circle( {
                     radius: 30,
@@ -643,4 +644,6 @@ text { fill: black }
     </style>
   </defs>
     <g id="body"/>
+    <circle id="c" cx="0" cy="0" r="40"/>
+    <text><textPath xlink:href="#c">Test</textPath></text>
 </svg>
