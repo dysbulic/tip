@@ -28,8 +28,8 @@
                 return ( updatable
                          && ( function() {
                              console.log( 'Setting: ' + attr )
-                             $doc.attr( attr, viewbox.__.join( ' ' ) )
-                         } )()
+                             return $doc.attr( attr, viewbox.__.join( ' ' ) )
+                         } )() )
             }
             this.update = update
 
