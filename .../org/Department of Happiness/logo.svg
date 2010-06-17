@@ -334,6 +334,13 @@
             } )
 
             this.__defineGetter__( '$root', function() { return $root } )
+
+            this.__defineGetter__( 'id', function() {
+                return $root.attr( 'id' )
+            } )
+            this.__defineSetter__( 'id', function( id ) {
+                return $root.attr( 'id', id )
+            } )
             
             this.__defineGetter__( 'radius', function() {
                 return parseFloat( $root.attr( 'r' ) )
@@ -375,13 +382,18 @@
     <script type="application/javascript"><![CDATA[
         $( function() {
             var json = display.JSON( new List( {
-                //username: 'bob@localhost',
+                username: 'bob@localhost',
                 password: 'bob\'spass',
                 connect: function() {
                     alert( 'hi' )
                 },
             } ) )
-            $('#body').append( json.$root )
+            //$('#body').append( json.$root )
+
+            var trigger = new Circle
+            trigger.id = 'trigger'
+            trigger.radius = 10
+            $('#body').append( trigger.$root )
 
             var border = new Circle
             $('#body').append( border.$root )
@@ -391,7 +403,7 @@
                 duration: 1000,
             }
 
-            json.$root.hover(
+            trigger.$root.hover(
                 function() {
                     hover.start = time.now
                     hover.scale = 1
@@ -422,6 +434,7 @@
 
     <style type="text/css">
     rect { fill: lightblue; stroke: darkgray }
+#trigger { fill: lightblue; stroke: darkgray }
     #log { text-anchor: middle }
 input { text-align: center; font-size: 13pt; border: none }
 foreignObject { overflow: visible; }
