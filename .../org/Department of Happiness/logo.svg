@@ -30,7 +30,6 @@
                 ids[ prop ] = parseFloat( str.shift() )
             } )
 
-            new List.by.ids( [ 'x', 'y', 'width', 'height' ] )
             var updatable = true
 
             function update() {
@@ -75,6 +74,7 @@
     <script type="application/javascript"><![CDATA[
         var view = new Attribute( {
             attribute: 'viewBox',
+            ids: new List.by.ids( [ 'x', 'y', 'width', 'height' ] ),
         } )
             
         var win = { width: window.innerWidth,
