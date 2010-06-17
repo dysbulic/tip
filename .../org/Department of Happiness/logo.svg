@@ -229,7 +229,7 @@
                                         ? this.elem[ this.attr ]
                                         : this.last.value )
                     var scale = this.scale || 1
-                    this.last.value += ( scale * deltaTime * ( end - begin ) / this.duration )
+                    this.last.value += ( scale * ( end - begin ) * deltaTime / this.duration )
                     this.last.value = Math.max( Math.min( begin, end ), this.last.value )
                     this.last.value = Math.min( Math.max( begin, end ), this.last.value )
                     return this.last.value
