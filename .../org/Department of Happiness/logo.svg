@@ -25,10 +25,8 @@
             var updatable = true
 
             function update() {
-                console.log( 'update' )
                 return ( updatable
                          && ( function() {
-                             console.log( 'Setting: ' + attr )
                              return $doc.attr( attr, viewbox.__.join( ' ' ) )
                          } )() )
             }
@@ -41,7 +39,6 @@
                 } )
                 self.__defineSetter__( prop, function( val ) {
                     viewbox.__.set( prop, val )
-                    console.log( viewbox.__.get( prop ) )
                     return update()
                 } )
             } )
@@ -56,7 +53,7 @@
                         self[ prop ] = view[ prop ]
                     }
                 } )
-                updatable = false
+                updatable = true
                 return update()
             } )
         }
