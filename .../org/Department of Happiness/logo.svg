@@ -39,7 +39,7 @@
                 } )
             } )
 
-            this.__defineSetter__( '=', function( view ) {
+            this.__defineSetter__( 'self', function( view ) {
                 console.log(view)
                 updatable = false
                 viewbox.__.each( function( val, prop ) {
@@ -61,7 +61,7 @@
     <script type="application/javascript"><![CDATA[
         var win = { width: window.innerWidth,
                     height: window.innerHeight, }
-        var v = view['='] = {
+        var v = view.self = {
             x: - win.width / 2,
             y: - win.height / 2,
             width: win.width,
