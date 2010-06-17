@@ -33,11 +33,11 @@
             } )
 
             var updatable = true
-            function update() {
-                return ( updatable
-                         && ( function() {
-                             return $root.attr( attr, self.self )
-                         } )() )
+            var updateʻ = config.update || function() {
+                return $root.attr( attr, self.self )
+            }
+            var update = function() {
+                return updatable && updateʻ.call( self )
             }
             this.update = update
 
@@ -421,7 +421,7 @@
                 set y( y ) { return $root.attr( 'cy', y ) },
             }
 
-            var circle = new List( {
+            var circle = {
                 get radius() { return parseFloat( $root.attr( 'r' ) ) },
                 set radius( radius ) { $root.attr( 'r', radius ) },
                 get center() { return center },
@@ -434,16 +434,28 @@
                     }
                     return center
                 },
-            } )
+            }
+
+            var self = this
+            for( prop in circle ) {
+                var get = circle.__lookupGetter__( prop )
+                var set = circle.__lookupSetter__( prop )
+                if( get || set ) {
+                    if( get ) {
+                        self.__defineGetter__( prop, get )
+                    }
+                    if( set ) {
+                        self.__defineSetter__( prop, set )
+                    }
+                } else {
+                    self[ prop ] = circle[ prop ]
+                }
+            }
 
             this.__defineGetter__( '$root', function() { return $root } )
 
-            this.__defineGetter__( 'id', function() {
-                return $root.attr( 'id' )
-            } )
-            this.__defineSetter__( 'id', function( id ) {
-                return $root.attr( 'id', id )
-            } )
+            this.__defineGetter__( 'id', function() { return $root.attr( 'id' ) } )
+            this.__defineSetter__( 'id', function( id ) { return $root.attr( 'id', id ) } )
             
             this.__defineGetter__( 'stroke-width', function( strokeWidth ) {
                 return parseFloat( $root.css( 'stroke-width' ) )
@@ -457,47 +469,12 @@
 
     <script type="application/javascript"><![CDATA[
         function Arc() {
-            var $root = $.__.$( '<path/>' )
-            this.__defineGetter__( '$root', function() { return $root } )
-           
-            var arc = new List( {
-                offset: 0,
-                extent: 0,
-                radius: 0,
-            } )
-            var updatable = true
-          
-            function update() {
-                $root.attr( 'd',
-                            'm 0,0 t 30 30 30 30' )
-                //'a ' + self.self )
-            }
-            this.update = update
-            update()
-
-            var self = this
-            arc.__.each( function( val, prop ) {
-                self.__defineGetter__( prop, function() {
-                    return arc.__.get( prop )
-                } )
-                self.__defineSetter__( prop, function( val ) {
-                    arc.__.set( prop, val )
-                    return update()
-                } )
-            } )
-            
-            this.__defineGetter__( 'self', function() {
-                return arc.__.join( ' ' )
-            } )
-            this.__defineSetter__( 'self', function( view ) {
-                updatable = false
-                arc.__.each( function( val, prop ) {
-                    if( view[ prop ] !== undefined ) {
-                        self[ prop ] = view[ prop ]
-                    }
-                } )
-                updatable = true
-                return update()
+            var arc = new Attribute( {
+                $root : $.__.$( '<path/>' ),
+                ids : List.by.ids( [ 'offset', 'extent', 'radius' ] ),
+                update : function() {
+                    return this.$root.attr( 'd', 'm 0,0 t ' + this.self.self )
+                },
             } )
         }
     ]]></script>
