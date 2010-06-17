@@ -296,7 +296,12 @@
 
     <script type="application/javascript"><![CDATA[
         function Circle() {
-            var $root = $.__.$( '<circle/>' )
+            var $root = $.__.$( '<circle/>' ).attr( {
+                cx: 0,
+                cy: 0,
+            } )
+
+            this.__defineGetter__( '$root', function() { return $root } )
             
             this.__defineSetter__( 'radius', function( radius ) {
                 $root.attr( 'r', radius )
@@ -336,8 +341,11 @@
             json.$root.hover(
                 function() {
                     hover.start = time.now
+                    hover.speed = 1
                 },
                 function() {
+                    hover.start = time.now
+                    hover.speed = -1
                 } )
 
             scene.add( {
@@ -346,7 +354,7 @@
                 get start() { return hover.start },
                 get speed() { return hover.speed },
                 get duration() { return hover.duration },
-                val: linear( 0, 50 )
+                val: linear( 0, 500 )
             } )
         } )
     ]]></script>
