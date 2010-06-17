@@ -431,8 +431,8 @@
                 update : function() {
                     $root.attr( 'd', [
                         'm',
-                        this.center.x - this.radius / 2,
-                        this.center.y - this.radius / 2,
+                        this.center.x - this.radius,
+                        this.center.y,
                         'a', this.radius, this.radius,
                         this.x.axis.rotation,
                         this.large.arc ? 1 : 0,
@@ -550,6 +550,12 @@
             this.__defineGetter__( 'text', function() { return $text.text() } )
             this.__defineSetter__( 'text', function( text ) { $text.text( text ) } )
 
+            this.__defineGetter__( 'align', function() { return {
+                get center() { return $text.css( 'text-anchor', 'middle' ) },
+                get start() { return $text.css( 'text-anchor', 'start' ) },
+                get end() { return $text.css( 'text-anchor', 'end' ) },
+            } } )
+
             this.__defineSetter__( 'path', function( path ) {
                 $path = $path || ( function() {
                     var $path = $text = $.__.$( '<textPath/>' )
@@ -636,7 +642,6 @@
             var head = {
                 text : new Text( {
                     text : 'Department of Happiness',
-                    text : 'tst',
                 } ),
                 path : new Circle( {
                     path : true,
@@ -648,6 +653,7 @@
             canvas.add( head.path )
             canvas.add( head.text )
             head.text.path = '#' + head.path.id
+            head.text.align.center
             
             ;[
                 {
