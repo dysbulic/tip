@@ -175,14 +175,11 @@
             this.__defineGetter__( 'x', container.transform.__lookupGetter__( 'x' ) ) 
             this.__defineSetter__( 'y', container.transform.__lookupSetter__( 'y' ) ) 
             this.__defineGetter__( 'y', container.transform.__lookupGetter__( 'y' ) ) 
+
             this.__defineGetter__( '$root', container.__lookupGetter__( '$root' ) ) 
 
-            this.__defineGetter__( 'text', function() {
-                return $text.text()
-            } )
-            this.__defineSetter__( 'text', function( text ) {
-                $text.text( text )
-            } )
+            this.__defineGetter__( 'text', function() { return $text.text() } )
+            this.__defineSetter__( 'text', function( text ) { $text.text( text ) } )
 
             this.__defineGetter__( 'background', function() {
                 return {
@@ -204,6 +201,7 @@
             }
             $obj.attr( size )
             $bg.attr( size )
+            console.log(this.width)
         }
     ]]></script>
 
@@ -229,8 +227,8 @@
 
     <script type="application/javascript"><![CDATA[
         function Value( val, id ) {
-            var container = new Container()
-            this.__defineGetter__( '$root', function() { return container.$root } )
+            var container = new Container
+            this.__defineGetter__( '$root', container.__lookupGetter__( '$root' ) ) 
             this.__defineSetter__( 'x', container.transform.__lookupSetter__( 'x' ) ) 
             this.__defineGetter__( 'x', container.transform.__lookupGetter__( 'x' ) ) 
             this.__defineSetter__( 'y', container.transform.__lookupSetter__( 'y' ) ) 
@@ -244,14 +242,20 @@
             if( typeof val == 'function' ) {
                 var id = new Label( id )
                 container.add( id )
+                this.__defineGetter__( 'width', id.__lookupGetter__( 'width' ) )
                 this.__defineGetter__( 'height', id.__lookupGetter__( 'height' ) )
 
                 container.$root.click( val )                
             } else {
                 var value = new Label( val )
                 var id = new Label( id )
+                console.log( value.width )
                 container.add( value )
+                console.log( value.width )
                 container.add( id )
+                this.__defineGetter__( 'width', function() {
+                    return Math.max( value.width, id.width )
+                } )
                 this.__defineGetter__( 'height', function() {
                     return Math.max( value.height, id.height )
                 } )
@@ -262,14 +266,14 @@
                     get start() { return hover.start },
                     get scale() { return hover.scale },
                     get duration() { return hover.duration },
-                    val: slide.linear( value.x, value.x + value.width / 2 )
+                    val: slide.linear( value.x, value.x - value.width / 2 )
                 } )
 
                 scene.add( {
                     elem: id,
                     attr: 'x',
                     get start() { return hover.start },
-                    get scale() { return - hover.scale },
+                    get scale() { return hover.scale },
                     get duration() { return hover.duration },
                     val: slide.linear( id.x, id.x + id.width / 2 )
                 } )
