@@ -464,6 +464,38 @@
                 //$root.css( 'stroke-width', strokeWidth )
                 $root.get(0).style.setProperty( 'stroke-width', strokeWidth, null )
             } )
+
+            if( arguments.length > 0
+                && arguments[ 0 ] instanceof Object ) {
+                var config = arguments[ 0 ]
+                for( prop in self ) {
+                    if( config[ prop ] !== undefined ) {
+                        self[ prop ] = config[ prop ]
+                    }
+                }
+            }
+        }
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
+        function Text() {
+            var $text = $.__.$( '<textPath/>' )
+            var $root = $.__.$( '<text/>' ).append( $text )
+
+            this.__defineGetter__( 'text', function() { return $text.text() } )
+            this.__defineSetter__( 'text', function( text ) { $text.text( text ) } )
+
+            this.__defineSetter__( 'path', function( path ) { $text.attr( 'xlink:href', path ) } )
+
+            if( arguments.length > 0
+                && arguments[ 0 ] instanceof Object ) {
+                var config = arguments[ 0 ]
+                for( prop in self ) {
+                    if( config[ prop ] !== undefined ) {
+                        self[ prop ] = config[ prop ]
+                    }
+                }
+            }
         }
     ]]></script>
 
@@ -525,14 +557,17 @@
             canvas.add( band )
 
             var head = {
-                text: 'Department of Happiness',
+                text: new Text( {
+                    text : 'Department of Happiness',
+                } ),
                 path: new Circle( {
                     radius: 30,
-                    extent: 90,
-                    offset: 45,
                 } ),
             }
+           
+            canvas.add( head.text )
             canvas.add( head.path )
+            
             
             ;[
                 {
