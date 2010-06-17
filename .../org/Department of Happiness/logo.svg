@@ -343,6 +343,15 @@
             this.__defineGetter__( 'center', function() {
                 return center
             } )
+            this.__defineSetter__( 'center', function( c ) {
+                if( c.x !== undefined ) {
+                    center.x = c.x
+                }
+                if( c.y !== undefined ) {
+                    center.y = c.y
+                }
+                return center
+            } )
             
             this.__defineSetter__( 'stroke-width', function( strokeWidth ) {
                 $root.css( 'stroke-width', strokeWidth )
