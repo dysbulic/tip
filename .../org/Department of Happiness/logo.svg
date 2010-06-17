@@ -427,13 +427,13 @@
                 },
                 large : { arc : true },
                 positive : { arc : true },
-                x : { axis : { rotation : 1 } },
+                sweep : 360,
                 update : function() {
                     $root.attr( 'd', [
                         this.radius, this.radius,
                         this.large.arc ? 1 : 0,
                         this.positive.arc ? 1 : 0,
-                        this.x.axis.rotation,
+                        this.sweep,
                         this.center.x, this.center.y
                     ].join( ' ' ) )
                 }
