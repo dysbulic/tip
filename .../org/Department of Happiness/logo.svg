@@ -480,17 +480,24 @@
     <script type="application/javascript"><![CDATA[
         function Text() {
             var $text = $.__.$( '<textPath/>' )
-            var $root = $.__.$( '<text/>' ).append( $text )
+            var $root = $.__.$( '<text/>' ).append( $text ).attr( {
+                x : 0,
+                y : 0,
+            } )
+
+            this.__defineGetter__( '$root', function() { return $root } )
 
             this.__defineGetter__( 'text', function() { return $text.text() } )
-            this.__defineSetter__( 'text', function( text ) { $text.text( text ) } )
+            this.__defineSetter__( 'text', function( text ) { alert(text);$text.text( text ) } )
 
             this.__defineSetter__( 'path', function( path ) { $text.attr( 'xlink:href', path ) } )
 
+            var self = this
             if( arguments.length > 0
                 && arguments[ 0 ] instanceof Object ) {
                 var config = arguments[ 0 ]
                 for( prop in self ) {
+
                     if( config[ prop ] !== undefined ) {
                         self[ prop ] = config[ prop ]
                     }
@@ -514,9 +521,9 @@
     <script type="application/javascript"><![CDATA[
         $( function() {
             var json = display.JSON( new List( {
-                username: 'bob@localhost',
-                password: 'bob\'spass',
-                connect: function() {
+                username : 'bob@localhost',
+                password : 'bob\'spass',
+                connect : function() {
                     alert( 'hi' )
                 },
             } ) )
@@ -557,48 +564,49 @@
             canvas.add( band )
 
             var head = {
-                text: new Text( {
+                text : new Text( {
                     text : 'Department of Happiness',
                 } ),
-                path: new Circle( {
+                path : new Circle( {
                     radius: 30,
                 } ),
             }
            
-            canvas.add( head.text )
+            head.path.id = 'head'
             canvas.add( head.path )
-            
+            canvas.add( head.text )
+            head.text.path = '#' + head.path.id
             
             ;[
                 {
-                    elem: border.outer,
-                    attr: 'radius',
-                    val: slide.linear( 100 )
+                    elem : border.outer,
+                    attr : 'radius',
+                    val : slide.linear( 100 )
                 },
                 {
-                    elem: border.inner,
-                    attr: 'radius',
-                    val: slide.linear( 74 )
+                    elem : border.inner,
+                    attr : 'radius',
+                    val : slide.linear( 74 )
                 },
                 {
-                    elem: band,
-                    attr: 'radius',
-                    val: slide.linear( 87 )
+                    elem : band,
+                    attr : 'radius',
+                    val : slide.linear( 87 )
                 },
                 {
-                    elem: band,
-                    attr: 'stroke-width',
-                    val: slide.linear( 23 )
+                    elem : band,
+                    attr : 'stroke-width',
+                    val : slide.linear( 23 )
                 },
                 {
-                    elem: border.outer,
-                    attr: 'stroke-width',
-                    val: slide.linear( 1 )
+                    elem : border.outer,
+                    attr : 'stroke-width',
+                    val : slide.linear( 1 )
                 },
                 {
-                    elem: border.inner,
-                    attr: 'stroke-width',
-                    val: slide.linear( 1 )
+                    elem : border.inner,
+                    attr : 'stroke-width',
+                    val : slide.linear( 1 )
                 }
             ].each( function( tixel ) {
                 [ 'start', 'scale', 'duration' ].each( function( attr ) {
@@ -618,6 +626,7 @@ input { text-align: center; font-size: 13pt; border: none }
 foreignObject { overflow: visible; }
 [class~='value'] { background-color: transparent; padding: .25em .5em }
 circle { fill: none; stroke: black }
+text { fill: black }
     </style>
   </defs>
     <g id="body"/>
