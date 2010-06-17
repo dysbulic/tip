@@ -479,22 +479,32 @@
 
     <script type="application/javascript"><![CDATA[
         function Text() {
-            var $text = $.__.$( '<textPath/>' )
+            var $path
             var $root = ( $.__.$( '<text/>' )
-                          //.append( $text )
+                          .append( $text )
                           .attr( {
                               x : 0,
                               y : 0,
                           } ) )
-            $text = $root
+            var $text = $root
 
             this.__defineGetter__( '$root', function() { return $root } )
 
             this.__defineGetter__( 'text', function() { return $text.text() } )
             this.__defineSetter__( 'text', function( text ) { $text.text( text ) } )
 
-            this.__defineSetter__( 'path', function( path ) { $text.attr( 'xlink:href', path ) } )
-
+            this.__defineSetter__( 'path', function( path ) {
+                $path = $path || ( function() {
+                    var $path = $text = $.__.$( '<textPath/>' )
+                    $path.text( $root.text() )
+                    $root.text( '' )
+                    $root.append( $path )
+                    
+                    return $path
+                } )()
+                $path.attr( 'xlink:href', path )
+            } )
+            
             var self = this
             if( arguments.length > 0
                 && arguments[ 0 ] instanceof Object ) {
@@ -578,7 +588,7 @@
             head.path.id = 'head'
             canvas.add( head.path )
             canvas.add( head.text )
-            head.text.path = '#' + head.path.id
+            //head.text.path = '#' + head.path.id
             
             ;[
                 {
