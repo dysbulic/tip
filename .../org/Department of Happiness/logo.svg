@@ -47,9 +47,8 @@
             this.__defineSetter__( 'self', function( view ) {
                 updatable = false
                 viewbox.__.each( function( val, prop ) {
-                    console.log(view[prop])
                     if( view[ prop ] !== undefined ) {
-                        this[ prop ] = val
+                        self[ prop ] = view[ prop ]
                     }
                 } )
                 updatable = false
