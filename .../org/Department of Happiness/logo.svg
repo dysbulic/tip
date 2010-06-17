@@ -219,9 +219,8 @@
                     this.last.value = ( this.last.value === undefined
                                         ? this.elem[ this.attr ]
                                         : this.last.value )
-                    this.last.value += delta * ( max - min ) / this.duration
+                    this.last.value += this.scale * delta * ( max - min ) / this.duration
                     this.last.value = Math.min( max, Math.max( min, this.last.value ) )
-                    console.log( this.attr  + '=' + this.elem[ this.attr ])
                     return this.last.value
                 }
             },
@@ -261,7 +260,7 @@
                     elem: value,
                     attr: 'x',
                     get start() { return hover.start },
-                    get speed() { return hover.speed },
+                    get scale() { return hover.scale },
                     get duration() { return hover.duration },
                     val: slide.linear( value.x, value.x + value.width / 2 )
                 } )
@@ -270,7 +269,7 @@
                     elem: id,
                     attr: 'x',
                     get start() { return hover.start },
-                    get speed() { return - hover.speed },
+                    get scale() { return - hover.scale },
                     get duration() { return hover.duration },
                     val: slide.linear( id.x, id.x + id.width / 2 )
                 } )
@@ -279,13 +278,12 @@
             container.$root.hover(
                 function() {
                     hover.start = time.now
-                    hover.speed = 1
+                    hover.scale = 1
                 },
                 function() {
                     hover.start = time.now
-                    hover.speed = -1
-                }
-            )
+                    hover.scale = -1
+                } )
         }
     ]]></script>
 
@@ -363,7 +361,7 @@
         $( function() {
             var json = display.JSON( new List( {
                 //username: 'bob@localhost',
-                //password: 'bob\'spass',
+                password: 'bob\'spass',
                 connect: function() {
                     alert( 'hi' )
                 },
@@ -381,15 +379,18 @@
             json.$root.hover(
                 function() {
                     hover.start = time.now
+                    hover.scale = 1
                 },
                 function() {
                     hover.start = time.now
+                    hover.scale = -1
                 } )
 
             scene.add( {
                 elem: border,
                 attr: 'radius',
                 get start() { return hover.start },
+                get scale() { return hover.scale },
                 get duration() { return hover.duration },
                 val: slide.linear( 0, 100 )
             } )
