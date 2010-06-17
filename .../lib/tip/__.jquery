@@ -36,20 +36,9 @@
         } )
     }
 
-    var namespaces
+    var root = document.documentElement
     $.__ = window.__
     $.__.$ = function(arg) {
-        var root = document.documentElement
-        if( namespaces === undefined ) {
-            namespaces = {}
-            root.attributes.each( function( ) {
-                if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
-                    var name = match[1] || ''
-                    namespaces[ name ] = this.nodeValue
-                }
-            })
-        }
-
         // Special case for the document element
         if( arg == '#' ) {
             return $(root)
@@ -57,7 +46,7 @@
         // Match a single tag with optional namespace, attributes and content text
         } else if( tagMatch = /<(?:(?:(\w+):)?(\w+))([^>]*)(?:\/>|([^<]*)<\/\1>)/.exec( arg ) ) {
             var ns = tagMatch[1] || ''
-            var $elem = $( document.createElementNS( namespaces[ns], tagMatch[2] ) )
+            var $elem = $( document.createElementNS( $.__.$.ns[ ns ], tagMatch[2] ) )
             while( attrMatch = /(\w+)\s*=\s*(?:\'([^\']*)\'|\"([^\"]*)\")/g.exec( tagMatch[3] ) ) {
                 $elem.attr( attrMatch[1],
                             attrMatch[2]
@@ -71,12 +60,24 @@
 
         // Match a namespaced tag name
         } else if( nameMatch = /(?:(\w+):)?(\w+)/.exec( arg ) ) {
-            return $(document.getElementsByTagNameNS( namespaces[nameMatch[1]], nameMatch[2] ))
+            return $(document.getElementsByTagNameNS( $.__.$.ns[ nameMatch[1] ], nameMatch[2] ))
 
         // Otherwise pass on to jQuery
         } else {
             return $.apply( this, arguments )
         }
     }
-    $.__.$.ns = namespaces
+    var namespaces
+    $.__.$.__defineGetter__( 'ns', function() {
+        if( namespaces === undefined ) {
+            namespaces = {}
+            root.attributes.each( function( ) {
+                if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
+                    var name = match[1] || ''
+                    namespaces[ name ] = this.nodeValue
+                }
+            })
+        }
+        return namespaces
+    } )
 } )( jQuery )

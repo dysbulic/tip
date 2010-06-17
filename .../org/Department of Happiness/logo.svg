@@ -502,7 +502,7 @@
                     
                     return $path
                 } )()
-                $path.attr( 'xlink:href', path )
+                $path.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'href', path )
             } )
             
             var self = this
@@ -588,7 +588,7 @@
             head.path.id = 'head'
             canvas.add( head.path )
             canvas.add( head.text )
-            //head.text.path = '#' + head.path.id
+            head.text.path = '#' + head.path.id
             
             ;[
                 {
