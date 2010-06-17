@@ -268,6 +268,17 @@ function List( ) {
     }
     this.__defineGetter__( '__', function() { return exports } )
 }
+
+List.by = {
+    ids : function( ids ) {
+        var list = new List
+        ids.each( function( id ) {
+            list.add( null, id )
+        } )
+        return list
+    },
+}
+
 List.prototype = new Array
 
 function Superlist( sublist ) {
