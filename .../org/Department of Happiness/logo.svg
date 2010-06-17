@@ -13,9 +13,9 @@
 
     <script type="application/javascript"><![CDATA[
         function View() {
-            var $doc = $.__.$('#')
+            var $root = $.__.$('#')
             var attr = 'viewBox'
-            var str = $doc.attr( attr ).split( ' ' )
+            var str = $root.attr( attr ).split( ' ' )
             var viewbox = new List( {
                 x : parseFloat( str[0] ),
                 y : parseFloat( str[1] ),
@@ -27,7 +27,7 @@
             function update() {
                 return ( updatable
                          && ( function() {
-                             return $doc.attr( attr, viewbox.__.join( ' ' ) )
+                             return $root.attr( attr, viewbox.__.join( ' ' ) )
                          } )() )
             }
             this.update = update
@@ -463,7 +463,7 @@
                     return arc.__.get( prop )
                 } )
                 self.__defineSetter__( prop, function( val ) {
-                    viewbox.__.arc( prop, val )
+                    arc.__.set( prop, val )
                     return update()
                 } )
             } )
@@ -536,6 +536,9 @@
             var head = {
                 text: 'Department of Happiness',
                 path: new Arc( {
+                    radius: 30,
+                    extent: 90,
+                    offset: 45,
                 } ),
             }
             canvas.add( head.path )
