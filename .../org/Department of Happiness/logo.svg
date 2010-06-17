@@ -425,17 +425,26 @@
                     x : 0,
                     y : 0,
                 },
+                x : { axis : { rotation : 0 } },
                 large : { arc : true },
                 positive : { arc : true },
-                sweep : 259,
                 update : function() {
                     $root.attr( 'd', [
-                        'm', this.center.x, this.center.y,
+                        'm',
+                        this.center.x - this.radius / 2,
+                        this.center.y - this.radius / 2,
                         'a', this.radius, this.radius,
-                        this.sweep,
+                        this.x.axis.rotation,
                         this.large.arc ? 1 : 0,
                         this.positive.arc ? 1 : 0,
-                        this.center.x, this.center.y
+                        this.center.x + this.radius * 2,
+                        this.center.y,
+                        'a', this.radius, this.radius,
+                        this.x.axis.rotation,
+                        this.large.arc ? 1 : 0,
+                        this.positive.arc ? 1 : 0,
+                        this.center.x - this.radius * 2,
+                        this.center.y
                     ].join( ' ' ) )
                 }
             }
@@ -693,11 +702,6 @@ text { fill: black }
     </style>
   </defs>
     <g id="body"/>
-    <circle id="d" cx="0" cy="0" r="40"/>
-    <path id="c" d="M0,0 
-           a25,25 0 0,1 50,-25
-           a30,30 0 0,1 60,-30
-M 0 0 a 30,40 300 1,1 0,0"/>
 <!--
     <text><textPath xlink:href="#c">Test</textPath></text>
 -->
