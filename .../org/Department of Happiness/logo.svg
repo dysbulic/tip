@@ -5,13 +5,17 @@
      xmlns:xlink="http://www.w3.org/1999/xlink">
   <title>Department of Happiness Logo</title>
   <defs>
+    <script type="application/javascript"><![CDATA[
+        console.log( 'hi' )
+    ]]></script>
     <script type='application/javascript' xlink:href='.../lib/jquery/jquery.js'></script>
 
     <script type="application/javascript" xlink:href=".../lib/tip/Array.each.js"/>
     <script type="application/javascript" xlink:href=".../lib/tip/List.js"/>
     <script type="application/javascript" xlink:href=".../lib/tip/__.jquery"/>
-
+    
     <script type="application/javascript"><![CDATA[
+        console.log( 'hi' )
         function Attribute( config ) {
             var $root = config.$root || $.__.$('#')
             var attr = config.attribute || ( function() {
@@ -78,11 +82,13 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
+        console.log( 'hi' )
         var view = new Attribute( {
             attribute: 'viewBox',
             ids: new List.by.ids( [ 'x', 'y', 'width', 'height' ] ),
         } )
-            
+        console.log( 'hi' )
+        console.log( view.width )
         var win = { width: window.innerWidth,
                     height: window.innerHeight, }
         view.self = {
