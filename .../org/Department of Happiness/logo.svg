@@ -650,9 +650,10 @@
 
             var head = new Container( {
                 id : 'head',
+                rotation : -90,
             } )
             head.text = new Text( {
-                text : 'Department of Happiness 12 344 2 2',
+                text : 'Department of Happiness',
             } )
             head.path = new Circle( {
                 id : 'head_text',
@@ -665,7 +666,26 @@
             head.add( head.text )
             head.text.path = '#' + head.path.id
             head.text.align.center
-            
+
+            var sub = new Container( {
+                id : 'sub',
+                rotation : 90,
+            } )
+            sub.path = new Circle( {
+                id : 'sub_text',
+                path : true,
+                radius : 82,
+            } )
+            sub.text = new Text( {
+                text : 'Totus Custodes',
+                path : '#' + sub.path.id,
+            } )
+
+            canvas.add( sub )
+            sub.add( sub.path )
+            sub.add( sub.text )
+            sub.text.align.center
+
             ;[
                 {
                     elem : border.outer,
@@ -715,8 +735,15 @@
       font-family: 'Ragg Mopp';
       src: url(".../font/by/Nick Curtis/nicksfonts.com/Ragg Mopp/Ragg Mopp.ttf");
     }
-#head path { fill: none; stroke: none }
-#head text { font-family:'Ragg Mopp'; fill: white; font-size: 22px; font-variant: small-caps; }
+    @font-face {
+      font-family: Lionheart;
+      src: url(".../font/by/Dan Zadorozny/iconian@aol.com/Lionheart/Lionheart.ttf");
+    }
+
+#head path, #sub path { fill: none; stroke: none }
+#head text, #sub text { fill: white; font-size: 22px; font-variant: small-caps; }
+#head text { font-family: 'Ragg Mopp'; font-size: 22px; }
+#sub text { font-family: 'Lionheart'; font-size: 22px; }
 input { text-align: center; font-size: 13pt; border: none }
 foreignObject { overflow: visible; }
 [class~='value'] { background-color: transparent; padding: .25em .5em }
