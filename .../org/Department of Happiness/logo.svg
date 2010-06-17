@@ -25,7 +25,11 @@
             var updatable = true
 
             function update() {
-                return updatable && $doc.attr( attr, viewbox.__.join( ' ' ) )
+                return ( updatable
+                         && ( function() {
+                             console.log( 'Setting: ' + attr )
+                             $doc.attr( attr, viewbox.__.join( ' ' ) )
+                         } )()
             }
             this.update = update
 
