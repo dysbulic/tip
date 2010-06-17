@@ -229,7 +229,7 @@
                                         ? this.elem[ this.attr ]
                                         : this.last.value )
                     var scale = this.scale || 1
-                    this.last.value += ( scale * deltaTime * Math.abs( begin - end ) / this.duration )
+                    this.last.value += ( scale * deltaTime * ( begin - end ) / this.duration )
                     this.last.value = Math.max( Math.min( begin, end ), this.last.value )
                     this.last.value = Math.min( Math.max( begin, end ), this.last.value )
                     return this.last.value
@@ -285,7 +285,7 @@
                     get start() { return hover.start },
                     get scale() { return hover.scale },
                     get duration() { return hover.duration },
-                    val: slide.linear( id.x, id.x + id.width / 2 )
+                    val: slide.linear( id.x + id.width / 2 )
                 } )
             }
             
@@ -302,14 +302,11 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
-        var $work = $.__.$( '<g/>' ).css( 'visibility', 'hidden' )
-        $.__.$( '#' ).append( $work )
         var pad = { top: 5, between: 5, bottom: 5, left: 5, right: 5 }
         var display = {
             JSON: function( list ) {
                 var lines = []
-                var container = new Container()
-                $work.append( container.$root )
+                var container = new Container
 
                 list.__.each( function( line, id ) {
                     var val = new Value( line, id )
@@ -410,7 +407,7 @@
                 get start() { return hover.start },
                 get scale() { return hover.scale },
                 get duration() { return hover.duration },
-                val: slide.linear( 0, 100 )
+                val: slide.linear( 100 )
             } )
             scene.add( {
                 elem: border,
@@ -418,7 +415,7 @@
                 get start() { return hover.start },
                 get scale() { return hover.scale },
                 get duration() { return hover.duration },
-                val: slide.linear( 0, 10 )
+                val: slide.linear( 10 )
             } )
         } )
     ]]></script>
