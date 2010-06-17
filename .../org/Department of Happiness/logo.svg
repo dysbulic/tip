@@ -450,17 +450,21 @@
             } ) )
             //$('#body').append( json.$root )
 
-            var canvas = new Container
-            canvas.scale = Math.min( win.width / 100, win.height / 100 )
-            $('#body').append( canvas.$root )
-
             var trigger = new Circle
             trigger.id = 'trigger'
             trigger.radius = 10
-            canvas.add( trigger )
+            $('#body').append( trigger.$root )
 
-            var border = new Circle
-            canvas.add( border )
+            var canvas = new Container
+            canvas.scale = Math.min( win.width / 100, win.height / 100 ) / 2 * .95
+            $('#body').append( canvas.$root )
+
+            var border = {
+                outer: new Circle,
+                inner: new Circle,
+            }
+            canvas.add( border.outer )
+            canvas.add( border.inner )
 
             var hover = {
                 start: false,
@@ -476,22 +480,27 @@
                     hover.start = time.now
                     hover.scale = -1
                 } )
-
-            scene.add( {
-                elem: border,
-                attr: 'radius',
-                get start() { return hover.start },
-                get scale() { return hover.scale },
-                get duration() { return hover.duration },
-                val: slide.linear( 100 )
-            } )
-            scene.add( {
-                elem: border,
-                attr: 'stroke-width',
-                get start() { return hover.start },
-                get scale() { return hover.scale },
-                get duration() { return hover.duration },
-                val: slide.linear( 10 )
+            [
+                {
+                    elem: border.inner,
+                    attr: 'radius',
+                    val: slide.linear( 100 )
+                },
+                {
+                    elem: border,
+                    attr: 'radius',
+                    val: slide.linear( 70 )
+                },
+                {
+                    elem: border,
+                    attr: 'stroke-width',
+                    val: slide.linear( 6 )
+                },
+            ].each( function( tixel ) {
+                [ 'start', 'scale', 'duration' ].each( function( attr ) {
+                    tixel.__defineGetter__( attr, { return hover[ attr ] } )
+                } )
+                scene.add( tixel )
             } )
         } )
     ]]></script>
