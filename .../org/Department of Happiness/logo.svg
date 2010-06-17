@@ -161,15 +161,15 @@
 
     <script type="application/javascript"><![CDATA[
         function Container() {
-            var $container = $.__.$( '<g/>' )
-            $work.append( $container )
+            var $root = $.__.$( '<g/>' )
+            $work.append( $root )
 
             var transform = {
                 x: 0,
                 y: 0,
                 scale: 1,
                 update: function() {
-                    $container.attr( 'transform',
+                    $root.attr( 'transform',
                                      'translate(' + this.x + ',' + this.y + ')'
                                      + ' scale(' + this.scale + ')' )
                 },
@@ -183,7 +183,7 @@
                 if( elem && elem.$root ) {
                     elem = elem.$root
                 }
-                $container.append( elem )
+                $root.append( elem )
             }
             this.add = add
 
@@ -191,7 +191,7 @@
                 elems.each( f )
             }
 
-            this.__defineGetter__( '$root', function() { return $container } )
+            this.__defineGetter__( '$root', function() { return $root } )
         
             this.__defineGetter__( 'transform', function() { return {
                 set x( x ) {
@@ -457,6 +457,12 @@
             } )
             var updatable = true
           
+            function update() {
+                $root.attr( 'd',
+                            'a ' + self.self )
+            }
+            this.update = update
+
             var self = this
             arc.__.each( function( val, prop ) {
                 self.__defineGetter__( prop, function() {
@@ -469,7 +475,7 @@
             } )
             
             this.__defineGetter__( 'self', function() {
-                return 'a ' + arc.__.join( ' ' )
+                return arc.__.join( ' ' )
             } )
             this.__defineSetter__( 'self', function( view ) {
                 updatable = false
