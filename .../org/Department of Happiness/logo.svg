@@ -34,13 +34,13 @@
                     return viewbox.__.get( prop )
                 } )
                 this.__defineSetter__( prop, function( val ) {
-                    var ret = viewbox.__.set( prop, val )
+                    viewbox.__.set( prop, val )
                     return update()
-
                 } )
             } )
 
             this.__defineSetter__( '=', function( view ) {
+                console.log(view)
                 updatable = false
                 viewbox.__.each( function( val, prop ) {
                     if( view[ prop ] !== undefined ) {
@@ -61,12 +61,13 @@
     <script type="application/javascript"><![CDATA[
         var win = { width: window.innerWidth,
                     height: window.innerHeight, }
-        view['='] = {
+        var v = view['='] = {
             x: - win.width / 2,
             y: - win.height / 2,
             width: win.width,
             height: win.height,
         }
+        console.log( v )
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
