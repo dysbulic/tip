@@ -514,12 +514,23 @@
             this.__defineGetter__( 'id', function() { return $root.attr( 'id' ) } )
             this.__defineSetter__( 'id', function( id ) { return $root.attr( 'id', id ) } )
             
-            this.__defineGetter__( 'stroke-width', function( strokeWidth ) {
-                return parseFloat( $root.css( 'stroke-width' ) )
+            ;[ 'stroke-width' ].each( function( attr ) {
+                self.__defineGetter__( attr, function() {
+                    return parseFloat( $root.css( attr ) )
+                } )
+                self.__defineSetter__( attr, function( val ) {
+                    //$root.css( attr, val )
+                    $root.get(0).style.setProperty( attr, val, null )
+                } )
             } )
-            this.__defineSetter__( 'stroke-width', function( strokeWidth ) {
-                //$root.css( 'stroke-width', strokeWidth )
-                $root.get(0).style.setProperty( 'stroke-width', strokeWidth, null )
+
+            ;[ 'stroke', 'fill' ].each( function( attr ) {
+                self.__defineGetter__( attr, function() {
+                    return $root.css( attr )
+                } )
+                self.__defineSetter__( attr, function( val ) {
+                    $root.get(0).style.setProperty( attr, val, null )
+                } )
             } )
 
             if( arguments.length > 0
@@ -653,7 +664,7 @@
             canvas.add( head.path )
             canvas.add( head.text )
             head.text.path = '#' + head.path.id
-            head.text.align.center
+            //head.text.align.center
             
             ;[
                 {
