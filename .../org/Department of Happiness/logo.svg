@@ -183,10 +183,12 @@
                 x: 0,
                 y: 0,
                 scale: 1,
+                rotation : 0,
                 update: function() {
                     $root.attr( 'transform',
-                                     'translate(' + this.x + ',' + this.y + ')'
-                                     + ' scale(' + this.scale + ')' )
+                                ( 'rotate(' + this.rotation + ')'
+                                  + 'translate(' + this.x + ',' + this.y + ')'
+                                  + ' scale(' + this.scale + ')' ) )
                 },
             }
             transform.update()
@@ -208,29 +210,17 @@
 
             this.__defineGetter__( '$root', function() { return $root } )
         
-            this.__defineGetter__( 'transform', function() { return {
-                set x( x ) {
-                    transform.x = x
-                    transform.update()
-                },
-                // This assumes transform will not be externally set
-                get x() { return transform.x },
-                set y( y ) {
-                    transform.y = y
-                    transform.update()
-                },
-                get y() { return transform.y },
-            } } )
-
-            this.__defineSetter__( 'scale', function( scale ) { 
-                transform.scale = scale
-                transform.update()
-            } )
-
             var self = this
+            ;[ 'x', 'y', 'scale', 'rotation' ].each( function( attr ) {
+                self.__defineGetter__( attr, function() { return transform[ attr ] } )
+                self.__defineSetter__( attr, function( val ) {
+                    transform[ attr ] = val
+                    transform.update()
+                } )
+            } )
+                                     
             if( config instanceof Object ) {
                 for( prop in self ) {
-                    console.log(prop)
                     if( config[ prop ] !== undefined ) {
                         self[ prop ] = config[ prop ]
                     }
@@ -267,10 +257,10 @@
                          + parseFloat( $text.css( 'border-top-width' ) )
                          + parseFloat( $text.css( 'border-bottom-width' ) )
                        ) } )
-            this.__defineSetter__( 'x', container.transform.__lookupSetter__( 'x' ) ) 
-            this.__defineGetter__( 'x', container.transform.__lookupGetter__( 'x' ) ) 
-            this.__defineSetter__( 'y', container.transform.__lookupSetter__( 'y' ) ) 
-            this.__defineGetter__( 'y', container.transform.__lookupGetter__( 'y' ) ) 
+            this.__defineSetter__( 'x', container.__lookupSetter__( 'x' ) ) 
+            this.__defineGetter__( 'x', container.__lookupGetter__( 'x' ) ) 
+            this.__defineSetter__( 'y', container.__lookupSetter__( 'y' ) ) 
+            this.__defineGetter__( 'y', container.__lookupGetter__( 'y' ) ) 
 
             this.__defineGetter__( '$root', container.__lookupGetter__( '$root' ) ) 
 
@@ -331,10 +321,10 @@
         function Value( val, id ) {
             var container = new Container
             this.__defineGetter__( '$root', container.__lookupGetter__( '$root' ) ) 
-            this.__defineSetter__( 'x', container.transform.__lookupSetter__( 'x' ) ) 
-            this.__defineGetter__( 'x', container.transform.__lookupGetter__( 'x' ) ) 
-            this.__defineSetter__( 'y', container.transform.__lookupSetter__( 'y' ) ) 
-            this.__defineGetter__( 'y', container.transform.__lookupGetter__( 'y' ) ) 
+            this.__defineSetter__( 'x', container.__lookupSetter__( 'x' ) ) 
+            this.__defineGetter__( 'x', container.__lookupGetter__( 'x' ) ) 
+            this.__defineSetter__( 'y', container.__lookupSetter__( 'y' ) ) 
+            this.__defineGetter__( 'y', container.__lookupGetter__( 'y' ) ) 
 
             var hover = {
                 start: false,
@@ -407,7 +397,7 @@
                     y += line.height + pad.between
                 } )
                 y -= pad.between - pad.bottom
-                container.transform.y = - y / 2
+                container.y = - y / 2
 
                 return container
             },
@@ -452,7 +442,8 @@
                         this.large.arc ? 1 : 0,
                         this.positive.arc ? 1 : 0,
                         this.center.x - this.radius * 2,
-                        this.center.y
+                        this.center.y,
+                        'z'
                     ].join( ' ' ) )
                 }
             }
@@ -578,7 +569,8 @@
 
             this.__defineSetter__( 'path', function( path ) {
                 $path = $path || ( function() {
-                    var $path = $text = $.__.$( '<textPath/>' )
+                    var $path = $text = ( $.__.$( '<textPath/>' )
+                                          .attr( 'startOffset', '50%' ) )
                     $path.text( $root.text() )
                     $root.text( '' )
                     $root.append( $path )
@@ -660,12 +652,12 @@
                 id : 'head',
             } )
             head.text = new Text( {
-                text : 'Department of Happiness',
+                text : 'Department of Happiness 12 344 2 2',
             } )
             head.path = new Circle( {
                 id : 'head_text',
                 path : true,
-                radius : 80,
+                radius : 82,
             } )
 
             canvas.add( head )
@@ -724,7 +716,7 @@
       src: url(".../font/by/Nick Curtis/nicksfonts.com/Ragg Mopp/Ragg Mopp.ttf");
     }
 #head path { fill: none; stroke: none }
-#head text { font-family:'Ragg Mopp'; fill: white }
+#head text { font-family:'Ragg Mopp'; fill: white; font-size: 22px; font-variant: small-caps; }
 input { text-align: center; font-size: 13pt; border: none }
 foreignObject { overflow: visible; }
 [class~='value'] { background-color: transparent; padding: .25em .5em }
@@ -733,7 +725,4 @@ text { fill: black }
     </style>
   </defs>
     <g id="body"/>
-<!--
-    <text><textPath xlink:href="#c">Test</textPath></text>
--->
 </svg>
