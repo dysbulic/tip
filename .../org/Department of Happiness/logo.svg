@@ -20,12 +20,17 @@
                 }
             } )()
             var str = $root.attr( attr ).split( ' ' )
-            var viewbox = new List( {
-                x : parseFloat( str[0] ),
-                y : parseFloat( str[1] ),
-                width : parseFloat( str[2] ),
-                height : parseFloat( str[3] ),
+            var ids = config.ids instanceof List && config.ids || ( function() {
+                throw {
+                    message: 'Missing Required List: ids'
+                }
+            } )()
+
+            ids.__.each( function( val, prop ) {
+                ids[ prop ] = parseFloat( str.shift() )
             } )
+
+            new List.by.ids( [ 'x', 'y', 'width', 'height' ] )
             var updatable = true
 
             function update() {
