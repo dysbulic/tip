@@ -407,23 +407,59 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
-        function Circle() {
-            var $root = $.__.$( '<circle/>' ).attr( {
-                cx: 0,
-                cy: 0,
-                r: 0,
-            } )
+        function Circle( config ) {
+            config || {}
+            var $root = ( config.path
+                          ? $.__.$( '<path/>' ).attr( {
+                              d : '',
+                          } )
+                          : $.__.$( '<circle/>' ).attr( {
+                              cx : 0,
+                              cy : 0,
+                              r : 0,
+                          } ) )
             
-            var center = {
-                get x() { return parseFloat( $root.attr( 'cx' ) ) },
-                set x( x ) { return $root.attr( 'cx', x ) },
-                get y() { return parseFloat( $root.attr( 'cy' ) ) },
-                set y( y ) { return $root.attr( 'cy', y ) },
+            var curve = {
+                radius : 0,
+                center : {
+                    x : 0,
+                    y : 0,
+                },
+                large : { arc : true },
+                positive : { arc : true },
+                x : { axis : { rotation : 1 } },
+                update : function() {
+                    $root.attr( 'd', [
+                        this.radius, this.radius,
+                        this.large.arc ? 1 : 0,
+                        this.positive.arc ? 1 : 0,
+                        this.x.axis.rotation,
+                        this.center.x, this.center.y
+                    ].join( ' ' ) )
+                }
             }
 
+            var center = ( config.path
+                           ? {
+                               get x() { return curve.center.x },
+                               set x( x ) {
+                                   curve.center.x = x;
+                                   return curve.update.call( curve )
+                               },
+                               get y() { return curve.center.y },
+                               set y( x ) {
+                                   curve.center.y = y;
+                                   return curve.update.call( curve )
+                               },
+                           }
+                            : {
+                                get x() { return parseFloat( $root.attr( 'cx' ) ) },
+                                set x( x ) { return $root.attr( 'cx', x ) },
+                                get y() { return parseFloat( $root.attr( 'cy' ) ) },
+                                set y( y ) { return $root.attr( 'cy', y ) },
+                            } )
+
             var circle = {
-                get radius() { return parseFloat( $root.attr( 'r' ) ) },
-                set radius( radius ) { $root.attr( 'r', radius ) },
                 get center() { return center },
                 set center( c ) {
                     if( c.x !== undefined ) {
@@ -435,6 +471,17 @@
                     return center
                 },
             }
+            circle.__defineGetter__( 'radius', ( config.path
+                                                 ? function() { return curve.radius }
+                                                 : function() { return parseFloat( $root.attr( 'r' ) ) }
+                                               ) )
+            circle.__defineSetter__( 'radius', ( config.path
+                                                 ? function( radius ) {
+                                                     curve.radius = radius
+                                                     return curve.update.call( curve )
+                                                 }
+                                                 : function( radius ) { $root.attr( 'r', radius ) }
+                                               ) )
 
             var self = this
             for( prop in circle ) {
@@ -645,6 +692,6 @@ text { fill: black }
   </defs>
     <g id="body"/>
     <circle id="d" cx="0" cy="0" r="40"/>
-    <path id="c" d="m 0,0 l 30,30"/>
+    <path id="c" d="m 0,0 a 40 40 ,-30 0 1 1 -30,0"/>
     <text><textPath xlink:href="#c">Test</textPath></text>
 </svg>
