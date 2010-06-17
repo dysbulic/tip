@@ -163,9 +163,11 @@
             var transform = {
                 x: 0,
                 y: 0,
+                scale: 1,
                 update: function() {
                     $container.attr( 'transform',
-                                     'translate(' + this.x + ',' + this.y + ')' )
+                                     'translate(' + this.x + ',' + this.y + ')'
+                                     + ' scale(' + this.scale + ')' )
                 },
             }
             transform.update()
@@ -186,7 +188,7 @@
             }
 
             this.__defineGetter__( '$root', function() { return $container } )
-
+        
             this.__defineGetter__( 'transform', function() { return {
                 set x( x ) {
                     transform.x = x
@@ -200,6 +202,11 @@
                 },
                 get y() { return transform.y },
             } } )
+
+            this.__defineSetter__( 'scale', function( scale ) { 
+                transform.scale = scale
+                transform.update()
+            } )
         }
     ]]></script>
 
@@ -443,13 +450,17 @@
             } ) )
             //$('#body').append( json.$root )
 
+            var canvas = new Container
+            canvas.scale = Math.min( win.width / 100, win.height / 100 )
+            $('#body').append( canvas.$root )
+
             var trigger = new Circle
             trigger.id = 'trigger'
             trigger.radius = 10
-            $('#body').append( trigger.$root )
+            canvas.add( trigger )
 
             var border = new Circle
-            $('#body').append( border.$root )
+            canvas.add( border )
 
             var hover = {
                 start: false,
