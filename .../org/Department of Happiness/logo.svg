@@ -397,6 +397,11 @@
                 r: 0,
             } )
 
+            var circle = new List( {
+                get radius() { return parseFloat( $root.attr( 'r' ) ) },
+                set radius( radius ) { $root.attr( 'r', radius ) },
+            } )
+
             this.__defineGetter__( '$root', function() { return $root } )
 
             this.__defineGetter__( 'id', function() {
@@ -457,7 +462,7 @@
           
             function update() {
                 $root.attr( 'd',
-                            'm 0,0 l 30,30' )
+                            'm 0,0 t 30 30 30 30' )
                 //'a ' + self.self )
             }
             this.update = update
@@ -541,7 +546,7 @@
 
             var head = {
                 text: 'Department of Happiness',
-                path: new Arc( {
+                path: new Circle( {
                     radius: 30,
                     extent: 90,
                     offset: 45,
