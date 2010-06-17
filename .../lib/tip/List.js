@@ -273,7 +273,7 @@ List.by = {
     ids : function( ids ) {
         var list = new List
         ids.each( function( id ) {
-            list.add( null, id )
+            list.__.add( null, id )
         } )
         return list
     },
