@@ -211,8 +211,15 @@
 
     <script type="application/javascript"><![CDATA[
         var slide = {
-            linear: function( min, max ) {
-                return function( delta ) {
+            linear: function( begin, end ) {
+                if( end === undefined ) {
+                    end = begin
+                    begin = undefined
+                }
+                return function( deltaTime ) {
+                    if( begin === undefined ) {
+                        begin = this.elem[ this.attr ]
+                    }
                     // The transition is rate based rather than percentage based
                     //   in an attempt to prevent jumps when transitions are
                     //   joined unexpectedly.
@@ -221,8 +228,10 @@
                     this.last.value = ( this.last.value === undefined
                                         ? this.elem[ this.attr ]
                                         : this.last.value )
-                    this.last.value += this.scale * delta * ( max - min ) / this.duration
-                    this.last.value = Math.min( max, Math.max( min, this.last.value ) )
+                    var scale = this.scale || 1
+                    this.last.value += ( scale * deltaTime * Math.abs( begin - end ) / this.duration )
+                    this.last.value = Math.max( Math.min( begin, end ), this.last.value )
+                    this.last.value = Math.min( Math.max( begin, end ), this.last.value )
                     return this.last.value
                 }
             },
@@ -361,7 +370,6 @@
             } )
             this.__defineSetter__( 'stroke-width', function( strokeWidth ) {
                 //$root.css( 'stroke-width', strokeWidth )
-                console.log(strokeWidth)
                 $root.get(0).style.setProperty( 'stroke-width', strokeWidth, null )
             } )
         }
@@ -410,7 +418,7 @@
                 get start() { return hover.start },
                 get scale() { return hover.scale },
                 get duration() { return hover.duration },
-                val: slide.linear( 0, 50 )
+                val: slide.linear( 0, 10 )
             } )
         } )
     ]]></script>
