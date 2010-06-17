@@ -12,6 +12,47 @@
     <script type="application/javascript" xlink:href=".../lib/tip/__.jquery"/>
 
     <script type="application/javascript"><![CDATA[
+        function View() {
+            var $doc = $.__.$('#')
+            var str = $doc.attr( attr ).split( ' ' )
+            var viewbox = new List( {
+                x : parseFloat( str[0] ),
+                y : parseFloat( str[1] ),
+                width : parseFloat( str[2] ),
+                height : parseFloat( str[3] ),
+            } )
+            var updatable = true
+
+            function update() {
+                return updatable && $doc.attr( attr, viewbox.__.join( ' ' ) )
+            }
+            this.update = update
+
+            viewbox.__.each( function( val, prop ) {
+                this.__defineGetter__( prop, function() {
+                    return viewbox.__.get( prop )
+                } )
+                this.__defineSetter__( prop, function( val ) {
+                    var ret = viewbox.__.set( prop, val )
+                    return update()
+
+                } )
+            } )
+
+            this.__defineSetter__( '=', function( view ) {
+                updatable = false
+                viewbox.__.each( function( val, prop ) {
+                    if( view[ prop ] !== undefined ) {
+                        this[ prop ] = val
+                    }
+                } )
+                updatable = false
+                return update()
+            } )
+        }
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
         var win = { width: window.innerWidth,
                     height: window.innerHeight, }
         var viewBox = [ - win.width / 2, - win.height / 2, win.width, win.height ].join( ' ' )
