@@ -98,8 +98,15 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
+        var $work = $.__.$( '<g/>' ).css( 'visibility', 'hidden' )
+        $.__.$( '#' ).append( $work )
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
         function Container() {
             var $container = $.__.$( '<g/>' )
+            $work.append( $container )
+
             var transform = {
                 x: 0,
                 y: 0,
@@ -145,7 +152,7 @@
 
     <script type="application/javascript"><![CDATA[
         function Label( text ) {
-            var container = new Container()
+            var container = new Container
 
             var $bg = $.__.$( '<rect/>' )
             container.add( $bg )
@@ -191,8 +198,6 @@
             } )
             this.background.radius = 4
 
-            $work.append( this.$root )
-
             var size = {
                 x: - this.width / 2,
                 y: 0,
@@ -201,7 +206,6 @@
             }
             $obj.attr( size )
             $bg.attr( size )
-            console.log(this.width)
         }
     ]]></script>
 
@@ -249,9 +253,7 @@
             } else {
                 var value = new Label( val )
                 var id = new Label( id )
-                console.log( value.width )
                 container.add( value )
-                console.log( value.width )
                 container.add( id )
                 this.__defineGetter__( 'width', function() {
                     return Math.max( value.width, id.width )
