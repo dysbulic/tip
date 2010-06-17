@@ -181,6 +181,9 @@
             var $root = $.__.$( '<g/>' )
             $work.append( $root )
 
+            this.__defineGetter__( 'id', function() { return $root.attr( 'id' ) } )
+            this.__defineSetter__( 'id', function( id ) { return $root.attr( 'id', id ) } )
+
             var transform = {
                 x: 0,
                 y: 0,
@@ -561,10 +564,13 @@
             this.__defineGetter__( 'text', function() { return $text.text() } )
             this.__defineSetter__( 'text', function( text ) { $text.text( text ) } )
 
+            function align( position ) {
+                return $root.get(0).style.setProperty( 'text-anchor', position, null )
+            }
             this.__defineGetter__( 'align', function() { return {
-                get center() { console.log('hi');return $root.get(0).style.setProperty( 'text-anchor', 'middle', null ) },
-                get start() { return $root.css( 'text-anchor', 'start' ) },
-                get end() { return $root.css( 'text-anchor', 'end' ) },
+                get center() { return align( 'middle' ) },
+                get start() { return align( 'start' ) },
+                get end() { return align( 'end' ) },
             } } )
 
             this.__defineSetter__( 'path', function( path ) {
@@ -650,19 +656,21 @@
             var band = new Circle
             canvas.add( band )
 
-            var head = {
-                text : new Text( {
-                    text : 'Department of Happiness',
-                } ),
-                path : new Circle( {
-                    path : true,
-                    radius : 30,
-                } ),
-            }
-           
-            head.path.id = 'head'
-            canvas.add( head.path )
-            canvas.add( head.text )
+            var head = new Container( {
+                id : 'head',
+            } )
+            head.text = new Text( {
+                text : 'Department of Happiness',
+            } )
+            head.path = new Circle( {
+                id : 'head_text',
+                path : true,
+                radius : 80,
+            } )
+
+            canvas.add( head )
+            head.add( head.path )
+            head.add( head.text )
             head.text.path = '#' + head.path.id
             head.text.align.center
             
@@ -709,8 +717,14 @@
     <style type="text/css">
     path { stroke: red; stroke-width: 5 }
     rect { fill: lightblue; stroke: darkgray }
-#trigger { fill: lightblue; stroke: darkgray }
+    #trigger { fill: lightblue; stroke: darkgray }
     #log { text-anchor: middle }
+    @font-face {
+      font-family: 'Ragg Mopp';
+      src: url(".../font/by/Nick Curtis/nicksfonts.com/Ragg Mopp/Ragg Mopp.ttf");
+    }
+#head path { fill: none; stroke: none }
+#head text { font-family:'Ragg Mopp'; fill: white }
 input { text-align: center; font-size: 13pt; border: none }
 foreignObject { overflow: visible; }
 [class~='value'] { background-color: transparent; padding: .25em .5em }
