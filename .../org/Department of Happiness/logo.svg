@@ -356,6 +356,7 @@
                 return center
             } )
             
+            $root.get(0).style['stroke-width'] = 20
             this.__defineSetter__( 'stroke-width', function( strokeWidth ) {
                 $root.css( 'stroke-width', strokeWidth )
             } )
@@ -399,6 +400,14 @@
                 get duration() { return hover.duration },
                 val: slide.linear( 0, 100 )
             } )
+            scene.add( {
+                elem: border,
+                attr: 'stroke-width',
+                get start() { return hover.start },
+                get scale() { return hover.scale },
+                get duration() { return hover.duration },
+                val: slide.linear( 0, 50 )
+            } )
         } )
     ]]></script>
 
@@ -408,6 +417,7 @@
 input { text-align: center; font-size: 13pt; border: none }
 foreignObject { overflow: visible; }
 [class~='value'] { background-color: transparent; padding: .25em .5em }
+circle { fill: none; stroke: black }
     </style>
   </defs>
     <g id="body"/>
