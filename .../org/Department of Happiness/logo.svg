@@ -356,9 +356,13 @@
                 return center
             } )
             
-            $root.get(0).style.setProperty( 'stroke-width', 20 )
+            this.__defineGetter__( 'stroke-width', function( strokeWidth ) {
+                return parseFloat( $root.css( 'stroke-width' ) )
+            } )
             this.__defineSetter__( 'stroke-width', function( strokeWidth ) {
-                $root.css( 'stroke-width', strokeWidth )
+                //$root.css( 'stroke-width', strokeWidth )
+                console.log(strokeWidth)
+                $root.get(0).style.setProperty( 'stroke-width', strokeWidth, null )
             } )
         }
     ]]></script>
