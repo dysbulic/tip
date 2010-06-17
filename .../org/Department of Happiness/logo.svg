@@ -396,10 +396,27 @@
                 cy: 0,
                 r: 0,
             } )
+            
+            var center = {
+                get x() { return parseFloat( $root.attr( 'cx' ) ) },
+                set x( x ) { return $root.attr( 'cx', x ) },
+                get y() { return parseFloat( $root.attr( 'cy' ) ) },
+                set y( y ) { return $root.attr( 'cy', y ) },
+            }
 
             var circle = new List( {
                 get radius() { return parseFloat( $root.attr( 'r' ) ) },
                 set radius( radius ) { $root.attr( 'r', radius ) },
+                get center() { return center },
+                set center( c ) {
+                    if( c.x !== undefined ) {
+                        center.x = c.x
+                    }
+                    if( c.y !== undefined ) {
+                        center.y = c.y
+                    }
+                    return center
+                },
             } )
 
             this.__defineGetter__( '$root', function() { return $root } )
@@ -409,33 +426,6 @@
             } )
             this.__defineSetter__( 'id', function( id ) {
                 return $root.attr( 'id', id )
-            } )
-            
-            this.__defineGetter__( 'radius', function() {
-                return parseFloat( $root.attr( 'r' ) )
-            } )
-            this.__defineSetter__( 'radius', function( radius ) {
-                $root.attr( 'r', radius )
-            } )
-
-            var center = {
-                get x() { return parseFloat( $root.attr( 'cx' ) ) },
-                set x( x ) { return $root.attr( 'cx', x ) },
-                get y() { return parseFloat( $root.attr( 'cy' ) ) },
-                set y( y ) { return $root.attr( 'cy', y ) },
-            }
-                    
-            this.__defineGetter__( 'center', function() {
-                return center
-            } )
-            this.__defineSetter__( 'center', function( c ) {
-                if( c.x !== undefined ) {
-                    center.x = c.x
-                }
-                if( c.y !== undefined ) {
-                    center.y = c.y
-                }
-                return center
             } )
             
             this.__defineGetter__( 'stroke-width', function( strokeWidth ) {
