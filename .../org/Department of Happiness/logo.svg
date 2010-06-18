@@ -410,6 +410,7 @@
             var $root = ( config.path
                           ? $.__.$( '<path/>' ).attr( {
                               d : '',
+                              transform : 'scale(-1)',
                           } )
                           : $.__.$( '<circle/>' ).attr( {
                               cx : 0,
@@ -747,9 +748,13 @@
 input { text-align: center; font-size: 13pt; border: none }
 foreignObject { overflow: visible; }
 [class~='value'] { background-color: transparent; padding: .25em .5em }
-circle { fill: none; stroke: black }
+circle, path { fill: none; stroke: black }
 text { fill: black }
     </style>
   </defs>
     <g id="body"/>
+    <path id="c" d="m 0,-30 a 30,30 0,0,0 0,60 a 30,30 0,0,0 0,-60" />
+    <path id="d" d="m -30,0 a 30,30 0,0,0 60,0 a 30,30 0,0,0 -60,0" />
+    <text><textPath xlink:href="#c">Test</textPath></text>
+    <text><textPath xlink:href="#d">Test</textPath></text>
 </svg>
