@@ -622,14 +622,14 @@
                 var x = { axis : { rotation : 0 } }
                 $root.attr( 'd', [
                     'm',
-                    center.x + radius * Math.sin( offset ),
-                    center.y + radius * Math.cos( offset ),
+                    center.x + radius * Math.cos( offset ),
+                    center.y + radius * Math.sin( offset ),
                     'a', radius, radius,
                     x.axis.rotation,
                     large.arc ? 1 : 0,
                     positive.arc ? 1 : 0,
-                    center.x + radius * Math.sin( offset + extent ),
-                    center.y + radius * Math.cos( offset + extent )
+                    center.x + radius * Math.cos( offset + extent ),
+                    center.y + radius * Math.sin( offset + extent )
                 ].join( ' ' ) )
             }
             update()
@@ -662,7 +662,7 @@
 
             var hover = {
                 start: time.now,
-                duration: 1000,
+                duration: 10000,
             }
 
             trigger.$root.hover(
