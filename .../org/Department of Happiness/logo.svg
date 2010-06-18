@@ -673,6 +673,8 @@
                 } )
             }
 
+            self.__defineSetter__( 'color', point.__lookupSetter__( 'color' ) )
+
             if( config instanceof Object ) {
                 for( prop in self ) {
                     if( config[ prop ] !== undefined ) {
@@ -689,24 +691,27 @@
             this.__defineGetter__( '$root', function() { return $root } )
 
             var center = { x : 0, y : 0 }
-            var radius = 10
+            var radius = 20
             var offset = 0
-            var extent = 180
-            var large = { arc : true }
+            var extent = 90
             var positive = { arc : true }
 
             function start() {
                 return {
-                    get x() { return center.x + radius * Math.cos( offset ) },
-                    get y() { return center.y + radius * Math.sin( offset ) },
+                    get x() { return center.x + radius * Math.cos( offset / 2 * Math.PI ) },
+                    get y() { return center.y + radius * Math.sin( offset / 2 * Math.PI ) },
                 }
             }
             this.__defineGetter__( 'start', start )
 
             function end() {
                 return {
-                    get x() { return center.x + radius * Math.cos( offset + extent ) },
-                    get y() { return center.y + radius * Math.sin( offset + extent ) },
+                    get x() {
+                        return center.x + radius * Math.cos( ( offset + extent ) / ( 2 * Math.PI ) )
+                    },
+                    get y() {
+                        return center.y + radius * Math.sin( ( offset + extent ) / ( 2 * Math.PI ) )
+                    },
                 }
             }
             this.__defineGetter__( 'end', end )
@@ -722,7 +727,7 @@
                     start.x, start.y,
                     'A', radius, radius,
                     x.axis.rotation,
-                    large.arc ? 1 : 0,
+                    extent > 180 ? 1 : 0,
                     positive.arc ? 1 : 0,
                     end.x, end.y
                 ].join( ' ' ) )
@@ -857,11 +862,13 @@
             scene.add( tk )
 
             ;[
-                {
+/*
+              {
                     elem : rc,
                     attr : 'extent',
                     val : slide.linear( 360 )
                 },
+*/
                 {
                     elem : border.outer,
                     attr : 'radius',
