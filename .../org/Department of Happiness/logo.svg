@@ -486,7 +486,7 @@
                 },
                 get positive() { return {
                     get arc() { return curve.positive.arc },
-                    set arc( positive ) { return arc.apply( this, Array.prototype.slice.call( this, arguments ) ) },
+                    set arc( positive ) { return arc.apply( this, arguments ) },
                 } },
                 set positive( positive ) {
                     if( positive.arc !== undefined ) {
@@ -688,7 +688,7 @@
             sub.path = new Circle( {
                 id : 'sub_text',
                 path : true,
-                radius : 82,
+                radius : 93,
                 positive : { arc : false },
             } )
             sub.text = new Text( {
@@ -767,8 +767,10 @@ text { fill: black }
     </style>
   </defs>
     <g id="body"/>
+<!--
     <path id="c" d="m 0,-30 a 30,30 0,0,0 0,60 a 30,30 0,0,0 0,-60" />
     <path id="d" d="m 0,-30 a 30,30 0,0,1 0,60 a 30,30 0,0,0 0,-60" />
     <text><textPath xlink:href="#c">Test</textPath></text>
     <text><textPath xlink:href="#d">Test</textPath></text>
+-->
 </svg>
