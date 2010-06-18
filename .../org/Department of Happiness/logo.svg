@@ -641,6 +641,18 @@
             self.__defineSetter__( 'radius', function( val ) {
                 return $root.attr( 'r', val )
             } )
+
+            self.__defineSetter__( 'color', function( color ) {
+                return $root.get(0).style.setProperty( 'color', fill, null )
+            } )
+
+            if( config instanceof Object ) {
+                for( prop in self ) {
+                    if( config[ prop ] !== undefined ) {
+                        self[ prop ] = config[ prop ]
+                    }
+                }
+            }
         }
         function Tracker( config ) {
             var elem = config.elem || ( function() {
@@ -650,12 +662,20 @@
             this.end = null
 
             var point = new Point
-            this.__defineGetter__( '$root', function() { return $root } )
+            this.__defineGetter__( '$root', function() { return point.$root } )
 
             this.snap = function() {
                 [ 'x', 'y' ].each( function( axis ) {
                     point[ axis ] = elem[ axis ]
                 } )
+            }
+
+            if( config instanceof Object ) {
+                for( prop in self ) {
+                    if( config[ prop ] !== undefined ) {
+                        self[ prop ] = config[ prop ]
+                    }
+                }
             }
         }
     ]]></script>
@@ -672,18 +692,36 @@
             var large = { arc : true }
             var positive = { arc : true }
 
+            function start() {
+                return {
+                    x : center.x + radius * Math.cos( offset ),
+                    y : center.y + radius * Math.sin( offset ),
+                }
+            }
+            this.__defineGetter__( 'start', start )
+
+            function end() {
+                return {
+                    x : center.x + radius * Math.cos( offset + extent ),
+                    y : center.y + radius * Math.sin( offset + extent )
+                }
+            }
+            this.__defineGetter__( 'end', end )
+
+            var self = this
+
             function update() {
                 var x = { axis : { rotation : 0 } }
+                var start = self.start
+                var end = self.end
                 $root.attr( 'd', [
                     'm',
-                    center.x + radius * Math.cos( offset ),
-                    center.y + radius * Math.sin( offset ),
+                    start.x, start.y,
                     'A', radius, radius,
                     x.axis.rotation,
                     large.arc ? 1 : 0,
                     positive.arc ? 1 : 0,
-                    center.x + radius * Math.cos( offset + extent ),
-                    center.y + radius * Math.sin( offset + extent )
+                    end.x, end.y
                 ].join( ' ' ) )
             }
             update()
@@ -802,9 +840,11 @@
             canvas.add( rc )
 
             var tk = new Tracker( {
-                elem : rc.center,
+                elem : rc.start,
+                color : 'red',
             } )
             canvas.add( tk )
+            scene.add( tk )
 
             ;[
                 {
