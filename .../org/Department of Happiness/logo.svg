@@ -651,6 +651,12 @@
 
             var point = new Point
             this.__defineGetter__( '$root', function() { return $root } )
+
+            this.snap = function() {
+                [ 'x', 'y' ].each( function( axis ) {
+                    point[ axis ] = elem[ axis ]
+                } )
+            }
         }
     ]]></script>
 
@@ -794,6 +800,11 @@
                 extent : 210,
             } )
             canvas.add( rc )
+
+            var tk = new Tracker( {
+                elem : rc.center,
+            } )
+            canvas.add( tk )
 
             ;[
                 {
