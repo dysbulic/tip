@@ -705,8 +705,8 @@
 
             function end() {
                 return {
-                    get x() { center.x + radius * Math.cos( offset + extent ) },
-                    get y() { center.y + radius * Math.sin( offset + extent ) },
+                    get x() { return center.x + radius * Math.cos( offset + extent ) },
+                    get y() { return center.y + radius * Math.sin( offset + extent ) },
                 }
             }
             this.__defineGetter__( 'end', end )
