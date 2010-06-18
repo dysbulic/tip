@@ -609,7 +609,31 @@
     <script type="application/javascript"><![CDATA[
         function Arc() {
             var $root = $.__.$( '<path/>' )
-            
+            this.__defineGetter__( '$root', function() { return $root } )
+
+            var center = { x : 0, y : 0 }
+            var radius = 10
+            var offset = 0
+            var extent = 180
+            var large = { arc : true }
+            var positive = { arc : true }
+
+            function update() {
+                var x = { axis : { rotation : 0 } }
+                $root.attr( 'd', [
+                    'm',
+                    center.x - radius,
+                    center.y,
+                    'a', radius, radius,
+                    x.axis.rotation,
+                    large.arc ? 1 : 0,
+                    positive.arc ? 1 : 0,
+                    center.x + radius * 2,
+                    center.y,
+                    'z'
+                ].join( ' ' ) )
+            }
+            update()
         }
     ]]></script>
 
@@ -697,6 +721,17 @@
             sub.add( sub.text )
             sub.text.align.center
 
+            var rc = new Arc( {
+                center : {
+                    x : 0,
+                    y : 10,
+                },
+                radius : 20,
+                offset : -15,
+                extent : 210,
+            } )
+            //canvas.add( rc )
+
             ;[
                 {
                     elem : border.outer,
@@ -763,6 +798,7 @@ text { fill: black }
     </style>
   </defs>
     <g id="body"/>
+    <path id="c" d="m 30,0 a 30,30 0,1,0 0,.001" />
 <!--
     <path id="c" d="m 0,-30 a 30,30 0,0,0 0,60 a 30,30 0,0,0 0,-60" />
     <path id="d" d="m 0,-30 a 30,30 0,0,1 0,60 a 30,30 0,0,0 0,-60" />
