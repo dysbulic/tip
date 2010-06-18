@@ -108,18 +108,31 @@
                 var now = time.now
                 
                 contents.__.each( function( tixel ) {
-                    var start = tixel.start || tixel.end - tixel.duration
-                    var end = tixel.end || start + tixel.duration
+                    var start = ( tixel.start === undefined
+                                  ? tixel.end - tixel.duration
+                                  : tixel.start )
+                    var end = ( tixel.end === undefined
+                                ? start + tixel.duration
+                                : tixel.end )
                     if( ( last < start && now >= start )
                         || ( last > end && now <= end )
-                        || ( tixel.percent > 0 && tixel.percent < 1 ) ) {
+                        || ( tixel.percent > 0 && tixel.percent < 1 )
+                        || ( start === null && end === null )
+                        || ( now <= end && start === null )
+                        || ( now >= start && end === null ) ) {
                         var percent = ( now - start ) / tixel.duration
                         tixel.percent = {
                             valueOf: function() { return percent },
                             get raw() { return percent },
                             get capped() { return Math.max( 0, Math.min( 1, percent ) ) },
                         }
-                        tixel.elem[ tixel.attr ] = tixel.val.call( tixel, now - last )
+                        
+                        if( tixel.elem && tixel.attr ) {
+                            tixel.elem[ tixel.attr ] = tixel.val.call( tixel, now - last )
+                        }
+                        if( typeof tixel.snap == 'function' ) {
+                            tixel.snap.call( tixel )
+                        }
                     }
                 } )
                 last = now
@@ -607,6 +620,41 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
+        function Point( config ) {
+            var $root = $.__.$( '<circle/>' ).attr( {
+            } )
+            this.__defineGetter__( '$root', function() { return $root } )
+
+            var self = this
+            ;[ 'x', 'y' ].each( function( attr ) {
+                self.__defineGetter__( attr, function() {
+                    return parseFloat( $root.attr( 'c' + attr ) )
+                } )
+                self.__defineSetter__( attr, function( val ) {
+                    return $root.attr( 'c' + attr, val )
+                } )
+            } )
+
+            self.__defineGetter__( 'radius', function() {
+                    return parseFloat( $root.attr( 'r' ) )
+            } )
+            self.__defineSetter__( 'radius', function( val ) {
+                return $root.attr( 'r', val )
+            } )
+        }
+        function Tracker( config ) {
+            var elem = config.elem || ( function() {
+                throw 'Missing Required Argument: elem'
+            } ) ()
+            this.start = null
+            this.end = null
+
+            var point = new Point
+            this.__defineGetter__( '$root', function() { return $root } )
+        }
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
         function Arc() {
             var $root = $.__.$( '<path/>' )
             this.__defineGetter__( '$root', function() { return $root } )
@@ -624,7 +672,7 @@
                     'm',
                     center.x + radius * Math.cos( offset ),
                     center.y + radius * Math.sin( offset ),
-                    'a', radius, radius,
+                    'A', radius, radius,
                     x.axis.rotation,
                     large.arc ? 1 : 0,
                     positive.arc ? 1 : 0,
@@ -639,6 +687,14 @@
             } )
             this.__defineSetter__( 'offset', function( val ) {
                 offset = val
+                update()
+            } )
+
+            this.__defineGetter__( 'extent', function() {
+                return extent
+            } )
+            this.__defineSetter__( 'extent', function( val ) {
+                extent = val
                 update()
             } )
         }
@@ -742,7 +798,7 @@
             ;[
                 {
                     elem : rc,
-                    attr : 'offset',
+                    attr : 'extent',
                     val : slide.linear( 360 )
                 },
                 {
