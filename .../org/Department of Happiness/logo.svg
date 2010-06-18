@@ -425,7 +425,7 @@
                 },
                 x : { axis : { rotation : 0 } },
                 large : { arc : true },
-                positive : { arc : false },
+                positive : { arc : true },
                 update : function() {
                     $root.attr( 'd', [
                         'm',
@@ -468,6 +468,11 @@
                                 set y( y ) { return $root.attr( 'cy', y ) },
                             } )
 
+            function arc( positive ) {
+                curve.positive.arc = positive
+                return curve.update.call( curve )
+            }
+
             var circle = {
                 get center() { return center },
                 set center( c ) {
@@ -478,6 +483,15 @@
                         center.y = c.y
                     }
                     return center
+                },
+                get positive() { return {
+                    get arc() { return curve.positive.arc },
+                    set arc( positive ) { return arc.apply( this, Array.prototype.slice.call( this, arguments ) ) },
+                } },
+                set positive( positive ) {
+                    if( positive.arc !== undefined ) {
+                        return arc.call( this, positive.arc )
+                    }
                 },
             }
             circle.__defineGetter__( 'radius', ( config.path
@@ -675,6 +689,7 @@
                 id : 'sub_text',
                 path : true,
                 radius : 82,
+                positive : { arc : false },
             } )
             sub.text = new Text( {
                 text : 'Totus Custodes',
