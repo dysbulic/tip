@@ -608,13 +608,8 @@
 
     <script type="application/javascript"><![CDATA[
         function Arc() {
-            var arc = new Attribute( {
-                $root : $.__.$( '<path/>' ),
-                ids : List.by.ids( [ 'offset', 'extent', 'radius' ] ),
-                update : function() {
-                    return this.$root.attr( 'd', 'm 0,0 t ' + this.self.self )
-                },
-            } )
+            var $root = $.__.$( '<path/>' )
+            
         }
     ]]></script>
 
