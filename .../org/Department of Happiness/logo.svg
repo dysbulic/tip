@@ -634,7 +634,13 @@
             }
             update()
 
-            
+            this.__defineGetter__( 'offset', function() {
+                return offset
+            } )
+            this.__defineSetter__( 'offset', function( val ) {
+                offset = val
+                update()
+            } )
         }
     ]]></script>
 
@@ -734,6 +740,11 @@
             canvas.add( rc )
 
             ;[
+                {
+                    elem : rc,
+                    attr : 'offset',
+                    val : slide.linear( 360 )
+                },
                 {
                     elem : border.outer,
                     attr : 'radius',
