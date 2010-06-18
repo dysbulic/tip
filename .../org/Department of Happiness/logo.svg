@@ -621,6 +621,8 @@
 
     <script type="application/javascript"><![CDATA[
         function Point( config ) {
+            config = config || {}
+
             var $root = $.__.$( '<circle/>' ).attr( {
             } )
             this.__defineGetter__( '$root', function() { return $root } )
@@ -641,9 +643,10 @@
             self.__defineSetter__( 'radius', function( val ) {
                 return $root.attr( 'r', val )
             } )
+            self.radius = config.radius || 1
 
             self.__defineSetter__( 'color', function( color ) {
-                return $root.get(0).style.setProperty( 'color', fill, null )
+                return $root.get(0).style.setProperty( 'fill', color, null )
             } )
 
             if( config instanceof Object ) {
@@ -842,6 +845,13 @@
             var tk = new Tracker( {
                 elem : rc.start,
                 color : 'red',
+            } )
+            canvas.add( tk )
+            scene.add( tk )
+
+            tk = new Tracker( {
+                elem : rc.end,
+                color : 'blue',
             } )
             canvas.add( tk )
             scene.add( tk )
