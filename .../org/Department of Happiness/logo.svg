@@ -697,16 +697,16 @@
 
             function start() {
                 return {
-                    x : center.x + radius * Math.cos( offset ),
-                    y : center.y + radius * Math.sin( offset ),
+                    get x() { return center.x + radius * Math.cos( offset ) },
+                    get y() { return center.y + radius * Math.sin( offset ) },
                 }
             }
             this.__defineGetter__( 'start', start )
 
             function end() {
                 return {
-                    x : center.x + radius * Math.cos( offset + extent ),
-                    y : center.y + radius * Math.sin( offset + extent )
+                    get x() { center.x + radius * Math.cos( offset + extent ) },
+                    get y() { center.y + radius * Math.sin( offset + extent ) },
                 }
             }
             this.__defineGetter__( 'end', end )
