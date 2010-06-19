@@ -22,17 +22,17 @@ function List( init ) {
         }
  
     }
-    this.add = add
+    self.add = add
 
     function get( key ) {
         return store[ position[ key ] ]
     }
-    this.get = get
+    self.get = get
 
     function set( key, val ) {
         return store[ position[ key ] ] = val
     }
-    this.get = get
+    self.get = get
 
     function vals() {
         var vals = []
@@ -41,18 +41,17 @@ function List( init ) {
         } )
         return vals
     }
-    this.vals = vals
+    self.vals = vals
 
     function join( sep ) {
         return vals().join( sep )
     }
-    this.join = join
+    self.join = join
 
     function each( f ) {
-        var self = this
+        var selfʻ = this
         keys.each( function( key ) {
-            if( typeof get == 'undefined' ) throw 'No get'
-            f.apply( self, [ key, get( key ) ] )
+            f.apply( selfʻ, [ key, self.get( key ) ] )
         } )
     }
     this.each = each

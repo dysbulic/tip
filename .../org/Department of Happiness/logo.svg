@@ -26,7 +26,7 @@
 
             ids.each( function( val, id ) {
                 if( ! strs.empty ) {
-                    ids[ id ] = parseFloat( str.shift() )
+                    ids[ id ] = parseFloat( strs.shift() )
                 }
             } )
             
@@ -113,6 +113,7 @@
         }
 
         function Scene() {
+            return
             var state = new List( {
                 'tixel.capture.frequency.mHz' : .025 * 1000,
                 'time.epoch' : time.now,
@@ -196,7 +197,7 @@
         }
 
         var scene = new Scene
-        scene.go
+        //scene.go
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
@@ -713,6 +714,8 @@
             var $root = $.__.$( '<path/>' )
             this.__defineGetter__( '$root', function() { return $root } )
 
+            var self = this
+
             var attrs = new List( {
                 center : { x : 0, y : 0 },
                 radius : 0,
@@ -732,13 +735,15 @@
 
             function end() {
                 return {
-                    get x() { return attrs.center.x + attrs.radius * Math.cos( Degrees.to.Radians( attrs.extent ) ) },
-                    get y() { return attrs.center.y - attrs.radius * Math.sin( Degrees.to.Radians( attrs.extent ) ) },
+                    get x() {
+                        return attrs.center.x + attrs.radius * Math.cos( Degrees.to.Radians( attrs.extent ) )
+                    },
+                    get y() {
+                        return attrs.center.y - attrs.radius * Math.sin( Degrees.to.Radians( attrs.extent ) )
+                    },
                 }
             }
             this.__defineGetter__( 'end', end )
-
-            var self = this
 
             function update() {
                 var x = { axis : { rotation : 0 } }
@@ -793,7 +798,6 @@
 
     <script type="application/javascript"><![CDATA[
         $( function() {
-            return
             view = {
                 x: - win.width / 2,
                 y: - win.height / 2,
