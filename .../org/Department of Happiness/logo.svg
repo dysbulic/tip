@@ -693,24 +693,26 @@
             var $root = $.__.$( '<path/>' )
             this.__defineGetter__( '$root', function() { return $root } )
 
-            var center = { x : 0, y : 0 }
-            var radius = 0
-            var offset = 0
-            var extent = 0
-            var positive = { arc : false }
+            var attrs = new List( {
+                center : { x : 0, y : 0 },
+                radius : 0,
+                offset : 0,
+                extent : 0,
+                positive : { arc : false }
+            } )
 
             function start() {
                 return {
-                    get x() { return center.x - radius },
-                    get y() { return center.y },
+                    get x() { return attrs.center.x - attrs.radius },
+                    get y() { return attrs.center.y },
                 }
             }
             this.__defineGetter__( 'start', start )
 
             function end() {
                 return {
-                    get x() { return center.x + radius * Math.cos( Math.toRadians( extent ) ) },
-                    get y() { return center.y - radius * Math.sin( Math.toRadians( extent ) ) },
+                    get x() { return attrs.center.x + attrs.radius * Math.cos( Math.toRadians( attrs.extent ) ) },
+                    get y() { return attrs.center.y - attrs.radius * Math.sin( Math.toRadians( attrs.extent ) ) },
                 }
             }
             this.__defineGetter__( 'end', end )
@@ -722,13 +724,15 @@
                 $root.attr( 'd', [
                     'm',
                     start.x, start.y,
-                    'A', radius, radius,
+                    'A', attrs.radius, attrs.radius,
                     x.axis.rotation,
-                    extent >= 180 ? 1 : 0,
-                    positive.arc ? 1 : 0,
+                    attrs.extent >= 180 ? 1 : 0,
+                    attrs.positive.arc ? 1 : 0,
                     end.x, end.y
                 ].join( ' ' ) )
-                $root.attr( 'transform', 'rotate(' + offset + ' ' + center.x + ',' + center.y + ')' )
+                $root.attr( 'transform', 'rotate(' + ( attrs.offset + ' '
+                                                       + attrs.center.x + ',' + attrs.center.y
+                                                       + ')' )
             }
             update()
  
