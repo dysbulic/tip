@@ -32,7 +32,7 @@ function List( init ) {
     function set( key, val ) {
         return store[ position[ key ] ] = val
     }
-    self.get = get
+    self.set = set
 
     function vals() {
         var vals = []
