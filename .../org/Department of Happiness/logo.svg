@@ -13,21 +13,17 @@
     
     <script type="application/javascript"><![CDATA[
         function Attribute( config ) {
-            var $root = config.$root || $.__.$('#')
+            var $root = config.root || $.__.$('#')
             var attr = config.attribute || ( function() {
-                throw {
-                    message: 'Missing Required Attribute: attribute'
-                }
+                throw { message: 'Missing Required Attribute: attribute' }
             } )()
-            var str = $root.attr( attr ).split( ' ' )
-            var ids = config.ids instanceof List && config.ids || ( function() {
-                throw {
-                    message: 'Missing Required List: ids'
-                }
+            var strs = $root.attr( attr ).split( ' ' )
+            var ids = List.as.List( config.ids ) || ( function() {
+                throw { message: 'Missing Required List: ids' }
             } )()
 
             ids.each( function( val, id ) {
-                if( str.length > 0 ) {
+                if( strs.empty ) {
                     ids[ id ] = parseFloat( str.shift() )
                 }
             } )
@@ -73,13 +69,25 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
-        var view = new Attribute( {
-            attribute: 'viewBox',
-            ids: new List.by.ids( [ 'x', 'y', 'width', 'height' ] ),
-        } )
-        var win = { width: window.innerWidth,
+        ( function() {
+            var view = new Attribute( {
+                $root = $.__.$( '#' ),
+                attribute : 'viewBox',
+                ids : [ 'x', 'y', 'width', 'height' ],
+            } )
+            view.expose( {
+                through : this,
+                as : 'view',
+            } )
+        } )()
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
+        ( function() {
+            var win = {
+                width: window.innerWidth,
                     height: window.innerHeight, }
-        view.self = {
+        view = {
             x: - win.width / 2,
             y: - win.height / 2,
             width: win.width,
@@ -773,6 +781,7 @@
 
     <script type="application/javascript"><![CDATA[
         $( function() {
+            return
             var json = display.JSON( new List( {
                 username : 'bob@localhost',
                 password : 'bob\'spass',
@@ -781,6 +790,8 @@
                 },
             } ) )
             //$('#body').append( json.$root )
+
+            console.log( 'hi' )
 
             var trigger = new Circle
             trigger.id = 'trigger'
