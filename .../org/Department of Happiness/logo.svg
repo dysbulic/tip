@@ -221,14 +221,14 @@
 
             var self = this
 
-            this.__defineGetter__( 'id', function() {
+            self.__defineGetter__( 'id', function() {
                 return $root.attr( 'id' ) || ( function() {
                     var id = time.now + '_' + Math.random()
                     self.id = id
                     return id
                 } )()
             } )
-            this.__defineSetter__( 'id', function( id ) { return $root.attr( 'id', id ) } )
+            self.__defineSetter__( 'id', function( id ) { return $root.attr( 'id', id ) } )
 
             var transform = {
                 x: 0,
@@ -820,6 +820,8 @@
                 width: win.width,
                 height: win.height,
             }
+            
+            console.log( view.asString )
 
             var json = display.JSON( new List( {
                 username : 'bob@localhost',
@@ -829,8 +831,6 @@
                 },
             } ) )
             //$('#body').append( json.$root )
-
-            //console.log( 'hi' )
 
             var trigger = new Circle
             trigger.id = 'trigger'

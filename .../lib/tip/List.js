@@ -50,7 +50,7 @@ function List( init ) {
     function each( f ) {
         var selfʻ = this
         keys.each( function( key ) {
-            f.apply( selfʻ, [ key, self.get( key ) ] )
+            f.apply( selfʻ, [ self.get( key ), key ] )
         } )
     }
     this.each = each
