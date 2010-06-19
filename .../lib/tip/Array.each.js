@@ -29,7 +29,7 @@
 } )()
 
 Array.prototype.__defineGetter__( 'empty', function() {
-    return this.length === 0
+    return this.length == 0
 } )
 
 //Array.prototype.__defineGetter__( 1, function() {
@@ -47,6 +47,19 @@ Array.prototype.__defineSetter__( -1, function( val ) {
 } )
 
 //Array.prototype.clone = function() { return this.slice(0) };
+
+;( function() {
+    var hasOwnProperty = Array.prototype.hasOwnProperty
+    var props = {}
+    for( prop in Array.prototype ) {
+        props[ prop ] = true
+    }
+    Array.prototype.hasOwnProperty = function( prop ) {
+        return ( this[ prop ]
+                 && props[ prop ] !== true
+                 && hasOwnProperty.apply( this, arguments ) )
+    }
+} )()
 
 if( NodeList.prototype != null ) {
     NodeList.prototype.each = Array.prototype.each

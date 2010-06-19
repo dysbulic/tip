@@ -85,14 +85,12 @@
     <script type="application/javascript"><![CDATA[
         ( function() {
             var win = {
-                width: window.innerWidth,
-                    height: window.innerHeight, }
-        view = {
-            x: - win.width / 2,
-            y: - win.height / 2,
-            width: win.width,
-            height: win.height,
-        }
+                get width() { return window.innerWidth },
+                get height() { return window.innerHeight },
+            }
+            this.__defineGetter__( 'win', function() { return win } )
+            // this.__defineSetter__
+        } )()
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
@@ -782,6 +780,13 @@
     <script type="application/javascript"><![CDATA[
         $( function() {
             return
+            view = {
+                x: - win.width / 2,
+                y: - win.height / 2,
+                width: win.width,
+                height: win.height,
+            }
+
             var json = display.JSON( new List( {
                 username : 'bob@localhost',
                 password : 'bob\'spass',

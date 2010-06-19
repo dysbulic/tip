@@ -59,15 +59,17 @@ function List( init ) {
 
     // Getters and setters are copied
     for( prop in init ) {
-        var get = init.__lookupGetter__( prop )
-        var set = init.__lookupSetter__( prop )
-
-        if( get || set ) {
-            var ptr = new Pointer( store, get, set )
-            this.__defineGetter__( prop, function() { return ptr.val } )
-            this.__defineSetter__( prop, function( val ) { return ptr.val = val } )
-        } else {
-            add( init[ prop ], prop )
+        if( init.hasOwnProperty( prop ) ) {
+            var get = init.__lookupGetter__( prop )
+            var set = init.__lookupSetter__( prop )
+            
+            if( get || set ) {
+                var ptr = new Pointer( store, get, set )
+                this.__defineGetter__( prop, function() { return ptr.val } )
+                this.__defineSetter__( prop, function( val ) { return ptr.val = val } )
+            } else {
+                add( init[ prop ], prop )
+            }
         }
     }
 }
