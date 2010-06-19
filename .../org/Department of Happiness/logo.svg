@@ -696,7 +696,7 @@
             var center = { x : 0, y : 0 }
             var radius = 20
             var offset = 0
-            var extent = 90
+            var extent = 0
             var positive = { arc : true }
 
             function start() {
@@ -707,7 +707,6 @@
             }
             this.__defineGetter__( 'start', start )
 
-            var once = false
             function end() {
                 return {
                     get x() { return center.x + radius * Math.cos( Math.toRadians( offset + extent ) ) },
@@ -770,7 +769,7 @@
 
             var hover = {
                 start: time.now,
-                duration: 100,
+                duration: 1000
             }
 
             trigger.$root.hover(
@@ -862,13 +861,11 @@
             scene.add( tk )
 
             ;[
-/*
               {
                     elem : rc,
                     attr : 'extent',
                     val : slide.linear( 360 )
                 },
-*/
                 {
                     elem : border.outer,
                     attr : 'radius',
