@@ -54,12 +54,9 @@
                 return ids.join( ' ' )
             } )
             
-            console.log(ids)
-
             function configure( config ) {
                 update( false )
                 ids.each( function( val, id ) {
-                    console.log( id )
                     if( config[ id ] !== undefined ) {
                         self[ id ] = config[ id ]
                     }
@@ -272,6 +269,13 @@
                     transform.update()
                 } )
             } )
+
+            self.__defineSetter__( 'size', function( size ) {
+                console.log( size )
+                self.scale = Math.min( size.external.width * win.width / size.internal.width,
+                                       size.external.height * win.height / size.internal.height ) / 2
+            } )
+
                                      
             if( config instanceof Object ) {
                 for( prop in self ) {
@@ -831,9 +835,21 @@
                 width: win.width,
                 height: win.height,
             }
-            
-            console.log( view.asString )
 
+            var canvas = new Container( {
+                size : {
+                    interior : {
+                        width : 100,
+                        height : 100,
+                    },
+                    exterior : {
+                        width : .95,
+                        height : .95,
+                    },
+                },
+            } )
+            $('#body').append( canvas.$root )
+            
             var json = new display.JSON( {
                 source : {
                     username : 'bob@localhost',
@@ -843,7 +859,7 @@
                     },
                 },
             } )
-            //$('#body').append( json.$root )
+            $('#body').append( json.$root )
 
             var trigger = new Circle
             trigger.id = 'trigger'
@@ -864,10 +880,6 @@
                     hover.start = time.now
                     hover.scale = -1
                 } )
-
-            var canvas = new Container
-            canvas.scale = Math.min( win.width / 100, win.height / 100 ) / 2 * .95
-            $('#body').append( canvas.$root )
 
             var border = {
                 outer: new Circle,
