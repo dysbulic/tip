@@ -694,7 +694,7 @@
             this.__defineGetter__( '$root', function() { return $root } )
 
             var center = { x : 0, y : 0 }
-            var radius = 20
+            var radius = 0
             var offset = 0
             var extent = 0
             var positive = { arc : false }
@@ -719,8 +719,6 @@
 
             function update() {
                 var x = { axis : { rotation : 0 } }
-                var start = self.start
-                var end = self.end
                 $root.attr( 'd', [
                     'm',
                     start.x, start.y,
@@ -747,6 +745,14 @@
             } )
             this.__defineSetter__( 'extent', function( val ) {
                 extent = val
+                update()
+            } )
+
+            this.__defineGetter__( 'radius', function() {
+                return radius
+            } )
+            this.__defineSetter__( 'radius', function( val ) {
+                radius = val
                 update()
             } )
 
@@ -851,7 +857,7 @@
                 },
                 radius : 20,
                 offset : 90,
-                extent : 0,
+                extent : 180,
             } )
             canvas.add( rc )
 
@@ -870,10 +876,15 @@
             scene.add( tk )
 
             ;[
-              {
+                {
                     elem : rc,
                     attr : 'offset',
                     val : slide.linear( 360 )
+                },
+                {
+                    elem : rc,
+                    attr : 'extent',
+                    val : slide.linear( 90 )
                 },
                 {
                     elem : border.outer,
