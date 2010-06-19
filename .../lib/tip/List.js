@@ -89,12 +89,12 @@ List.as = {
                     : ( arguments.length == 1
                         ? arguments[ 0 ]
                         : Array.prototype.slice.apply( this, arguments ) ) )
-        val instanceof List && return val
-        ( val === undefined || val === null || val === true || val === false )
-            && return val
+        if( val instanceof List ) return val
+        if ( val === undefined || val === null || val === true || val === false )
+            return val
         val = ( val instanceof Number || val instanceof String ) ? [ val ] : val
-        ( val instanceof Array || val instanceof Object )
-            && return new List( val )
+        if( val instanceof Array || val instanceof Object )
+            return new List( val )
         throw "Wha' Happen?"
     },
 }
