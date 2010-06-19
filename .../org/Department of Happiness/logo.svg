@@ -706,9 +706,9 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
-        Math.toRadians = function( degrees ) {
+        var Degrees = { to : { Radians : function( degrees ) {
             return degrees * ( 2 * Math.PI ) / 360
-        }
+        } } }
         function Arc( config ) {
             var $root = $.__.$( '<path/>' )
             this.__defineGetter__( '$root', function() { return $root } )
@@ -732,8 +732,8 @@
 
             function end() {
                 return {
-                    get x() { return attrs.center.x + attrs.radius * Math.cos( Math.toRadians( attrs.extent ) ) },
-                    get y() { return attrs.center.y - attrs.radius * Math.sin( Math.toRadians( attrs.extent ) ) },
+                    get x() { return attrs.center.x + attrs.radius * Math.cos( Degrees.to.Radians( attrs.extent ) ) },
+                    get y() { return attrs.center.y - attrs.radius * Math.sin( Degrees.to.Radians( attrs.extent ) ) },
                 }
             }
             this.__defineGetter__( 'end', end )
