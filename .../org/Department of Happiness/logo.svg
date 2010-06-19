@@ -698,8 +698,9 @@
                 radius : 0,
                 offset : 0,
                 extent : 0,
-                positive : { arc : false }
+                positive : { arc : false },
             } )
+            console.log( attrs.radius )
 
             function start() {
                 return {
@@ -732,7 +733,7 @@
                 ].join( ' ' ) )
                 $root.attr( 'transform', 'rotate(' + ( attrs.offset + ' '
                                                        + attrs.center.x + ',' + attrs.center.y
-                                                       + ')' )
+                                                       + ')' ) )
             }
             update()
  
