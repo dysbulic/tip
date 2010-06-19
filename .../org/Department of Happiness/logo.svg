@@ -128,6 +128,7 @@
                 var now = time.now
                 
                 contents.each( function( tixel ) {
+                    tixel = tixel || {}
                     var start = ( tixel.start === undefined
                                   ? tixel.end - tixel.duration
                                   : tixel.start )
@@ -200,8 +201,17 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
-        var $work = $.__.$( '<g/>' ).css( 'visibility', 'hidden' )
-        $.__.$( '#' ).append( $work )
+        ( function() {
+            var $work
+            this.__defineGetter__( '$work', function() {
+                $work = $work || ( function() {
+                    var $work = $.__.$( '<g/>' ).css( 'visibility', 'hidden' )
+                    $.__.$( '#' ).append( $work )
+                    return $work
+                } )()
+                return $work
+            } )
+        } )()
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
@@ -209,7 +219,15 @@
             var $root = $.__.$( '<g/>' )
             $work.append( $root )
 
-            this.__defineGetter__( 'id', function() { return $root.attr( 'id' ) } )
+            var self = this
+
+            this.__defineGetter__( 'id', function() {
+                return $root.attr( 'id' ) || ( function() {
+                    var id = time.now + '_' + Math.random()
+                    self.id = id
+                    return id
+                } )()
+            } )
             this.__defineSetter__( 'id', function( id ) { return $root.attr( 'id', id ) } )
 
             var transform = {
@@ -722,7 +740,6 @@
                 extent : 0,
                 positive : { arc : false },
             } )
-            console.log( attrs.radius )
 
             function start() {
                 return {
@@ -808,12 +825,12 @@
                 username : 'bob@localhost',
                 password : 'bob\'spass',
                 connect : function() {
-                    alert( 'hi' )
+                    //alert( 'hi' )
                 },
             } ) )
             //$('#body').append( json.$root )
 
-            console.log( 'hi' )
+            //console.log( 'hi' )
 
             var trigger = new Circle
             trigger.id = 'trigger'

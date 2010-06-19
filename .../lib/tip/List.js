@@ -13,17 +13,6 @@ function List( init ) {
     var store = []
     var self = this
 
-    function add( val, key ) {
-        if( position[ key ] === undefined ) { // New key
-            keys.push( key )
-            position[ key ] = store.push( val ) - 1
-            self.__defineGetter__( key, function() { return get( key ) } )
-            self.__defineSetter__( key, function( val ) { return set( key, val ) } )
-        }
- 
-    }
-    self.add = add
-
     function get( key ) {
         return store[ position[ key ] ]
     }
@@ -33,6 +22,16 @@ function List( init ) {
         return store[ position[ key ] ] = val
     }
     self.set = set
+
+    function add( val, key ) {
+        if( position[ key ] === undefined ) { // New key
+            keys.push( key )
+            position[ key ] = store.push( val ) - 1
+            self.__defineGetter__( key, function() { return self.get( key ) } )
+            self.__defineSetter__( key, function( val ) { return self.set( key, val ) } )
+        }
+    }
+    self.add = add
 
     function vals() {
         var vals = []
@@ -78,10 +77,6 @@ function List( init ) {
         }
     }
 }
-
-var list = new List
-list.add( 3, 'test' )
-console.log( list.test )
 
 List.by = {
     ids : function( ids ) {
