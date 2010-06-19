@@ -51,7 +51,7 @@ function List( init ) {
     function each( f ) {
         var self = this
         keys.each( function( key ) {
-            console.log( typeof get )
+            if( typeof get == 'undefined' ) throw 'No get'
             f.apply( self, [ key, get( key ) ] )
         } )
     }
