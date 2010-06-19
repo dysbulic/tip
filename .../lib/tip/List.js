@@ -34,6 +34,20 @@ function List( init ) {
     }
     this.get = get
 
+    function vals() {
+        var vals = []
+        each( function( val, key ) {
+            vals.push( val )
+        } )
+        return vals
+    }
+    this.vals = vals
+
+    function join( sep ) {
+        return vals().join( sep )
+    }
+    this.join = join
+
     function each( f ) {
         var self = this
         keys.each( function( key ) {
@@ -55,4 +69,14 @@ function List( init ) {
             add( init[ prop ], prop )
         }
     }
+}
+
+List.by = {
+    ids : function( ids ) {
+        var list = new List
+        ids.each( function( id ) {
+            list.add( null, id )
+        } )
+        return list
+    },
 }

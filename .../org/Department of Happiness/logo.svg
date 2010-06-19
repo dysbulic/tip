@@ -42,18 +42,18 @@
             this.update = update
 
             var self = this
-            ids.__.each( function( val, prop ) {
+            ids.each( function( val, prop ) {
                 self.__defineGetter__( prop, function() {
-                    return ids.__.get( prop )
+                    return ids.get( prop )
                 } )
                 self.__defineSetter__( prop, function( val ) {
-                    ids.__.set( prop, val )
+                    ids.set( prop, val )
                     return update()
                 } )
             } )
 
             this.__defineGetter__( 'self', function() {
-                return ids.__.join( ' ' )
+                return ids.join( ' ' )
             } )
             this.__defineSetter__( 'self', function( config ) {
                 updatable = false
