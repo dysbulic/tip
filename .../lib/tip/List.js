@@ -50,6 +50,7 @@ function List( init ) {
 
     function each( f ) {
         var self = this
+        console.log( typeof get )
         keys.each( function( key ) {
             f.apply( self, [ key, get( key ) ] )
         } )
