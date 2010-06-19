@@ -435,27 +435,35 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
-        var pad = { top: 5, between: 5, bottom: 5, left: 5, right: 5 }
-        var display = {
-            JSON: function( list ) {
-                var lines = []
-                var container = new Container
+        ( function() {
+            var pad = { top: 5, between: 5, bottom: 5, left: 5, right: 5 }
+            var display = {
+                JSON: function( config ) {
+                    var lines = []
+                    var container = new Container
+                    var self = this
+                    
+                    this.__defineGetter__( '$root', function() { return container.$root } )
+                    
+                    config = config || {}
+                    var list = as.List( config.source )
 
-                list.each( function( line, id ) {
-                    var val = new Value( line, id )
-                    container.add( val )
-                } )
-                var y = pad.top
-                container.each( function( line ) {
-                    line.y = y
-                    y += line.height + pad.between
-                } )
-                y -= pad.between - pad.bottom
-                container.y = - y / 2
+                    list.each( function( line, id ) {
+                        var val = new Value( line, id )
+                        container.add( val )
+                    } )
+                    var y = pad.top
+                    container.each( function( line ) {
+                        line.y = y
+                        y += line.height + pad.between
+                    } )
+                    y -= pad.between - pad.bottom
+                    container.y = - y / 2
+                },
+            }
 
-                return container
-            },
-        }
+            this.__defineGetter__( 'display', function() { return display } )
+        } )()
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
@@ -826,13 +834,15 @@
             
             console.log( view.asString )
 
-            var json = display.JSON( new List( {
-                username : 'bob@localhost',
-                password : 'bob\'spass',
-                connect : function() {
-                    //alert( 'hi' )
+            var json = new display.JSON( {
+                source : {
+                    username : 'bob@localhost',
+                    password : 'bob\'spass',
+                    connect : function() {
+                        alert( 'hi' )
+                    },
                 },
-            } ) )
+            } )
             //$('#body').append( json.$root )
 
             var trigger = new Circle
