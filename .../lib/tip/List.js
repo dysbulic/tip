@@ -9,21 +9,28 @@ function Pointer( store, get, set ) {
 
 function List( init ) {
     var keys = []
-    var positions = {}
+    var position = {}
     var store = []
+    var self = this
 
     function add( val, key ) {
-        // New key
-        if( positions[ key ] === undefined ) {
-            var idx = store.push( val )
+        if( position[ key ] === undefined ) { // New key
             keys.push( key )
-            console.log( idx )
+            position[ key ] = store.push( val ) - 1
+            self.__defineGetter__( key, function() { return get( key ) } )
+            self.__defineSetter__( key, function( val ) { return set( key, val ) } )
         }
+ 
     }
     this.add = add
 
     function get( key ) {
-        return store[ position[ key ] ] 
+        return store[ position[ key ] ]
+    }
+    this.get = get
+
+    function set( key, val ) {
+        return store[ position[ key ] ] = val
     }
     this.get = get
 
