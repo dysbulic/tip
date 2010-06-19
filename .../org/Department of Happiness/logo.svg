@@ -18,7 +18,7 @@
                 throw { message: 'Missing Required Attribute: attribute' }
             } )()
             var strs = $root.attr( attr ).split( ' ' )
-            var ids = List.as.List( config.ids ) || ( function() {
+            var ids = List.invert( config.ids ) || ( function() {
                 throw { message: 'Missing Required List: ids' }
             } )()
 

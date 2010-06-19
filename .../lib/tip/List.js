@@ -104,13 +104,15 @@ as.List = as.List || function() {
     throw "Wha' Happen?"
 }
 
-var from = from || {}
-from.Values = from.Values || function() {
+List.invert = function() {
     var val = as.List( arguments.length == 0
                        ? undefined
                        : ( arguments.length == 1
                            ? arguments[ 0 ]
                            : Array.prototype.slice.apply( this, arguments ) ) )
     var out = new List
-    val.each( function( id ) { out.add( null, id ) } )
+    val.each( function( val, id ) { out.add( id, val ) } )
+    return out
 }
+
+List.__defineGetter__( 'inverse', function() { return List.invert.call( this, this ) } )
