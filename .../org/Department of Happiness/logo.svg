@@ -698,8 +698,8 @@
 
             function start() {
                 return {
-                    get x() { return center.x + radius * Math.cos( offset / 2 * Math.PI ) },
-                    get y() { return center.y + radius * Math.sin( offset / 2 * Math.PI ) },
+                    get x() { return center.x + radius * Math.cos( offset / ( 2 * Math.PI ) ) },
+                    get y() { return center.y + radius * Math.sin( offset / ( 2 * Math.PI ) ) },
                 }
             }
             this.__defineGetter__( 'start', start )
@@ -727,7 +727,7 @@
                     start.x, start.y,
                     'A', radius, radius,
                     x.axis.rotation,
-                    extent > 180 ? 1 : 0,
+                    extent >= 180 ? 1 : 0,
                     positive.arc ? 1 : 0,
                     end.x, end.y
                 ].join( ' ' ) )
