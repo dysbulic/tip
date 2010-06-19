@@ -26,9 +26,9 @@
                 }
             } )()
 
-            ids.__.each( function( val, id ) {
+            ids.each( function( val, id ) {
                 if( str.length > 0 ) {
-                    ids.__.set( id, parseFloat( str.shift() ) )
+                    ids[ id ] = parseFloat( str.shift() )
                 }
             } )
 
@@ -101,13 +101,13 @@
                 id: undefined,
             }
 
-            var contents = new List()
+            var contents = new List
 
             var last = time.now
             function once() {
                 var now = time.now
                 
-                contents.__.each( function( tixel ) {
+                contents.each( function( tixel ) {
                     var start = ( tixel.start === undefined
                                   ? tixel.end - tixel.duration
                                   : tixel.start )
@@ -143,7 +143,7 @@
             this.__defineGetter__( 'go', function() {
                 if( interval.id === undefined ) {
                     var self = this
-                    var freq = state.__.get( 'tixel.capture.frequency.mHz' ) || 100
+                    var freq = state.get( 'tixel.capture.frequency.mHz' ) || 100
                     interval.id =
                         setInterval( function() {
                             once.apply( self, arguments )
@@ -171,7 +171,7 @@
             
             this.add = function( tixel ) {
                 tixel.speed = tixel.speed || 1
-                contents.__.add( tixel )
+                contents.add( tixel )
             }
         }
 
@@ -400,7 +400,7 @@
                 var lines = []
                 var container = new Container
 
-                list.__.each( function( line, id ) {
+                list.each( function( line, id ) {
                     var val = new Value( line, id )
                     container.add( val )
                 } )
