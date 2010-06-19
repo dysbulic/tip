@@ -88,19 +88,29 @@ List.by = {
     },
 }
 
-List.as = {
-    List : function() {
-        var val = ( arguments.length == 0
-                    ? undefined
-                    : ( arguments.length == 1
-                        ? arguments[ 0 ]
-                        : Array.prototype.slice.apply( this, arguments ) ) )
-        if( val instanceof List ) return val
-        if ( val === undefined || val === null || val === true || val === false )
-            return val
-        val = ( val instanceof Number || val instanceof String ) ? [ val ] : val
-        if( val instanceof Array || val instanceof Object )
-            return new List( val )
-        throw "Wha' Happen?"
-    },
+var as = as || {}
+as.List = as.List || function() {
+    var val = ( arguments.length == 0
+                ? undefined
+                : ( arguments.length == 1
+                    ? arguments[ 0 ]
+                    : Array.prototype.slice.apply( this, arguments ) ) )
+    if( val instanceof List ) return val
+    if ( val === undefined || val === null || val === true || val === false )
+        return val
+    val = ( val instanceof Number || val instanceof String ) ? [ val ] : val
+    if( val instanceof Array || val instanceof Object )
+        return new List( val )
+    throw "Wha' Happen?"
+}
+
+var from = from || {}
+from.Values = from.Values || function() {
+    var val = as.List( arguments.length == 0
+                       ? undefined
+                       : ( arguments.length == 1
+                           ? arguments[ 0 ]
+                           : Array.prototype.slice.apply( this, arguments ) ) )
+    var out = new List
+    val.each( function( id ) { out.add( null, id ) } )
 }

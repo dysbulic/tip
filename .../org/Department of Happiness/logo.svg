@@ -54,9 +54,12 @@
                 return ids.join( ' ' )
             } )
             
+            console.log(ids)
+
             function configure( config ) {
                 update( false )
                 ids.each( function( val, id ) {
+                    console.log( id )
                     if( config[ id ] !== undefined ) {
                         self[ id ] = config[ id ]
                     }
@@ -72,7 +75,7 @@
                     throw { message: 'Missing Required String: as' }
                 } )()
                
-                elem.__defineGetter__( prop, self.__lookupGetter__( 'asString' ) )
+                elem.__defineGetter__( prop, function() { return self } )
                 elem.__defineSetter__( prop, configure )
             }
 
