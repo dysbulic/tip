@@ -686,6 +686,9 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
+        Math.toRadians = function( degrees ) {
+            return degrees * ( 2 * Math.PI ) / 360
+        }
         function Arc() {
             var $root = $.__.$( '<path/>' )
             this.__defineGetter__( '$root', function() { return $root } )
@@ -698,20 +701,17 @@
 
             function start() {
                 return {
-                    get x() { return center.x + radius * Math.cos( offset / ( 2 * Math.PI ) ) },
-                    get y() { return center.y + radius * Math.sin( offset / ( 2 * Math.PI ) ) },
+                    get x() { return center.x + radius * Math.cos( Math.toRadians( offset ) ) },
+                    get y() { return center.y + radius * Math.sin( Math.toRadians( offset ) ) },
                 }
             }
             this.__defineGetter__( 'start', start )
 
+            var once = false
             function end() {
                 return {
-                    get x() {
-                        return center.x + radius * Math.cos( ( offset + extent ) / ( 2 * Math.PI ) )
-                    },
-                    get y() {
-                        return center.y + radius * Math.sin( ( offset + extent ) / ( 2 * Math.PI ) )
-                    },
+                    get x() { return center.x + radius * Math.cos( Math.toRadians( offset + extent ) ) },
+                    get y() { return center.y + radius * Math.sin( Math.toRadians( offset + extent ) ) },
                 }
             }
             this.__defineGetter__( 'end', end )
@@ -733,7 +733,7 @@
                 ].join( ' ' ) )
             }
             update()
-
+ 
             this.__defineGetter__( 'offset', function() {
                 return offset
             } )
@@ -770,7 +770,7 @@
 
             var hover = {
                 start: time.now,
-                duration: 10000,
+                duration: 100,
             }
 
             trigger.$root.hover(
