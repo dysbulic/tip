@@ -81,3 +81,8 @@ List.by = {
         return list
     },
 }
+
+List.as = {
+    List : function( in ) {
+    },
+}
