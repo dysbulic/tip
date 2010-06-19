@@ -83,6 +83,18 @@ List.by = {
 }
 
 List.as = {
-    List : function( in ) {
+    List : function() {
+        var val = ( arguments.length == 0
+                    ? undefined
+                    : ( arguments.length == 1
+                        ? arguments[ 0 ]
+                        : Array.prototype.slice.apply( this, arguments ) ) )
+        val instanceof List && return val
+        ( val === undefined || val === null || val === true || val === false )
+            && return val
+        val = ( val instanceof Number || val instanceof String ) ? [ val ] : val
+        ( val instanceof Array || val instanceof Object )
+            && return new List( val )
+        throw "Wha' Happen?"
     },
 }
