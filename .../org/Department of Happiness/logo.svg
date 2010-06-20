@@ -203,29 +203,28 @@
         ( function() {
             var $work
             this.__defineGetter__( '$work', function() {
-                $work = $work || ( function() {
+                return $work = $work || ( function() {
                     var $work = $.__.$( '<g/>' ).css( 'visibility', 'hidden' )
                     $.__.$( '#' ).append( $work )
                     return $work
                 } )()
-                return $work
             } )
         } )()
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
         ( function( $ ) {
-            $.$root = ( function( config ) {
-                var $root = config.$root || $.__.$( '<g/>' )
+            $.$root = function( config ) {
+                var $root = config && config.$root || $.__.$( '<g/>' )
                 this.__defineGetter__( '$root', function() { return $root } )
-            } ).apply
+            }
         } )( jQuery )
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
         ( function() {
             var add = {
-                id : ( function() {
+                id : function() {
                     this.__defineGetter__( 'id', function() {
                         this.id = ( this.id !== undefined
                                     ? this.id
@@ -241,9 +240,9 @@
                     this.__defineSetter__( 'id', function( id ) {
                         return this.$root.attr( 'id', id )
                     } )
-                } ).apply,
+                },
             }
-            this.__defineGetter__( 'add', function() { return add } )
+            this.__defineGetter__( 'add', function() { console.log(add.id);return add } )
         } )()
     ]]></script>
     
@@ -251,10 +250,10 @@
         ( function() {
             var self = {} || this
             
-            $.$root( self, arguments )
+            $.$root.apply( self, arguments )
             $work.append( self.$root )
         
-            add.id( self, arguments )
+            add.id.apply( self, arguments )
             console.log( self )
         } )()
 
@@ -264,7 +263,7 @@
             $.$root( self, arguments )
             $work.append( self.$root )
 
-            add.id( self, arguments )
+            add.id.apply( self, arguments )
 
             var transform = {
                 x: 0,
