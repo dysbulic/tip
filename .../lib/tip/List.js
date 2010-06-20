@@ -53,7 +53,9 @@ function List( init ) {
             f.apply( selfʻ, [ self.get( key ), key ] )
         } )
     }
-    this.each = each
+    self.each = each
+
+    self.__defineGetter__( 'length', function() { return store.length } )
 
     for( prop in init ) {
         if( init.hasOwnProperty( prop ) ) {

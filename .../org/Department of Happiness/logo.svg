@@ -22,9 +22,9 @@
                 throw { message: 'Missing Required List: ids' }
             } )()
 
-            var self = this
+            var self = config.self || this
 
-             ids.each( function( val, id ) {
+            ids.each( function( val, id ) {
                 if( ! strs.empty ) {
                     ids[ id ] = parseFloat( strs.shift() )
                 }
@@ -79,8 +79,6 @@
             }
 
             configure( config )
-
-            self.toString = function() { 
         }
     ]]></script>
 
@@ -137,7 +135,6 @@
                     var end = ( tixel.end === undefined
                                 ? start + tixel.duration
                                 : tixel.end )
-                    console.log( tixel )
                     if( ( last < start && now >= start )
                         || ( last > end && now <= end )
                         || ( tixel.percent > 0 && tixel.percent < 1 )
@@ -194,7 +191,6 @@
             } )
             
             this.add = function( tixel ) {
-                tixel.speed = tixel.speed || 1
                 contents.add( tixel )
             }
         }
@@ -218,20 +214,55 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
+        ( function( $ ) {
+            $.$root = ( function( config ) {
+                var $root = config.$root || $.__.$( '<g/>' )
+                this.__defineGetter__( '$root', function() { return $root } )
+            } ).apply
+        } )( jQuery )
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
+        ( function() {
+            var add = {
+                id : ( function() {
+                    this.__defineGetter__( 'id', function() {
+                        this.id = ( this.id !== undefined
+                                    ? this.id
+                                    : ( this.$root.attr( 'id' ) !== undefined
+                                        ? this.$root.attr( 'id' )
+                                        : ( function() {
+                                            var id = time.now + '_' + Math.random()
+                                            self.id = id
+                                            return id
+                                        } )() ) )
+                        return this.id
+                    } )
+                    this.__defineSetter__( 'id', function( id ) {
+                        return this.$root.attr( 'id', id )
+                    } )
+                } ).apply,
+            }
+            this.__defineGetter__( 'add', function() { return add } )
+        } )()
+    ]]></script>
+    
+    <script type="application/javascript"><![CDATA[
+            var self = config.self || this
+
+            $.$root( self, arguments )
+            $work.append( self.$root )
+
+            add.id( self, arguments )
+        console.log( self )
+
         function Container( config ) {
-            var $root = $.__.$( '<g/>' )
-            $work.append( $root )
+            var self = config.self || this
 
-            var self = this
+            $.$root( self, arguments )
+            $work.append( self.$root )
 
-            self.__defineGetter__( 'id', function() {
-                return $root.attr( 'id' ) || ( function() {
-                    var id = time.now + '_' + Math.random()
-                    self.id = id
-                    return id
-                } )()
-            } )
-            self.__defineSetter__( 'id', function( id ) { return $root.attr( 'id', id ) } )
+            add.id( self, arguments )
 
             var transform = {
                 x: 0,
