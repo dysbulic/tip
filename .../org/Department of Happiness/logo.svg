@@ -25,7 +25,6 @@
             var self = this
 
             ids.each( function( val, id ) {
-                console.log( 'i:' + id )
                 if( ! strs.empty ) {
                     ids[ id ] = parseFloat( strs.shift() )
                 }
@@ -272,12 +271,10 @@
             } )
 
             self.__defineSetter__( 'size', function( size ) {
-                console.log( size )
                 self.scale = Math.min( size.external.width * win.width / size.internal.width,
                                        size.external.height * win.height / size.internal.height ) / 2
             } )
 
-                                     
             if( config instanceof Object ) {
                 for( prop in self ) {
                     if( config[ prop ] !== undefined ) {
@@ -640,6 +637,10 @@
             this.__defineGetter__( 'text', function() { return $text.text() } )
             this.__defineSetter__( 'text', function( text ) { $text.text( text ) } )
 
+            this.__defineSetter__( 'font', function( font ) {
+                $root.get(0).style.setProperty( 'font-family', font, null )
+            } )
+
             function align( position ) {
                 return $root.get(0).style.setProperty( 'text-anchor', position, null )
             }
@@ -659,7 +660,8 @@
                     
                     return $path
                 } )()
-                $path.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', path )
+                var id = typeof path == 'string' ? path : '#' + path.id
+                $path.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', id )
             } )
             
             var self = this
@@ -828,6 +830,17 @@
         }
     ]]></script>
 
+    <style id="fonts" type="text/css"/>
+        @font-face {
+            font-family: 'Ragg Mopp';
+            src: url(".../font/by/Nick Curtis/nicksfonts.com/Ragg Mopp/Ragg Mopp.ttf");
+        }
+        @font-face {
+            font-family: Lionheart;
+            src: url(".../font/by/Dan Zadorozny/iconian@aol.com/Lionheart/Lionheart.ttf");
+        }
+    </style>
+
     <script type="application/javascript"><![CDATA[
         $( function() {
             view = {
@@ -860,7 +873,7 @@
                     },
                 },
             } )
-            $('#body').append( json.$root )
+            //$('#body').append( json.$root )
 
             var trigger = new Circle
             trigger.id = 'trigger'
@@ -898,9 +911,11 @@
             } )
             head.text = new Text( {
                 text : 'Department of Happiness',
+                font : 'Ragg Mopp',
+#sub text { font-family: ; font-size: 22px; }
+
             } )
             head.path = new Circle( {
-                id : 'head_text',
                 path : true,
                 radius : 82,
             } )
@@ -916,14 +931,14 @@
                 rotation : 90,
             } )
             sub.path = new Circle( {
-                id : 'sub_text',
                 path : true,
                 radius : 93,
                 positive : { arc : false },
             } )
             sub.text = new Text( {
                 text : 'Totus Custodes',
-                path : '#' + sub.path.id,
+                path : sub.path,
+                font : 'Lionheart'
             } )
 
             canvas.add( sub )
@@ -1011,19 +1026,9 @@
     rect { fill: lightblue; stroke: darkgray }
     #trigger { fill: lightblue; stroke: darkgray }
     #log { text-anchor: middle }
-    @font-face {
-      font-family: 'Ragg Mopp';
-      src: url(".../font/by/Nick Curtis/nicksfonts.com/Ragg Mopp/Ragg Mopp.ttf");
-    }
-    @font-face {
-      font-family: Lionheart;
-      src: url(".../font/by/Dan Zadorozny/iconian@aol.com/Lionheart/Lionheart.ttf");
-    }
 
 #head path, #sub path { fill: none; stroke: none }
 #head text, #sub text { fill: white; font-size: 22px; font-variant: small-caps; }
-#head text { font-family: 'Ragg Mopp'; font-size: 22px; }
-#sub text { font-family: 'Lionheart'; font-size: 22px; }
 input { text-align: center; font-size: 13pt; border: none }
 foreignObject { overflow: visible; }
 [class~='value'] { background-color: transparent; padding: .25em .5em }
