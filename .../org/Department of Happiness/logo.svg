@@ -25,6 +25,7 @@
             var self = this
 
             ids.each( function( val, id ) {
+                console.log( 'i:' + id )
                 if( ! strs.empty ) {
                     ids[ id ] = parseFloat( strs.shift() )
                 }
@@ -830,19 +831,19 @@
     <script type="application/javascript"><![CDATA[
         $( function() {
             view = {
-                x: - win.width / 2,
-                y: - win.height / 2,
-                width: win.width,
-                height: win.height,
+                x : - win.width / 2,
+                y : - win.height / 2,
+                width : win.width,
+                height : win.height,
             }
 
             var canvas = new Container( {
                 size : {
-                    interior : {
+                    internal : {
                         width : 100,
                         height : 100,
                     },
-                    exterior : {
+                    external : {
                         width : .95,
                         height : .95,
                     },

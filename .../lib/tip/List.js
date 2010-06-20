@@ -56,23 +56,24 @@ function List( init ) {
     this.each = each
 
     for( prop in init ) {
-        // Indexed from 1
-        if( init instanceof Array
-            && ( prop instanceof Number || typeof prop == 'number'
-                 || ( typeof prop == 'string' && /[+-]*[0-9]/.test( prop ) ) ) ) {
-            prop = parseInt( prop ) + 1
-        }
         if( init.hasOwnProperty( prop ) ) {
+            // Indexed from 1
+            var id = ( init instanceof Array
+                       && ( prop instanceof Number || typeof prop == 'number'
+                            || ( typeof prop == 'string' && /[+-]*[0-9]/.test( prop ) ) )
+                       ? parseInt( prop ) + 1
+                       : prop )
+
             var get = init.__lookupGetter__( prop )
             var set = init.__lookupSetter__( prop )
             
             // Getters and setters are copied
             if( get || set ) {
                 var ptr = new Pointer( store, get, set )
-                this.__defineGetter__( prop, function() { return ptr.val } )
-                this.__defineSetter__( prop, function( val ) { return ptr.val = val } )
+                this.__defineGetter__( id, function() { return ptr.val } )
+                this.__defineSetter__( id, function( val ) { return ptr.val = val } )
             } else {
-                add( init[ prop ], prop )
+                add( init[ prop ], id )
             }
         }
     }
