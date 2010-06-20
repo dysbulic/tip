@@ -248,13 +248,15 @@
     ]]></script>
     
     <script type="application/javascript"><![CDATA[
-            var self = config.self || this
-
+        ( function() {
+            var self = {} || this
+            
             $.$root( self, arguments )
             $work.append( self.$root )
-
+        
             add.id( self, arguments )
-        console.log( self )
+            console.log( self )
+        } )()
 
         function Container( config ) {
             var self = config.self || this
