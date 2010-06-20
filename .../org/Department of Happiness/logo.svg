@@ -830,7 +830,7 @@
         }
     ]]></script>
 
-    <style id="fonts" type="text/css"/>
+    <style id="fonts" type="text/css">
         @font-face {
             font-family: 'Ragg Mopp';
             src: url(".../font/by/Nick Curtis/nicksfonts.com/Ragg Mopp/Ragg Mopp.ttf");
@@ -909,22 +909,20 @@
                 id : 'head',
                 rotation : -90,
             } )
-            head.text = new Text( {
-                text : 'Department of Happiness',
-                font : 'Ragg Mopp',
-#sub text { font-family: ; font-size: 22px; }
-
-            } )
             head.path = new Circle( {
                 path : true,
                 radius : 82,
+            } )
+            head.text = new Text( {
+                text : 'Department of Happiness',
+                font : 'Ragg Mopp',
+                path : head.path,
+                align : 'center',
             } )
 
             canvas.add( head )
             head.add( head.path )
             head.add( head.text )
-            head.text.path = '#' + head.path.id
-            head.text.align.center
 
             var sub = new Container( {
                 id : 'sub',
@@ -938,7 +936,8 @@
             sub.text = new Text( {
                 text : 'Totus Custodes',
                 path : sub.path,
-                font : 'Lionheart'
+                font : 'Lionheart',
+                align : 'center',
             } )
 
             canvas.add( sub )
