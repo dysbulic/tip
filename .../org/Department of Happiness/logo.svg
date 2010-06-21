@@ -716,31 +716,31 @@
             self.__defineSetter__( 'align', function( alignment ) { return align( alignment ) } )
 
             var $path = {
-                textʻ : {
-                    get text() { return self.text },
-                    set text( text ) {
-                        self.text = text
-                        this.display.length = $root.get(0).getBBox().width
-                        console.log( this.display.length )
-                    },
-                    display : { },
+                textʻʻ : '',
+                get textʻ() { return this.textʻʻ },
+                set textʻ( text ) {
+                    this.textʻʻ = text
+                    this.update()
+                    this.display.length = $root.get(0).getBBox().width
+                    console.log( this.display.length )
                 },
+                display : { },
                 methodʻ : 'align',
                 $letters : [],
                 text : function( text ) {
                     if( arguments.length == 0 ) {
-                        return this.textʻ.text
+                        return this.textʻ
                     }
                     if( text === null ) {
                         $letters.each( function( $letter ) {
                             $letter.erase()
                         } )
+                    } else {
+                        this.textʻ = text
                     }
-                    this.textʻ.text = text
-                    this.update()
                 },
                 update : function() {
-                    var text = this.textʻ.text
+                    var text = this.textʻ
                     var stretch = this.method == 'stretch'
                     var num = { slots : ( stretch ? text.length : 1 ) }
                     while( this.$letters.length < num.slots ) {
@@ -752,13 +752,28 @@
                         this.path.id !== undefined
                             && $slot.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', this.path.id )
                         $root.append( $slot )
+                        console.log( text )
                         this.$letters.push( $slot )
                     }
+
+                    var $box = $.__.$( '<text/>' )
+                    Tip.$work.append( $box )
+                    var Box = { for : function( $path ) {
+                        var $parent = $path.parent()
+                        $box.append( $path )
+                        var box = $box.get(0).getBBox()
+                        $parent.append( $path )
+                        return box
+                    } }
 
                     var self = this
                     if( stretch ) {
                         text.each( function( letter, idx ) {
-                             self.$letters[ idx ].text( letter )
+                            console.log(idx)
+                            var $letter = self.$letters[ idx ]
+                            $letter.text( letter )
+                            $letter.box = Box.for( $letter )
+                            console.log( $letter.box )
                         } )
                     } else {
                         this.$letters[ 0 ].text( text )
