@@ -688,6 +688,8 @@
             Tip.add.id.apply( self, args )
             Tip.add.shape.apply( self, args )
 
+            Tip.$work.append( $root )
+
             var $text = $root
 
             self.__defineGetter__( 'text', function() { return $text.text() } )
@@ -715,25 +717,30 @@
 
             var $path = {
                 textʻ : {
-                    text : '',
+                    get text() { return self.text },
+                    set text( text ) {
+                        self.text = text
+                        this.display.length = $root.get(0).getBBox().width
+                        console.log( this.display.length )
+                    },
                     display : { },
-                }
+                },
                 methodʻ : 'align',
                 $letters : [],
                 text : function( text ) {
                     if( arguments.length == 0 ) {
-                        return this.textʻ
+                        return this.textʻ.text
                     }
                     if( text === null ) {
                         $letters.each( function( $letter ) {
                             $letter.erase()
                         } )
                     }
-                    this.textʻ = text
+                    this.textʻ.text = text
                     this.update()
                 },
                 update : function() {
-                    var text = this.textʻ
+                    var text = this.textʻ.text
                     var stretch = this.method == 'stretch'
                     var num = { slots : ( stretch ? text.length : 1 ) }
                     while( this.$letters.length < num.slots ) {
