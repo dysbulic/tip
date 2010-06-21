@@ -823,7 +823,7 @@
 
             var start = {
                 get x() { return attrs.center.x },
-                get y() { return attrs.center.y - attrs.radius },
+                get y() { return ( - attrs.center.y ) - attrs.radius },
             }
             self.__defineGetter__( 'start', function() { return start } )
 
@@ -832,7 +832,7 @@
                     return attrs.center.x + attrs.radius * Math.sin( Degrees.to.Radians( attrs.extent ) )
                 },
                 get y() {
-                    return attrs.center.y - attrs.radius * Math.cos( Degrees.to.Radians( attrs.extent ) )
+                    return ( - attrs.center.y ) - attrs.radius * Math.cos( Degrees.to.Radians( attrs.extent ) )
                 },
             }
             self.__defineGetter__( 'end', function() { return end } )
@@ -849,7 +849,7 @@
                     end.x, end.y
                 ].join( ' ' ) )
                 $root.attr( 'transform', 'rotate(' + ( attrs.offset + ' '
-                                                       + attrs.center.x + ',' + attrs.center.y
+                                                       + attrs.center.x + ',' + ( - attrs.center.y )
                                                        + ')' ) )
             }
             update()
@@ -997,42 +997,23 @@
             var rc = new Arc( {
                 center : {
                     x : 0,
-                    y : 0,
+                    y : 10,
                 },
                 radius : 20,
-                offset : 0,
-                extent : -270,
-                id : 'arc',
             } )
             canvas.add( rc )
-
-            var tk = new Tracker( {
-                elem : rc.start,
-                color : 'red',
-            } )
-            canvas.add( tk )
-            scene.add( tk )
-
-            tk = new Tracker( {
-                elem : rc.end,
-                color : 'blue',
-            } )
-            canvas.add( tk )
-            scene.add( tk )
 
             ;[
                 {
                     elem : rc,
                     attr : 'offset',
-                    val : slide.linear( 360 )
+                    val : slide.linear( 135 )
                 },
-/*
                 {
                     elem : rc,
                     attr : 'extent',
-                    val : slide.linear( 90 )
+                    val : slide.linear( -270 )
                 },
-*/
                 {
                     elem : border.outer,
                     attr : 'radius',
