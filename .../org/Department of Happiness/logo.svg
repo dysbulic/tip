@@ -243,7 +243,7 @@
                                : ( self.$root.attr( 'id' ) !== undefined
                                    ? self.$root.attr( 'id' )
                                    : ( function() {
-                                       var id = time.now + '_' + Math.random()
+                                       var id = 't' + time.now
                                        self.id = id
                                        return id
                                    } )() ) )
@@ -500,14 +500,15 @@
 
             this.__defineGetter__( 'display', function() { return display } )
         } )()
-        console.log(Math.MAX_INT)
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
         function Circle( config ) {
             var args = Array.prototype.slice.call( this, arguments )
+            console.log('l:' + arguments.length + ':' + args.length)
             config = config || ( function() {
                 var config = {}
+                console.log('unshift')
                 args.unshift( config )
                 return config
             } )()
@@ -521,6 +522,7 @@
                                  cy : 0,
                                  r : 0,
                              } ) )
+            console.log(args[0].$root)
             var $root = Tip.add.$root.apply( self, args )
             Tip.add.id.apply( self, args )
 
@@ -911,7 +913,7 @@
 
             var hover = {
                 start: time.now,
-                duration: 10000,
+                duration: 100,
             }
 
             trigger.$root.hover(
