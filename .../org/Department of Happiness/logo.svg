@@ -714,7 +714,10 @@
             self.__defineSetter__( 'align', function( alignment ) { return align( alignment ) } )
 
             var $path = {
-                textʻ : '',
+                textʻ : {
+                    text : '',
+                    display : { },
+                }
                 methodʻ : 'align',
                 $letters : [],
                 text : function( text ) {
@@ -739,16 +742,16 @@
                                           startOffset : '50%',
                                           method : this.method,
                                       } ) )
+                        this.path.id !== undefined
+                            && $slot.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', this.path.id )
                         $root.append( $slot )
-                        console.log( $root.children().size() )
                         this.$letters.push( $slot )
                     }
 
                     var self = this
                     if( stretch ) {
                         text.each( function( letter, idx ) {
-                            console.log( idx + ':' + self.$letters.length + ':' + num.slots )
-                            self.$letters[ idx ].text( letter )
+                             self.$letters[ idx ].text( letter )
                         } )
                     } else {
                         this.$letters[ 0 ].text( text )
@@ -763,15 +766,12 @@
                     this.update()
                     return method
                 },
+                pathʻ : { },
+                get path() { return this.pathʻ },
                 set path( path ) {
-                    var id = typeof path == 'string' ? path : '#' + path.id
+                    this.path.id = typeof path == 'string' ? path : '#' + path.id
                     this.$letters.each( function( $letter ) {
-                        $letter.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', id )
-                        console.log('!')
-                        if( $letter.parent().size() == 0 ) {
-                            console.log('!')
-                            $root.append( $slot )
-                        }
+                        $letter.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', this.id )
                     } )
                 },
             }
@@ -781,6 +781,7 @@
                     $path.text( self.text )
                     $root.text( '' )
                     $text = $path
+                    $path.path = path
                 } else { 
                     $root.text( self.text )
                     $path.text( '' )
