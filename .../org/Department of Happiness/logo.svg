@@ -727,11 +727,8 @@
                         } )
                     }
                     this.textʻ = text
-                    var num = {
-                        slots : ( this.method == 'stretch'
-                                  ? text.length
-                                  : 1 )
-                    }
+                    var stretch = this.method == 'stretch'
+                    var num = { slots : ( stretch ? text.length : 1 ) }
                     while( this.$letters.length <= num.slots ) {
                         this.$letters.push( $.__.$( '<textPath/>' )
                                        .attr( {
@@ -739,8 +736,12 @@
                                            method : this.method,
                                        } ) )
                     }
+
+                    var self = this
+                    if( this.method == 'stretch' 
                     text.each( function( letter, idx ) {
-                        this.$letters[ idx ].text( letter )
+                        console.log( idx + ':' + self.$letters.length + ':' + num.slots )
+                        self.$letters[ idx ].text( letter )
                     } )
                 },
                 get method() { return this.methodʻ },
