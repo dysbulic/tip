@@ -758,18 +758,27 @@
                     var $box = $.__.$( '<text/>' )
                     Tip.$work.append( $box )
                     var Box = { for : function( str ) {
+                        if( str == ' ' ) {
+                            var quote = $box.text( '"' ).get(0).getBBox()
+                            var quoted = { space : $box.text( '" "' ).get(0).getBBox() }
+                            return {
+                                x : quote.x, y : quote.y,
+                                width : quoted.space.width - 2 * quote.width,
+                                height : quoted.space.height - 2,
+                            }
+                        }
                         return $box.text( str ).get(0).getBBox()
                     } }
 
                     if( stretch ) {
-                        var total = text.length
                         var width = Box.for( text ).width
+                        var sum = 0
                         text.each( function( letter, idx ) {
                             var $letter = self.$letters[ idx ]
                             $letter.text( letter )
-                            $letter.attr( 'startOffset', ( idx / ( total - 1 ) ) * 100 + '%' )
-                            $letter.box = Box.for( letter )
-                            console.log( $letter.box )
+                            var next = Box.for( letter ).width
+                            $letter.attr( 'startOffset', ( ( sum + next / 2 ) / width ) * 100 + '%' )
+                            sum += next
                         } )
                     } else if( this.path.id !== undefined ) {
                         var $letter = this.$letters[ 0 ]
@@ -1085,7 +1094,10 @@
                 {
                     elem : head.path,
                     attr : 'offset',
-                    val : slide.linear( - head.text.extent / 2 )
+                    val : slide.linear( - head.text.extent / 2 ),
+                    get start() {
+                        return hover.start + hover.duration
+                    }
                 },
                 {
                     elem : head.path,
@@ -1124,7 +1136,9 @@
                 }
             ].each( function( tixel ) {
                 [ 'start', 'scale', 'duration' ].each( function( attr ) {
-                    tixel.__defineGetter__( attr, function() { return hover[ attr ] } )
+                    if( tixel.__lookupGetter__( attr ) == undefined && tixel[ attr ] == undefined ) {
+                        tixel.__defineGetter__( attr, function() { return hover[ attr ] } )
+                    }
                 } )
                 scene.add( tixel )
             } )
