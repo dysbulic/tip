@@ -713,25 +713,44 @@
             } } )
             self.__defineSetter__( 'align', function( alignment ) { return align( alignment ) } )
 
-            
-
             var $path = {
                 textʻ : '',
-                $letters : []
-                get text() { return this.textʻ },
-                set text( text ) {
+                methodʻ : 'auto',
+                $letters : [],
+                text : function( text ) {
+                    if( arguments.length == 0 ) {
+                        return this.textʻ
+                    }
+                    if( text === null ) {
+                        $letters.each( function( $letter ) {
+                            $letter.erase()
+                        } )
+                    }
                     this.textʻ = text
                     var num = {
                         slots : ( this.method == 'stretch'
                                   ? text.length
                                   : 1 )
-                              }
-                    while( $letters.length <= num.slots ) {
-                        $letters.push( $.__.$( '<textPath/>' )
-                                       .attr( 'startOffset', '50%' ) )
                     }
-                    
+                    while( this.$letters.length <= num.slots ) {
+                        this.$letters.push( $.__.$( '<textPath/>' )
+                                       .attr( {
+                                           startOffset : '50%',
+                                           method : this.method,
+                                       } ) )
+                    }
+                    text.each( function( letter, idx ) {
+                        this.$letters[ idx ].text( letter )
+                    } )
                 },
+                get method() { return this.methodʻ },
+                set method( method ) {
+                    this.methodʻ = method
+                    this.$letters.each( function( $letter ) {
+                        $letter.attr( 'method', method )
+                    } )
+                    return method
+                }
             }
 
             self.__defineSetter__( 'path', function( path ) {
@@ -755,13 +774,8 @@
 
             self.__defineGetter__( 'to', function() { return {
                 // Ideally, there should be a way to fill the space above the curve
-                set path( opt ) {
-                    if( opt == 'stretch' ) {
-                        $path.attr( 'method', opt )
-                    }
-                },
-                get path() { return $path.method }
-            },
+                set path( opt ) { return $path.method = opt },
+                get path() { return $path.method },
             } } )
             
             Tip.configure.call( self, config )
