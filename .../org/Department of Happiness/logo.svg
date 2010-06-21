@@ -741,7 +741,7 @@
                 update : function() {
                     var text = this.textʻ
                     var stretch = this.method == 'stretch'
-                    var num = { slots : ( stretch ? text.length : 5 ) }
+                    var num = { slots : ( stretch ? text.length : 1 ) }
                     while( this.$letters.length < num.slots ) {
                         var $slot = ( $.__.$( '<textPath/>' )
                                       .attr( {
@@ -755,19 +755,19 @@
 
                     var $box = $.__.$( '<text/>' )
                     Tip.$work.append( $box )
-                    var Box = { for : function( $path ) {
-                        $box.append( $path )
-                        var box = $box.get(0).getBBox()
-                        $root.append( $path )
-                        return box
+                    var Box = { for : function( str ) {
+                        return $box.text( str ).get(0).getBBox()
                     } }
 
                     var self = this
                     if( stretch ) {
+                        var total = text.length
                         text.each( function( letter, idx ) {
                             var $letter = self.$letters[ idx ]
                             $letter.text( letter )
-                            $letter.box = Box.for( $letter )
+                            $letter.attr( 'startOffset', ( idx / ( total - 1 ) ) * 100 + '%' )
+                            $letter.box = Box.for( letter )
+                            console.log( $letter.box )
                         } )
                     } else {
                         var $letter = this.$letters[ 0 ]
