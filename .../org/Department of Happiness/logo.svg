@@ -275,9 +275,10 @@
                         } )
                     } )
 
-                    self.__defineSetter__( 'clear', self.make.clear = function() {
-                        self.stroke
-                    }
+                    self.__defineSetter__( 'clear', function( clear ) {
+                        self.stroke = 'none'
+                        self.fill = 'none'
+                    } )
                 },
             }
             Tip.__defineGetter__( 'add', function() { return add } )
@@ -658,37 +659,51 @@
 
     <script type="application/javascript"><![CDATA[
         function Text( config ) {
+            var args = Array.prototype.slice.call( arguments )
+            config = config || ( function() {
+                var config = {}
+                args.unshift( config )
+                return config
+            } )()
+            var self = config.self || this
+            config.$root = ( $.__.$( '<text/>' )
+                             .attr( {
+                                 x : 0,
+                                 y : 0,
+                                 'letter-spacing' : '1em',
+                             } ) )
+            var $root = Tip.add.$root.apply( self, args )
+            Tip.add.id.apply( self, args )
+
+            Tip.add.shape.apply( self, args )
+
             var $path
-            var $root = ( $.__.$( '<text/>' )
-                          .append( $text )
-                          .attr( {
-                              x : 0,
-                              y : 0,
-                              'letter-spacing' : '1em',
-                          } ) )
             var $text = $root
 
-            this.__defineGetter__( '$root', function() { return $root } )
+            self.__defineGetter__( 'text', function() { return $text.text() } )
+            self.__defineSetter__( 'text', function( text ) { $text.text( text ) } )
 
-            this.__defineGetter__( 'text', function() { return $text.text() } )
-            this.__defineSetter__( 'text', function( text ) { $text.text( text ) } )
-
-            this.__defineSetter__( 'font', function( font ) {
+            self.__defineSetter__( 'font', function( font ) {
                 $root.get(0).style.setProperty( 'font-family', font, null )
+            } )
+
+            self.__defineSetter__( 'height', function( height ) {
+                height = typeof height == 'number' ? height + 'px' : height
+                $root.get(0).style.setProperty( 'font-size', height, null )
             } )
 
             function align( position ) {
                 position = position == 'center' ? 'middle' : position
                 return $root.get(0).style.setProperty( 'text-anchor', position, null )
             }
-            this.__defineGetter__( 'align', function() { return {
+            self.__defineGetter__( 'align', function() { return {
                 get center() { return align( 'middle' ) },
                 get start() { return align( 'start' ) },
                 get end() { return align( 'end' ) },
             } } )
-            this.__defineSetter__( 'align', function( alignment ) { return align( alignment ) } )
+            self.__defineSetter__( 'align', function( alignment ) { return align( alignment ) } )
 
-            this.__defineSetter__( 'path', function( path ) {
+            self.__defineSetter__( 'path', function( path ) {
                 $path = $path || ( function() {
                     var $path = $text = ( $.__.$( '<textPath/>' )
                                           .attr( 'startOffset', '50%' ) )
@@ -702,7 +717,6 @@
                 $path.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', id )
             } )
             
-            var self = this
             if( config instanceof Object ) {
                 for( prop in self ) {
                     if( config[ prop ] !== undefined ) {
@@ -949,12 +963,15 @@
             head.path = new Circle( {
                 path : true,
                 radius : 82,
+                clear : true,
             } )
             head.text = new Text( {
                 text : 'Department of Happiness',
                 font : 'Ragg Mopp',
                 path : head.path,
                 align : 'center',
+                fill : 'white',
+                height : 22,
             } )
 
             canvas.add( head )
@@ -969,13 +986,15 @@
                 path : true,
                 radius : 93,
                 positive : { arc : false },
-                stroke : 'none',
+                clear : true,
             } )
             sub.text = new Text( {
                 text : 'Totus Custodes',
                 path : sub.path,
                 font : 'Lionheart',
                 align : 'center',
+                fill : 'white',
+                height : 22,
             } )
 
             canvas.add( sub )
@@ -1054,7 +1073,6 @@
                 } )
                 scene.add( tixel )
             } )
-            console.log( scene.length )
         } )
     ]]></script>
 
@@ -1064,7 +1082,6 @@
     #trigger { fill: lightblue; stroke: darkgray }
     #log { text-anchor: middle }
 
-#head text, #sub text { fill: white; font-size: 22px; font-variant: small-caps; }
 input { text-align: center; font-size: 13pt; border: none }
 foreignObject { overflow: visible; }
 [class~='value'] { background-color: transparent; padding: .25em .5em }
