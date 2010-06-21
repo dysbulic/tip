@@ -503,20 +503,11 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
-        ( function() {
-            console.log( Function.prototype.call )
-            function A() {
-                this.test = 'test'
-                B()
-            }
-            A.test = 'tset'
-            function B() {
-                console.log(arguments.callee.test)
-            }
-            A()            
-        } )()
         function Circle( config ) {
-            config = config || {}
+            var args = Array.prototype.slice.call( this, arguments )
+            config = config || ( function() {
+                return args.unshift( {} )
+            } )()
             var self = config.self || this
             config.$root = ( config.path
                              ? $.__.$( '<path/>' ).attr( {
@@ -527,9 +518,8 @@
                                  cy : 0,
                                  r : 0,
                              } ) )
-            console.log( config === arguments[ 0 ] )
-            var $root = Tip.add.$root.apply( self, arguments )
-            Tip.add.id.apply( self, arguments )
+            var $root = Tip.add.$root.apply( self, args )
+            Tip.add.id.apply( self, args )
 
             var curve = {
                 radius : 0,
