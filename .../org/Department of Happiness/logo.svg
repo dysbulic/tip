@@ -822,17 +822,17 @@
             } )
 
             var start = {
-                get x() { return attrs.center.x - attrs.radius },
-                get y() { return attrs.center.y },
+                get x() { return attrs.center.x },
+                get y() { return attrs.center.y - attrs.radius },
             }
             self.__defineGetter__( 'start', function() { return start } )
 
             var end = {
                 get x() {
-                    return attrs.center.x + attrs.radius * Math.cos( Degrees.to.Radians( attrs.extent ) )
+                    return attrs.center.x + attrs.radius * Math.sin( Degrees.to.Radians( attrs.extent ) )
                 },
                 get y() {
-                    return attrs.center.y - attrs.radius * Math.sin( Degrees.to.Radians( attrs.extent ) )
+                    return attrs.center.y - attrs.radius * Math.cos( Degrees.to.Radians( attrs.extent ) )
                 },
             }
             self.__defineGetter__( 'end', function() { return end } )
@@ -1000,8 +1000,8 @@
                     y : 0,
                 },
                 radius : 20,
-                offset : 90,
-                extent : 180,
+                offset : 0,
+                extent : 90,
                 id : 'arc',
             } )
             canvas.add( rc )
