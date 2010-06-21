@@ -535,13 +535,13 @@
                 update : function() {
                     $root.attr( 'd', [
                         'm',
-                        this.center.x + ( this.positive.arc ? 1 : -1 ) * this.radius,
-                        this.center.y + ( this.positive.arc ? 0 : -1 ) * this.radius,
+                        this.center.x,// + ( this.positive.arc ? 1 : -1 ) * this.radius,
+                        this.center.y + ( this.positive.arc ? -1 : 1 ) * this.radius,
                         'a', this.radius, this.radius,
                         this.x.axis.rotation,
                         this.large.arc ? 1 : 0,
                         this.positive.arc ? 1 : 0,
-                            .0001, 0
+                            -.001, 0
                     ].join( ' ' ) )
                 }
             }
