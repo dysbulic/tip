@@ -844,8 +844,8 @@
                     start.x, start.y,
                     'A', attrs.radius, attrs.radius,
                     x.axis.rotation,
-                    attrs.extent >= 180 ? 1 : 0,
-                    attrs.positive.arc ? 1 : 0,
+                    Math.abs( attrs.extent ) >= 180 ? 1 : 0,
+                    attrs.extent > 0 ? 1 : 0,
                     end.x, end.y
                 ].join( ' ' ) )
                 $root.attr( 'transform', 'rotate(' + ( attrs.offset + ' '
@@ -1001,7 +1001,7 @@
                 },
                 radius : 20,
                 offset : 0,
-                extent : 90,
+                extent : -270,
                 id : 'arc',
             } )
             canvas.add( rc )
@@ -1021,12 +1021,12 @@
             scene.add( tk )
 
             ;[
-/*
                 {
                     elem : rc,
                     attr : 'offset',
                     val : slide.linear( 360 )
                 },
+/*
                 {
                     elem : rc,
                     attr : 'extent',
