@@ -741,13 +741,14 @@
                 update : function() {
                     var text = this.textʻ
                     var stretch = this.method == 'stretch'
-                    var num = { slots : ( stretch ? text.length : 1 ) }
+                    var num = { slots : ( stretch ? text.length : 5 ) }
                     while( this.$letters.length < num.slots ) {
                         var $slot = ( $.__.$( '<textPath/>' )
                                       .attr( {
                                           startOffset : '50%',
                                           method : this.method,
                                       } ) )
+                        console.log( text + ':' + this.path.id )
                         this.path.id !== undefined
                             && $slot.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', this.path.id )
                         $root.append( $slot )
@@ -773,8 +774,8 @@
                         } )
                     } else {
                         var $letter = this.$letters[ 0 ]
-                        console.log( text + ':' + $letter )
                         $letter.text( text )
+                        console.log( text + ':' + $letter.parent().attr( 'id', 'test' ) )
                     }
                 },
                 get method() { return this.methodʻ },
@@ -793,6 +794,7 @@
                     this.$letters.each( function( $letter ) {
                         $letter.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', this.id )
                     } )
+                    this.update()
                 },
             }
 
