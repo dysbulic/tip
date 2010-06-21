@@ -715,8 +715,6 @@
 
             var $path = ( $.__.$( '<textPath/>' )
                           .attr( 'startOffset', '50%' ) )
-            $root.append( $.__.$( '<tspan/>' ) )
-            $root.append( $path )
 
             self.__defineSetter__( 'path', function( path ) {
                 if( path ) {
@@ -725,6 +723,9 @@
                     $text = $path
                     var id = typeof path == 'string' ? path : '#' + path.id
                     $path.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', id )
+                    if( $path.parent().size() == 0 ) {
+                        $root.append( $path ) // Has to follow attr set?
+                    }
                 } else { 
                     $root.text( self.text )
                     $path.text( '' )
