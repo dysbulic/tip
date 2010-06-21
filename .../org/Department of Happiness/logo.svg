@@ -716,14 +716,30 @@
                 var id = typeof path == 'string' ? path : '#' + path.id
                 $path.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', id )
             } )
+
+            self.__defineGetter__( 'to', function() { return {
+                set path( opt ) {
+                    console.log('!')
+                    $path.attr( 'method', opt )
+                },
+            } } )
             
-            if( config instanceof Object ) {
-                for( prop in self ) {
-                    if( config[ prop ] !== undefined ) {
-                        self[ prop ] = config[ prop ]
+            function configure( config ) {
+                for( prop in config ) {
+                    if( config.hasOwnProperty( prop ) ) {
+                        var next = config[ prop ]
+                            console.log( prop )
+                        var current = this[ prop ]
+                        if( next instanceof Object && current instanceof Object ) {
+                            console.log( 'p:' + prop )
+                            configure.call( current, next )
+                        } else {
+                            this[ prop ] = next
+                        }
                     }
                 }
             }
+            configure.call( self, config )
         }
     ]]></script>
 
@@ -829,7 +845,7 @@
 
             var end = {
                 get x() {
-                    return attrs.center.x - attrs.radius * Math.sin( Degrees.to.Radians( attrs.extent ) )
+                    return attrs.center.x + attrs.radius * Math.sin( Degrees.to.Radians( attrs.extent ) )
                 },
                 get y() {
                     return ( - attrs.center.y ) - attrs.radius * Math.cos( Degrees.to.Radians( attrs.extent ) )
@@ -955,7 +971,7 @@
             } )
             head.path = new Arc( {
                 radius : 82,
-                clear : true,
+                //clear : true,
                 stroke : 'red',
             } )
             head.text = new Text( {
@@ -965,6 +981,8 @@
                 align : 'center',
                 fill : 'white',
                 height : 22,
+                extent : 220,
+                to : { path : 'stretch' },
             } )
 
             canvas.add( head )
@@ -1003,12 +1021,12 @@
                 {
                     elem : head.path,
                     attr : 'offset',
-                    val : slide.linear( 135 )
+                    val : slide.linear( - head.text.extent / 2 )
                 },
                 {
                     elem : head.path,
                     attr : 'extent',
-                    val : slide.linear( -270 )
+                    val : slide.linear( head.text.extent )
                 },
                 {
                     elem : border.outer,
