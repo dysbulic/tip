@@ -253,6 +253,32 @@
                         return self.$root.attr( 'id', id )
                     } )
                 },
+                shape : function( config ) {
+                    var self = config && config.self || this
+
+                    ;[ 'stroke-width' ].each( function( attr ) {
+                        self.__defineGetter__( attr, function() {
+                            return parseFloat( self.$root.css( attr ) )
+                        } )
+                        self.__defineSetter__( attr, function( val ) {
+                            //$root.css( attr, val )
+                            self.$root.get(0).style.setProperty( attr, val, null )
+                        } )
+                    } )
+
+                    ;[ 'stroke', 'fill' ].each( function( attr ) {
+                        self.__defineGetter__( attr, function() {
+                            return self.$root.css( attr )
+                        } )
+                        self.__defineSetter__( attr, function( val ) {
+                            self.$root.get(0).style.setProperty( attr, val, null )
+                        } )
+                    } )
+
+                    self.__defineSetter__( 'clear', self.make.clear = function() {
+                        self.stroke
+                    }
+                },
             }
             Tip.__defineGetter__( 'add', function() { return add } )
         } )()
@@ -523,6 +549,8 @@
             var $root = Tip.add.$root.apply( self, args )
             Tip.add.id.apply( self, args )
 
+            Tip.add.shape.apply( self, args )
+            
             var curve = {
                 radius : 0,
                 center : {
@@ -535,14 +563,12 @@
                 update : function() {
                     $root.attr( 'd', [
                         'm',
-                        this.center.x + ( this.positive.arc ? 0 : 0 ) * this.radius,
-                        this.center.y + ( this.positive.arc ? 1 : 1 ) * this.radius,
+                        this.center.x, this.center.y + this.radius,
                         'a', this.radius, this.radius,
                         this.x.axis.rotation,
                         this.large.arc ? 1 : 0,
                         this.positive.arc ? 1 : 0,
-                        this.positive.arc ? .0001 : -.0001,
-                        this.positive.arc ? 0 : 0
+                        ( this.positive.arc ? 1 : -1 ) * .0001, 0
                     ].join( ' ' ) )
                 }
             }
@@ -619,25 +645,6 @@
                     self[ prop ] = circle[ prop ]
                 }
             }
-
-            ;[ 'stroke-width' ].each( function( attr ) {
-                self.__defineGetter__( attr, function() {
-                    return parseFloat( $root.css( attr ) )
-                } )
-                self.__defineSetter__( attr, function( val ) {
-                    //$root.css( attr, val )
-                    $root.get(0).style.setProperty( attr, val, null )
-                } )
-            } )
-
-            ;[ 'stroke', 'fill' ].each( function( attr ) {
-                self.__defineGetter__( attr, function() {
-                    return $root.css( attr )
-                } )
-                self.__defineSetter__( attr, function( val ) {
-                    $root.get(0).style.setProperty( attr, val, null )
-                } )
-            } )
 
             if( config instanceof Object ) {
                 for( prop in self ) {
@@ -962,6 +969,7 @@
                 path : true,
                 radius : 93,
                 positive : { arc : false },
+                stroke : 'none',
             } )
             sub.text = new Text( {
                 text : 'Totus Custodes',
