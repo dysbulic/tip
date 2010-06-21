@@ -284,50 +284,74 @@
             Tip.__defineGetter__( 'add', function() { return add } )
         } )()
     ]]></script>
+
+    <script type="application/javascript"><![CDATA[
+        ( function() {
+            function configure( config ) {
+                for( prop in config ) {
+                    if( config.hasOwnProperty( prop ) ) {
+                        var next = config[ prop ]
+                            console.log( prop )
+                        var current = this[ prop ]
+                        if( next instanceof Object && current instanceof Object ) {
+                            configure.call( current, next )
+                        } else {
+                            this[ prop ] = next
+                        }
+                    }
+                }
+            }
+            Tip.configure = configure
+        } )()
+    ]]></script>
     
     <script type="application/javascript"><![CDATA[
         function Container( config ) {
-            var self = config && config.self || this
+            var args = Array.prototype.slice.call( arguments )
+            config = config || ( function() {
+                var config = {}
+                args.unshift( config )
+                return config
+            } )()
+            var self = config.self || this
+            var $root = Tip.add.$root.apply( self, args )
+            Tip.add.id.apply( self, args )
 
-            var $root = Tip.add.$root.apply( self, arguments )
             Tip.$work.append( $root )
 
-            Tip.add.id.apply( self, arguments )
+            function update() {
+                $root.attr( 'transform',
+                            ( 'rotate(' + this.rotation + ')'
+                              + 'translate(' + this.x + ',' + this.y + ')'
+                              + ' scale(' + this.scale + ')' ) )
+            }
 
             var transform = {
                 x: 0,
                 y: 0,
                 scale: 1,
                 rotation : 0,
-                update: function() {
-                    $root.attr( 'transform',
-                                ( 'rotate(' + this.rotation + ')'
-                                  + 'translate(' + this.x + ',' + this.y + ')'
-                                  + ' scale(' + this.scale + ')' ) )
-                },
             }
-            transform.update()
+            update.call( transform )
 
             var elems = []
 
             function add( elem ) {
                 elems.push( elem )
-                if( elem && elem.$root ) {
-                    elem = elem.$root
-                }
-                $root.append( elem )
+                $root.append( elem && elem.$root || elem )
             }
             self.add = add
 
-            self.each = function( f ) {
+            function each( f ) {
                 elems.each( f )
             }
+            self.each = each
 
             ;[ 'x', 'y', 'scale', 'rotation' ].each( function( attr ) {
                 self.__defineGetter__( attr, function() { return transform[ attr ] } )
                 self.__defineSetter__( attr, function( val ) {
                     transform[ attr ] = val
-                    transform.update()
+                    update.call( transform )
                 } )
             } )
 
@@ -336,13 +360,7 @@
                                        size.external.height * win.height / size.internal.height ) / 2
             } )
 
-            if( config instanceof Object ) {
-                for( prop in self ) {
-                    if( config[ prop ] !== undefined ) {
-                        self[ prop ] = config[ prop ]
-                    }
-                }
-            }
+            Tip.configure.apply( self, args )
         }
     ]]></script>
 
@@ -677,6 +695,8 @@
 
             Tip.add.shape.apply( self, args )
 
+            
+
             var $path
             var $text = $root
 
@@ -720,28 +740,11 @@
             self.__defineSetter__( 'spacing', function( spacing ) { return $path.attr( 'spacing', spacing ) })
 
             self.__defineGetter__( 'to', function() { return {
-                set path( opt ) {
-                    console.log('!')
-                    $path.attr( 'method', opt )
-                },
+                // Ideally, there should be a way to fill the space above the curve
+                set path( opt ) { $path.attr( 'method', opt ) },
             } } )
             
-            function configure( config ) {
-                for( prop in config ) {
-                    if( config.hasOwnProperty( prop ) ) {
-                        var next = config[ prop ]
-                            console.log( prop )
-                        var current = this[ prop ]
-                        if( next instanceof Object && current instanceof Object ) {
-                            console.log( 'p:' + prop )
-                            configure.call( current, next )
-                        } else {
-                            this[ prop ] = next
-                        }
-                    }
-                }
-            }
-            configure.call( self, config )
+            Tip.configure.call( self, config )
         }
     ]]></script>
 
