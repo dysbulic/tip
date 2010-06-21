@@ -504,11 +504,9 @@
 
     <script type="application/javascript"><![CDATA[
         function Circle( config ) {
-            var args = Array.prototype.slice.call( this, arguments )
-            console.log('l:' + arguments.length + ':' + args.length)
+            var args = Array.prototype.slice.call( arguments )
             config = config || ( function() {
                 var config = {}
-                console.log('unshift')
                 args.unshift( config )
                 return config
             } )()
@@ -522,7 +520,6 @@
                                  cy : 0,
                                  r : 0,
                              } ) )
-            console.log(args[0].$root)
             var $root = Tip.add.$root.apply( self, args )
             Tip.add.id.apply( self, args )
 
