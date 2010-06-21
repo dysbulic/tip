@@ -535,14 +535,14 @@
                 update : function() {
                     $root.attr( 'd', [
                         'm',
-                        this.center.x + ( this.positive.arc ? 1 : 0 ) * this.radius,
-                        this.center.y + ( this.positive.arc ? 0 : 1 ) * this.radius,
+                        this.center.x + ( this.positive.arc ? 0 : 0 ) * this.radius,
+                        this.center.y + ( this.positive.arc ? 1 : 1 ) * this.radius,
                         'a', this.radius, this.radius,
                         this.x.axis.rotation,
                         this.large.arc ? 1 : 0,
                         this.positive.arc ? 1 : 0,
-                        this.positive.arc ? 0 : -.0001,
-                        this.positive.arc ? -0.001 : 0
+                        this.positive.arc ? .0001 : -.0001,
+                        this.positive.arc ? 0 : 0
                     ].join( ' ' ) )
                 }
             }
@@ -671,6 +671,7 @@
             } )
 
             function align( position ) {
+                position = position == 'center' ? 'middle' : position
                 return $root.get(0).style.setProperty( 'text-anchor', position, null )
             }
             this.__defineGetter__( 'align', function() { return {
@@ -678,6 +679,7 @@
                 get start() { return align( 'start' ) },
                 get end() { return align( 'end' ) },
             } } )
+            this.__defineSetter__( 'align', function( alignment ) { return align( alignment ) } )
 
             this.__defineSetter__( 'path', function( path ) {
                 $path = $path || ( function() {
@@ -936,7 +938,6 @@
 
             var head = new Container( {
                 id : 'head',
-                //rotation : -90,
             } )
             head.path = new Circle( {
                 path : true,
@@ -955,7 +956,7 @@
 
             var sub = new Container( {
                 id : 'sub',
-                //rotation : 90,
+                rotation : 180,
             } )
             sub.path = new Circle( {
                 path : true,
@@ -972,7 +973,6 @@
             canvas.add( sub )
             sub.add( sub.path )
             sub.add( sub.text )
-            sub.text.align.center
 
             var rc = new Arc( {
                 center : {
