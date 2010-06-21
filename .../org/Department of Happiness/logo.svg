@@ -717,6 +717,8 @@
                 $path.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', id )
             } )
 
+            self.__defineSetter__( 'spacing', function( spacing ) { return $path.attr( 'spacing', spacing ) })
+
             self.__defineGetter__( 'to', function() { return {
                 set path( opt ) {
                     console.log('!')
