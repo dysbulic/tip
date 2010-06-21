@@ -715,7 +715,7 @@
 
             var $path = {
                 textʻ : '',
-                methodʻ : 'auto',
+                methodʻ : 'align',
                 $letters : [],
                 text : function( text ) {
                     if( arguments.length == 0 ) {
@@ -727,22 +727,32 @@
                         } )
                     }
                     this.textʻ = text
+                    this.update()
+                },
+                update : function() {
+                    var text = this.textʻ
                     var stretch = this.method == 'stretch'
                     var num = { slots : ( stretch ? text.length : 1 ) }
-                    while( this.$letters.length <= num.slots ) {
-                        this.$letters.push( $.__.$( '<textPath/>' )
-                                       .attr( {
-                                           startOffset : '50%',
-                                           method : this.method,
-                                       } ) )
+                    while( this.$letters.length < num.slots ) {
+                        var $slot = ( $.__.$( '<textPath/>' )
+                                      .attr( {
+                                          startOffset : '50%',
+                                          method : this.method,
+                                      } ) )
+                        $root.append( $slot )
+                        console.log( $root.children().size() )
+                        this.$letters.push( $slot )
                     }
 
                     var self = this
-                    if( this.method == 'stretch' 
-                    text.each( function( letter, idx ) {
-                        console.log( idx + ':' + self.$letters.length + ':' + num.slots )
-                        self.$letters[ idx ].text( letter )
-                    } )
+                    if( stretch ) {
+                        text.each( function( letter, idx ) {
+                            console.log( idx + ':' + self.$letters.length + ':' + num.slots )
+                            self.$letters[ idx ].text( letter )
+                        } )
+                    } else {
+                        this.$letters[ 0 ].text( text )
+                    }
                 },
                 get method() { return this.methodʻ },
                 set method( method ) {
@@ -750,8 +760,20 @@
                     this.$letters.each( function( $letter ) {
                         $letter.attr( 'method', method )
                     } )
+                    this.update()
                     return method
-                }
+                },
+                set path( path ) {
+                    var id = typeof path == 'string' ? path : '#' + path.id
+                    this.$letters.each( function( $letter ) {
+                        $letter.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', id )
+                        console.log('!')
+                        if( $letter.parent().size() == 0 ) {
+                            console.log('!')
+                            $root.append( $slot )
+                        }
+                    } )
+                },
             }
 
             self.__defineSetter__( 'path', function( path ) {
@@ -759,11 +781,6 @@
                     $path.text( self.text )
                     $root.text( '' )
                     $text = $path
-                    var id = typeof path == 'string' ? path : '#' + path.id
-                    $path.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', id )
-                    if( $path.parent().size() == 0 ) {
-                        $root.append( $path ) // Has to follow attr set?
-                    }
                 } else { 
                     $root.text( self.text )
                     $path.text( '' )
