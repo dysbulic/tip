@@ -722,7 +722,6 @@
                     this.textʻʻ = text
                     this.update()
                     this.display.length = $root.get(0).getBBox().width
-                    console.log( this.display.length )
                 },
                 display : { },
                 methodʻ : 'align',
@@ -752,31 +751,30 @@
                         this.path.id !== undefined
                             && $slot.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', this.path.id )
                         $root.append( $slot )
-                        console.log( text )
                         this.$letters.push( $slot )
                     }
 
                     var $box = $.__.$( '<text/>' )
                     Tip.$work.append( $box )
                     var Box = { for : function( $path ) {
-                        var $parent = $path.parent()
                         $box.append( $path )
                         var box = $box.get(0).getBBox()
-                        $parent.append( $path )
+                        $root.append( $path )
                         return box
                     } }
 
                     var self = this
+                    console.log( text + ':' + self.$letters.length )
                     if( stretch ) {
                         text.each( function( letter, idx ) {
-                            console.log(idx)
                             var $letter = self.$letters[ idx ]
                             $letter.text( letter )
                             $letter.box = Box.for( $letter )
-                            console.log( $letter.box )
                         } )
                     } else {
-                        this.$letters[ 0 ].text( text )
+                        var $letter = this.$letters[ 0 ]
+                        console.log( text + ':' + $letter )
+                        $letter.text( text )
                     }
                 },
                 get method() { return this.methodʻ },
