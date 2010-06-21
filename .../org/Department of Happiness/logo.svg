@@ -740,6 +740,7 @@
                 },
                 update : function() {
                     var text = this.textʻ
+                    console.log( 'u:' + text + ':' + this.path.id )
                     var stretch = this.method == 'stretch'
                     var num = { slots : ( stretch ? text.length : 5 ) }
                     while( this.$letters.length < num.slots ) {
@@ -748,10 +749,8 @@
                                           startOffset : '50%',
                                           method : this.method,
                                       } ) )
-                        console.log( text + ':' + this.path.id )
                         this.path.id !== undefined
                             && $slot.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', this.path.id )
-                        $root.append( $slot )
                         this.$letters.push( $slot )
                     }
 
@@ -765,7 +764,6 @@
                     } }
 
                     var self = this
-                    console.log( text + ':' + self.$letters.length )
                     if( stretch ) {
                         text.each( function( letter, idx ) {
                             var $letter = self.$letters[ idx ]
@@ -775,7 +773,6 @@
                     } else {
                         var $letter = this.$letters[ 0 ]
                         $letter.text( text )
-                        console.log( text + ':' + $letter.parent().attr( 'id', 'test' ) )
                     }
                 },
                 get method() { return this.methodʻ },
@@ -790,11 +787,13 @@
                 pathʻ : { },
                 get path() { return this.pathʻ },
                 set path( path ) {
-                    this.path.id = typeof path == 'string' ? path : '#' + path.id
-                    this.$letters.each( function( $letter ) {
-                        $letter.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', this.id )
+                    var self = this
+                    self.path.id = typeof path == 'string' ? path : '#' + path.id
+                    self.$letters.each( function( $letter ) {
+                        $letter.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', self.path.id )
+                        $root.append( $letter )
                     } )
-                    this.update()
+                    self.update()
                 },
             }
 
