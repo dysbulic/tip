@@ -713,8 +713,26 @@
             } } )
             self.__defineSetter__( 'align', function( alignment ) { return align( alignment ) } )
 
-            var $path = ( $.__.$( '<textPath/>' )
-                          .attr( 'startOffset', '50%' ) )
+            
+
+            var $path = {
+                textʻ : '',
+                $letters : []
+                get text() { return this.textʻ },
+                set text( text ) {
+                    this.textʻ = text
+                    var num = {
+                        slots : ( this.method == 'stretch'
+                                  ? text.length
+                                  : 1 )
+                              }
+                    while( $letters.length <= num.slots ) {
+                        $letters.push( $.__.$( '<textPath/>' )
+                                       .attr( 'startOffset', '50%' ) )
+                    }
+                    
+                },
+            }
 
             self.__defineSetter__( 'path', function( path ) {
                 if( path ) {
@@ -739,11 +757,11 @@
                 // Ideally, there should be a way to fill the space above the curve
                 set path( opt ) {
                     if( opt == 'stretch' ) {
-                        var text = self.text
-                    } else {
                         $path.attr( 'method', opt )
                     }
                 },
+                get path() { return $path.method }
+            },
             } } )
             
             Tip.configure.call( self, config )
