@@ -24,12 +24,18 @@ function List( init ) {
     self.set = set
 
     function add( val, key ) {
+        if( key === undefined ) { // Push
+            key = store.push( val ) - 1
+            keys.push( key )
+            position[ key ] = key
+        }
         if( position[ key ] === undefined ) { // New key
             keys.push( key )
             position[ key ] = store.push( val ) - 1
             self.__defineGetter__( key, function() { return self.get( key ) } )
             self.__defineSetter__( key, function( val ) { return self.set( key, val ) } )
         }
+        return key
     }
     self.add = add
 

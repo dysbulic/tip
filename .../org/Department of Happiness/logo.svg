@@ -193,18 +193,31 @@
             this.add = function( tixel ) {
                 contents.add( tixel )
             }
+
+            this.__defineGetter__( 'length', function() {
+                return contents.length
+            } )
         }
 
         var scene = new Scene
         scene.go
     ]]></script>
 
+    <script type="application/javascript"><![CDATA[ 
+        ( function( $ ) {
+            var Tip = {}
+            this.__defineGetter__( 'Tip', function() { return Tip } )
+        } )( jQuery )
+    ]]></script>
+
     <script type="application/javascript"><![CDATA[
         ( function() {
             var $work
-            this.__defineGetter__( '$work', function() {
+            Tip.__defineGetter__( '$work', function() {
                 return $work = $work || ( function() {
-                    var $work = $.__.$( '<g/>' ).css( 'visibility', 'hidden' )
+                    var $work = ( $.__.$( '<g/>' )
+                                  .css( 'visibility', 'hidden' )
+                                  .attr( 'id', 'work' ) )
                     $.__.$( '#' ).append( $work )
                     return $work
                 } )()
@@ -213,57 +226,46 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
-        ( function( $ ) {
-            $.$root = function( config ) {
-                var $root = config && config.$root || $.__.$( '<g/>' )
-                this.__defineGetter__( '$root', function() { return $root } )
-            }
-        } )( jQuery )
-    ]]></script>
-
-    <script type="application/javascript"><![CDATA[
         ( function() {
             var add = {
-                id : function() {
-                    this.__defineGetter__( 'id', function() {
-                        this.id = ( this.id !== undefined
-                                    ? this.id
-                                    : ( this.$root.attr( 'id' ) !== undefined
-                                        ? this.$root.attr( 'id' )
-                                        : ( function() {
-                                            var id = time.now + '_' + Math.random()
-                                            self.id = id
-                                            return id
-                                        } )() ) )
-                        return this.id
+                $root : function( config ) {
+                    var self = config && config.self || this
+                    var $root = config && config.$root || $.__.$( '<g/>' )
+                    this.__defineGetter__( '$root', function() { return $root } )
+                    return $root
+                },
+                id : function( config ) {
+                    var self = config && config.self || this
+                    var id 
+                    self.__defineGetter__( 'id', function() {
+                        id = ( id !== undefined
+                               ? id
+                               : ( self.$root.attr( 'id' ) !== undefined
+                                   ? self.$root.attr( 'id' )
+                                   : ( function() {
+                                       var id = time.now + '_' + Math.random()
+                                       self.id = id
+                                       return id
+                                   } )() ) )
+                        return id
                     } )
-                    this.__defineSetter__( 'id', function( id ) {
-                        return this.$root.attr( 'id', id )
+                    self.__defineSetter__( 'id', function( id ) {
+                        return self.$root.attr( 'id', id )
                     } )
                 },
             }
-            this.__defineGetter__( 'add', function() { console.log(add.id);return add } )
+            Tip.__defineGetter__( 'add', function() { return add } )
         } )()
     ]]></script>
     
     <script type="application/javascript"><![CDATA[
-        ( function() {
-            var self = {} || this
-            
-            $.$root.apply( self, arguments )
-            $work.append( self.$root )
-        
-            add.id.apply( self, arguments )
-            console.log( self )
-        } )()
-
         function Container( config ) {
-            var self = config.self || this
+            var self = config && config.self || this
 
-            $.$root( self, arguments )
-            $work.append( self.$root )
+            var $root = Tip.add.$root.apply( self, arguments )
+            Tip.$work.append( $root )
 
-            add.id.apply( self, arguments )
+            Tip.add.id.apply( self, arguments )
 
             var transform = {
                 x: 0,
@@ -288,15 +290,12 @@
                 }
                 $root.append( elem )
             }
-            this.add = add
+            self.add = add
 
-            this.each = function( f ) {
+            self.each = function( f ) {
                 elems.each( f )
             }
 
-            this.__defineGetter__( '$root', function() { return $root } )
-        
-            var self = this
             ;[ 'x', 'y', 'scale', 'rotation' ].each( function( attr ) {
                 self.__defineGetter__( attr, function() { return transform[ attr ] } )
                 self.__defineSetter__( attr, function( val ) {
@@ -505,17 +504,20 @@
 
     <script type="application/javascript"><![CDATA[
         function Circle( config ) {
-            config = config || {}
-            var $root = ( config.path
-                          ? $.__.$( '<path/>' ).attr( {
-                              d : '',
-                          } )
-                          : $.__.$( '<circle/>' ).attr( {
-                              cx : 0,
-                              cy : 0,
-                              r : 0,
-                          } ) )
-            
+            var self = config && config.self || this
+            config.$root = ( config.path
+                             ? $.__.$( '<path/>' ).attr( {
+                                 d : '',
+                             } )
+                             : $.__.$( '<circle/>' ).attr( {
+                                 cx : 0,
+                                 cy : 0,
+                                 r : 0,
+                             } ) )
+            console.log( config === arguments[ 0 ] )
+            var $root = Tip.add.$root.apply( self, arguments )
+            Tip.add.id.apply( self, arguments )
+
             var curve = {
                 radius : 0,
                 center : {
@@ -605,7 +607,6 @@
                                                  : function( radius ) { $root.attr( 'r', radius ) }
                                                ) )
 
-            var self = this
             for( prop in circle ) {
                 var get = circle.__lookupGetter__( prop )
                 var set = circle.__lookupSetter__( prop )
@@ -621,11 +622,6 @@
                 }
             }
 
-            this.__defineGetter__( '$root', function() { return $root } )
-
-            this.__defineGetter__( 'id', function() { return $root.attr( 'id' ) } )
-            this.__defineSetter__( 'id', function( id ) { return $root.attr( 'id', id ) } )
-            
             ;[ 'stroke-width' ].each( function( attr ) {
                 self.__defineGetter__( attr, function() {
                     return parseFloat( $root.css( attr ) )
@@ -1052,6 +1048,7 @@
                 } )
                 scene.add( tixel )
             } )
+            console.log( scene.length )
         } )
     ]]></script>
 
