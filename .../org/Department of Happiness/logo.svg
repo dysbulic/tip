@@ -739,18 +739,20 @@
                     }
                 },
                 update : function() {
-                    var text = this.textʻ
-                    var stretch = this.method == 'stretch'
+                    var self = this
+                    var text = self.textʻ
+                    var stretch = self.method == 'stretch'
                     var num = { slots : ( stretch ? text.length : 1 ) }
-                    while( this.$letters.length < num.slots ) {
+                    while( self.$letters.length < num.slots ) {
                         var $slot = ( $.__.$( '<textPath/>' )
                                       .attr( {
                                           startOffset : '50%',
                                           method : this.method,
                                       } ) )
-                        this.path.id !== undefined
-                            && $slot.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', this.path.id )
-                        this.$letters.push( $slot )
+                        self.path.id !== undefined
+                            && $slot.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', self.path.id )
+                        $root.append( $slot )
+                        self.$letters.push( $slot )
                     }
 
                     var $box = $.__.$( '<text/>' )
@@ -759,9 +761,9 @@
                         return $box.text( str ).get(0).getBBox()
                     } }
 
-                    var self = this
                     if( stretch ) {
                         var total = text.length
+                        var width = Box.for( text ).width
                         text.each( function( letter, idx ) {
                             var $letter = self.$letters[ idx ]
                             $letter.text( letter )
@@ -769,7 +771,7 @@
                             $letter.box = Box.for( letter )
                             console.log( $letter.box )
                         } )
-                    } else {
+                    } else if( this.path.id !== undefined ) {
                         var $letter = this.$letters[ 0 ]
                         $letter.text( text )
                     }
