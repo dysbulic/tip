@@ -503,6 +503,18 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
+        ( function() {
+            console.log( Function.prototype.call )
+            function A() {
+                this.test = 'test'
+                B()
+            }
+            A.test = 'tset'
+            function B() {
+                console.log(arguments.callee.test)
+            }
+            A()            
+        } )()
         function Circle( config ) {
             config = config || {}
             var self = config.self || this
