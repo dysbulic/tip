@@ -231,7 +231,7 @@
                 $root : function( config ) {
                     var self = config && config.self || this
                     var $root = config && config.$root || $.__.$( '<g/>' )
-                    this.__defineGetter__( '$root', function() { return $root } )
+                    self.__defineGetter__( '$root', function() { return $root } )
                     return $root
                 },
                 id : function( config ) {
@@ -291,7 +291,6 @@
                 for( prop in config ) {
                     if( config.hasOwnProperty( prop ) ) {
                         var next = config[ prop ]
-                            console.log( prop )
                         var current = this[ prop ]
                         if( next instanceof Object && current instanceof Object ) {
                             configure.call( current, next )
@@ -420,6 +419,8 @@
             }
             $obj.attr( size )
             $bg.attr( size )
+
+            //Tip.configure.apply( self, args )
         }
     ]]></script>
 
@@ -567,7 +568,6 @@
                              } ) )
             var $root = Tip.add.$root.apply( self, args )
             Tip.add.id.apply( self, args )
-
             Tip.add.shape.apply( self, args )
             
             var curve = {
@@ -665,13 +665,7 @@
                 }
             }
 
-            if( config instanceof Object ) {
-                for( prop in self ) {
-                    if( config[ prop ] !== undefined ) {
-                        self[ prop ] = config[ prop ]
-                    }
-                }
-            }
+            Tip.configure.apply( self, args )
         }
     ]]></script>
 
@@ -692,12 +686,8 @@
                              } ) )
             var $root = Tip.add.$root.apply( self, args )
             Tip.add.id.apply( self, args )
-
             Tip.add.shape.apply( self, args )
 
-            
-
-            var $path
             var $text = $root
 
             self.__defineGetter__( 'text', function() { return $text.text() } )
@@ -723,25 +713,36 @@
             } } )
             self.__defineSetter__( 'align', function( alignment ) { return align( alignment ) } )
 
+            var $path = ( $.__.$( '<textPath/>' )
+                          .attr( 'startOffset', '50%' ) )
+            $root.append( $.__.$( '<tspan/>' ) )
+            $root.append( $path )
+
             self.__defineSetter__( 'path', function( path ) {
-                $path = $path || ( function() {
-                    var $path = $text = ( $.__.$( '<textPath/>' )
-                                          .attr( 'startOffset', '50%' ) )
-                    $path.text( $root.text() )
+                if( path ) {
+                    $path.text( self.text )
                     $root.text( '' )
-                    $root.append( $path )
-                    
-                    return $path
-                } )()
-                var id = typeof path == 'string' ? path : '#' + path.id
-                $path.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', id )
+                    $text = $path
+                    var id = typeof path == 'string' ? path : '#' + path.id
+                    $path.get(0).setAttributeNS( $.__.$.ns[ 'xlink' ], 'xlink:href', id )
+                } else { 
+                    $root.text( self.text )
+                    $path.text( '' )
+                    $text = $root
+                }
             } )
 
             self.__defineSetter__( 'spacing', function( spacing ) { return $path.attr( 'spacing', spacing ) })
 
             self.__defineGetter__( 'to', function() { return {
                 // Ideally, there should be a way to fill the space above the curve
-                set path( opt ) { $path.attr( 'method', opt ) },
+                set path( opt ) {
+                    if( opt == 'stretch' ) {
+                        var text = self.text
+                    } else {
+                        $path.attr( 'method', opt )
+                    }
+                },
             } } )
             
             Tip.configure.call( self, config )
@@ -750,41 +751,36 @@
 
     <script type="application/javascript"><![CDATA[
         function Point( config ) {
-            config = config || {}
+            var args = Array.prototype.slice.call( arguments )
+            config = config || ( function() {
+                var config = {}
+                args.unshift( config )
+                return config
+            } )()
+            var self = config.self || this
+            var circle = new Circle
 
-            var $root = $.__.$( '<circle/>' ).attr( {
-            } )
-            this.__defineGetter__( '$root', function() { return $root } )
+            this.__defineGetter__( '$root', circle.__lookupGetter__( '$root' ) )
 
             var self = this
             ;[ 'x', 'y' ].each( function( attr ) {
-                self.__defineGetter__( attr, function() {
-                    return parseFloat( $root.attr( 'c' + attr ) )
-                } )
-                self.__defineSetter__( attr, function( val ) {
-                    return $root.attr( 'c' + attr, val )
-                } )
+                self.__defineGetter__( attr, circle.center.__lookupGetter__( attr ) )
+                self.__defineSetter__( attr, circle.center.__lookupSetter__( attr ) )
             } )
 
-            self.__defineGetter__( 'radius', function() {
-                    return parseFloat( $root.attr( 'r' ) )
-            } )
-            self.__defineSetter__( 'radius', function( val ) {
-                return $root.attr( 'r', val )
-            } )
+            for( prop in circle ) {
+                if( circle.hasOwnProperty( prop ) && prop != 'center' ) {
+                    self.__defineGetter__( prop, circle.__lookupGetter__( prop ) )
+                    self.__defineSetter__( prop, circle.__lookupGetter__( prop ) )
+                }
+            }
             self.radius = config.radius || 1
 
             self.__defineSetter__( 'color', function( color ) {
                 return $root.get(0).style.setProperty( 'fill', color, null )
             } )
 
-            if( config instanceof Object ) {
-                for( prop in self ) {
-                    if( config[ prop ] !== undefined ) {
-                        self[ prop ] = config[ prop ]
-                    }
-                }
-            }
+            Tip.configure.apply( self, args )
         }
         function Tracker( config ) {
             var elem = config.elem || ( function() {
@@ -863,17 +859,17 @@
                 $root.attr( 'd', [
                     'm',
                     start.x, start.y,
-                    'A', attrs.radius, attrs.radius,
+                    'A', this.radius, this.radius,
                     x.axis.rotation,
-                    Math.abs( attrs.extent ) >= 180 ? 1 : 0,
-                    attrs.extent > 0 ? 1 : 0,
+                    Math.abs( this.extent ) >= 180 ? 1 : 0,
+                    this.extent > 0 ? 1 : 0,
                     end.x, end.y
                 ].join( ' ' ) )
-                $root.attr( 'transform', 'rotate(' + ( attrs.offset + ' '
-                                                       + attrs.center.x + ',' + ( - attrs.center.y )
+                $root.attr( 'transform', 'rotate(' + ( this.offset + ' '
+                                                       + this.center.x + ',' + ( - this.center.y )
                                                        + ')' ) )
             }
-            update()
+            update.call( attrs )
  
             attrs.each( function( val, attr ) {
                 self.__defineGetter__( attr, function() {
@@ -881,18 +877,12 @@
                 } )
                 self.__defineSetter__( attr, function( val ) {
                     attrs[ attr ] = val
-                    update()
+                    update.call( attrs )
                     return self[ attr ]
                 } )
             } )
 
-            if( config instanceof Object ) {
-                for( prop in self ) {
-                    if( config[ prop ] !== undefined ) {
-                        self[ prop ] = config[ prop ]
-                    }
-                }
-            }
+            Tip.configure.apply( self, args )
         }
     ]]></script>
 
@@ -1016,11 +1006,6 @@
             canvas.add( sub )
             sub.add( sub.path )
             sub.add( sub.text )
-
-            var rc = new Arc( {
-                radius : 20,
-            } )
-            canvas.add( rc )
 
             ;[
                 {
