@@ -798,38 +798,44 @@
             return degrees * ( 2 * Math.PI ) / 360
         } } }
         function Arc( config ) {
-            var $root = $.__.$( '<path/>' )
-            this.__defineGetter__( '$root', function() { return $root } )
+            var args = Array.prototype.slice.call( arguments )
+            config = config || ( function() {
+                var config = {}
+                args.shift()
+                args.unshift( config )
+                return config
+            } )()
+            var self = config.self || this
 
-            var self = this
+            config.$root = $.__.$( '<path/>' )
+            var $root = Tip.add.$root.apply( self, args )
+
+            Tip.add.id.apply( self, args )
+            Tip.add.shape.apply( self, args )
 
             var attrs = new List( {
                 center : { x : 0, y : 0 },
                 radius : 0,
                 offset : 0,
                 extent : 0,
-                positive : { arc : false },
+                positive : { arc : true },
             } )
 
-            function start() {
-                return {
-                    get x() { return attrs.center.x - attrs.radius },
-                    get y() { return attrs.center.y },
-                }
+            var start = {
+                get x() { return attrs.center.x - attrs.radius },
+                get y() { return attrs.center.y },
             }
-            this.__defineGetter__( 'start', start )
+            self.__defineGetter__( 'start', function() { return start } )
 
-            function end() {
-                return {
-                    get x() {
-                        return attrs.center.x + attrs.radius * Math.cos( Degrees.to.Radians( attrs.extent ) )
-                    },
-                    get y() {
-                        return attrs.center.y - attrs.radius * Math.sin( Degrees.to.Radians( attrs.extent ) )
-                    },
-                }
+            var end = {
+                get x() {
+                    return attrs.center.x + attrs.radius * Math.cos( Degrees.to.Radians( attrs.extent ) )
+                },
+                get y() {
+                    return attrs.center.y - attrs.radius * Math.sin( Degrees.to.Radians( attrs.extent ) )
+                },
             }
-            this.__defineGetter__( 'end', end )
+            self.__defineGetter__( 'end', function() { return end } )
 
             function update() {
                 var x = { axis : { rotation : 0 } }
@@ -848,28 +854,15 @@
             }
             update()
  
-            this.__defineGetter__( 'offset', function() {
-                return offset
-            } )
-            this.__defineSetter__( 'offset', function( val ) {
-                offset = val
-                update()
-            } )
-
-            this.__defineGetter__( 'extent', function() {
-                return extent
-            } )
-            this.__defineSetter__( 'extent', function( val ) {
-                extent = val
-                update()
-            } )
-
-            this.__defineGetter__( 'radius', function() {
-                return radius
-            } )
-            this.__defineSetter__( 'radius', function( val ) {
-                radius = val
-                update()
+            attrs.each( function( val, attr ) {
+                self.__defineGetter__( attr, function() {
+                    return attrs[ attr ]
+                } )
+                self.__defineSetter__( attr, function( val ) {
+                    attrs[ attr ] = val
+                    update()
+                    return self[ attr ]
+                } )
             } )
 
             if( config instanceof Object ) {
@@ -934,7 +927,7 @@
 
             var hover = {
                 start: time.now,
-                duration: 100,
+                duration: 1000,
             }
 
             trigger.$root.hover(
@@ -1009,6 +1002,7 @@
                 radius : 20,
                 offset : 90,
                 extent : 180,
+                id : 'arc',
             } )
             canvas.add( rc )
 
@@ -1027,6 +1021,7 @@
             scene.add( tk )
 
             ;[
+/*
                 {
                     elem : rc,
                     attr : 'offset',
@@ -1037,6 +1032,7 @@
                     attr : 'extent',
                     val : slide.linear( 90 )
                 },
+*/
                 {
                     elem : border.outer,
                     attr : 'radius',
