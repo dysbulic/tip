@@ -535,13 +535,13 @@
                 update : function() {
                     $root.attr( 'd', [
                         'm',
-                        this.center.x - this.radius,
-                        this.center.y,
+                        this.center.x + ( this.positive.arc ? 1 : -1 ) * this.radius,
+                        this.center.y + ( this.positive.arc ? 0 : -1 ) * this.radius,
                         'a', this.radius, this.radius,
                         this.x.axis.rotation,
                         this.large.arc ? 1 : 0,
                         this.positive.arc ? 1 : 0,
-                        .0001, 0
+                            .0001, 0
                     ].join( ' ' ) )
                 }
             }
@@ -550,12 +550,12 @@
                            ? {
                                get x() { return curve.center.x },
                                set x( x ) {
-                                   curve.center.x = x;
+                                   curve.center.x = x
                                    return curve.update.call( curve )
                                },
                                get y() { return curve.center.y },
                                set y( x ) {
-                                   curve.center.y = y;
+                                   curve.center.y = y
                                    return curve.update.call( curve )
                                },
                            }
@@ -1055,7 +1055,6 @@
     #trigger { fill: lightblue; stroke: darkgray }
     #log { text-anchor: middle }
 
-#head path, #sub path { fill: none; stroke: none }
 #head text, #sub text { fill: white; font-size: 22px; font-variant: small-caps; }
 input { text-align: center; font-size: 13pt; border: none }
 foreignObject { overflow: visible; }
