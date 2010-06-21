@@ -504,7 +504,8 @@
 
     <script type="application/javascript"><![CDATA[
         function Circle( config ) {
-            var self = config && config.self || this
+            config = config || {}
+            var self = config.self || this
             config.$root = ( config.path
                              ? $.__.$( '<path/>' ).attr( {
                                  d : '',
