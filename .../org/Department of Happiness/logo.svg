@@ -500,13 +500,16 @@
 
             this.__defineGetter__( 'display', function() { return display } )
         } )()
+        console.log(Math.MAX_INT)
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
         function Circle( config ) {
             var args = Array.prototype.slice.call( this, arguments )
             config = config || ( function() {
-                return args.unshift( {} )
+                var config = {}
+                args.unshift( config )
+                return config
             } )()
             var self = config.self || this
             config.$root = ( config.path
@@ -539,15 +542,7 @@
                         this.x.axis.rotation,
                         this.large.arc ? 1 : 0,
                         this.positive.arc ? 1 : 0,
-                        this.center.x + this.radius * 2,
-                        this.center.y,
-                        'a', this.radius, this.radius,
-                        this.x.axis.rotation,
-                        this.large.arc ? 1 : 0,
-                        this.positive.arc ? 1 : 0,
-                        this.center.x - this.radius * 2,
-                        this.center.y,
-                        'z'
+                        .0001, 0
                     ].join( ' ' ) )
                 }
             }
