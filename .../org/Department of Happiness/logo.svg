@@ -829,7 +829,7 @@
 
             var end = {
                 get x() {
-                    return attrs.center.x + attrs.radius * Math.sin( Degrees.to.Radians( attrs.extent ) )
+                    return attrs.center.x - attrs.radius * Math.sin( Degrees.to.Radians( attrs.extent ) )
                 },
                 get y() {
                     return ( - attrs.center.y ) - attrs.radius * Math.cos( Degrees.to.Radians( attrs.extent ) )
@@ -955,7 +955,7 @@
             } )
             head.path = new Arc( {
                 radius : 82,
-                //clear : true,
+                clear : true,
                 stroke : 'red',
             } )
             head.text = new Text( {
@@ -1001,12 +1001,12 @@
 
             ;[
                 {
-                    elem : rc,
+                    elem : head.path,
                     attr : 'offset',
                     val : slide.linear( 135 )
                 },
                 {
-                    elem : rc,
+                    elem : head.path,
                     attr : 'extent',
                     val : slide.linear( -270 )
                 },
