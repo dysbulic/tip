@@ -121,17 +121,6 @@
         } )()
     ]]></script>
 
-    <script type="application/javascript"><![CDATA[
-        $( function() {
-            view = {
-                x : - win.width / 2,
-                y : - win.height / 2,
-                width : win.width,
-                height : win.height,
-            }
-        } )
-    ]]></script>
-
     <script type="application/javascript"><![CDATA[ 
         ( function( $ ) {
             var Tip = {}
@@ -245,7 +234,7 @@
             var $root = Tip.add.$root.apply( self, args )
             Tip.add.id.apply( self, args )
 
-            Tip.$work.append( $root )
+            $root.parent().size() == 0 && Tip.$work.append( $root )
 
             function update() {
                 $root.attr( 'transform',
@@ -290,6 +279,35 @@
 
             Tip.configure.apply( self, args )
         }
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
+        $( function() {
+            var orig = {
+                width : view.width,
+                height : view.height,
+            }
+            view = {
+                x : - win.width / 2,
+                y : - win.height / 2,
+                width : win.width,
+                height : win.height,
+            }
+            var body = new Container( {
+                $root : $( '#body' ),
+                size : {
+                    internal : {
+                        width : orig.width,
+                        height : orig.height,
+                    },
+                    external : {
+                        width : .95,
+                        height : .95,
+                    },
+                },
+           } )
+
+        } )
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
