@@ -290,13 +290,20 @@
                     [ 'width', 'height' ].each( function( axis ) {
                         if( size[ dimension ].__lookupGetter__( axis ) == undefined
                             && size[ dimension ][ axis ] == undefined ) {
-                            size[ dimension ][ axis ] = size[ dimension ][ axis ]
+                            size[ dimension ][ axis ] = sizeʻ[ dimension ][ axis ]
                         }
+                        sizeʻ[ dimension ][ axis ] = size[ dimension ][ axis ]
                     } )
                 } )
-                self.scale = Math.min( size.external.width * win.width / size.internal.width,
-                                       size.external.height * win.height / size.internal.height ) / 2
+                return self.scale = Math.min( size.external.width * win.width / size.internal.width,
+                                              size.external.height * win.height / size.internal.height ) / 2
             } )
+
+            var on = {
+                click : function( f ) {
+                    self.$root.click( f )
+                },
+            }
 
             Tip.configure.apply( self, args )
         }
@@ -328,6 +335,9 @@
                 },
            } )
 
+            body.on.click( function( click ) {
+                console.log( click.x + ',' + click.y )
+            } )
         } )
     ]]></script>
 
