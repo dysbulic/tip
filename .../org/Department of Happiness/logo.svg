@@ -1048,9 +1048,8 @@
                 id : 'head',
             } )
             head.path = new Arc( {
-                radius : 82,
-                //clear : true,
-                stroke : 'red',
+                radius : 80.5,
+                clear : true,
             } )
             head.text = new Text( {
                 text : 'Department of Happiness',
@@ -1058,8 +1057,8 @@
                 path : head.path,
                 align : 'center',
                 fill : 'white',
-                height : 22,
-                extent : 220,
+                height : 25,
+                extent : 210,
                 to : { path : 'stretch' },
             } )
 
@@ -1095,14 +1094,13 @@
                     elem : head.path,
                     attr : 'offset',
                     val : slide.linear( - head.text.extent / 2 ),
-                    get start() {
-                        return hover.start + hover.duration
-                    }
+                    get start() { return hover.start + hover.duration },
                 },
                 {
                     elem : head.path,
                     attr : 'extent',
-                    val : slide.linear( head.text.extent )
+                    val : slide.linear( head.text.extent ),
+                    get start() { return hover.start + hover.duration },
                 },
                 {
                     elem : border.outer,
