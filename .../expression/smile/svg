@@ -272,7 +272,28 @@
                 } )
             } )
 
+            var sizeʻ = {
+                internal : {
+                    width : view.width,
+                    height : view.height,
+                },
+                external : {
+                    width : 1,
+                    height : 1,
+                },
+                
+            }
             self.__defineSetter__( 'size', function( size ) {
+                size = size || {}
+                [ 'internal', 'external' ].each( function( dimension ) {
+                    size[ dimension ] = size[ dimension ] || {}
+                    [ 'width', 'height' ].each( function( axis ) {
+                        if( size[ dimension ].__lookupGetter__( axis ) == undefined
+                            && size[ dimension ][ axis ] == undefined ) {
+                            size[ dimension ][ axis ] = size[ dimension ][ axis ]
+                        }
+                    } )
+                } )
                 self.scale = Math.min( size.external.width * win.width / size.internal.width,
                                        size.external.height * win.height / size.internal.height ) / 2
             } )
