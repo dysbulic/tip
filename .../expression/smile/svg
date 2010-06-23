@@ -310,11 +310,14 @@
                         }
                         ;[ 'x', 'y' ].each( function( axis ) {
                             port.__defineGetter__( axis, function() {
-                                return ( point = point || ( function() {
-                                    var point = document.createSVGPoint()
-                                    point.matrixTransform( document.getScreenCTM().inverse() )
+                                point = point || ( function() {
+                                    var point = document.documentElement.createSVGPoint()
+                                    ;[ 'x', 'y' ].each( function( axisʻ ) {
+                                        point[ axisʻ ] = event[ 'client' + axisʻ.toUpperCase() ]
+                                    } )
+                                    point.matrixTransform( $root.get(0).getScreenCTM().inverse() )
                                     return point
-                                } )() )[ axis ]
+                                } )()[ axis ]
                             } )
                         } )
                         f.call( self, port )
