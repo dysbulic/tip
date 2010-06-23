@@ -55,7 +55,7 @@
 
             var smile = new SVG
             smile.eye.right.color = 'blue'
-            smile.eye.right.color = red
+            smile.eye.left.color = red
         } )
     ]]></script>
 
@@ -377,6 +377,17 @@
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
+        function SVG( config ) { 
+            config = config || {}
+            var $root = config.$root || ( function() {
+                //self.__defineGetter__( 'self', function() {} )
+                return $.__.$( '#' )
+            } )()
+            var self = config.self || this
+            
+            function label( ) {
+            }
+        }
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
