@@ -302,28 +302,7 @@
             var on = {
                 click : function( f ) {
                     self.$root.click( function( event ) {
-                        var transform = windo
-
-                        var point = doc.createSVGPoint();
-                        var startPoint;
-                        var currentPoint = 
-                        var dragging = false;
-
-                        for(var i = Math.max(4, Math.random() * 10); i >= 1; i--) {
-                            var rect = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-                            rect.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#rect');
-                            rect.setAttribute('x', Math.random() * 300);
-                            rect.setAttribute('y', Math.random() * 300);
-
-                            var dragListener = function(event) {
-                                [ currentPoint.x, currentPoint.y ] = [ event.clientX, event.clientY ];
-                                currentPoint = 
-                                var attrs = arguments.callee.attrs;
-                                [ attrs.x.nodeValue, attrs.y.nodeValue ] =
-                                    [ startPoint.x + (currentPoint.x - clickPoint.x),
-                                      startPoint.y + (currentPoint.y - clickPoint.y) ];
-
-
+                        var point
                         f.call( self, {
                             event : event,
                             get x() {
