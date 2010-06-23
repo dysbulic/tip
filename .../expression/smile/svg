@@ -303,23 +303,19 @@
                 click : function( f ) {
                     self.$root.click( function( event ) {
                         var point
-                        f.call( self, {
+                        var port = {
                             event : event,
-                            get x() {
+                        }
+                        ;[ 'x', 'y' ].each( function( axis ) {
+                            port.__defineGetter__( axis, function() {
                                 return ( point = point || ( function() {
-                                    var point = doc.createSVGPoint()
-                                    point.matrixTransform( doc.getScreenCTM().inverse() )
+                                    var point = document.createSVGPoint()
+                                    point.matrixTransform( document.getScreenCTM().inverse() )
                                     return point
-                                } )() ).x
-                            },
-                            get y() {
-                                return ( point = point || ( function() {
-                                    var point = doc.createSVGPoint()
-                                    point.matrixTransform( doc.getScreenCTM().inverse() )
-                                    return point
-                                } )() ).y
-                            },
+                                } )() )[ axis ]
+                            } )
                         } )
+                        f.call( self, port )
                     } )
                 },
             }
