@@ -3,8 +3,7 @@
      xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink"
      width="100%" height="100%"
-     viewBox="-77.25 -77.25 155 155"
-     id="expression/smile">
+     viewBox="-77.25 -77.25 155 155">
   <defs id="defs">
     <style type="text/css">
       #face {
@@ -56,7 +55,7 @@
             var smile = new SVG
             console.log( smile )
             //smile.eye.right.color = 'blue'
-            //smile.eye.left.color = red
+            smile.eye.left.color = red
         } )
     ]]></script>
 
@@ -385,10 +384,9 @@
                 return $.__.$( '#' )
             } )()
             var self = config.self || this
-            console.log( 'hi' )
-            ( function label( $elem, store ) {
+
+            var svg = ( function label( $elem, store ) {
                 var id = $elem.attr( 'id' )
-                console.log( id )
                 var storeʻ = store
                 if( id !== undefined ) {
                     console.log( id )
@@ -399,9 +397,10 @@
                         return storeʻ
                     } )
                 }
-                $elem.children.each( function( elem ) {
+                $elem.children().each( function( idx, elem ) {
                     label( $( elem ), storeʻ )
                 } )
+                return store
             } )( $root, self )
         }
     ]]></script>
