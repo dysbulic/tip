@@ -97,8 +97,8 @@
             var updateʻ = config.update || function() {
                 return $root.attr( attr, self.asString )
             }
-            var update = function( ʻpdatable ) {
-                if( ʻpdatable !== undefined ) updatable = ʻpdatable
+            var update = function( ʻupdatable ) {
+                if( ʻupdatable !== undefined ) updatable = ʻupdatable
                 return updatable && updateʻ.call( self )
             }
             self.update = update
@@ -405,7 +405,7 @@
                             $elem.css( 'border-' + side, val )
                         }
                     } )
-                    store.__defineGetter__( 'border', borderʻ )
+                    store.__defineGetter__( 'border', function() { return borderʻ } )
                 }
                 $elem.children().each( function( idx, elem ) {
                     label( $( elem ), storeʻ )
