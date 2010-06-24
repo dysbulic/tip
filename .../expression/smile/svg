@@ -63,7 +63,7 @@
     ]]></script>
 
   </defs>
-  <g id="body">
+  <g>
     <path d="m 77.25,0 a 77.25,77.25 1 1 1 0,-1e-4" id="face" style="fill:#ffffaf;stroke:#060505;stroke-width:1.25" />
     <g id="eye">
       <path d="m 16,-51 c 7.5,0 10,42 0,42 -11,0 -9,-42 0,-42 z" id="right" />
@@ -385,8 +385,21 @@
             } )()
             var self = config.self || this
             
-            function label( ) {
-            }
+            ( function label( $elem, store ) {
+                var id = $elem.attr( 'id' )
+                var storeʻ = store
+                if( id !== undefined ) {
+                    storeʻ = {
+                        $elem : $elem,
+                    }
+                    store.__defineGetter__( id, function() {
+                        return storeʻ
+                    } )
+                }
+                $elem.children.each( function( elem ) {
+                    label( $( elem ), storeʻ )
+                } )
+            } )( $root, self )
         }
     ]]></script>
 
