@@ -86,8 +86,24 @@ function List( init ) {
 
     self.__defineGetter__( 'length', function() { return store.length } )
 
-    function trigger( type, key ) {
-        listeners[ type ].each( function( f ) {
+    function trigger( listeners, args, action ) {
+        var self = this
+        listeners.each( function( f ) {
+            if( typeof f.pre == 'function' ) {
+                
+                f.pre.apply( self, args )
+            }
+        } )
+        action.apply( self, args )
+        listeners.each( function( f ) {
+            if( typeof f == 'function' ) {
+                f.apply( self, args )
+            }
+        } )
+        listeners.each( function( f ) {
+            if( typeof f.post == 'function' ) {
+                f.post.apply( self, args )
+            }
         } )
     }
 
@@ -108,7 +124,7 @@ function List( init ) {
                         || new Pointer.Slot( init[ prop ] ) )
             this.__defineGetter__( id, function() { return ptr.self } )
             this.__defineSetter__( id, function( val ) {
-                return trigger( 'set', [ val, ptr ], function( val, ptr ) {
+                return trigger( listeners.set, [ val, ptr ], function( val, ptr ) {
                     return ptr.self = val
                 } )
             } )
