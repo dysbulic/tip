@@ -54,8 +54,9 @@
             this.__defineGetter__( 'red', function() { return 'red' } )
 
             var smile = new SVG
-            smile.eye.right.color = 'blue'
-            smile.eye.left.color = red
+            console.log( smile )
+            //smile.eye.right.color = 'blue'
+            //smile.eye.left.color = red
         } )
     ]]></script>
 
@@ -384,11 +385,13 @@
                 return $.__.$( '#' )
             } )()
             var self = config.self || this
-            
+            console.log( 'hi' )
             ( function label( $elem, store ) {
                 var id = $elem.attr( 'id' )
+                console.log( id )
                 var storeʻ = store
                 if( id !== undefined ) {
+                    console.log( id )
                     storeʻ = {
                         $elem : $elem,
                     }
