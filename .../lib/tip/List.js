@@ -47,11 +47,17 @@ function List( init ) {
             self.__defineGetter__( key, function() { return self.get( key ) } )
             self.__defineSetter__( key, function( val ) { return self.set( key, val ) } )
 
-            on.set.__defineSetter__( key, function( f ) {
-                listeners.set = listeners.set || {}
-                listeners.set[ key ] = listeners.set[ key ] || []
-                return listeners.set[ key ].push( f )
-            } )
+            on.set[ key ] = {
+                add : function( f ) {
+                    listeners.set = listeners.set || {}
+                    listeners.set[ key ] = listeners.set[ key ] || []
+                    return listeners.set[ key ].push( f )
+                },
+                remove : function( f ) {
+                    throw 'Not implemented'
+                },
+            }
+
         }
         return key
     }
@@ -108,25 +114,32 @@ function List( init ) {
 
     for( prop in init ) {
         if( init.hasOwnProperty( prop ) ) {
-            // Indexed from 1
-            var id = ( init instanceof Array
-                       && ( prop instanceof Number || typeof prop == 'number'
-                            || ( typeof prop == 'string' && /[+-]*[0-9]/.test( prop ) ) )
-                       ? parseInt( prop ) + 1
-                       : prop )
+            ( function() {
+                var id = ( init instanceof Array
+                           && ( prop instanceof Number || typeof prop == 'number'
+                                || ( typeof prop == 'string' && /^[0-9]+$/.test( prop ) ) )
+                           ? parseInt( prop ) + 1 // Indexed from 1
+                           : prop )
 
-            var get = init.__lookupGetter__( prop )
-            var set = init.__lookupSetter__( prop )
-            
-            var ptr = ( ( get || set )
-                        && new Pointer.Accessor( store, get, set )
-                        || new Pointer.Slot( init[ prop ] ) )
-            this.__defineGetter__( id, function() { return ptr.self } )
-            this.__defineSetter__( id, function( val ) {
-                return trigger( listeners.set, [ val, ptr ], function( val, ptr ) {
-                    return ptr.self = val
+                var ptr = ( ( init[ prop ] instanceof Pointer
+                              ? init[ prop ]
+                              : undefined )
+                            || ( function() {
+                                var get = init.__lookupGetter__( prop )
+                                var set = init.__lookupSetter__( prop )
+                                return ( ( get || set )
+                                         ? new Pointer.Accessor( init, get, set )
+                                         : undefined )
+                            } )()
+                            || new Pointer.Slot( init[ prop ] ) )
+
+                this.__defineGetter__( id, function() { return ptr.self } )
+                this.__defineSetter__( id, function( val ) {
+                    return trigger( listeners.set, [ val, ptr ], function( val, ptr ) {
+                        return ptr.self = val
+                    } )
                 } )
-            } )
+            } ).apply( this )
         }
     }
 }

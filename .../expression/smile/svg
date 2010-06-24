@@ -84,6 +84,7 @@
             var split = {
                 attribute : $root.attr( attribute ).split( ' ' ),
             }
+            console.log( as.List( config.ids ) )
             var position = {
                 ids : List.invert( config.ids ) || ( function() {
                     throw { message: 'Missing Required List: ids' }
@@ -92,9 +93,11 @@
 
             var self = config.self || this
 
+            console.log( position.ids )
             position.ids.each( function( val, id ) {
                 if( ! split.attribute.empty ) {
                     position.ids[ id ] = parseFloat( split.attribute.shift() )
+                    console.log( position.ids[ id ] )
                 }
             } )
             
@@ -404,9 +407,9 @@
                     var borderʻ = List.by.ids( [ 'top', 'bottom', 'left', 'right' ] )
                     borderʻ.each( function( val, side ) {
                         borderʻ[ side ] = $elem.css( 'border-' + side )
-                        borderʻ.on.set[ side ] = function( val ) {
+                        borderʻ.on.set[ side ].add( function( val ) {
                             $elem.css( 'border-' + side, val )
-                        }
+                        } )
                     } )
                     store.__defineGetter__( 'border', function() { return borderʻ } )
                 }
