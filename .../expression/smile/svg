@@ -23,6 +23,7 @@
                 width : view.width,
                 height : view.height,
             }
+            console.log( view.asString )
 /*
             view = {
                 x : - win.width / 2,
@@ -77,25 +78,29 @@
     <script type="application/javascript"><![CDATA[
         function SplitAttribute( config ) {
             var $root = config.root || $.__.$('#')
-            var attr = config.attribute || ( function() {
+            var attribute = config.attribute || ( function() {
                 throw { message: 'Missing Required Attribute: attribute' }
             } )()
-            var strs = $root.attr( attr ).split( ' ' )
-            var ids = List.invert( config.ids ) || ( function() {
-                throw { message: 'Missing Required List: ids' }
-            } )()
+            var split = {
+                attribute : $root.attr( attribute ).split( ' ' ),
+            }
+            var position = {
+                ids : List.invert( config.ids ) || ( function() {
+                    throw { message: 'Missing Required List: ids' }
+                } )(),
+            }
 
             var self = config.self || this
 
-            ids.each( function( val, id ) {
-                if( ! strs.empty ) {
-                    ids[ id ] = parseFloat( strs.shift() )
+            position.ids.each( function( val, id ) {
+                if( ! split.attribute.empty ) {
+                    position.ids[ id ] = parseFloat( split.attribute.shift() )
                 }
             } )
             
             var updatable = true
             var updateʻ = config.update || function() {
-                return $root.attr( attr, self.asString )
+                return $root.attr( attribute, self.asString )
             }
             var update = function( ʻupdatable ) {
                 if( ʻupdatable !== undefined ) updatable = ʻupdatable
@@ -103,24 +108,24 @@
             }
             self.update = update
 
-            ids.each( function( val, prop ) {
+            position.ids.each( function( val, prop ) {
                 self.__defineGetter__( prop, function() {
-                    return ids.get( prop )
+                    return position.ids.get( prop )
                 } )
                 self.__defineSetter__( prop, function( val ) {
-                    ids.set( prop, val )
+                    position.ids.set( prop, val )
                     return update()
                 } )
             } )
 
             self.__defineGetter__( 'asString', function() {
-                return ids.join( ' ' )
+                return position.ids.join( ' ' )
             } )
-            
+
             function configure( config ) {
                 if( config instanceof Object ) {
                     update( false )
-                    ids.each( function( val, id ) {
+                    position.ids.each( function( val, id ) {
                         if( config[ id ] !== undefined ) {
                             self[ id ] = config[ id ]
                         }
@@ -130,9 +135,7 @@
             } 
 
             self.expose = function( config ) {
-                var elem = config.through || ( function() {
-                    throw { message: 'Missing Required Object: through' }
-                } )() 
+                var elem = config.through || self
                 var prop = config.as || ( function() {
                     throw { message: 'Missing Required String: as' }
                 } )()
@@ -140,7 +143,7 @@
                 elem.__defineGetter__( prop, function() { return self } )
                 elem.__defineSetter__( prop, configure )
             }
-
+            
             configure( config )
         }
     ]]></script>
