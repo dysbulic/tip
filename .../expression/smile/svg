@@ -389,13 +389,16 @@
                 var id = $elem.attr( 'id' )
                 var storeʻ = store
                 if( id !== undefined ) {
-                    console.log( id )
                     storeʻ = {
                         $elem : $elem,
                     }
                     store.__defineGetter__( id, function() {
                         return storeʻ
                     } )
+                }
+                document.root = $elem
+                if( $elem.get(0).nodeName == 'path' ) {
+                    console.log( 'path' )
                 }
                 $elem.children().each( function( idx, elem ) {
                     label( $( elem ), storeʻ )
