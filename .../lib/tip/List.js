@@ -1,9 +1,20 @@
-function Pointer( store, get, set ) {
-    this.__defineGetter__( 'val', function() {
+function Pointer() {
+    this.val = null
+}
+Pointer.Accessor = function( store, get, set ) {
+    this.__defineGetter__( 'self', function() {
         return get.apply( store, arguments )
     } )
-    this.__defineSetter__( 'val', function() {
+    this.__defineSetter__( 'self', function() {
         return set.apply( store, arguments )
+    } )
+}
+Pointer.Slot = function( val ) {
+    this.__defineGetter__( 'self', function() {
+        return val
+    } )
+    this.__defineSetter__( 'self', function( valʻ ) {
+        return val = valʻ
     } )
 }
 
@@ -92,18 +103,15 @@ function List( init ) {
             var get = init.__lookupGetter__( prop )
             var set = init.__lookupSetter__( prop )
             
-            // Getters and setters are copied
-            if( get || set ) {
-                var ptr = new Pointer( store, get, set )
-                this.__defineGetter__( id, function() { return ptr.val } )
-                this.__defineSetter__( id, function( val ) {
-                    trigger( 'set', [ val, ptr ], function( val, ptr ) {
-                        ptr.val = val
-                    } )
+            var ptr = ( ( get || set )
+                        && new Pointer.Accessor( store, get, set )
+                        || new Pointer.Slot( init[ prop ] ) )
+            this.__defineGetter__( id, function() { return ptr.self } )
+            this.__defineSetter__( id, function( val ) {
+                return trigger( 'set', [ val, ptr ], function( val, ptr ) {
+                    return ptr.self = val
                 } )
-            } else {
-                add( init[ prop ], id )
-            }
+            } )
         }
     }
 }
