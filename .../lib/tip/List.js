@@ -131,7 +131,7 @@ function List( init ) {
                                          ? new Pointer.Accessor( init, get, set )
                                          : undefined )
                             } )()
-                            || new Pointer.Slot( init[ prop ] )
+                            || new Pointer.Slot( init[ prop ] ) )
 
                 this.__defineGetter__( id, function() { return ptr.self } )
                 this.__defineSetter__( id, function( val ) {
