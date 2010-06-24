@@ -90,7 +90,6 @@ function List( init ) {
         var self = this
         listeners.each( function( f ) {
             if( typeof f.pre == 'function' ) {
-                
                 f.pre.apply( self, args )
             }
         } )
