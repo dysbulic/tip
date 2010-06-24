@@ -11,6 +11,7 @@ function List( init ) {
     var keys = []
     var position = {}
     var store = []
+    var listeners = {}
     var self = this
 
     function get( key ) {
@@ -34,6 +35,12 @@ function List( init ) {
             position[ key ] = store.push( val ) - 1
             self.__defineGetter__( key, function() { return self.get( key ) } )
             self.__defineSetter__( key, function( val ) { return self.set( key, val ) } )
+
+            on.set.__defineSetter__( key, function( f ) {
+                listener.set = listener.set || {}
+                listener.set[ key ] = listeners.set[ key ] || []
+                return listeners.set[ key ].push( f )
+            } )
         }
         return key
     }
@@ -61,7 +68,17 @@ function List( init ) {
     }
     self.each = each
 
+    var on = {
+        set : {}
+    }
+    self.__defineGetter__( 'on', function() { return on } )
+
     self.__defineGetter__( 'length', function() { return store.length } )
+
+    function trigger( type, key ) {
+        listeners[ type ].each( function( f ) {
+        } )
+    }
 
     for( prop in init ) {
         if( init.hasOwnProperty( prop ) ) {
@@ -79,7 +96,11 @@ function List( init ) {
             if( get || set ) {
                 var ptr = new Pointer( store, get, set )
                 this.__defineGetter__( id, function() { return ptr.val } )
-                this.__defineSetter__( id, function( val ) { return ptr.val = val } )
+                this.__defineSetter__( id, function( val ) {
+                    trigger( 'set', [ val, ptr ], function( val, ptr ) {
+                        ptr.val = val
+                    } )
+                } )
             } else {
                 add( init[ prop ], id )
             }
