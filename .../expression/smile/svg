@@ -50,11 +50,11 @@
                 console.log( click.x + ',' + click.y )
             } )
 
-            this.__defineGetter__( 'red', function() { return 'red' } )
+            window.__defineGetter__( 'red', function() { return 'red' } )
+            //arguments.callee.__defineGetter__( 'red', function() { return 'red' } )
 
             var smile = new SVG
-            console.log( smile )
-            //smile.eye.right.color = 'blue'
+            smile.eye.right.color = 'blue'
             smile.eye.left.color = red
         } )
     ]]></script>
