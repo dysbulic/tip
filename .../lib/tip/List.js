@@ -48,8 +48,8 @@ function List( init ) {
             self.__defineSetter__( key, function( val ) { return self.set( key, val ) } )
 
             on.set.__defineSetter__( key, function( f ) {
-                listener.set = listener.set || {}
-                listener.set[ key ] = listeners.set[ key ] || []
+                listeners.set = listeners.set || {}
+                listeners.set[ key ] = listeners.set[ key ] || []
                 return listeners.set[ key ].push( f )
             } )
         }
