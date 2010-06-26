@@ -23,7 +23,6 @@
                 width : view.width,
                 height : view.height,
             }
-            console.log( view.asString )
 /*
             view = {
                 x : - win.width / 2,
@@ -399,7 +398,6 @@
                         return storeʻ
                     } )
                 }
-                document.root = $elem
                 if( $elem.get(0).nodeName == 'path' ) {
                     var borderʻ = List.by.ids( [ 'top', 'bottom', 'left', 'right' ] )
                     borderʻ.each( function( val, side ) {
@@ -409,6 +407,13 @@
                         } )
                     } )
                     store.__defineGetter__( 'border', function() { return borderʻ } )
+
+                    store.__defineGetter__( 'fill', function() { return $elem.css( 'fill' ) } )
+                    store.__defineSetter__( 'fill', function( fill ) { return $elem.css( 'fill', fill ) } )
+                    store.__defineGetter__( 'color', store.__lookupGetter__( 'fill' ) )
+                    store.__defineSetter__( 'color', store.__lookupSetter__( 'fill' ) )
+                    store.__defineGetter__( 'stroke', function() { return $elem.css( 'stroke' ) } )
+                    store.__defineSetter__( 'stroke', function( stroke ) { return $elem.css( 'stroke', stroke ) } )
                 }
                 $elem.children().each( function( idx, elem ) {
                     label( $( elem ), storeʻ )
