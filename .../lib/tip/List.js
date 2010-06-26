@@ -31,6 +31,7 @@ function List( init ) {
 
     function set( key, val ) {
         var ptr = store[ key ]
+        listeners.set = listeners.set || {}
         return trigger( listeners.set, [ val, ptr ], function( val, ptr ) {
             return ptr.selfʻ = val
         } )
@@ -41,7 +42,6 @@ function List( init ) {
         var ptr = ( val instanceof Pointer
                     ? val
                     : new Pointer.Slot( val ) )
-
         console.log( 'a:' + key )
         if( key === undefined ) { // Push
             key = keys.length
@@ -98,6 +98,7 @@ function List( init ) {
 
     function trigger( listeners, args, action ) {
         var self = this
+        listeners = as.List( listeners )
         listeners.each( function( f ) {
             if( typeof f.pre == 'function' ) {
                 f.pre.apply( self, args )
