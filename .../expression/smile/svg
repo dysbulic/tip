@@ -407,13 +407,17 @@
                         } )
                     } )
                     store.__defineGetter__( 'border', function() { return borderʻ } )
-
                     store.__defineGetter__( 'fill', function() { return $elem.css( 'fill' ) } )
-                    store.__defineSetter__( 'fill', function( fill ) { return $elem.css( 'fill', fill ) } )
+                    store.__defineSetter__( 'fill', function( fill ) {
+                        return $elem.get(0).style.setProperty( 'fill', fill, null )
+                    } )
                     store.__defineGetter__( 'color', store.__lookupGetter__( 'fill' ) )
                     store.__defineSetter__( 'color', store.__lookupSetter__( 'fill' ) )
                     store.__defineGetter__( 'stroke', function() { return $elem.css( 'stroke' ) } )
-                    store.__defineSetter__( 'stroke', function( stroke ) { return $elem.css( 'stroke', stroke ) } )
+                    store.__defineSetter__( 'stroke', function( stroke ) {
+                        return $elem.get(0).style.setProperty( 'stroke', stroke, null )
+                    } )
+
                 }
                 $elem.children().each( function( idx, elem ) {
                     label( $( elem ), storeʻ )
