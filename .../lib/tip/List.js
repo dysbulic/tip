@@ -36,6 +36,7 @@ function List( init ) {
     self.set = set
 
     function add( val, key ) {
+        console.log( 'a:' + key )
         if( key === undefined ) { // Push
             key = store.push( val ) - 1
             keys.push( key )
@@ -78,9 +79,9 @@ function List( init ) {
     self.join = join
 
     function each( f ) {
-        var selfʻ = this
+        var ʻself = this || self
         keys.each( function( key ) {
-            f.apply( selfʻ, [ self.get( key ), key ] )
+            f.apply( ʻself, [ self.get( key ), key ] )
         } )
     }
     self.each = each
@@ -150,6 +151,7 @@ List.by = {
         ids.each( function( id ) {
             list.add( null, id )
         } )
+        console.log( 'l[' + ids[ 0 ] + '] :' + list[ ids[ 0 ] ] )
         return list
     },
 }
@@ -160,11 +162,12 @@ as.List = as.List || function() {
                 ? undefined
                 : ( arguments.length == 1
                     ? arguments[ 0 ]
-                    : Array.prototype.slice.apply( this, arguments ) ) )
+                    : Array.prototype.slice.call( arguments ) ) )
     if( val instanceof List ) return val
     if ( val === undefined || val === null || val === true || val === false )
         return val
     val = ( val instanceof Number || val instanceof String ) ? [ val ] : val
+    console.log( 'as.List:array' )
     if( val instanceof Array || val instanceof Object )
         return new List( val )
     throw "Wha' Happen?"
@@ -175,9 +178,9 @@ List.invert = function() {
                        ? undefined
                        : ( arguments.length == 1
                            ? arguments[ 0 ]
-                           : Array.prototype.slice.apply( this, arguments ) ) )
+                           : Array.prototype.slice.call( arguments ) ) )
     var out = new List
-    val.each( function( val, id ) { out.add( id, val ) } )
+    val.each( function( val, id ) { console.log( id ); out.add( id, val ) } )
     return out
 }
 

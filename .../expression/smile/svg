@@ -84,7 +84,7 @@
             var split = {
                 attribute : $root.attr( attribute ).split( ' ' ),
             }
-            console.log( as.List( config.ids ) )
+            console.log( List.invert( as.List( config.ids ) ) )
             var position = {
                 ids : List.invert( config.ids ) || ( function() {
                     throw { message: 'Missing Required List: ids' }
@@ -158,6 +158,7 @@
                 attribute : 'viewBox',
                 ids : [ 'x', 'y', 'width', 'height' ],
             } )
+            console.log( view.width )
             view.expose( {
                 through : this,
                 as : 'view',
