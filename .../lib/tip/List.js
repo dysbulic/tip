@@ -36,6 +36,18 @@ function List( init ) {
     self.set = set
 
     function add( val, key ) {
+        var ptr = ( ( val instanceof Pointer
+                      ? val
+                      : undefined )
+                    ||      || new Pointer.Slot( init[ prop ] ) )
+
+                this.__defineGetter__( id, function() { return ptr.self } )
+                this.__defineSetter__( id, function( val ) {
+                    return trigger( listeners.set, [ val, ptr ], function( val, ptr ) {
+                        return ptr.self = val
+                    } )
+                } )
+
         console.log( 'a:' + key )
         if( key === undefined ) { // Push
             key = store.push( val ) - 1
@@ -58,6 +70,7 @@ function List( init ) {
                     throw 'Not implemented'
                 },
             }
+
 
         }
         return key
@@ -121,25 +134,14 @@ function List( init ) {
                                 || ( typeof prop == 'string' && /^[0-9]+$/.test( prop ) ) )
                            ? parseInt( prop ) + 1 // Indexed from 1
                            : prop )
-
-                var ptr = ( ( init[ prop ] instanceof Pointer
-                              ? init[ prop ]
-                              : undefined )
-                            || ( function() {
-                                var get = init.__lookupGetter__( prop )
-                                var set = init.__lookupSetter__( prop )
-                                return ( ( get || set )
-                                         ? new Pointer.Accessor( init, get, set )
-                                         : undefined )
-                            } )()
-                            || new Pointer.Slot( init[ prop ] ) )
-
-                this.__defineGetter__( id, function() { return ptr.self } )
-                this.__defineSetter__( id, function( val ) {
-                    return trigger( listeners.set, [ val, ptr ], function( val, ptr ) {
-                        return ptr.self = val
-                    } )
-                } )
+                var val = ( function() {
+                    var get = init.__lookupGetter__( prop )
+                    var set = init.__lookupSetter__( prop )
+                    return ( ( get || set )
+                             ? new Pointer.Accessor( init, get, set )
+                             : init[ prop ] )
+                } )()
+                add( val, id )
             } ).apply( this )
         }
     }
@@ -167,7 +169,7 @@ as.List = as.List || function() {
     if ( val === undefined || val === null || val === true || val === false )
         return val
     val = ( val instanceof Number || val instanceof String ) ? [ val ] : val
-    console.log( 'as.List:array' )
+    console.log( 'as.List :array' )
     if( val instanceof Array || val instanceof Object )
         return new List( val )
     throw "Wha' Happen?"
