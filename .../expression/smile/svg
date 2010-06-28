@@ -54,6 +54,7 @@
             //arguments.callee.__defineGetter__( 'red', function() { return 'red' } )
 
             var smile = new SVG
+            console.log( smile.eye.right )
             smile.eye.right.color = 'blue'
             smile.eye.left.color = red
         } )
@@ -407,8 +408,11 @@
                         } )
                     } )
                     store.__defineGetter__( 'border', function() { return borderʻ } )
+
+                    console.log('p')
                     store.__defineGetter__( 'fill', function() { return $elem.css( 'fill' ) } )
                     store.__defineSetter__( 'fill', function( fill ) {
+                        console.log( 'HI' )
                         return $elem.get(0).style.setProperty( 'fill', fill, null )
                     } )
                     store.__defineGetter__( 'color', store.__lookupGetter__( 'fill' ) )
