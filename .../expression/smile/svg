@@ -407,18 +407,16 @@
                             $elem.css( 'border-' + side, val )
                         } )
                     } )
-                    store.__defineGetter__( 'border', function() { return borderʻ } )
+                    storeʻ.__defineGetter__( 'border', function() { return borderʻ } )
 
-                    console.log('p')
-                    store.__defineGetter__( 'fill', function() { return $elem.css( 'fill' ) } )
-                    store.__defineSetter__( 'fill', function( fill ) {
-                        console.log( 'HI' )
+                    storeʻ.__defineGetter__( 'fill', function() { return $elem.css( 'fill' ) } )
+                    storeʻ.__defineSetter__( 'fill', function( fill ) {
                         return $elem.get(0).style.setProperty( 'fill', fill, null )
                     } )
-                    store.__defineGetter__( 'color', store.__lookupGetter__( 'fill' ) )
-                    store.__defineSetter__( 'color', store.__lookupSetter__( 'fill' ) )
-                    store.__defineGetter__( 'stroke', function() { return $elem.css( 'stroke' ) } )
-                    store.__defineSetter__( 'stroke', function( stroke ) {
+                    storeʻ.__defineGetter__( 'color', storeʻ.__lookupGetter__( 'fill' ) )
+                    storeʻ.__defineSetter__( 'color', storeʻ.__lookupSetter__( 'fill' ) )
+                    storeʻ.__defineGetter__( 'stroke', function() { return $elem.css( 'stroke' ) } )
+                    storeʻ.__defineSetter__( 'stroke', function( stroke ) {
                         return $elem.get(0).style.setProperty( 'stroke', stroke, null )
                     } )
 
