@@ -7,77 +7,83 @@ var Hello = {
     },
 
     send_ping: function (to) {
-        var ping = $iq({
+        var ping = $iq( {
             to: to,
             type: "get",
-            id: "ping1"}).c("ping", {xmlns: "urn:xmpp:ping"});
+            id: "ping1",
+        }).c( "ping", { xmlns: "urn:xmpp:ping" } )
 
-        Hello.log("Sending ping to " + to + ".");
+        Hello.log("Sending ping to " + to + ".")
 
-        Hello.start_time = (new Date()).getTime();
-        Hello.connection.send(ping);
+        Hello.start_time = (new Date()).getTime()
+        Hello.connection.send(ping)
     },
 
-    handle_pong: function (iq) {
-        var elapsed = (new Date()).getTime() - Hello.start_time;
-        Hello.log("Received pong from server in " + elapsed + "ms.");
+    handle_pong: function(iq) {
+        var elapsed = (new Date()).getTime() - Hello.start_time
+        Hello.log("Received pong from server in " + elapsed + "ms.")
 
-        Hello.connection.disconnect();
+        Hello.connection.disconnect()
         
-        return false;
+        return false
+    },
+}
+
+$(function() {
+    function connect() {
+        $(document).trigger( 'connect', {
+            jid: $('#jid').val(),
+            password: $('#password').val()
+        } )
+        $('#password').val('')
+        var $this = $(this)
+        $this.dialog !== undefined && $this.dialog('close')
     }
-};
 
-$(document).ready(function () {
-    $('#login_dialog').dialog({
-        autoOpen: true,
-        draggable: false,
-        modal: true,
-        title: 'Connect to XMPP',
-        buttons: {
-            "Connect": function () {
-                $(document).trigger('connect', {
-                    jid: $('#jid').val(),
-                    password: $('#password').val()
-                });
-                
-                $('#password').val('');
-                $(this).dialog('close');
-            }
+    var $input = $('#login_dialog')
+    if( $input.dialog !== undefined ) {
+        $input.dialog( {
+            autoOpen: true,
+            draggable: false,
+            modal: true,
+            title: 'Connect to XMPP',
+            buttons: {
+                Connect: connect,
+            },
+        } )
+    } else {
+        $input.append( $( '<input type="submit" value="Connect"/>' )
+                       .click( connect ) )
+    }
+} )
+
+var BOSH_SERVICE = 'http://bosh.metajack.im:5280/xmpp-httpbind'
+var BOSH_SERVICE = 'http://localhost:5281/xmpp-httpbind'
+$(document).bind( 'connect', function( event, data ) {
+    var connection = new Strophe.Connection( BOSH_SERVICE )
+
+    connection.connect( data.jid, data.password, function (status) {
+        if( status === Strophe.Status.CONNECTED ) {
+            $(document).trigger( 'connected' )
+        } else if( status === Strophe.Status.DISCONNECTED ) {
+            $(document).trigger( 'disconnected' )
         }
-    });
-});
+    } )
 
-$(document).bind('connect', function (ev, data) {
-    var conn = new Strophe.Connection(
-        "http://bosh.metajack.im:5280/xmpp-httpbind");
+    Hello.connection = connection
+} )
 
-    conn.connect(data.jid, data.password, function (status) {
-        if (status === Strophe.Status.CONNECTED) {
-            $(document).trigger('connected');
-        } else if (status === Strophe.Status.DISCONNECTED) {
-            $(document).trigger('disconnected');
-        }
-    });
+$(document).bind( 'connected', function() {
+    Hello.log( 'Connection established:' )
 
-    Hello.connection = conn;
-});
+    Hello.connection.addHandler( Hello.handle_pong, null, 'iq', null, 'ping1' )
 
-$(document).bind('connected', function () {
-    // inform the user
-    Hello.log("Connection established.");
-
-    Hello.connection.addHandler(Hello.handle_pong, null, "iq", null, "ping1");
-
-    var domain = Strophe.getDomainFromJid(Hello.connection.jid);
+    var domain = Strophe.getDomainFromJid( Hello.connection.jid )
     
-    Hello.send_ping(domain);
+    Hello.send_ping( domain )
+} )
 
-});
-
-$(document).bind('disconnected', function () {
-    Hello.log("Connection terminated.");
-
-    // remove dead connection object
+$(document).bind( 'disconnected', function() {
+    Hello.log( 'Connection terminated:' )
     Hello.connection = null;
-});
+} )
