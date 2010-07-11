@@ -145,7 +145,7 @@ $(document).ready(function () {
 
 $(document).bind('connect', function (ev, data) {
     var conn = new Strophe.Connection(
-        "http://localhost:5280/xmpp-httpbind");
+        "http://localhost:5280/http-bind");
         //'http://bosh.metajack.im:5280/xmpp-httpbind')
 
     conn.connect(data.jid, data.password, function (status) {

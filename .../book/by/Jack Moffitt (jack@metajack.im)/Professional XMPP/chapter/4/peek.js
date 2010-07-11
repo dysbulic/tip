@@ -165,9 +165,10 @@ $(document).ready(function () {
     });
 });
 
+var BOSH_SERVER = "http://bosh.metajack.im:5280/xmpp-httpbind"
+BOSH_SERVER = "http://localhost:5280/http-bind"
 $(document).bind('connect', function (ev, data) {
-    var conn = new Strophe.Connection(
-        "http://bosh.metajack.im:5280/xmpp-httpbind");
+    var conn = new Strophe.Connection( BOSH_SERVER )
 
     conn.xmlInput = function (body) {
         Peek.show_traffic(body, 'incoming');

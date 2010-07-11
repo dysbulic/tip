@@ -58,7 +58,7 @@ $(function() {
 } )
 
 var BOSH_SERVICE = 'http://bosh.metajack.im:5280/xmpp-httpbind'
-var BOSH_SERVICE = 'http://localhost:5281/xmpp-httpbind'
+var BOSH_SERVICE = 'http://localhost:5280/http-bind'
 $(document).bind( 'connect', function( event, data ) {
     var connection = new Strophe.Connection( BOSH_SERVICE )
 
@@ -67,6 +67,8 @@ $(document).bind( 'connect', function( event, data ) {
             $(document).trigger( 'connected' )
         } else if( status === Strophe.Status.DISCONNECTED ) {
             $(document).trigger( 'disconnected' )
+        } else if( status === Strophe.Status.CONNECTING ) {
+            Hello.log( 'Connecting:' )
         }
     } )
 
