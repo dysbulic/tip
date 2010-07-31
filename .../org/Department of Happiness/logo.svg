@@ -17,19 +17,18 @@
             var lists = []
             var list = { idx : 0 }
             $( 'script' ).each( function( idx, scrpt ) {
-                list.idxʻ = list.idx++
-                lists[ list.idxʻ ] = lists[ list.idxʻ ] || []
-
                 var $script = $( scrpt )
                 var base = { type : 'application/javascript' }
                 if( $script.attr( 'type' ).substr( 0, base.type.length ) == base.type ) {
                     var classes = $script.attr( 'type' ).substr( base.type.length )
                     if( classes != '' ) {
+                        list.idxʻ = list.idx++
+                        lists[ list.idxʻ ] = lists[ list.idxʻ ] || []
                         classes = $script.attr( 'type' ).substr( base.type.length + 1 ).split( '+' )
 
                         var func = eval( '( function() { return ' + $script.text().trim() + '} )()' )
                         lists[ list.idxʻ ].push( func )
-
+                        
                         for( var bgn = 0; bgn < classes.length; bgn++ ) {
                             var pos = script
                             for( var idx = 0; idx < classes.length; idx++ ) {
@@ -50,6 +49,7 @@
                             return lists[ list.idxʻ ]
                         } )
                         
+                        console.log( list.idx )
                         console.log( script )
                     }
                 }
@@ -158,7 +158,7 @@
                 ids : [ 'x', 'y', 'width', 'height' ],
             } )
             view.expose( {
-                through : this,
+                through : self,
                 as : 'view',
             } )
         }
@@ -173,7 +173,7 @@
                 get height() { return window.innerHeight },
             }
             self.__defineGetter__( 'win', function() { return win } )
-            // this.__defineSetter__
+            // self.__defineSetter__
         }
     ]]></script>
 
@@ -1051,12 +1051,14 @@
     </style>
 
     <script type="application/javascript+postload"><![CDATA[
-        function() {
-            view = {
-                x : - win.width / 2,
-                y : - win.height / 2,
-                width : win.width,
-                height : win.height,
+        function( config ) {
+            var self = config && config.self || this
+
+            self.view = {
+                x : - self.win.width / 2,
+                y : - self.win.height / 2,
+                width : self.win.width,
+                height : self.win.height,
             }
 
             var canvas = new Container( {
