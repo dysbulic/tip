@@ -14,12 +14,32 @@
     <script type="application/javascript"><![CDATA[
         $( function() {
             var script = {}
-            $( 'script' ).each( function( idx, script ) {
-                var $script = $( script )
+            var lists = []
+            var ʻidxʻ = 0
+            $( 'script' ).each( function( idx, scrpt ) {
+                var $script = $( scrpt )
                 var base = { type : 'application/javascript' }
-                if( $script.attr( 'type' ).substr( base.type.length ) == base.type ) {
-                    var func = eval( '( function() { return ' + $script.text().trim() + '} )()' )
-                    console.log( $script.attr( 'type' ).substr( base.type.length ) )
+                if( $script.attr( 'type' ).substr( 0, base.type.length ) == base.type ) {
+                    var classes = $script.attr( 'type' ).substr( base.type.length )
+                    if( classes != '' ) {
+                        classes = $script.attr( 'type' ).substr( base.type.length + 1 ).split( '+' )
+                        var func = eval( '( function() { return ' + $script.text().trim() + '} )()' )
+                        for( var bgn = 0; bgn < classes.length; bgn++ ) {
+                            var pos = script
+                            for( var idx = 0; idx < classes.length - 1; idx++ ) {
+                                var idxʻ = ( idx + bgn ) % classes.length
+                                pos[ classes[ idxʻ ] ] = ( pos[ classes[ idxʻ ] ]
+                                                           ? pos[ classes[ idxʻ ] ]
+                                                           : {} )
+                                if( idx < classes.length - 1 ) {
+                                    pos = pos[ classes[ idxʻ ] ]
+                                }
+                            }
+                        }
+                        pos.__defineGetter__( classes[ idxʻ ], function() { ] = val
+                        
+                        console.log( script )
+                    }
                 }
             } )
             $.get( '.../expression/smile.svg',
