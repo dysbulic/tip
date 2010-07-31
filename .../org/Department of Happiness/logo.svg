@@ -15,18 +15,24 @@
         $( function() {
             var script = {}
             var lists = []
-            var ʻidxʻ = 0
+            var list = { idx : 0 }
             $( 'script' ).each( function( idx, scrpt ) {
+                list.idxʻ = list.idx++
+                lists[ list.idxʻ ] = lists[ list.idxʻ ] || []
+
                 var $script = $( scrpt )
                 var base = { type : 'application/javascript' }
                 if( $script.attr( 'type' ).substr( 0, base.type.length ) == base.type ) {
                     var classes = $script.attr( 'type' ).substr( base.type.length )
                     if( classes != '' ) {
                         classes = $script.attr( 'type' ).substr( base.type.length + 1 ).split( '+' )
+
                         var func = eval( '( function() { return ' + $script.text().trim() + '} )()' )
+                        lists[ list.idxʻ ].push( func )
+
                         for( var bgn = 0; bgn < classes.length; bgn++ ) {
                             var pos = script
-                            for( var idx = 0; idx < classes.length - 1; idx++ ) {
+                            for( var idx = 0; idx < classes.length; idx++ ) {
                                 var idxʻ = ( idx + bgn ) % classes.length
                                 pos[ classes[ idxʻ ] ] = ( pos[ classes[ idxʻ ] ]
                                                            ? pos[ classes[ idxʻ ] ]
@@ -36,7 +42,13 @@
                                 }
                             }
                         }
-                        pos.__defineGetter__( classes[ idxʻ ], function() { ] = val
+                        pos.__defineGetter__( classes[ idxʻ ], function() {
+                            return lists[ list.idxʻ ]
+                        } )
+                        pos.__defineSetter__( classes[ idxʻ ], function( val ) {
+                            lists[ list.idxʻ ] = val
+                            return lists[ list.idxʻ ]
+                        } )
                         
                         console.log( script )
                     }
@@ -160,7 +172,7 @@
                 get width() { return window.innerWidth },
                 get height() { return window.innerHeight },
             }
-            this.__defineGetter__( 'win', function() { return win } )
+            self.__defineGetter__( 'win', function() { return win } )
             // this.__defineSetter__
         }
     ]]></script>
