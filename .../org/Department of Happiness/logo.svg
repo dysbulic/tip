@@ -12,6 +12,35 @@
     <script type="application/javascript" xlink:href=".../lib/tip/__.jquery"/>
     
     <script type="application/javascript"><![CDATA[
+        $( function() {
+            $.get( '.../expression/smile.svg',
+                   function( xhr ) {
+                       console.log( xhr )
+                       var doc = xhr.documentElement
+                       $.__.$( '#' ).append( doc )
+                       doc.setAttribute( 'width', '40' ) 
+                       doc.setAttribute( 'height', '40' ) 
+                   }
+                 )
+            $( 'script' ).each( function( idx, script ) {
+                var $script = $( script )
+                if( $script.attr( 'type' ) == 'application/javascript+reload' ) {
+                    var func = eval( $script.text() )
+                    console.log( func )
+                }
+            } )
+        } )
+    ]]></script>
+
+    <script type="application/javascript+reload"><![CDATA[
+        function( config ) {
+            config = config !== undefined ? config : {}
+            var self = config.self || this
+            alert( 'hi' )
+        }
+    ]]></script>
+
+    <script type="application/javascript"><![CDATA[
         function SplitAttribute( config ) {
             var $root = config.root || $.__.$('#')
             var attr = config.attribute || ( function() {
