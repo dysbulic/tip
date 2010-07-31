@@ -592,8 +592,11 @@
         }
     ]]></script>
 
-    <script type="application/javascript"><![CDATA[
-        ( function() {
+    <script type="application/javascript+reload"><![CDATA[
+        function( config ) {
+            config = config !== undefined ? config : {}
+            var self = config.self || this
+
             var pad = { top: 5, between: 5, bottom: 5, left: 5, right: 5 }
             var display = {
                 JSON: function( config ) {
@@ -620,8 +623,8 @@
                 },
             }
 
-            this.__defineGetter__( 'display', function() { return display } )
-        } )()
+            self.__defineGetter__( 'display', function() { return display } )
+        }
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
@@ -797,7 +800,7 @@
                 set textʻ( text ) {
                     this.textʻʻ = text
                     this.update()
-                    this.display.length = $root.get(0).getBBox().width
+                    self.display.length = $root.get(0).getBBox().width
                 },
                 display : { },
                 methodʻ : 'align',
