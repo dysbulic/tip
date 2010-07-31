@@ -22,42 +22,42 @@
                 if( $script.attr( 'type' ).substr( 0, base.type.length ) == base.type ) {
                     var classes = $script.attr( 'type' ).substr( base.type.length )
                     if( classes != '' ) {
-                        var list = []
-                        
                         classes = $script.attr( 'type' ).substr( base.type.length + 1 ).split( '+' )
-
-                        var func = eval( '( function() { return ' + $script.text().trim() + '} )()' )
-                        list.push( func )
                         
-                        for( var bgn = 0; bgn < classes.length; bgn++ ) {
-                            var pos = script
-                            for( var idx = 0; idx < classes.length; idx++ ) {
-                                var idxʻ = ( idx + bgn ) % classes.length
+                        var pos = script
+                        var idx = 0
                         /*
-                                pos[ classes[ idxʻ ] ] = ( pos[ classes[ idxʻ ] ]
-                                                           ? pos[ classes[ idxʻ ] ]
-                                                           : {} )
-                                if( idx < classes.length - 1 ) {
-                                    pos = pos[ classes[ idxʻ ] ]
-                                }
-                        */
+                        for( var idx = 0; idx < classes.length; idx++ ) {
+                            pos[ classes[ idx ] ] = ( pos[ classes[ idx ] ]
+                                                      ? pos[ classes[ idx ] ]
+                                                      : {} )
+                            if( idx < classes.length - 1 ) {
+                                pos = pos[ classes[ idx ] ]
                             }
                         }
+                        */
+                        
+                        var cls = { name : classes[ idx ] }
 
-                        if( pos.__lookupGetter__( classes[ idxʻ ] ) == undefined ) {
-                            list.idxʻ = list.idx++
-                            lists[ list.idxʻ ] = list
+                        var list = pos[ cls.name ] || []
+                        var func = eval( '( function() { return ' + $script.text().trim() + '} )()' )
+                        list.push( func )
 
-                            pos.__defineGetter__( classes[ idxʻ ], function() {
-                                return lists[ list.idxʻ ]
+                        if( pos.__lookupGetter__( cls.name ) == undefined ) {
+                            var indx = lists.length + 1
+                            lists[ indx ] = list
+
+                            pos.__defineGetter__( cls.name, function() {
+                                return lists[ indx ]
                             } )
-                            pos.__defineSetter__( classes[ idxʻ ], function( val ) {
-                                lists[ list.idxʻ ] = val
-                                return lists[ list.idxʻ ]
+                            pos.__defineSetter__( cls.name, function( val ) {
+                                lists[ indx ] = val
+                                return lists[ indx ]
                             } )
                         }
+                        list.push( func )
 
-                        console.log( list.idx )
+                        console.log( indx )
                         console.log( script )
                     }
                 }
