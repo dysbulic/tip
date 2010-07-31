@@ -415,12 +415,12 @@
                 elems.push( elem )
                 $root.append( elem && elem.$root || elem )
             }
-            self.add = add
+            this.add = add
 
             function each( f ) {
                 elems.each( f )
             }
-            self.each = each
+            this.each = each
 
             ;[ 'x', 'y', 'scale', 'rotation' ].each( function( attr ) {
                 self.__defineGetter__( attr, function() { return transform[ attr ] } )
@@ -431,8 +431,8 @@
             } )
 
             self.__defineSetter__( 'size', function( size ) {
-                self.scale = Math.min( size.external.width * win.width / size.internal.width,
-                                       size.external.height * win.height / size.internal.height ) / 2
+                self.scale = Math.min( size.external.width * self.win.width / size.internal.width,
+                                       size.external.height * self.win.height / size.internal.height ) / 2
             } )
 
             Tip.configure.apply( self, args )
@@ -1069,6 +1069,7 @@
             }
 
             var canvas = new Container( {
+                self : self,
                 size : {
                     internal : {
                         width : 100,
