@@ -13,6 +13,15 @@
     
     <script type="application/javascript"><![CDATA[
         $( function() {
+            var script = {}
+            $( 'script' ).each( function( idx, script ) {
+                var $script = $( script )
+                var base = { type : 'application/javascript' }
+                if( $script.attr( 'type' ).substr( base.type.length ) == base.type ) {
+                    var func = eval( '( function() { return ' + $script.text().trim() + '} )()' )
+                    console.log( $script.attr( 'type' ).substr( base.type.length ) )
+                }
+            } )
             $.get( '.../expression/smile.svg',
                    function( xhr ) {
                        console.log( xhr )
@@ -22,22 +31,18 @@
                        doc.setAttribute( 'height', '40' ) 
                    }
                  )
-            $( 'script' ).each( function( idx, script ) {
-                var $script = $( script )
-                if( $script.attr( 'type' ) == 'application/javascript+reload' ) {
-                    var func = eval( $script.text() )
-                    console.log( func )
-                }
+
+            script.reload.each( function( func ) {
+                func.call( this, {
+                    self : this,
+                } )
+            } )
+            script.postload.each( function( func ) {
+                func.call( this, {
+                    self : this,
+                } )
             } )
         } )
-    ]]></script>
-
-    <script type="application/javascript+reload"><![CDATA[
-        function( config ) {
-            config = config !== undefined ? config : {}
-            var self = config.self || this
-            alert( 'hi' )
-        }
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
@@ -111,8 +116,10 @@
         }
     ]]></script>
 
-    <script type="application/javascript"><![CDATA[
-        ( function() {
+    <script type="application/javascript+reload"><![CDATA[
+        function( config ) {
+            config = config !== undefined ? config : {}
+            var self = config.self || this
             var view = new SplitAttribute( {
                 $root : $.__.$( '#' ),
                 attribute : 'viewBox',
@@ -122,18 +129,20 @@
                 through : this,
                 as : 'view',
             } )
-        } )()
+        }
     ]]></script>
 
-    <script type="application/javascript"><![CDATA[
-        ( function() {
+    <script type="application/javascript+reload"><![CDATA[
+        function( config ) {
+            config = config !== undefined ? config : {}
+            var self = config.self || this
             var win = {
                 get width() { return window.innerWidth },
                 get height() { return window.innerHeight },
             }
             this.__defineGetter__( 'win', function() { return win } )
             // this.__defineSetter__
-        } )()
+        }
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
@@ -1009,8 +1018,8 @@
         }
     </style>
 
-    <script type="application/javascript"><![CDATA[
-        $( function() {
+    <script type="application/javascript+postload"><![CDATA[
+        function() {
             view = {
                 x : - win.width / 2,
                 y : - win.height / 2,
@@ -1169,7 +1178,7 @@
                 } )
                 scene.add( tixel )
             } )
-        } )
+        }
     ]]></script>
 
     <style type="text/css">
