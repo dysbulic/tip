@@ -430,9 +430,11 @@
                 } )
             } )
 
-            self.__defineSetter__( 'size', function( size ) {
-                self.scale = Math.min( size.external.width * self.win.width / size.internal.width,
-                                       size.external.height * self.win.height / size.internal.height ) / 2
+            this.__defineSetter__( 'size', function( size ) {
+                console.log( size )
+                self.scale =
+                    Math.min( size.external.width * self.win.width / size.internal.width,
+                              size.external.height * self.win.height / size.internal.height ) / 2
             } )
 
             Tip.configure.apply( self, args )
@@ -602,11 +604,11 @@
                 JSON: function( config ) {
                     var lines = []
                     var container = new Container
-                    var self = this
-                    
+                    config = config || {}
+                    var self = config.self || this
+
                     this.__defineGetter__( '$root', function() { return container.$root } )
                     
-                    config = config || {}
                     var list = as.List( config.source )
 
                     list.each( function( line, id ) {
@@ -771,14 +773,14 @@
 
             var $text = $root
 
-            self.__defineGetter__( 'text', function() { return $text.text() } )
-            self.__defineSetter__( 'text', function( text ) { $text.text( text ) } )
+            this.__defineGetter__( 'text', function() { return $text.text() } )
+            this.__defineSetter__( 'text', function( text ) { $text.text( text ) } )
 
-            self.__defineSetter__( 'font', function( font ) {
+            this.__defineSetter__( 'font', function( font ) {
                 $root.get(0).style.setProperty( 'font-family', font, null )
             } )
 
-            self.__defineSetter__( 'height', function( height ) {
+            this.__defineSetter__( 'height', function( height ) {
                 height = typeof height == 'number' ? height + 'px' : height
                 $root.get(0).style.setProperty( 'font-size', height, null )
             } )
@@ -787,12 +789,12 @@
                 position = position == 'center' ? 'middle' : position
                 return $root.get(0).style.setProperty( 'text-anchor', position, null )
             }
-            self.__defineGetter__( 'align', function() { return {
+            this.__defineGetter__( 'align', function() { return {
                 get center() { return align( 'middle' ) },
                 get start() { return align( 'start' ) },
                 get end() { return align( 'end' ) },
             } } )
-            self.__defineSetter__( 'align', function( alignment ) { return align( alignment ) } )
+            this.__defineSetter__( 'align', function( alignment ) { return align( alignment ) } )
 
             var $path = {
                 textʻʻ : '',
@@ -800,7 +802,7 @@
                 set textʻ( text ) {
                     this.textʻʻ = text
                     this.update()
-                    self.display.length = $root.get(0).getBBox().width
+                    this.display.length = $root.get(0).getBBox().width
                 },
                 display : { },
                 methodʻ : 'align',
@@ -838,7 +840,7 @@
                     Tip.$work.append( $box )
                     var Box = { for : function( str ) {
                         if( str == ' ' ) {
-                            var quote = $box.text( '"' ).get(0).getBBox()
+                            var quote = $box.text( '""'.substring( 1 ) ).get(0).getBBox()
                             var quoted = { space : $box.text( '" "' ).get(0).getBBox() }
                             return {
                                 x : quote.x, y : quote.y,
@@ -886,7 +888,7 @@
                 },
             }
 
-            self.__defineSetter__( 'path', function( path ) {
+            this.__defineSetter__( 'path', function( path ) {
                 if( path ) {
                     $path.text( self.text )
                     $root.text( '' )
@@ -899,9 +901,9 @@
                 }
             } )
 
-            self.__defineSetter__( 'spacing', function( spacing ) { return $path.attr( 'spacing', spacing ) })
+            this.__defineSetter__( 'spacing', function( spacing ) { return $path.attr( 'spacing', spacing ) })
 
-            self.__defineGetter__( 'to', function() { return {
+            this.__defineGetter__( 'to', function() { return {
                 // Ideally, there should be a way to fill the space above the curve
                 set path( opt ) { return $path.method = opt },
                 get path() { return $path.method },
@@ -1062,7 +1064,6 @@
     <script type="application/javascript+postload"><![CDATA[
         function( config ) {
             var self = config && config.self || this
-            console.log(self)
 
             self.view = {
                 x : - self.win.width / 2,
@@ -1086,7 +1087,8 @@
             } )
             $('#body').append( canvas.$root )
             
-            var json = new display.JSON( {
+            var json = new self.display.JSON( {
+                self : self,
                 source : {
                     username : 'bob@localhost',
                     password : 'bob\'spass',
@@ -1135,6 +1137,7 @@
                 clear : true,
             } )
             head.text = new Text( {
+                self : self,
                 text : 'Department of Happiness',
                 font : 'Ragg Mopp',
                 path : head.path,
@@ -1144,6 +1147,7 @@
                 extent : 210,
                 to : { path : 'stretch' },
             } )
+            console.log(self)
 
             canvas.add( head )
             head.add( head.path )
@@ -1160,6 +1164,7 @@
                 clear : true,
             } )
             sub.text = new Text( {
+                self : self,
                 text : 'Totus Custodes',
                 path : sub.path,
                 font : 'Lionheart',

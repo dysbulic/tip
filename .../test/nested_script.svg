@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.0"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:html="http://www.w3.org/1999/xhtml"
+     xmlns:templ="tip:/sys/lib/templ/"
+     width="100%" height="100%" viewBox="0 0 500 500">
+  <title>Nested Script Test</title>
+  <defs>
+    <script type="text/javascript" xlink:href=".../lib/jquery/jquery.js" />
+
+    <script type="application/javascript" xlink:href=".../lib/tip/Array.each.js"/>
+    <script type="application/javascript" xlink:href=".../lib/tip/List.js"/>
+    <script type="application/javascript" xlink:href=".../lib/tip/__.jquery"/>
+
+    <script type="text/javascript">//<![CDATA[
+      $( function() {
+          console.log( $( 'title' ).text() )
+          $.get( 'nested.svg',
+                 function( xhr ) {
+                     //console.log( xhr )
+                     var doc = xhr.documentElement
+                     $.__.$( '#' ).append( doc )
+                 }
+               )
+      } )
+    //]]></script>
+    <style type="text/css">
+    </style>
+  </defs>
+</svg>
