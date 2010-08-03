@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<test>
+  <code id="testscript" xmlns="http://www.w3.org/1999/xhtm">
+    if(typeof(debug) != "undefined") {
+      debug(filename + ": in XML body (html): " +
+            document.createElement('div') + " " +
+            typeof(document.createElement('div').style));
+    }
+  </code>
+  <code id="testscripttwo" xmlns="http://odin.himinbi.org/tests/">
+    if(typeof(debug) != "undefined") {
+      debug(filename + ": in XML body (namespace): " +
+            document.createElement('div') + " " + 
+            typeof(document.createElement('div').style));
+    }
+  </code>
+  <code id="testscriptthree">
+    if(typeof(debug) != "undefined") {
+      debug(filename + ": in XML body (anon): " +
+            document.createElement('div') + " " +
+            typeof(document.createElement('div').style));
+    }
+  </code>
+</test>

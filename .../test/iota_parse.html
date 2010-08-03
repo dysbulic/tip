@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Parsing Iota Promonet</title>
+    <link type="text/css" rel="stylesheet" href="javascript_test.css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript">
+      function debug(text) {
+        var debugArea = document.createElement("div");
+        debugArea.appendChild(document.createTextNode(text));
+        //debugArea.innerHTML = text;
+        document.getElementsByTagName("body").item(0).appendChild(debugArea);
+      }
+      function debugBreak() {
+        document.getElementsByTagName("body").item(0)
+          .appendChild(document.createElement("hr"));
+      }
+    </script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <form id="code" action="" onsubmit="eval(this['code'].value); return false">
+      <div style="height: 90%">
+        <textarea name="code" cols="" rows=""
+>var sample = document.getElementById('code')['sample'].value;
+var div = document.createElement("div");
+div.innerHTML = sample;
+debug("Image: " + div.childNodes[0].getAttribute("src"));
+debug("Track Title: " + div.childNodes[2].childNodes[0].childNodes[0].childNodes[0].data.replace(" Download ", ""));
+debug("Track Link: " + div.childNodes[2].childNodes[0].childNodes[0].getAttribute("href"));
+debug("Album Title: " + div.childNodes[0].getAttribute("alt"));
+debug("Album Link: " + div.childNodes[8].getAttribute("href"));
+debug("Artist Link: " + div.childNodes[2].childNodes[6].getAttribute("href"));
+debug("Artist: " + div.childNodes[2].childNodes[6].childNodes[0].data);
+debug("Label Link: " + div.childNodes[2].childNodes[8].getAttribute("href"));
+debug("Label: " + div.childNodes[2].childNodes[8].childNodes[0].data);
+debug("iTunes Buy Link: " + div.childNodes[3].childNodes[0].childNodes[3].getAttribute("href"));
+debug("Real Stream Link: " + div.childNodes[3].childNodes[1].childNodes[3].getAttribute("href"));
+debug("Real Buy Link: " + div.childNodes[3].childNodes[2].childNodes[3].getAttribute("href"));
+</textarea>
+      </div>
+      <div style="height: 90%">
+        <textarea name="sample" cols="" rows=""><IMG src="http://image.iodalliance.com/release/169569-72.jpg"
+width="250" height="250" alt="Waiting For A Ghost"><BR><P><STRONG><A
+href="http://redirect.iodalliance.com/download_track.php?id=1059ED47447460376D7B5A830096B1F3D72FE533BE77D89163172A76563C8472A77BE64EF1738D69C42014C395ABEA0E"
+target="_new" rel="nofollow"> Download "Millions"</A></STRONG> (mp3)
+<BR> from "Waiting For A Ghost"<BR>by <A
+href="http://redirect.iodalliance.com/artist.php?id=051451C6F6947169F23F12C42D3275C6F61D0391062102196C3ED7F1F9F86A1B"
+target="_new" rel="nofollow">Shawn Lov</A><BR><A
+href="http://redirect.iodalliance.com/label.php?id=FB7F588FCCC4014C5DE226C04349B2B95C896194219C585984C959D66AB5385C"
+target="_new" rel="nofollow">Nuffsaid Records</A></P><UL><LI><IMG
+src="http://promonet.iodalliance.com/img/service_icon_4.gif">
+<STRONG>Buy at </STRONG><A
+href="http://redirect.iodalliance.com/buy_album.php?id=1059ED47447460376D7B5A830096B1F3C717E116EAA8B73C7834286214214BB611ED96A786CB61A545B554BC0DAEEBBB"
+target="_blank" rel="nofollow">iTunes Music Store</A></LI><LI><IMG
+src="http://promonet.iodalliance.com/img/service_icon_1.gif">
+<STRONG>Stream from </STRONG><A
+href="http://redirect.iodalliance.com/buy_album.php?id=1059ED47447460376D7B5A830096B1F335EE75B034C0571799C73F57B6E215EA11ED96A786CB61A545B554BC0DAEEBBB"
+target="_blank" rel="nofollow">RealNetworks /
+Rhapsody</A></LI><LI><IMG
+src="http://promonet.iodalliance.com/img/service_icon_1.gif">
+<STRONG>Buy at </STRONG><A
+href="http://redirect.iodalliance.com/buy_album.php?id=1059ED47447460376D7B5A830096B1F335EE75B034C0571799C73F57B6E215EA11ED96A786CB61A545B554BC0DAEEBBB"
+target="_blank" rel="nofollow">RealNetworks /
+Rhapsody</A></LI></UL><BR><BR><IMG
+src="http://promonet.iodalliance.com/img/icon_landing_page.gif"> <A
+href="http://redirect.iodalliance.com/buy_album.php?id=1059ED47447460376D7B5A830096B1F3D28E837B8BD45AF20EB0441FE43B06CE367E9F3A8BEB64D21B4B73937412D648"
+target="_new" rel="nofollow">More On This Album</A><BR></textarea>
+      </div>
+      <div><input type="submit" value="Go"></input></div>
+    </form>
+  </body>
+</html>

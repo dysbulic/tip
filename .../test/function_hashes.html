@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Functions as Hash Keys</title>
+    <link type="text/css" rel="stylesheet" href="javascript_test.css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript"> google.load("jquery", "1.4") </script>
+    <script type="text/javascript" src="jquery.dump.js"></script>
+    <script type="text/javascript">//<![CDATA[
+      var funcs = {};
+      var args = {};
+      for(i = 1; i < Math.max(4, Math.random() * 10); i++) {
+        var func = function() {
+          $('body').append($('<p/>').text(String.fromCharCode('a'.charCodeAt() + this.i) + ': ' +
+                                          Array.prototype.slice.call(arguments).join(', ')));
+        }
+        func.i = i;
+        funcs[func] = func;
+        args[func] = [ 'one', 'two', 'three' ];
+      }
+      $(function() {
+        $.each(funcs, function(funcString, args) {
+          $('body').append($('<p/>').text('Parsing:'));
+          funcString = funcString.replace(/^function \(\) {/, '');
+          funcString = funcString.replace(/}$/, '');
+          $('body').append($('<pre/>').text(funcString));
+          try {
+            var func = new Function(funcString);
+            func.apply(func, args[func])
+          } catch(e) {
+            $('body').append($('<p/>').text('Error: ' + e.toString()));
+          }
+        });
+      });
+    //]]></script>
+  </head>
+  <body>
+    <h1>Functions as Hash Keys</h1>
+    
+    <p>Testing if function objects can be used as keys in javascript arrays.</p>
+
+    <p><code>toString</code> is called and that is used as the key. That means both all functions are flattened to the same key and any properties of the function object are lost.</p>
+
+    <hr/>
+  </body>
+</html>

@@ -83,83 +83,15 @@
         } )
     ]]></script>
 
-    <script type="application/javascript"><![CDATA[
-        function SplitAttribute( config ) {
-            var $root = config.root || $.__.$('#')
-            var attr = config.attribute || ( function() {
-                throw { message: 'Missing Required Attribute: attribute' }
-            } )()
-            var strs = $root.attr( attr ).split( ' ' )
-            var ids = List.invert( config.ids ) || ( function() {
-                throw { message: 'Missing Required List: ids' }
-            } )()
-
-            var self = config.self || this
-
-            ids.each( function( val, id ) {
-                if( ! strs.empty ) {
-                    ids[ id ] = parseFloat( strs.shift() )
-                }
-            } )
-            
-            var updatable = true
-            var updateʻ = config.update || function() {
-                return $root.attr( attr, self.asString )
-            }
-            var update = function( ʻpdatable ) {
-                if( ʻpdatable !== undefined ) updatable = ʻpdatable
-                return updatable && updateʻ.call( self )
-            }
-            self.update = update
-
-            ids.each( function( val, prop ) {
-                self.__defineGetter__( prop, function() {
-                    return ids.get( prop )
-                } )
-                self.__defineSetter__( prop, function( val ) {
-                    ids.set( prop, val )
-                    return update()
-                } )
-            } )
-
-            self.__defineGetter__( 'asString', function() {
-                return ids.join( ' ' )
-            } )
-            
-            function configure( config ) {
-                if( config instanceof Object ) {
-                    update( false )
-                    ids.each( function( val, id ) {
-                        if( config[ id ] !== undefined ) {
-                            self[ id ] = config[ id ]
-                        }
-                    } )
-                    return update.call( this, true )
-                }
-            } 
-
-            self.expose = function( config ) {
-                var elem = config.through || ( function() {
-                    throw { message: 'Missing Required Object: through' }
-                } )() 
-                var prop = config.as || ( function() {
-                    throw { message: 'Missing Required String: as' }
-                } )()
-               
-                elem.__defineGetter__( prop, function() { return self } )
-                elem.__defineSetter__( prop, configure )
-            }
-
-            configure( config )
-        }
-    ]]></script>
+    <script type="application/javascript" xlink:href=".../lib/tip/SplitAttribute.jquery"/>
 
     <script type="application/javascript+reload"><![CDATA[
         function( config ) {
             config = config !== undefined ? config : {}
             var self = config.self || this
+            var $root = self instanceof Node ? $( self ) : $.__.$( '#' )
             var view = new SplitAttribute( {
-                $root : $.__.$( '#' ),
+                $root : $root,
                 attribute : 'viewBox',
                 ids : [ 'x', 'y', 'width', 'height' ],
             } )

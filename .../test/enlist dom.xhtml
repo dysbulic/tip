@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Web Storage</title>
+    <style type="text/css">
+      body { max-width: 750px; margin: auto }
+      table { border-collapse: collapse }
+      th, td { border: 1px solid; padding: 1em }
+    </style>
+    <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"/> -->
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"/>
+    <script type="text/javascript" src="~/lib/tip/Array.each.js"/>
+    <script type="text/javascript" src="~/lib/tip/pointers.js"/>
+    <script type="text/javascript" src="~/lib/tip/List.js"/>
+    <script type="text/javascript"><![CDATA[
+        localStorage.clear();
+        var docID = [ '⋱', 'will@doh', 'Mȉmis', 'test', '2010', '04', '11@01:51:39.294' ]
+        docID = []
+        var store = localStorage
+        var sep = '/'
+
+        $( function() {
+            function collapse( ) {
+                var keys = Array.prototype.slice.call( arguments )
+                if( ! true ) console.log( 'start:' + keys + '//' + this )
+
+                if( this.data ) {
+                    var str = JSON.stringify( this.data.trim() )
+                    if( str == '""' ) throw 'empty child'
+                    var guid = ( store[ str ]
+                                 || keys.join( sep ) )
+                    console.log( '\t' + 'key∷' + guid );
+                    //console.log( '\t' + 'val∷' + str );
+                    store[ str ] = guid;
+                    store[ guid ] = str;
+
+                    if( ! true ) console.log( ' stop:' + keys + '//' + this );
+                    return guid
+                }
+                if( typeof this.each == 'function' ) {
+                    var children = []
+                    this.each.apply( this, [ function( ) {
+                        if( ! true ) console.log( 'child:' + '' + '//' + this )
+                        var sub = subkey.apply( this );
+                        try {
+                            children = children.concat(
+                                collapse.apply( this, keys.concat( sub ) )
+                            )
+                        } catch( e ) { }
+                    } ] )
+                    if( ! true ) console.log( 'each:' + children + '//' + this )
+                    return children
+                }
+                var children = []
+                if( this.childNodes ) {
+                    if( ! true ) console.log( 'children:' + children + '//' + this )
+                    children = children.concat(
+                        collapse.apply( this.childNodes, keys )
+                    )
+                }
+                if( this.attributes ) {
+                    this.attributes.each( function( val, key ) {
+                        children = children.concat(
+                            collapse.apply( { data: val }, keys.concat( [ key ] ) )
+                        )
+                    } )
+                }
+                return ( children.length > 0
+                         ? collapse.apply( { data : JSON.stringify( children ) }, keys )
+                         : ( function() { throw 'empty child' } ) )
+            }
+            var root = collapse.apply( document, docID );
+            console.log( root )
+        } )
+    ]]></script>
+    <script type="text/javascript"><![CDATA[
+        function subkey() {
+            var ret =
+                ( this.data !== undefined
+                    // ToDo: Handle multiple text siblings
+                    ? ([]).concat(
+                        [ ([
+                            '',
+                            'element node',
+                            'attribute node',
+                            'txt',
+                            'txt',
+                            'entity reference',
+                            'entity',
+                            'processing instruction',
+                            'comment',
+                            'document',
+                            'document type',
+                            'document fragment',
+                            'notation'
+                        ])[ parseInt( this.nodeType ) ] ],
+                        this.nodeType === Node.COMMENT_NODE
+                          ? [ 'txt' ] : []
+                      )
+                    : ( this.name && this.nodeValue
+                          ? [ this.name ] 
+                          : ( this.localName !== null
+                              && this.localName !== undefined
+                                ? ( function counts() {
+                                        var $this = $(this);
+                                        $this.attr( 'mark', '__count_holder' );
+                                  
+                                        var ret = (
+                                            ([]).concat(
+                                                true ? [] : [
+                                                    '*',
+                                                    new List( {
+                                                        'child index' : (
+                                                            $this.index()
+                                                            + 1 // convert from offset
+                                                        ),
+                                                        'total siblings' : (
+                                                            $this.siblings().size()
+                                                            + 1 // count self
+                                                        ),
+                                                    } ).vals.join( '∈' )
+                                                ],
+                                                ([]).concat(
+                                                    [ this.localName ],
+                                                    ( function() {
+                                                          var type = this.localName
+                                                          var out = (
+                                                              new List( {
+                                                                  'ns index' : (
+                                                                      $this.siblings( type ).size()
+                                                                      - ( $this.parent().children(
+                                                                              '[mark="__count_holder"] ~ ' + type
+                                                                          ).size() )
+                                                                      + 1 // convert from offset
+                                                                  ),
+                                                                  'ns siblings' : (
+                                                                      $this.siblings( type ).size()
+                                                                      + 1 // count self
+                                                                  ),
+                                                              } ).vals.join( '∈' ) )
+                                                        return out == '1∈1' ? [] : [ out ]
+                                                    } ).apply( this )
+                                                )
+                                            )
+                                        )
+                                    $this.removeAttr( 'mark' );
+                                    return ret
+                                } ).apply( this, arguments )
+                              : [ ]
+                            )
+                      )
+                )
+            return ret
+        }
+    ]]></script>
+    <script type="text/javascript"><![CDATA[
+        $( function() {
+            var $cache = $('<table/>');
+            Array.prototype.each.apply( store, [ function( val, idx ) {
+                $row = $('<tr/>');
+                [ val, store[ val ] ].each( function( val ) {
+                    $row.append( $('<td/>').text( val ) )
+                } )
+                $cache.append( $row )
+            } ] )
+            $('body').append( $cache )
+        } )
+    ]]></script>
+  </head>
+  <body>
+    <h1>Testing <a href="http://www.w3.org/TR/html5/"><acronym title="Hypertext Markup Language">HTML</acronym> 5</a> <a href="http://www.w3.org/TR/webstorage/">Web Storage</a></h1>
+  </body>
+</html>

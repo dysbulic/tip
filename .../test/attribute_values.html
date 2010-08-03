@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Attribute Values</title>
+    <style type="text/css">
+    </style>
+    <script src="jquery/dist/jquery.js" type="text/javascript"></script>
+    <script type="text/javascript">//<![CDATA[
+      $(function() {
+        var test = $('#test').get(0);
+        $('body').append($('<p/>').text('test.attributes: ' + test.attributes));
+        $('body').append($('<p/>').text('test.attributes[\'style\']: ' + test.attributes.getNamedItem('style')));
+        $('body').append($('<p/>').text('test.attributes[\'style\'].val: ' + test.attributes.getNamedItem('style').nodeValue));
+        $('body').append($('<p/>').text('test.attributes[\'style\'].val: ' + test.attributes['style'].nodeValue));
+        $('body').append($('<p/>').text('test.attributes[\'style\'].name: ' + test.attributes['style'].name));
+        $('body').append($('<p/>').text('test.attributes[\'style\'].val: ' + test.attributes['style'].value));
+        $('body').append($('<p/>').text('test.attributes[\'x\']: ' + test.attributes.getNamedItem('x')));
+        $('body').append($('<p/>').text('test.attribute[\'x\']: ' + test.getAttributeNode('x')));
+      });
+    //]]></script>
+  </head>
+  <body>
+    <p id="test" style="color: blue">Testing for the <code>attributes</code> element&hellip;</p>
+  </body>
+</html>

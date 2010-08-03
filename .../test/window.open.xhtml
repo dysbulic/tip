@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Window.Open</title>
+    <style type="text/css">
+      a { color: blue; }
+      #debug { list-style: none; }
+      #debug li { margin-left: .5em; text-indent: -.5em; }
+      #debug li:before { content: '⊗'; color: black;
+                       margin-right: .5em; }
+      #debug [ type = 'undefined' ]:before { color: rgb(227, 20, 79); }
+      #debug [ pass = 'f' ]:before { content: '✘'; color: red; }
+      #debug [ pass = 't' ]:before { content: '✔'; color: green; }
+    </style>
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"/>
+    <script type="text/javascript" src="interpage_movement/Array.each.js"/>
+    <script type="application/javascript" src="interpage_movement/IdentifiedStack.js"/>
+    <script type="text/javascript" src="interpage_movement/MutableString.js"/>
+    <script type="text/javascript">window.__ = new IdentifiedStack();</script>
+
+    <script type="text/javascript" src="interpage_movement/timestamp.js"/>
+    <script type="text/javascript">//<![CDATA[
+var path = window.location.pathname.replace( new RegExp( '[^/]*/', 'g' ), '' );
+var $root;
+
+window.stamp = window.__.timestamp;
+window.toJSON = function() {
+    return '{ "type": [ "Window" ], "stamp": ' + window.stamp + ' }'
+};
+window.hub = ( window.opener ? window.opener.hub : 
+               window.parent.hub ? window.parent.hub :
+               new IdentifiedStack( {
+                   onLeave: function( win ) {
+                       $('body').append( $('<p/>').text( 'bye:' + win.stamp ) )
+                   },
+                   get asString() { return '⊛' },
+                   leaving: function( win ) {
+                       
+                   }
+               } ) );
+window.hub.set( window.stamp, new IdentifiedStack( {
+    win: window
+} ) );
+
+$( function() {
+    $root = $('body');
+    print.$list( 'go' );
+    setInterval( step, 500 );
+} );
+
+var get = new IdentifiedStack();
+
+window.__.list = function list( name ) {
+    var self = arguments.callee;
+    self.lists.let( name, new IdentifiedStack() );
+    var ret = self.lists.get( name );
+    //console.log( 'self:list:' + name + ':' + ret );
+    return ret;
+}
+window.__.list.lists = new IdentifiedStack();
+
+window.__.add = function list( name ) {
+    
+}
+
+get.$list = function( name ) {
+    var handlers = get.$list.handlers.get( name );
+    var $lst = get.$lists.get( name );
+
+    handlers.each( function( handler ) {
+        handler.apply( this, [ $lst ] );
+    } );
+    
+    return $lst;
+}
+get.$lists = new IdentifiedStack();
+get.$lists.on( 'get', function( key, ret ) {
+    if( ! ret ) {
+        var $lst = $( '<ul/>' );
+        this.set( key, $lst );
+        throw { 'return': $lst };
+    }
+} );
+
+get.$list.$base = $('<div/>').css( { display: 'none' } );
+
+get.$list.handlers = new IdentifiedStack();
+get.$list.handlers.on( 'get', function( key, ret ) {
+    if( ! ret ) {
+        var stk = new IdentifiedStack();
+        this.set( key, stk );
+        throw { 'return': stk };
+    }
+} );
+
+var print = new IdentifiedStack();
+print.$list = function( name ) {
+    $root.append( get.$list( name ) );
+}
+
+$(window).bind( 'unload', function() {
+    hub.leaving( win );
+} );
+
+new IdentifiedStack( { 
+    debug: function( $dbg ) {
+        $dbg.empty();
+        new IdentifiedStack( {
+            '∃ opener': window.opener != null,
+            'depth ≟ 1': window.parent == window,
+        } ).each( function( ret, tst ) {
+            $dbg.append( $('<li/>').attr( {
+                'class': 'test',
+                'pass': ret ? 't' : 'f',
+            } ).text(
+                tst
+            ) );
+        } );
+    },
+    go: function( $go ) {
+        $go.empty();
+        new IdentifiedStack( {
+            'close': function() { window.close() },
+            pause: function() {
+                $(this).text( 'play' );
+            },
+                
+        } ).set(
+            'new:' + path, function() {
+                window.open( path );
+            }
+        ).each( function( action, key ) {
+            $go.append( $('<li/>').text( key ).click( action ) )
+        } );
+    }
+} ).each( function( f, key ) {
+    get.$list.handlers.get( key ).add( f );
+} );
+
+function step( ) {
+    print.$list( 'debug' );
+    
+    var scope = {
+        '$go': { test: 't' } };
+        
+    var vals = new IdentifiedStack( {
+        now: window.__.timestamp,
+        hub: hub ? hub.asString : hub,
+        'scope["$go"]["test"]': scope["$go"]["test"],
+        'scope.$go.test': scope.$go.test,
+    } );
+    [ 'hub.msg', 'scope.$go.test' ].each( function( id ) {
+        var key = new MutableString( id );
+        var baseId = key['.'];
+        eval( 'var val = ' + baseId );
+        vals.set( 'p:' + baseId, val );
+        var count = 0;
+        //while( ( val = val[ key['.'] ] ) );
+        while( val && ( prop = key['.'] ) ) {
+            val = val[ prop ];
+        }
+        vals.set( id, val );
+    } );
+
+    get.$list.handlers.get( 'debug' ).add( function( $dbg ) {
+        $dbg.empty();
+        vals.each( function( val, key ) {
+            $dbg.append( $('<li/>').attr( {
+                'class': 'variable',
+                'type': typeof val,
+            } ).text(
+                key + ' = ' + val
+            ) );
+        } );
+    } );
+    print.$list( 'debug' );
+}
+    //]]></script>
+  </head>
+  <body>
+  </body>
+</html>

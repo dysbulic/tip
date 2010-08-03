@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Table Test</title>
+    <style type="text/css">
+      body {
+        background-color: rgb(233, 222, 237);
+        font-size: 14pt;
+      }
+      #menu div.spacer {
+        width: .75em;
+        height: .5em;
+        float: left;
+        text-align: center;
+        vertical-align: middle;
+        margin: 0px 0px 0px 0px;
+      }
+      #menu a.expansion-button {
+        display: block;
+        font-size: 10pt;
+        text-decoration: none;
+        font-style: fixed;
+        font-weight: bold;
+      }
+      #menu a.expansion-button:hover {
+       border: thin dashed gray;
+      }
+      #menu div div {
+        margin-left: .2in;
+      }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+    <script type="text/javascript">//<![CDATA[
+      var menu = new Array();
+      var containedMark = "+";
+      var expandedMark = "-";
+
+      /* To cut down on the amount of typing in html to create
+       * a menu the init will try and walk through the menu
+       * adding the expansion buttons. Also it will save the
+       * structure for quicker access later. (Well, I assume
+       * it is quicker...)
+       */
+      function init() {
+        createMenu(document.getElementById("menu").childNodes);
+      }
+
+      function createMenu(nodeList) {
+        var nodes = new Array();
+        var count = nodeList.length;
+        for(var i = 0; i < count; i++) {
+          // IE doesn't have the constant defined
+          // if(nodeList[i].nodeType != Node.TEXT_NODE) {
+          if(nodeList[i].nodeType != 3) {
+            nodes.push(nodeList[i]);
+
+            var spacer = document.createElement("div");
+            spacer.setAttribute("class", "spacer");
+
+            if(nodeList[i].getElementsByTagName("div").length > 0) {
+              var link = document.createElement("a");
+              link.setAttribute("onclick", "toggleVisibility(" + menu.length + ")"); 
+              link.setAttribute("class", "expansion-button");
+              spacer.appendChild(link);
+
+              var item = new Object();
+
+              item.visible = true;
+              item.text = document.createTextNode(expandedMark);
+              link.appendChild(item.text);
+
+              // To keep the count right in the javascript this needs to be
+              //  added before the recursion
+              menu.push(item);
+
+              item.nodes = createMenu(nodeList[i].childNodes);
+            }
+            nodeList[i].insertBefore(spacer, nodeList[i].childNodes[0]);
+          }
+        }
+	return nodes;
+      }
+      
+      function toggleVisibility(id) {
+        menu[id].visible = !menu[id].visible;
+
+        var visibility = menu[id].visible ? "block" : "none";
+        for(var i = menu[id].nodes.length - 1; i >= 0; i--) {
+          menu[id].nodes[i].style.display = visibility;
+        }
+
+        menu[id].text.data = menu[id].visible ? expandedMark : containedMark;
+      }
+    //]]></script>
+  </head>
+  <body onload="init()">
+    <p>This is a test of javascript to dynamically display information in a tree.</p>
+    <div id="menu">
+      <div>One</div>
+      <div>Two</div>
+      <div>Three
+        <div>One</div>
+        <div>Two</div>
+        <div>Three
+          <div>One</div>
+          <div>Two</div>
+          <div>Three</div>
+          <div>Four
+            <div>One</div>
+            <div>Two</div>
+          </div>
+        </div>
+      </div>
+      <div>Four</div>
+    </div>
+  </body>
+</html>

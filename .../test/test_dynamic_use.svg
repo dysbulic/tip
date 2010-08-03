@@ -1,0 +1,31 @@
+<svg viewBox="0 0 10 10" width="100%" height="100%"
+     xmlns="http://www.w3.org/2000/svg" version="1.0"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>Dynamic Use</title>
+  <defs>
+    <script type="text/javascript">
+      // Doesn't exist
+      document.addEventListener('load', function() { alert('document.onload') }, true);
+      function addCircle(point) {
+        var use_elm = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        use_elm.setAttribute('x', point.x);
+        use_elm.setAttribute('y', point.y);
+        use_elm.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#target');
+        use_elm.style.stroke = 'red';
+        document.rootElement.appendChild(use_elm);
+      }
+      window.addEventListener('load', function() { addCircle({ x: 5, y: 5 }) }, true);
+      window.addEventListener('click', function(event) {
+          var screenCTM = document.documentElement.getScreenCTM();
+          var point = document.documentElement.createSVGPoint(); 
+          point.x = event.clientX;
+          point.y = event.clientY; 
+          point = point.matrixTransform(screenCTM.inverse());
+          addCircle(point);
+        },
+        true);
+    </script>
+    <style type="text/css"> #target { stroke: black; } </style>
+    <circle id="target" r="2.5" style="fill: none"/>
+  </defs>
+</svg>

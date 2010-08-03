@@ -15,15 +15,43 @@
     <script type="text/javascript">//<![CDATA[
       $( function() {
           console.log( $( 'title' ).text() )
+          View()
+          console.log( view )
           $.get( 'nested.svg',
                  function( xhr ) {
                      //console.log( xhr )
                      var doc = xhr.documentElement
+                     console.log( $( 'title', doc ).text() )
+                     View( {
+                         self : doc,
+                     } )
+                     console.log( doc.view )
+                     doc.view.width = 100
                      $.__.$( '#' ).append( doc )
                  }
                )
       } )
     //]]></script>
+
+    <script type="application/javascript" xlink:href=".../lib/tip/SplitAttribute.jquery"/>
+
+    <script type="application/javascript"><![CDATA[
+        function View( config ) {
+            config = config !== undefined ? config : {}
+            var self = config.self || this
+            var $root = self instanceof Node ? $( self ) : $.__.$( '#' )
+            var view = new SplitAttribute( {
+                $root : $root,
+                attribute : 'viewBox',
+                ids : [ 'x', 'y', 'width', 'height' ],
+            } )
+            view.expose( {
+                through : self,
+                as : 'view',
+            } )
+        }
+    ]]></script>
+
     <style type="text/css">
     </style>
   </defs>

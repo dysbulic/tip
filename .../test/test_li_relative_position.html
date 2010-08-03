@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Relavive Position of List Items</title>
+    <style type="text/css">
+      ul li ul {
+        overflow: hidden;
+      }
+      ul li ul li {
+        position: relative;
+        top: -2.5em;
+      }
+    </style>
+    <!--[if lt IE 7]>
+    <style type="text/css">
+      ul {
+        zoom: 1;
+        margin: 0;
+        padding-left: 2em;;
+      }
+      ul li ul li {
+        top: -3em;
+      }
+    </style>
+    <![endif]-->
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p>I just need to figure out which styles to use to hide the children of a div&hellip;</p>
+    <p><a href="http://www.mozilla.org/newlayout/">Gecko</a> handles the <code>overflow: hidden</code> correctly, but IE doesn't clip unless <code>zoom: 1</code> is used to trigger <a href="http://www.satzansatz.de/cssd/onhavinglayout.html"><code>hasLayout</code></a>. Unfortunately it also clips the bullets, and it takes switching the <code>margin</code> to <code>padding</code> to make them show up.</p>
+    <ul>
+      <li>One</li>
+      <li>Two</li>
+      <li>Three:
+      <ul>
+        <li>Apples</li>
+        <li>Bears</li>
+        <li>Carrots</li>
+        <li>Doggies</li>
+        <li>Eucharist</li>
+      </ul>
+      </li>
+      <li>Four</li>
+      <li>Five</li>
+    </ul>
+  </body>
+</html>
