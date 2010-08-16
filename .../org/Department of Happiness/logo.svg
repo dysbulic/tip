@@ -85,22 +85,7 @@
 
     <script type="application/javascript" xlink:href=".../lib/tip/SplitAttribute.jquery"/>
 
-    <script type="application/javascript+reload"><![CDATA[
-        function( config ) {
-            config = config !== undefined ? config : {}
-            var self = config.self || this
-            var $root = self instanceof Node ? $( self ) : $.__.$( '#' )
-            var view = new SplitAttribute( {
-                $root : $root,
-                attribute : 'viewBox',
-                ids : [ 'x', 'y', 'width', 'height' ],
-            } )
-            view.expose( {
-                through : self,
-                as : 'view',
-            } )
-        }
-    ]]></script>
+    <script type="application/javascript" xlink:href=".../lib/tip/view.js"/>
 
     <script type="application/javascript+reload"><![CDATA[
         function( config ) {
@@ -115,100 +100,8 @@
         }
     ]]></script>
 
+    <script type="application/javascript" xlink:href=".../lib/tip/scene.js"/>
     <script type="application/javascript"><![CDATA[
-        var time = {
-            get now() { return ( new Date() ).getTime() }
-        }
-
-        function Scene() {
-            var state = new List( {
-                'tixel.capture.frequency.mHz' : .025 * 1000,
-                'time.epoch' : time.now,
-            } )
-            var interval = {
-                id: undefined,
-            }
-
-            var contents = new List
-
-            var last = time.now
-            function once() {
-                var now = time.now
-                
-                contents.each( function( tixel ) {
-                    tixel = tixel || {}
-                    var start = ( tixel.start === undefined
-                                  ? tixel.end - tixel.duration
-                                  : tixel.start )
-                    var end = ( tixel.end === undefined
-                                ? start + tixel.duration
-                                : tixel.end )
-                    if( ( last < start && now >= start )
-                        || ( last > end && now <= end )
-                        || ( tixel.percent > 0 && tixel.percent < 1 )
-                        || ( start === null && end === null )
-                        || ( now <= end && start === null )
-                        || ( now >= start && end === null ) ) {
-                        var percent = ( now - start ) / tixel.duration
-                        tixel.percent = {
-                            valueOf: function() { return percent },
-                            get raw() { return percent },
-                            get capped() { return Math.max( 0, Math.min( 1, percent ) ) },
-                        }
-                        
-                        if( tixel.elem && tixel.attr ) {
-                            tixel.elem[ tixel.attr ] = tixel.val.call( tixel, now - last )
-                        }
-                        if( typeof tixel.snap == 'function' ) {
-                            tixel.snap.call( tixel )
-                        }
-                    }
-                } )
-                last = now
-            }
-
-            this.__defineGetter__( 'once', once )
-
-            this.__defineGetter__( 'go', function() {
-                if( interval.id === undefined ) {
-                    var self = this
-                    var freq = state.get( 'tixel.capture.frequency.mHz' ) || 100
-                    interval.id =
-                        setInterval( function() {
-                            once.apply( self, arguments )
-                        },
-                                     freq )
-                }
-                return this
-            } )
-
-            this.__defineGetter__( 'stop', function() {
-                if( interval.id !== undefined ) {
-                    clearInterval( interval.id )
-                    interval.id = undefined
-                }
-                return this
-            } )
-
-            this.__defineGetter__( 'running', function() {
-                return interval.id !== undefined
-            } )
-
-            this.__defineGetter__( 'pause', function() {
-                return this.running ? this.stop : this.go
-            } )
-            
-            this.add = function( tixel ) {
-                contents.add( tixel )
-            }
-
-            this.__defineGetter__( 'length', function() {
-                return contents.length
-            } )
-        }
-
-        var scene = new Scene
-        scene.go
     ]]></script>
 
     <script type="application/javascript"><![CDATA[ 
@@ -561,125 +454,8 @@
         }
     ]]></script>
 
+    <script type="application/javascript" xlink:href=".../lib/tip/Circle.js"/>
     <script type="application/javascript"><![CDATA[
-        function Circle( config ) {
-            var args = Array.prototype.slice.call( arguments )
-            config = config || ( function() {
-                var config = {}
-                args.unshift( config )
-                return config
-            } )()
-            var self = config.self || this
-            config.$root = ( config.path
-                             ? $.__.$( '<path/>' ).attr( {
-                                 d : '',
-                             } )
-                             : $.__.$( '<circle/>' ).attr( {
-                                 cx : 0,
-                                 cy : 0,
-                                 r : 0,
-                             } ) )
-            var $root = Tip.add.$root.apply( self, args )
-            Tip.add.id.apply( self, args )
-            Tip.add.shape.apply( self, args )
-            
-            var curve = {
-                radius : 0,
-                center : {
-                    x : 0,
-                    y : 0,
-                },
-                x : { axis : { rotation : 0 } },
-                large : { arc : true },
-                positive : { arc : true },
-                update : function() {
-                    $root.attr( 'd', [
-                        'm',
-                        this.center.x, this.center.y + this.radius,
-                        'a', this.radius, this.radius,
-                        this.x.axis.rotation,
-                        this.large.arc ? 1 : 0,
-                        this.positive.arc ? 1 : 0,
-                        ( this.positive.arc ? 1 : -1 ) * .0001, 0
-                    ].join( ' ' ) )
-                }
-            }
-
-            var center = ( config.path
-                           ? {
-                               get x() { return curve.center.x },
-                               set x( x ) {
-                                   curve.center.x = x
-                                   return curve.update.call( curve )
-                               },
-                               get y() { return curve.center.y },
-                               set y( x ) {
-                                   curve.center.y = y
-                                   return curve.update.call( curve )
-                               },
-                           }
-                            : {
-                                get x() { return parseFloat( $root.attr( 'cx' ) ) },
-                                set x( x ) { return $root.attr( 'cx', x ) },
-                                get y() { return parseFloat( $root.attr( 'cy' ) ) },
-                                set y( y ) { return $root.attr( 'cy', y ) },
-                            } )
-
-            function arc( positive ) {
-                curve.positive.arc = positive
-                return curve.update.call( curve )
-            }
-
-            var circle = {
-                get center() { return center },
-                set center( c ) {
-                    if( c.x !== undefined ) {
-                        center.x = c.x
-                    }
-                    if( c.y !== undefined ) {
-                        center.y = c.y
-                    }
-                    return center
-                },
-                get positive() { return {
-                    get arc() { return curve.positive.arc },
-                    set arc( positive ) { return arc.apply( this, arguments ) },
-                } },
-                set positive( positive ) {
-                    if( positive.arc !== undefined ) {
-                        return arc.call( this, positive.arc )
-                    }
-                },
-            }
-            circle.__defineGetter__( 'radius', ( config.path
-                                                 ? function() { return curve.radius }
-                                                 : function() { return parseFloat( $root.attr( 'r' ) ) }
-                                               ) )
-            circle.__defineSetter__( 'radius', ( config.path
-                                                 ? function( radius ) {
-                                                     curve.radius = radius
-                                                     return curve.update.call( curve )
-                                                 }
-                                                 : function( radius ) { $root.attr( 'r', radius ) }
-                                               ) )
-
-            for( prop in circle ) {
-                var get = circle.__lookupGetter__( prop )
-                var set = circle.__lookupSetter__( prop )
-                if( get || set ) {
-                    if( get ) {
-                        self.__defineGetter__( prop, get )
-                    }
-                    if( set ) {
-                        self.__defineSetter__( prop, set )
-                    }
-                } else {
-                    self[ prop ] = circle[ prop ]
-                }
-            }
-
-            Tip.configure.apply( self, args )
-        }
     ]]></script>
 
     <script type="application/javascript"><![CDATA[
