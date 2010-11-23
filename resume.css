@@ -8,3 +8,34 @@ legend { float: left; width: 5em; text-align: right;
 form a { display: block; margin-left: 25%; margin-top: 1.5em; width: 50%;
          text-align: center; border: thin solid; text-decoration: none; }
 form a:hover { color: green; border-color: green; }
+body { margin: 1em 4em; max-width: 56em; font-size: 14pt; line-height: 1.3em; background-color: rgb(255, 245, 209); }
+#toplist { max-width: 800px; }
+.publication { font-style: italic; }
+h1, h2, h3 { margin: 0; text-align: center; }
+#name, #address { margin: 0; }
+#name { float: left; font-size: 18pt; font-family: "Baskerville Old Face"; margin-top: .5em; }
+#address { float: right; width: 20em; }
+ol { list-style-type: upper-roman; }
+ul { list-style: disc; }
+ul ul { list-style: square; }
+
+a { text-decoration: none; color: rgb(11, 25, 120); }
+a:hover { color: rgb(120, 32, 11); }
+
+ol, ul { margin-left: .5em; padding-left: 0; }
+li { padding-left: 1.5em; text-indent: -1.5em; }
+
+@media print {
+  html, body { margin: 0; padding: 0; font-size: 12pt; line-height: 1.27em; max-width: 100%; }
+  body { margin-left: .1in; }
+  /* ol, ul { margin: 0; padding: 0; padding-left: 1em; } */
+  ol { list-style-type: none; }
+  ol li { margin-left: -1em; font-weight: bold; margin-top: .25em; }
+  ul li { font-weight: normal; margin-top: 0; }
+  a { color: inherit; }
+  acronym { border: none; }
+  #name { font-size: 12.5pt; margin-top: 1.5em; }
+  #address { width: 13em; }
+  #address * { font-size: 12pt; }
+  /*#work { page-break-before: always; }*/
+}
