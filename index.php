@@ -8,7 +8,7 @@
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js">
     </script>
     <script type="application/javascript"
-            src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js">
+            src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.js">
     </script>
     <script type="application/javascript" src="index.js"></script>
     <script type="application/javascript">//<![CDATA[
@@ -21,5 +21,6 @@
     <?php if(isset($params['error'])) { ?>
       <div id="error"><?php print $params['error'] ?></div>
     <?php } ?>
+    <?php include('resume.html') ?>  
   </body>
 </html>
