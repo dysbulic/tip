@@ -1,0 +1,27 @@
+body.tabbed {
+  margin: 0; padding: 0;
+  max-width: 100%;
+}
+
+.tabbed #htmltab {
+  max-width: 52em;
+  margin: auto;
+}
+
+#top > .ui-tabs-nav li {
+  width: 45%;
+}
+
+#top > .ui-tabs-nav li a {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+li { text-indent: 0; }
+
+@media print {
+  /* Force printing of HTML version */
+  .ui-tabs-nav, .ui-tabs-panel { display: none; }
+  #htmltab.ui-tabs-panel { display: block; }
+}
