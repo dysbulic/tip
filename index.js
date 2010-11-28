@@ -40,7 +40,7 @@ $(function() {
       $root = $(ui.panel);
     }
   } );
-  $toptabs.tabs("add", "#tabs-" + tabcount++, "jQuery <acronym title='User Interface'>UI</acronym>");
+  $toptabs.tabs("add", "#jquerytab", "jQuery <acronym title='User Interface'>UI</acronym>");
   
   var $areas = $("<div id='areas'><ul></ul></div>");
   $root.append( $areas );
@@ -69,8 +69,22 @@ $(function() {
 
   function buildTimeline( $src, $root ) {
     //$src.children().clone().appendTo( $root );
-    $src.children().each( function( idx, elem ) {
-      console.log( $(elem).text() );
+    var $headlist = $('<ul id="headers"/>');
+    var $proplist = $('<ul id="props"/>');
+    $src.children().children( 'li' ).each( function( idx, elem ) {
+      var $pitem = $('<li/>');
+      $pitem.append( $(elem).children( 'ul' ).clone() );
+      $proplist.append( $pitem );
+
+      var $hitem = $('<li/>');
+      $hitem.append( $(elem).children( '.org' ).clone() );
+      $hitem.append( $(elem).children( '.role' ).clone() );
+      $hitem.click( function() {
+      } );
+      
+      $headlist.append( $hitem );
     } );
+    $root.append( $headlist );
+    $root.append( $proplist );
   }
 } );
