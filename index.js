@@ -98,15 +98,35 @@ $(function() {
       $root.append( $proplist );
     }
   }
-  /* Load content via ajax if not inserted via php */
-  if( $('body').children().size() == 1 ) {
-    $.get( 'resume.html', function( data ) {
-      $('body').append( $('<div/>' ).html( data ) );
-      setup();
-    } )
-  } else {
-    console.log($('body').children().size());
-    setup();
-  }
+
+    /* Load content via ajax if not inserted via php */
+    function loadContent( data ) {
+	$('body').append( $('<div/>' ).html( data ) );
+	setup();
+    }
+    if( $('body').children().size() == 1 ) {
+      try {
+	  $.ajax( {
+	      url: 'resume.html', 
+	      success: function( data, status ) {
+		  console.log( data );
+		  if( data != '' ) {
+		      loadContent( data )
+		  } else {
+		      $.get( 'https://github.com/wholcomb/resume/raw/master/resume.html',
+			     loadContent )
+		  }
+	      },
+	      error: function() {
+		  // Not called on error: Origin null is not allowed by Access-Control-Allow-Origin.
+	      },
+	  } )
+      } catch( e ) {
+	  console.log( e.getMessage() );
+      }
+    } else {
+	console.log($('body').children().size());
+	setup();
+    }
 } );
   
