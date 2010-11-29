@@ -80,6 +80,11 @@ $(function() {
       $hitem.append( $(elem).children( '.org' ).clone() );
       $hitem.append( $(elem).children( '.role' ).clone() );
       $hitem.click( function() {
+	  var offset = $pitem.offset().top;
+	  $('#props').animate( {
+	    scrollTop: offset
+	  }, 1000);
+	  console.log(offset);
       } );
       
       $headlist.append( $hitem );
