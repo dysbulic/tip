@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.0"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="100%" height="100%" viewBox="-25 -25 50 50">
+  <title>jQuery SVG Load Test</title>
+  <defs>
+    <script type="text/javascript" xlink:href="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" />
+    <script type="text/javascript">
+      function clearError() {
+        $('#error').remove();
+      }
+      $( function clearError() {
+        $('#error').remove();
+      } );
+      function useBranchedVersion() { // Loads the version of the library from: https://github.com/wholcomb/jquery
+        var script = document.createElementNS( 'http://www.w3.org/2000/svg', 'script' );
+        script.setAttribute( 'type', 'text/javascript' );
+        script.setAttributeNS( 'http://www.w3.org/1999/xlink', 'xlink:href', '.../lib/jquery/jquery.js' );
+        script.addEventListener( 'load', function() {
+          console.log( $ );
+          clearError();
+        } );
+        document.documentElement.appendChild( script );
+      }
+    </script>
+    <style type="text/css">
+      text { text-anchor: middle; font-size: 2.5px; }
+      a tspan { fill: blue; }
+      a:hover tspan { fill: orange; }
+    </style>
+  </defs>
+  <text id="error" x="0" y="0">
+    <tspan>You should not be seeing this message.</tspan>
+    <tspan dy="1.25em" x="0">Its visibility means jQuery didn't load.</tspan>
+    <a xlink:href="http://bugs.jquery.com/ticket/5911"><tspan dy="1.25em" x="0">This is documented in ticket 5911.</tspan></a>
+    <a xlink:href="javascript:useBranchedVersion()"><tspan dy="1.5em" x="0">Load branched version of jQuery.</tspan></a>
+  </text>
+</svg>
