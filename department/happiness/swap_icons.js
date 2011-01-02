@@ -1,36 +1,24 @@
 $( function() {
-    function getMatrix( transform ) {
-        if( transform instanceof SVGMatrix ) {
-            return transform
+    // External images don't load in Firefox and
+    // image sizing is incorrect in Chrome 10
+    // so this replaces the image elements with
+    // inline svgs.
+    $('image').each(function() {
+        var $image = $(this);
+        var link = $image.attr( 'xlink:href' );
+        if( !link ) link = $image.attr('href');
+        if( link[0] != '#' && link.substring( link.length - 4 ) == '.svg' ) { // non-local svg image
+            $.get( link, function( data ) {
+                var $svg = $(data.documentElement);
+                $(['x', 'y', 'width', 'height']).each( function( idx, val ) {
+                    if( $image.attr( val ) != undefined ) {
+                        $svg.attr( val, $image.attr( val ) );
+                    }
+                });
+                $image.replaceWith( $svg );
+            })
         }
-
-        var mat = document.documentElement.createSVGMatrix();
-        // If unspecified return the identity matrix
-        if( ! transform ) {
-            mat.a = 1;
-            mat.e = 1;
-            return mat;
-        }
-
-        var trans = transform.split( /[ ,()]/ );
-        trans = trans.filter( function( elem ) {
-            return !elem.match( /[ ,()]/ ) && elem != '';
-        } )
-        for( i = 0; i < trans.length; i++) {
-            if( trans[i] == 'matrix' ) {
-                mat.a = parseFloat( trans[1] );
-                mat.b = parseFloat( trans[2] );
-                mat.c = parseFloat( trans[3] );
-                mat.d = parseFloat( trans[4] );
-                mat.e = parseFloat( trans[5] );
-                mat.f = parseFloat( trans[6] );
-                i += 6;
-            } else if( trans[i] == 'translate' ) {
-                mat.c = parseFloat( trans[1] );
-            }
-        }
-        return mat;
-    }
+    })
 
 //     $.fx.step[ 'transform' ] = function(fx) {
 //         if(!fx.transformInit) {
@@ -58,27 +46,40 @@ $( function() {
     $root.find( '[class="menuitem"]' ).each( function() {
         var $item = $(this);
         $item.click( function() {
-            $item.data( 'showsub', ! $item.data( 'showsub' ) )
+            var $item = $(this);
+            var showsub = ! $item.data( 'showsub' );
+            $item.data( 'showsub', showsub )
             $item.parents().andSelf().each( function() {
                 var $parent = $(this);
                 
-                if( $item.data( 'showsub' ) ) {
+                if( showsub ) {
                     $parent.data( 'transform', $parent.attr( 'transform' ) );
                     $parent.animate( {
                         transform : 'matrix(1,0,0,1,0,0)',
                     } );
                 } else {
-                    console.log( $parent.data( 'transform' ) );
                     $parent.animate( {
                         transform : $parent.data( 'transform' ),
                     } );
                 }
+            } );
+            if( showsub ) {
+                $root.data( 'viewBox', $root.attr( 'viewBox' ) );
+                $root.animate( {
+                    //viewBox : '0 0 ' + $item.width() + ' ' + $item.height(),
+                    svgViewBox : '0 0 100 100', // ToDo: dynamically determine width and height
+                } )
+            } else {
+                $root.animate( {
+                    svgViewBox : $root.data( 'viewBox' ),
+                } )
+            }
+        } );
+    } )
+} )
+
       //console.log( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) );
       //$root.append( $('<g/>').append( $root.children() ) );
       //$root.append( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) );
       //$root.get( 0 ).appendChild( document.createElementNS( 'http://www.w3.org/2000/svg', 'svg:g' ) );
       //console.log( $root.children().size() );
-            } );
-        } );
-    } )
-} )
