@@ -40,8 +40,9 @@ $( function() {
 //         console.log(fx.$elem.attr('transform'));
 //     };
 
+    function scroller() {
+    } 
 
-    console.log( 'exe' );
     var $root = $(document.documentElement);
     $root.find( '[class="menuitem"]' ).each( function() {
         var $item = $(this);
@@ -49,11 +50,18 @@ $( function() {
             var $item = $(this);
             var showsub = ! $item.data( 'showsub' );
             $item.data( 'showsub', showsub )
+
             $item.parents().andSelf().each( function() {
                 var $parent = $(this);
                 
                 if( showsub ) {
-                    $parent.data( 'transform', $parent.attr( 'transform' ) );
+                    var transform = $parent.attr( 'transform' )
+                    // if no transform is set, use the identity transform
+                    if( transform == undefined || transform == '' ) {
+                        transform = 'matrix(1,0,0,1,0,0)'
+                        $parent.attr( 'transform', transform )
+                    }
+                    $parent.data( 'transform', transform )
                     $parent.animate( {
                         transform : 'matrix(1,0,0,1,0,0)',
                     } );
@@ -63,6 +71,7 @@ $( function() {
                     } );
                 }
             } );
+
             if( showsub ) {
                 $root.data( 'viewBox', $root.attr( 'viewBox' ) );
                 $root.animate( {
@@ -74,6 +83,15 @@ $( function() {
                     svgViewBox : $root.data( 'viewBox' ),
                 } )
             }
+
+            $item.parent().children().each( function() {
+                var $child = $(this)
+                if( !$child.equals( $item ) ) {
+                    $child.animate( {
+                        opacity : showsub ? '1' : '0',
+                    } )
+                }
+            } );
         } );
     } )
 } )
