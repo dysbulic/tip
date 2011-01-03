@@ -75,6 +75,7 @@ $(function() {
       var $headlist = $('<ul id="headers"/>');
       var $proplist = $('<ul id="props"/>');
       $src.children().children( 'li' ).each( function( idx, elem ) {
+        var $pitems = []
         var $pitem = $('<li/>');
         $pitem.append( $(elem).children( 'ul' ).clone() );
         $proplist.append( $pitem );
@@ -94,6 +95,9 @@ $(function() {
       
         $headlist.append( $hitem );
       } );
+        $headlist.children().each( function( idx ) {
+            console.log( idx )
+        } )
       $root.append( $headlist );
       $root.append( $proplist );
     }
