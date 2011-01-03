@@ -18,9 +18,47 @@ body.tabbed {
   text-align: center;
 }
 
-#headers {
-  width: 45%;
+.ui-tabs-nav > li {
+  text-indent: 0;
+}
+
+#areas > .ui-tabs-panel {
+/*
+  display: table;
+*/
+}
+
+#scroller, #headers, #props {
+  float: left;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  margin: 1em 0;
+}
+
+#headers, #props, #props ul {
   list-style: none;
+}
+
+#headers {
+  white-space: nowrap;
+  overflow: hidden;
+  margin-left: .5em;
+}
+
+#props li, #headers li ul, #headers li {
+  text-indent: 0;
+  padding-left: 0;
+}
+
+#headers li {
+  text-indent: .1em;
+  margin-bottom: .5em;
+}
+
+#headers .org {
+  display: block;
+  border-bottom: 2px solid;
 }
 
 #headers .role {
@@ -33,22 +71,28 @@ body.tabbed {
 }
 
 #props {
-  width: 45%;
+}
+
+#props ul {
+  border-top: 2px solid;
 }
 
 #jquerytab {
-    overflow: scroll;
+  padding: .5em;
 }
 
-#headers, #props {
-  float: left;
-}
+/*body { overflow: hidden; }*/
 
 li { text-indent: 0; }
 
-html { height: 100%; }
-#props { height: 20em; overflow: auto; }
-#props ul { border-top: 2px solid; }
+body.htmltab #top, body.htmltab .ui-widget-header .ui-tabs-selected {
+  background-image: none; background-color: rgb(255, 245, 209);
+}
+
+/* Without the direct descendant selector, all subtabs are colored */
+body.jquerytab #top, body.jquerytab > * > .ui-widget-header .ui-tabs-selected {
+  background-image: none; background-color: rgb(220, 228, 252);
+}
 
 @media print {
   /* Force printing of HTML version */
