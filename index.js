@@ -112,7 +112,6 @@ $(function() {
     console.log( '.ui-tabs-nav.height() = ' + $areas.children( '.ui-tabs-nav' ).height() );
     console.log( '.ui-tabs-nav.innerHeight() = ' + $areas.children( '.ui-tabs-nav' ).innerHeight() );
     console.log( '.ui-tabs-nav.outerHeight() = ' + $areas.children( '.ui-tabs-nav' ).outerHeight() );
-    return;
     console.log( 'document.body.clientHeight = ' + document.body.clientHeight );
     console.log( '$top.innerHeight() = ' + $top.innerHeight() );
     console.log( '$top.outerHeight() = ' + $top.outerHeight() );
@@ -131,7 +130,6 @@ $(function() {
                  - parseInt( $top.css( 'padding-top' ).replace( /px$/, '' ) ) ),
     } );
   } );
-  $(window).click();
 
   // Runs to populate the tab version
   function tabVersion() {
@@ -143,7 +141,6 @@ $(function() {
       if( $src.children().hasClass( 'title' ) ) {
         $topictabs.tabs( {
           add : function( event, ui ) {
-            console.log( ui.panel.id );
             matchTabHeight( $jquerytab, $areas, $(ui.panel) );
             parseResumeItem( $src, $(ui.panel) );
           },
@@ -159,7 +156,6 @@ $(function() {
   $toptabs.bind( 'tabsshow', tabVersion );
 
   function parseResumeItem( $src, $root ) {
-    console.log( $src.attr( 'id' ) );
     if( $src.attr( 'id' ) == 'work' ) {
       var $headlist = $('<ul id="headers"/>');
       var $proplist = $('<ul id="props"/>');
