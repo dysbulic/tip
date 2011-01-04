@@ -163,6 +163,7 @@ $(function() {
     if( $src.attr( 'id' ) == 'work' ) {
       var $headlist = $('<ul id="headers"/>');
       var $proplist = $('<ul id="props"/>');
+
       $src.children().children( 'li' ).each( function( idx, elem ) {
         var $pitem = $('<li/>');
         $pitem.append( $(elem).children( 'ul' ).clone() );
@@ -183,32 +184,51 @@ $(function() {
       
         $headlist.append( $hitem );
       } );
-      $headlist.children().each( function( idx ) {
-        console.log( idx )
-      } )
 
       $root.append( $headlist );
       $root.append( $proplist );
 
-      var $scroller = $('<div id="scroller"/>');
-      $scroller.append( $('<div/>').height( $headlist.get(0).scrollHeight ) );
-      $scroller.scroll( function( event ) {
-        $headlist.scrollTop( $scroller.scrollTop() )
-       } );
-      $scroller.width( 12 ); // Chrome doesn't include the scrollbar in the width
-
-      $root.prepend( $scroller );
-      
       // display table-cell doesn't scroll correctly
       $proplist.width( $root.width()
                        - $headlist.width()
                        - parseInt( $root.css( 'padding-left' ).replace( /px$/, '' ) )
                        - parseInt( $root.css( 'padding-right' ).replace( /px$/, '' ) )
                        );
-      console.log($headlist.width());
-      console.log($proplist.width());
+
+      // Make the elements of the two lists the same height by expanding the shorter
+      $headlist.children().each( function( idx ) {
+          var $hitem = $(this)
+          var $pitem = $proplist.children().eq( idx )
+
+          var height = Math.max( $hitem.outerHeight(), $pitem.outerHeight() )
+          
+          $([ $hitem, $pitem ]).each( function() {
+              var $item = this
+              var offset = $item == $hitem ? 10 : 0 // Alignment is off
+              $item.height( height
+                            - ( $item.outerHeight() - $item.height() )
+                            - offset )
+          } )
+      } )
+
+      var $scroller = $('<div id="scroller"/>');
+      $scroller.append( $('<div/>').height( $headlist.get(0).scrollHeight ) );
+      function scrollWindows( pos ) {
+        $scroller.scrollTop( pos )
+        $headlist.scrollTop( pos )
+        $proplist.scrollTop( pos )
+      }
+      $([ $scroller, $proplist ]).each( function() {
+        var $win = $(this)
+        $win.scroll( function( event ) {
+          scrollWindows( $win.scrollTop() )
+        } );
+      } );
+      $scroller.width( 12 ); // Chrome doesn't include the scrollbar in the width
+
+      $root.prepend( $scroller );
     } else {
-      $src.children().clone().remove( '.title' ).appendTo( $root );
+      $src.children().clone().not( '.title' ).appendTo( $root );
     }
   }
 
