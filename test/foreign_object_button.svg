@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.0"
+     xmlns:html="http://www.w3.org/1999/xhtml"
+     width="100%" height="100%"
+     viewBox="-10 -10 220 320">
+  <title>Foreign Object Button Test</title>
+  <defs>
+    <style type="text/css">
+      rect { stroke: black; fill: none; }
+      table { border-collapse: collapse; }
+      table, th, td { border: 1px solid black; text-align: center; }
+      th, td { padding: .1em .2em; }
+      foreignObject { overflow: visible; }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="200" height="300"/>
+  <foreignObject x="0" y="0" height="200" width="200">
+    <html:button onclick="alert('hi')">Hi</html:button>
+  </foreignObject>
+  <switch>
+    <foreignObject x="100" y="100" height="100" width="100"
+                   requiredExtensions="http://www.w3.org/1999/xhtml">
+      <html:table>
+        <html:tr><html:th>Letter</html:th><html:th>Number</html:th></html:tr>
+        <html:tr><html:td>A</html:td><html:td>1</html:td></html:tr>
+        <html:tr><html:td>B</html:td><html:td>2</html:td></html:tr>
+      </html:table>
+    </foreignObject>
+  </switch>
+  <switch>
+    <foreignObject x="0" y="200" height="100" width="200"
+                   requiredExtensions="http://www.w3.org/1998/Math/MathML">
+      <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+        <msubsup><mi>&#x3C3;</mi><mi>x</mi><mn>2</mn></msubsup>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <munderover>
+              <mo>&#x02211;</mo>
+              <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+              <mfenced open="|" close="|"><mi>x</mi></mfenced>
+            </munderover>
+            <msup><mfenced><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>-</mo><mover><mi>x</mi><mo>_</mo></mover></mrow></mfenced><mn>2</mn></msup>
+          </mrow>
+          <mrow><mfenced open="|" close="|"><mi>x</mi></mfenced><mo>-</mo><mn>1</mn></mrow>
+        </mfrac>
+      </math>
+    </foreignObject>
+  </switch>
+</svg>

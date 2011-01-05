@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Javascript Object Watch</title>
+    <style type="text/css">
+      #colors { list-style: none; }
+      #colors li { float: left; display: block; width: 4em; height: 4em; }
+      #colors:after { content: ''; clear: both; display: block; }
+      body { background-color: white; }
+    </style>
+    <script src="http://www.google.com/jsapi?key=ABQIAAAA70e1TrScvoeLHNzMa4BtIBS5CBWw3K3PbugkSJo66gbauGjNKRRIPzVtdxmhAaWS96QCWhtaQjwqIA" type="text/javascript"></script>
+    <script type="text/javascript"> google.load("jquery", "1.4") </script>
+    <script type="text/javascript">//<![CDATA[
+      $(function() {
+        var colorList = $('<ul id="colors"/>');
+        var primaryColors = [ 'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet' ];
+        var lightColors = [ 'pink', 'salmon', 'lightyellow', 'lightgreen', 'lightblue', 'orchid', 'plum' ]
+        var colorProxy = { get color() { var ret = this.cache || $('body').css('background-color');
+                                         this.cache = ret;
+                                         return ret;
+                                       },
+                           set color(val) { this.cache = val;
+                                            $('body').css('background-color', val);
+                                          }
+                         };
+        $.each(primaryColors, function(idx, color) {
+          var colorItem = $('<li/>');
+          colorItem.click(function() { colorProxy.color = $(this).data('color'); return false; })
+          colorList.append(colorItem);
+        });
+        $('body').append(colorList);
+
+        function setColors() {
+          colorList.children().each(function(idx) {
+            var color = Math.random() < .5 ? primaryColors[idx] : lightColors[idx];
+            $(this).data('color', color);
+            $(this).css('background-color', color);
+          });
+        }
+        setColors();
+        
+        try {
+          colorProxy.watch('color', function(id, oldVal, newVal) {
+                                      if( lightColors.indexOf(newVal) >= 0 ) {
+                                        return undefined;
+                                      }
+                                      return newVal;
+                                    });
+        } catch(e) {
+          $('body').append($('<p/>').text("No watch method"));
+        }
+
+        var origColor = $('body').css('background-color');
+        $('body').click(function() { $(this).css('background-color', origColor); setColors(); });
+        $('body').height($(this).height());
+      });
+    //]]></script>
+  </head>
+  <body>
+    <h1>Javascript <a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference%3aGlobal_Objects%3aObject%3awatch"><code>Watch</code></a></h1>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Subclassing Functions in Javascript</title>
+    <link type="text/css" rel="stylesheet" href="javascript_test.css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      function debug(text) {
+        var debugArea = document.createElement("div");
+        debugArea.appendChild(document.createTextNode(text));
+        //debugArea.innerHTML = text;
+        document.getElementsByTagName("body").item(0).appendChild(debugArea);
+      }
+      function debugBreak() {
+        document.getElementsByTagName("body").item(0)
+          .appendChild(document.createElement("hr"));
+      }
+    </script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p>I don't understand this bit of code. When I call
+    <code>typeof(Obj.prototype)</code> from outside the constructor I
+    am getting a different result than calling
+    <code>typeof(this.prototype)</code> from within.</p> <p>Ahh,
+    <code>prototype</code> is not accessible in the way I was trying
+    to access it. Silly me&hellip; In any case, I don't think I can
+    subclass Function or any of the predefined objects&hellip;</p>
+    <form action="" onsubmit="try { eval(this['code'].value) } catch(e) { debug(e.fileName + ':' + e.lineNumber + ': ' + e) } finally { return false }">
+      <div style="height: 90%">
+        <textarea name="code" cols="" rows=""
+>function SubclassFunction() {
+  Function.apply(this, arguments);
+  debug("In constructor: " + this);
+}
+SubclassFunction.prototype = new Function();
+SubclassFunction.prototype.toString = function() { return typeof(this.prototype) };
+
+debug("For Function()");
+var func = new Function("test", "debug('Function Variable Called')");
+var subfunc = new SubclassFunction("test", "debug('Subclass Function Variable Called')");
+debug("Types: Sub.proto=" + typeof(SubclassFunction.prototype) +
+      " : Func=" + typeof(new Function()) +
+      " : func=" + typeof(func) +
+      " : subfunc=" + typeof(subfunc));
+try {
+  func();
+  subfunc();
+} catch(e) {
+  debug(e);
+}
+
+debugBreak();
+
+function SubclassString() {
+  String(this, arguments);
+}
+SubclassString.prototype = new String();
+SubclassString.prototype.toString = function() { return typeof(this.prototype) + " \"" + String.toString() + "\"" };
+
+debug("For String()");
+var string = new String("Test String");
+var substring = new SubclassString("Test Subclass String");
+debug("Types: Sub.proto=" + typeof(SubclassString.prototype) +
+      " : Str=" + typeof(new String()) +
+      " : string=" + typeof(string) +
+      " : substring=" + typeof(substring));
+
+try {
+  debug("String: \"" + string + "\"");
+  debug("Subclass String: \"" + substring + "\"");
+} catch(e) {
+  debug(e);
+}
+
+debugBreak();
+
+function SuperclassObject(value) {
+  this.value = value;
+}
+SuperclassObject.prototype = new Object;
+SuperclassObject.prototype.toString = function() { return typeof(this.prototype) + " \"" + this.value + "\"" };
+
+function SubclassObject(value) {
+  SuperclassObject.apply(this, arguments);
+}
+SubclassObject.prototype = new SuperclassObject;
+
+debug("For Object()");
+var objectone = new SubclassObject("user object one");
+var objecttwo = new SubclassObject("user object two");
+debug("Types: Sub.proto=" + typeof(SubclassObject.prototype) +
+      " : Sup=" + typeof(new SubclassObject()) +
+      " : one=" + typeof(objectone) +
+      " : two=" + typeof(objecttwo));
+
+debug("Object One: " + objectone);
+debug("Object Two: " + objecttwo);</textarea>
+      </div>
+      <div><input type="submit" value="Go"></input></div>
+    </form>
+  </body>
+</html>

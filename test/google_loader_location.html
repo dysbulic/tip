@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Google Loader</title>
+    <style type="text/css">
+      #info, #search { float: left; padding: 1em; }
+    </style>
+    <script src="http://www.google.com/jsapi?key=ABQIAAAA70e1TrScvoeLHNzMa4BtIBS5CBWw3K3PbugkSJo66gbauGjNKRRIPzVtdxmhAaWS96QCWhtaQjwqIA" type="text/javascript"></script>
+    <script type="text/javascript"> google.load("jquery", "1.4") </script>
+    <script type="text/javascript">//<![CDATA[
+      $(function() {
+        if (!google.loader.ClientLocation) {
+          $('body').($('<p>ClientLocation is not set</p>'));
+        } else {
+          var loc = google.loader.ClientLocation;
+          var addr = google.loader.ClientLocation.address;
+          $('body').append($('<ul id="info"/>')
+                           .append($('<li>(' + loc.latitude + ', ' + loc.longitude + ')</li>'))
+                           .append($('<li>' + addr.city + ', ' + addr.region + ', ' + addr.country + ' (' + addr.country_code + ')</li>')));
+        }
+      });
+    //]]></script>
+    <script type="text/javascript">//<![CDATA[
+      google.load("search", "1", { callback: function() {
+        var searchControl = new google.search.SearchControl();
+
+        var localSearch = new google.search.LocalSearch();
+        localSearch.setCenterPoint(google.loader.ClientLocation.address.city + ',' + google.loader.ClientLocation.address.region);
+
+        searchControl.addSearcher(localSearch);
+        searchControl.addSearcher(new google.search.WebSearch());
+        searchControl.addSearcher(new google.search.VideoSearch());
+        searchControl.addSearcher(new google.search.BlogSearch());
+
+        var attachPoint = $('<div id="search"/>');
+        $('body').append(attachPoint);
+        searchControl.draw(attachPoint.get(0));
+
+        searchControl.execute('pizza');
+      } });
+    //]]></script>
+  </head>
+  <body>
+  </body>
+</html>

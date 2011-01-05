@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Testing CSS display: table property</title>
+    <style type="text/css">
+      body { font-size: 13pt; max-width: 800px; }
+
+      .italic { font-style: italic; }
+      
+      .left, .center, .right { border: 2px solid; padding: 1em; }
+      .layout { display: table; border: 2px solid #987; background-color: #EDC; }
+      body>table, .layout { width: 600px; }
+      .cell { display: table-cell; overflow: hidden; }
+      table, .cell p, td p { border: 1px solid #444; }
+      .cell p { margin: 0; }
+      .left { width: 100px; background-color: #ABC; border-color: #567; }
+      .center { background-color: #BCD; border-color: #678; }
+      .right { width: 200px; background-color: #CDE; border-color: #789; }
+
+      .topvalign .cell { vertical-align: top; }
+      .midvalign .cell { vertical-align: middle; }
+      .botvalign .cell { vertical-align: bottom; }
+      .basvalign .cell { vertical-align: baseline; }
+
+      #margintable { margin-top: -100%; }
+      #floattable { float: left; /* margin-top: -.8em; */ }
+      
+      .rel { position: relative; }
+      #abstable { position: absolute; top: 0; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p><em>This is a now invalidated <a href="http://bugzilla.mozilla.org/show_bug.cgi?id=337624">bug report</a>. For the solution and explanation, see the <a href="#solution">final examples</a>.</em></p>
+    <hr />
+    <p>I'm trying to use the <code>display</code> value of <code>table</code> to handle some <a href="../shadow_body/">height issues</a>. Unfortunately, the <a href="http://www.kintera.org">retarded <acronym title="Content Management System">CMS</acronym></a> I've got to use keeps sticking tables in my layout and it seems to be breaking things. This is a test just to verify there isn't a workaround&hellip;</p>
+    <a name="realtable"></a>
+    <p>To use a straight table based layout, this is how it ought to look:</p>
+    <table>
+      <tr>
+        <td class="left"><p>Left Column</p></td>
+        <td class="center">
+          <table><tr><td>Content in a Table</td></tr></table>
+        </td>
+        <td class="right"><p>Right Column</p></td>
+      </tr>
+    </table>
+    
+    <p>When the three <code>div</code>s have a display of <code>table-cell</code>, this is how they render:</p>
+    
+    <div class="layout">
+      <div class="left cell"><p>Left Column</p></div>
+      <div class="center cell"><p>Content not in a Table</p></div>
+      <div class="right cell"><p>Right Column</p></div>
+    </div>
+
+    <p>When the center column contains a table though, this is how it renders:</p>
+
+    <div class="layout">
+      <div class="left cell"><p>Left Column test starts here and continues down&hellip;</p></div>
+      <div class="center cell">
+        <table><tr><td>Content in a Table. The side elements render below this text&hellip;</td></tr></table>
+      </div>
+      <div class="right cell"><p>Right Column</p></div>
+    </div>
+
+    <p>The same thing happens on the sides:</p>
+
+    <div class="layout">
+      <div class="left cell">
+        <table><tr><td>Content in a Table. The side elements render below this text&hellip;</td></tr></table>
+      </div>
+      <div class="center cell">
+        <p>Center Column test starts here and continues down&hellip;</p>
+      </div>
+      <div class="right cell"><p>Right Column</p></div>
+    </div>
+    
+    <div class="layout">
+      <div class="left cell">
+        <table><tr><td>Content in a Table. The side elements render below this text&hellip;</td></tr></table>
+      </div>
+      <div class="center cell">
+        <table><tr><td>Content in a Table. The side elements render below this text. This element has some extra content to show that the longest table is what determines the height&hellip;</td></tr></table>
+      </div>
+      <div class="right cell"><p>Right Column</p></div>
+    </div>
+    
+    <p>Changing the display type of the table has no effect:</p>
+
+    <form id="table-dyndisplay" action="" onsubmit="return false;">
+      <p><code>#dyntable { display: </code>
+        <select name="table-display">
+          <option value="" class="italic">Blank</option>
+          <option value="null" class="italic">Null</option>
+          <option value="inherit">inherit</option>
+          <option value="inline">inline</option>
+          <option value="block">block</option>
+          <option value="list-item">list-item</option>
+          <option value="run-in">run-in</option>
+          <option value="compact">compact</option>
+          <option value="marker">marker</option>
+          <option value="table">table</option>
+          <option value="inline-table">inline-table</option>
+          <option value="table-row-group">table-row-group</option>
+          <option value="table-header-group">table-header-group</option>
+          <option value="table-footer-group">table-footer-group</option>
+          <option value="table-row">table-row</option>
+          <option value="table-column-group">table-column-group</option>
+          <option value="table-column">table-column</option>
+          <option value="table-cell">table-cell</option>
+          <option value="table-caption">table-caption</option>
+          <option value="none">none</option>
+        </select>
+        <code> }</code>
+      </p>
+    </form>
+    <form id="row-dyndisplay" action="" onsubmit="return false;">
+      <p><code>#dynrow { display: </code>
+        <select name="row-display">
+          <option value="" class="italic">Blank</option>
+          <option value="null" class="italic">Null</option>
+          <option value="inherit">inherit</option>
+          <option value="inline">inline</option>
+          <option value="block">block</option>
+          <option value="list-item">list-item</option>
+          <option value="run-in">run-in</option>
+          <option value="compact">compact</option>
+          <option value="marker">marker</option>
+          <option value="table">table</option>
+          <option value="inline-table">inline-table</option>
+          <option value="table-row-group">table-row-group</option>
+          <option value="table-header-group">table-header-group</option>
+          <option value="table-footer-group">table-footer-group</option>
+          <option value="table-row">table-row</option>
+          <option value="table-column-group">table-column-group</option>
+          <option value="table-column">table-column</option>
+          <option value="table-cell">table-cell</option>
+          <option value="table-caption">table-caption</option>
+          <option value="none">none</option>
+        </select>
+        <code> }</code>
+      </p>
+    </form>
+    <form id="cell-dyndisplay" action="" onsubmit="return false;">
+      <p><code>#dyncell { display: </code>
+        <select name="cell-display">
+          <option value="" class="italic">Blank</option>
+          <option value="null" class="italic">Null</option>
+          <option value="inherit">inherit</option>
+          <option value="inline">inline</option>
+          <option value="block">block</option>
+          <option value="list-item">list-item</option>
+          <option value="run-in">run-in</option>
+          <option value="compact">compact</option>
+          <option value="marker">marker</option>
+          <option value="table">table</option>
+          <option value="inline-table">inline-table</option>
+          <option value="table-row-group">table-row-group</option>
+          <option value="table-header-group">table-header-group</option>
+          <option value="table-footer-group">table-footer-group</option>
+          <option value="table-row">table-row</option>
+          <option value="table-column-group">table-column-group</option>
+          <option value="table-column">table-column</option>
+          <option value="table-cell">table-cell</option>
+          <option value="table-caption">table-caption</option>
+          <option value="none">none</option>
+        </select>
+        <code> }</code>
+      </p>
+    </form>
+    <div class="layout">
+      <div class="left cell"><p>Left Column test starts here and continues down&hellip;</p></div>
+      <div class="center cell">
+        <table id="dyntable"><tr id="dynrow"><td id="dyncell">Content in a Table. The side elements render below this text&hellip;</td></tr></table>
+      </div>
+      <div class="right cell"><p>Right Column</p></div>
+    </div>
+
+    <script type="text/javascript">
+      handler = function (formname, elementname) {
+        this.select = document.forms[formname + '-dyndisplay'][formname + '-display'];
+        this.select.onchange = function(event) {
+          var val = this[this.selectedIndex].value;
+          if(val == 'null') val = undefined;
+          arguments.callee.element.style.display = val;
+        }
+        this.select.onchange.element = document.getElementById(elementname);
+      }
+      new handler("table", "dyntable");
+      new handler("row", "dyncell");
+      new handler("cell", "dyncell");
+    </script>
+
+    <p>I don't really understand why this is happening, but there is a border the height of the middle table on the left and right columns. This is what is looks like with the style:</p>
+    <p><code>.center { overflow: hidden; } .center table { margin-top: -100%; }</code></p>
+
+    <div class="layout">
+      <div class="left cell"><p>Left Column test starts here and continues down&hellip;</p></div>
+      <div class="center cell">
+        <table id="margintable"><tr><td>Content in a Table. The side elements render below this text&hellip;</td></tr></table>
+      </div>
+      <div class="right cell"><p>Right Column</p></div>
+    </div>
+
+    <p>The best solution I can come up with is to float the table, so it out of the normal flow and doesn't cause the margin.</p>
+    <p><code>.center table { float: left; }</code></p>
+    <p>I'm also getting some extra space at the top of the table and to fix it takes this style:</p>
+    <p><code> .center table { margin-top: -.8em; }</code></p>
+
+    <div class="layout">
+      <div class="left cell"><p>Left Column test starts here and continues down&hellip;</p></div>
+      <div class="center cell">
+        <table id="floattable"><tr><td>Content in a Table. The side elements render below this text&hellip;</td></tr></table>
+      </div>
+      <div class="right cell"><p>Right Column content is here. Does its length matter? I sure as hell hope not...</p></div>
+    </div>
+
+    <p>Using <code>absolute</code> <code>position</code>ing doesn't work because:</p>
+    
+    <ol>
+      <li>The phantom space is still present at the top of the table</li>
+      <li>The table can now overflow the bottom of its parent</li>
+    </ol>
+
+    <div class="layout">
+      <div class="left cell"><p>Left Column test starts here and continues down&hellip;</p></div>
+      <div class="center cell">
+        <div class="rel">
+          <table id="abstable"><tr><td>Content in a Table. The side elements render below this text&hellip;</td></tr></table>
+        </div>
+      </div>
+      <div class="right cell"><p>Right Column</p></div>
+    </div>
+
+    <a name="solution"></a>
+
+    <p>At the recommendation of <a href="http://l-c-n.com">Philippe</a> in the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=337624#c2">bug report</a> recommends trying <code>vertical-align: top</code>, so I'm going to do that. Cool, that looks good. It is also good in: Safari, Opera and Firefox XP. This is excellent because my <a href="test_colored_rightcol.html">workaround</a> brings up a different bug in Firefox.</p>
+
+    <div class="layout topvalign">
+      <div class="left cell"><p>Left Column test starts here and continues down&hellip;</p></div>
+      <div class="center cell">
+        <table><tr><td>Content in a Table. The side elements render below this text&hellip;</td></tr></table>
+      </div>
+      <div class="right cell"><p>Right Column</p></div>
+    </div>
+
+    <p>Does it still work if the <code>vertical-align</code> is set to <code>middle</code>?</p>
+
+    <div class="layout midvalign">
+      <div class="left cell"><p>Left Column test starts here and continues down&hellip;</p></div>
+      <div class="center cell">
+        <table><tr><td>Content in a Table. The side elements render below this text&hellip;</td></tr></table>
+      </div>
+      <div class="right cell"><p>Right Column</p></div>
+    </div>
+
+    <p>Yep, and <code>bottom</code>?</p>
+
+    <div class="layout botvalign">
+      <div class="left cell"><p>Left Column test starts here and continues down&hellip;</p></div>
+      <div class="center cell">
+        <table><tr><td>Content in a Table. The side elements render below this text&hellip;</td></tr></table>
+      </div>
+      <div class="right cell"><p>Right Column</p></div>
+    </div>
+
+    <p>So the default is <code>baseline</code>, the <a href="http://www.w3.org/TR/REC-CSS2/tables.html#height-layout">description</a> for which in the context of tables is:</p>
+
+    <blockquote>"The baseline of a cell is the baseline of the first line box in the cell. If there is no text, the baseline is the baseline of whatever object is displayed in the cell, or, if it has none, the bottom of the cell box. The maximum distance between the top of the cell box and the baseline over all cells that have 'vertical-align: baseline' is used to set the baseline of the row."</blockquote>
+
+    <p>So, I guess I was wrong. Apparently, the entire <code>table</code> in the center column is a <a href="http://www.w3.org/TR/REC-CSS2/visuren.html#line-box">line box</a> and so the baseline is at it's bottom. I do think though that this example should not render differently than the <a href="#realtable">initial table example</a>. I suppose though that the table example is a case where following the spec would be confusing. It certainly was to me&hellip;</p>
+
+    <div class="layout basvalign">
+      <div class="left cell"><p>Left Column test starts here and continues down&hellip;</p></div>
+      <div class="center cell">
+        <table><tr><td>Content in a Table. The side elements render below this text&hellip;</td></tr></table>
+      </div>
+      <div class="right cell"><p>Right Column</p></div>
+    </div>
+
+    <hr />
+
+    <p>This page seemed to display correctly in <a href="http://www.apple.com/macosx/features/safari/">Safari</a>, but then I was playing around with the drop down above and changed the <code>display</code> style something and then to <code>block</code>. (Just going straight to <code>block</code> doesn't cause anything.) This caused the display to be like <a href="http://www.mozilla.com/">Firefox</a> and changing it back to <code>inline</code> had no effect. If I do <code>inline</code> before <code>block</code> however, it just removes the border.</p>
+
+    <p><a href="http://www.opera.com">Opera</a> 8.54 also displays like Firefox except when the <code>table</code> has a <code>display</code> or <code>inline</code>. Then it does it the expected height but with an odd line above and below. <code>Float</code>ing elements though does not provide a solution.</p>
+
+    <p><a href="http://konqueror.kde.org">Konqueror</a> 3.5.2 does like Safari complete with the behavior when it is changed via a script. Though the first change puts it over the line and it stays there.</p>
+  </body>
+</html>

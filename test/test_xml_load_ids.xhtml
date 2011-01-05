@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>IDs in AJAX Loaded Documents</title>
+    <link type="text/css" rel="stylesheet" href="javascript_test.css" />
+    <style type="text/css">
+      h1, h2 {
+        text-align: center;
+      }
+    </style>
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript">
+      function debug(text) {
+        var debugArea = document.createElement("div");
+        debugArea.appendChild(document.createTextNode(text));
+        //debugArea.innerHTML = text;
+        document.getElementsByTagName("body").item(0).appendChild(debugArea);
+      }
+      function debugBreak() {
+        document.getElementsByTagName("body").item(0)
+          .appendChild(document.createElement("hr"));
+      }
+    </script>
+  </head>
+  <body>
+    <p id="intro">This is from a <a
+    href="test_javascript_document.xhtml">different test</a>. I am
+    trying to load a document via <code>XMLHttpRequest</code> and call
+    <code>document.getElementById</code> and it is returning null
+    which I don't understand since I thiought I had used the function
+    in other programs and had it work&hellip;</p>
+    <form action="" onsubmit="eval(this['code'].value); return false">
+      <div style="height: 90%">
+        <textarea name="code" cols="" rows=""
+><![CDATA[function Callback(url, pathString) {
+  this.url = url;
+  this.filename = url.replace(/.*\//, "");
+  this.path = pathString.split(/:/);
+  var call = function(request) { this.container.callback.call(this.container, request) }
+  call.container = this;
+  loadXMLDocument(url, call);
+}
+Callback.prototype = new Function();
+Callback.prototype.callback = function(request) {
+  if(request.readyState == 4) {
+    debug("Got: " + this.url + " (" + request.status + ")");
+    if(request.status == 200) {
+      var node = request.responseXML;
+      for(var i = 0; i < this.path.length; i++) {
+        node = node.childNodes.item(this.path[i]);
+      }
+      var id = node.getAttribute("id");
+      debug(this.filename + ": tree ID: " + id);
+      debug(this.filename + ": get by ID: " + request.responseXML.getElementById(id));
+    }
+    debugBreak();
+  }
+}
+new Callback(window.location.pathname, "2:3:1");
+new Callback(window.location.pathname.replace(/\.[^\.]+$/, ".xml"), "2:3:1");
+new Callback(window.location.pathname, "2:3:7");
+new Callback("test_javascript_document.xml", "0:1");
+new Callback("test_javascript_document.xml", "0:3");
+new Callback("test_javascript_document.xml", "0:5");]]></textarea>
+      </div>
+      <div><input type="submit" value="Go"></input></div>
+    </form>
+    <h2>Chebyshev's theorem</h2>
+    <math id="chebychev" mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mi>P</mi>
+      <mfenced>
+        <mrow>
+          <mi>&mu;</mi><mo>-</mo><mi>k</mi><mi>&sigma;</mi>
+          <mo>&lt;</mo><mi>X</mi><mo>&lt;</mo><mi>&mu;</mi>
+          <mo>+</mo><mi>k</mi><mi>&sigma;</mi>
+        </mrow>
+      </mfenced>
+      <mo>&leq;</mo>
+      <mrow>
+        <mn>1</mn><mo>-</mo>
+        <mfrac>
+          <mn>1</mn>
+          <msup><mi>k</mi><mn>2</mn></msup>
+        </mfrac>
+      </mrow>
+    </math>
+  </body>
+</html>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Dynamic Table Caption</title>
+    <style type="text/css">
+      table { border-collapse: collapse; }
+      th, td { padding .25em .5em; border: 1px solid; }
+      body { max-width: 600px; margin: auto; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+    <script type="text/javascript">//<![CDATA[
+      var table = document.createElement("table");
+      table.appendChild(document.createElement("caption"));
+      table.lastChild.appendChild(document.createTextNode(""));
+
+      function createTable() {
+        var body = document.getElementsByTagName("body").item(0);
+        body.appendChild(table);
+        var rowsHTML = "<test xmlns='http://www.w3.org/1999/xhtml'>";
+        rowsHTML += "<tr><th>Header #1</th><th>Header #2</th><th>Header #3</th></tr>";
+        rowsHTML += "<tr><td>A</td><td>B</td><td>C</td></tr>";
+        rowsHTML += "</test>";
+        var rows = (new DOMParser()).parseFromString(rowsHTML, "text/xml");
+        for(var i = 0; i < rows.firstChild.childNodes.length; i++) {
+          var newRow = document.importNode(rows.firstChild.childNodes[i], true);
+          table.appendChild(newRow);
+        }
+      }
+
+      function setCaption(text) {
+        table.firstChild.firstChild.data = text;
+      }
+    //]]></script>
+  </head>
+  <body>
+    <p>The dynamic table and the static table should be identical, but are not if the table is originally inserted with an empty caption. If the caption is initially empty, setting it has no affect on the document. If it is not empty then it can be set as normal.</p>
+
+    <p>To see the difference, click "Set Caption" then "Create Table" and it will be captioned. Reverse that order and it will not be.</p>
+
+    <table>
+      <caption>Static Test Table</caption>
+      <tr><th>Header #1</th><th>Header #2</th><th>Header #3</th></tr>
+      <tr><td>A</td><td>B</td><td>C</td></tr>
+    </table>
+
+    <form action="">
+      <div><input type="button" onclick="createTable()" value="Create Table"/></div>
+      <div><input type="button" onclick="setCaption('Dynamic Test Table')" value="Set Caption"/></div>
+    </form>
+  </body>
+</html>

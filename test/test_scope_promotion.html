@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Scope Promotion in Javascript</title>
+    <link type="text/css" rel="stylesheet" href="javascript_test.css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script id="testscript" type="text/javascript">
+      if(typeof(debug) != "undefined") {
+        debug(filename + " in HTML body: " + typeof(document.createElement('div').style));
+      }
+    </script>
+    <script type="text/javascript">
+      function debug(text) {
+        var debugArea = document.createElement("div");
+        debugArea.appendChild(document.createTextNode(text));
+        //debugArea.innerHTML = text;
+        document.getElementsByTagName("body").item(0).appendChild(debugArea);
+      }
+      function debugBreak() {
+        document.getElementsByTagName("body").item(0)
+          .appendChild(document.createElement("hr"));
+      }
+    </script>
+  </head>
+  <body>
+    <p>Javascript scoping is really odd. The declaration of a local variable works like you would expect it to, but there are times that a declared variable sticks out above the scope where it was declared.</p>
+    <form action="" onsubmit="eval(this['code'].value); return false">
+      <div style="height: 90%">
+        <textarea name="code" cols="" rows=""
+>var declx = function() { var x = 2; };
+declx();
+debug("func local decl typeof(x) = " + typeof(x));
+declx = function() { x = 3; };
+declx();
+debug("func global decl typeof(x) (x) = " + typeof(x) + " (" + x + ")");
+var printx = function(pref) { debug(pref + " x = " + x); };
+printx("func print");
+var setx = function() { x = 6; var x = 5; };
+setx();
+printx("func double set");
+setx = function() { var x = 5; printx("func print func"); debug("func print x = " + x); };
+setx();
+setx = function() { var x = 5; var subsetx = function() { x = 6; }; subsetx(); debug("subfunc set x = " + x); };
+setx();
+printx("global");
+y = 3;
+if(true) { var y = 13; }
+debug("y = " + y);
+if(true) { var z = 23; }
+debug("z = " + z);
+</textarea>
+      </div>
+      <div><input type="submit" value="Go"></input></div>
+    </form>
+  </body>
+</html>

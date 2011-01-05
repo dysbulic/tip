@@ -1,0 +1,47 @@
+<svg viewBox="-10 -10 120 120" width="100%" height="100%"
+     xmlns="http://www.w3.org/2000/svg" version="1.0"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>Testing Transform Parameters</title>
+  <defs>
+    <script type="text/javascript" xlink:href="jquery/dist/jquery.js" />
+    <script type="text/javascript">
+      $(function() {
+        $('text').each(function() {
+          var strokeWidth = $(this).css('stroke-width');
+          strokeWidth = strokeWidth ? parseFloat(strokeWidth) : 0; // Stroke width not returned in Chrome 4
+          $(this).parent().children('rect').attr('width', $(this).get(0).getBBox().width +
+                                                          2 * parseFloat($(this).attr('x')) + 
+                                                          strokeWidth);
+        });
+      });
+    </script>
+    <style type="text/css">
+      rect { stroke: #00123B; fill: #F8BD49; stroke-width: .5; }
+      text { font-size: 6.5px; text-anchor: left; }
+    </style>
+  </defs>
+  <g transform="translate()">
+    <rect width="38" height="10" rx="3" />
+    <text x="2" y="7">t()</text>
+  </g>
+  <g transform="translate(40)">
+    <rect width="38" height="10" rx="3" />
+    <text x="2" y="7">t(40)</text>
+  </g>
+  <g transform="translate(40) translate(40)">
+    <rect width="38" height="10" rx="3" />
+    <text x="2" y="7">t(40) t(40)</text>
+  </g>
+  <g transform="translate(40,12) translate(40)">
+    <rect width="38" height="10" rx="3" />
+    <text x="2" y="7">t(40,10) t(40)</text>
+  </g>
+  <g transform="translate(10,30) rotate(45)">
+    <rect width="38" height="10" rx="3" />
+    <text x="2" y="7">t(10,30) r(45)</text>
+  </g>
+  <g transform="rotate(45) translate(10,30)">
+    <rect width="38" height="10" rx="3" />
+    <text x="2" y="7">r(45) t(10,30)</text>
+  </g>
+</svg>

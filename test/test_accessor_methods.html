@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Getters and Setters in Javascript</title>
+    <link type="text/css" rel="stylesheet" href="javascript_test.css" />
+    <style type="text/css">
+    </style>
+<!--
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+-->
+    <script type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      function debug(text) {
+        var debugArea = document.createElement("div");
+        debugArea.appendChild(document.createTextNode(text));
+        //debugArea.innerHTML = text;
+        document.getElementsByTagName("body").item(0).appendChild(debugArea);
+      }
+      function debugBreak() {
+        document.getElementsByTagName("body").item(0)
+          .appendChild(document.createElement("hr"));
+      }
+    </script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p>This is a test of getter and setter code. I'm pretty sure
+    there's no way to get it to work in IE.</p>
+    <form action="" onsubmit="eval(this['code'].value); return false">
+      <div style="height: 90%">
+        <textarea name="code" cols="" rows=""
+>function addGetter(element, property, method) {
+  if(typeof(element.prototype.__defineGetter__) != "undefined") {
+    element.prototype.__defineGetter__(property, method);
+  } else {
+    try {
+      eval("element[prototype][property] getter = method");
+    } catch(e) {
+      debug("Failed to add getter for " + property + " to " + element);
+    }
+  }
+}
+
+function addSetter(element, property, method) {
+  if(typeof(element.prototype.__defineSetter__) != "undefined") {
+    element.prototype.__defineSetter__(property, method);
+  } else {
+    try {
+      eval("element.prototype[property] setter = method");
+    } catch(e) {
+      if(typeof(element.watch) != "undefined") {
+        var wrapper = function(value) {
+          arguments.callee.watchedElement.unwatch(arguments.callee.watchedProperty);
+          arguments.callee.setter(value);
+          arguments.callee.watchedElement.watch
+            (arguments.callee.watchedProperty, arguments.callee);
+          return arguments.callee.watchedElement[arguments.callee.watchedProperty];
+        }
+        wrapper.setter = method;
+        wrapper.watchedProperty = property;
+        wrapper.watchedElement = element;
+        element.watch(property, wrapper);
+      } else {
+        debug("Failed to add setter for " + property + " to " + element);
+      }
+    }
+  }
+}
+
+TestObject = function() {}
+TestObject.prototype = new Object;
+var getterMethod = function() { return this.randomVar ? this.randomVar : 5 };
+var setterMethod = function(val) { this.randomVar = val * 100 * Math.random() };
+addGetter(TestObject, "dynamicVar", getterMethod);
+addSetter(TestObject, "dynamicVar", setterMethod);
+var testObject = new TestObject();
+debug("Before Assignment: " + testObject.dynamicVar);
+testObject.dynamicVar = 20;
+debug("After Assignment: " + testObject.dynamicVar);</textarea>
+      </div>
+      <div><input type="submit" value="Go"></input></div>
+    </form>
+  </body>
+</html>

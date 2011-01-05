@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>MathML Table Colspan Test</title>
+    <style type="text/css">
+      mtd { border: 1px solid; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p>This is to verify that MathML <code>colspans</code> aren't working in Firefox.</p>
+
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mtable>
+        <mtr>
+          <mtd colspan="2"><mtext>colspan="2"</mtext></mtd>
+        </mtr>
+        <mtr>
+          <mtd columnspan="2"><mtext>columnspan="2"</mtext></mtd>
+        </mtr>
+        <mtr>
+          <mtd>0</mtd>
+          <mtd>0</mtd>
+        </mtr>
+      </mtable>
+    </math>
+  </body>
+</html>
