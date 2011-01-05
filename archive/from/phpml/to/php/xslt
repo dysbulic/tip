@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!-- Author: Will Holcomb <will@technoanarchy.org>
+   - Date: July 2009
+   -
+   - XSLT stylesheet to convert from php markup to php processing instructions
+  -->
+<xsl:stylesheet version="1.0"
+                xmlns:php="tip:format:phpml"
+                xmlns:redirect="http://xml.apache.org/xalan/redirect"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                extension-element-prefixes="redirect">
+  <xsl:output method="xml" standalone="no" indent="yes"/>
+
+  <xsl:template match="/">
+    <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="*|@*">
+    <xsl:copy>
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="php:var">
+    <xsl:processing-instruction name="php">
+      <xsl:text>$</xsl:text><xsl:value-of select="@name"/>
+      <xsl:if test="text() != ''"> = <xsl:apply-templates/></xsl:if>
+      <xsl:text>;</xsl:text>
+    </xsl:processing-instruction>
+  </xsl:template>
+
+  <xsl:template match="php:if">
+    <xsl:processing-instruction name="php">if(<xsl:value-of select="@test"/>):</xsl:processing-instruction>
+    <xsl:apply-templates/>
+    <xsl:if test="name(following-sibling::*[position() = 1]) != 'php:else'">
+      <xsl:processing-instruction name="php">endif</xsl:processing-instruction>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="php:else">
+    <xsl:processing-instruction name="php">else:</xsl:processing-instruction>
+    <xsl:apply-templates/>
+    <xsl:processing-instruction name="php">endif</xsl:processing-instruction>
+  </xsl:template>
+
+  <xsl:template match="php:php">
+    <xsl:processing-instruction name="php"><xsl:apply-templates/></xsl:processing-instruction>
+  </xsl:template>
+
+  <xsl:template match="php:page">
+    <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="php:require">
+    <xsl:processing-instruction name="php">require(<xsl:apply-templates/>)</xsl:processing-instruction>
+  </xsl:template>
+</xsl:stylesheet>
