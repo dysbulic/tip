@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- Author: Will Holcomb <will@technoanarchy.org>
+   - Date: July 2009
+   -
+   - XSLT stylesheet to replace image tags with inline svgs
+  -->
+<xsl:stylesheet version="1.0"
+                xmlns:php="tip:format:phpml"
+                xmlns:redirect="http://xml.apache.org/xalan/redirect"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                extension-element-prefixes="redirect">
+  <xsl:output method="xml" standalone="no" indent="yes"/>
+
+  <xsl:template match="/">
+    <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="*|@*">
+    <xsl:copy>
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="image">
+  </xsl:template>
+</xsl:stylesheet>
