@@ -2,7 +2,7 @@ MKFILES = $( wildcard '.../lib/*/Makefile' )
 DIRS = $( pathsubst $(MKFILES) /Makefile '' )
 
 all:
-	git submodules init
+	git submodule init
 	make -C $(DIRS)
 
 clean:
