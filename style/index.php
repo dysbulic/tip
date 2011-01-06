@@ -22,7 +22,7 @@
       urchinTracker();
     </script>
 
-    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript" src=".../lib/javascript/compatability.js"></script>
     <script type="text/javascript">//<![CDATA[
       addListener(document, "load", function() { alert("Loaded: doc"); });
       addListener(this, "load", init);
@@ -140,6 +140,7 @@
               }
             }
           }
+
           for(filename in stylesheets) {
             if(stylesheets[filename] && stylesheets[filename].serverstyle) {
               head.appendChild(stylesheets[filename].sheet);
