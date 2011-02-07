@@ -19,6 +19,10 @@ AddType text/xml :
 AddType application/javascript .jquery
 AddEncoding x-gzip .svgz
 
+<Files "svg">
+  ForceType image/svg+xml
+</Files>
+
 #RewriteEngine on
 #RewriteCond %{REQUEST_URI} ^.*gmail/*(.*)$ [NC]
 #RewriteRule ^(.*)$ http://gmail.com/%1 [R,L]
