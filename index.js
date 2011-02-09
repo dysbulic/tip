@@ -1,4 +1,4 @@
-$(function() {
+$( function() {
   var $body = $('body');
   $body.addClass('tabbed');
 
@@ -24,6 +24,9 @@ $(function() {
 
   // Match the height of the jquery display to the window
   function matchTabHeight( $container, $holder, $tab ) {
+    if( $.browser.msie ) { // Heights not returned correctly in IE
+      return
+    }
     $tab.height( $container.innerHeight()
                  - parseInt( $container.css( 'padding-top' ).replace( /px$/, '' ) )
                  - parseInt( $container.css( 'padding-bottom' ).replace( /px$/, '' ) )
@@ -70,20 +73,20 @@ $(function() {
       $root = $(ui.panel);
     },
   } );
-  $toptabs.tabs( 'add', '#jquerytab', 'jQuery <acronym title="User Interface">UI</acronym>' );
+  $toptabs.tabs( 'add', '#jquerytab', 'jQuery <acronym title="User Interface">UI</acronym>' )
   
-  var $jquerytab = $('#jquerytab');
+  var $jquerytab = $('#jquerytab')
 
   $toptabs.bind( 'tabsshow', function( event, ui ) {
     if( ui.panel.id == 'jquerytab' ) {
       // Different dimensions are reported post-loading
       var $window = $(window);
       $window.innerHeight = function() {
-        return window.innerHeight
-      };
-      $window.css = function( prop ) {
-        return $('body').css( prop );
-      };
+        return window.innerHeight;
+      }
+      $window.css = function() {
+        return $body.css.apply( $body, arguments );
+      }
       matchTabHeight( $window, $top, $(ui.panel) );
     }
   } );
@@ -109,6 +112,7 @@ $(function() {
   } );
 
   $(window).click( function() {
+    return
     console.log( '.ui-tabs-nav.height() = ' + $areas.children( '.ui-tabs-nav' ).height() );
     console.log( '.ui-tabs-nav.innerHeight() = ' + $areas.children( '.ui-tabs-nav' ).innerHeight() );
     console.log( '.ui-tabs-nav.outerHeight() = ' + $areas.children( '.ui-tabs-nav' ).outerHeight() );
