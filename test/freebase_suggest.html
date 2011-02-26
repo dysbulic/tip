@@ -16,13 +16,29 @@
         }
         var match = /([^=]+)=(.*)/.exec( param )
         if( match ) {
-          params[ match[1] ] = match[2]
+          params[ unescape( match[1] ) ] = unescape( match[2] )
         } else {
           params[ param ] = null
         }
       } )
       var $output = $('<ul/>')
+      var display = {
+        $type : $('<pre/>'),
+        $filter : $('<pre/>'),
+      }
+      var $link = $('<a>Permalink</a>')
       function setup_suggest( type, filter ) {
+        display.$type.text( type )
+        display.$filter.text( filter )
+
+        // JSON.parse is stricter than desired
+        //var filter = eval( '(function() { return ' + $filter.val() + '})()' )
+        //display.$filter.text( JSON.stringify( filter ) )
+
+        $link.attr( {
+          href : ( '?type=' + escape( type )
+                   + '&filter=' + escape( filter ) )
+        } )
         $("#suggest").suggest( {
           type : type,
           mql_filter : filter,
@@ -35,7 +51,7 @@
           $type.val( params[ 'type' ] )
         }
         if( params[ 'filter' ] ) {
-          $filter.text( params[ 'filter' ] )
+          $filter.val( params[ 'filter' ] )
         }
         setup_suggest( params[ 'type' ], params[ 'filter' ] )
 
@@ -47,17 +63,18 @@
         } )
         .focus()
 
-        $('#suggest').after( $output )
+        $('#suggest')
+        .after( $output )
+        .after( display.$filter )
+        .after( display.$type )
+        .after( $link )
         .bind( 'fb-select', function( evt, data ) {
           $output.append( $('<li/>').text( data.name ) )
           $('#suggest').val( '' )
         } )
 
         $('form').submit( function() {
-          // JSON.parse is stricter than desired
-          var filter = eval( '(function() { return ' + $filter.text() + '})()' )
-          var type = $type.val()
-          setup_suggest( type, filter )
+          setup_suggest( $type.val(), $filter.val() )
         } )
       } )
     //]]></script>
@@ -70,7 +87,9 @@
       ul:after, li:after { content: ''; display: block; clear: both; }
       [type="submit"] { float: right; margin-right: 3em; }
       li { margin: .5em 0; }
-      #suggest { width: 20em; display: block; margin: auto; }
+      #suggest { width: 20em; }
+      a { width: 10em; text-align: center }
+      #suggest, a { display: block; margin: auto; }
     </style>
   </head>
   <body>
