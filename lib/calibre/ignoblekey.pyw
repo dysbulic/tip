@@ -67,7 +67,7 @@ def retrieve_key(dbpath, outpath):
         data = data[index:index + KEYLEN]
         keyb64 = data.encode('base64')
     else:
-        index = index + 1
+        index = index + 1 # This is the offset from version 2
         data = data[index:index + 2 * KEYLEN]
         for i in xrange(KEYLEN, len(data)):
             try:
@@ -110,7 +110,7 @@ def cli_main(argv=sys.argv):
 
 def gui_main(argv=sys.argv):
     root = Tkinter.Tk()
-    viewer = LView(root)
+    viewer = LogView(root)
 
     handler = LoggerToWindowHandler(viewer)
     fmt='%(asctime)s %(message)s'
@@ -124,39 +124,36 @@ def gui_main(argv=sys.argv):
     except IgnobleError, e:
         log.error("Error: " + str(e))
     except Exception:
-        log.error("Exception: " traceback.format_exc())
+        log.error("Exception: " + traceback.format_exc())
         
     viewer.wait_window(viewer)
     return 0
 
-class LView(Tkinter.Frame):
+import ScrolledText
+import gettext
+_ = gettext.gettext
+
+class LogView(Tkinter.Frame):
     def __init__(self, root):
         Tkinter.Frame.__init__(self, root, border=5)
         self.text = ScrolledText.ScrolledText(root, width=120, height=20)
         self.text.pack(fill=Tkconstants.BOTH, expand=1)
 
-        #self.text.configure(state=Tkinter.DISABLED)
-
-        self.root = root
-
         close = Tkinter.Button(root, text=_('Close'), width=10, command=self.ok, default=Tkinter.ACTIVE)
         close.pack(side=Tkinter.RIGHT)
-        self.bind("<Return>", self.ok)
-        self.bind("<Escape>", self.ok)
+        root.bind("<Return>", self.ok)
+        root.bind("<Escape>", self.ok)
+
+        root.title(_('Log Entries'))
+        self.root = root
 
         #self.transient(parent)
-        root.title(_('Log Entries'))
         #body.pack(padx=5, pady=5)
-        #self.grab_set()
 
         #root.protocol("WM_DELETE_WINDOW", self.ok)
-        
-        root.geometry("+%d+%d" % (root.winfo_rootx()+50,
-                                  root.winfo_rooty()+50))
-
+        #root.geometry("+%d+%d" % (root.winfo_rootx()+50,
+        #                          root.winfo_rooty()+50))
         #self.initial_focus.focus_set()
-
-        #self.wait_window(self)
 
     def ok(self, event=None):
         self.root.withdraw()
@@ -185,86 +182,6 @@ class LoggerToWindowHandler(logging.Handler):
     def emit(self, record):
         """ Process a log message """
         self.win.insert(self.format(record))
-
-# adapted from: http://www.pythonware.com/library/tkinter/introduction/dialog-windows.htm
-""" View Log """
-# $Id: ViewLog.py,v 1.2 2004/04/12 04:38:58 prof Exp $
-import Tkinter
-import tkSimpleDialog
-import ScrolledText
-import gettext
-_ = gettext.gettext
-
-class LogView(Tkinter.Toplevel):
-    """ Display log messages of a program """
-
-    def __init__(self, parent, log, fmt='%(asctime)s %(message)s', datefmt='%H:%M:%S'):
-        """ Create and display window. Log is CumulativeLogger. """
-        Tkinter.Toplevel.__init__(self, parent)
-
-        handler = LoggerToWindowHandler(self)
-        handler.setFormatter(logging.Formatter(fmt, datefmt))
-        logging.getLogger().addHandler(handler)
-
-        self.transient(parent)
-        self.title(_('Log Entries'))
-        self.parent = parent
-        #self.result = None
-        body = Tkinter.Frame(self)
-        self.initial_focus = self.body(body)
-        body.pack(padx=5, pady=5)
-        self.buttonbox()
-        self.grab_set()
-
-        if not self.initial_focus:
-            self.initial_focus = self
-
-        self.protocol("WM_DELETE_WINDOW", self.cancel)
-
-        self.geometry("+%d+%d" % (parent.winfo_rootx()+50,
-                                  parent.winfo_rooty()+50))
-
-        self.initial_focus.focus_set()
-
-        #self.wait_window(self)
-
-    def ok(self, event=None):
-        if not self.validate():
-            self.initial_focus.focus_set() # put focus back
-            return
-
-        self.withdraw()
-        self.update_idletasks()
-
-        #self.apply()
-
-        self.cancel()
-
-    def cancel(self, event=None):
-        # put focus back to the parent window
-        self.parent.focus_set()
-        self.destroy()
-
-    def validate(self):
-        return 1 # override
-
-    def insert(self, msg):
-        self.text.insert(Tkinter.END, msg + "\n")
-        self.text.see(Tkinter.END)
-
-    def body(self, master):
-        """ Create dialog body """
-        master.pack_configure(fill=Tkinter.BOTH, expand=1)
-        self.text = ScrolledText.ScrolledText(master, width=120, height=20)
-        #self.text.configure(state=Tkinter.DISABLED)
-        self.text.pack(fill=Tkinter.BOTH)
-
-    def buttonbox(self):
-        """ Create custom buttons """
-        w = Tkinter.Button(self, text=_('Close'), width=10, command=self.ok, default=Tkinter.ACTIVE)
-        w.pack(side=Tkinter.RIGHT)
-        self.bind("<Return>", self.ok)
-        self.bind("<Escape>", self.cancel)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
