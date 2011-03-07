@@ -8,10 +8,10 @@ if [ ! -d "$KINDLE" ]; then
 #    exit -1
 fi
 
-for file in */*.html; do
-    mobifile="${file%html}mobi"
+for file in */*html; do
+    mobifile="${file%.*}.mobi"
     doc="$(basename "$file")"
-    mobidoc="${doc%html}mobi"
+    mobidoc="${doc%.*}.mobi"
     kindlemobi="$KINDLE$mobidoc"
     if [[ ! -e "$kindlemobi" || "$file" -nt "$kindlemobi" ]]; then
         pushd "$(dirname "$file")" > /dev/null

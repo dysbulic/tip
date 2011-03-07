@@ -38,11 +38,14 @@ B64_ENCODED = True
 KEYLEN = 20
 
 BN_KEY_KEY = 'hk00000000'
+KEYLEN = 28
 BN_APPDATA_DIR = r'Barnes & Noble\*DesktopReader'
 BN_CONFIG_DB_GLOB = 'ClientAPI*.db'
 KEYPATH = 'bnepubkey.b64'
 B64_ENCODED = False
-KEYLEN = 28
+
+#BN_KEY_KEY = 'hk00000001'
+#KEYLEN = 16
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
@@ -147,18 +150,9 @@ class LogView(Tkinter.Frame):
         root.title(_('Log Entries'))
         self.root = root
 
-        #self.transient(parent)
-        #body.pack(padx=5, pady=5)
-
-        #root.protocol("WM_DELETE_WINDOW", self.ok)
-        #root.geometry("+%d+%d" % (root.winfo_rootx()+50,
-        #                          root.winfo_rooty()+50))
-        #self.initial_focus.focus_set()
-
     def ok(self, event=None):
         self.root.withdraw()
         self.root.update_idletasks()
-        #self.parent.focus_set()
         self.root.destroy()
 
     def insert(self, msg):
@@ -169,7 +163,6 @@ class LogView(Tkinter.Frame):
 # adapted from: http://uucode.com/texts/pylongopgui/pyguiapp.html
 """ Deliver logger messages to logger window """
 # $Id: LoggerToWindow.py,v 1.3 2004/04/06 03:48:14 prof Exp $
-import logging
 
 class LoggerToWindowHandler(logging.Handler):
     """ Provide a logging handler """
