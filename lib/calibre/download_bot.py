@@ -24,7 +24,9 @@ The known commands are:
 """
 
 from ircbot import SingleServerIRCBot
-from irclib import nm_to_n, nm_to_h, irc_lower, ip_numstr_to_quad, ip_quad_to_numstr
+from irclib import (nm_to_n, nm_to_h, irc_lower,
+                    ip_numstr_to_quad, ip_quad_to_numstr,
+                    DCCConnectionError)
 
 import os, re, glob
 import struct
@@ -33,10 +35,23 @@ import zipfile
 from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
 from contextlib import closing
 import random
+import time
+import threading
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
+
+# From: http://www.nullege.com/codes/show/src%40s%40k%40skink-HEAD%40skink%40lib%40cherrypy%40process%40plugins.py/363/threading._Timer/python
+class PerpetualTimer(threading._Timer):
+    """A subclass of threading._Timer whose run() method repeats."""
+  
+    def run(self):
+        while True:
+            self.finished.wait(self.interval)
+            if self.finished.isSet():
+                return
+            self.function(*self.args, **self.kwargs)
 
 class Search:
     def __init__(self, author = "", title = ""):
@@ -45,12 +60,24 @@ class Search:
         self.results = []
         self.matches = None
         self.active_source = None
+        self.rename = True # Rename to author - title
         
     @property
     def phrase(self):
         last_name = self.author.split()[-1] if len(self.author) > 0 else ""
-        return "%s%s%s" % (last_name, " " if len(last_name) > 0 else "", self.title)
-        
+        phrase = "%s%s%s" % (last_name, " " if len(last_name) > 0 else "", self.title)
+        # Characters stripped by search bot
+        phrase = phrase.replace("'", " ")
+        phrase = re.sub("[,?]", "", phrase)
+        phrase = re.sub(r"\s\s+", " ", phrase)
+        phrase = phrase.strip()
+        return phrase.encode("utf-8")
+
+    @property
+    def filetitle(self):
+        filename = "%s - %s" % (self.author, self.title)
+        filename = filename.replace("/", "_")
+        return filename
 
 class UnknownPhrase(Exception):
     pass
@@ -91,7 +118,9 @@ class SearchManager():
                     or rcnt < ccnt
                     or (rcnt == ccnt and random.random() > .5))):
                min_result = result
-        log.info("Using %s for %s" % (min_result.server, min_result.filename))
+        if min_result is None:
+            log.info("No html entires found from %d result%s",
+                     len(search.results), "s" if len(search.results) != 1 else "")
         if min_result is not None:
             self.use_count[min_result.server] = self.use_count[min_result.server] + 1
         return min_result
@@ -146,14 +175,21 @@ class DownloadBot(SingleServerIRCBot):
                 searches.get(search_str)
             except UnknownPhrase:
                 log.error("Search for '%s' not recorded" % search_str)
-                searches.add(Search(title=search_str))
+                search = Search(title=search_str)
+                search.rename = False
+                searches.add(search)
             return
 
         missing = re.match("<<SearchBot>> Sorry, your search for \"(.*)\" returned no matches.", msg)
         if missing is not None:
             search_str = missing.group(1)
-            searches.get(search_str).matches = 0
+            search = searches.get(search_str)
+            search.matches = 0
             log.info("No results for '%s'" % search_str)
+            dir = search.filetitle
+            if not os.path.exists(dir):
+                log.info("Creating Placeholder: " + dir)
+                os.mkdir(dir)
             self.queue_next()
             return
 
@@ -167,7 +203,7 @@ class DownloadBot(SingleServerIRCBot):
 
         welcome = re.match("\[#ebooks\] Welcome to #ebooks", msg)
         if welcome is not None:
-            self.queue_next()
+            self.start_queue()
             return
 
         log.info("PrivNotice: " + msg)
@@ -189,38 +225,55 @@ class DownloadBot(SingleServerIRCBot):
         log.info("CTCP Arg[0]: " + event.arguments()[0])
         if event.arguments()[0] != "DCC" or len(event.arguments()) < 2:
             return
-        args = re.match(r"^(?P<cmd>\w+)\s+\"(?P<filename>.*)\"\s+(?P<ip>\d+)\s+(?P<port>\d+)\s+(?P<unkn>\d+)\s*$",
-                        event.arguments()[1])
-        if args is None or args.group('cmd') != "SEND":
+        arg = event.arguments()[1]
+        args = re.match(r"^(?P<cmd>\w+)\s+\"?(?P<filename>[^\"].*[^\"])\"?"
+                        + r"\s+(?P<ip>\d+)(\s+(?P<unkn1>\d+))?"
+                        + r"\s+(?P<port>\d+)\s+(?P<unkn2>\d+)\s*$",
+                        arg)
+        if args is None or args.group('cmd').upper() != "SEND":
+            log.info("CTCP Arg[1]: " + arg)
             return
         peeraddress = ip_numstr_to_quad(args.group('ip'))
         peerport = int(args.group('port'))
-        dcc = self.dcc_connect(peeraddress, peerport, "raw")
-        dcc.filename = os.path.basename(args.group('filename'))
+        try:
+            dcc = self.dcc_connect(peeraddress, peerport, "raw")
+            dcc.filename = os.path.basename(args.group('filename'))
 
-        search = re.match("^SearchBot_results_for_(?P<name>.*).txt.zip", dcc.filename)
-        dcc.is_search = search is not None
-        if dcc.is_search:
-            search_str = search.group('name')
-            try:
-                dcc.search = searches.get(search_str)
-                log.info("Search Result: " + search_str)
-            except UnknownPhrase:
-                dcc.search = searches.add(Search(title=search_str))
-                log.error("Unknown Search: " + search_str)
-        else:
-            dcc.search = searches.get(dcc.filename)
+            search = re.match("^SearchBot_results_for_(?P<name>.*).txt.zip", dcc.filename)
+            dcc.is_search = search is not None
+            if dcc.is_search:
+                search_str = search.group('name')
+                try:
+                    dcc.search = searches.get(search_str)
+                    log.info("Search Result: " + search_str)
+                except UnknownPhrase:
+                    dcc.search = searches.add(Search(title=search_str))
+                    log.error("Unknown Search: " + search_str)
+            else:
+                try:
+                    dcc.search = searches.get(dcc.filename)
+                except UnknownPhrase:
+                    # some servers replace spaces
+                    dcc.filename = dcc.filename.replace("_", " ")
+                    try:
+                        dcc.search = searches.get(dcc.filename)
+                    except UnknownPhrase:
+                        log.error("Unknown File: " + dcc.filename)
+                        dcc.search = searches.add(Search(title=dcc.filename))
+                        dcc.search.rename = False
+            dcc.search.filename = dcc.filename
 
-        dcc.search.filename = dcc.filename
-
-        if os.path.exists(dcc.filename):
-            count = 1
-            basename, extension = os.path.splitext(dcc.filename)
-            while os.path.exists(dcc.filename):
-                dcc.filename = "%s.%d%s" % (basename, count, extension)
-                count = count + 1
-        dcc.file = open(dcc.filename, "w")
-        dcc.received_bytes = 0
+            if os.path.exists(dcc.filename):
+                count = 1
+                basename, extension = os.path.splitext(dcc.filename)
+                while os.path.exists(dcc.filename):
+                    dcc.filename = "%s.%d%s" % (basename, count, extension)
+                    count = count + 1
+            dcc.file = open(dcc.filename, "w")
+            dcc.received_bytes = 0
+        except DCCConnectionError as err:
+            log.error("Connect Error: " + str(err))
+            log.info("CTCP Arg[1]: " + arg)
 
     def on_dccmsg(self, connection, event):
         data = event.arguments()[0]
@@ -295,11 +348,11 @@ class DownloadBot(SingleServerIRCBot):
     def search_for(self, search):
         searches.add(search)
         
-        previous = "SearchBot_results_for_\"%s\".txt.zip" % search.phrase
+        previous = "SearchBot_results_for_%s.txt.zip" % search.phrase
         if os.path.exists(previous):
             log.info("Using cached search: " + previous)
             search.filename = previous
-            process_search(search)
+            self.process_search(search)
         else:
             c = self.connection
             cmd = "@search %s" % search.phrase
@@ -328,6 +381,7 @@ class DownloadBot(SingleServerIRCBot):
         source = searches.get_source(search)
         if source is None:
             log.error("No results for: " + search.phrase)
+            self.queue_next()
         else:
             searches.link(source.filename, search)
             c = self.connection
@@ -337,15 +391,30 @@ class DownloadBot(SingleServerIRCBot):
             source.attempted = True
 
     def name_download(self, search):
-        filename = "%s - %s.html.rar" % (search.author, search.title)
-        if filename != search.filename:
+        filename = "%s.html.rar" % (search.filetitle)
+        if search.rename and filename != search.filename:
             log.info("Renaming %s to %s" % (search.filename, filename))
             os.rename(search.filename, filename)
 
+    def start_queue(self):
+        self.lock_check = PerpetualTimer(30.0, self.check_lock)
+        self.lock_check.start()
+        self.queue_next()
+
+    def check_lock(self):
+        """If it has been over a minute since the last queue entry, process one"""
+        delta = time.time() - self.last_pop_time
+        if delta > 60:
+            log.info("Kicking queue after %d second wait" % delta)
+            self.queue_next()
+
     def queue_next(self):
+        self.last_pop_time = time.time()
+        log.info("Popping Queue: " + str(len(search_queue)))
         if len(search_queue) > 0:
             self.search_for(search_queue.pop())
-
+        else:
+            log.info("Queue Empty")
 
 import freebase
 
@@ -377,7 +446,7 @@ for category in results.category:
         if len(dbpath) == 0:
             search_queue.append(Search(author, title))
         else:
-            log.info("Found Path: " + dbpath[0])
+            log.debug("Found Path: " + dbpath[0])
 
 def main():
     import sys
@@ -404,3 +473,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+sys.exit(0)
