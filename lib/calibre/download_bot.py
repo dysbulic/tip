@@ -81,8 +81,8 @@ class SearchManager():
         for result in search.results:
             if not self.use_count.has_key(result.server):
                 self.use_count[result.server] = 0
-            rcnt = self.use_count[min_result.server] if min_result is not None else None # Result Count
-            ccnt = self.use_count[result.server]     # Current Count
+            ccnt = self.use_count[min_result.server] if min_result is not None else None # Current Count
+            rcnt = self.use_count[result.server]     # Result Count
 
             # Find minimum, coin toss for ties
             if(not result.attempted
@@ -91,6 +91,7 @@ class SearchManager():
                     or rcnt < ccnt
                     or (rcnt == ccnt and random.random() > .5))):
                min_result = result
+        log.info("Using %s for %s" % (min_result.server, min_result.filename))
         if min_result is not None:
             self.use_count[min_result.server] = self.use_count[min_result.server] + 1
         return min_result
