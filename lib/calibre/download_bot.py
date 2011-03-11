@@ -74,7 +74,7 @@ class Search:
         phrase = re.sub("[,?]", "", phrase)
         phrase = re.sub(r"\s\s+", " ", phrase)
         phrase = phrase.strip()
-        return unicode(phrase, errors='replace')
+        return phrase.encode('utf-8', errors='replace')
 
     @property
     def filetitle(self):
