@@ -42,6 +42,8 @@ logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
+blacklist = set() #set([ "DajaBot" ])
+
 # From: http://www.nullege.com/codes/show/src%40s%40k%40skink-HEAD%40skink%40lib%40cherrypy%40process%40plugins.py/363/threading._Timer/python
 class PerpetualTimer(threading._Timer):
     """A subclass of threading._Timer whose run() method repeats."""
@@ -61,6 +63,7 @@ class Search:
         self.matches = None
         self.active_source = None
         self.rename = True # Rename to author - title
+        self.source = None
         
     @property
     def phrase(self):
@@ -71,7 +74,7 @@ class Search:
         phrase = re.sub("[,?]", "", phrase)
         phrase = re.sub(r"\s\s+", " ", phrase)
         phrase = phrase.strip()
-        return phrase.encode("utf-8")
+        return unicode(phrase, errors='replace')
 
     @property
     def filetitle(self):
@@ -104,26 +107,39 @@ class SearchManager():
 
     def get_source(self, search):
         """Return the result whose server is least used"""
-        min_result = None
-        for result in search.results:
-            if not self.use_count.has_key(result.server):
-                self.use_count[result.server] = 0
-            ccnt = self.use_count[min_result.server] if min_result is not None else None # Current Count
-            rcnt = self.use_count[result.server]     # Result Count
+        def find_result(type):
+            min_result = None
+            for result in search.results:
+                if not self.use_count.has_key(result.server):
+                    self.use_count[result.server] = 0
+                ccnt = self.use_count[min_result.server] if min_result is not None else None # Current Count
+                rcnt = self.use_count[result.server]     # Result Count
 
-            # Find minimum, coin toss for ties
-            if(not result.attempted
-               and result.is_html
-               and (min_result is None
-                    or rcnt < ccnt
-                    or (rcnt == ccnt and random.random() > .5))):
-               min_result = result
-        if min_result is None:
-            log.info("No html entires found from %d result%s",
-                     len(search.results), "s" if len(search.results) != 1 else "")
-        if min_result is not None:
-            self.use_count[min_result.server] = self.use_count[min_result.server] + 1
-        return min_result
+                # Find minimum, coin toss for ties
+                if(not result.attempted
+                   and result.server not in blacklist
+                   and getattr(result, "is_" + type)
+                   and (min_result is None
+                        or rcnt < ccnt
+                        or (rcnt == ccnt and random.random() > .5))):
+                    min_result = result
+            return min_result
+
+        result = None
+        types = ["html", "rtf", "doc"]
+        for type in types:
+            result = find_result(type)
+            if result is not None:
+                result.type = type
+                break
+        if result is not None:
+            self.use_count[result.server] = self.use_count[result.server] + 1
+            result.attempted = True
+        else:
+            log.info("No %s entries found from %d result%s for %s",
+                     ", ".join(types), len(search.results), "s" if len(search.results) != 1 else "", search.title)
+
+        return result
 
 class DownloadSource():
     def __init__(self, server, filename, size):
@@ -139,7 +155,21 @@ class DownloadSource():
 
     @property
     def is_html(self):
-        return re.search("(\[[^\]]*htm[^\]]*\]|\([^\)]*htm[^\)]*\)|\.htm)", self.filename) is not None
+        return re.search("(\[[^\]]*htm[^\]]*\]|\([^\)]*htm[^\)]*\)|\.htm)",
+                         self.filename,
+                         re.IGNORECASE) is not None
+
+    @property
+    def is_rtf(self):
+        return re.search("(\[[^\]]*rtf[^\]]*\]|\([^\)]*rtf[^\)]*\)|\.rtf)",
+                         self.filename,
+                         re.IGNORECASE) is not None
+
+    @property
+    def is_doc(self):
+        return re.search("(\[[^\]]*doc[^\]]*\]|\([^\)]*doc[^\)]*\)|\.doc)",
+                         self.filename,
+                         re.IGNORECASE) is not None
 
 searches = SearchManager()
 search_queue = []
@@ -197,7 +227,7 @@ class DownloadBot(SingleServerIRCBot):
         if found is not None:
             search_str = found.group(1)
             count = int(found.group(2))
-            searches.get(search_str).matches = count
+            #searches.get(search_str).matches = count
             log.info("%d results for %s" % (count, search_str))
             return
 
@@ -361,37 +391,44 @@ class DownloadBot(SingleServerIRCBot):
             c.privmsg(chname, cmd)
 
     def process_search(self, search):
-        with closing(ZipFile(open(search.filename, 'rb'))) as inf:
-            name = inf.namelist()[0]
-            log.info("Zipped: " + name)
-            lines = inf.read(name).split("\n")[4:] # Trim header
-            results = []
-            for line in lines:
-                parts = re.match(r"^!(?P<server>\S+)\s+(?P<file>.*?)  (.*)\s+(?P<size>\d+(.\d+)?)\s*(?P<unit>.?[Bb])", line)
-                if parts is None:
-                    log.error("Unknown Result Match: " + line)
-                else:
-                    src = DownloadSource(parts.group('server'),
-                                                  parts.group('file'),
-                                                  parts.group('size') + parts.group('unit'))
-                    results.append(src)
+        results = []
+        try:
+            with closing(ZipFile(open(search.filename, 'rb'))) as inf:
+                name = inf.namelist()[0]
+                log.debug("Zipped: " + name)
+                lines = inf.read(name).split("\n")[4:] # Trim header
+                for line in lines:
+                    parts = re.match(r"^!(?P<server>\S+)\s+(?P<file>.*?)"
+                                     + r"  (.*)\s+(?P<size>\d+(.\d+)?)\s*(?P<unit>[KkMm]?i?[Bb])",
+                                     line)
+                    if parts is None:
+                        log.error("Unknown Result Match: " + line)
+                    else:
+                        src = DownloadSource(parts.group('server'),
+                                             parts.group('file'),
+                                             parts.group('size') + parts.group('unit'))
+                        results.append(src)
+        except zipfile.BadZipfile:
+            log.error("Bad Zip File: " + search.filename)
 
         search.results = results
 
-        source = searches.get_source(search)
-        if source is None:
+        search.source = searches.get_source(search)
+        if search.source is None:
             log.error("No results for: " + search.phrase)
             self.queue_next()
         else:
-            searches.link(source.filename, search)
+            searches.link(search.source.filename, search)
             c = self.connection
             chname, chobj = self.channels.items()[0]
-            log.info("Sending: '%s' to %s" % (source.req, chname))
-            c.privmsg(chname, source.req)
-            source.attempted = True
+            log.info("Sending: '%s' to %s" % (search.source.req, chname))
+            c.privmsg(chname, search.source.req)
 
     def name_download(self, search):
-        filename = "%s.html.rar" % (search.filetitle)
+        basename, extension = os.path.splitext(search.filename)
+        filename = "%s.%s%s" % (search.filetitle,
+                                search.source.type if search.source is not None else "html",
+                                extension)
         if search.rename and filename != search.filename:
             log.info("Renaming %s to %s" % (search.filename, filename))
             os.rename(search.filename, filename)
@@ -404,49 +441,82 @@ class DownloadBot(SingleServerIRCBot):
     def check_lock(self):
         """If it has been over a minute since the last queue entry, process one"""
         delta = time.time() - self.last_pop_time
-        if delta > 60:
+        if delta > 60 and len(search_queue) > 0:
             log.info("Kicking queue after %d second wait" % delta)
             self.queue_next()
 
     def queue_next(self):
         self.last_pop_time = time.time()
-        log.info("Popping Queue: " + str(len(search_queue)))
         if len(search_queue) > 0:
-            self.search_for(search_queue.pop())
+            next = search_queue.pop()
+            log.info("Queue Pop: %d: %s" % (len(search_queue), next.filetitle))
+            self.search_for(next)
         else:
             log.info("Queue Empty")
 
 import freebase
 
-query = {
-    "id" :   "/en/nebula_award",
-    "type" : "/award/award",
-    "category" : [{
-      "name" : None,
-      "nominees" : [{
-        "award_nominee" : [{
+nominees = True
+
+if nominees:
+    query = [{
+        "id|=" : [ "/en/nebula_award", "/en/hugo_award" ],
+        "type" : "/award/award",
+        "category" : [{
           "name" : None,
-        }],
-        "nominated_for" : [{
-          "name" : None,
-        }],
-        "limit" : 5000,
+          "nominees" : [{
+            "award_nominee" : [{ "name" : None, }],
+            "nominated_for" : [{
+              "name" : None,
+              "type" : "/book/written_work",
+            }],
+            "limit" : 5000,
+          }]
+        }]
       }]
-    }]
-}
+
+    get_records = lambda result: category.nominees
+    get_author = lambda record: record.award_nominee[0].name
+    get_title = lambda record: record.nominated_for[0].name
+else:
+    query = {
+        "id|=" : [ "/en/nebula_award", "/en/hugo_award" ],
+        "type" : "/award/award",
+        "category" : [{
+          "name" : None,
+            "winners" : [{
+            "award_winner" : [{ "name" : None, }],
+            "honored_for" : [{
+              "name" : None,
+              "type" : "/book/written_work",
+            }],
+            "limit" : 5000,
+          }]
+        }]
+      }
+
+    get_records = lambda result: result.winners
+    get_author = lambda record: record.award_winner[0].name
+    get_title = lambda record: record.honored_for[0].name
 
 results = freebase.mqlread(query)
 
-for category in results.category:
-    for nominee in category.nominees:
-        author = nominee.award_nominee[0].name
-        title = nominee.nominated_for[0].name
+count = 0
+for award in results:
+    for category in award.category:
+        for record in get_records(category):
+            count = count + 1
+            author = get_author(record)
+            title = get_title(record)
+            
+            dbpath = glob.glob("%s*%s*" % (author, title))
+            if len(dbpath) == 0:
+                search_queue.append(Search(author, title))
+            else:
+                log.debug("Found Path: " + dbpath[0])
 
-        dbpath = glob.glob("%s*%s*" % (author, title))
-        if len(dbpath) == 0:
-            search_queue.append(Search(author, title))
-        else:
-            log.debug("Found Path: " + dbpath[0])
+log.info("%d/%d title%s in queue" % (len(search_queue), count,
+                                     "" if len(search_queue) == 1 else "s"))
 
 def main():
     import sys
@@ -470,6 +540,7 @@ def main():
 
     bot = DownloadBot(channel, nickname, server, port)
     bot.start()
+    log.info("Bot Exited")
 
 if __name__ == "__main__":
     main()
