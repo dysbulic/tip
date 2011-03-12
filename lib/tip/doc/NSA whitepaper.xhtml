@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC
+  "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>NSA Whitepaper</title>
+    <script type="application/javascript" src=".../lib/jquery/jquery.js"/>
+    <script type="application/javascript" src=".../lib/tip/Array.each.js"/>
+    <script type="application/javascript" src=".../lib/tip/pointers.js"/>
+    <script type="application/javascript" src=".../lib/tip/List.js"/>
+    <script type="application/javascript" src=".../lib/tip/__.jquery"/>
+    <script type="application/javascript"><![CDATA[
+    ]]></script>
+  </head>
+  <body>
+    <h1>NSA Whitepaper</h1>
+    <h2><a href="mailto:Will%20Holcomb%20%3Cwill@dhappy.org%3E">Will Holcomb</a></h2>
+    <h2></h2>
+    <p><em>In progress&hellip;</em></p>
+    <p>The ability to intercept <code>obj.<em>val</em></code> for undefined <em>val</em>s would be incredibly helpful.</p>
+    <p>The issue that I am struggling with currently is:</p>
+    <pre>var obj = { valueOf : function() { return 3 } }
+    console.log( obj )</pre>
+    <p>prints <code>3</code> while:</p>
+    <pre>var obj = { valueOf : function() { return function() { return 3 } } }
+    console.log( obj )</pre>
+    <p>prints <code>Object</code>.</p>
+    <p><code>valueOf</code> must return a primitive type or it is not evaluated.</p>
+  </body>
+</html>
