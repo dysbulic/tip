@@ -1,0 +1,34 @@
+/**
+ * Keep two values in sync using mutual event listeners.
+ *
+ * Adapted from a different form and needs to be reworked for efficency.
+ */
+(function($) {
+    if( ! $.fn.prop ) throw "link requires $.fn.prop";
+    if( ! $.fn.prop.Prop.prototype.change ) throw "link requires $.fn.prop.change";
+
+    if( $.fn.props !== undefined ) {
+        $.fn.props.PropList.prototype.link = function(to, map) {
+            if( to instanceof jQuery && map !== undefined ) {
+                this.__.iter(function(idx, prop) {
+                    prop.link(to.prop(map[prop.name]));
+                });
+            } else {
+                this.__.iter(function(idx, prop) {
+                    prop.link(to);
+                });
+            }
+        }
+    }
+
+    $.fn.prop.Prop.prototype.link = function(to) {
+        // If to is an object, then the property to link to is the same name as origin
+        if( to.name === undefined && to.value === undefined && typeof to.prop == 'function' ) {
+            to = to.prop(this.name);
+        }
+        var from = this;
+        to.value = from.value; // Set initial value from origin
+        from.change(function() { to.value = this.value });
+        to.change(function() { from.value = this.value });
+    }
+})(jQuery);
