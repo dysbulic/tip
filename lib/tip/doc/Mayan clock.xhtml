@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC
+  "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head id="defs">
+    <title>Mayan Clock</title>
+    <script type="application/javascript" src=".../lib/jquery/jquery.js"/>
+    <script type="application/javascript" src=".../lib/tip/tip.jquery"/>
+    <script type="application/javascript" src=".../lib/by/Steven Levithan/http:%252f%252fblog.stevenlevithan.com%252farchives%252fdate-time-format/date.format.js"/>
+    <script type="application/javascript"><![CDATA[
+        $( function() {
+            var ids
+            document.__ = {
+                helo : function( ) {
+                    this.timestamp = this.timestamp || ( new Date() )
+                },
+            }
+            var $time = $( '<iframe src="seven_segment.svg"/>' )
+            $time.bind( 'load', function() {
+              //console.log( this.contentDocument )
+            } )
+            $( 'body' ).append( $time )
+            setInterval( function() {
+                $time.text( ( new Date ).toString( 'jjjj-nn-dd @ HH:MM:ss.mmm' ) )
+            }, 1000 )
+        } )
+    ]]></script>
+  </head>
+  <body id="body">
+  </body>
+</html>
