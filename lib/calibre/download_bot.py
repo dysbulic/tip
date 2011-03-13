@@ -42,7 +42,8 @@ logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
-blacklist = set() #set([ "DajaBot" ])
+blacklist = set()
+blacklist.add("DajaBot")
 
 # From: http://www.nullege.com/codes/show/src%40s%40k%40skink-HEAD%40skink%40lib%40cherrypy%40process%40plugins.py/363/threading._Timer/python
 class PerpetualTimer(threading._Timer):
@@ -74,7 +75,11 @@ class Search:
         phrase = re.sub("[,?]", "", phrase)
         phrase = re.sub(r"\s\s+", " ", phrase)
         phrase = phrase.strip()
-        return phrase.encode('utf-8', errors='replace')
+        try:
+            return phrase.encode('utf-8', 'replace')
+        except UnicodeDecodeError as e:
+            log.error("Unicode Error: " + str(e))
+            return phrase
 
     @property
     def filetitle(self):
@@ -126,7 +131,7 @@ class SearchManager():
             return min_result
 
         result = None
-        types = ["html", "rtf", "doc"]
+        types = ["html", "epub", "rtf", "doc"]
         for type in types:
             result = find_result(type)
             if result is not None:
@@ -153,23 +158,27 @@ class DownloadSource():
         """IRC request command"""
         return "!%s %s" % (self.server, self.filename)
 
-    @property
-    def is_html(self):
-        return re.search("(\[[^\]]*htm[^\]]*\]|\([^\)]*htm[^\)]*\)|\.htm)",
+    def check_type(self, type):
+        return re.search("(\[[^\]]*%s[^\]]*\]|\([^\)]*%s[^\)]*\)|\.%s)" % (type, type, type),
                          self.filename,
                          re.IGNORECASE) is not None
+        
+
+    @property
+    def is_html(self):
+        return self.check_type("htm")
+
+    @property
+    def is_epub(self):
+        return self.check_type("epub")
 
     @property
     def is_rtf(self):
-        return re.search("(\[[^\]]*rtf[^\]]*\]|\([^\)]*rtf[^\)]*\)|\.rtf)",
-                         self.filename,
-                         re.IGNORECASE) is not None
+        return self.check_type("rtf")
 
     @property
     def is_doc(self):
-        return re.search("(\[[^\]]*doc[^\]]*\]|\([^\)]*doc[^\)]*\)|\.doc)",
-                         self.filename,
-                         re.IGNORECASE) is not None
+        return self.check_type("doc")
 
 searches = SearchManager()
 search_queue = []
@@ -476,7 +485,7 @@ if nominees:
       }]
 
     get_records = lambda result: category.nominees
-    get_author = lambda record: record.award_nominee[0].name
+    get_author = lambda record: " & ".join([n.name for n in record.award_nominee])
     get_title = lambda record: record.nominated_for[0].name
 else:
     query = {
@@ -496,7 +505,7 @@ else:
       }
 
     get_records = lambda result: result.winners
-    get_author = lambda record: record.award_winner[0].name
+    get_author = lambda record: " & ".join([n.name for n in record.award_winner])
     get_title = lambda record: record.honored_for[0].name
 
 results = freebase.mqlread(query)
@@ -509,7 +518,7 @@ for award in results:
             author = get_author(record)
             title = get_title(record)
             
-            dbpath = glob.glob("%s*%s*" % (author, title))
+            dbpath = glob.glob("%s*%s*" % (author.replace(" ", "*"), title))
             if len(dbpath) == 0:
                 search_queue.append(Search(author, title))
             else:
