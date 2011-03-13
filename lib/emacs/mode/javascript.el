@@ -1,1 +1,1 @@
-.../lib/by/Karl Landstrom/emacs_javascript_mode.el
+.../lib/by/Karl Landstrom/emacs/javascript-mode.el
