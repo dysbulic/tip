@@ -59,15 +59,13 @@
         
         markAddress( '3201 Westerwald Ave., 21218' )
         
-        return
-        
         var mql = [ {
             id : '/en/wal-mart',
             type : '/organization/organization',
             locations: [ {
                 name : null,
                 opening_date : null,
-                address : [ {
+                'a:address' : [ {
                     citytown : {
                         name : null,
                         optional : true
@@ -93,6 +91,13 @@
                     } ],
                     type : '/location/mailing_address',
                 } ],
+                'b:address' : [ {
+                    type :  '/location/location',
+                    geolocation : [ {
+                        latitude :  null,
+                        longitude : null,
+                    } ],
+                } ],
             } ],
         } ]
         
@@ -104,10 +109,12 @@
                    function( data ) {
                        console.log( data )
                        $(data.result[0].locations).each( function( idx, location ) {
-                           var addr = location.address[0]
-                           markAddress( ( addr.street_address[0].value
+                           //var addr = location.address[0]
+                           /*
+                            markAddress( ( addr.street_address[0].value
                                           + ',' + addr.postal_code.name ),
                                         location.title )
+                            */
                        } )
                    } )
     } )
