@@ -146,11 +146,11 @@
         return list
       }
     </script>
-    <script
-       type="text/javascript"
-       id="script3047">
+    <script type="text/javascript">
       $(function() {
-        $(document).click( function() {
+        var TIMEOUT = 1000
+
+        function recolor() {
           $( 'path, rect' ).each( function() {
             $(this).css({
               fill : genColor(),
@@ -158,6 +158,16 @@
             })
           } )
           //$('#background').animate({ fill : genColor() })
+        }
+        var interval = undefined
+        $(document).click( function() {
+          if( interval ) {
+            clearInterval( interval )
+            interval = undefined
+          } else {
+            recolor()
+            interval = setInterval( recolor, TIMEOUT )
+          }
         } )
       } )
     </script>
