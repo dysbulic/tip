@@ -69,7 +69,7 @@
   </head>
   <body>
     <p>Tests adding content using <code>node.innerHTML</code>. I'm getting a <acronym title="Document Object Model">DOM</acronym> error when the <a href="http://static.ak.connect.facebook.com/connect.php/en_US/js/Api/CanvasUtil/Connect/XFBML"><acronym title="Extensible Facebook Markup Language">XFBML</acronym> script</a> loads.</p>
-    <p>Upon examination, the error <a href="http://stackoverflow.com/questions/4162270/dom-exception-when-assigning-html-entities-to-innerhtml">arises from the &amp;nbsp;</a> in the <acronym title="Extensible Hypertext Markup Language">XHTML</acronym>.</p>
+    <p>Upon examination, the error <a href="http://stackoverflow.com/questions/4162270/dom-exception-when-assigning-html-entities-to-innerhtml">arises from the &amp;nbsp;</a> in the <acronym title="Extensible Hypertext Markup Language">XHTML</acronym>. It's a <a href="http://bugs.developers.facebook.net/show_bug.cgi?id=5932">known error</a>.</p>
     <p>A possible fix would be the override the <code>innerHTML</code> setter, but those are <a href="http://code.google.com/p/chromium/issues/detail?id=13175">inaccessible in Chrome</a>.</p>
     <hr/>
   </body>
