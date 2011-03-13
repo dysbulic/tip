@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC
+ "+//ISBN 0-9673008-1-9//DTD OEB 1.0.1 Document//EN"
+ "http://openebook.org/dtds/oeb-1.0.1/oebdoc101.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="author" content="Will Holcomb" />
+<meta name="cover" content="tip:DoH" />
+<link rel="stylesheet" type="text/css" href=".../style/blog.css"/>
+<title>The Spread of Department Stores</title>
+</head>
+<body>
+<h1>The Spread of Department Stores</h1>
+<h2>by Will Holcomb</h2>
+
+<hr/>
+
+<p>I've been thinking about <a href="http://freebase.com">Freebase</a> and it's application to <a type="org" href="http://singinst.org/"><a type="definition" href="http://en.wikipedia.org/wiki/Memetics">memetics</a></a>. I'm particularly interested in timeseries <a href="http://www.informationisbeautiful.net">infographics</a>. One of my all time favorites is <a href="http://projects.flowingdata.com/walmart/">the growth of Wal-Mart</a>.</p>
+
+<object class="row" height="300px"
+        data="http://media.flowingdata.com/walmart/Walmarts201004.swf" 
+        type="application/x-shockwave-flash">
+  <embed src="http://media.flowingdata.com/walmart/Walmarts201004.swf"
+         class="row" height="8em"
+         type="application/x-shockwave-flash">
+    <iframe class="row" height="8em"
+            src="http://www.youtube.com/embed/sjCAr1QOByE"></iframe>
+  </embed>
+</object> 
+
+<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"></script>
+<script type="text/javascript"><![CDATA[
+  $( function() {
+    $('body').append( $('<div id="#map"/>') )
+
+    var map = new OpenLayers.Map( 'map' )
+    var mapnik = new OpenLayers.Layer.OSM()
+    map.addLayer( mapnik )
+    map.setCenter( new OpenLayers.LonLat( 13.41, 52.52 )
+         .transform(
+            new OpenLayers.Projection( 'EPSG:4326' ),  // transform from WGS 1984
+            new OpenLayers.Projection( 'EPSG:900913' ) // to Spherical Mercator Projection
+          ), 15 // Zoom level
+        )
+  } )
+]]></script>
+</body>
+</html>
