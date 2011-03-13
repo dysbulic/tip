@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Templating Use Case Scenarios</title>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <style type="text/css">
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Templating Use Case Scenarios</h1>
+
+    <p>In looking at templating, there are several common situations that make up 90% of the problems I expect to see. I want to make sure that I handle them well.</p>
+
+    <h2>Common Container</h2>
+
+    <p>Lots of sites have a common header and sidebars that are included on all the pages. If you look at <a href="http://mpp.org">MPP's site</a>, the header and side columns are the same across the site.</p>
+
+    <p>I want to be able to specify a default container at the base of a file hierarchy and have it propogate up. As to have the container will be specified, each directory will have metadata and that will allow the specification of information like defaults.</p>
+
+    <h2>Adding a Stylesheet</h2>
+
+    <p>I'll have a content document, which will need something like a custom width on the body or a different background color. To do this properly, I need to include a new stylesheet link in the header. Specifying a transformation like that is done with various hooks in most systems.</p>
+
+    <p>I like the hooks system because it is flexible. What I was thinking is I would prep the output document in memory and let hooks modify that. Maybe expose the document to the <a href="http://jakarta.apache.org/bsf/">BSF</a> and <a href="http://dsd.lbl.gov/nux/">xQuery</a>.</p>
+  </body>
+</html>
