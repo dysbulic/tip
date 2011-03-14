@@ -1,0 +1,288 @@
+;; Red Hat Linux default .emacs initialization file
+
+;; Are we running XEmacs or Emacs?
+(defvar running-xemacs (string-match "XEmacs\\|Lucid" emacs-version))
+
+;; Set up the keyboard so the delete key on both the regular keyboard
+;; and the keypad delete the character under the cursor and to the right
+;; under X, instead of the default, backspace behavior.
+(global-set-key [delete] 'delete-char)
+(global-set-key [kp-delete] 'delete-char)
+
+;; store a longer command history
+(setq extended-command-history-max 50)
+(setq query-replace-history-max 50)
+
+;; Turn on font-lock mode for Emacs
+(cond ((not running-xemacs)
+	(global-font-lock-mode t)))
+
+(set-background-color "#000000")
+(set-background-color "black")
+(set-face-background 'default "black")
+
+;; Hilight the cursor line
+; (global-hl-line-mode 1)
+
+;; Always end a file with a newline
+(setq require-final-newline t)
+
+;; Show line-number in the mode line
+(line-number-mode 1)
+
+;; Show column-number in the mode line
+(column-number-mode 1)
+
+;; default to better frame titles
+(setq frame-title-format
+      (concat  "%b - emacs@" (system-name)))
+
+;; Stop at the end of the file, not just add lines
+(setq next-line-add-newlines nil)
+
+;; Don't ask when following links
+(setq vc-follow-symlinks t)
+
+;; Enable wheelmouse support by default
+(require 'mwheel)
+
+;; From ftp://ftp.csd.uu.se/pub/users/andersl/emacs/my-init.el
+
+;; Don't want to always hit return
+(setq completion-auto-exit t)
+
+;; One space ends a sentence
+(set 'sentence-end "[.?!][]\"')]*\\($\\|\t\\| \\)[ \t\n]*")
+(set 'sentence-end-double-space nil)
+
+;(eval-after-load "ispell"
+;  '(progn
+;     (setq ispell-program-name "aspell")))
+
+;;;-------------------------------------------------------------------
+;;; Mark handling.  The following two lines makes the highlighted
+;;; region visible, but I'm still able to use all region-commands even
+;;; if the region has been turned off (just like in the good ol'
+;;; days!)
+;;;
+
+(if (boundp 'transient-mark-mode)
+    (setq transient-mark-mode t))
+(setq mark-even-if-inactive t)
+
+;; For the apache coding style
+
+;(defun apache-jakarta-mode ()
+;  "The Java mode specialization for Apache Jakarta projects."
+;  (if (not (assoc "apache-jakarta" c-style-alist))
+;      ;; Define the Apache Jakarta cc-mode style.
+;      (c-add-style "apache-jakarta" '("java" (indent-tabs-mode . nil))))
+
+;  (c-set-style "apache-jakarta")
+;  (c-set-offset 'substatement-open 0 nil)
+;  (setq mode-name "Apache Jakarta")
+
+;  ;; Turn on syntax highlighting when X is running.
+;  (if (boundp 'window-system)
+;      (progn (setq font-lock-support-mode 'lazy-lock-mode)
+;             (font-lock-mode t))))
+
+; Waste of display space if you can't click on it
+(if (not window-system) (menu-bar-mode nil))
+
+;; Activate Jakarta mode.
+;(if (fboundp 'jde-mode)
+;    (add-hook 'jde-mode-hook 'apache-jakarta-mode)
+;  (add-hook 'java-mode-hook 'apache-jakarta-mode))
+
+;; No tabs-- use spaces when indenting (doesn't affect Makefiles, 
+;; does affect text files and code, doesn't affect existing tabs).
+;; The use of setq-default means this only affects modes that don't
+;; overwrite this setting.
+(setq-default indent-tabs-mode nil)
+
+;; conditionally set editing mode for javascript
+(setq javascript-file "~/.../lib/emacs/mode/javascript.el")
+(if (file-exists-p javascript-file)
+    (progn (load javascript-file)
+           (setq auto-mode-alist
+                 (append '(("\\(js\\|jquery\\|json\\|mql\\|tipscript\\)$" . javascript-mode)) auto-mode-alist))
+           (message "javascript mode loaded"))
+  (setq auto-mode-alist
+        (append '(("jquery|\\.js$" . c-mode)) auto-mode-alist)))
+
+;; Input control characters in hex
+(setq read-quoted-char-radix 16)
+
+(defun set-mail-mode ()
+  "Sets the environment properly for sending mail from"
+  (interactive nil)
+  (auto-fill-mode 1)
+  (set-input-method "french-postfix")
+  (global-set-key [?\C-x ?\C-t] 'ispell-buffer)
+  (message "mail mode set"))
+
+(global-set-key [?\C-\M-M] 'set-mail-mode)
+
+;; turn on filling and french for mail messages
+(setq auto-mode-alist
+      (append '(("mutt[-[:alnum:]]\\{3,\\}$" . set-mail-mode))
+              auto-mode-alist))
+
+;; make a shortcut for the goto-line function
+(global-set-key [?\M-1] 'goto-line)
+
+;; define a function to do a word count
+(defun word-count nil "Count words in buffer" (interactive)
+  (shell-command-on-region (point-min) (point-max) "wc -w"))
+
+(setq nxml-file ".../lib/emacs/mode/nxml/rng-auto.el")
+(if (file-exists-p nxml-file)
+    (progn (load nxml-file)
+           (setq auto-mode-alist
+                 (cons '("\\(xml\\|xsl\\|html\\|rng\\|xhtml\\|xslt\\|rml\\|docbook\\|svg\\|tmpl\\)" . nxml-mode)
+                       auto-mode-alist))
+           (message "nxml mode loaded")))
+
+(fset 'xml-mode 'nxml-mode)
+(fset 'html-mode 'nxml-mode)
+
+(setq matlab-file ".../emacs.d/matlab.el")
+(if (file-exists-p matlab-file)
+    (progn (load matlab-file)
+           (setq auto-mode-alist
+                 (cons '("\\.m\\'" . matlab-mode)
+                       auto-mode-alist))
+           (message "matlab mode loaded")))
+
+
+(setq php-file "~/.emacs.d/php-mode.el")
+(if (file-exists-p php-file)
+    (progn (load php-file)
+           (setq auto-mode-alist
+                 (cons '("\\.php\\'" . php-mode)
+                       auto-mode-alist))
+           (message "php mode loaded")))
+
+;; (setq python-file "~/.emacs.d/python-mode/python-mode.el")
+;; (if (file-exists-p python-file)
+;;     (progn (load python-file)
+;;            (setq auto-mode-alist
+;;                  (cons '("\\.\\(py\\)\\'" . python-mode)
+;;                        auto-mode-alist))
+;;            (message "python mode loaded")))
+
+;(setq auto-mode-alist
+;      (cons '("\\.\\(js\\)\\'" . c-mode)
+;            auto-mode-alist))
+
+(defun remove-hard-wrap () 
+  "Make several lines into a single long line."
+  (interactive)
+  (let ((fill-column 90002000))
+    (fill-paragraph nil)))
+(global-set-key "\C-x\M-q" 'remove-hard-wrap)
+
+;(setq javascript-file "~/.emacs.d/javascript-mode.el")
+;(if (file-exists-p javascript-file)
+;    (progn (load javascript-file)
+;           (setq auto-mode-alist
+;                 (cons '("\\.\\(js\\)\\'" . javascript-mode)
+;                       auto-mode-alist))
+;           (message "javascript mode loaded")))
+
+(defun dot-truncate (string n) 
+  "Truncate a string and add a leading ellipe if over a permitted length."
+  (if (> (length string) n)
+      (concat "…" (substring string (- 0 (- n 1))))
+    string))
+
+;; Set a Mode Line that tells me which machine, which directory,
+;; and which line I am on, plus the other customary information.
+;;
+;; From: http://www.gnu.org/software/emacs/emacs-lisp-intro/html_node/Mode-Line.html
+(setq default-mode-line-format
+      (quote
+       (#("DGU!-" 0 1 ; Don't Give Up!
+          (help-echo
+           "mouse-1: select window, mouse-2: delete others ..."))
+        mode-line-mule-info
+        mode-line-modified
+        mode-line-frame-identification
+        "  "
+        mode-line-buffer-identification
+;        (:eval (dot-truncate (abbreviate-file-name (buffer-file-name)) 40))
+        "  "
+        #(" " 0 1
+          (help-echo
+           "mouse-1: select window, mouse-2: delete others ..."))
+;        (line-number-mode " Line %l ")
+        "%03l:%02c (%m)"
+        global-mode-string
+        #("   %[(" 0 6
+          (help-echo
+           "mouse-1: select window, mouse-2: delete others ..."))
+        (:eval (mode-line-mode-name))
+        mode-line-process
+        minor-mode-alist
+        #("%n" 0 2 (help-echo "mouse-2: widen" local-map (keymap ...)))
+        ")%] "
+        (-3 . "%P")
+        " "
+        ;;   "-%-"
+        (:eval (substring
+                (system-name) 0 (string-match "\\..+" (system-name))))
+        ":"
+        default-directory
+        )))
+
+;;       (setq default-mode-line-format
+;;             (list 
+;;       " Don't Give Up " '(:eval (if (buffer-modified-p) "-" "=")) "> "
+;;        mode-line-mule-info
+;;        '(32 (:eval (dot-truncate (abbreviate-file-name (buffer-file-name)) 40)))
+;;        '"%03l:%02c (%m)"))
+;;        '(:eval (make-string (- (frame-width)
+;;                                (length (format-mode-line "Line %l, Pos %c (%m)")) 48) ?\ ))
+;;        " Line %l, Pos %c (%m) "))
+
+;; ===== Function to delete a line =====
+
+;; First define a variable which will store the previous column position
+(defvar previous-column nil "Save the column position")
+
+;; Define the nuke-line function. The line is killed, then the newline
+;; character is deleted. The column which the cursor was positioned at is then
+;; restored. Because the kill-line function is used, the contents deleted can
+;; be later restored by usibackward-delete-char-untabifyng the yank commands.
+(defun nuke-line()
+  "Kill an entire line, including the trailing newline character"
+  (interactive)
+
+  ;; Store the current column position, so it can later be restored for a more
+  ;; natural feel to the deletion
+  (setq previous-column (current-column))
+
+  ;; Now move to the end of the current line
+  (end-of-line)
+
+  ;; Test the length of the line. If it is 0, there is no need for a
+  ;; kill-line. All that happens in this case is that the new-line character
+  ;; is deleted.
+  (if (= (current-column) 0)
+    (delete-char 1)
+
+    ;; This is the 'else' clause. The current line being deleted is not zero
+    ;; in length. First remove the line by moving to its start and then
+    ;; killing, followed by deletion of the newline character, and then
+    ;; finally restoration of the column position.
+    (progn
+      (beginning-of-line)
+      (kill-line)
+      (delete-char 1)
+      (move-to-column previous-column))))
+
+;; Now bind the delete line function to the F8 key
+; (global-set-key [f8] 'nuke-line)
+
+(setq-default ispell-program-name "aspell")
