@@ -6,6 +6,7 @@
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    version="1.0"
    width="100%"
@@ -26,12 +27,56 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <defs
-     id="defs2425">
-    <style
-       type="text/css"
-       id="style3039" />
-  </defs>
+  <script
+      xlink:href=".../lib/jquery/js"
+      id="script3041"
+      type="text/javascript" />
+  <script
+      type="text/javascript"
+      id="script3045">
+      // From: http://www.benwatts.ca/sandbox/jquery-colourific/
+
+      function genColor() {
+        var r = Math.floor( Math.random() * 256 )
+        var g = Math.floor( Math.random() * 256 )
+        var b = Math.floor( Math.random() * 256 )
+        return '#' + toHex( r, g, b ).join( '' )
+      }
+
+      function toHex() {
+        var args = Array.prototype.slice.call( arguments )
+        var list = ( $(args).map( function( idx, arg ) {
+                     return ( ( arg &lt; 10 ? '0' : '' )
+                              + arg.toString( 16 ) )
+                   } ) ).get()
+        return list
+      }
+    </script>
+    <script type="text/javascript">
+      $(function() {
+        var TIMEOUT = 1000
+
+        function recolor() {
+          $( 'path, rect' ).each( function() {
+            $(this).css({
+              fill : genColor(),
+              stroke : genColor(),
+            })
+          } )
+          //$('#background').animate({ fill : genColor() })
+        }
+        var interval = undefined
+        $(document).click( function() {
+          if( interval ) {
+            clearInterval( interval )
+            interval = undefined
+          } else {
+            recolor()
+            interval = setInterval( recolor, TIMEOUT )
+          }
+        } )
+      } )
+    </script>
   <g
      transform="translate(-97.362848,-243.23734)"
      id="layer1">
