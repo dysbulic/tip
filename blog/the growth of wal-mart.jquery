@@ -5,6 +5,9 @@
     var geocoder
     var map 
 
+    // A sorted list of active locations
+    var locations = []
+
     function buildUI() {
         $container = 
             $('<div/>')
@@ -81,8 +84,8 @@
     }
 
     var service_url = 'http://api.freebase.com/api/service/mqlread'
-    function retrieveLocations( mql, oncomplete ) {
-        var callback = function( data ) {
+    function retrieveLocations( mql, oncomplete, callback ) {
+        callback = callback || function( data ) {
             var locations = []
             $(data.result[0].locations).each( function( idx, location ) {
                 var addr = location[ 'mail:address' ]
@@ -94,13 +97,22 @@
                     city : addr.citytown.name,
                     state : addr.state_province_region.name,
                     zip : addr.postal_code.name,
+                    date : {
+                        open : ( function() {
+                            var date = new Date( location.opening_date )
+                            var toString = date.toString
+                            date.toString = function() {
+                                return toString.call( this, 'isoDate' )
+                            }
+                            return date
+                        } )(),
+                        close : Date.parse( location.closing_date ),
+                    },
                 } )
             } )
-            oncomplete.apply( this, locations )
+            arguments.callee.oncomplete.call( this, locations )
         }
-        var callbackPath = ( document.location + '/' + $current.attr( 'src' )
-                             + '/' + arguments.callee.name + '/callback' )
-        $(window).data( callbackPath, callback )
+        callback.oncomplete = oncomplete
 
         var query_envelope = { query : mql }
         $.getJSON( service_url + '?callback=?',
@@ -108,13 +120,18 @@
                    callback )
     }
     
-    function addMarkers( locations ) {
-        $(locations).each( function( idx, loc ) {
+    function addMarkers( locs ) {
+        $(locs).each( function( idx, loc ) {
             var $info = $('<div/>').addClass( 'info' )
             $info.append( $('<h1/>').text( loc.name ) )
             var $props
             $info.append( $props = $('<ul/>') )
         
+            $props.append( $('<li/>').text( 'Opened: ' + loc.date.open ) )
+            if( loc.date.close ) {
+                $props.append( $('<li/>').text( 'Closed: ' + loc.date.close ) )
+            }
+
             $props.append( $('<li/>').text( loc.street ) )
             $props.append( $('<li/>').text( loc.city + ', ' + loc.state + ' ' + loc.zip ))
         
@@ -123,6 +140,10 @@
             } )
 
             loc.marker = placeMarker( loc.pos, loc.name, loc.infowin )
+        } )
+        locations.concat( locs )
+        locations.sort( function( a, b ) {
+            
         } )
     }
 
