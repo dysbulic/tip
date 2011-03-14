@@ -5,7 +5,7 @@
   <head>
     <title>Unofficial Undergraduate Transcript for Will Holcomb</title>
     <style type="text/css">
-      #transcript { width: 600px; }
+      body { max-width: 800px; margin: 3em auto; }
       table { width: 100%; border-collapse: collapse; }
       table + table { margin-top: 1em; }
       th, td { border: 1px solid; padding: .25em .5em; }
@@ -14,26 +14,36 @@
       .classes { cursor: crosshair; }
       .selected { background-color: yellow; }
     </style>
-    <script type="text/javascript" src="compatability.js"></script>
+    <script type="text/javascript" src=".../lib/google/loader/js"></script>
+    <script type="text/javascript"> google.load( 'jquery', '1.5', { uncompressed : false } ) </script>
+
     <script type="text/javascript">//<![CDATA[
       var resultTable = document.createElement("table");
-      function click(event) {
-        toggleRow(getSource(event));
+      function click( event ) {
+        toggleRow( this )
       }
-      function hover(event) {
-        if(event.ctrlKey) toggleRow(getSource(event));
+      function hover( event ) {
+        if( event.ctrlKey ) {
+          toggleRow( this )
+        }
       }
-      function toggleRow(row) {
-        while(row.nodeName.toLowerCase() != "tr") { row = row.parentNode; }
-        if(row.className.match(/selected/)) { removeRow(row); }
-        else { addRow(row); }
+      function toggleRow( row ) {
+        while( row.nodeName.toLowerCase() != 'tr' ) {
+          row = row.parentNode
+        }
+        if( $(row).hasClass( 'selected' ) ) {
+          removeRow( row )
+        }
+        else {
+          addRow( row )
+        }
       }
-      function addRow(row) {
-        resultTable.appendChild(row.cloneNode(true));
-        row.className += " selected";
-        recompute();
+      function addRow( row ) {
+        resultTable.appendChild( row.cloneNode( true ) )
+        $(row).addClass( 'selected' )
+        recompute()
       }
-      function removeRow(row) {
+      function removeRow( row ) {
         for(var i = resultTable.childNodes.length - 1; i >= 0; i--) {
           if(resultTable.childNodes[i].getAttribute("id") == row.getAttribute("id")) {
             resultTable.removeChild(resultTable.childNodes[i]);
@@ -58,7 +68,7 @@
         resultTable.firstChild.firstChild.data =
           (totalPoints + " / " + totalHours + " = " + Math.round(1000 * average) / 1000);
       }
-      function init() {
+      $( function() {
         var tables = document.getElementsByTagName("table");
         for(var i = 0; i < tables.length; i++) {
           var table = tables.item(i);
@@ -76,8 +86,7 @@
                 row.setAttribute("id", (row.childNodes[0].firstChild.data +
                                         row.childNodes[1].firstChild.data + "-" +
                                         row.childNodes[2].firstChild.data + "-" + i));
-                addListener(row, "click", click);
-                addListener(row, "mouseover", hover);
+                $(row).click( click ).hover( hover )
               }
             }
           }
@@ -86,8 +95,7 @@
         resultTable.appendChild(document.createElement("caption"));
         resultTable.firstChild.appendChild(document.createTextNode("Results"));
         document.getElementsByTagName("body").item(0).appendChild(resultTable);
-      }
-      addListener(this, "load", init);
+      } )
       //]]></script>
   </head>
   <body>
