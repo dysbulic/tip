@@ -1,0 +1,59 @@
+table {
+  width: 95%;
+  margin: auto;
+  border-collapse: collapse;
+}
+
+tbody a {
+  display: block;
+}
+
+@media print {
+  table {
+    margin: none;
+    width: 100%
+    font-size: 11pt;
+  }
+
+  col#home {
+    width: 25%;
+  }
+
+  td, th {
+    border: medium inset ! important;
+  }
+}
+
+thead {
+  background-color: rgb(48, 88, 169);
+  color: white;
+}
+
+th a {
+  color: white;
+}
+
+thead td, thead th {
+  border-top: none;
+  border-bottom: double black;
+}
+
+td, th {
+  border: thin dashed gray;
+  text-align: center;
+  page-break-inside: avoid;
+}
+
+tr td:first-child, tr th:first-child {
+  border-left: none;
+  border-right: double;
+}
+
+tr td:last-child, tr th:last-child {
+  border-right: none;
+}
+
+tr:hover {
+  background-color: yellow;
+  color: rgb(38, 48, 129);
+}
