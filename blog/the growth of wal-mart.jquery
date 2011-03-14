@@ -1,15 +1,19 @@
 ( function() {
     var $current = $('body').children().last()
+    var $container, $map, $slider
 
-    $( function() {
-        var $container = 
+    var geocoder
+    var map 
+
+    function buildUI() {
+        $container = 
             $('<div/>')
             .css( {
                 height : '500px',
                 width : '900px',
                 margin : 'auto',
             } )
-        var $map =
+        $map =
             $('<div/>')
             .css( {
                 height : '100%',
@@ -17,150 +21,139 @@
             } )
         $container.append( $map )
 
-        var $slider =
+        $slider =
             $('<div/>')
             .slider()
         $container.append( $slider )
                            
         $current.after( $container )
+    }
+
+    // Places a marker on the map at pos with an optional InfoWindow
+    function placeMarker( pos, title, infowin ) {
+        pos = new google.maps.LatLng( pos.latitude, pos.longitude )
+        var marker = new google.maps.Marker( {
+            position : pos,
+            map : map,
+            title : title,
+        } )
+        if( infowin ) {
+            infowin.isOpen = false
+            var opener = infowin.open
+            infowin.open = function() {
+                opener.apply( this, arguments )
+                infowin.isOpen = true
+            }
+            var closer = infowin.close
+            infowin.close = function() {
+                closer.apply( this, arguments )
+                infowin.isOpen = false
+            }
+            google.maps.event.addListener( marker, 'click', function() {
+                if( !infowin.isOpen ) {
+                    infowin.open( map, marker )
+                } else {
+                    infowin.close()
+                }
+            } )
+            // Has no effect
+            google.maps.event.addListener( infowin, 'click', function() {
+                infowin.close()
+            } )
+            $(infowin.getContent()).click( function() {
+                infowin.close()
+            } )
+        }
+    }
+
+    // Look up address and place a marker
+    function markAddress( address, title ) {
+        geocoder.geocode( { address : address }, function( results, status ) {
+            if( status == google.maps.GeocoderStatus.OK ) {
+                var pos = results[0].geometry.location
+                pos.__defineGetter__( 'latitude', function() { return pos.lat } )
+                pos.__defineGetter__( 'longitude', function() { return pos.long } )
+                placeMarker( pos )
+            } else {
+                console.log( 'Geocode Failed: ' + status )
+            }
+        } )
+    }
+
+    var service_url = 'http://api.freebase.com/api/service/mqlread'
+    function retrieveLocations( mql, oncomplete ) {
+        var callback = function( data ) {
+            var locations = []
+            $(data.result[0].locations).each( function( idx, location ) {
+                var addr = location[ 'mail:address' ]
+                
+                locations.push( {
+                    name : location.name,
+                    pos : location[ 'geo:address' ].geolocation,
+                    street : addr.street_address.value,
+                    city : addr.citytown.name,
+                    state : addr.state_province_region.name,
+                    zip : addr.postal_code.name,
+                } )
+            } )
+            oncomplete.apply( this, locations )
+        }
+        var callbackPath = ( document.location + '/' + $current.attr( 'src' )
+                             + '/' + arguments.callee.name + '/callback' )
+        $(window).data( callbackPath, callback )
+
+        var query_envelope = { query : mql }
+        $.getJSON( service_url + '?callback=?',
+                   { query : JSON.stringify( query_envelope ) },
+                   callback )
+    }
     
-        var geocoder = new google.maps.Geocoder()
-    
+    function addMarkers( locations ) {
+        $(locations).each( function( idx, loc ) {
+            var $info = $('<div/>').addClass( 'info' )
+            $info.append( $('<h1/>').text( loc.name ) )
+            var $props
+            $info.append( $props = $('<ul/>') )
+        
+            $props.append( $('<li/>').text( loc.street ) )
+            $props.append( $('<li/>').text( loc.city + ', ' + loc.state + ' ' + loc.zip ))
+        
+            loc.infowin = new google.maps.InfoWindow( {
+                content : $info.get(0),
+            } )
+
+            loc.marker = placeMarker( loc.pos, loc.name, loc.infowin )
+        } )
+    }
+
+    $( function() {
+        buildUI()
+
         var mapOptions = {
             zoom : 4,
             mapTypeId : google.maps.MapTypeId.ROADMAP,
         }
-        var map = new google.maps.Map( $map.get(0), mapOptions )
+        map = new google.maps.Map( $map.get(0), mapOptions )
+        geocoder = new google.maps.Geocoder()
     
         var address = 'United States'
         geocoder.geocode( { address : address }, function( results, status ) {
             if( status == google.maps.GeocoderStatus.OK ) {
                 map.setCenter( results[0].geometry.location, 4, google.maps.MapTypeId.ROADMAP )
             } else {
-                console.log( 'Geocode was not successful for the following reason: ' + status )
+                console.log( 'Geocode Failed: ' + status )
             }
         } )
 
         var loc = google.loader.ClientLocation
         placeMarker( loc, 'Current Location' )
         
-        function placeMarker( pos, title, infowin ) {
-            pos = new google.maps.LatLng( pos.latitude, pos.longitude )
-            var marker = new google.maps.Marker( {
-                position : pos,
-                map : map,
-                title : title,
-            } )
-            if( infowin ) {
-                infowin.isOpen = false
-                var opener = infowin.open
-                infowin.open = function() {
-                    opener.apply( this, arguments )
-                    infowin.isOpen = true
-                }
-                var closer = infowin.close
-                infowin.close = function() {
-                    closer.apply( this, arguments )
-                    infowin.isOpen = false
-                }
-                google.maps.event.addListener( marker, 'click', function() {
-                    if( !infowin.isOpen ) {
-                        infowin.open( map, marker )
-                    } else {
-                        infowin.close()
-                    }
-                } )
-                // Has no effect
-                google.maps.event.addListener( infowin, 'click', function() {
-                    infowin.close()
-                } )
-                $(infowin.getContent()).click( function() {
-                    infowin.close()
-                } )
-            }
-        }
-        
-        function markAddress( address, title ) {
-            geocoder.geocode( { address : address }, function( results, status ) {
-                if( status == google.maps.GeocoderStatus.OK ) {
-                    var pos = results[0].geometry.location
-                    pos.__defineGetter__( 'latitude', function() { return pos.lat } )
-                    pos.__defineGetter__( 'longitude', function() { return pos.long } )
-                    placeMarker( pos )
-                } else {
-                    console.log( 'Geocode was not successful for the following reason: ' + status )
-                }
-            } )
-        }
-        
-        var mql = [ {
-            id : '/en/wal-mart',
-            type : '/organization/organization',
-            locations: [ {
-                name : null,
-                opening_date : null,
-                'mail:address' : {
-                    //index : null,
-                    //sort : 'index',
-                    citytown : {
-                        name : null,
-                        optional : true
-                    },
-                    postal_code : {
-                        name : null,
-                        optional : true
-                    },
-                    state_province_region : {
-                        name : null,
-                        optional : true
-                    },
-                    street_address: {
-                        lang : '/lang/en',
-                        optional : true,
-                        type : '/type/text',
-                        value : null
-                    },
-                    type : '/location/mailing_address',
-                },
-                'geo:address' : {
-                    type :  '/location/location',
-                    geolocation : {
-                        latitude :  null,
-                        longitude : null,
-                    },
-                },
-            } ],
-        } ]
-        
-        var query_envelope = { query : mql }
-        var service_url = 'http://api.freebase.com/api/service/mqlread'
-        
-        $.getJSON( service_url + '?callback=?',
-                   { query : JSON.stringify( query_envelope ) },
+        var mqlURI = 'query/Wal-mart/locations/mql'
+        mqlURI = 'http://loki/blog/query/Wal-mart/locations/mql'
+
+        $.getJSON( mqlURI,
                    function( data ) {
-                       console.log( data )
-                       $(data.result[0].locations).each( function( idx, location ) {
-                           var pos = location[ 'geo:address' ].geolocation
-
-                           var $info = $('<div/>').addClass( 'info' )
-                           $info.append( $('<h1/>').text( location.name ) )
-                           var $props
-                           $info.append( $props = $('<ul/>') )
-
-                           var addr = location[ 'mail:address' ]
-
-                           $props.append( $('<li/>').text( addr.street_address.value ) )
-                           $props.append( $('<li/>')
-                                          .text( addr.citytown.name
-                                                 + ', ' + addr.state_province_region.name
-                                                 + ' ' + addr.postal_code.name ) )
-
-                           var infowin = new google.maps.InfoWindow( {
-                               content : $info.get(0),
-                           } )
-
-                           placeMarker( pos, location.name, infowin )
-                       } )
+                       retrieveLocations( data, addMarkers )
                    } )
     } )
 } )()
