@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# If running interactively, then:
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
 
 if [ "$PS1" ]; then
     PS1='\n\u@\h\[\033[1;35m\]:\[\033[0m\]\w\[\033[1;33m\]\$\[\033[0m\] '
@@ -202,6 +203,9 @@ export XMODIFIERS="@im=${XIM}"
 # Make bash append rather than overwrite the history on disk
 shopt -s histappend
 
+# don't put duplicate lines in the history. See bash(1) for more options
+HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
+
 # Check the window size after each command and update LINES and COLUMNS.
 shopt -s checkwinsize
 
@@ -293,6 +297,9 @@ function mplayer() {
     fi
     "$MPLAYERCMD" $MPLAYERARGS "$@"
 }
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # OSX terminal emulators have trouble with the delete key on the command line
 # stty erase 
@@ -511,6 +518,17 @@ else
     alias dir > /dev/null 2> /dev/null && alias dir="ls --color"
 fi
 
+# set a fancy prompt (non-color, unless we know we "want" color)
+if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    color_prompt=yes
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
 
 if [ ! "${BASH_VERSINFO[5]/solaris/}" != "${BASH_VERSINFO[5]}" ]; then # not in solaris
     alias emacs="emacs -nw"
