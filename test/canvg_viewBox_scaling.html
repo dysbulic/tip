@@ -10,6 +10,7 @@
 <style type="text/css">
   object, canvas { display: block; margin: auto }
   .error { text-align: center; font-weight: bold; color: red; }
+  body { max-width: 600px; margin: 3em auto; }
 </style>
 </head>
 <body>
@@ -22,11 +23,13 @@
 
 <script type="text/javascript">//<![CDATA[
 var dataURI = '.../image/animal/cow/'
-var $couch = $('<object/>')
+var max = 300
+var $couch
+$('<div/>').width( max ).height( max ).css( { margin : 'auto' } )
+.appendTo( $('body') )
+.append( $couch = $('<object/>')
   .css( { position : 'relative' } )
-  .attr( { type : 'image/svg+xml', data : dataURI } )
-  .wrap( $('<div/>').width( 300 ).height( 300 ).css( { margin : 'auto' } )
-         .appendTo( $('body') ) )
+  .attr( { type : 'image/svg+xml', data : dataURI } ) )
 
 $( function() {
   // This check must be disabled to allow animation on objects in jQuery 1.5
@@ -36,9 +39,9 @@ $( function() {
       try {
         var grow = !$couch.data( 'growing' )
         $couch.animate( {
-          width : grow ? 300 : 0,
-          height: grow ? 300 : 0,
-          top : grow ? 0 : 150,
+          width : grow ? max : 0,
+          height: grow ? max : 0,
+          top : grow ? 0 : max / 2,
         },
         5000,
         arguments.callee )
@@ -57,14 +60,16 @@ $( function() {
 <script type="text/javascript" src="http://canvg.googlecode.com/svn/trunk/canvg.js"></script> 
 
 <script type="text/javascript">//<![CDATA[
-var $canvas = $('<canvas/>').css( { width: 500, height: 500 } )
+var $canvas = $('<canvas/>').css( { width: 300, height: 300 } )
 $('body').append( $canvas )
 canvg( $canvas.get( 0 ), dataURI )
 //]]></script>
 
+<p>One method of getting a correct render is to load the image, compute a height and width and set them prior to rendering:</p>
+
 <script type="text/javascript">//<![CDATA[
-$( function() {
-  var $canvas = $('<canvas/>').css( { width: 500, height: 500 } )
+function drawSVG() {
+  var $canvas = $('<canvas/>').css( { width: 300, height: 300 } )
   $('body').append( $canvas )
   $.get( dataURI,
          function( data ) {
@@ -78,7 +83,14 @@ $( function() {
            data = ( new XMLSerializer() ).serializeToString( data )
            canvg( $canvas.get( 0 ), data )
          } )
-} )
+}
+drawSVG()
+//]]></script>
+
+<p>This is done with the function:</p>
+
+<script type="text/javascript">//<![CDATA[
+$('body').append( $('<pre/>').text( drawSVG.toString() ) )
 //]]></script>
 </body>
 </html>
