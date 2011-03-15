@@ -5,25 +5,16 @@
 
 /* Color Styles */
 
-body {
-    background-color: #FFFDEE;
-}
+@import url('.../style/quotes/css');
+@import url('.../font/VKB%20KonQa/css');
 
-#logo {
-    background-color: #BD6731;
-}
-
-#title {
-    background-color: #FFF5EE;
-}
+body { background-color: #FFFDEE; }
+#logo { background-color: #BD6731; }
+#title { background-color: #FFF5EE; }
 
 #header {
-    background-image: url('background.png');
+    background-image: url('background.svg');
     color: #0f0f30;
-}
-
-#header h3 {
-    background-image: url('title_text.png');
 }
 
 #title h1, #title h2 {
@@ -38,6 +29,16 @@ body {
 
 /* Structural Styles */
 
+/* ToDo: get anchors to overlay objects so clicks register */
+
+#navigation li a, #navigation li { display: block; width: 150px; height: 140px; }
+#navigation li { opacity: .5; }
+#navigation li:hover { opacity: 1; }
+
+#navigation li { position: relative; background-color: transparent; z-index: 4; }
+#navigation li a { position: relative; background-color: transparent; z-index: 3; }
+#navigation li object { position: relative; z-index: -1; }
+
 html {
   margin: 0;
   height: 100%;
@@ -48,6 +49,10 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Myraid Pro", "Trebuchet", "Trebuchet MS", Verdana, Arial, sans-serif;
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 #header ol {
@@ -124,7 +129,7 @@ body {
 #header h3, #header h3 a {
     display: block;
     text-align: center;
-    font-size: 37px;
+    font-size: 40px;
     font-family: 'VKB KonQa';
     width: 700px;
     height: 51px;
@@ -156,7 +161,7 @@ body {
     font-size: 25px;
 }
 
-#body, #footer {
+section, #footer {
     clear: both;
     max-width: 600px;
     margin: auto;
