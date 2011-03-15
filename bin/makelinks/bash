@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Author: Will Holcomb <will@doh.gov>
+# Description: Program to build a local Tipspace as a set of links on top of a filesystem.
+
+# Revision 0.1: 8 September 2009
+# Roots .~ at the home directory
+# Roots ... at the universal namespace
+# Loads file extensions from 
+
+function checkdir() {
+    pushd -- "$1" > /dev/null
+    pwd
+    [ -e "..." ] || ln -s ../... ...
+    [ -e ".~" ] || ln -s ../.~ .~
+    for file in *; do
+        if [[ -d "$file" && ! -L "$file" ]]; then
+            checkdir "$file"
+        fi
+    done
+    popd > /dev/null
+}
+
+dir=${1:-.}
+checkdir "$dir"

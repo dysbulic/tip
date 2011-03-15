@@ -144,6 +144,11 @@
                        auto-mode-alist))
            (message "nxml mode loaded")))
 
+(setq auto-mode-alist
+      (cons '("\\(css\\)" . css-mode)
+            auto-mode-alist))
+
+
 (fset 'xml-mode 'nxml-mode)
 (fset 'html-mode 'nxml-mode)
 
