@@ -42,9 +42,9 @@ AddEncoding x-gzip .svgz
 #RewriteCond %{REQUEST_URI} ^.*gmail/*(.*)$ [NC]
 #RewriteRule ^(.*)$ http://gmail.com/%1 [R,L]
 
-<FilesMatch ".svn">
-  AuthUserFile /home/will/sites/.htpasswd
-  AuthName "Subversion Pass"
+<FilesMatch ".svn|.git">
+  AuthUserFile .../.htpasswd
+  AuthName "Versioning Pass"
   AuthType Basic
   Require Valid-User
 </FilesMatch> 
