@@ -33,7 +33,9 @@ $('<div/>').width( max ).height( max ).css( { margin : 'auto' } )
 
 $( function() {
   // This check must be disabled to allow animation on objects in jQuery 1.5
-  $.noData[ 'object' ] = location.search == '?disableNoData'
+  if( location.search != '?leaveNoData' ) {
+    $.noData[ 'object' ] = false
+  }
 
   ;( function() {
       try {
