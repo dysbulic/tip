@@ -1,0 +1,81 @@
+table.data { border-collapse: collapse; width: 100%; }
+table.data, table.data th, table.data td { border: 1px solid; }
+table.data th, table.data td { padding: .25em .5em; }
+
+h1, h2, h3 { text-align: center; font-family: Arial; }
+/*
+h1 { page-break-after: auto; }
+h2 { page-break-before: auto; }
+*/
+section { margin-top: 1em; }
+p.first { text-indent: 0; margin-top: 1em; }
+p { text-indent: 1.5em; margin-top: .3em; margin-bottom: .25em; }
+span.start { font-variant: small-caps; }
+hr { width: 50%; }
+
+p.sig { text-align: right }
+
+i i, em i, i em, i cite { font-style: normal; }
+
+.break-before { page-break-before: always }
+.break-after { page-break-after: always }
+
+.small-caps { font-variant: small-caps }
+.uppercase { text-transform: uppercase }
+.italic { font-style: italic }
+.bold { font-weight: bold }
+.monospace { font-family: monospace }
+.normal { font-variant: normal; font-weight: normal; font-style: normal; }
+
+.chapter { page-break-before: always }
+
+.quote  { margin-left: 3em; margin-right: 3em; font-style: italic; }
+.poetry { margin-left: 3em; margin-right: 3em; font-style: italic; text-indent: 0; }
+.define { margin-left: 3em; margin-right: 3em; text-indent: -1.3em; }
+
+.right  { text-align: right }
+.center { text-indent: 0; text-align: center }
+.left  { text-align: left }
+
+img.center, object.center { display: block; margin-left: auto; margin-right: auto; }
+
+.bold { font-weight: bold }
+.italic { font-style: italic }
+
+.noindent, div.noindent > * { text-indent: 0 }
+
+q:before { content: '\201C' }
+q:after { content: '\201D' }
+q.continued:after { content: '' }
+q.single:before, q q:before { content: '\2018' }
+q.single:after, q q:after { content: '\2019' }
+[lang="fr"] q:before { content: '\AB' }
+[lang="fr"] q:after { content: '\BB' }
+[lang="fr"] q q:before { content: '\2039' }
+[lang="fr"] q q:after { content: '\203A' }
+
+wbr:after { content: '\200B' }
+
+@media screen {
+  body { max-width: 600px; margin: auto; font-size: 13pt;
+         font-family: Georgia, "Times New Roman"; line-height: 1.15em;
+         background-color: #F7F7F7; }
+
+}
+
+.column.left, .column.right {
+  width: 46%;
+  padding: 1%;
+}
+
+.left { float: left }
+.right { float: right }
+
+.block:after {
+  content: ''; display: block; clear: both;
+}
+
+/* Multiple quoted paragraphs don't end with a trailing quote */
+q.continued:after { content: ''; }
+
+img.cover { display: block; margin: auto; }
