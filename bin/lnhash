@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HASHDIR=".../hashes"
+HASHDIR=".../hashes/sha256"
 HASHCMD="sha256sum"
 
 ROOTDIR=${HASHDIR%%/*}
@@ -21,7 +21,9 @@ ROOTDIR=${HASHDIR%%/*}
 mkdir -pv "$HASHDIR"
 for file in "$@"; do
     HASH=$($HASHCMD "$file" | sed -e 's| .*||')
+    echo -n "Move: "
     mv -v "$file" "$HASHDIR/$HASH"
+    echo -n "Link: "
     ln -sv "$HASHDIR/$HASH" "$file"
 done
 
