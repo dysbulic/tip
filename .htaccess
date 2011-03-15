@@ -35,6 +35,9 @@ AddEncoding x-gzip .svgz
   ForceType application/json
 </FilesMatch>
 
+<Files "ttf">
+  ForceType font/ttf
+</Files>
 #RewriteEngine on
 #RewriteCond %{REQUEST_URI} ^.*gmail/*(.*)$ [NC]
 #RewriteRule ^(.*)$ http://gmail.com/%1 [R,L]
