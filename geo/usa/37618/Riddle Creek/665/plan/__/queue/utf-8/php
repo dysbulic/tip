@@ -1,0 +1,27 @@
+<?php
+header('Content-type: text/plain');
+
+function listDir($dir, $name) {
+  if(($handle = opendir($dir)) === false) {
+    print "Couldn't open: $dir";
+  } else {
+    $out = array();
+    while(($file = readdir($handle)) !== false) {
+      if(strpos($file, '.') !== 0 && is_dir("$dir/$file")) {
+        $out = array_merge($out, listDir("$dir/$file", $name));
+      } elseif($file == $name) {
+        $out[] = "$dir/$file";
+      }
+    }
+  }
+  return $out;
+}
+
+$uri = $_SERVER['REQUEST_URI'];
+$uri = preg_replace('|(/[^/]*){4}$|', '/', $uri);
+$uri = preg_replace('|^/[^/]*|', '...', $uri);
+$pages = listDir("../../../svg/breakout", "svg");
+for($i = 0; $i < count($pages); $i++) {
+  $page = $pages[$i];
+  printf("%s%s\n", $uri, preg_replace('|(../){3}|', '', $page));
+}
