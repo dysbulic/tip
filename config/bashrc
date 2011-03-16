@@ -576,5 +576,9 @@ alias syncfiles="find \"$WEBSITE_DIR\" \\( -name \"*~\" -or -name \".*~\" \\) -p
                     \"$WEBSITE_DIR\" will@himinbi.org:"
 
 HASHDIR=".../hashes/"
-alias pushhashes="rsync --rsh=ssh --partial --progress --verbose --recursive \
-                        --archive --compress \"$HASHDIR\" wjholcomb@himinbi.org:$HASHDIR"
+LOCAL="$HASHDIR"
+REMOTE="wjholcomb@himinbi.org:$HASHDIR"
+ARGS="--rsh=ssh --partial --progress --verbose --recursive --archive --compress"
+
+alias pushhashes="rsync $ARGS \"$LOCAL\" \"$REMOTE\""
+alias pullhashes="rsync $ARGS \"$REMOTE\" \"$LOCAL\""
