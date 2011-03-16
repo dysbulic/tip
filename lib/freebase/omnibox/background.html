@@ -6,17 +6,17 @@ $( function(){
 chrome.omnibox.onInputChanged.addListener(
   function( text, suggest ) {
     console.log( 'inputChanged: ' + text )
-    var sugg=[];
 
-   $.getJSON( "http://westport.freebaseapps.com/newjsonp?q=" + text + "&callback=?", 
+    $.getJSON( "http://westport.freebaseapps.com/newjsonp?q=" + text + "&callback=?", 
           function( data ) {
-            for( var i in data.response ) {
-              sugg.push( {
-                content : data.response[i].id,
-                description : data.response[i].name
+            var suggestions = []
+            $( data.response ).each( function( idx, suggestion ) {
+              suggestions.push( {
+                content : suggestion.id,
+                description : suggestion.name
               } )
             }
-            suggest( sugg )
+            suggest( suggestions )
           } )
 } )
 

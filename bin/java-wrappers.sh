@@ -189,12 +189,15 @@ locate_jar() {
     return 0			# Found
 }
 
+PATHSEP=":"
+[ "$OSTYPE" == "cygwin" ] && PATHSEP=";" 
+
 # Find jars and add them to the classpath
 find_jars() {
     looked_for_jars=1
     for jar in $@ ; do
 	if locate_jar $jar; then
-	    JAVA_CLASSPATH=$JAVA_CLASSPATH:$found_jar
+	    JAVA_CLASSPATH=$JAVA_CLASSPATH$PATHSEP$found_jar
 	else
 	    java_warning "Unable to locate $jar in $JAVA_JARPATH"
 	fi
@@ -207,7 +210,7 @@ find_one_jar_in() {
     looked_for_jars=1
     for jar in $@ ; do
 	if locate_jar $jar; then 
-	    JAVA_CLASSPATH=$JAVA_CLASSPATH:$found_jar
+	    JAVA_CLASSPATH=$JAVA_CLASSPATH$PATHSEP$found_jar
 	    return 0
 	fi
     done
@@ -240,7 +243,8 @@ run_java() {
     export JAVA_HOME
     java_debug "Environment variable CLASSPATH is '$CLASSPATH'"
     java_debug "Runnning $JAVA_CMD $JAVA_ARGS $cp $@"
-    exec $JAVA_CMD $JAVA_ARGS $cp "$@"
+    echo exec "$JAVA_CMD" $JAVA_ARGS $cp "$@"
+    exec "$JAVA_CMD" $JAVA_ARGS $cp "$@"
 }
 
 # Runs a java jar.
