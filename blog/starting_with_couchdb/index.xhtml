@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tip="http://dhappy.org/tip/0.1/a"
+      xmlns:var="tip:core/var">
+  <head>
+    <title><var:title>Starting With CouchDB</var:title></title>
+    <link rel="stylesheet" type="text/css" href="~/media/style/thesis.css" />
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src=".../sys/lib/tip/src/$.jquery"></script>
+    <style type="text/css">
+    </style>
+  </head>
+  <body>
+    <header>
+      <hgroup>
+        <h1><var:title/></h1>
+        <h2><a href="mailto:Will%20Holcomb%20%3Cwill@dhappy.org%3E">Will Holcomb</a></h2>
+        <h2>11 March 2010</h2>
+      </hgroup>
+    </header>
+
+    <section>
+      <title>Introduction</title>
+      
+      <p>A process log of me working through the <a href="http://www.ibm.com/developerworks/opensource/library/os-couchdb/">IBM tutorial</a> and <a href="http://books.couchdb.org/relax/">O'Reilly book</a> to run <a href="http://couchdb.apache.org">CouchDB.</a></p>
+    </section>
+
+    <section>
+      <title>Aptitude</title>
+
+      <p>There's an aptitude package, so I just ran <code>sudo aptitude</code> and installed <code>couchdb</code>. In the process, I discovered there is already an <a href="http://launchpad.net/desktopcouch">instance</a> running on my machine.</p>
+    </section>
+
+    <section>
+      <title>Creating a Database</title>
+
+      <p>Post-install, there is a <a href="http://localhost:5984/">web endpoint on port 5984</a> which communicates via <a href="http://json.org"><acronym title="Javascript Object Notation">JSON</acronym></a>.</p>
+
+      <p>A <a href="http://localhost:5984/_utils/">utility webapp</a> is also available.</p>
+
+      <p>Database names have to be:</p>
+
+      <ul>
+        <li><code>[a-z]</code> &mdash; lowercase letters</li>
+        <li><code>[0-9]</code> &mdash; digits</li>
+        <li><code>[_$()+,/]</code></li>
+      </ul>
+
+      <p>I created the database: <code><var:db>organization/department/happiness/will</var:db></code>. The slashes have to be urlencoded, so it is: <code><var:dburl>organization%2Fdepartment%2Fhappiness%2Fwill/name</var:dburl></code> The curl command is:</p>
+
+      <p><code>curl -X PUT http://127.0.0.1:5984/<var:dburl/></code></p>
+    </section>
+
+    <section>
+      <title>Listing the Database</title>
+
+      <p>To show all databases, the command is:</p>
+
+      <p><code>curl -X GET http://localhost:5984/_all_dbs</code></p>
+    </section>
+
+    <section>
+      <title>Adding A Value</title>
+
+      <p>To create a new empty document:</p>
+
+      <p><code><var:mkdoc>curl -X PUT http://127.0.0.1:5984/<var:dburl/>/<var:name>name</var:name> -H "Content-Type: application/json" -d <var:content>{}</var:content></var:mkdoc></code></p>
+
+      <p>To create a document with content:</p>
+
+      <p><code><var:mkdoc><var:content>'{ "First": "Will" }'</var:content></var:mkdoc></code></p>
+    </section>
+
+    <section>
+      <title>Test Program</title>
+
+      <p>Next I created a <a href="basic\ map\ reduce.bash">program</a> to test out some of the basic functionality:</p>
+
+      <iframe src="basic\ map\ reduce.bash"></iframe>
+    </section>
+    
+    
+  </body>
+</html>
