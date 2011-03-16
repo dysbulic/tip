@@ -1,11 +1,11 @@
 # Options +Indexes
-HeaderName HEADER.html
+HeaderName .apache.header.html
 IndexOptions Charset=UTF-8 NameWidth=* DescriptionWidth=* FancyIndexing FoldersFirst ScanHTMLTitles SuppressHTMLPreamble XHTML HTMLTable -SuppressIcon
 IndexIgnore .svn *~ .DS_Store HEADER.html svn-commit.tmp
 
 AddCharset UTF-8 .html .php .css .js
 
-DirectoryIndex index.php index.xhtml index.html index.svg xhtml html svg
+DirectoryIndex index.php index.xhtml index.html index.svg php xhtml html svg utf-8 txt
 
 RemoveHandler .sh
 RemoveHandler .py
@@ -19,8 +19,19 @@ AddType text/xml :
 AddType application/javascript .jquery
 AddEncoding x-gzip .svgz
 
+<Files "php">
+  # ToDo: Make futureproof
+  SetHandler php5-script
+  #SetHandler php-script
+  #SetHandler application/x-httpd-php
+</Files>
+
 <Files "svg">
   ForceType image/svg+xml
+</Files>
+
+<Files "utf-8">
+  ForceType text/plain;charset=utf-8
 </Files>
 
 <Files "css">
@@ -38,6 +49,7 @@ AddEncoding x-gzip .svgz
 <Files "ttf">
   ForceType font/ttf
 </Files>
+
 #RewriteEngine on
 #RewriteCond %{REQUEST_URI} ^.*gmail/*(.*)$ [NC]
 #RewriteRule ^(.*)$ http://gmail.com/%1 [R,L]
