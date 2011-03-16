@@ -11,15 +11,15 @@
 
 #GIT_WORK_TREE=~/tip/book/ git checkout
 
-CURRENT="$(pwd)"
-HOME="$(echo ~)"
-LOCAL="${CURRENT#${HOME}/}"
-LIB="repo"
-ROOT="${LOCAL#${LIB}/}"
-TYPE="git"
-PATH="${ROOT%/${TYPE}}"
+current="$(pwd)"
+home="$(echo ~)"
+local="${current#${home}/}"
+lib="repo"
+root="${local#${lib}/}"
+type="git"
+dir="${root%/${type}}"
 
-pushd ~/"$PATH"
-/usr/bin/env -i git pull origin master
-/usr/bin/env -i git remote | grep -q '^github$' && git push github master 
-/usr/bin/env -i git update-server-info
+pushd ~/"$dir"
+env -i git pull origin master
+env -i git remote | grep -q '^github$' && git push github master 
+env -i git update-server-info
