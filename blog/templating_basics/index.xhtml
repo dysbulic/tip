@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:tip="http://dhappy.org/tip/0.1/a" xml:lang="en">
+  <head>
+    <title>Templating Basics</title>
+    <link rel="stylesheet" type="text/css" href="doh.css" />
+    <link rel="stylesheet" type="text/css" href="doh_ie.css" tip:browser="ie"/>
+    <style type="text/css">
+      body { max-width: 750px; margin: auto; }
+      .head h1, .head h2 { text-align: center; }
+      hr { width: 50%; }
+      object { width: 100%; }
+      [data='simple_html_tree.svg'] { height: 200px; }
+      [data='simple_php_tree.svg'] { height: 200px; }
+    </style>
+  </head>
+  <body>
+    <div class="head">
+      <h1>Templating Basics</h1>
+      <h2><a href="mailto:Will%20Holcomb%20%3Cwill@dhappy.org%3E">Will Holcomb</a></h2>
+      <h2>18 January 2010</h2>
+    </div>
+    
+    <p>We'll start with the natural building block of any digital system: the bit. A bit is just a binary digit, a one or a zero. Bits are used to encode information. For example, imagine I have a bunch of red cards and a bunch of green cards. I give a red card to everyone in the country except for the President to whom I give a green one. Since the cards only have two possible states, they are a form of bit. The information associated with that bit, however, is highly complex.</p>
+
+    <p>Bits are combined into series to represent larger sets of possibilities. Whereas the President bit could only represent two possibilities: someone is the President (red card) or not the President (green card), a string of <em>n</em> bits can represent 2<sup><em>n</em></sup> possibilities. Almost all digital information in the world today is stored as groups of eight bits called "bytes."</p>
+
+<!--more-->
+
+    <p>Once again, context is important. Computers programs store information that tells the programs how the bits should be interpreted. For example, one of the more common needs is encoding a list of characters. In this situation, organizations have created specifications that describes which bytes should be mapped to which characters. So when the computer sees the byte <code>01100001</code>, it knows that it represents the letter 'a'.</p>
+
+    <p>When multiple bytes are combined in a series, they become a "string." All digital information from webpages to e-mails to videos are strings. There are simple strings, like "sandwich" or "free fall", and more complex strings that are broken down incrementally according to a "file format." Files are simply pointers which direct the computer to the location of a string in storage.</p>
+
+    <p>The format of the file provides additional information about the context in which the string should be evaluated. One of the most common formats, is also one of the easiest to see the contextualization in action. It is called <acronym title="eXtensible Markup Language">XML</acronym> and it defines the basic rules that govern a variety of markup languages.</p>
+
+    <p>Markup languages take a piece of text and add additional metainformation to make the document richer. For example, webpages are written in a <acronym title="HTML">hypertext markup</acronym>. If an author is writing about <cite>Dune</cite> and wants to represent that the string "Dune" is the title of a book, they surround it with "tags": <code>&lt;cite>Dune&lt;/cite></code>. When the browser reads the string, "&lt;cite>Dune&lt;/cite>", it knows that the text within the tags ("Dune") is a citation and should be italicized.</p>
+
+    <p>One of the important characteristics of <acronym title="eXtensible Markup Language">XML</acronym> is it can be represented as a "tree." A tree is a structure for arranging strings relative to each other in a hierarchy. It is most easily understood in terms of an example. Consider this simple <acronym title="Hypertext Markup Language">HTML</acronym> string:</p>
+
+    <pre>&lt;html>
+  &lt;head>&lt;title>Greeting&lt;/title>&lt;/head>
+  &lt;body>
+    &lt;p>Hello digital world!&lt;/p>
+    &lt;p>This is hypertext.&lt;/p>
+  &lt;/body>
+&lt;/html></pre>
+    
+    <p>The tree for this document would look like:</p>
+
+    <object type="image/svg+xml" data="simple_html_tree.svg"></object>
+
+    <p>A technology frequently used in creating webpages are "templating languages." These are a method of describing the structure of a page, but allowing the specific information to be tailored to the individual request. For example, a simple template in php might look like:</p>
+
+    <pre>&lt;html>
+  &lt;head>&lt;title>Greeting&lt;/title>&lt;/head>
+  &lt;body>&lt;p>Hello &lt;?php print $name ?>&lt;/p>&lt;/body>
+&lt;/html></pre>
+
+    <p>The value of <code>&lt;?php print $name ?></code> is replaced when the page is loaded. So, for a template string, there is both the source string that defines the template and a result string that is produced by evaluating the template in a context. A tree representation of this source template would be:</p>
+
+    <object type="image/svg+xml" data="simple_php_tree.svg"></object>
+
+    <hr />
+
+<!--
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-2592249-5");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+-->
+  </body>
+</html>
