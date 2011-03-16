@@ -11,8 +11,10 @@
 
 #GIT_WORK_TREE=~/tip/book/ git checkout
 
+env -i git update-server-info
+
 current="$(pwd)"
-home="$(echo ~)"
+home=$(echo ~)
 local="${current#${home}/}"
 lib="repo"
 root="${local#${lib}/}"
@@ -22,4 +24,3 @@ dir="${root%/${type}}"
 pushd ~/"$dir"
 env -i git pull origin master
 env -i git remote | grep -q '^github$' && git push github master 
-env -i git update-server-info
