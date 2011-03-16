@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.0"
+     xmlns:svg="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="100%" height="100%"
+     viewBox="-10 -10 520 520">
+  <defs>
+    <script type="text/javascript" xlink:href="jquery.min.js"/>
+    <script type="text/javascript">//<![CDATA[
+      var branchingFactor = 5;
+      var maxDepth = 6;
+      var minChildren = 3;
+      function Node(depth) {
+        this.children = [];
+        this.depth = depth;
+      }
+      var nodes = [];
+      var levels = [];
+      function genTree(depth) {
+        if(++depth >= maxDepth) return;
+        var node = new Node(depth);
+        nodes.push(node); // all nodes
+        if(typeof levels[depth] == 'undefined') levels[depth] = [];
+        levels[depth].push(node); // nodes grouped by level
+        var numChildren = Math.max(minChildren, Math.random() * branchingFactor);
+        for(var i = 0; i < numChildren; i++) {
+          var child = null;
+          if(i == 0 || Math.random() > .25 + ((depth / maxDepth) * .5)) {
+            child = genTree(depth);
+          }
+          node.children.push(child);
+        }
+        return node;
+      }
+      function linkNodes(node) {
+        $(node.children).each(function(idx, child) {
+          if(child) {
+            linkNodes(child);
+          } else {
+            child = node.children[idx] = nodes[Math.floor(Math.random() * nodes.length)]
+          }
+        });
+      }
+      var root = genTree(0);
+      linkNodes(root);
+      $(window).ready(function() {
+        var width = 500;
+        var height = 500;
+        $(levels).each(function(idx, level) {
+          $(level).each(function(iidx, node) {
+            $.extend(node, { x: ((iidx + 1) / (level.length + 1)) * width, y: height - ((node.depth / levels.length) * height) });
+          });
+        });
+        $(levels).each(function(idx, level) {
+          $(level).each(function(idx, node) {
+            var use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+            use.setAttributeNS("http://www.w3.org/1999/xlink", 'href', '#node');
+            $('#base').append($(use).attr('x', node.x).attr('y', node.y));
+          });
+        });
+        $(levels).each(function(idx, level) {
+          $(level).each(function(idx, node) {
+            $(node.children).each(function(idx, child) {
+              if(node.depth != child.depth)
+                $('#base').append($(document.createElementNS('http://www.w3.org/2000/svg', 'line'))
+                                    .attr('x1', node.x).attr('y1', node.y)
+                                    .attr('x2', child.x).attr('y2', child.y))
+            });
+          });
+        });
+        var pad = 4;
+        var pos = 0;
+        var stringWidth = parseFloat($('#string').attr('width'));
+        while(pos < width) {
+          var use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+          use.setAttributeNS("http://www.w3.org/1999/xlink", 'href', '#string');
+          $('#base').append($(use).attr('x', pos).attr('y', 0));
+          var parent = nodes[Math.floor(Math.random() * nodes.length)];
+          $('#base').append($(document.createElementNS('http://www.w3.org/2000/svg', 'line'))
+                              .attr('x1', parent.x).attr('y1', parent.y)
+                              .attr('x2', pos + stringWidth / 2).attr('y2', stringWidth))
+          pos += stringWidth + pad;
+        }
+        
+      });
+    //]]></script>
+    <style type="text/css">
+      #arrowend { overflow: visible; }
+      line { marker-end: url('#arrowend'); }
+      line, #arrowhead { stroke: black; }
+      rect { fill: #95df9d; stroke: black; stroke-width: 1; }
+      #node { fill: #9589bd; stroke: black; }
+    </style>
+    <path id="arrowhead"
+          d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+          transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    <marker orient="auto" refY="0" refX="0" id="arrowend">
+      <use xlink:href="#arrowhead" />
+    </marker>
+    <circle id="node" cx="0" cy="0" r="7" />
+    <rect id="string" width="10" height="10" x="0" y="0" rx="0.7" ry="0.7" />
+  </defs>
+  <g id="base">
+  </g>
+</svg>

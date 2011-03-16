@@ -467,6 +467,7 @@ fi
 alias c="ssh wjholcomb@himinbi.org"
 alias c="ssh wjholcomb@madstones.com"
 alias connect_loki="ssh will@loki"
+alias cl="ssh will@loki"
 alias connect_stderr="ssh will@stderr.org"
 alias connect_honors="ssh will@honors.tntech.edu"
 alias connect_home="ssh will@loki.himinbi.org"
@@ -518,10 +519,10 @@ elif [ "${BASH_VERSINFO[5]/cygwin/}" != "${BASH_VERSINFO[5]}" ]; then # in windo
 
     alias dir="ls --color"
 else
-    alias ls="dir --color=auto"
     # suse aliases dir to ls -l
     alias dir > /dev/null 2> /dev/null && alias dir="ls --color"
 fi
+alias ls="dir --color=auto"
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -575,5 +576,9 @@ alias syncfiles="find \"$WEBSITE_DIR\" \\( -name \"*~\" -or -name \".*~\" \\) -p
                     \"$WEBSITE_DIR\" will@himinbi.org:"
 
 HASHDIR=".../hashes/"
-alias pushhashes="rsync --rsh=ssh --partial --progress --verbose --recursive \
-                        --archive --compress \"$HASHDIR\" wjholcomb@himinbi.org:$HASHDIR"
+LOCAL="$HASHDIR"
+REMOTE="wjholcomb@himinbi.org:$HASHDIR"
+ARGS="--rsh=ssh --partial --progress --verbose --recursive --archive --compress"
+
+alias pushhashes="rsync $ARGS \"$LOCAL\" \"$REMOTE\""
+alias pullhashes="rsync $ARGS \"$REMOTE\" \"$LOCAL\""
