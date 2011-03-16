@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # The "post-receive" script is run after receive-pack has accepted a pack
 # and the repository has been updated.  It is passed arguments in through
@@ -11,10 +11,15 @@
 
 #GIT_WORK_TREE=~/tip/book/ git checkout
 
-/home/wjholcomb/repo/tip/book/git
-echo $0 >> .../log
-pwd >> .../log
+CURRENT="$(pwd)"
+HOME="$(echo ~)"
+LOCAL="${CURRENT#${HOME}/}"
+LIB="repo"
+ROOT="${LOCAL#${LIB}/}"
+TYPE="git"
+PATH="${ROOT%/${TYPE}}"
 
-pushd ~/.../book/
-env -i git pull origin master
-env -i git update-server-info
+pushd ~/"$PATH"
+/usr/bin/env -i git pull origin master
+/usr/bin/env -i git remote | grep -q '^github$' && git push github master 
+/usr/bin/env -i git update-server-info
