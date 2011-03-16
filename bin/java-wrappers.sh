@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 # wrappers.sh: various functions to be used by Java script wrappers
 # Copyright 2008 by Vincent Fourmond <fourmond@debian.org>
 #
@@ -190,7 +192,9 @@ locate_jar() {
 }
 
 PATHSEP=":"
-[ "$OSTYPE" == "cygwin" ] && PATHSEP=";" 
+
+# Don't Understand: [: 196: unexpected operator
+#[ "$OSTYPE" == "cygwin" ] && PATHSEP=";" 
 
 # Find jars and add them to the classpath
 find_jars() {
@@ -243,7 +247,6 @@ run_java() {
     export JAVA_HOME
     java_debug "Environment variable CLASSPATH is '$CLASSPATH'"
     java_debug "Runnning $JAVA_CMD $JAVA_ARGS $cp $@"
-    echo exec "$JAVA_CMD" $JAVA_ARGS $cp "$@"
     exec "$JAVA_CMD" $JAVA_ARGS $cp "$@"
 }
 
