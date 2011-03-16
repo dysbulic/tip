@@ -22,5 +22,6 @@ type="git"
 dir="${root%/${type}}"
 
 pushd ~/"$dir"
+pwd
 env -i git pull origin master
 env -i git remote | grep -q '^github$' && git push github master 
