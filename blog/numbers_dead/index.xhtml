@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:tip="http://dhappy.org/tip/0.1/a" xml:lang="en">
+  <head>
+    <title>Illusionment</title>
+    <link rel="stylesheet" type="text/css" href="doh.css" />
+    <link rel="stylesheet" type="text/css" href="doh_ie.css" tip:browser="ie"/>
+    <style type="text/css">
+      #rogers_axioms span { display: inline-block; }
+      .leader { width: 3em; text-align: center; }
+      .axiom { min-width: 16em; }
+      line { display: block; }
+      [lvl='2'] { text-indent: 1.5em; }
+      [lvl='3'] { text-indent: 3em; }
+      linegroup { display: block; margin-bottom: 1em; }
+      blockquote { text-align: center; }
+      poem { text-align: left; display: inline-block; margin: 0 auto; }
+      poem:after { content: ''; display: block; clear: both; }
+      blockquote .sig { text-align: right; margin: 0; margin-right: 3em; }
+    </style>
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>-->
+    <script type="text/javascript" src="jquery/dist/jquery.js"></script>
+    <script type="text/javascript">//<![CDATA[
+      $(function() {
+        return;
+        var $canvas = $('<canvas/>');
+        var ctx = $canvas.get(0).getContext('2d'); 
+        $('.rowimage').each(function() {
+          ctx.drawImage(this, 0, 0);
+          var data = ctx.createImageData(0, 0, this.width, this.height).data;
+          var sum = [ 0, 0, 0 ];
+          for( pixel in data ) {
+            sum[0] += pixel >> 16 & 0xFF;
+            sum[1] += pixel >> 8 & 0xFF ;
+            sum[2] += pixel & 0xFF;
+          }
+          var avg = sum.map(function(axis) { return Math.round(axis / data.length) });
+          var color = sum[0] << 16 | sum[1] << 8 | sum[2];
+          alert('Average Color: #' + parseInt(color, 16));
+        });
+      });
+    //]]></script>
+  </head>
+  <body>
+    <div class="head">
+      <h1>Illusionment</h1>
+      <h2><a href="mailto:Will%20Holcomb%20%3Cwill@dhappy.org%3E">Will Holcomb</a></h2>
+      <h2>26 February 2010</h2>
+    </div>
+
+    <p>I don't write all that much anymore. For years, I was a part of a journaling group. People would write about their lives and share them with the group. One of the base agreements was to, when it mattered, try for <a href="http://en.wikipedia.org/wiki/Humanistic_psychology">humanistic psychologist</a> <a href="http://en.wikipedia.org/wiki/Carl_Rogers">Carl Rogers</a> four axioms for healthy relationships:</p>
+
+    <ul id="rogers_axioms">
+      <li>
+        <span class="axiom">Radical Honesty</span>
+        <span class="leader">&mdash;</span>
+        <span class="sum">Tell the truth,</span>
+      </li>
+      <li>
+        <span class="axiom">Radical Openness</span>
+        <span class="leader">&mdash;</span>
+        <span class="sum">clearly,</span>
+      </li>
+      <li>
+        <span class="axiom">Radical Empathy</span>
+        <span class="leader">&mdash;</span>
+        <span class="sum">remembering others</span>
+      </li>
+      <li>
+        <span class="axiom">Unconditional Positive Regard</span>
+        <span class="leader">&mdash;</span>
+        <span class="sum">and cherishing them.</span>
+      </li>
+    </ul>
+
+    <p>It was, for me, a <a href="http://en.wikipedia.org/wiki/Sangha">sangha</a> &mdash; a place where I could work at figuring out what was really true for myself without fear of judgment. Back in June, however, I left the group, ostensibly over a dispute about confidentiality, but as much as anything I just needed space to think.</p>
+
+   <img class="rowimage" src="http://lh6.ggpht.com/_VWAiP1S24SU/S4gb5NmZOwI/AAAAAAAAAPM/AKVbUnUolY0/s400/Sunflower.jpg" alt="Forgiveness is not an emotion&hellip;"/>
+
+    <!--more-->
+
+    <p>I just recently learned the word <a href="http://blog.ted.com/2010/01/how_to_live_to.php">生き甲斐</a> (<em>ikigai</em>) that <a href="http://blog.ted.com/2010/01/how_to_live_to.php">Dan Buettner</a> translates as "the reason you get out of bed in the morning." Even though I didn't know the word for it, that's what I left graduate school to find.</p>
+
+    <blockquote class="touchstone">
+      <poem xmlns="http://www.daisy.org/z3986/structure/SG-DAISY3/">
+        <linegroup>
+          <line>A choice</line>
+          <line lvl="2">for this</line>
+          <line lvl="3">means</line>
+          <line lvl="2">no choice</line>
+          <line lvl="3">for that.</line>
+        </linegroup>
+        <linegroup>
+          <line>Living with it</line>
+          <line lvl="2">is called</line>
+          <line lvl="3">maturity.</line>
+        </linegroup>
+      </poem>
+      <p class="sig">&mdash; <a href="http://blog.moretolife.org/2007/08/passing-of-brad-brown.html">K. Bradford Brown</a>, <a href="http://www.amazon.com/Side-Out-Mental-Touchstones-Awakening/dp/B001ONUYP8/ref=sr_1_4?ie=UTF8&amp;s=books&amp;qid=1267221925&amp;sr=1-4"><cite>In Side Out</cite></a></p>
+    </blockquote>
+
+    <p>As I was facing 30, <a href="http://hoenir.himinbi.org/2008/07/09/facebook-engaged-once-again/">marriage</a> and <a href="http://www.cbdmp.org/images/graph_mom_age.gif">children</a>, the finiteness of my life was palpable. Tomorrow will be the one-year anniversary of leaving <a href="http://eecs.vanderbilt.edu/research/hmtl/">Vanderbilt</a>, and I'm finally coming to a point of clarity.</p>
+
+    <p>The problem that I have been having for months now is the complexity of my ideas. They're densely interconnected and when I try to pull off a chunk to explain it, it withers and dies. I've been playing with graphs today, and I'm hopeful I can work my way to a coherent explanation. I'll start off with the graph that I've been thinking about the most: <a href="http://projects.will.madstones.com/blog/numbers_dead/versus/time/graph/2010-2015/per/year/graph.svg">deaths versus time</a>.</p>
+ 
+    <object class="rowimage" style="height: 400px" data="versus/time/graph/2010-2015/per/year/graph.svg" title="# Dead / Time (2010-2015)" type="image/svg+xml">
+      <object class="rowimage" style="height: 100%" data="http://projects.will.madstones.com/blog/numbers_dead/versus/time/graph/2010-2015/per/year/graph.svg" title="# Dead / Time (2010-2015)" type="image/svg+xml">
+        <p>Your browser does not appear to support the <span class="title">Scalable Vector Graphics">format</span> of <a href="http://projects.will.madstones.com/blog/numbers_dead/versus/time/graph/2010-2015/per/year/graph.svg">this graph</a>. Known compatible browsers include:</p>
+        <ul>
+          <li><a href="http://mozilla.org/firefox">Firefox</a></li>
+          <li><a href="http://www.google.com/chrome">Chrome</a></li>
+          <li><a href="http://opera.com">Opera</a></li>
+        </ul>
+      </object>
+    </object>
+
+    <p></p>
+
+<!--
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-2592249-5");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+-->
+  </body>
+</html>
