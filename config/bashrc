@@ -574,3 +574,7 @@ alias syncfiles="find \"$WEBSITE_DIR\" \\( -name \"*~\" -or -name \".*~\" \\) -p
                     --exclude=roster/ --exclude=carl/ \
                     --exclude=\"sites/gallery\" --exclude=\"sites/albums\" \
                     \"$WEBSITE_DIR\" will@himinbi.org:"
+
+HASHDIR=".../hashes/"
+alias pushhashes="rsync --rsh=ssh --partial --progress --verbose --recursive \
+                        --archive --compress \"$HASHDIR\" wjholcomb@himinbi.org:$HASHDIR"
