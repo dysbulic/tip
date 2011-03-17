@@ -1,38 +1,4 @@
-( function() {
-    var serverURI
-
-    localStorage.__defineGetter__(
-        'serverURI',
-        function() {
-            console.log( "Getting serverURI" )
-            return ( localStorage._serverURI = // Cache the value
-             ( localStorage._serverURI
-               || ( function() {
-                      var manifest = chrome.extension.getURL( 'manifest.json' )
-                      return manifest.serverURI
-                   } )()
-               || 'http://westport.freebaseapps.com/newjsonp' ) )
-        } )
-
-    console.log( "Getter: " + localStorage.serverURI )
-
-    localStorage.__defineSetter__(
-        'serverURI',
-        function( uri ) {
-            console.log( "Setting serverURI: " + uri )
-            var currentURI = localStorage.serverURI
-
-            if( uri != currentURI ) {
-                localStorage._serverURI = uri
-                
-                //webkitNotifications.createHTMLNotification( 'notification.html' )
-
-                var notification = webkitNotifications.createNotification(
-                    'icon/48/png',
-                    'Server Changed',
-                    'The suggestions server has been set to: ' + uri
-                )
-                notification.show()
-            }
-        } )
-} )()
+// Make sure serverURI is set
+localStorage.serverURI =
+    localStorage.serverURI
+    || 'http://westport.freebaseapps.com/newjsonp'

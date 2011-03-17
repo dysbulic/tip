@@ -2,10 +2,29 @@ $( function() {
     var $input = $('input[name="server"]')
     $input.val( localStorage.serverURI )
     console.log( "ServerURI: " + localStorage.serverURI )
-    
-    // Saves options to localStorage.
-    function save_options() {
-        localStorage.serverURI = $input.val()
+  
+    function save() {
+        var uri = $input.val()
+        var currentURI = localStorage.serverURI
+
+        if( uri != currentURI ) {
+            localStorage.serverURI = uri
+                
+            //webkitNotifications.createHTMLNotification( 'notification.html' )
+
+            var notification = webkitNotifications.createNotification(
+                chrome.extension.getURL( 'icon/48/png' ),
+                'Server Changed',
+                'The suggestions server has been set to: ' + uri
+            )
+            notification.show()
+
+            setTimeout( function() {
+                notification.cancel()
+            }, 5000 )
+        }
     }
+
+    $('button').click( save )
 } )
 
