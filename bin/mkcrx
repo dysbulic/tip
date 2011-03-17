@@ -27,8 +27,18 @@ VERBARG=
 [ -n "$DEBUG" ] && VERBARG="-v"
 # Even with --exclude ..., it still appears to be traversing the whole tree
 #(cd "$dir" && zip -qr -9 -X "$cwd/$zip" .)
-(cd "$dir" && find -not -name ... -not -name "$zip" -not -name "$crx" -print0 | \
-     xargs -0 zip -q -9 $VERBARG -X --symlinks - > "$cwd/$zip")
+(
+    cd "$dir" && \
+        # I want to traverse all links except ...
+        # find -not -name ... -not -name "$zip" -not -name "$crx" -not -name "$key" -follow -print0 | \
+    (
+        find -not -name ... -not -name "$zip" -not -name "$crx" -not -name "${key##*/}" -print0
+        for dir in $(find -type l -xtype d -not -name ... -print | sed -e 's/$/\//'); do
+            find "$dir" -not -name ... -print0
+        done
+    ) | \
+    xargs -0 zip -q -9 $VERBARG -X - > "$cwd/$zip"
+)
 
 # signature
 [ -n "$DEBUG" ] && echo "Signing $zip with $key"

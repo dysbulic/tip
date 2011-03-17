@@ -34,15 +34,19 @@ AddEncoding x-gzip .svgz
   ForceType text/plain;charset=utf-8
 </Files>
 
+<Files "html">
+  ForceType text/html
+</Files>
+
 <Files "css">
   ForceType text/css
 </Files>
 
-<FilesMatch "js">
+<FilesMatch "(js|jquery)">
   ForceType application/javascript
 </FilesMatch>
 
-<FilesMatch "mql">
+<FilesMatch "(mql|json)">
   ForceType application/json
 </FilesMatch>
 
