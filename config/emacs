@@ -291,3 +291,14 @@
 ; (global-set-key [f8] 'nuke-line)
 
 (setq-default ispell-program-name "aspell")
+
+(defun mark-back
+  (interactive)
+  (set-mark-command)
+  (backward-word))
+
+(global-set-key [A-left] 'backward-word)
+(global-set-key [A-right] 'forward-word)
+(global-set-key [A-up] 'previous-line)
+(global-set-key [A-down] 'next-line)
+;(global-set-key [M-S-left] 'mark-back)

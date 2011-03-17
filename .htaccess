@@ -62,6 +62,10 @@ AddEncoding x-gzip .svgz
   ForceType text/xml
 </Files>
 
+<Files "jar">
+  ForceType application/x-java-applet
+</Files>
+
 #RewriteEngine on
 #RewriteCond %{REQUEST_URI} ^.*gmail/*(.*)$ [NC]
 #RewriteRule ^(.*)$ http://gmail.com/%1 [R,L]
