@@ -10,5 +10,9 @@ icon/%/png: logo/svg
 	rasterize -m image/png -w "$*" -h "$*" -d "$(@D)/tmp.png" "$<"
 	mv "$(@D)/tmp.png" "$@"
 
-crx: $(icons) manifest.json */*/jquery */jquery */js */html
+# manifest.json: manifest/json
+#	# ToDo: Make this work
+#	json -e "$.version += '@' + git.version" "$<" > "$@"
+
+crx: $(icons) manifest.json $(shell find -name jquery -or -name js -or -name html)
 	mkcrx . key/signing/pem

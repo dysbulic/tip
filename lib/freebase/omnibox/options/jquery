@@ -1,7 +1,8 @@
 $( function() {
     var $input = $('input[name="server"]')
     $input.val( localStorage.serverURI )
-
+    console.log( "ServerURI: " + localStorage.serverURI )
+    
     // Saves options to localStorage.
     function save_options() {
         localStorage.serverURI = $input.val()
