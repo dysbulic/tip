@@ -1,0 +1,65 @@
+function getServerURI() {
+    return ( localStorage.serverURI = // Cache the value
+             ( localStorage.serverURI
+               || ( function() {
+                      var manifestURL = chrome.extension.getURL( 'manifest.json' )
+                      console.log( manifestURL )
+                      return $.ajax( {
+                          url : manifestURL,
+                          dataType : 'json',
+                          async : false,
+                      } )
+                   } )()
+               || 'http://westport.freebaseapps.com/newjsonp' ) )
+}
+
+function setServerURI( uri ) {
+    var currentURI = getServerURI()
+
+    if( uri != currentURI ) {
+        localStorage.serverURI = uri
+
+        //webkitNotifications.createHTMLNotification( 'notification.html' )
+
+        var notification = webkitNotifications.createNotification(
+            'icon/48/png',
+            'Server Changed',
+            'The suggestions server has been set to: ' + uri
+        )
+        notification.show()
+    }
+}
+
+$( function(){
+    // This event is fired each time the user updates the text in the omnibox,
+    // as long as the extension's keyword mode is still active.
+    chrome.omnibox.onInputChanged.addListener(
+        function( text, suggest ) {
+            var serverURI = getServerURI()
+            console.log( 'Server: ' + serverURI )
+            $.getJSON( serverURI + '?q=' + text + '&callback=?',
+                       function( data ) {
+                           var suggestions = []
+                           $( data.response ).each( function( idx, suggestion ) {
+                               suggestions.push( {
+                                   content : suggestion.id,
+                                   description : suggestion.name,
+                               } )
+                           } )
+                           suggest( suggestions )
+                       } )
+        } )
+
+    // This event is fired with the user accepts the input in the omnibox.
+    chrome.omnibox.onInputEntered.addListener(
+        function( text ) {
+            if( text.match( /^\// ) ) {
+                var fburl = 'http://freebase.com/view' + text
+                return chrome.tabs.create( { url : fburl } )
+            } else if( text != '' ) {
+                var fburl = getServerURI() + '?q=' + text
+                return chrome.tabs.create( { url : fburl } )
+            }
+        }
+    )
+} )
