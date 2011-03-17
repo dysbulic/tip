@@ -19,9 +19,13 @@ export EDITOR="emacs -nw"
 export RSYNC_RSH=ssh
 export CVS_RSH=ssh
 
-[ -d ~/.../bin ] && export PATH=~/.../bin:$PATH
-[ -d ~/bin ] && export PATH=~/bin:$PATH
-[ -d ~/bin/sdcc/bin/ ] && export PATH=$PATH:~/bin/sdcc/bin/
+# Include OSX specific pathes; and give them precedence
+for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin; do
+    [ -d "$path" ] && export PATH="$path:$PATH"
+done
+
+# [ -d ~/bin ] && export PATH=~/bin:$PATH
+# [ -d ~/bin/sdcc/bin/ ] && export PATH=$PATH:~/bin/sdcc/bin/
 
 export LANG="en_US.UTF-8"
 export LC_ALL=$LANG
@@ -270,11 +274,6 @@ function sendhttpexample() {
 }
 
 # logger "$0 executed"
-
-# Include OSX specific pathes; and give them precedence
-for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin; do
-    [ -d "$path" ] && export PATH="$path:$PATH"
-done
 
 # For invoking the correct handler for files from the command line
 which xdg-open > /dev/null 2> /dev/null && alias start=xdg-open
