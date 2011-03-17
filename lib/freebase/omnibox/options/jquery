@@ -6,7 +6,7 @@ $( function() {
   
     function save() {
         var status = ""
-        $input.each( function( idx, input ) {
+        $('input').each( function( idx, input ) {
             var $input = $(input)
             var name = $input.attr( 'name' )
             var val = $input.val()
@@ -23,20 +23,24 @@ $( function() {
             // ToDo: Generate HTML <ul/>
             // http://www.chromium.org/developers/design-documents/desktop-notifications/api-specification
             //webkitNotifications.createHTMLNotification( 'notification.html' )
+            
+            webkitNotifications.ALLOWED = webkitNotifications.ALLOWED || 0
 
-            var notification = webkitNotifications.createNotification(
-                chrome.extension.getURL( 'icon/48/png' ),
-                'Property Changed',
-                stauts
-            )
-            notification.show()
+            if( webkitNotifications.checkPermission() == webkitNotifications.ALLOWED ) {
+                var notification = webkitNotifications.createNotification(
+                    chrome.extension.getURL( 'icon/48/png' ),
+                    'Property Changed',
+                    status
+                )
+                notification.show()
                     
-            setTimeout( function() {
-                notification.cancel()
-            }, 5000 )
+                setTimeout( function() {
+                    notification.cancel()
+                }, 10000 )
+            }
         }
+        return false
     }
 
     $('form').submit( save )
 } )
-
