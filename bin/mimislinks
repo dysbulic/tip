@@ -25,7 +25,11 @@ function checkdir() {
         
         # ToDo: Recognize "too many levels of links" error and don't display broken link error
         pushd -- "$current" > /dev/null
-        [ -e "..." ] || ln -sv ../... ...
+        [ -e "..." ] || {
+            # ToDo: Trim display of path from root to start dir
+            echo -n $(pwd)
+            ln -sv ../... ...
+        }
         for file in .* * ; do
             [[ -d "$file" && ! -L "$file" ]] && {
                 checkdir "$file"
