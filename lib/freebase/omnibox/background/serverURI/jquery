@@ -4,26 +4,22 @@
     localStorage.__defineGetter__(
         'serverURI',
         function() {
+            console.log( "Getting serverURI" )
             return ( localStorage._serverURI = // Cache the value
              ( localStorage._serverURI
-               /*
                || ( function() {
-                      var manifestURL = chrome.extension.getURL( 'manifest.json' )
-                      console.log( manifestURL )
-                      var manifest = $.ajax( {
-                          url : manifestURL,
-                          dataType : 'json',
-                          async : false,
-                      } )
+                      var manifest = chrome.extension.getURL( 'manifest.json' )
                       return manifest.serverURI
                    } )()
-               */
                || 'http://westport.freebaseapps.com/newjsonp' ) )
         } )
+
+    console.log( "Getter: " + localStorage.serverURI )
 
     localStorage.__defineSetter__(
         'serverURI',
         function( uri ) {
+            console.log( "Setting serverURI: " + uri )
             var currentURI = localStorage.serverURI
 
             if( uri != currentURI ) {
