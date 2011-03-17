@@ -1,0 +1,42 @@
+( function() {
+    var serverURI
+
+    localStorage.__defineGetter__(
+        'serverURI',
+        function() {
+            return ( localStorage._serverURI = // Cache the value
+             ( localStorage._serverURI
+               /*
+               || ( function() {
+                      var manifestURL = chrome.extension.getURL( 'manifest.json' )
+                      console.log( manifestURL )
+                      var manifest = $.ajax( {
+                          url : manifestURL,
+                          dataType : 'json',
+                          async : false,
+                      } )
+                      return manifest.serverURI
+                   } )()
+               */
+               || 'http://westport.freebaseapps.com/newjsonp' ) )
+        } )
+
+    localStorage.__defineSetter__(
+        'serverURI',
+        function( uri ) {
+            var currentURI = localStorage.serverURI
+
+            if( uri != currentURI ) {
+                localStorage._serverURI = uri
+                
+                //webkitNotifications.createHTMLNotification( 'notification.html' )
+
+                var notification = webkitNotifications.createNotification(
+                    'icon/48/png',
+                    'Server Changed',
+                    'The suggestions server has been set to: ' + uri
+                )
+                notification.show()
+            }
+        } )
+} )()
