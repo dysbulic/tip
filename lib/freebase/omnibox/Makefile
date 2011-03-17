@@ -10,5 +10,5 @@ icon/%/png: logo/svg
 	rasterize -m image/png -w "$*" -h "$*" -d "$(@D)/tmp.png" "$<"
 	mv "$(@D)/tmp.png" "$@"
 
-crx: $(icons) manifest.json */jquery */js */html
+crx: $(icons) manifest.json */*/jquery */jquery */js */html
 	mkcrx . key/signing/pem
