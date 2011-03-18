@@ -1,4 +1,8 @@
-( function() {
+//!.../bin/js
+
+var window = window || {}
+
+;( function() {
     // An object passed the getter to the setter
     // reveals the nature of the assignment and
     // thereby that it is looking for a default
@@ -15,7 +19,7 @@
     name = arguments.callee.callee.name
     console.log( name )
         */
-        print 'Error: expected and not found at ' + name
+        print('Error: expected and not found at ' + name)
         return name
     }
     
