@@ -1,0 +1,6 @@
+#!.../bash
+
+[ $#IFS > 1 ] && IFS=
+for arg in "$*"; do
+    echo -n $(bc ibase=16 "$arg")
+done
