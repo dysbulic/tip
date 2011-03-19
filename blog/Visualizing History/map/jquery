@@ -18,9 +18,10 @@ d3.json( '.../geo/usa/state/json',
       .data( collection.features )
         .enter().append( 'svg:path' )
           .attr( {
-              d : ( function() { // needed so I can place a breakpoint
-                  d3.geo.path().projection( xy )
-              } )(),
+              d : d3.geo.path().projection( xy ),
+              title : function( d ) {
+                  return d.name
+              },
           } )
 } )
 
