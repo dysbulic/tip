@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC
+ "+//ISBN 0-9673008-1-9//DTD OEB 1.0.1 Document//EN"
+ "http://openebook.org/dtds/oeb-1.0.1/oebdoc101.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head profile="http://gmpg.org/xfn/11"> 
+<link rel="icon" type="image/svg+xml" href=".../revolution/Technoanarchist/logo/letter/" />
+<link rel="icon" type="image/png" href=".../revolution/Technoanarchist/logo/letter/png" />
+<link rel="stylesheet" type="text/css" href=".../style/blog/css"/>
+<link rel="stylesheet" type="text/css" href=".../lib/jquery-ui/css"/>
+<link rel="stylesheet" type="text/css" href="css"/>
+<title>Visualizing History</title>
+</head>
+<body>
+<h1>The Spread of Department Stores</h1>
+<h2>by Will Holcomb</h2>
+
+<hr/>
+
+<p>I've been thinking about <a href="http://freebase.com">Freebase</a> and it's application to <a type="org" href="http://singinst.org/"><a type="definition" href="http://en.wikipedia.org/wiki/Memetics">memetics</a></a>. I'm particularly interested in timeseries <a href="http://www.informationisbeautiful.net">infographics</a>. One of my all time favorites is <a href="http://projects.flowingdata.com/walmart/">the growth of Wal-Mart</a>.</p>
+
+<!--
+<object class="row" width="900" height="450"
+        data="http://media.flowingdata.com/walmart/Walmarts201004.swf" 
+        type="application/x-shockwave-flash">
+  <iframe width="853" height="510" src="http://www.youtube.com/embed/sjCAr1QOByE"></iframe>
+</object>
+-->
+
+<p>What I'd like to be able to visualize is the transition in the method of consumption. I want to see a variety of stores. The <a href="http://tinyurl.com/64y9brz" todo="make live">data's in Freebase</a>, <a href="http://code.google.com/apis/maps/">Google's got maps</a> and <a href="http://jqueryui.com">jQuery</a>'s got <a href="http://jqueryui.com/demos/slider/">sliders</a>.</p>
+
+<script type="text/javascript" src=".../lib/google/loader/js"></script>
+<script type="text/javascript"> google.load( 'jquery', '1.5', { uncompressed : true } ) </script>
+<script type="text/javascript">//<![CDATA[
+//]]></script>
+<script type="text/javascript"> google.load( 'jqueryui', '1.8.10', { uncompressed : true } )</script>
+<!-- Error: "Sensor parameter must be specified"
+<script type="text/javascript"> google.load( 'maps', '3' ) </script>
+-->
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+<script type="text/javascript" src="http://canvg.googlecode.com/svn/trunk/rgbcolor.js"></script> 
+<script type="text/javascript" src="http://canvg.googlecode.com/svn/trunk/canvg.js"></script> 
+
+<script type="text/javascript">//<![CDATA[
+//]]></script>
+
+<script type="text/javascript" src=".../lib/array/each/js"></script>
+<script type="text/javascript" src=".../lib/date/format/js"></script>
+
+<script id="freebase_map" type="text/javascript" src=".../co/Wal-mart/growth/jquery"></script>
+
+<br/><br/>
+
+<p>My next task is to replace the pins with meaningful icons. I've been <a href=".../image/logo/">collecing logos</a>. I think watching 
+<object data=".../image/logo/McDonald's/" type="image/svg+xml" class="letter">
+<a href=".../image/logo/McDonanld's">McDonald's</a>
+</object>s
+and 
+<object data=".../image/logo/Wal-mart/button" type="image/svg+xml" class="letter">
+<a href=".../image/logo/Wal-mart">Wal-mart</a>
+</object>s
+march across the world would be interesting.</p>
+
+<p>Where I'd like to go with this eventually is a visual history of the Earth. Show different types of dinosaurs roaming around during the periods they existed. I think it would help people get a better sense of what it means that 6000 years of recorded history is 0.001% of the 570 million years of life on the planet. 0.001% of 24 hours is less than a second.</p>
+
+<iframe src="map">
+</iframe>
+
+</body>
+</html>
