@@ -3,7 +3,7 @@ var svg = ( d3.select( 'body' )
             .attr( {
                 width : '100%',
                 height : '100%',
-                viewBox : [0, 0, 4000, 2000].join( ' ' ),
+                viewBox : [0, 0, 960, 500].join( ' ' ),
             } ) )
 svg.append( 'svg:g' ).attr( 'id', 'states' )
 svg.append( 'svg:g' ).attr( 'id', 'state-centroids' )
@@ -17,7 +17,11 @@ d3.json( '.../geo/usa/state/json',
     .selectAll( 'path' )
       .data( collection.features )
         .enter().append( 'svg:path' )
-          .attr( 'd', d3.geo.path().projection( xy ) )
+          .attr( {
+              d : ( function() { // needed so I can place a breakpoint
+                  d3.geo.path().projection( xy )
+              } )(),
+          } )
 } )
 
 /*
