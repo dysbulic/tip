@@ -583,7 +583,7 @@ export LOCAL="$__HASHDIR"
 export REMOTE="wjholcomb@madstones.com"
 ARGS="--rsh=ssh --partial --progress --verbose --recursive --archive --compress"
 
-alias pushhashes="eval rsync $ARGS \"\$LOCAL\" \"\$REMOTE:\$HASHDIR\""
-alias pullhashes="rsync $ARGS \"\$REMOTE\" \"\$LOCAL\""
+alias pushhashes="eval rsync $ARGS \"\$LOCAL\" \"\$REMOTE:\$__HASHDIR\""
+alias pullhashes="rsync $ARGS \"\$REMOTE:\$__HASHDIR\" \"\$LOCAL\""
 
 alias print="eval echo \$OUT"
