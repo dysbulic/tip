@@ -59,14 +59,16 @@ function addMarkers( collection ) {
             .append( 'svg:circle' )
               .attr( {
                   transform : function( d ) {
-                      return "translate( " + xy( d.pos ) + " )"
+                      return "translate(" + xy( d.pos ) + ")"
                   },
                   r : 0,
               } )
             .transition()
               .duration( 1000 )
               .delay( function( d, i ) { return i * 50 } )
-              .attr( 'r', function( d ) { return 10 } )
+              .attr( {
+                  r : function( d ) { return 10 },
+              } )
 }
 
 var service_url = 'http://api.freebase.com/api/service/mqlread'

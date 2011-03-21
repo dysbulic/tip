@@ -26,3 +26,15 @@ if( NamedNodeMap && NamedNodeMap.prototype != null ) {
 
 $.read = function() {
 }
+
+$( function() {
+    $('img[type="image/svg+xml"]').each( function() {
+        var $img = $(this)
+        $img.replaceWith(
+            $('<object/>').attr( {
+                data : $img.attr( 'src' ),
+                type : $img.attr( 'type' ),
+            } )
+        )
+    } )
+} )
