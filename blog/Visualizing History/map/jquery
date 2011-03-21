@@ -1,3 +1,24 @@
+( function() {
+    var $slider =
+        $('<div/>')
+        .slider()
+    $('body').append( $slider )
+
+    // A sorted list of active locations
+    var opens = ( function() {
+        var opens = []
+        var concat = opens.concat
+        opens.concat = function() {
+            return ( concat
+                     .apply( opens, arguments )
+                     .sort( function( a, b ) {
+                         return a.date.open - b.date.open
+                     } ) )
+        }
+        return opens
+    } )()
+
+
 var svg = ( d3.select( 'body' )
             .append( 'svg:svg' )
             .attr( {
@@ -46,7 +67,7 @@ d3.json( '.../geo/usa/state/centroid/json',
 } )
 */
 
-function addMarkers( collection ) {
+function addMarkers( locs ) {
     // The radius scale for the centroids.
     var r = ( d3.scale.sqrt()
               .domain( [0, 1e6] )
@@ -54,7 +75,7 @@ function addMarkers( collection ) {
 
     svg.select( '#state-centroids' )
         .selectAll( 'circle' )
-          .data( collection )
+          .data( locs )
           .enter()
             .append( 'svg:circle' )
               .attr( {
@@ -66,10 +87,23 @@ function addMarkers( collection ) {
             .transition()
               .duration( 1000 )
               .delay( function( d, i ) { return i * 50 } )
+              .attr( 'r', function( d ) { return 10 } )
+/*
               .attr( {
                   r : function( d ) { return 10 },
               } )
+*/
+    opens = opens.concat( locs )
+    configSlider()
 }
+
+    function configSlider() {
+        $slider.slider( 'option', 'min', opens[0].date.open.valueOf() )
+        //label.date.$start.text( opens[0].date.open )
+        $slider.slider( 'option', 'max', opens[-1].date.open.valueOf() )
+        //label.date.$end.text( opens[-1].date.open )
+        setDate( new Date(  $slider.slider( 'value' ) ) )
+    }
 
 var service_url = 'http://api.freebase.com/api/service/mqlread'
 function retrieveLocations( mql, oncomplete, translator ) {
@@ -82,7 +116,7 @@ function retrieveLocations( mql, oncomplete, translator ) {
                 name : location.name,
                 pos : ( function() {
                     var loc = location[ 'geo:address' ].geolocation
-                    var pos = [ loc.latitude, loc.longitude ]
+                    var pos = [ loc.longitude, loc.latitude ]
                     pos = $.extend( pos, loc )
                     return pos
                 } )(),
@@ -119,3 +153,5 @@ d3.json( mqlURI,
          function( data ) {
              retrieveLocations( data, addMarkers )
          } )
+
+} )()
