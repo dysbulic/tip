@@ -578,10 +578,12 @@ alias syncfiles="find \"$WEBSITE_DIR\" \\( -name \"*~\" -or -name \".*~\" \\) -p
                     --exclude=\"sites/gallery\" --exclude=\"sites/albums\" \
                     \"$WEBSITE_DIR\" will@himinbi.org:"
 
-HASHDIR=".../hashes/"
-LOCAL="$HASHDIR"
-REMOTE="wjholcomb@himinbi.org:$HASHDIR"
+export __HASHDIR=".../hashes/"
+export LOCAL="$__HASHDIR"
+export REMOTE="wjholcomb@madstones.com"
 ARGS="--rsh=ssh --partial --progress --verbose --recursive --archive --compress"
 
-alias pushhashes="rsync $ARGS \"$LOCAL\" \"$REMOTE\""
-alias pullhashes="rsync $ARGS \"$REMOTE\" \"$LOCAL\""
+alias pushhashes="eval rsync $ARGS \"\$LOCAL\" \"\$REMOTE:\$__HASHDIR\""
+alias pullhashes="rsync $ARGS \"\$REMOTE:\$__HASHDIR\" \"\$LOCAL\""
+
+alias print="eval echo \$OUT"
