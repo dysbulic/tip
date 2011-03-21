@@ -5,7 +5,7 @@ IndexIgnore .svn *~ .DS_Store HEADER.html svn-commit.tmp
 
 AddCharset UTF-8 .html .php .css .js
 
-DirectoryIndex index.php index.xhtml index.html index.svg php xhtml svg html utf-8 txt js jquery
+DirectoryIndex php xhtml svg html utf-8 txt js jquery eson json css
 
 RemoveHandler .sh
 RemoveHandler .py
@@ -34,6 +34,10 @@ AddEncoding x-gzip .svgz
   ForceType text/plain;charset=utf-8
 </Files>
 
+<Files "xhtml">
+  ForceType application/xhtml+xml
+</Files>
+
 <Files "html">
   ForceType text/html
 </Files>
@@ -42,7 +46,7 @@ AddEncoding x-gzip .svgz
   ForceType text/css
 </Files>
 
-<FilesMatch "(js|jquery)">
+<FilesMatch "(js|jquery|rhino)">
   ForceType application/javascript
 </FilesMatch>
 
@@ -64,6 +68,10 @@ AddEncoding x-gzip .svgz
 
 <Files "jar">
   ForceType application/x-java-applet
+</Files>
+
+<Files "mp3">
+  ForceType audio/mpeg
 </Files>
 
 #RewriteEngine on
