@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # If not running interactively, don't do anything
-#[ -z "$PS1" ] && return
+[[ "$-" != *i* ]] && return
 
 if [ "$PS1" ]; then
     PS1='\n\u@\h\[\033[1;35m\]:\[\033[0m\]\w\[\033[1;33m\]\$\[\033[0m\] '
@@ -501,6 +501,7 @@ elif [ "${BASH_VERSINFO[5]/cygwin/}" != "${BASH_VERSINFO[5]}" ]; then # in windo
     # this fixes a problem with emacs not exiting properly
     # it will cause the terminal to break though if it is set here rather than in the global env
     [ -z "$CYGWIN" ] && export CYGWIN=tty
+    export CYGWIN="$CYGWIN winsymlinks"
 
     # mingw's compiler needs to be used before cwywin's to compile QT stuff
     mingwdir="/cygdrive/c/Documents and Settings/$USERNAME/My Documents/Programs/mingw32/bin/"
@@ -517,7 +518,8 @@ elif [ "${BASH_VERSINFO[5]/cygwin/}" != "${BASH_VERSINFO[5]}" ]; then # in windo
     [ -d "$QTDIR" ] && export PATH="$QTDIR/bin/:$PATH"
     which make.bat > /dev/null 2>&1 && alias make="make.bat"
 
-    sevenzipdir="$(cygpath "$ProgramW6432")/7-Zip"
+    PROGRAMS=${ProgramW6432}
+    sevenzipdir="$(cygpath "$PROGRAMS")/7-Zip"
     [ -d "$sevenzipdir" ] && export PATH="$PATH:$sevenzipdir"
 
     alias dir="ls --color"
