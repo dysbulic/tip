@@ -1,32 +1,30 @@
 ( function() {
-    var $slider =
-        $('<div/>').css( {
+    var slider = ( d3.select( 'body' )
+                   .append( 'div' )
+                   .css( {
             position : 'absolute',
             width : '100%',
         } )
         .slider()
     $('body').append( $slider )
 
-
-        $.fx.step[ 'slide' ] = function( fx ) {
-            if( ! fx.initialized ) {
-                fx.start = $slider.slider( 'value' )
-                fx.min = $slider.slider( 'option', 'min' )
-                //percent = 
-                fx.initialized = true
-            }
-            $slider.slider( 'value', fx.pos * ( fx.end - fx.min ) )
-            //console.log( fx )
+    $.fx.step[ 'slide' ] = function( fx ) {
+        if( ! fx.initialized ) {
+            fx.start = $slider.slider( 'value' )
+            fx.min = $slider.slider( 'option', 'min' )
+            fx.initialized = true
         }
+        $slider.slider( 'value', fx.pos * ( fx.end - fx.min ) )
+    }
 
-        $slider.bind( 'slidechange', function( evt, ui ) {
-            setDate( new Date( ui.value ) )
-        } )
+    $slider.bind( 'slidechange', function( evt, ui ) {
+        setDate( ui.value )
+    } )
 
-        $slider.bind( 'dblclick', function( evt ) {
-            var end = $slider.slider( 'option', 'max' )
-            $slider.animate( { slide : end }, 30000 )
-        } )
+    $slider.bind( 'dblclick', function( evt ) {
+        var end = $slider.slider( 'option', 'max' )
+        $slider.animate( { slide : end }, 30000 )
+    } )
 
 
     // A sorted list of active locations
