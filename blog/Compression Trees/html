@@ -18,7 +18,35 @@
 
 <p>I've been considering a storage system and have been trying it out in the filesystem. I want to describe that a bit and discuss implications I think it has.</p>
 
-<p>There are two main changes to the system:</p>
+<p>There are three main changes to the system:</p>
+
+<h2>Stub Names</h2>
+
+<p>Filenames are decomposed into directories containing files whose names are what were previously the file extensions. For example, consider the contents of my <a href=".../image/">image collection</a>. When I started I had files like:</p>
+
+<ul>
+  <li><a href=".../image/kitten/head/svg">kitten_head.svg</a></li>
+  <li><a href=".../image/light bulb/svg">light bulb.svg</a></li>
+  <li><a href=".../image/flag/England/">Flag of England.svg</a></li>
+</ul>
+
+<p>Converting them to stub form they become:</p>
+
+<ul>
+  <li><a href=".../image/kitten/head/svg">kitten/head/svg</a></li>
+  <li><a href=".../image/light bulb/svg">light bulb/svg</a></li>
+  <li><a href=".../image/flag/England/">flag/England/svg</a></li>
+</ul>
+
+<p>The directories leading up to the file are a list of increasingly specific tags. Part of the point of stub links is to ease comprehensible of alternate paths. For example, the path: <code><a href=".../book/by/Nancy Kress/Beggars in Spain/html">book/by/Nancy Kress/Beggars in Spain/html</a></code>. The directory <code>Beggars in Spain</code> is also linked to from:</p>
+
+<ul>
+  <li>magazine/Asimov's Science Fiction/1991/April/Nancy Kress/Beggars in Spain</li>
+  <li>book/award/Hugo/winner/1992</li>
+  <li>book/award/Nebula/winner/1992</li>
+  <li>book/collection/The Year's Best Science Fiction/9th/Nancy Kress/Beggars in Spain</li>
+  <li>book/collection/The Year's Best Science Fiction/9th/1</li>
+</ul>
 
 <h2>Relative Roots</h2>
 
@@ -26,6 +54,12 @@
 
 <p>Structurally this creates a tree that looks like:</p>
 
-<img id="fsdiagram" src=".../lib/mimis/tree/in/filesystem/svg"/>
+<object id="fsdiagram" data=".../lib/mimis/tree/in/filesystem/svg"/>
+
+<p></p>
+
+<h2>Indirected Binaries</h2>
+
+<p>All binary files are stored as links to <code>.../hashes/</code></p>
 </body>
 </html>
