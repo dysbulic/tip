@@ -7,6 +7,13 @@
     exit -1
 }
 
+[[ "$MKDIR" == "t" || "$MKDIR" == "y" ]] && {
+    for file in "$*"; do
+        info=$(mplayer -vo null -ao null -frames 0 -identify "$file")
+        echo $info
+    done
+}
+
 cores=0
 for processor in $(grep -e '^cpu cores' /proc/cpuinfo | sed -e 's/.*:\s*//'); do
     cores=$(($cores + $processor))
@@ -14,16 +21,24 @@ done
 
 ARGS="-f webm -vcodec libvpx -acodec libvorbis -threads $cores -aq 100 -sameq -y"
 
-for file in "$@"; do
-    input="$file"
+for path in "$@"; do
+    dir="$(dirname "$path")"
+    pushd "$dir" > /dev/null
+
+    input="${path##*/}"
     [ -e "$input" ] || {
-        echo "Error: Input Not Found: $input"
+        echo "Error: Input Not Found: $path"
+        popd > /dev/null
         continue
     }
 
-    output="${file%.*}.webm"
-    [ -e "$output" ] && {
-        echo -n "Replace? [y/N]: $output: "
+    output=
+    file="$(basename "$path")"
+    [ "${file#*.}" != "$file" ] && output="$output${file%.*}."
+    output="${output}webm"
+
+    [ -e "$out" ] && {
+        echo -n "Replace? [y/N]: $: "
         read -n 1 replace
         echo
         [[ "$replace" == "y" ||  "$replace" == "Y" ]] || {
@@ -38,7 +53,11 @@ for file in "$@"; do
     args="$ARGS"
     
     echo "Pass #1: $input"
+    echo time ffmpeg -i "$input" $args -an -pass 1 -passlogfile "$output" "$output"
     time ffmpeg -i "$input" $args -an -pass 1 -passlogfile "$output" "$output"
     echo "Pass #2: $input"
+    echo time ffmpeg -i "$input" $args -pass 2 -passlogfile "$output" "$output"
     time ffmpeg -i "$input" $args -pass 2 -passlogfile "$output" "$output"
+
+    popd > /dev/null
 done

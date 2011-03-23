@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+
+import os, re, glob
+from PIL import Image
+from PIL.ExifTags import TAGS
+
+for file in glob.glob( "*" ):
+    
+    candidateFilter = re.compile( "^(.*).[Jj][Pp][Ee]?[Gg]$")
+    match = candidateFilter.search( file )
+    
+    continue if match is None
+
+    img = Image.open( file )
+    info = img._getexif()
+    time = None
+    for tag, value in info.items():
+        decoded = TAGS.get( tag, tag )
+        if decoded == "DateTimeOriginal":
+            time = value
+            break
+        
+    continue if time is None
+
+    print time
+
+#     dir=".../by/time/$(exif -m "$file" | grep "^Date and Time (original)" | sed -e 's/.*\t//g' -e 's/[: ]/\//g')"
+#     mkdir "$dir"
+#     new="$dir/jpg"
+#     mv "$file" "$new"
+#     max=1
+#     while [ -e "$max" ]; do
+#         max=$(($max+1))
+#     done
+#     ln -s "$new" $max
+# done
