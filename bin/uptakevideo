@@ -2,8 +2,7 @@
 
 import logging
 import os, re, glob
-from PIL import Image
-from PIL.ExifTags import TAGS
+import subprocess
 
 config = {
     'preface' : '.../by/time/',
@@ -25,10 +24,26 @@ if os.path.exists( config['maxpath'] ):
 
 for file in glob.glob( "*" ):
     
-    candidateFilter = re.compile( "^(.*).jpe?g$", re.IGNORECASE )
+    candidateFilter = re.compile( "^(.*).(mpe?g|avi)$", re.IGNORECASE )
     match = candidateFilter.search( file )
     
     if match is None: continue
+
+    command = [ "ffprobe", "-show_format", file ]
+    print "Reading Metadata: %s" % ( " ".join( command ) )
+    ffprobeOut = subprocess.Popen( command,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.DEVNULL ).stdout
+    for line in ffprobeOut.readlines():
+        print line
+    ffprobeOut.close()
+
+    continue
+
+    lsdvdout = re.sub("&", "&amp;", lsdvdout)
+    lsdvdBuffer = StringIO.StringIO(lsdvdout)
+    dvdDoc = xml.dom.minidom.parse(lsdvdBuffer)
+
 
     img = Image.open( file )
     info = img._getexif()
