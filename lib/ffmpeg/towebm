@@ -21,6 +21,9 @@ done
 
 ARGS="-f webm -vcodec libvpx -acodec libvorbis -threads $cores -aq 100 -sameq -y"
 
+# Only VP8 video and Vorbis audio are supported for WebM
+# ARGS="-f webm -vcodec libvpx -acodec copy -threads $cores -sameq -y"
+
 for path in "$@"; do
     dir="$(dirname "$path")"
     pushd "$dir" > /dev/null
@@ -38,10 +41,14 @@ for path in "$@"; do
     output="${output}webm"
 
     [ -e "$out" ] && {
-        echo -n "Replace? [y/N]: $: "
-        read -n 1 replace
-        echo
+        [ -z "$REPLACE" ] && {
+            read -n 1 -p "Replace? [y/N]: $: " replace
+        } || {
+            replace="$REPLACE"
+        }
         [[ "$replace" == "y" ||  "$replace" == "Y" ]] || {
+            echo "Skipping Existing: $dir/$out"
+            popd > /dev/null
             continue
         }
     }

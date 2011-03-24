@@ -19,6 +19,9 @@ export EDITOR="emacs -nw"
 export RSYNC_RSH=ssh
 export CVS_RSH=ssh
 
+# Will start the gui
+#which update-manager && update-manager -d
+
 # Include OSX specific pathes; and give them precedence
 for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin; do
     [ -d "$path" ] && export PATH="$path:$PATH"
