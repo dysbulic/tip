@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20001102//EN"
  "http://www.w3.org/TR/2000/CR-SVG-20001102/DTD/svg-20001102.dtd">
-<?xml-stylesheet href="cover.css" type="text/css"?>
+<?xml-stylesheet href="css" type="text/css"?>
 <svg viewBox="0 0 450 450"
  a:scriptImplementation="Adobe"
  xmlns="http://www.w3.org/2000/svg"
@@ -20,29 +20,27 @@
     </mask>
     <clipPath id="clipborder"> 
       <circle r="225" cx="225" cy="225" />
-<!--      <use xlink:href="#area" style="fill: url(#border)"/>
-  -->
+      <!-- <use xlink:href="#area" style="fill: url(#border)"/> -->
     </clipPath>
-    <image id="swirl" width="430" height="430" xlink:href="swirl.svg">
+    <image id="swirl" width="430" height="430" xlink:href=".../image/logo/Debian/swirl/svg">
       <title>Debian Swirl</title>
     </image>
-    <image id="fox" width="180" height="350" xlink:href="linuxfox.svg">
+    <image id="fox" width="180" height="350" xlink:href=".../image/mascot/Linux/fox/svg">
       <title>Linux Fox</title>
     </image>
-    <image id="logo" width="310" height="90" xlink:href="debian.svg">
+    <image id="logo" width="310" height="90" xlink:href=".../image/logo/Debian/svg">
       <title>Debian Logo</title>
     </image>
   </defs>
   <g style="clip-path: url(#clipborder)">
     <use xlink:href="#swirl" x="5" y="5"/>
     <g transform="translate(273 100)">
-      <use xlink:href="#fox" x="5" y="5" style="filter: url(filters.svg#dropShadow);"/>
+      <use xlink:href="#fox" x="5" y="5" style="filter: url('.../style/filter/shadow/drop/svg#filter');"/>
     </g>
     <g transform="translate(10 150) rotate(-30)">
-      <use xlink:href="#logo" style="filter: url(filters.svg#whiteShadow)"/>
+      <use xlink:href="#logo" style="filter: url('.../style/filter/shadow/white/svg#filter')"/>
     </g>
   </g>
-  <script type="text/ecmascript" a:scriptImplementation="Adobe"
-   xlink:href="insert_names.js"/>
+  <script type="text/ecmascript" xlink:href="insert_names.js"/>
   <rect x="0" y="0" width="450" height="450" style="fill: white" mask="url(#mask)"/>
 </svg>

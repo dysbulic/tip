@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20001102//EN"
+ "http://www.w3.org/TR/2000/CR-SVG-20001102/DTD/svg-20001102.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+  <title>Debian Cover Filters</title>
+  <filter id="filter">
+    <desc>Produces a white border</desc>
+    <feMorphology operator="dilate" in="SourceAlpha" radius="5"/>
+    <feGaussianBlur stdDeviation=".65"/>
+    <feComponentTransfer result="whiteness">
+      <feFuncR type="discrete" tableValues="1 1"/> <!-- Batik doesn't like -->
+      <feFuncG type="discrete" tableValues="1 1"/> <!--  a single valued   -->
+      <feFuncB type="discrete" tableValues="1 1"/> <!--  tableValues       -->
+    </feComponentTransfer>
+    <feMerge>
+      <feMergeNode in="whiteness"/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+</svg>

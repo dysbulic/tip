@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20001102//EN"
+ "http://www.w3.org/TR/2000/CR-SVG-20001102/DTD/svg-20001102.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+  <title>Drop Shadow Filter</title>
+  <filter id="filter">
+    <desc>Produces a 3D effect as if the item was close to the surface</desc>
+    <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+    <feOffset dx="2" dy="2" result="blur"/>
+    <feMerge>
+      <feMergeNode in="blur"/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+</svg>
