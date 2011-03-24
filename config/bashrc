@@ -209,6 +209,23 @@ function dumppub() {
     popd > /dev/null
 }
 
+function git-fold() {
+    [ $# != 2 ] && {
+        echo "Usage: git-fold $repo $dir"
+        echo
+        echo "Folds $repo into the current repository at $dir"
+        return -1
+    }
+    repo="$1"
+    dir="$2"
+    git remote rm git-fold-merge-project
+    git remote add -f git-fold-merge-project "$repo"
+    git merge -s ours --no-commit git-fold-merge-project/master
+    git read-tree --prefix="$dir" -u git-fold-merge-project/master
+    git commit -m "Folding in $repo @ $dir"
+    git pull -s subtree git-fold-merge-project master
+}
+
 # To remove language selection menus from windows in Solaris
 export XIM="htt"
 export GTK_IM_MODULE=iiim
