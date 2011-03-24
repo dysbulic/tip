@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>CMS Migration Project Plan for MPP</title>
+    <link type="text/css" rel="stylesheet" href="cover_letter.css" />
+    <style type="text/css">
+      table { border-collapse: collapse; }
+      th, td { padding: .25em; border: 1px solid; }
+      .done { text-decoration: line-through; }
+    </style>
+  </head>
+  <body>
+    <h1><acronym title="Content Management System">CMS</acronym> Migration Project Plan for <acronym title="the Marijuana Policy Project">MPP</acronym></h1>
+    <h2>Last Updated: 2007/05/22</h2>
+
+    <p>MPP relies heavily on the web for the dissemination of its information, events organization and fund-raising. The current state of the web deployment is fairly complex and largely functional, but it has essentially reached the limits of its capacity to grow to meet the expending needs of MPP as an organization. There are two primary areas where attention is most needed:</p>
+    <ol>
+      <li>The company responsible for the CMS for MPP's <a href="http://mpp.org">main site</a>, <a href="http://kintera.com">Kintera</a>, has offered a consistently mediocre product and nonexistent customer support. Their software limits both the types of designs that are permissible and the speed that new designs can be created.</li>
+      <li>MPP's <a href="#campaigns">campaign sites</a> have been developed over the course of several years. They are hosted in a variety of environments and are largely only editable through the intervention of the IT staff.</li>
+    </ol>
+
+    <h2>Use Case Scenarios</h2>
+    <p>In deciding upon a software solution, a common step in the process is to outline scenarios for the use of the product. In doing so necessary features of the system can be identified.</p>
+
+    <h3><a href="http://mpp.org">mpp.org</a></h3>
+
+    <p><em>MPP's primary site will be hosted by <a href="http://convio.com">Convio</a>. The needs of the site are not discussed here because they will hopefully be met by Convio and will not affect the requirements of the internal CMS in any case.</em></p>
+
+    <h3><a href="http://granitestaters.com">granitestaters.com</a></h3>
+    
+    <p>MPP uses a variety of individually designed sites to present information about particular campaigns in a personalized way. GraniteStaters.com is an example of this type of site. It is aimed at voters in New Hampshire &mdash; the site of the first presidential primary. The site has several functions:</p>
+
+    <ul>
+      <li>Describe the Granite Staters for Medical Marijuana initiative and the history of the initiative in past elections</li>
+      <li>Deliver a voter guide which summarizes candidates' positions on medical marijuana</li>
+      <li>Archive news stories about candidates that have taken public positions on marijuana</li>
+      <li>Deliver press releases by the Granite Staters initiative</li>
+      <li>Archive weekly email alerts to the list of interested voters</li>
+      <li>Offer instructions and hints on writing letters to the editor</li>
+      <li>Volunteer online to help the campaign, receive email alerts or donate</li>
+      <li>Provide <acronym title="Rich Site Summary">RSS</acronym> feeds of the news, alerts and candidates sections</li>
+    </ul>
+
+    <p>After the initial site design, all information should be updated by the Federal Policies department. They should be able to log in via the web and:</p>
+
+    <ul>
+      <li>Edit the content of existing pages</li>
+      <li>Add new pages to the site structure</li>
+      <li>Add new alert and news stories</li>
+      <li>Add candidates and maintain position information</li>
+    </ul>
+
+    <h3><a href="http://activism.mpp.org">activism.mpp.org</a></h3>
+
+    <p>In an effort to increase MPP's grassroots efforts on the web, an activist blog was started. The concept is that it would be a private forum for major actors in the marijuana policy effort to coordinate their efforts and share ideas. The functions of the site are:</p>
+
+    <ul>
+      <li>Allow federal policies staff to post blog entries</li>
+      <li>Allow moderated commenting on blog entries</li>
+      <li>Graph the relative progress of activists on staff defined metrics</li>
+      <li>Offer static pages with information about effective lobbying techniques</li>
+      <li>Show how various representatives voted on the Hinchey amendment</li>
+      <li>Allow access to an archive of blog posts</li>
+    </ul>
+
+    <h3><a href="http://media.mpp.org">media.mpp.org</a></h3>
+    
+    <p>MPP has a variety of short pieces of film, radio segments and archived news stories about the organizations mission and battles. This information is not accessible in a central repository and such a site could potentially be very popular. The function of the site would be:</p>
+
+    <ul>
+      <li>Present listings of media files based on type, tag, date or title</li>
+      <li>Allow addition of new media items via the web</li>
+      <li>Allow the association of metadata (such as genre or subject) with media items</li>
+    </ul>
+
+    <h2>Project Goal</h2>
+    <p>MPP's sites hosted in a manner that meets the following goals:</p>
+    <ol>
+      <li>Rapid and flexible development of new sites</li>
+      <li>Maintenance and addition of content across sites distributed across the organization to the appropriate departments</li>
+    </ol>
+
+    <p>The specific characteristics needed in the CMS are:</p>
+
+    <table>
+      <tr><th>Characteristic</th><th>Description</th></tr>
+      <tr>
+        <td>Concise Template Specification</td>
+        <td>
+          <p>The majority of websites have design elements that are shared across multiple pages: headers, navigation, sidebars, etc. The specification of that structure and how content items are included in it is a <em>template</em>. There are a variety of different methods used for specifying templates. Kintera and Convio both use specialized XML vocabularies (invalid XML in the case of Kintera). Most open-source CMSes use some sort of PHP based toolkit.</p>
+          <p>The templating language is one of the most important features so far as site development time. A concise language can significantly reduce development time by reducing duplicated effort whereas a poorly designed one can actually add development tasks to compensate for issues with the design. (See Kintera's forms module for an excellent example.)</p>
+          <p>PHP is commonly used because it is bundled with the most common webserver on the internet, <a href="http://httpd.apache.org">Apache</a>. This means that developers wanting to appeal to as wide an audience as possible will use PHP and MySQL since that is available on the bulk of hosting providers. The reason that many commercial providers use custom XML vocabularies is XML is a generic format for specifying data structures. A variety of tools exist for dealing with XML and by using XML in the CMS, companies get the use of those tools as well as easier interoperability with other vendors. <em>(As noted earlier, Kintera's format is nearly XML, but is invalid in a couple fundamental ways, so I assume they heard XML is cool and attempted to include it for buzzword compliance. As usual, they failed.)</em></p>
+        </td>
+      </tr>
+      <tr>
+        <td>Web-Based Interface</td>
+        <td>
+          <p>Though the web developer might be comfortable working with pages of code and command-line programs, the average user has neither the need nor the desire for such things. To properly support the distributed maintenance of sites, users should be able to authenticate to an administrative interface where they can <a href="http://en.wikipedia.org/wiki/CRUD_(acronym)" title="CRUD">create, edit, update and delete</a> content. Editing of XHTML should be done in a <acronym title="What You See Is What You Get">WYSIWYG</acronym> pane.</p>
+          <p>The interface should also provide access to user management functionality, system configuration and usage statistics.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>Content Moderation</td>
+        <td>
+          <p>Some CMSes include workflow management functionality that specifies the stages in the publication process for a piece of content. For MPP, an example of an ideal workflow might be:</p>
+          <ol>
+            <li>Basic site template and types of content items defined by web administrator</li>
+            <li>Navigation hierarchy and page content entered by departmental staff</li>
+            <li>Revisions to content by chief of staff</li>
+            <li>Final approval by executive director</li>
+            <li>Publication</li>
+          </ol>
+          <p>This is similar conceptually to the current structure except that content edits are generally funneled back through IT. Ideally each individual would log in and see items that are available for their review and editing. Most workflow managers are queue based so you work through a list of items bumping them either back to the previous level on on to the next.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>Content Versioning</td>
+        <td>
+          <p>Content frequently goes through a variety of revisions during the course of its life. A report or the structure of the site might be changed multiple times through the course of its life. The majority of the time the nature, date and author of changes is unimportant. In the .5% of the time that retrieving a past revision becomes important, it can be extremely important. (Kintera ate a large chunk of the Boynton Beach Party page a couple weeks ago. I happened to have a copy saved which is what enabled me to get it back up in five minutes.)</p>
+          <p>Versioning provides an audit trail to be able to determine which edits were performed by whom at what time.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>Efficient Document Generation</td>
+        <td>
+          <p>As the sophistication of software systems increases, their processing time has a tendency to increase as well. It is possible to mitigate those increases with more powerful webserver, but it's important to remember that the right page can take a site from 1,000 hits per day to 500,000 per hour overnight.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>Granular Access Control</td>
+        <td>
+          <p>Administrators should be able to limit users' ability to view and edit different parts of the site. This should include distributed user management as well as content management.</p>
+        </td>
+      </tr>
+    </table>
+
+    <h2>Project Plan</h2>
+    <p>The sites will continue to be hosted in a pair of CMSes:</p>
+    <ul>
+      <li>The primary site will be hosted in a CMS provided by <a href="http://convio.com">Convio</a> and will use their website management tools to integrate the website content customized based on membership records.</li>
+      <li>The campaign sites will be housed in a CMS hosted on a managed server, probably by <a href="http://dreamhost.com">Dreamhost</a></li>
+    </ul>
+    
+    <p>There are three primary development paths to consider for the internal CMS:</p>
+
+    <ul>
+      <li>Purchase a commercial software package
+      <ul>
+        <li>Advantages:
+        <ul>
+          <li>Full feature set</li>
+          <li>Generally more extensive testing</li>
+          <li>Responsive support personnel</li>
+        </ul></li>
+        <li>Disadvantages:
+        <ul>
+          <li>Initial and possibly recurring costs</li>
+          <li>Limited to existent feature set</li>
+      </ul></li>
+      </ul>
+      </li>
+      <li>Customize an existing free open-source project
+      <ul>
+        <li>Advantages:
+        <ul>
+          <li>Several available active and robust projects</li>
+          <li>Frequently supported by large developer communities</li>
+          <li>Customizability limited by developer time</li>
+          <li>Paid support frequently available</li>
+        </ul></li>
+        <li>Disadvantages:
+        <ul>
+          <li>Projects generally aimed at developers and lack ease of use</li>
+          <li>Templating systems generally complex</li>
+          <li>Development of custom modules frequently complex</li>
+        </ul></li>
+      </ul></li>
+      <li>Develop a custom CMS application
+      <ul>
+        <li>Advantages:
+        <ul>
+          <li>Tailored to the exact needs of MPP</li>
+          <li>Systems design tailored to the design preferences of the web designer</li>
+          <li>No need to support previous software versions</li>
+        </ul></li>
+        <li>Disadvantages:
+        <ul>
+          <li>Potential issues in transitioning between web developers</li>
+          <li>Danger of incompletely or undocumented code</li>
+          <li>Potential reduplication of existing systems</li>
+        </ul></li>
+      </ul></li>
+    </ul>
+
+    <p>The real choice was between customizing an open-source solution and developing a new system from scratch. There is a huge amount of work being done on the web currently and software-wise there is a huge proliferation of open-source content management systems. This is unfortunately because the bulk of projects meet the needs of the specific project the designer created them for. Also it is because there are several different schools of web design and content management philosophy and different projects arise from those. The projects that I looked at specifically were:</p>
+
+    <ul>
+      <li><a href="http://drupal.org">Drupal</a>: This is the system that <a href="http://ostrowassociates.com">Ostrow Associates</a> is implemented in. The basic administrative and editing interfaces are useful and interesting. The usage of callbacks and hooks in the templating system is creative and makes for a fairly flexible system, but understanding the code requires an extensive knowledge of the programming system and it is difficult to develop new functionality quickly.</li>
+      <li><a href="http://wordpress.org">Wordpress</a>: This is the system that the <a href="http://activism.mpp.org">activism blog</a> is implemented in. It is a blogging system and not really designed to be used as a full-scale CMS.</li>
+      <li><a href="http://joomla.org">Joomla</a>: This is the system that had the reputation on the web for being the most flexible. Unfortunately it was also the system that I had to evaluate without doing a sample site. It looked promising, but I was turned off by the extensive use of tables and the mixing of content and presentation.</li>
+      <li><a href="http://www.rubyonrails.org">Ruby on Rails</a>: This is a publishing framework moreso than a CMS. It uses the Ruby language as a templating language and provides a variety of classes for database access and formatting lists.</li>
+    </ul>
+
+    <p>The recurring issue was that every CMS must attempt to strike a balance between the web developer's need for expressive power and the end users' need for comprehensibility. The bulk of projects simply ignored the scenario where maintenance will be performed by multiple people. Many which addressed it had models for site design which were difficult to work with to design sites on the short schedules frequently present at MPP.</p>
+    <p>The information from Kintera needs to be organized and restructured. The structure of the data needs to be maintained while being reorganized and none of the existing CMSes seem well suited to that task. A custom solution can meet this need as well as the other needs better than the customization of an existing system. Perhaps with an unlimited amount of time, becoming an expert in Joomla might work better for the long term, but to meet the short deadlines it is easier to write code.</p>
+
+    <h2>Timelines</h2>
+
+    <p>The tasks are divided based on my trip to Peru on June 2nd. Basic editing in the internal CMS and the export of data from Kintera so that it can be reorganized and cleaned. Then, once I return, there will be the export of the cleaned data into Convio's import format and the addition of more advanced functionality into the CMS. The deadline for phase two will be the launch of 70years.org to commemorate the 70th anniversary of marijuana prohibition on August 2nd.</p>
+    <p>The tasks are:</p>
+    
+    <ul>
+      <li>Basic Templating
+      <ul>
+        <li class="done">Phase One &bull; Recursive Processing</li>
+        <li class="done">Phase One &bull; Relative Paths</li>
+        <li class="done">Phase One &bull; XSLT Serialization Test</li>
+        <li>Phase One &bull; XSLT Template Serialization</li>
+        <li>Phase One &bull; List-Style Subtemplate Application</li>
+      </ul></li>
+      <li>Content Versioning
+      <ul>
+        <li>Phase One &bull; Generation from Subversion</li>
+        <li>Phase Two &bull; Web-Based Visual Diff</li>
+        <li>Phase Two &bull; XML Schema Based Data Input</li>
+      </ul></li>
+      <li>Web-Based Editing
+      <ul>
+        <li>Phase One &bull; Hand-Coded Test Editing Interfaces</li>
+        <li>Phase One &bull; Content Reorganization</li>
+      </ul></li>
+      <li>Phase Two &bull; Content Customized to User Login</li>
+      <li>Forms Processing
+      <ul>
+        <li>Phase One &bull; Hand-Coded Test Forms Processing</li>
+        <li>Phase Two &bull; Automated Forms Processing</li>
+      </ul></li>
+      <li>Efficient Document Generation
+      <ul>
+        <li class="done">Phase One &bull; Native XML Database Document Loading Test</li>
+        <li>Phase One &bull; Document Caching in Native XML Database</li>
+        <li>Phase One &bull; Document Caching in Relational Database</li>
+        <li>Phase One &bull; Dependency Tracking</li>
+      </ul></li>
+      <li>Phase Two &bull; <acronym title="Access Control List">ACL</acronym>-Based Document Control</li>
+      <li>Convio Data Import
+      <ul>
+        <li>Phase One &bull; Envisioned Primary Sitemap</li>
+        <li>Phase One &bull; Primary Site Data Extraction</li>
+        <li>Phase One &bull; State Sites Data Extraction</li>
+        <li>Phase One &bull; Automated Data Cleaning</li>
+        <li>Phase One &bull; Task Delineation for Content Reorganization</li>
+        <li>Phase Two &bull; Data Categorization</li>
+        <li>Phase Two &bull; XML Data Export</li>
+        <li>Phase Two &bull; Convio Data Import</li>
+      </ul></li>
+    </ul>
+
+    <h2 id="campaigns">Campaign Sites</h2>
+    
+    <table>
+      <tr><th>Site</th><th>Description</th></tr>
+      <tr>
+        <td><a href="http://changemarijuanapolicy.org">ChangeMarijuanaPolicy.org</a></td>
+        <td>Redirect to <a href="http://mpp.org">mpp.org</a></td>
+      </tr>
+      <tr>
+        <td><a href="http://changetheclimate.org">ChangeTheClimate.(org|com)</a></td>
+        <td>Adopted national campaign site</td>
+      </tr>
+      <tr>
+        <td><a href="http://controlmarijuana.org">ControlMarijuana.(org|com)</a></td>
+        <td>Redirect to <a href="http://mpp.org">mpp.org</a></td>
+      </tr>
+      <tr>
+        <td><a href="http://crcm-nv.org">CRCM-NV.(org|com)</a></td>
+        <td>Redirect to <a href="http://regulatemarijuana.org">RegulateMarijuana.org</a></td>
+      </tr>
+      <tr>
+        <td><a href="http://forfeiture.org">forfeiture.org</a></td>
+        <td>Redirect to <a href="http://mpp.org">mpp.org</a></td>
+      </tr>
+      <tr>
+        <td><a href="http://granitestaters.com">GraniteStaters.com</a></td>
+        <td>Granite Staters for Medical Marijuana &mdash; Listing of presidential candidates positions on medical marijuana</td>
+      </tr>
+      <tr>
+        <td><a href="http://joinmpp.org">JoinMPP.org</a></td>
+        <td>Landing page for tracking effectiveness of radio ad campaign</td>
+      </tr>
+      <tr>
+        <td><a href="http://mandatorymadness.com">MandatoryMadness.(org|com)</a></td>
+        <td>Stories of victims affected by mandatory minimum sentences</td>
+      </tr>
+      <tr>
+        <td><a href="http://marijuanapolicy.com">MarijuanaPolicy.(org|com)</a></td>
+        <td>Redirect to <a href="http://mpp.org">mpp.org</a></td>
+      </tr>
+      <tr>
+        <td><a href="http://marijuanapolicyproject.com">MarijuanaPolicyProject.(org|com)</a></td>
+        <td>Redirect to <a href="http://mpp.org">mpp.org</a></td>
+      </tr>
+      <tr>
+        <td><a href="http://marijuanaregulation.com">MarijuanaRegulation.(org|com)</a></td>
+        <td>Redirect to <a href="http://mpp.org">mpp.org</a></td>
+      </tr>
+      <tr>
+        <td><a href="http://minnesotacares.org">MinnesotaCares.org</a></td>
+        <td>Minnesotans for Compassionate Care</td>
+      </tr>
+      <tr>
+        <td><a href="http://montanacares.com">MontanaCares.(org|com)</a></td>
+        <td>Medical Marijuana Policy Project of Montana</td>
+      </tr>
+      <tr>
+        <td><a href="http://mpp-vip.org">MPP-VIP.(org|com)</a></td>
+        <td>Marijuana Policy Project VIP Campaign</td>
+      </tr>
+      <tr>
+        <td><a href="http://mpp.org">MPP.org</a></td>
+        <td>MPP's Primary Site</td>
+      </tr>
+      <tr>
+        <td><a href="http://ostrowassociates.com">OstrowAssociates.com</a></td>
+        <td>Dr. David Ostrow</td>
+      </tr>
+      <tr>
+        <td><a href="http://prohibitioncosts.org">ProhibitionCosts.org </a></td>
+        <td>The Budgetary Implications of Marijuana Prohibition</td>
+      </tr>
+      <tr>
+        <td><a href="http://regulatemarijuana.com">RegulateMarijuana.(org|com)</a></td>
+        <td>Committee to Regulate and Control Marijuana &mdash; Nevada Decriminilization Initiative</td>
+      </tr>
+      <tr>
+        <td><a href="http://regulatemarijuanainalaska.com">RegulateMarijuanaInAlaska.(org|com)</a></td>
+        <td>Regulate Marijuana in Alaska</td>
+      </tr>
+      <tr>
+        <td><a href="http://rimedicalmarijuana.org">RIMedicalMarijuana.org</a></td>
+        <td>Redirect to <a href="http://ripatients.org">RIPatients.org</a></td>
+      </tr>
+      <tr>
+        <td><a href="http://savehemp.org">SaveHemp.org</a></td>
+        <td>Redirect to <a href="http://mpp.org">mpp.org</a></td>
+      </tr>
+      <tr>
+        <td><a href="http://sdmedicalmarijuana.com">SDMedicalMarijuana.(org|com)</a></td>
+        <td>South Dakotans for Medical Marijuana</td>
+      </tr>
+      <tr>
+        <td><a href="http://sensiblemarijuanapolicy.org">SensibleMarijuanaPolicy.org</a></td>
+        <td>Committee for Sensible Marijuana Policy &mdash; Massachusetts Decriminalization Initiative</td>
+      </tr>
+      <tr>
+        <td><a href="http://sensiblesantacruz.org">SensibleSantaCruz.org</a></td>
+        <td>Santa Cruz Citizens for Sensible Marijuana Policy</td>
+      </tr>
+      <tr>
+        <td><a href="http://stoparrestingpatients.org">StopArrestingPatients.(org|com)</a></td>
+        <td>Michigan Coalition for Compassionate Care</td>
+      </tr>
+      <tr>
+        <td><a href="http://stopteenuse.org">StopTeenUse.(org|com)</a></td>
+        <td>Stop Teen Use of Marijuana</td>
+      </tr>
+      <tr>
+        <td><a href="http://taxationandregulation.org">TaxationAndRegulation.(org|com)</a></td>
+        <td>Redirect to <a href="http://stopteenuse.org">StopTeenUse.org</a></td>
+      </tr>
+      <tr>
+        <td><a href="http://truthaboutmarijuana.org">TruthAboutMarijuana.(org|com)</a></td>
+        <td>Redirect to <a href="http://mpp.org">mpp.org</a></td>
+      </tr>
+      <tr>
+        <td><a href="http://vermontmpp.org">VermontMPP.org</a></td>
+        <td>Redirect to <a href="http://vmpp.org">vmpp.org</a></td>
+      </tr>
+      <tr>
+        <td><a href="http://vmpp.org">VMPP.ORG</a></td>
+        <td>Vermont Marijuana Policy Project</td>
+      </tr>
+    </table>
+  </body>
+</html>
