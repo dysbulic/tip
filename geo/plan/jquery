@@ -1,0 +1,22 @@
+function drawGridLines(type, holder) {
+    var breaks = 60;
+    var max = 360;
+    var size = { width : 1280, height : 650 };
+    for(idx = 1; idx <= max; idx += max / breaks) {
+        switch(type) {
+        case "horizontal":
+            $(holder).append("line").attr("class", "lat " + idx)
+                                    .attr("x1",          0).attr("y1", size.width)
+                                    .attr("x2", size.width).attr("y2", size.width);
+            $(holder).append("text").append(idx + "&deg;");
+            break;
+        }
+    }
+}
+
+function drawGrid() {
+    drawGridLines("horizontal", "#latlong");
+    drawGridLines("vertical", "#latlong");
+}
+
+drawGrid();

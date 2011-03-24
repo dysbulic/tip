@@ -1,0 +1,42 @@
+#!/bin/bash
+
+HASHDIR=".../hashes/sha256"
+HASHCMD="sha256sum"
+
+ROOTDIR=${HASHDIR%%/*}
+[ -e "$ROOTDIR" ] || {
+    echo "Root Directory Missing: $ROOTDIR"
+    exit -1
+}
+
+[ -z "$*" ] && {
+    echo "Usage: $0 [file]+"
+    echo " Replaces the file with a symlink to a file in $HASHDIR"
+    echo " The files name in the hash directory is the SHA256 sum."
+    echo " This is to allow the hashdir to sync independently"
+    echo "  of the source tree."
+    echo
+    echo " find -name ttf -print0 | xargs -0 lnhash"
+    exit -2
+}
+
+mkdir -pv "$HASHDIR"
+for file in "$@"; do
+    [ -d "$file" ] && {
+        echo "Skipping Directory: $file"
+        continue
+    }
+    [ -L "$file" ] && {
+        echo "Skipping Link: $file"
+        echo -n "  $file -> "
+        readlink "$file"
+        continue
+    }
+
+    HASH=$($HASHCMD "$file" | sed -e 's| .*||')
+    echo -n "Move: "
+    mv -v "$file" "$HASHDIR/$HASH"
+    echo -n "Link: "
+    ln -sv "$HASHDIR/$HASH" "$file"
+done
+

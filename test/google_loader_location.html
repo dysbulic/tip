@@ -7,39 +7,41 @@
     <style type="text/css">
       #info, #search { float: left; padding: 1em; }
     </style>
-    <script src="http://www.google.com/jsapi?key=ABQIAAAA70e1TrScvoeLHNzMa4BtIBS5CBWw3K3PbugkSJo66gbauGjNKRRIPzVtdxmhAaWS96QCWhtaQjwqIA" type="text/javascript"></script>
-    <script type="text/javascript"> google.load("jquery", "1.4") </script>
+    <script src=".../lib/google/loader/js" type="text/javascript"></script>
+    <script type="text/javascript"> google.load("jquery", "1.5") </script>
     <script type="text/javascript">//<![CDATA[
-      $(function() {
-        if (!google.loader.ClientLocation) {
-          $('body').($('<p>ClientLocation is not set</p>'));
+      $( function() {
+        if( !google.loader.ClientLocation ) {
+          $('body').append( $('<p>ClientLocation is not set</p>') )
         } else {
-          var loc = google.loader.ClientLocation;
-          var addr = google.loader.ClientLocation.address;
-          $('body').append($('<ul id="info"/>')
-                           .append($('<li>(' + loc.latitude + ', ' + loc.longitude + ')</li>'))
-                           .append($('<li>' + addr.city + ', ' + addr.region + ', ' + addr.country + ' (' + addr.country_code + ')</li>')));
+          var loc = google.loader.ClientLocation
+          var addr = google.loader.ClientLocation.address
+          $('body').append( $('<ul id="info"/>')
+                            .append( $('<li>(' + loc.latitude + ', ' + loc.longitude + ')</li>') )
+                            .append( $('<li>' + addr.city + ', ' + addr.region + ', '
+                                       + addr.country + ' (' + addr.country_code + ')</li>') ) )
         }
-      });
+      } )
     //]]></script>
     <script type="text/javascript">//<![CDATA[
       google.load("search", "1", { callback: function() {
-        var searchControl = new google.search.SearchControl();
+        var searchControl = new google.search.SearchControl()
 
-        var localSearch = new google.search.LocalSearch();
-        localSearch.setCenterPoint(google.loader.ClientLocation.address.city + ',' + google.loader.ClientLocation.address.region);
+        var localSearch = new google.search.LocalSearch()
+        localSearch.setCenterPoint( google.loader.ClientLocation.address.city
+                                    + ',' + google.loader.ClientLocation.address.region )
 
-        searchControl.addSearcher(localSearch);
-        searchControl.addSearcher(new google.search.WebSearch());
-        searchControl.addSearcher(new google.search.VideoSearch());
-        searchControl.addSearcher(new google.search.BlogSearch());
+        searchControl.addSearcher( localSearch )
+        searchControl.addSearcher( new google.search.WebSearch() )
+        searchControl.addSearcher( new google.search.VideoSearch() )
+        searchControl.addSearcher( new google.search.BlogSearch() )
 
-        var attachPoint = $('<div id="search"/>');
-        $('body').append(attachPoint);
-        searchControl.draw(attachPoint.get(0));
+        var attachPoint = $('<div id="search"/>')
+        $('body').append( attachPoint )
+        searchControl.draw( attachPoint.get(0) )
 
-        searchControl.execute('pizza');
-      } });
+        searchControl.execute( 'pizza' )
+      } })
     //]]></script>
   </head>
   <body>

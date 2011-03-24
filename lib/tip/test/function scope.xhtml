@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC
+  "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Function Scope</title>
+  <script type="application/javascript" src=".../lib/tip/Array.each.js"/>
+  <script type="application/javascript" src=".../lib/tip/List.js"/>
+  <script type="application/javascript" src=".../lib/jquery/jquery.js"/>
+  <script type="application/javascript" src=".../lib/tip/tip.jquery"/>
+  <script type="application/javascript"><![CDATA[
+      $( function() {
+          var list = new List
+          list.__.set( 'a', 'A' )
+          list.__.set( 'b', 'B' )
+          
+          var $list = $('<ul/>')
+          $.__.$('#').append( $list )
+
+          list.__.each( function( val, key ) {
+              $list.append( $('<li/>').text( 'pre list.' + key + ' = ' + val ) )
+          } )
+          ;
+          ( function recurse( depth ) {
+              ++depth
+              list.__.each( function( val, key ) {
+                  $list.append( $('<li/>').text( depth + ' pre list.' + key + ' = ' + val ) )
+              } )
+              if( depth < 5 ) {
+                  var scope = list
+                  list = new Superlist( list )
+                  list.__.set( 'd', depth )
+                  recurse( depth )
+                  list = scope
+              }
+              list.__.each( function( val, key ) {
+                  $list.append( $('<li/>').text( depth + ' post list.' + key + ' = ' + val ) )
+              } )
+          } )( 0 )
+          list.__.each( function( val, key ) {
+              $list.append( $('<li/>').text( 'post list.' + key + ' = ' + val ) )
+          } )
+      } )
+  ]]></script>
+</head>
+<body>
+  <p>Trying to do scoping using superlists&hellip;</p>
+</body>
+</html>

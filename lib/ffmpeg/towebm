@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# If there are no arguments, print instructions
+[ -z "$*" ] && {
+    echo "Convert videos to webm"
+    echo "Usage: $0 <<video>+>"
+    exit -1
+}
+
+cores=0
+for processor in $(grep -e '^cpu cores' /proc/cpuinfo | sed -e 's/.*:\s*//'); do
+    cores=$(($cores + $processor))
+done
+
+ARGS="-f webm -vcodec libvpx -acodec libvorbis -threads $cores -aq 100 -sameq -y"
+
+for file in "$@"; do
+    input="$file"
+    [ -e "$input" ] || {
+        echo "Error: Input Not Found: $input"
+        continue
+    }
+
+    output="${file%.*}.webm"
+    [ -e "$output" ] && {
+        echo -n "Replace? [y/N]: $output: "
+        read -n 1 replace
+        echo
+        [[ "$replace" == "y" ||  "$replace" == "Y" ]] || {
+            continue
+        }
+    }
+
+    # Doesn't handle spaces correctly
+    #args="$ARGS -passlogfile \"$output\""
+    #args="$ARGS -passlogfile \\\"$output\\\""
+    #args="$ARGS -passlogfile '$output'"
+    args="$ARGS"
+    
+    echo "Pass #1: $input"
+    time ffmpeg -i "$input" $args -an -pass 1 -passlogfile "$output" "$output"
+    echo "Pass #2: $input"
+    time ffmpeg -i "$input" $args -pass 2 -passlogfile "$output" "$output"
+done

@@ -1,0 +1,9 @@
+SIZE = 400
+
+all: doh_logo.jpg doh_logo_paths.jpg doh_logo_paths_godnames.jpg doh_logo_big_icons.jpg doh_logo_big_icons_paths.jpg business_card_front.jpg business_card_front_paths.jpg
+
+business_card%.jpg: business_card%.svg
+	java -jar ~/bin/batik-1.6/batik-rasterizer.jar -m "image/jpeg" -w $(SIZE) -h $$((20 * $(SIZE) / 35)) -d "$@" "$<"
+
+%.jpg: %.svg
+	java -jar ~/bin/batik-1.6/batik-rasterizer.jar -m "image/jpeg" -w $(SIZE) -h $(SIZE) -d "$@" "$<"
