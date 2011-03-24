@@ -33,7 +33,7 @@ for file in glob.glob( "*" ):
     print "Reading Metadata: %s" % ( " ".join( command ) )
     ffprobeOut = subprocess.Popen( command,
                                    stdout=subprocess.PIPE,
-                                   stderr=subprocess.DEVNULL ).stdout
+                                   stderr=None ).stdout
     for line in ffprobeOut.readlines():
         print line
     ffprobeOut.close()
