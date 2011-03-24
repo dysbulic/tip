@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Include the wrappers utility script
+. java-wrappers.sh
+
+# We need sun runtime.
+find_java_runtime openjdk sun 
+
+find_jars xercesImpl batik-all 
+find_jars xml-apis-ext batik-transcoder
+# fop-transcoder.jar 
+
+# We need FOP for PDF output
+if locate_jar fop; then
+    find_jars fop xmlgraphics-commons
+fi
+
+find_jars avalon-framework commons-logging commons-io
+
+# We see if there is a -scriptSecurityOn in the commandline
+if [ "$1" != -scriptSecurityOn ]; then
+    extra_args="-scriptSecurityOff"
+else
+    shift
+    extra_args=""
+fi
+
+run_java org.apache.batik.apps.rasterizer.Main $extra_args "$@"

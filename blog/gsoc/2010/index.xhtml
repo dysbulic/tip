@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tip="http://dhappy.org/tip/0.1/a"
+      xmlns:thesis="tip:media/document/thesis"
+      xmlns:var="tip:core/var">
+  <head>
+    <title>Summer of Code Proposal &mdash; Collaborative Art</title>
+    <link rel="stylesheet" type="text/css" href="~/media/style/thesis.css" />
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"/>
+    <script type="text/javascript" src=".../lib/tip/src/__.jquery"/>
+    <style type="text/css">
+      #htmldom object, #htmltraverse object, #cals object { height: 300px; }
+      #htmlevents object { height: 120px; }
+      #copiedcals object { height: 300px; }
+      #faodata object, #svgdom object { height: 225px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <hgroup>
+        <h1>A Platform for Collaborative Art</h1>
+        <h2><em><a href="http://google.com">Google</a> <a href="http://socghop.appspot.com">Summer of Code</a> 2010</em></h2>
+        <h2><a href="mailto:Will%20Holcomb%20%3Cwill@dhappy.org%3E">Will Holcomb</a></h2>
+        <h2>April 2010</h2>
+      </hgroup>
+    </header>
+
+    <section id="abstract">
+      <title>Abstract</title>
+
+      <p>For Summer of Code, I propose to implement a platform for distributed collaboration and interaction with large-scale digitial art projects. The project will center around a pilot piece open to participants in the yearly art festival <a href="http://burningman.com">Burning Man</a>. This document describes the motivation in greater depth and gives an overview of the technical details of implementation.</p>
+    </section>
+
+    <section id="motivation">
+      <title>Motivation</title>
+
+      <p>Much of the work of the <a href="http://creativecommons.org">Creative Commons</a> to date has focused on improving the reuse of creative work by making it possible to create derivative works. An area that has recieved less attention is the Commons as an environment where artists collaborate to create complex works of art.</p>
+
+      <p>The dominant technology in the arena of collaborative creativity is arguably the <a href="http://en.wikipedia.org/wiki/Wiki">wiki</a>. Current wiki software, however, focuses collaboration on editing text. While other types of media may be present, they are involatile within the context of the wiki.</p>
+
+      <p>A more fundamental limitation of wikis is the requirement for consensus. Each artifact in the system has a single authoritative version decided upon by editors. While a consensus-based model might be appropriate for projects with an objective baseline, such as an <a href="http://wikipedia.org">encyclopedia</a>, there are a variety of situations for which no deciding authority exists.</p>
+
+      <p><a href="http://www.w3.org/Graphics/SVG/"><acronym title="SVG">Scalable Vector Graphics</acronym></a> is a standard for two-dimensional graphics that represents the image as a structured text document, much like <acronym title="Hypertext Markup Language">HTML</acronym>. Alterations in the image require only changes to the source text, making them prime candidates for reuse.</p>
+
+      <p>At this time, no tools exist for the collaborative creation of composite <acronym title="Scalable Vector Graphics">SVG</acronym>s. The creation of such a tool, particularly when combined with an interesting content project, would serve to engage artists in a new medium while bolstering participation in the Commons.</p>
+    </section>
+
+    <section id="tech">
+      <title>Technology Plan</title>
+
+      <p>Central to the system is the use of a work graph which holds contributions from artists as well as information about the social graph and relationships between elements. Responses to content requests take the form of a traversal of the work graph.</p>
+
+      <p>A message queue for <acronym title="eXtensible Markup Language">XML</acronym> pipelining will be passed through the traverse and accumulate messages to fulfill the request.</p>
+
+      <p>Each contributor will have a separate subgraph within the work graph, and viewers will be able either to follow predefined paths or view alternatives and combine work in original ways. The social aspect of the work graph will contain tagging metadata that viewers can use to sort through the possiblities.</p>
+
+      <p>Though the pilot project is oriented specifically at <acronym title="Scalable Vector Graphics">SVG</acronym>, the platform is appropriate for any type of <acronym title="eXtensible Markup Language">XML</acronym> composition.</p>
+    </section>
+
+    <section id="timeline">
+      <title>Timeline</title>
+
+      <p>In order to be accessible to the participants of Burning Man which is held at the end of August, some aspects of this project would need to begin initial development in advance of the official opening of Summer of Code in late May.</p>
+      
+      <p>A potential development timeline is:</p>
+
+      <ul>
+        <li>May &mdash; Combine the graph database <a href="http://neo4j.org">Neo4j</a> and pipelining framework <a href="http://cocoon.apache.org">Cocoon</a> to hold the work graph and fulfill content requests for a single user.</li>
+        <li>June &mdash; Add support for <a href="http://openid.net">OpenID</a> authentication and support for the social graph within the work graph. Open pilot project to particiation.</li>
+        <li>July &mdash; Add support for basic traversal operations from the <a href="http://www.w3.org/TR/xslt"><acronym title="eXtensible Stylesheet Transformations">XSLT</acronym></a> specification to the traversal of the work graph.</li>
+        <li>August &mdash; If time permits, create a handheld interface for traversing the work graph for the Android phone. This could then be accessible to allow interaction with the piece at the actual event.</li>
+      </ul>
+    </section>
+  </body>
+</html>

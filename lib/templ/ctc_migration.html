@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Change the Climate Migration</title>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <style type="text/css">
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Change the Climate Migration</h1>
+
+    <p>MPP is getting ready to move from <a href="http://kintera.com">Kintera</a> to <a href="http://getactive.com">GetActive</a> because Kintera is very broken. Only the <a href="http://mpp.org">main site</a> is moving into GetActive. To keep costs down, little campaign sites are moving in-house. We have some things hosted on our own servers already, but the problem is they are not in CMSes and all updates have to go through IT. This isn't really workable since I don't have time to both do design stuff and make dozens of content edits per week.</p>
+
+    <p>I've written some code to integrate with <a href="http://drupal.org">Drupal</a> and <a href="http://wordpress.org">WordPress</a>, and both are better than static HTML, but neither works really well for me. MPP is going to take over the hosting of <a href="http://changetheclimate.org">changetheclimate.org</a> and since it is a site with several distinct parts, I want to use it as a test case.</p>
+
+    <h2>Headers and Footers</h2>
+
+    <p>There is a header and sidebar that is present on all the pages. For example, the main landing page is generated from the following files:</p>
+
+    <ul>
+      <li><a href="../changetheclimate.org/index.phps">index.php</a></li>
+      <li><a href="../changetheclimate.org/top.phps">top.php</a></li>
+      <li><a href="../changetheclimate.org/right.phps">right.php</a></li>
+    </ul>
+
+    <p>I want to have one main template for the parts of the page that are shared across various pages. Then I want to have a content template (that will likely be static content).</p>
+
+    <ul>
+      <li><a href="default.html.tmpl">default.html.tmpl</a></li>
+      <li><a href="index.html.tmpl">index.html.tmpl</a></li>
+      <li><a href="news.html.tmpl">news.html.tmpl</a></li>
+    </ul>
+
+    <p>The system is built on the concept of reasonable defaults that can be overridden. The steps involved are:</p>
+
+    <ol>
+      <li>
+        <p><strong>Load Metadata:</strong> Part of the point is the encapsulation into discrete pieces with as little "leakage" as possible. Take, for example the main container template and the content. The container doesn't care about what the content is, nor does the content, generally care about the container. So information about these two things is stored in separate files and the relationships between them are stored as metadata.</p>
+        <p>Metadata is simply a set of name-value pairs that specify an environment for the processing. These pairs are loaded from several different sources and if a value is defined a second time, its value replaces the previous definition. The initial loading of metadata is done in the following order:</p>
+        <ol>
+          <li><code>~/.templ.metadata</code></li>
+          <li><code>./.templ.metadata</code></li>
+          <li><code>-metadata <em>filename</em></code> argument to the interpreter</li>
+          <li><code>-data <em>name</em>=<em>value</em></code> arguments to the interpreter</li>
+        </ol>
+      </li>
+      <li><p><strong>Process Files:</strong> Each of the files in the directory ending in <code>.tmpl</code> are examined. If they don't contain the attribute <code>tmpl:iscontent="false"</code> the file is loaded as content into a template.</p></li>
+      <li>
+        <p><strong>Load Content Template:</strong> There has to be some container for content. The container may be specified in several ways. The first of these to be found is used for the file <code><em>name</em>.<em>filetype</em>.tmpl</code>:</p>
+        <ol>
+          <li><code>-template <em>filename</em></code> argument to the interpreter</li>
+          <li><code>./default.<em>filetype</em>.tmpl</code></li>
+          <li><code>-default-template <em>filename</em></code> argument to the interpreter</li>
+          <li><code>./default.html.tmpl</code></li>
+        </ol>
+      </li>
+      <li><p><strong>Load the Content:</strong> The template is marked with <code>&lt;tmpl:area/></code> tags. Each of them has an <code>id</code>. By default, the content is loaded into an area with the <code>id</code> of <code>content</code>.</p></li>
+    </ol>
+  </body>
+</html>

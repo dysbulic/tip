@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:tip="http://dhappy.org/tip/0.1/a"
+      xmlns:sm="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xml:lang="en">
+  <head>
+    <title>The <acronym title="Department of Happiness">DoH</acronym> </title>
+    <sm:url>
+      <sm:loc><templ:var name="/where"/></sm:loc>
+      <sm:lastmod><templ:var name="/page/current/modification/-1"/></sm:lastmod>
+      <templ:var name="/page/current/modification/frequence"><sm:changefreq><templ:var/></sm:changefreq></templ:var>
+      <sm:priority><templ:var name="/page/priority"/></sm:priority>
+    </sm:url> 
+    <link rel="stylesheet" type="text/css" href="doh.css" />
+    <link rel="stylesheet" type="text/css" href="doh_ie.css" tip:browser="ie"/>
+    <style type="text/css">
+      #postits object { height: 200px; }
+      #iteration object { height: 200px; }
+      #projected object { height: 200px; }
+      #five_year object { height: 300px; }
+      #sorted object { height: 250px; }
+      #milestones object { height: 100px; }
+      #logo { margin-top: 3em; width: 100%; height: 450px; margin-bottom: 3em; }
+      #amazon { border: 1px solid; margin: 2em auto; }
+      #kitten { height: 450px; }
+      #selftag { height: 250px; }
+      #tagprogress { height: 300px; }
+    </style>
+  </head>
+  <body>
+    <object id="logo" type="image/svg+xml" data="http://will.tip.dhappy.org/.../media/image/logo/Department of Happiness/logo.svg">
+    </object>
+    <table>
+      <tr>
+        <td>
+          <ul>
+            <li>Name:</li>
+            <li>Date:</li>
+          </ul>
+        </td>
+        <td>
+          <p>0910117grXfB</p>
+        </td>
+      </tr>
+    </table>
+
+    <ol>
+      <li>
+        <h2>Introduction:</h2>
+        <p>This is a creativity quiz. If you are unwilling to complete this quiz for any reason, please pass it to the most creative looking person in your general vicinity.</p>
+      </li>
+      <li>
+        <h2>Part One:</h2>
+        <p>Please answer question IV on the previous page.</p>
+      </li>
+      <li>
+        <h2>Part Two:</h2>
+        <ol>
+          <li>
+            <p>What is the largest sum of odd numbers you can calculate in one minute?</p>
+            <ul>
+              <li>n = <tip:input var="/math/sum/integers/odd/sum/higest/count"/></li>
+              <li>
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <moverunder><mo>&Sum;</mo><mi>n</mi><mrow><mi>i</mi><mo>=</mo><mi>1</mi></mrow></moverunder>
+                  <mfenced close=""><mtable>
+                    <mtd><mi>i</mi><mo>mod</mo><mn>2</mn><mo>=</mo><mn>0</mn></mtd><mtd><mo>;</mo></mtd><mtd><mn>0</mn></mtd>
+                    <mtd><mi>i</mi><mo>mod</mo><mn>2</mn><mo>=</mo><mn>1</mn></mtd><mtd><mo>;</mo></mtd><mtd><mi>i</mi></mtd>
+                  </mtable></mfenced>
+                </math>
+                =
+                <tip:input var="/math/sum/integers/odd/sum/higest/sum"/>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <p>You, Gandhi, Hitler, and Jesus are on a sinking boat in shark infested waters. If one of you gets out you can bail fast enough for help to arrive, if no one gets out you will all die. Who should get out? Why?</p>
+            <tip:input var="/question/who dies?/me/Gandhi/Hitler/Jesus/"/>
+          </li>
+          <li>
+            <p>What is the greatest hindrance to your dreams, and what would you do if it didn't exist?</p>
+            <tip:input var="/question/What is the greatest hindrance to your dreams, and what would you do if it didn't exist?"/>
+          </li>
+          <li>
+            <p>If you were absolute dictator of the world, what rules would you change?</p>
+            <tip:input var="/question/If you were absolute dictator of the world, what rules would you change?"/>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <h2>Part Three:</h2>
+        
+        <p>Please describe what you think this test <em>should</em> look like.</p>
+        <tip:input var="/quiz/creativity/"/>
+      </li>
+    </ol>
+  </body>
+</html>

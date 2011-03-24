@@ -1,0 +1,8 @@
+AddType image/svg+xml .svg
+
+RewriteEngine on
+RewriteOptions inherit
+
+RewriteCond %{SERVER_NAME} ^riddlecreek\.holcomb\.info$ [NC]
+
+RewriteRule ^(.*)$ http://www.holcomb.info/property%{REQUEST_URI} [R,L]

@@ -1,0 +1,37 @@
+document = [:space:]*, xml declaration,
+           [:space:]*, doctype?,
+           ( [:space:]*, processing instruction )*,
+           [:space:]*, root;
+xml declaration = '<?xml', attributes, [:space:]*, '?>'; 
+
+doctype = '<!DOCTYPE',
+            [:space:]*, name,
+            ( [:space:]*, public identifier,
+              [:space:]*, system identifier, )?
+            internal subset?
+          '>';
+public identifier = quoted string;
+system identifier = quoted string;
+internal subset = '[', [.]*, ']'; // ToDo
+
+processing instruction = '<?', name, attributes, [:space:]*, '?>';
+
+root = node;
+node = parent | empty;
+parent = open, content, close;
+open = '<', name, attributes, [:space:]*, '>';
+content = ( data | node )*;
+close = '</', name, '>';
+
+data = tagless text | character data;
+tagless text = ( entity | '< ' | [^<] )+;
+entity = '&', name, ';';
+character data = '<![CDATA[', [.]*, ']]>';
+
+attributes = ( [:space:]+, attribute )*;
+attribute = name, [:space:]*, '=', [:space:]*, value;
+name = [^[:space:]]+;
+value = quoted string;
+
+quoted string = ( ( '"', [^"]*, '"' )
+                  || ( "'", [^'], "'" ) );

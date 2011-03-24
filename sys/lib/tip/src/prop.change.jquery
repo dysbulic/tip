@@ -1,0 +1,128 @@
+(function($) {
+    if( ! $.fn.prop ) throw "prop.change requires $.fn.prop";
+
+    // If DOMAttrModified.js is already defined, this will succeed with
+    // a buggy false positive because the elem[attr] syntax is used to
+    // set when a predefined attribute is set (which __TEST__ is not).
+    $.support.DOMAttrModified = false;
+    var listener = function() { $.support.DOMAttrModified = true };
+    var doc = $(document.documentElement);
+    doc.bind('DOMAttrModified', listener);
+    doc.attr('___TEST___', true);
+    doc.attr('___TEST___', null);
+    doc.unbind('DOMAttrModified', listener);
+
+    // Requires $.fn.props
+    if( $.fn.props !== undefined ) {
+        $.fn.props.PropList.prototype.change = function( handler ) {
+            this.__.iter(function(idx, prop) {
+                prop.change(handler);
+            });
+        }
+    }
+
+    $.fn.prop.Prop.prototype.change = function( handler ) {
+        var listeners = this.listeners('change');
+        if( ! handler.props ) {
+            handler.props = [];
+        }
+        handler.props.push(this);
+        listeners.push(handler);
+    }
+
+    $.fn.prop.Prop.prototype.listeners = function(event) {
+        if( event == 'change' ) {
+            if( this.ownerElement.nodeType == Node.ELEMENT_NODE ) {
+                return getDOMListeners(this);
+            } else {
+                return getObjectListeners(this);
+            }
+        }
+        return undefined;
+    }
+
+    $.fn.prop.Prop.prototype.trigger = function(event, data) {
+        var listeners = this.listeners(event);
+        if( listeners && listeners.length > 0 ) {
+            $.each(listeners, function(idx, listener) {
+                $.each(listener.props, function(idx, prop) {
+                    listener.call(prop, event);
+                });
+            });
+        }
+    }
+
+    // Returns the listeners for an attribute to a DOM element
+    function getDOMListeners(attr) {
+        var $parent = $(attr.ownerElement);
+        // Chrome 5 does not support DOMAttrModified
+        if( ! $.support.DOMAttrModified && attr.name in attr.ownerElement ) {
+            var setter = attr.ownerElement.__lookupSetter__(attr.name);
+            // Prevent multiple wrappings
+            if( ! setter || ! setter.isDOMAttrModifiedWrapper ) {
+                // Pass through setAttribute to allow workaround to catch the setting
+                var newSetter = function(newVal) {
+                    attr.value = newVal;
+                }
+                newSetter.isDOMAttrModifiedWrapper = true;
+                attr.ownerElement.__defineSetter__(attr.name, newSetter);
+            }
+        }
+        var listenersMap = $parent.data('changeListeners');
+        if( ! listenersMap ) {
+            listenersMap = {};
+            var trigger = function(event) {
+                if( event.newValue != event.prevValue ) {
+                    attr.trigger('change', event);
+                }
+            }
+            $parent.bind('DOMAttrModified', function(event) {
+                trigger(event);
+            });
+            $parent.data('changeListeners', listenersMap);
+        }
+        if( ! listenersMap[attr.name] ) {
+            listenersMap[attr.name] = [];
+        }
+        return listenersMap[attr.name];
+    }
+
+    // Returns the listeners for an attribute to an object
+    function getObjectListeners(prop) {
+        var obj = prop.ownerElement;
+        var propName = prop.name;
+
+        // Wrap access to object properties in getters and setters to allow
+        // the change listeners to function
+        var setter = obj.__lookupSetter__(propName);
+        if( setter === undefined ) {
+            var getter = obj.__lookupGetter__(propName);
+            if( getter !== undefined ) {
+                setter = function(val) {
+                    throw 'Error: Attemped to set ' + propName + ' which has a getter, but no setter';
+                }
+            } else {
+                var value = obj[propName];
+                obj.__defineGetter__(propName, function() { return value; });
+                setter = function(val) { value = val };
+            }
+        }
+
+        // Wrap setter access to call listeners on change
+        if( setter.listeners === undefined ) {
+            var origSetter = setter;
+            var newSetter = function(newValue) {
+                var prevValue = obj[propName];
+                origSetter(newValue);
+                if(prevValue != newValue) {
+                    var event = { newValue: newValue, prevValue: prevValue };
+                    prop.trigger('change', event);
+                }
+            }
+            obj.__defineSetter__(propName, newSetter);
+            setter = newSetter;
+            setter.listeners = [];
+        }
+        return setter.listeners;
+    }
+})(jQuery)

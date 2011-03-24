@@ -1,0 +1,16 @@
+<svg id="svg-root" viewBox="0 0 450 350"
+ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <g id="test-body-content">
+    <text style="font-family:Helvetica;font-size:14;text-anchor: middle;" x="225" y="20">Test for clip-rule property.</text>
+    <clipPath id="clip1">
+      <path style="clip-rule:evenodd;" d="M200,60l20,0 0,60 20,0 0,-20 -60,0 0,-20 80,0 0,60 -60,0 0,-80z"/>
+    </clipPath>
+    <rect x="0" y="0" width="450" height="450" style="fill:red;clip-path:url(#clip1);"/>
+    <text style="font-family:Helvetica;font-size:12;text-anchor: middle;" x="225" y="170">clip-rule=evenodd</text>
+    <clipPath id="clip2">
+      <path style="clip-rule:nonzero;" d="M200,210l20,0 0,60 20,0 0,-20 -60,0 0,-20 80,0 0,60 -60,0 0,-80z"/>
+    </clipPath>
+    <rect x="0" y="0" width="450" height="450" style="fill:blue;clip-path:url(#clip2);"/>
+    <text style="font-family:Helvetica;font-size:12;text-anchor: middle;" x="225" y="320">cliprule=nonzero</text>
+  </g>
+</svg>

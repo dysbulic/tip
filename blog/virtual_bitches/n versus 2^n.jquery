@@ -1,0 +1,17 @@
+$.tip.load( 'src/props.jquery' );
+$.tip.ready(function() {
+    var start = $('#start').props({ cx: 'x', cy: 'y' });
+    var end = $('#end').props({ cx: 'x', cy: 'y' });
+
+    alert(start.x);
+
+    var padPercent = .05;
+    var pad = { x: Math.abs(start.x - end.x) * padPercent,
+                y: Math.abs(start.y - end.y) * padPercent };
+    
+    //for( var i = 1; i < 5; i++ ) {
+    $.tip.$('#').append($.tip.$('<line/>').attr({ x1: start.x - pad.x,
+                                                  y1: end.y,
+                                                  x2: end.x,
+                                                  y2: start.y + pad.y }));
+});

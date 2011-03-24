@@ -1,0 +1,104 @@
+set envelope_from=yes
+set from="Will Holcomb <will@himinbi.org>"
+
+# Causes sgid to be ignored
+#set sendmail="/usr/sbin/sendmail -oi -oem -O Timeout.queuereturn=30d -O Timeout.queuewarn=5d"
+set sendmail_wait=1
+set folder=~/mail
+set postponed=+postponed-msgs
+set send_charset="utf-8"
+set record=+sent-mail
+set copy=yes 
+set move=no    # Only move from spool on manual move
+set delete=yes # Delete without prompting
+set confirmappend=no
+set abort_unmodified=ask-yes
+
+mailboxes $MAIL imaps://honors.tntech.edu
+
+message-hook . "set mime_forward=no"
+message-hook "~h multipart" "set mime_forward=ask-yes"
+
+source /usr/share/doc/mutt-1.4/gpg.rc
+set pgp_replysign
+set pgp_replyencrypt
+#set pgp_autosign
+my_hdr X-GPG-Key: http://odin.himinbi.org/public_pgp_key.txt
+
+set   followup_to
+set   honor_followup_to
+unset metoo      # Remove me from CC headers
+unset save_empty # Remove empty folders
+
+set status_format="-%r-+(%v) %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]----%>-(%P)---"
+set compose_format="--+(%v) Compose  [Approx. msg size: %l   Atts: %a]%>-"
+set pager_format="-%Z- %C/%m: %.20n %> %s"
+
+set alias_file=~/sites/himinbi.org/odin/config/mutt.aliases
+source ~/sites/himinbi.org/odin/config/mutt.aliases
+
+#source ~/mauritanians/load_mutt_aliases.pl|
+ignore *    # this means "ignore all lines by default"
+unignore    from: subject to cc mail-followup-to \
+                date x-mailer x-url 
+hdr_order   from to cc  reply-to mail-followup-to date subject
+
+macro   generic "\ex"           ":exec "
+macro   pager   "\ex"           ":exec "
+macro   generic "\eX"           "\ex"
+macro   pager   "\eX"           "\ex"
+macro   index   "~"             ";~"
+
+#bind index v display-message
+bind index p previous-undeleted
+bind index n next-undeleted
+bind index ' ' next-page
+#bind index c mail
+#bind index g change-folder
+#bind index w search
+#bind index y print-message
+bind index x sync-mailbox
+bind index $ sort-mailbox
+bind index a tag-prefix
+bind index \; tag-entry
+
+macro index l   ":exec change-folder\n+\t\t"  "go to folder list"
+macro pager i   ":exec change-folder\n\n"     "go to message index"
+macro pager l   ":exec change-folder\n\n"     "go to message index (list)"
+macro browser g ":exec toggle-mailboxes\n!\n" "go to main index"
+#macro index g   ":exec change-folder\n!\n"    "go to main index"
+macro pager g   ":exec change-folder\n!\n"    "go to main index"
+
+bind pager q quit
+macro browser q ":exec toggle-mailboxes\n!\nquit" "go to main index"
+
+bind pager p previous-undeleted
+bind pager n next-undeleted
+bind pager ' ' next-page
+#bind pager g change-folder
+#bind pager c mail
+#bind pager w search
+bind pager y print-message
+bind pager \n noop      # PINE prints "No default action for this menu."
+bind pager <up> previous-line
+bind pager <down> next-line
+
+# color normal white black
+# color hdrdefault red default
+# color quoted brightblue default
+# color signature red default
+# color indicator brightyellow red
+# color error brightred default
+# color status yellow blue
+# color tree magenta default      # the thread tree in the index menu
+# color tilde magenta default
+# color message brightcyan default
+# color markers brightcyan default
+# color attachment brightmagenta default
+# color search default green      # how to hilite search patterns in the pager
+# 
+color header brightred default ^(From|Subject):
+color body magenta default "(ftp|http)://[^ ]+" # point out URLs
+color body magenta default [-a-z_0-9.]+@[-a-z_0-9.]+    # e-mail addresses
+color underline brightgreen default
+

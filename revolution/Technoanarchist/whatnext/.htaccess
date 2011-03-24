@@ -1,0 +1,15 @@
+RewriteEngine on
+
+RewriteCond %{REMOTE_ADDR} !^10\.
+RewriteCond %{REMOTE_ADDR} !^192\.168\.
+RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.
+RewriteCond %{REMOTE_ADDR} !^::1
+RewriteCond %{SERVER_NAME} !^ebene [NC]
+RewriteCond %{SERVER_NAME} !^whatnext\.technoanarchy\.org$ [NC]
+RewriteCond %{REQUEST_URI} ^.*whatnext/*(.*)$ [NC]
+RewriteRule ^(.*)$ http://whatnext.technoanarchy.org/%1 [R,L]
+
+RewriteBase /
+RewriteCond %{REQUEST_URI} !^/(skins|stylesheets|images|config)/
+RewriteCond %{REQUEST_URI} !^/(redirect|texvc|index).php
+RewriteRule ^(.*)$ /index.php?title=$1 [L,QSA]

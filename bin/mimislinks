@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+# Author: Will Holcomb <will@doh.gov>
+# Description: Program to build a local Tipspace as a set of links on top of a filesystem.
+
+# Revision 0.1: 8 September 2009
+# Roots .~ at the home directory
+# Roots ... at the universal namespace
+# Loads file extensions from 
+
+function checkdir() {
+    (
+        current="$1"
+        [ "$current" == "-" ] && {
+            current="./$current"
+        }
+        [[ "$current" == "." || "$current" == ".." ]] && {
+            # Special directories
+            return
+        }
+        [[ "$current" == ".git" || "$current" == ".svn" ]] && {
+            # Intentionally ignored
+            return
+        }
+        
+        # ToDo: Recognize "too many levels of links" error and don't display broken link error
+        pushd -- "$current" > /dev/null
+        [ -e "..." ] || {
+            # ToDo: Trim display of path from root to start dir
+            echo -n $(pwd)
+            ln -sv ../... ...
+        }
+        for file in .* * ; do
+            [[ -d "$file" && ! -L "$file" ]] && {
+                checkdir "$file"
+            }
+            # Shell expansion of '*' is '*' in an empty directory
+            [[ ! -e "$file" && "$file" != "*" ]] && {
+                link=$(readlink "$file")
+                # Kludge: If link is correct, assume "too deep" error
+                [[ "$file" == "..." && "$link" == "../..." ]] && {
+                    pwd
+                } || {
+                    echo "Broken Link: "
+                    echo "  $(pwd)/$file ->"
+                    echo "  $link"
+                }
+            }
+        done
+        popd > /dev/null
+    )
+}
+
+dir=${1:-$(pwd)}
+checkdir "$dir"
