@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Making a SVG Cover</title>
+    <link rel="stylesheet" href="../styles/main.css" type="text/css" />
+    <link rel="shortcut icon" href="http://odin.himinbi.org/gallery/main.php?g2_view=core.DownloadItem&amp;g2_itemId=8950" />
+    <style type="text/css">
+      .object { text-align: center; }
+      object { border: thin dashed gray; }
+      iframe { width: 100%; border: none; height: 20em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1><acronym title="Scalable Vector Graphic">SVG</acronym> Debian CD Cover</h1>
+
+    <iframe src="params.html"></iframe>
+
+    <p>A while back I made a <a href="raster.html">CD cover</a> for debian 2.2rc1. It was one of my first artsy sort of things and I was happy with it. I even shared it with the debian people and got put in the <a href="http://www.debian.org/CD/artwork/">FAQ</a>. Unfortunately I was too busy to keep updating the text as releases came out and eventually it was booted.</p>
+    <p>I made a replacement in <a href="http://www.w3.org/TR/SVG11/">SVG</a> which adds the labels using <a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm">ecmascript</a> and the <a href="http://www.w3.org/DOM/">DOM</a>. If your browser can view them, you can generate one using <a href="params.html">this form</a>. (The form also allows you to view the URL needed for viewers like <a href="http://xml.apache.org/batik/">Batik</a> which can take a URL, but can't do a HTML form.) If necessary, you can also <a href="images/svg_cover_files.tgz">download the files</a> and use Batik locally. (Questions marks are allowed in file names on some OS's though and so file:/ urls do not necessarily work with arguments.) The how of how it was done follows.</p>
+    <hr/>
+    <p>I was wandering back through old stuff and noticed those
+     covers and thought, "hmm&hellip;, it is just some image compositing
+     with some blending&hellip; I bet I could to that in svg and let people
+     make the text whatever they want." So, this page is me figuring
+     out how to do that&hellip;</p>
+    <p>I need this image to fade at the border and to do that
+     I will need to mask with a radial gradient. Such a svg would look
+     <a href="images/gradient.svg">something like this</a>:</p>
+    <div class="object">
+      <a href="images/gradient.svg">
+        <object data="images/gradient.svg" type="image/svg+xml"
+         width="400" height="400">
+          <object data="images/gradient.png" type="image/png">
+            <p>Your browser doesn't seem to handle the &lt;object&gt;
+             tag</p>
+          </object>
+        </object>
+      </a>
+    </div>
+    <p><a href="../svg_web_start/?svg=../covers/images/gradient.svg">View in Batik.</a></p>
+    <p>I used <a href="http://www.almackey.com">Al Mackey</a>'s <a
+     href="images/mackeyfox.png">Linux fox</a> (which I can no longer
+     find a working link for). I thought it would work better in a
+     vector format so I took a bit and <a
+     href="images/linuxfox.svg">vectorized</a> it using <a
+     href="http://www.adobe.com/products/illustrator/">Illustrator</a>.</p>
+    <div class="object">
+      <a href="images/linuxfox.svg">
+        <object data="images/linuxfox.svg" type="image/svg+xml"
+         width="400" height="400">
+          <object data="images/linuxfox.png" type="image/png">
+            <p>Your browser doesn't seem to handle the &lt;object&gt;
+             tag</p>
+          </object>
+        </object>
+      </a>
+    </div>
+    <p><a href="../svg_web_start/?svg=../covers/images/linuxfox.svg">View in Batik.</a></p>
+    <p>The <a href="images/swirl.svg">swirl</a> is just a converted
+     version of the <a
+     href="http://www.uk.debian.org/logos/#open-use">open use
+     logos</a>.</p>
+    <div class="object">
+      <a href="images/swirl.svg">
+        <object data="images/swirl.svg" type="image/svg+xml"
+         width="400" height="400">
+          <object data="images/swirl.png" type="image/png">
+            <p>Your browser doesn't seem to handle the &lt;object&gt;
+             tag</p>
+          </object>
+        </object>
+      </a>
+    </div>
+    <p><a href="../svg_web_start/?svg=../covers/images/swirl.svg">View in Batik.</a></p>
+    <p>Likewise the <a href="images/debian.svg">lettering</a> is just
+     broken out from an <a
+     href="http://www.uk.debian.org/logos/#open-use">open use
+     logo</a>.</p>
+    <div class="object">
+      <a href="images/debian.svg">
+        <object data="images/debian.svg" type="image/svg+xml"
+         width="400">
+          <object data="images/debian.png" type="image/png">
+            <p>Your browser doesn't seem to handle the &lt;object&gt;
+             tag</p>
+          </object>
+        </object>
+      </a>
+    </div>
+    <p><a href="../svg_web_start/?svg=../covers/images/debian.svg">View in Batik.</a></p>
+    <p>The process now is just compositing and adding some labels. SVG
+     makes importing and manipulating images pretty easy. There is a
+     basic <a href="images/cover_template.svg">template</a> which uses
+     ecmascript to insert labels.</p>
+    <div class="object">
+      <a href="images/cover_template.svg">
+        <object data="images/cover_template.svg" type="image/svg+xml"
+         width="400" height="400">
+          <object data="images/basic_template.png" type="image/png">
+            <p>Your browser doesn't seem to handle the &lt;object&gt;
+             tag</p>
+          </object>
+        </object>
+      </a>
+    </div>
+    <p><a href="../svg_web_start/?svg=../covers/images/cover_template.svg">View in Batik.</a></p>
+    <p>The parameters can be specified using <a href="params.html">a
+     form</a> or can be inserted in the URL manually. All of the
+     work is done by a script in the image and there is no server
+     generated content.</p>
+    <p>The parameters used by the program are:</p>
+    <ul>
+      <li>release: the name of the release (ex. "2.2 revision 3" or
+       "woody 3.0 rc2")</li>
+      <li>discname: the name of the disc (ex. "binary disc 1")</li>
+      <li>discid: a short id for the disc (ex. "1")</li>
+    </ul>
+    <p>Here is an <a href="images/cover_template.svg?discname=test%20disc%20name&amp;release=woody%201.2%20rc2&amp;discid=1">example</a> of the image with the query string ?discname=test%20disc%20name&amp;release=woody%201.2%20rc2&amp;discid=1</p>
+    <div class="object">
+      <a href="images/cover_template.svg?discname=test%20disc%20name&amp;release=woody%201.2%20rc2&amp;discid=1">
+        <object data="images/cover_template.svg?discname=test%20disc%20name&amp;release=woody%201.2%20rc2&amp;discid=1" type="image/svg+xml"
+         width="400" height="400">
+          <object data="images/option_template.png" type="image/png">
+            <p>Your browser doesn't seem to handle the &lt;object&gt;
+             tag</p>
+          </object>
+        </object>
+      </a>
+    </div>
+    <p><a href="../svg_web_start/?svg=../covers/images/cover_template.svg?discname=test+disc+name%26release=woody+1.2+rc2%26discid=1">View in Batik.</a></p>
+    <p>The filters are in an external file and the <a
+     href="http://www.adobe.com/svg/">Adobe viewer</a> doesn't deal
+     well with that. Your best bet is <a
+     href="http://xml.apache.org/batik/">Batik</a> which supports the
+     external filters correctly.</p>
+  </body>
+</html>

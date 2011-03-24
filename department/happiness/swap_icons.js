@@ -48,7 +48,6 @@ $( function() {
         if( $item == undefined ) {
             return
         }
-        console.log( 'toggle:' + showsub )
         $item.data( 'showsub', showsub )
         $item.parents().andSelf().each( function() {
             var $parent = $(this);
@@ -129,7 +128,6 @@ $( function() {
 
     var title = $root.children( 'title' ).text()
     $.history.init( function( hash ) {
-        console.log(hash)
         if( hash == '' ) {
             toggleItem( $selected, false )
         } else {
