@@ -9,7 +9,7 @@ $( function() {
         if( link[0] != '#' && link.substring( link.length - 3 ) == 'svg' ) { // non-local svg image
             $.get( link, function( data ) {
                 var $svg = $(data.documentElement)
-                $([ 'x', 'y', 'width', 'height' ]).each( function( idx, val ) {
+                $([ 'x', 'y', 'width', 'height', 'title' ]).each( function( idx, val ) {
                     if( $use.attr( val ) != undefined ) {
                         $svg.attr( val, $use.attr( val ) )
                     }
