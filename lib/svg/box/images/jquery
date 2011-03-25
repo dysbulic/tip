@@ -1,12 +1,73 @@
 $( function() {
+/*
     var $root = $(document.documentElement)
     $root.find( 'g' ).each( function() {
-        var $link = $(this)
-        console.log( $link )
-        $link.hover( function() {
-            console.log( 'hovered' )
-        } )
+        var $box = ( $(document.createElementNS( 'http://www.w3.org/2000/svg', 'rect' ))
+                     .attr( { purpose : 'outline' } ) )
+        $(this)
+            .after( $box )
+            .hover(
+                function() {
+                    var bbox = this.getBBox()
+                    $box.attr( bbox ).toggle( true )
+                },
+                function() {
+                    // $box.removeClass( 'visible' ).addClass( 'hidden' )
+                    $box.attr( bbox ).toggle( false )
+                } )
     } )
+*/
 
-    console.log( 'ran' )
+    // From: http://files.myopera.com/MacDev_ed/svg/coords/sandbox.svg
+
+    var bbox = null
+
+    function drawRect( evt ) {
+        var elm = evt.target
+        // fixes for 'use' elements
+        if( ! elm.getBBox ) {
+            if( elm.correspondingUseElement ) {
+                elm = elm.correspondingUseElement
+            } else {
+                return null
+            }
+        }
+  
+        var box = elm.getBBox()
+  
+        // don't care about the root element
+        var root = document.documentElement
+        if( root == evt.target ) {
+            return false
+        }
+        
+        // remove any old bbox
+        if( bbox ) {
+            bbox.parentNode.removeChild( bbox )
+            bbox = null
+        }
+  
+        // make new bbox
+        if( ! bbox ) {    
+            bbox = document.createElementNS( 'http://www.w3.org/2000/svg', 'rect' )
+            bbox.setAttributeNS( null, 'fill', 'none' )
+            bbox.setAttributeNS( null, 'stroke', 'red' )
+            bbox.setAttributeNS( null, 'pointer-events', 'none' )
+            root.appendChild( bbox )
+        }
+  
+        // outset the rect a bit
+        bbox.x.baseVal.value = box.x - 2;
+        bbox.y.baseVal.value = box.y - 2;
+        bbox.width.baseVal.value = box.width + 4;
+        bbox.height.baseVal.value = box.height + 4;
+  
+        // make the bbox rect element have the same user units even though it's the last child of the root element
+        bbox.transform.baseVal.clear()
+        var tfm2elm = elm.getTransformToElement( bbox )
+        bbox.transform.baseVal.appendItem( bbox.transform.baseVal.createSVGTransformFromMatrix( tfm2elm ) )
+    }
+
+    $(document.documentElement).bind( 'mousemove', drawRect )
+    
 } )
