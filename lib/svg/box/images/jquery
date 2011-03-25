@@ -1,0 +1,12 @@
+$( function() {
+    var $root = $(document.documentElement)
+    $root.find( 'g' ).each( function() {
+        var $link = $(this)
+        console.log( $link )
+        $link.hover( function() {
+            console.log( 'hovered' )
+        } )
+    } )
+
+    console.log( 'ran' )
+} )
