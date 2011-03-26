@@ -1,0 +1,95 @@
+@import url('.../font/css');
+
+div.message {
+    max-width: 30em;
+    border: 2px solid;
+    border-radius: .25em;
+    padding: .4em 1em;
+    margin: 1em auto;
+}
+
+div.message:after { content: ''; display: block; clear: both; }
+
+.message.error {
+    background: none;
+    background: #ECEADF url('http://jqueryui.com/themeroller/images/?new=eceadf&w=60&h=60&f=png&q=100&fltr[]=over|textures/23_fine_grain.png|0|0|10') 50% 50% repeat;
+    border-color: #797664;
+}
+
+/*
+.message[source='dev/scanner'] {
+    margin-left: 3em; 
+    background-image: url('.../image/icon/Gnome/devices/scanner/');
+*/
+    /*background-attachment: fixed;*/
+/*
+    background-position: left;
+    background-repeat: no-repeat;
+
+    background-size: 100% 100%;
+    -webkit-background-size: 100% 100%;
+
+*/
+    /* Background is always centered */
+/*
+    background-image: none;
+}
+*/
+
+.message[source='dev/scanner'] *[rel=icon] {
+    width: 8.5em;
+    height: 7em;
+    float: left;
+    margin: auto;
+}
+
+.message h1 {
+    font-family: 'Liberation Sans', 'Champagne & Limousines';
+    margin: 0 auto;
+}
+
+.message p {
+    font-family: Sansation;
+    text-align: center;
+    text-indent: 0;
+    margin-top: .5em;
+    font-size: 14pt;
+}
+
+[rel~=button] {
+    border: 2px solid;
+    border-radius: .25em;
+    height: 2em;
+    width: 20%;
+    margin-right: .8em;
+}
+
+[rel~=button]:hover {
+    position: relative;
+    left: 2px;
+    top: 2px;
+}
+
+[rel='yes button'] {
+    background-color: #CADECA;
+}
+
+[rel='yes button']:hover {
+    background-color: #438C45;
+}
+
+[rel='no button'] {
+    background-color: #C7919A;
+}
+
+[rel='no button']:hover {
+    background-color: #852E3D;
+}
+
+[rel='¬/know button'] {
+    background-color: #B4B7DB;
+}
+
+[rel='¬/know button']:hover {
+    background-color: #3D438A;
+}
