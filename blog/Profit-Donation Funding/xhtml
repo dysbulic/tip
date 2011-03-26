@@ -31,11 +31,19 @@
 
 <ul>
 <li><p>If they click <code>no</code>, they get some snippy comment about the nature of electronic devices.</p></li>
-<li><p>If they click <code>don't know</code>, they get a dialog to pick their scanner model and computer followed by appropriate instruction/options. Eventually they get back to this question where they can now answer <code>yes</code>.</p></li>
+<li><p>If they click <code>don't know</code>, they get appropriate instruction/options. Eventually they get back to this question where they can now answer <code>yes</code>.</p></li>
 <li><p>If they enter <code>yes</code> they might get some further diagnostic questions, but eventually end up they end up with the choice to escalate the issue.</p></li>
 </ul>
 
-<div class="error message" source="dev/scanner">
+<p>The first level above a novice user is a diagnostician. This is someone with the technical expertise necessary to narrow an amorphous user complaint into a usable bug report. Advanced users might well not need an intermediate. The goal is to produce some set of development needs expressed as:</p>
+
+<dl>
+<dt>Bug</dt><dd>A aspect of a piece of software that does not meet spcification. For example, I filed a <a href="http://code.google.com/p/chromium/issues/detail?id=77367">Chrome bug</a> yesterday because the <acronym title="Scalable Vector Image">SVG</acronym>s in my <a href="http://dhappy.org">landing page</a> were too small.</dd>
+</dl>
+
+ to prepare a properly descriptive bug report. For example, Alice needed a feature request created. A variety of pages might be collected, but one of them will be a stub message that looks something like:</p>
+
+<div class="message" source="dev/scanner">
 <img rel="icon" src=".../image/icon/Gnome/devices/scanner/" title="Scanner"/>
 <h1>No Scanner Detected</h1>
 <p>Is your scanner connected and turned on?</p>
@@ -44,7 +52,6 @@
 <object rel="¬/know button" data=".../image/button/¬/know" title="Don't Know"  type="image/svg+xml"/>
 <object rel="yes button"    data=".../image/button/yes"    title="Yes"         type="image/svg+xml"/>
 </div>
-<p>The first level above a novice user is a diagnostician.  
 
 </body>
 </html>
