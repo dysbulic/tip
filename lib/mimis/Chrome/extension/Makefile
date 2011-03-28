@@ -14,7 +14,7 @@ icon/%/png: logo/svg
 #	# ToDo: Make this work
 #	json -e "$.version += '@' + git.version" "$<" > "$@"
 
-crx: $(icons) manifest.json $(shell find -name jquery -or -name js -or -name html)
+crx: $(icons) manifest.json $(shell find -name jquery -or -name js -or -name html) .../lib/jquery/
 	mkcrx . key/signing/pem
 
 clean:

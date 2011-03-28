@@ -1,0 +1,14 @@
+var mimis = mimis || {}
+
+mimis.bind = mimis.bind || function( name, listener ) {
+    $(window).bind( 'mimis.' + name, listener )
+}
+
+mimis.unbind = mimis.unbind || function( name, listener ) {
+    $(window).unbind( 'mimis.' + name, listener )
+}
+
+mimis.trigger = mimis.trigger || function( name, extra ) {
+    $(window).trigger( 'mimis.' + name, extra )
+}
+

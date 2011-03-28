@@ -1,0 +1,135 @@
+( function() {
+    var position = 0
+    
+    var block = {
+        names : [ 'bTop', 'bBottom' ],
+    }
+    block.names.each( function( name ) {
+        block[ name ] = {
+            min : parseFloat( $('#' + name).attr( 'y1' ) ),
+            max : parseFloat( $('#' + name).attr( 'y2' ) ),
+        }
+    } )
+    console.log( block )
+
+    var bar = {
+        min : block.bTop.min,
+        max : parseFloat( $('#bar').attr( 'y2' ) ),
+    }
+
+    var clip = {
+        x : parseFloat( $('#cliprect').attr( 'x' ) ),
+        width : parseFloat( $('#cliprect').attr( 'width' ) ),
+    }
+
+    function setPosition( pos ) {
+        if( pos == undefined ) {
+            rotation = 0
+            color = 'black'
+            text = '\u2400'
+            newY = - parseFloat( $('#bar').attr( 'y1' ) )
+            newClipWidth = 0
+            newClipX = clip.x
+        } else {
+            pos = Math.max( pos, -1 ) // no less than -1
+            pos = Math.min( pos, 1 )  // no more than 1
+            
+            rotation = 135 * pos
+            
+            red = pos < 0 ? Math.round( 255 * -pos ) : 0
+            green = pos > 0 ? Math.round( 255 * pos ) : 0
+            blue = Math.round( 255 * ( 1 - Math.abs( pos ) ) )
+            color = "rgb(" + red + "," + green + "," + blue + ")"
+            
+            text = Math.round( pos * 100 ) / 100
+            
+            newY = bar.max - (1 - ( ( pos + 1 ) / 2 ) )  * ( bar.max - bar.min )
+            
+            starColor = pos > 0 ? 'gold' : 'black'
+            
+            newClipWidth = Math.abs( pos ) * clip.width;
+            newClipX = pos > 0 ? clip.x : clip.x + clip.width - newClipWidth;
+        }
+        $('#image').attr( 'transform', "rotate(" + rotation + ")")
+        $('#form').css( { stroke : color } )
+        $('#text').text( text )
+        $('#bar').attr( 'y2', newY )
+        
+        block.names.each( function( name ) {
+            var $elem = $('#' + name)
+            if( newY <= block[ name ].min || newY >= bar.max ) {
+                $elem.css( { display : 'none' } )
+            } else {
+                $elem.css( { display : 'inline' } )
+                $elem.attr( { y2 : Math.min( newY, block[ name ].max ) } )
+            }
+        } )
+        
+        $('#stars').css( {
+            fill : starColor,
+            stroke : starColor,
+        } )
+        $('#cliprect').attr( {
+            x : newClipX,
+            width : newClipWidth,
+        } )
+        
+        position = pos
+    }
+    
+    var doc = document.rootElement ? document.rootElement : this;
+    var $doc = $(doc)
+    $doc.bind( 'keypress', keypress )
+    $doc.bind( 'mousedown', mousedown )
+    $doc.bind( 'mouseup', mouseup )
+    $doc.bind( 'mousemove', drag )
+
+    // For Opera
+    if(!Event.prototype.DOM_VK_LEFT)  Event.prototype.DOM_VK_LEFT = 37
+    if(!Event.prototype.DOM_VK_UP)    Event.prototype.DOM_VK_UP = 38
+    if(!Event.prototype.DOM_VK_RIGHT) Event.prototype.DOM_VK_RIGHT = 39
+    if(!Event.prototype.DOM_VK_DOWN)  Event.prototype.DOM_VK_DOWN = 40
+
+    var delta = .05
+    function keypress( evt ) {
+        if( position === undefined ) {
+            position = 0
+        }
+        switch( evt.keyCode ) {
+        case evt.DOM_VK_LEFT:
+            position -= delta
+            break
+        case evt.DOM_VK_RIGHT:
+            position += delta
+            break
+        case evt.DOM_VK_UP:
+            position = 0
+            break
+        case evt.DOM_VK_DOWN:
+            position = undefined
+            break
+        }
+        setPosition( position )
+        if( window.focus )
+            window.focus()
+    }
+    
+    var origX = null
+    var xWindow = 150
+
+    function mousedown( evt ) {
+      origX = evt.clientX - position * xWindow
+    }
+
+    function mouseup( evt ) {
+      origX = null
+    }
+
+    function drag( evt ) {
+      if( origX != null ) {
+        setPosition( ( evt.clientX - origX ) / xWindow )
+      }
+    }
+
+    setPosition(position)
+} )()
