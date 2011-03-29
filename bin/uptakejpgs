@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-<<<<<<< HEAD
 # -*- coding: utf-8 -*-
 
 """
@@ -12,20 +11,12 @@ import shutil
 from PIL import Image
 from PIL.ExifTags import TAGS
 import getopt
-=======
-
-import logging
-import os, re, glob
-from PIL import Image
-from PIL.ExifTags import TAGS
->>>>>>> eb9af66dde1fd709a85629532b0955f5e96b6a59
 
 config = {
     'preface' : '.../by/time/',
     'maxpath' : '__/lib/uptake/max',
 }
 
-<<<<<<< HEAD
 # ToDo: merge config with json.load( '.../lib/uptake/jpeg/json' )
 
 logging.basicConfig( level = logging.INFO )
@@ -49,40 +40,20 @@ leaveOrig = ( config.has_key( 'leaveOrig' ) and config['leaveOrig'] ) or opts.ha
 if not os.path.exists( '...' ):
     log.info( 'Connecting Relative Root: ...' )
     if not isDryRun: os.symlink( '../...', '...' )
-=======
-logging.basicConfig( level = logging.INFO )
-log = logging.getLogger(__name__)
-
-# ToDo: merge with json.load( '.../lib/uptake/jpeg/json' )
-
-if not os.path.exists( "..." ):
-    os.symlink( "../...", "..." )
->>>>>>> eb9af66dde1fd709a85629532b0955f5e96b6a59
 
 max = 1
 if os.path.exists( config['maxpath'] ):
     with open( config['maxpath'], 'w' ) as file:
         max = file.read()
 
-<<<<<<< HEAD
 timeKey = 'DateTimeOriginal'
 
 for file in args:
-=======
-for file in glob.glob( "*" ):
-    
-    candidateFilter = re.compile( "^(.*).jpe?g$", re.IGNORECASE )
-    match = candidateFilter.search( file )
-    
-    if match is None: continue
-
->>>>>>> eb9af66dde1fd709a85629532b0955f5e96b6a59
     img = Image.open( file )
     info = img._getexif()
     time = None
     for tag, value in info.items():
         decoded = TAGS.get( tag, tag )
-<<<<<<< HEAD
         if decoded == timeKey:
             time = value
             break
@@ -111,37 +82,3 @@ for file in glob.glob( "*" ):
 
     log.info( 'Linking: %s ↔ %s' % ( max, dir ) )
     if not isDryRun: os.symlink( dir, str( max ) )
-=======
-        if decoded == "DateTimeOriginal":
-            time = value
-            break
-        
-    if time is None: continue
-
-    dir = config['preface'] + re.sub( r"[: ]", "/", time, 0 )
-    try:
-        os.makedirs( dir )
-    except OSError as e:
-        print str(e)
-
-    dest = dir + "/jpg"
-    
-    log.info( "Renaming %s to %s" % ( file, dest ) )
-    os.rename( file, dest )
-    while os.path.lexists( str( max ) ):
-        max = max + 1
-
-    log.info( "Linking %s to %s" % ( max, dir ) )
-    os.symlink( dir, str( max ) )
-
-#     dir=".../by/time/$(exif -m "$file" | grep "^Date and Time (original)" | sed -e 's/.*\t//g' -e 's/[: ]/\//g')"
-#     mkdir "$dir"
-#     new="$dir/jpg"
-#     mv "$file" "$new"
-#     max=1
-#     while [ -e "$max" ]; do
-#         max=$(($max+1))
-#     done
-#     ln -s "$new" $max
-# done
->>>>>>> eb9af66dde1fd709a85629532b0955f5e96b6a59
