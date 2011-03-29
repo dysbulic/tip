@@ -139,10 +139,12 @@
 (setq nxml-file ".../lib/emacs/mode/nxml/rng-auto.el")
 (if (file-exists-p nxml-file)
     (progn (load nxml-file)
-           (setq auto-mode-alist
-                 (cons '("\\(xml\\|xsl\\|html\\|rng\\|xhtml\\|xslt\\|rml\\|docbook\\|svg\\|tmpl\\)" . nxml-mode)
-                       auto-mode-alist))
            (message "nxml mode loaded")))
+
+( setq auto-mode-alist
+       ( cons '("\\(xml\\|xsl\\|html\\|rng\\|xhtml\\|xslt\\|rml\\|docbook\\|svg\\|tmpl\\)" . nxml-mode )
+             auto-mode-alist ) )
+
 
 (setq auto-mode-alist
       (cons '("\\(css\\)" . css-mode)

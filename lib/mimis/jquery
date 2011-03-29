@@ -12,3 +12,8 @@ mimis.trigger = mimis.trigger || function( name, extra ) {
     $(window).trigger( 'mimis.' + name, extra )
 }
 
+localStorage.mimis = localStorage.mimis || {}
+
+mimis.__defineGetter__( 'url', function() {
+        return localStorage.mimis.url || chrome.extension.getURL( 'agent/cache/' )
+} )

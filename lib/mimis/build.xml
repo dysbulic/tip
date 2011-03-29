@@ -39,7 +39,8 @@
     <!-- Even with exclude ..., is still overflowing the heap -->
     <copy todir="build/">
       <fileset dir="java/src" followsymlinks="false">
-        <include name="**/*.java" />
+        <!--<include name="**/*.java" />-->
+        <include name="**/CacheAgentApplet.java" />
         <exclude name="..." />
         <exclude name="**/..." />
       </fileset>
@@ -48,14 +49,17 @@
   </target>
 
   <target name="jar" depends="setup">
-    <javac srcdir="build/" destdir="build/" deprecation="on">
+    <javac srcdir="build/" destdir="build/" deprecation="false" includeantruntime="false">
       <classpath>
-        <!--<pathelement location="/usr/share/java/antlr.jar"/>-->
+        <pathelement location=".../lib/java/lib/smack-3.1.0.jar"/>
+        <pathelement location=".../lib/java/lib/java-plugin-jre-1.6.0_23.jar"/>
+        <!--
         <fileset dir="${user.home}/.../lib/java/lib">
           <include name="**/*.jar"/>
           <exclude name="..." />
           <exclude name="**/..." />
         </fileset>
+        -->
       </classpath>
     </javac>
     <mkdir dir="${jar.dir}" />

@@ -32,11 +32,15 @@ for file in "$@"; do
         readlink "$file"
         continue
     }
+    [ ! -e "$file" ] && {
+        echo "Skipping Non-existent: $file"
+        continue
+    }
 
     HASH=$($HASHCMD "$file" | sed -e 's| .*||')
-    echo -n "Move: "
-    mv -v "$file" "$HASHDIR/$HASH"
-    echo -n "Link: "
-    ln -sv "$HASHDIR/$HASH" "$file"
+    echo "Move: $file → $HASHDIR/$HASH"
+    mv "$file" "$HASHDIR/$HASH"
+    echo "Link: $HASHDIR/$HASH ↔ $file"
+    ln -s "$HASHDIR/$HASH" "$file"
 done
 

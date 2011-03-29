@@ -17,16 +17,16 @@
 
 <p class="first">I've been thinking a possible open-source development model. I'm having trouble getting the idea winnowed down to elevator speech, so I wanted to write a bit.</p>
 
-<p>The system is built on a peer-to-peer filesystem called <a href=".../lib/mimis/">Mïmis</a>. Its operation and clients are controlled by interacting with named locations in a collaborative namespace. I'm working on the implementation currently. The basic deliverable is a javascript <acronym title="Application Programming Interface">API</acronym> the implements:</p>
+<p>The system is built on a peer-to-peer filesystem called <a href=".../lib/mimis/">Mïmis</a>. Its operation and clients are controlled by interacting with named locations in a collaborative namespace. I'm working on the implementation currently. The basic deliverable is a javascript implemention of:</p>
 
 <ul>
-  <li><code>mimis.read( location, callback )</code></li>
-  <li><code>mimis.write( location, callback )</code></li>
+<li><code>mimis.read( location, callback )</code></li>
+<li><code>mimis.write( location, callback )</code></li>
 </ul>
 
 <p>Where <code>location</code> refers to a position in the filesystem. For example, I'm working on <a href=".../blog/Visualizing History">mapping the spread of businesses</a>. An instruction in that program might look like:</p>
 
-<code><pre><![CDATA[read( '.../co/Wal-mart/location/',
+<code><pre><![CDATA[mimis.read( '.../co/Wal-mart/location/',
       function( locs ) {
         locs.sort( function( a, b ) {
           return a.date.open - b.date.open
@@ -42,11 +42,64 @@
 <p>The basic process of handling the call is:</p>
 
 <ol>
-<li><ruby><img type="letter logo" src=".../image/logo/Google/Chrome/"/><rt>Chrome</rt></ruby></li>
+<li><a href="http://www.google.com/chrome/">Chrome</a> encounters the <code>mimis.read</code> statement.</li>
+<li>Execution passes to code from the <a href=".../lib/mimis/crx">Mïmis extension</a>.</li>
+<li>The extension communicates with a <a href="http://neo4j.org">Neo4j</a> instance to build the response.</li>
 </ol>
 
+<p>Conceptually, the Mïmis filesystem is a forest of links which contextualize a pool of hashes. In a traditional filesystem, a file is placed in a single directory. In Mïmis, the file is entered into the system and terminates (ideally) any comprehensible path which uniquely identifies it.</p>
+
+<h2>Stub Filenames</h2>
+
+<p>I'm <a href="https://github.com/wholcomb/tip">beginning to model it</a> by creating a system of links in a filesystem. There's a couple changes that are needed to make it work. The first is using stub filenames. The name of the file is descriptive of the format of the contents of a file, but not its nature. All the "name" information is in the paths.</p>
+
+<p>For example, one path might be: <code><a href=".../book/by/Nancy Kress/Beggars in Spain/html">book/by/Nancy Kress/Beggars in Spain/html</a></code>. The directory <code><a href=".../book/by/Nancy Kress/Beggars in Spain/">Beggars in Spain</a></code> is also linked to from:</p>
+
+<ul>
+<li>magazine/Asimov's Science Fiction/1991/April/Beggars in Spain</li>
+<li>magazine/Asimov's Science Fiction/1991/April/Nancy Kress/Beggars in Spain</li>
+<li>book/series/by/Nancy Kress/Sleepless/Beggars in Spain</li>
+<li>book/award/Hugo/winner/1992</li>
+<li>book/award/Nebula/winner/1992</li>
+<li>book/collection/The Year's Best Science Fiction/9th/Nancy Kress/Beggars in Spain</li>
+<li>book/collection/The Year's Best Science Fiction/9th/1</li>
+</ul>
+
+<p>Loading <code>html</code> from any of those locations will load the appropriate file.</p>
+
+<p>Creating the stub form of resource names is generally pretty straightforward. For example, consider the contents of my <a href=".../image/">image collection</a>. When I started I had files like:</p>
+
+<ul>
+  <li><a href=".../image/kitten/head/svg">kitten_head.svg</a></li>
+  <li><a href=".../image/light bulb/svg">light bulb.svg</a></li>
+  <li><a href=".../image/flag/England/">Flag of England.svg</a></li>
+</ul>
+
+<p>Converting them to stub form they become:</p>
+
+<ul>
+  <li><a href=".../image/kitten/head/svg">kitten/head/svg</a></li>
+  <li><a href=".../image/light bulb/svg">light bulb/svg</a></li>
+  <li><a href=".../image/flag/England/">flag/England/svg</a></li>
+</ul>
 
 
+<h2>Relative Roots</h2>
+
+<p>Each directory contains a <code>...</code> subdirectory which is a symlink to <code>../...</code>. The one exception is the root of the filesystem where <code>...</code> is a link to <code>.</code>.</p>
+
+<p>Structurally this creates a tree that looks like:</p>
+
+<object data=".../lib/mimis/tree/in/filesystem/svg" type="image/svg+xml" style="height: 300px; width: 100%;"/>
+
+<p>Algorithmically, what this structure allows is trees </p>
+
+<h2>Indirected Binaries</h2>
+
+<p>All binary files are stored as links to <code>.../hashes/</code></p>
+
+
+<p>The Neo4j instance serves to aggregate multiple filesystem sources. The base source </p>
 
 
 <p>Alice gets a new <a href="http://www.epson.com/cgi-bin/Store/jsp/Product.do?sku=B11B189011">scanner</a>, plugs it in, starts the <a href="https://launchpad.net/simple-scan">scanning software</a>, clicks <code>scan</code> and gets the error:</p>
