@@ -56,10 +56,6 @@ public class CacheAgentApplet extends JApplet {
 
     String mimisValueKey = "__mimis_value";
 
-    public CacheAgentApplet() {
-        System.out.println( "Starting: " + this.getClass().getName() );
-    }
-
     public interface Callback {
         public Object call( Object data );
     }
@@ -129,7 +125,6 @@ public class CacheAgentApplet extends JApplet {
 
     Map<Integer,Callback> callbacks =
         new HashMap<Integer,Callback>();
-    
     public Object browserGet( String path, Callback callback ) {
         JSObject browser = (JSObject)browserGet( "mimis.browser" );
         log.info( "get1:" + path );
@@ -155,9 +150,6 @@ public class CacheAgentApplet extends JApplet {
         final JApplet container = this;
 
         window = JSObject.getWindow( container );
-
-        JSObject console = (JSObject)browserGet( "console" );
-        console.call( "log", new Object[] { "Initializing Applet" } );
 
         try {
             //container.setContentPane( chooser );

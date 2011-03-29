@@ -9,9 +9,12 @@ STOREPASS = storepass
 
 KEYPATH = $(dir $(KEYSTORE))
 
+<<<<<<< HEAD
 jar:
 	ant
 
+=======
+>>>>>>> eb9af66dde1fd709a85629532b0955f5e96b6a59
 compile: keystore
 	mvn package
 

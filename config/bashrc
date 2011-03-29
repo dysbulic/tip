@@ -70,8 +70,11 @@ function json() {
 #function mv() {
 #}
 
+<<<<<<< HEAD
 alias findbiggitfiles="git ls-files -t `find . -type f -size +1M -print0 | xargs -0`"
 
+=======
+>>>>>>> eb9af66dde1fd709a85629532b0955f5e96b6a59
 # Push merges to webserver based on config at:
 # http://hoenir.himinbi.org/2010/01/14/putting-sites-in-git/
 function publish() {
@@ -610,8 +613,11 @@ export LOCAL="$__HASHDIR"
 export REMOTE="wjholcomb@madstones.com"
 ARGS="--rsh=ssh --partial --progress --verbose --recursive --archive --compress"
 
+<<<<<<< HEAD
 alias hashbins="find \( -name jpg -or -name png -or -name odp -or -name mpeg -or -name avi -or -name webm \) -print0 | xargs -0 lnhash"
 
+=======
+>>>>>>> eb9af66dde1fd709a85629532b0955f5e96b6a59
 alias pushhashes="eval rsync $ARGS \"\$LOCAL\" \"\$REMOTE:\$__HASHDIR\""
 alias pullhashes="rsync $ARGS \"\$REMOTE:\$__HASHDIR\" \"\$LOCAL\""
 
