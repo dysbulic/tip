@@ -70,6 +70,8 @@ function json() {
 #function mv() {
 #}
 
+alias findbiggitfiles="git ls-files -t `find . -type f -size +1M -print0 | xargs -0`"
+
 # Push merges to webserver based on config at:
 # http://hoenir.himinbi.org/2010/01/14/putting-sites-in-git/
 function publish() {
