@@ -39,7 +39,7 @@ VERBARG=
         # Causes Chrome error
         #find ".../lib/jquery/" -not -name ... -print0
         (
-            for file in $(find -name xhtml); do
+            for file in $(find -L \( -path \*/... -or -path \*/.tip \) -prune -o -name xhtml -print); do
                 xsltproc .../lib/tip/extract/href/xslt "$file" | grep -e '^/\.tip\/'
             done
             [ -e mkcrx/includes ] && cat mkcrx/includes

@@ -32,7 +32,29 @@ $( function() {
     var url = mimis.url
 
     if( url == undefined ) {
-        // Goto options
+        // ToDo: Move to definitions file
+        webkitNotifications.__defineGetter__(
+            'allowed',
+            function() {
+                webkitNotifications.ALLOWED = webkitNotifications.ALLOWED || 0
+                return webkitNotifications.checkPermission() == webkitNotifications.ALLOWED
+            } )
+            
+        if( webkitNotifications.allowed ) {
+            var notification = webkitNotifications.createNotification(
+                // ToDo: Create error icon
+                chrome.extension.getURL( 'icon/48/png' ),
+                'Startup Error',
+                // ToDo: Add click to go to server section of options
+                'Could not find a cache agent. Please configure one.'
+            )
+            notification.show()
+            setTimeout( function() {
+                notification.cancel()
+            }, 10000 )
+        }
+
+        // ToDo: Goto options
     }
 
     String.prototype.startsWith = String.prototype.startsWith || function( str ) {
@@ -41,33 +63,30 @@ $( function() {
 
     chrome.tabs.getAllInWindow( undefined, function( tabs ) {
         if( tabs.each( function( tab ) {
+            console.log( tab.url )
             if( tab.url.startsWith( url ) ) {
                 chrome.tabs.update( tab.id, { selected : true } )
                 return false
             }
         } ) ) {
-            return
             chrome.tabs.create( {
                 url : url,
                 selected : false,
                 pinned : true,
             }, function( tab ) {
-                console.log( tab )
-                chrome.tabs.executeScript( tab.id, {
-                    //file : chrome.getURL()
-                } )
             } )
         }
     } )
 } )
 
+/*
 chrome.tabs.executeScript( null, {
-    //code : "document.body.style.backgroundColor = 'red'",
-    //file : 
+    file : '',
 } )
+*/
         
 chrome.browserAction.setBadgeText( {
-    text : "#"
+    text : '#',
 } )
 
 ;( function() {
