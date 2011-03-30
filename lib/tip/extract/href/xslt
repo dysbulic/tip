@@ -7,7 +7,7 @@
     <apply-templates select='//@*' />
   </template>
   <template match='@*'></template>
-  <template match='html:script/@src | attribute::html:href | attribute::xlink:href'>
+  <template match='html:script/@src | attribute::href | attribute::html:href | attribute::xlink:href'>
     <value-of select="." /><text>&#x0A;</text>
   </template>
 </stylesheet>

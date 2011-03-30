@@ -1,45 +1,66 @@
 $( function() {
-    $('body').append(
-        $('<object/>').attr( {
-            class : 'rowimage',
-            height : '300px',
-            type : 'image/svg+xml',
-            data : '/logo/svg',
-        } ) )
-
+    var links =
+        $.extend( {},
+                  links,
+                  mimis.links,
+                  ( function() {
+                      // chrome.extension.getURL( '' )
+                      var url = $('link[rel="mimis link list"]').attr( 'href' )
+                      var links
+                      $.ajax( {
+                          url : url,
+                          dataType : 'text',
+                          async : false,
+                          success : function( eson ) {
+                              links = eval( "( function() { return " + eson + " } )()" )
+                          },
+                      } )
+                      return links
+                  } )() )
+    
+    links.initial.each( function( link ) {
+        $('body').append(
+            $('<object/>').attr(
+                $.extend( {
+                    class : 'icon',
+                    type : 'image/svg+xml',
+                    data : chrome.extension.getURL( link.icon ),
+                },
+                          link ) ) )
+    } )
+        
     var url = mimis.url
 
     if( url == undefined ) {
         // Goto options
     }
 
-    chrome.tabs.create( {
-        url : url,
-        selected : false
-    }, function( tab ) {
-        console.log( tab )
-        chrome.tabs.executeScript( tab.id, {
-            //file : chrome.getURL()
-        } )
-    } )
-
     String.prototype.startsWith = String.prototype.startsWith || function( str ) {
         return this.indexOf( str ) === 0
     }
 
     chrome.tabs.getAllInWindow( undefined, function( tabs ) {
-        if( ! tabs.each( function( tab ) {
+        if( tabs.each( function( tab ) {
             if( tab.url.startsWith( url ) ) {
                 chrome.tabs.update( tab.id, { selected : true } )
                 return false
             }
         } ) ) {
-            chrome.tabs.create( { url : url } )
+            return
+            chrome.tabs.create( {
+                url : url,
+                selected : false,
+                pinned : true,
+            }, function( tab ) {
+                console.log( tab )
+                chrome.tabs.executeScript( tab.id, {
+                    //file : chrome.getURL()
+                } )
+            } )
         }
     } )
 } )
 
-console.log( chrome )
 chrome.tabs.executeScript( null, {
     //code : "document.body.style.backgroundColor = 'red'",
     //file : 

@@ -38,14 +38,17 @@ VERBARG=
         done
         # Causes Chrome error
         #find ".../lib/jquery/" -not -name ... -print0
-        for file in $(find -name xhtml); do
-            xsltproc .../lib/tip/extract/href/xslt "$file" | \
-                grep -e '^/\.tip\/' | sed -ne 's/^\///' -e 'H;${g;s/\n/\x00/g;P}' | \
-                tr -d '\n'
-        done
+        (
+            for file in $(find -name xhtml); do
+                xsltproc .../lib/tip/extract/href/xslt "$file" | grep -e '^/\.tip\/'
+            done
+            [ -e mkcrx/includes ] && cat mkcrx/includes
+        ) | \
+            sed -ne 's/^\///' -e 'H;${g;s/\n/\x00/g;P}' | \
+            tr -d '\n'
         printf '\0'
     ) | \
-    xargs -0 zip -q -9 $VERBARG -X - > "$cwd/$zip"
+        xargs -0 zip -q -9 $VERBARG -X - > "$cwd/$zip"
 )
 
 # signature

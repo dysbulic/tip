@@ -15,5 +15,9 @@ mimis.trigger = mimis.trigger || function( name, extra ) {
 localStorage.mimis = localStorage.mimis || {}
 
 mimis.__defineGetter__( 'url', function() {
-        return localStorage.mimis.url || chrome.extension.getURL( 'agent/cache/' )
+    var mimis_dir = mimis_dir || 'agent/cache/'
+    return ( localStorage.mimis.url
+             || ( chrome && chrome.extension
+                  ? chrome.extension.getURL( mimis_dir )
+                  : 'http://mimis.dhappy.org/' + mimis_dir ) )
 } )
