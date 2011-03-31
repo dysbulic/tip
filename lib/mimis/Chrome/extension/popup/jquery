@@ -4,20 +4,7 @@ $( function() {
         $.extend( {},
                   links,
                   mimis.links,
-                  ( function() {
-                      // chrome.extension.getURL( '' )
-                      var url = $('link[rel="mimis link list"]').attr( 'href' )
-                      var links
-                      $.ajax( {
-                          url : url,
-                          dataType : 'text',
-                          async : false,
-                          success : function( eson ) {
-                              links = eval( "( function() { return " + eson + " } )()" )
-                          },
-                      } )
-                      return links
-                  } )() )
+                  mimis.load( $('link[rel="mimis link list"]').attr( 'href' ) ) )
     
     links.initial.each( function( link ) {
         $body.append(
@@ -41,20 +28,19 @@ $( function() {
     ;( function() {
         var statûs = $status.history = []
         $('object[class~="icon"]')
-            .bind( {
-                mouseenter : function() {
-                    statûs.push( $status.text() )
-                    $status.text( $(this).attr( 'title' ) )
-                },
-                mouseexit : function() {
-                    var pop = statûs.pop()
-                    if( pop !== undefined ) {
-                        $status.text( pop )
-                    }
-                },
-            } )
             .each( function() {
-                console.log( this )
+                $(this.contentDocument).bind( {
+                    mouseenter : function() {
+                        statûs.push( $status.text() )
+                        $status.text( $(this).attr( 'title' ) )
+                    },
+                    mouseexit : function() {
+                        var pop = statûs.pop()
+                        if( pop !== undefined ) {
+                            $status.text( pop )
+                        }
+                    },
+                }  )
             } )
     } )()
         
@@ -69,14 +55,12 @@ $( function() {
     }
 
     chrome.tabs.getAllInWindow( undefined, function( tabs ) {
-        console.log( uri )
-        if( tabs.each( function( tab ) {
-            console.log( tab.url )
-            console.log( tab.url.indexOf( uri ) )
-            console.log( tab.url.startsWith( uri ) )
+        if( ! tabs.each( function( tab ) {
             if( tab.url.startsWith( uri ) ) {
-                chrome.tabs.update( tab.id, { selected : true } )
-                return false
+                chrome.tabs.update( tab.id, {
+                    // ToDo: Flash favicon
+                } ) 
+                return true
             }
         } ) ) {
             chrome.tabs.create( {

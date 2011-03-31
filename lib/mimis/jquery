@@ -1,8 +1,83 @@
+var mimis = mimis || {}
+
+$.isString = $.isString ||
+    function( str ) {
+        return str instanceof String || typeof str == "string"
+    }
+
+// Allow negative indexing for last element
+Array.prototype.__defineGetter__( -1, function() {
+    return this.length > 0 && this[ this.length - 1 ] || undefined
+} )
+
+Array.prototype.__defineSetter__( -1, function( val ) {
+    var idx = this.length > 0 ? this.length - 1 : 0
+    this[ idx ] = val
+} )
+
+
+String.prototype.concat = String.prototype.concat ||
+    function() {
+        var out = ''
+        mimis.each.apply( arguments, function() {
+            out += this.toString()
+        } )
+        return out
+    }
+
+// Add array iterator
+mimis.each = Array.prototype.each =
+    mimis.each || Array.prototype.each || function each( f, args ) {
+        if( $.isFunction( f ) ) {
+            var out
+            for( var i = 0; i < this.length; i++ ) {
+                var ret = f.apply( this, [ this[i], i, args ] )
+                if( ret === true || ret === false ) {
+                    return ret
+                } else if( ret === undefined ) {
+                } else if( $.isArray( ret )
+                           || $.isString( ret )
+                           || ret.concatenable ) {
+                    out = out.concat( ret )
+                } else if( $.isFunction( ret ) ) {
+                    ret.call( this, out )
+                } else if( $.isObject( ret ) ) {
+                    $.extend( true, ret, out )
+                }
+            }
+            return out
+        }
+    }
+
+String.prototype.each = String.prototype.each || Array.prototype.each
+
+if( NodeList.prototype != null ) {
+    NodeList.prototype.each = NodeList.prototype.each || Array.prototype.each
+}
+
+if( NamedNodeMap.prototype != null ) {
+    NamedNodeMap.prototype.each = NamedNodeMap.prototype.each || function( f ) {
+        Array.prototype.each.apply( this, [ function( attr, idx ) {
+            f.apply( attr, [ attr.nodeValue, attr.name ] )
+        } ] )
+    }
+}
+
+/*
+Array.prototype.__defineGetter__( 'empty', function() {
+    return this.length == 0
+} )
+*/
+
+console.debug = console.log
+
 String.prototype.startsWith = String.prototype.startsWith || function( str ) {
     return this.indexOf( str ) == 0
 }
 
-var mimis = mimis || {}
+String.prototype.endsWith = String.prototype.endsWith || function( str ) {
+    return this.lastIndexOf( str ) == this.length - str.length
+}
 
 mimis.bind = mimis.bind || function( name, listener ) {
     $(window).bind( 'mimis.' + name, listener )
@@ -96,3 +171,39 @@ mimis.set = mimis.set ||
         store[ ultimate ] = val
         return ret
     }
+
+mimis.load = mimis.load || function() {
+    
+    mimis.each.apply( arguments, function() {
+        var ret
+        $.ajax( {
+            url : url,
+            dataType : 'text',
+            async : false,
+            success : function( eson ) {
+                ret = eval( "( function() { return " + eson + " } )()" )
+            },
+        } )
+        return ret
+    } )
+}
+
+// Extract namespaces
+mimis.ns = mimis.ns || ( function() {
+    var ns = mimis.load( '/.tip/lib/mimis/ns/abbreviations/eson' )
+    document.documentElement.attributes.each( function( ) {
+        if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
+            var name = match[1] || ''
+            var href = this.nodeValue
+            ns[ name ] = href
+        }
+    } )
+    // Reverse map
+    for( abbr in ns ) {
+        ns[ ns[ abbr ] ] = abbr
+    }
+    ns[ 'default' ] = ns[ 'default' ] = 'html'
+    !ns[ '' ] && ( ns[ '' ] = ns[ ns[ 'default' ] ] )
+    ns.toString = ns.toString || function() { return ns[ '' ] }
+    return ns
+} )()
