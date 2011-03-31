@@ -2,7 +2,12 @@ var mimis = mimis || {}
 
 $.isString = $.isString ||
     function( str ) {
-        return str instanceof String || typeof str == "string"
+        return str instanceof String || $.type( str ) == 'string'
+    }
+
+$.isObject = $.isObject ||
+    function( obj ) {
+        return obj instanceof Object || $.type( obj ) == 'object'
     }
 
 // Allow negative indexing for last element
@@ -42,7 +47,7 @@ mimis.each = Array.prototype.each =
                 } else if( $.isFunction( ret ) ) {
                     ret.call( this, out )
                 } else if( $.isObject( ret ) ) {
-                    $.extend( true, ret, out )
+                    out = $.extend( true, ret, out )
                 }
             }
             return out
@@ -116,7 +121,7 @@ if( webkitNotifications.__lookupGetter__( 'allowed' ) === undefined ) {
 
 mimis.notify = mimis.notify ||
     function( config ) {
-        $.extend( true, config, {
+        config = $.extend( true, config, {
             icon : 'icon/48/png',
             title : 'Mïmis',
             message : ( 'You are being notified by: '
@@ -124,8 +129,6 @@ mimis.notify = mimis.notify ||
             timeout : 10000,
         } )
         
-        console.log( config )
-
         if( webkitNotifications.checkPermission() == webkitNotifications.PERMISSION_ALLOWED ) {
             with( config ) {
                 var notification =
@@ -173,12 +176,11 @@ mimis.set = mimis.set ||
     }
 
 mimis.load = mimis.load || function() {
-    
-    mimis.each.apply( arguments, function() {
+    return mimis.each.call( arguments, function( uri ) {
         var ret
         $.ajax( {
-            url : url,
-            dataType : 'text',
+            url : uri,
+            dataType : 'text', // ECMAScript Object Notation
             async : false,
             success : function( eson ) {
                 ret = eval( "( function() { return " + eson + " } )()" )
