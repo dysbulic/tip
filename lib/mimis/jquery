@@ -1,0 +1,23 @@
+var mimis = mimis || {}
+
+mimis.bind = mimis.bind || function( name, listener ) {
+    $(window).bind( 'mimis.' + name, listener )
+}
+
+mimis.unbind = mimis.unbind || function( name, listener ) {
+    $(window).unbind( 'mimis.' + name, listener )
+}
+
+mimis.trigger = mimis.trigger || function( name, extra ) {
+    $(window).trigger( 'mimis.' + name, extra )
+}
+
+localStorage.mimis = localStorage.mimis || {}
+
+mimis.__defineGetter__( 'url', function() {
+    var mimis_uri = mimis_uri || 'agent/cache/xhtml.xhtml'
+    return ( localStorage.mimis.url
+             || ( chrome && chrome.extension
+                  ? chrome.extension.getURL( mimis_uri )
+                  : 'http://mimis.dhappy.org/' + mimis_uri ) )
+} )

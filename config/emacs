@@ -106,7 +106,7 @@
 (if (file-exists-p javascript-file)
     (progn (load javascript-file)
            (setq auto-mode-alist
-                 (append '(("\\(js\\|jquery\\|json\\|mql\\|tipscript\\)$" . javascript-mode)) auto-mode-alist))
+                 (append '(("\\(js\\|jquery\\|json\\|mql\\|tipscript\\|\\.?rhino\\)$" . javascript-mode)) auto-mode-alist))
            (message "javascript mode loaded"))
   (setq auto-mode-alist
         (append '(("jquery|\\.js$" . c-mode)) auto-mode-alist)))
@@ -139,15 +139,15 @@
 (setq nxml-file ".../lib/emacs/mode/nxml/rng-auto.el")
 (if (file-exists-p nxml-file)
     (progn (load nxml-file)
-           (setq auto-mode-alist
-                 (cons '("\\(xml\\|xsl\\|html\\|rng\\|xhtml\\|xslt\\|rml\\|docbook\\|svg\\|tmpl\\)" . nxml-mode)
-                       auto-mode-alist))
            (message "nxml mode loaded")))
+
+( setq auto-mode-alist
+       ( cons '("\\(xml\\|xsl\\|html\\|rng\\|xhtml\\|xslt\\|rml\\|docbook\\|svg\\|tmpl\\)" . nxml-mode )
+             auto-mode-alist ) )
 
 (setq auto-mode-alist
       (cons '("\\(css\\)" . css-mode)
             auto-mode-alist))
-
 
 (fset 'xml-mode 'nxml-mode)
 (fset 'html-mode 'nxml-mode)
