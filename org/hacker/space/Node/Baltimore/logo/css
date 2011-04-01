@@ -1,0 +1,36 @@
+@import url('.../font/Univers LT/css');
+
+#node, #circles {
+    fill: #0892d0;
+}
+
+#lines {
+    fill: #111;
+}
+
+text {
+    font-size: 48px;
+    font-family: 'Univers LT';
+}
+
+@-webkit-keyframes pulse {
+    0% {
+        fill: #0892d0;
+    }
+    33% {
+        fill: #F892d0;
+    }
+    67% {
+        fill: #5892d0;
+    }
+    100% {
+        fill: #3892d0;
+    }
+}
+
+#circles {
+    -webkit-animation-name: pulse;
+    -webkit-animation-duration: 4s;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-timing-function: ease-in-out;
+}

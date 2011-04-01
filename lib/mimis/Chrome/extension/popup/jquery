@@ -8,13 +8,17 @@ $( function() {
     
     links.initial.each( function( link ) {
         $body.append(
-            $('<object/>').attr(
-                $.extend( {
-                    class : 'icon',
-                    type : 'image/svg+xml',
-                    data : chrome.extension.getURL( link.icon ),
-                },
-                          link ) ) )
+            $('<object/>')
+                .attr( $.extend
+                       ( link, 
+                         {
+                             class : 'icon',
+                             type : 'image/svg+xml',
+                             data : chrome.extension.getURL( link.icon ),
+                         } ) ) )
+            .bind( {
+                load : function() { console.log( 'loaded' ) },
+            } )
     } )
 
     var $status =
@@ -24,22 +28,61 @@ $( function() {
             type : 'text',
         } )
         .appendTo( $body )
+        .bind( {
+            keyPress : function() {
+                $('object[class~="icon"]')
+                    .each( function() {
+                        console.log( this.contentDocument )
+                    } )
+            },
+        } )
 
     ;( function() {
         var statûs = $status.history = []
+        var binder = arguments.callee
+        var activeImage
         $('object[class~="icon"]')
-            .each( function() {
-                $(this.contentDocument).bind( {
-                    mouseenter : function() {
-                        statûs.push( $status.text() )
-                        $status.text( $(this).attr( 'title' ) )
-                    },
-                    mouseexit : function() {
+            .each( function( idx ) {
+                // Load event does not fire on <object/>
+                if( idx == 0
+                    && ( this.contentDocument instanceof HTMLDocument // Fails
+                         || this.contentDocument.documentElement instanceof HTMLHtmlElement // Fails
+                         || this.contentDocument.documentElement.localName == 'html' ) ) {
+                    setTimeout( binder, 100 )
+                    return false
+                }
+                
+                $(document).bind( {
+                    mouseover : function() {
                         var pop = statûs.pop()
                         if( pop !== undefined ) {
-                            $status.text( pop )
+                            $status.val( pop )
+                        }
+                        activeImage = undefined
+                    },
+                } )
+
+                var $obj = $(this)
+                $(this.contentDocument).bind( {
+                    // mouseenter : // Doesn't work
+                    // mouseleave : // Doesn't work
+                    mouseover : function() {  // Fires repeadedly
+                        if( activeImage != this ) {
+                            statûs.push( $status.val() )
+                            $status.val( $obj.attr( 'title' ) )
+                            activeImage = this
                         }
                     },
+                    mousedown : function() {
+                        $obj.addClass( 'clicking' )
+                    },
+                    mouseup : function() {
+                        $obj.removeClass( 'clicking' )
+                    },
+                    click : function() {
+                        self.close()
+                    },
+                    // mouseout : function() { // Fires repeadedly
                 }  )
             } )
     } )()
