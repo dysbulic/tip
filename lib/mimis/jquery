@@ -100,7 +100,8 @@ localStorage.mimis = localStorage.mimis || mimis || {}
 
 mimis.__defineGetter__( 'uri', function() {
     var mimis_uri = mimis_uri || 'agent/cache/xhtml.xhtml'
-    localStorage.mimis.uri = 'http://loki/lib/mimis/' + mimis_uri
+    localStorage.mimis.uri = 'http://dhappy.dyndns.org/lib/mimis/' + mimis_uri
+    
     return ( localStorage.mimis.uri
              || ( chrome && chrome.extension
                   ? chrome.extension.getURL( mimis_uri )

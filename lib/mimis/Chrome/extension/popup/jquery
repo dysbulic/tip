@@ -30,10 +30,6 @@ $( function() {
         .appendTo( $body )
         .bind( {
             keyPress : function() {
-                $('object[class~="icon"]')
-                    .each( function() {
-                        console.log( this.contentDocument )
-                    } )
             },
         } )
 
@@ -97,6 +93,7 @@ $( function() {
         } )
     }
 
+    // ToDo: Check against applet registered with background
     chrome.tabs.getAllInWindow( undefined, function( tabs ) {
         if( ! tabs.each( function( tab ) {
             if( tab.url.startsWith( uri ) ) {
@@ -106,6 +103,7 @@ $( function() {
                 return true
             }
         } ) ) {
+            console.log( 'Opening: ' + uri )
             chrome.tabs.create( {
                 url : uri,
                 selected : false,
