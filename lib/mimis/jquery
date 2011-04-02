@@ -96,20 +96,18 @@ mimis.trigger = mimis.trigger || function( name, extra ) {
     $(window).trigger( 'mimis.' + name, extra )
 }
 
-localStorage.mimis = localStorage.mimis || mimis || {}
-
 mimis.__defineGetter__( 'uri', function() {
     var mimis_uri = mimis_uri || 'agent/cache/xhtml.xhtml'
-    localStorage.mimis.uri = 'http://dhappy.dyndns.org/lib/mimis/' + mimis_uri
+    localStorage.mimis_uri = 'http://dhappy.dyndns.org/lib/mimis/' + mimis_uri
     
-    return ( localStorage.mimis.uri
+    return ( localStorage.mimis_uri
              || ( chrome && chrome.extension
                   ? chrome.extension.getURL( mimis_uri )
                   : 'http://mimis.dhappy.org/' + mimis_uri ) )
 } )
 
 mimis.__defineSetter__( 'uri', function( uri ) {
-    return localStorage.mimis.uri = uri
+    return localStorage.mimis_uri = uri
 } )
 
 if( webkitNotifications.__lookupGetter__( 'allowed' ) === undefined ) {

@@ -5,7 +5,9 @@ $( function() {
     )
     var $list = $('<ol/>').appendTo( $body )
     function add( text ) {
-        $list.append( $('<li/>').text( text === undefined ? 'undefined' : text ) )
+        $list.append( $('<li/>').text(
+            text === undefined ? 'undefined' : text
+        ) )
     }
 
     localStorage.test1 = {
