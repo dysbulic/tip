@@ -22,14 +22,27 @@
 </ul>
 
 <section>
-<h1>Mïmis' Browser Interaction Model</h1>
-<h2>by Will Holcomb</h2>
+<h1>1.0</h1>
 
-<hr/>
+<ol>
+<li>User</li>
+<li><a href="http://www.google.com/chrome/">Chrome</a></li>
+<li><a href="crx">Chrome extension</a></li>
+<li><a href="java/src/">Java</a> <a href="java/src/org/dhappy/mimis/CacheAgentApplet.java">applet</a></li>
+<li><a href="http://neo4j.org">Neo4j</a></li>
+<li>Cache Agents:
+<ul>
+<li><a href="java/src/org/dhappy/mimis/SmackGMailConnection.java"><acronym title="Extensible Message Passing Protocol">XMPP</acronym></a></li>
+<li><a href="java/src/org/dhappy/mimis/FileLoader.java">File System</a></li>
+<li><a href="http://mina.apache.org/">P2P</a></li>
+<li>HTTP direct to User</li>
+</ul>
+</li>
+</ol>
 
-<p>The interface engine for Mïmis 1.0 consists of:</p>
+<p>The Neo4j instance is used by the agents to manage their behaviors. It is also caching information from other Mïmis instances running on the network.</p>
 
-<object data="doc/interface/generation/"/>
+<p>Much of the information in Neo4j is a persistent shared metadata cache.</p>
 </section>
 </body>
 </html>
