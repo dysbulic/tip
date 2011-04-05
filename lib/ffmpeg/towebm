@@ -7,6 +7,13 @@
     exit -1
 }
 
+[[ "$MKDIR" == "t" || "$MKDIR" == "y" ]] && {
+    for file in "$*"; do
+        info=$(mplayer -vo null -ao null -frames 0 -identify "$file")
+        echo $info
+    done
+}
+
 cores=0
 for processor in $(grep -e '^cpu cores' /proc/cpuinfo | sed -e 's/.*:\s*//'); do
     cores=$(($cores + $processor))
@@ -14,19 +21,34 @@ done
 
 ARGS="-f webm -vcodec libvpx -acodec libvorbis -threads $cores -aq 100 -sameq -y"
 
-for file in "$@"; do
-    input="$file"
+# Only VP8 video and Vorbis audio are supported for WebM
+# ARGS="-f webm -vcodec libvpx -acodec copy -threads $cores -sameq -y"
+
+for path in "$@"; do
+    dir="$(dirname "$path")"
+    pushd "$dir" > /dev/null
+
+    input="${path##*/}"
     [ -e "$input" ] || {
-        echo "Error: Input Not Found: $input"
+        echo "Error: Input Not Found: $path"
+        popd > /dev/null
         continue
     }
 
-    output="${file%.*}.webm"
-    [ -e "$output" ] && {
-        echo -n "Replace? [y/N]: $output: "
-        read -n 1 replace
-        echo
+    output=
+    file="$(basename "$path")"
+    [ "${file#*.}" != "$file" ] && output="$output${file%.*}."
+    output="${output}webm"
+
+    [ -e "$out" ] && {
+        [ -z "$REPLACE" ] && {
+            read -n 1 -p "Replace? [y/N]: $: " replace
+        } || {
+            replace="$REPLACE"
+        }
         [[ "$replace" == "y" ||  "$replace" == "Y" ]] || {
+            echo "Skipping Existing: $dir/$out"
+            popd > /dev/null
             continue
         }
     }
@@ -38,7 +60,11 @@ for file in "$@"; do
     args="$ARGS"
     
     echo "Pass #1: $input"
+    echo time ffmpeg -i "$input" $args -an -pass 1 -passlogfile "$output" "$output"
     time ffmpeg -i "$input" $args -an -pass 1 -passlogfile "$output" "$output"
     echo "Pass #2: $input"
+    echo time ffmpeg -i "$input" $args -pass 2 -passlogfile "$output" "$output"
     time ffmpeg -i "$input" $args -pass 2 -passlogfile "$output" "$output"
+
+    popd > /dev/null
 done

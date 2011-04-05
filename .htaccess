@@ -17,6 +17,7 @@ AddType text/plain .sh .com .vbs .py .java .c
 AddType image/svg+xml .svg .svgz
 AddType text/xml :
 AddType application/javascript .jquery
+AddType video/webm .webm
 AddEncoding x-gzip .svgz
 
 <Files "php">
@@ -55,8 +56,16 @@ AddEncoding x-gzip .svgz
   ForceType application/json
 </FilesMatch>
 
+<FilesMatch "eson">
+  ForceType application/eson
+</FilesMatch>
+
 <Files "ttf">
   ForceType font/ttf
+</Files>
+
+<Files "otf">
+  ForceType font/opentype
 </Files>
 
 <Files "crx">
@@ -73,6 +82,10 @@ AddEncoding x-gzip .svgz
 
 <Files "mp3">
   ForceType audio/mpeg
+</Files>
+
+<Files "webm">
+  ForceType video/webm
 </Files>
 
 #RewriteEngine on

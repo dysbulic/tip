@@ -19,6 +19,9 @@ export EDITOR="emacs -nw"
 export RSYNC_RSH=ssh
 export CVS_RSH=ssh
 
+# Will start the gui
+#which update-manager && update-manager -d
+
 # Include OSX specific pathes; and give them precedence
 for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin; do
     [ -d "$path" ] && export PATH="$path:$PATH"
@@ -29,6 +32,9 @@ done
 
 export LANG="en_US.UTF-8"
 export LC_ALL=$LANG
+
+# Make javascripts executable
+# echo ':javascript:M:://!::/usr/bin/js:' > /proc/sys/fs/binfmt_misc/register
 
 # ToDo: make sorting workflow easier by greying out windows quickly
 #function setactive() { termcolor('black'); }
@@ -63,6 +69,8 @@ function json() {
 # ToDo: Create a version that takes an arg that will create the directory is non-existent
 #function mv() {
 #}
+
+alias findbiggitfiles="git ls-files -t \$(find . -type f -size +1M -print0 | xargs -0)"
 
 # Push merges to webserver based on config at:
 # http://hoenir.himinbi.org/2010/01/14/putting-sites-in-git/
@@ -201,6 +209,23 @@ function dumppub() {
         ssh -i "$KEY" "$REMOTE" "cd '$OUTDIR' && cat ~/'$REMOTE_FILE' | tar -xj && \
                                  cd - && ln -s '$OUTDIR/$resource'"
     popd > /dev/null
+}
+
+function git-fold() {
+    [ $# != 2 ] && {
+        echo "Usage: git-fold $repo $dir"
+        echo
+        echo "Folds $repo into the current repository at $dir"
+        return -1
+    }
+    repo="$1"
+    dir="$2"
+    git remote rm git-fold-merge-project
+    git remote add -f git-fold-merge-project "$repo"
+    git merge -s ours --no-commit git-fold-merge-project/master
+    git read-tree --prefix="$dir" -u git-fold-merge-project/master
+    git commit -m "Folding in $repo @ $dir"
+    git pull -s subtree git-fold-merge-project master
 }
 
 # To remove language selection menus from windows in Solaris
@@ -584,6 +609,8 @@ export __HASHDIR=".../hashes/"
 export LOCAL="$__HASHDIR"
 export REMOTE="wjholcomb@madstones.com"
 ARGS="--rsh=ssh --partial --progress --verbose --recursive --archive --compress"
+
+alias hashbins="find \( -name jpg -or -name png -or -name odp -or -name mpeg -or -name avi -or -name webm \) -print0 | xargs -0 lnhash"
 
 alias pushhashes="eval rsync $ARGS \"\$LOCAL\" \"\$REMOTE:\$__HASHDIR\""
 alias pullhashes="rsync $ARGS \"\$REMOTE:\$__HASHDIR\" \"\$LOCAL\""
