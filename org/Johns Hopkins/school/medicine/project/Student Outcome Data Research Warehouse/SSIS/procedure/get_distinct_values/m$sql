@@ -1,0 +1,425 @@
+set ANSI_NULLS ON
+set QUOTED_IDENTIFIER ON
+go
+
+--created by: Kelly Qu
+--created on: 9/28/2006
+--used to generate sord ad-hoc report
+--modified by Hong Song on 2/8/2007 - change inner join to left join
+--04/24/07 modified by: Alex Knopf. Modified "WHERE" clause to add
+--	"AND/OR" group/field functionality to filtering conditions.
+
+ALTER procedure [dbo].[generate_ad_hoc_report_data]
+	--added on 1/24/2007 for multi-user interface
+	@sord_report_ad_hoc_id int,
+	@class_of_desc_selected int
+As
+declare @table_name as varchar(100),
+		@field_name as varchar(100),
+		@operator as varchar(50), 
+		@value as varchar(1200),
+		@field_list as varchar(3000),
+		@table_n_join as varchar(2000),
+		@where as varchar(8000),
+		@group_by as varchar(1000),
+		@SQL_ST varchar(8000),
+		@ErrorSave INT,
+		@sord_report_ad_hoc_field_id int,
+		@sord_report_ad_hoc_group_by_id int,
+		@is_number int,
+		@group_id int,
+		@group_logic varchar(3),
+		@field_logic varchar(3),
+		@current_group_id int,
+		@current_group_number int,
+		@current_field_number int,
+		@filter_id int,
+		@i int, @j int
+
+set @field_list=''
+set @SQL_ST=''
+
+declare c_field_list cursor for
+	select 
+		distinct 
+			f.sord_report_ad_hoc_field_id, 
+			substring(m.current_name, 0, charindex('.', m.current_name)) as table_name,
+			ltrim(substring(m.current_name, charindex('.', m.current_name)+1, len(m.current_name))) as field_name
+	from dbo.sord_report_ad_hoc_field f
+	inner join dbo.sord_ad_hoc_field_name_map m
+	on f.table_name+'.'+f.field_name=m.new_name
+	where sord_report_ad_hoc_id=@sord_report_ad_hoc_id
+	order by sord_report_ad_hoc_field_id
+
+	open c_field_list
+
+	fetch next from c_field_list
+	into @sord_report_ad_hoc_field_id, @table_name, @field_name
+
+	while @@fetch_status=0
+	begin
+		--if @table_name <> 'student_ref_class_of' or @class_of_desc_selected = 1
+--dw 9/4/2007 add "and patindex('%.' + @field_name + ',%', @field_list) = 0"	
+		if @table_name <> 'student_ref_class_of'	
+		   and patindex('%.' + @field_name + ',%', @field_list) = 0	
+		begin
+			SET @field_list = @field_list + @table_name + '.' + @field_name+','
+		end
+--hs 9/4/2007 
+		else if patindex('%.' + @field_name + ',%', @field_list) > 0	
+		begin
+			SET @field_list = @field_list + @table_name + '.' + @field_name+' as '+ @field_name +'_2,'
+		end
+--end
+		fetch next from c_field_list
+		into @sord_report_ad_hoc_field_id, @table_name, @field_name
+	end
+	
+	close c_field_list
+	deallocate c_field_list
+
+   --add person_lastname, person_firstname if they are not selected
+   --modified on 11/29/2006 based on user request
+--	if PATINDEX ('%last_name%', @field_list)=0
+--	begin
+--		set @field_list='person.last_name,'+ @field_list
+--	end
+--
+--	if PATINDEX ('%first_name%', @field_list)=0
+--	begin
+--		set @field_list='person.first_name,'+ @field_list
+--	end
+	--end of modification
+
+SET @table_n_join = 'from person ' + char(13) 
+
+declare c_table_join cursor for
+	select 
+		distinct substring(m.current_name, 0, charindex('.', m.current_name)) as table_name
+	from dbo.sord_report_ad_hoc_field f
+	left join dbo.sord_ad_hoc_field_name_map m
+	on f.table_name+'.'+f.field_name=m.new_name
+	where sord_report_ad_hoc_id=@sord_report_ad_hoc_id 
+	and substring(m.current_name, 0, charindex('.', m.current_name))<>'person'
+	
+
+	open c_table_join
+
+	fetch next from c_table_join
+	into @table_name
+print 'test'
+	while @@fetch_status=0
+	begin
+print @table_name
+		if @table_name<>'student_ref_class_of'
+		begin
+			if @table_name = 'student'
+			begin -- Filter out persons without student_id. DW 04/11/07
+				set @table_n_join = replace(@table_n_join, 'from person ', 'from person ' + char(13) + 'inner join student on person.person_id = student.person_id ')
+			end
+			else if @table_name = 'student_degree_objective_status'
+			begin -- Filter out persons without student_id. DW 04/11/07
+				set @table_n_join = replace(@table_n_join, 'from person ', 'from person ' + char(13) + 'inner join student_degree_objective_status on person.person_id = student_degree_objective_status.person_id ')
+			end
+			else
+			begin
+				SET @table_n_join=@table_n_join + 'left join ' +@table_name +' on person.person_id= ' + @table_name + '.person_id ' + char(13) 
+			end
+		end
+
+		fetch next from c_table_join
+		into @table_name
+	end
+	
+-- Filter out persons without student_id. DW 04/11/07
+	if patindex('%inner join student %', @table_n_join) = 0 and
+	   patindex('%inner join student_degree_objective_status %', @table_n_join) = 0  
+		begin
+			set @table_n_join = replace(@table_n_join, 'from person ', 'from person ' + char(13) + 'inner join student on person.person_id = student.person_id ')
+		end		
+-- If only one tale (or view) is joined, empty rows will not be displayed. -- DW 04/12/07
+-- But if 'Where person.person_id = ..' is used and the person_id is not in the table (or view), this row will not be displayed too.	
+	if patindex('%left join %left join %', @table_n_join) = 0 and 
+	   patindex('%left join %', @table_n_join) > 0  
+		begin
+			set @table_n_join = replace(@table_n_join, 'left join ', 'inner join ')
+		end		
+-- end 
+--
+-- HS 8/10/2007
+	if PATINDEX('% evalue_answer_details %', @table_n_join) > 0 and
+	   PATINDEX('% student_course_details %', @table_n_join) > 0 
+	begin
+		set @table_n_join = @table_n_join + ' and student_course_details.student_ref_course_id = evalue_answer_details.student_ref_course_id ' + char(13)
+	end
+-- end
+
+	close c_table_join
+	deallocate c_table_join
+
+
+SET @where = 'WHERE '
+
+declare c_filter cursor for
+	select 
+		distinct substring(m.current_name, 0, charindex('.', m.current_name)) as table_name, 
+		substring(m.current_name, charindex('.', m.current_name)+1, len(m.current_name)) as field_name, 
+		t.operator, replace(t.[value],'''',''''''),
+		t.sord_report_ad_hoc_group_id,
+		t.sord_report_ad_hoc_group_logic,
+		t.sord_report_ad_hoc_field_logic,
+		t.sord_report_ad_hoc_filter_id
+
+	from dbo.sord_report_ad_hoc_filter t
+	inner join dbo.sord_report_ad_hoc_field f
+	on t.sord_report_ad_hoc_field_id = f.sord_report_ad_hoc_field_id
+	inner join dbo.sord_ad_hoc_field_name_map m
+	on f.table_name +'.' + f.field_name = m.new_name
+	where f.sord_report_ad_hoc_id = @sord_report_ad_hoc_id
+	order by t.sord_report_ad_hoc_group_id, t.sord_report_ad_hoc_filter_id
+
+	open c_filter
+
+	fetch next from c_filter
+	into @table_name, @field_name, @operator, @value, @group_id, @group_logic, @field_logic, @filter_id
+
+	--Set group and field counters.
+	--The # of the group/field will determine evaluation of the group/field logic.
+	SET @current_group_id = 0
+	SET @current_group_number = 0
+	SET @current_field_number = 0
+
+	while @@fetch_status = 0
+	begin
+		IF	@current_group_id <> @group_id
+			BEGIN
+				--New logical group.
+				SET @current_group_id = @group_id
+
+				SET @current_group_number = @current_group_number + 1
+
+				--The first field in the group.
+				SET @current_field_number = 1
+
+				--Start building a new logical group.
+
+				IF @current_group_number = 1
+					BEGIN
+						--For the group #1 the group logic is not evaluated.
+						SET @where = @where + '('
+					END
+				ELSE
+					BEGIN
+						--Evaluate the group logic.
+						SET @where = @where + ') ' + char(13) + @group_logic + ' ('
+					END
+			END
+
+			--Continue building the current logical group.
+
+			--Is it the very first field in the group?
+			IF @current_field_number = 1
+				BEGIN
+					--Ignore the logic for the first field.
+					SET @field_logic = ''
+				END
+		
+			if  @value = '' and @operator = '<>'
+				begin
+					SET @where = @where + ' ' + @field_logic + ' ' + @table_name + '.' + @field_name + ' is not null'
+				end
+			else
+			if @value = '' and @operator = '='
+				begin
+					SET @where = @where + ' ' + @field_logic + ' ' + @table_name + '.' + @field_name + ' is null'
+				end
+			else
+	--		if ISNUMERIC(@value)= 1
+	--			begin
+	--				SET @where=@where+ @table_name +'.' + @field_name + ' ' + @operator + ' ' +@value + char(13) + ' and '
+	--			end
+	--		else
+				begin
+					SET @where = @where + ' ' + @field_logic + ' ' + @table_name + '.' + @field_name + ' ' + @operator + ' ''' + @value + ''''
+				end
+
+			--Next field in the group.
+			SET @current_field_number = @current_field_number + 1
+
+		fetch next from c_filter
+		into @table_name, @field_name, @operator, @value, @group_id, @group_logic, @field_logic, @filter_id
+
+	end
+	
+	close c_filter
+	deallocate c_filter
+
+	if @where <> 'WHERE ' 
+	begin 
+		SET @where = replace(@where, '(  ', '(') + ') ' 
+	end
+
+	--modified on 1/16/2007 based on Craig's request
+	-- to exclude 0 usmle scores, except step2CS
+-- moved to student_usmle_details, DW 04/11/07 
+--	if PATINDEX('%student_usmle%', @table_n_join)>0
+--	begin
+--		set @where=@where + ' ((usmle_jhu_type in (''Step1'', ''Step2CK'', ''Step3'')
+--				and two_digit_score<>0 and three_digit_score<>0)
+--				or usmle_jhu_type=''Step2CS'') ' + char(13) + 'and '
+--	end
+
+--if student table is included, will group by class_of by default
+	--modified on 11/29/2006 based on user request
+	--if PATINDEX ('%student_ref_class_of%', @where)>0
+	--modified on 3/1/2007
+	if PATINDEX ('%student_ref_class_of%', @field_list)>0 or @class_of_desc_selected = 1
+	begin	
+
+		if PATINDEX ('%student_degree_objective_status%', @table_n_join)=0
+		begin
+			
+			SET @table_n_join=@table_n_join+ 'left join student_degree_objective_status on person.person_id= student_degree_objective_status.person_id ' + char(13) 
+		end
+			--set @field_list='student_ref_class_of.class_of_desc,'+ @field_list
+			SET @table_n_join=@table_n_join+ 'left join student_ref_class_of on student_ref_class_of.student_ref_class_of_id= student_degree_objective_status.student_ref_class_of_id ' + char(13)
+			SET @group_by='order by class_of_desc, '
+	
+	end
+	else if PATINDEX ('%student_ref_class_of%', @where)>0
+	begin	
+
+		if PATINDEX ('%student_degree_objective_status%', @table_n_join)=0
+		begin
+			
+			SET @table_n_join=@table_n_join+ 'left join student_degree_objective_status on person.person_id= student_degree_objective_status.person_id ' + char(13)
+		end
+			set @field_list=@field_list + 'student_ref_class_of.class_of_desc'
+			SET @table_n_join=@table_n_join+ 'left join student_ref_class_of on student_ref_class_of.student_ref_class_of_id= student_degree_objective_status.student_ref_class_of_id ' + char(13)
+			SET @group_by='order by class_of_desc, '
+	
+	end
+	else
+	begin
+		SET @group_by='Order By '
+	end
+	--end of modification
+
+	-- rows with 'LOA' are filtered even the time_status_desc field is not included - DW 03/08/07
+	if PATINDEX('% student_degree_objective_status %', @table_n_join) > 0 and
+	   PATINDEX('% student_degree_objective_status.time_status_desc%''LOA''% ', @where) = 0 
+	begin
+		set @where = @where + 'and student_degree_objective_status.time_status_desc <> ''LOA''' + char(13)
+		set @where = replace(@where, 'WHERE and ', 'WHERE ')
+	end
+	--end of modification
+
+declare c_group_by cursor for
+	select 
+		distinct sord_report_ad_hoc_group_by_id, substring(m.current_name, 0, charindex('.', m.current_name)) as table_name, 
+		substring(m.current_name, charindex('.', m.current_name)+1, len(m.current_name)) as field_name 
+	from dbo.sord_report_ad_hoc_group_by t
+	inner join dbo.sord_report_ad_hoc_field f
+	on t.sord_report_ad_hoc_field_id=f.sord_report_ad_hoc_field_id
+	inner join dbo.sord_ad_hoc_field_name_map m
+	on f.table_name+'.'+f.field_name=m.new_name
+	where f.sord_report_ad_hoc_id=@sord_report_ad_hoc_id
+	order by sord_report_ad_hoc_group_by_id
+
+	open c_group_by
+
+	fetch next from c_group_by
+	into @sord_report_ad_hoc_group_by_id, @table_name, @field_name
+
+	while @@fetch_status=0
+	begin
+		if @table_name<>'student_ref_class_of'
+		begin
+			SET @group_by=@group_by+ @field_name + ', '
+		END
+		
+		fetch next from c_group_by
+		into @sord_report_ad_hoc_group_by_id, @table_name, @field_name
+
+	end
+	
+	close c_group_by
+	deallocate c_group_by
+	--print @group_by
+
+if @class_of_desc_selected = 1 and PATINDEX ('%student_ref_class_of%', @field_list)= 0
+begin
+	set @field_list=@field_list +'student_ref_class_of.class_of_desc'
+	set @SQL_ST='SELECT DISTINCT ' + substring(@field_list,0,len(@field_list)+1) + char(13) + 
+		+ @table_n_join 
+
+end
+else
+if @class_of_desc_selected = 0 and PATINDEX ('%student_ref_class_of%', @field_list)> 0
+begin
+	set @SQL_ST='SELECT DISTINCT ' + substring(@field_list,0,len(@field_list)+1) + char(13) + 
+		+ @table_n_join 
+end
+else
+begin
+	set @SQL_ST='SELECT DISTINCT ' + substring(@field_list,0,len(@field_list)) + char(13) + 
+		+ @table_n_join 
+end
+
+if @where<>'WHERE ' 
+begin
+	set @SQL_ST = @SQL_ST + @where
+end
+
+set @SQL_ST = @SQL_ST + ') result ' + char(13)
+
+if @group_by<>'Order By '
+begin
+	set @SQL_ST=@SQL_ST + substring(@group_by,0,len(@group_by))
+end
+
+--print @sql_st
+
+-- add row_number by DWU 05/18/07 
+set @i = PATINDEX ('%ORDER BY %', @SQL_ST)
+set @i = case when @i > 0 then @i + LEN('OREDER BY ') else CHARINDEX('.', @SQL_ST) + 1 end 
+
+--print @i
+
+set @j = CHARINDEX(',', @SQL_ST, @i) - @i
+if @j < 1 
+begin 
+	set @j = CHARINDEX(char(13), @SQL_ST, @i) - @i   
+end
+
+if @j < 1 
+begin 
+	set @j = LEN(@SQL_ST) - @i + 1   
+end
+
+set @field_name = SUBSTRING(@SQL_St, @i, @j)
+set @SQL_ST = 'SELECT row_number() over (order by ' + @field_name + ') as [ ], * ' + char(13) + 
+              'From ' + char(13) +
+			  '(' + @SQL_ST
+---
+
+print @SQL_ST
+
+if @SQL_ST<>'SELECT DISTINCT  from person '
+begin
+	Execute(@SQL_ST)
+end
+else
+begin
+	select 'no data is selected above' as query_field
+end
+return 0
+
+print @SQL_ST
+-- Save any nonzero @@ERROR value.
+IF (@@ERROR <> 0)
+   SET @ErrorSave = @@ERROR
+
+-- Returns 0 if INSERT statement had
+-- no error; otherwise, returns the last error.
+RETURN @ErrorSave
