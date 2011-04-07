@@ -4,21 +4,28 @@ $( function() {
         $.extend( {},
                   links,
                   mimis.links,
-                  mimis.load( $('link[rel="mimis link list"]').attr( 'href' ) ) )
+                  mimis.load( '/.tip/lib/mimis/links/eson' ) )
     
     links.initial.each( function( link ) {
         $body.append(
-            $('<object/>')
-                .attr( $.extend
-                       ( link, 
-                         {
-                             class : 'icon',
-                             type : 'image/svg+xml',
-                             data : chrome.extension.getURL( link.icon ),
-                         } ) ) )
-            .bind( {
-                load : function() { console.log( 'loaded' ) },
-            } )
+            $('<a/>')
+                .attr( {
+                    href : link.href,
+                } )
+                .append(
+                    $('<object/>')
+                        .attr( $.extend
+                               ( link, 
+                                 {
+                                     class : 'icon',
+                                     type : 'image/svg+xml',
+                                     data : chrome.extension.getURL( link.icon ),
+                                 } ) )
+                        .bind( {
+                            load : function() { console.log( 'loaded' ) },
+                        } )
+                )
+        )
     } )
 
     var $status =
@@ -76,7 +83,27 @@ $( function() {
                         $obj.removeClass( 'clicking' )
                     },
                     click : function() {
-                        self.close()
+                        var uri = $obj.parent( 'a' ).attr( 'href' )
+                        if( uri.startsWith( '.../' ) ) {
+                            uri = mimis.endpoint.http + '/' + uri
+                        }
+                        chrome.tabs.getAllInWindow( undefined, function( tabs ) {
+                            if( ! tabs.each( function( tab ) {
+                                if( tab.url.startsWith( uri ) ) {
+                                    chrome.tabs.update( tab.id, {
+                                        selected : true,
+                                    } ) 
+                                    return true
+                                }
+                            } ) ) {
+                                chrome.tabs.create( {
+                                    url : uri,
+                                    selected : true,
+                                }, function( tab ) {
+                                } )
+                            }
+                        } )
+                        //self.close()
                     },
                     // mouseout : function() { // Fires repeadedly
                 }  )
@@ -103,7 +130,6 @@ $( function() {
                 return true
             }
         } ) ) {
-            console.log( 'Opening: ' + uri )
             chrome.tabs.create( {
                 url : uri,
                 selected : false,
@@ -114,24 +140,10 @@ $( function() {
     } )
 } )
 
-/*
-chrome.tabs.executeScript( null, {
-    file : '',
-} )
-*/
-        
 chrome.browserAction.setBadgeText( {
-    text : '#',
+    text : '❤',
 } )
 
-;( function() {
-    var i = 0
-    window.setInterval( function() {
-        chrome.browserAction.setBadgeBackgroundColor( {
-            color : [ Math.round( Math.random() * 255 ),
-                      Math.round( Math.random() * 255 ),
-                      Math.round( Math.random() * 255 ),
-                      Math.round( Math.random() * 255 ) ],
-        } )
-    }, 3000 )
-} )()
+chrome.browserAction.setBadgeBackgroundColor( {
+    color : [ 200, 100, 100, 100 ],
+} )
