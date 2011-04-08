@@ -3,12 +3,41 @@ $( function() {
 
     function pullChildren( $root ) {
         var $children =
-            $root.children( '[inkscape:groupmode="layer"]' )
-        console.log( $children.size() )
+            $root.children( '[inkscape\\:groupmode="layer"]' )
+        var $list
         if( $children.size() > 0 ) {
-            var $list = $('<ol/>')
-            
+            //$list = $('<ol/>')
+            $list = $(document.createElementNS( mimis.ns.html, 'ul' ))
+            $children.each( function() {
+                var $this = $(this)
+                var $item = $(document.createElementNS( mimis.ns.html, 'li' ))
+                var $text = $(document.createElementNS( mimis.ns.html, 'span' ))
+                var $sub = pullChildren( $this )
+
+                $list.append(
+                    $item.append(
+                        $text.text( $this.attr( 'inkscape:label' ) )
+                    )
+                        .append( $sub )
+                )
+            } )
         }
+        return $list
     }
-    pullChildren( mimis.$root )
+    
+/*
+    var d$root = d3.select( document.documentElement )
+    d$root
+        .selectAll( '[inkscape:groupmode="layer"]' )
+        .each( function() {
+            console.log( arguments )
+        } )
+*/
+    var $list = pullChildren( mimis.$root )
+    $list.css( {
+        position : 'absolute',
+        top : 0,
+        left : 0,
+    } )
+    mimis.$root.append( $list )
 } )
