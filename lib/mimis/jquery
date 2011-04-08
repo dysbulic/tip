@@ -203,12 +203,17 @@ mimis.ns = mimis.ns ||
         } )
         // Reverse map
         for( abbr in ns ) {
-            ns[ ns[ abbr ] ] = abbr
+            if( abbr != '' ) {
+                ns[ ns[ abbr ] ] = abbr
+            }
         }
         ns[ 'default' ] = ns[ 'default' ] || 'html'
-        !ns[ '' ] && ( ns[ '' ] = ns[ ns[ 'default' ] ] )
-        ns.toString = ns.toString || function() { return ns[ '' ] }
-        ns.valueOf = ns.valueOf || ns.toString
+        !ns[ '' ] && (
+            ns[ '' ] = ns[ ns[ 'default' ] ]
+        )
+        ns.valueOf = ns.toString =
+            function() { return ns[ '' ] }
+        ns.abbr = ns[ ns ]
         return ns
     } )()
 
@@ -228,4 +233,51 @@ mimis.endpoint = mimis.endpoint || {
     get http() {
         return 'http://localhost'
     },
+}
+
+mimis.$root = mimis.$root || $( document.documentElement )
+
+if( mimis.ns.abbr == 'svg' &&
+    mimis.$root.__lookupGetter__( 'viewBox' ) === undefined ) {
+    mimis.$root.__defineGetter__(
+        'viewBox',
+        function() {
+            var attr = $(this).attr( 'viewBox' )
+            var split = attr.split( ' ' )
+            // ToDo: handle unset viewBox
+            return {
+                x : split[0],
+                y : split[1],
+                width : split[2],
+                height : split[3],
+            }
+        } )
+}
+
+if( mimis.ns.abbr == 'svg' &&
+    mimis.$root.__lookupSetter__( 'viewBox' ) === undefined ) {
+    mimis.$root.__defineSetter__(
+        'viewBox',
+        function( box ) {
+            box =
+                $.extend( mimis.$root.viewBox,
+                          box )
+            var vals = [
+                box.x, box.y, box.width, box.height
+            ]
+            console.log( vals )
+            mimis.$root.attr( {
+                viewBox : vals.join( ' ' )
+            } )
+            return box
+        } )
+}
+
+if( mimis.ns.abbr == 'svg' &&
+    mimis.$root.__lookupGetter__( 'bbox' ) === undefined ) {
+    mimis.$root.__defineGetter__(
+        'bbox',
+        function() {
+            return mimis.$root.get(0).getBBox()
+        } )
 }
