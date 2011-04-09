@@ -9,35 +9,64 @@ $( function() {
             //$list = $('<ol/>')
             $list = $(document.createElementNS( mimis.ns.html, 'ul' ))
             $children.each( function() {
-                var $this = $(this)
-                var $item = $(document.createElementNS( mimis.ns.html, 'li' ))
-                var $text = $(document.createElementNS( mimis.ns.html, 'span' ))
-                var $sub = pullChildren( $this )
+                var $layer = $(this)
+                var $check =
+                    $(document.createElementNS( mimis.ns.html, 'input' ))
+                    .attr( {
+                        type : 'checkbox',
+                        //checked : false, //! $this.is( ':visible' ),
+                        //'html:checked' : true, //! $this.is( ':visible' ),
+                    } )
+                    .click( function() {
+                        console.log( 'Checked: ' + $(this).is( ':checked' ) )
+                        $layer.toggle( $(this).is( ':checked' ) )
+                    } )
+                //$check.get(0).setAttributeNS( mimis.ns.html, 'checked', true )
+                //if( $this.is( ':visible' ) ) {
+                if( $layer.css( 'display' ) != 'none' ) {
+                    $check.attr( {
+                        checked : true,
+                    } )
+                }
+                var $text =
+                    $(document.createElementNS( mimis.ns.html, 'span' ))
+                    .text( $layer.attr( 'inkscape:label' ) )
+                var $sub = pullChildren( $layer )
+                var $item =
+                    $(document.createElementNS( mimis.ns.html, 'li' ))
+                    .append( $check )
+                    .append( $text )
+                    .append( $sub )
 
-                $list.append(
-                    $item.append(
-                        $text.text( $this.attr( 'inkscape:label' ) )
-                    )
-                        .append( $sub )
-                )
+                $list.append( $item )
             } )
         }
         return $list
     }
     
-/*
+    /*
     var d$root = d3.select( document.documentElement )
     d$root
         .selectAll( '[inkscape:groupmode="layer"]' )
         .each( function() {
             console.log( arguments )
         } )
-*/
+    */
+
     var $list = pullChildren( mimis.$root )
     $list.css( {
         position : 'absolute',
         top : 0,
         left : 0,
     } )
-    mimis.$root.append( $list )
+    mimis.$root.append(
+        $(document.createElementNS( mimis.ns, 'foreignObject' ))
+            .attr( {
+                x : 0,
+                y : 0,
+                height : '100%',
+                width : '100%',
+            } )
+            .append( $list )
+    )
 } )

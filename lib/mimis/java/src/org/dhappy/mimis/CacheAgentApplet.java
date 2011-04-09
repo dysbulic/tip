@@ -10,8 +10,6 @@ import java.io.OutputStream;
 import javax.activation.MimetypesFileTypeMap;
 
 import javax.swing.JApplet;
-import javax.swing.SwingUtilities;
-import javax.swing.JFileChooser;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -324,7 +322,7 @@ public class CacheAgentApplet extends JApplet {
         return ret;
     }
 
-    public Object listen( String key, final Object callback ) {
+    public Callback castCallback( final Object callback ) {
         Callback castCallback = null;
         if( callback instanceof Callback ) {
             castCallback = (Callback)callback;
@@ -334,16 +332,21 @@ public class CacheAgentApplet extends JApplet {
                         if( ! ( data instanceof JSObject ) ) {
                             data = makeJSObject( data );
                         }
-                        ((JSObject)callback).call( "call", new Object[] { callback, data } );
+                        ((JSObject)callback).call
+                            ( "call", new Object[] { callback, data } );
                         return data;
                     }
                 };
         } else if( callback != null ) {
             log.warning( getClass().getName()
-                         + ".listen called with callback type: "
+                         + " called with callback type: "
                          + callback.getClass().getName() );
         }
+        return castCallback;
+    }
 
+    public Object listen( String key, Object callback ) {
+        Callback castCallback = castCallback( callback );
         Object ret = localGet( key, castCallback );
         return ret;
     }
