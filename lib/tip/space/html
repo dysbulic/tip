@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tip="http://dhappy.org/tip/0.1/a"
+      xmlns:var="tip:core/var">
+  <head>
+    <title><var:title><var:program id="tip"><var:name>Tipspace</var:name> <var:version>0.1</var:version></var:program> </var:title></title>
+    <link rel="stylesheet" type="text/css" href="~/media/style/thesis.css" />
+    <script type="text/javascript" src=".../sys/lib/jquery/dev/dist/jquery.js"/>
+    <script type="text/javascript" src=".../sys/lib/tip/src/$.jquery"/>
+    <style type="text/css">
+      #htmldom object, #htmltraverse object, #cals object { height: 300px; }
+      #htmlevents object { height: 120px; }
+      #copiedcals object { height: 300px; }
+      #faodata object, #svgdom object { height: 225px; }
+      [title="One dimensional number line"] { height: 100px; }
+      [title="Two dimensional number line"] { height: 350px; }
+      [title="Three dimensional number line"] { height: 350px; }
+      [title="n versus 2^n"] td { padding: .25em .5em; }
+      [title="n versus 2^n"] td:first-child { text-align: right; }
+      [title="n versus 2^n"] td:last-child { text-align: left; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <hgroup>
+        <h1><var:title/></h1>
+        <h2><a href="mailto:Will%20Holcomb%20%3Cwill@dhappy.org%3E">Will Holcomb</a></h2>
+        <h2>28 February 2010</h2>
+      </hgroup>
+    </header>
+
+    <section>
+      <title>One Bit</title>
+
+      <p>Start with the number of posibilities representable with a single binary digit: two &mdash; one labeled "zero" and the other "one."</p>
+
+      <object type="image/svg+xml" title="One dimensional number line" data="~/blog/virtual_bitches/one_bit.svg"/>
+    </section>
+
+    <section>
+      <title>Two Bits</title>
+
+      <p>Next step it up a dimension; two bits: four values.</p>
+
+      <object type="image/svg+xml" title="Two dimensional number line" data="~/blog/virtual_bitches/two_bit.svg"/>
+    </section>
+
+    <section>
+      <title>Three Bits</title>
+
+      <p>Three bits: eight values.</p>
+
+      <object type="image/svg+xml" title="Three dimensional number line" data="~/blog/virtual_bitches/three_bit.svg"/>
+    </section>
+
+    <section id="motivation">
+      <title>More</title>
+
+      <p>As the number of bits increases, the number of possible points grows exponentially:</p>
+
+      <figure type="dual">
+      <table title="n versus 2^n">
+        <thead><tr><th># of Bits</th><th># of Possiblities</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>2</td></tr>
+          <tr><td>2</td><td>4</td></tr>
+          <tr><td>3</td><td>8</td></tr>
+          <tr><td>4</td><td>16</td></tr>
+          <tr><td>5</td><td>32</td></tr>
+          <tr><td>8</td><td>256</td></tr>
+          <tr><td>16</td><td>65,536</td></tr>
+          <tr><td>32</td><td>4,294,967,296</td></tr>
+          <tr><td><em>n</em></td><td>2<sup><em>n</em></sup></td></tr>
+        </tbody>
+      </table>
+      <object type="image/svg+xml" title="Three dimensional number line" data="~/blog/virtual_bitches/n versus 2^n.svg"/>
+      </figure>
+    </section>
+<!--
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-2592249-5");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+-->
+  </body>
+</html>
