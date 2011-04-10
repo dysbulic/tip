@@ -6,9 +6,10 @@
       xmlns:var="tip:core/var">
   <head>
     <title><var:title><var:program id="tip"><var:name>Tipspace</var:name> <var:version>0.1</var:version></var:program> </var:title></title>
-    <link rel="stylesheet" type="text/css" href="~/media/style/thesis.css" />
-    <script type="text/javascript" src=".../sys/lib/jquery/dev/dist/jquery.js"/>
-    <script type="text/javascript" src=".../sys/lib/tip/src/$.jquery"/>
+    <link rel="stylesheet" type="text/css"       href=".../style/main/" />
+    <script                type="text/javascript" src=".../lib/jquery/js"/>
+    <script                type="text/javascript" src=".../lib/mimis/jquery"/>
+    <script                type="text/javascript" src="jquery"/>
     <style type="text/css">
       #htmldom object, #htmltraverse object, #cals object { height: 300px; }
       #htmlevents object { height: 120px; }
@@ -26,9 +27,24 @@
     <a href="app/">
       <message>
         <!--<icon href=".../co/Google/logo/button/"/>-->
-        <img role="icon" href=".../co/Google/logo/button/" alt="Google"/>
-        <img role="icon" href=".../co/Google/App Engine/logo/button/" alt="Google"/>
+        <!-- http://groups.google.com/group/google-appengine/browse_thread/thread/4f1c8fd696d882af/5f0c1484368021ff?pli=1
+           - <img role="icon" src=".../co/Google/App Engine/logo/button/" alt="Google"/>
+          -->
+        <img role="icon" src=".../co/Google/logo/button/" alt="Google"/>
         <p>Current development is on an <a href="http://code.google.com/appengine/">App Engine</a> application.</p>
+      </message>
+    </a>
+    <a href=".../lib/mimis/">
+      <message>
+        <!--<img role="icon" src=".../lib/mimis/logo/button/" alt="Mïmis"/>-->
+        <img role="icon" src=".../lib/mimis/logo/button/svg" alt="Mïmis"/>
+        <p>Tipspace is an interface to the Mïmis filesystem.</p>
+      </message>
+    </a>
+    <a href=".../lib/mimis/">
+      <message>
+        <img role="icon" src=".../lib/mimis/logo/button/" alt="Mïmis"/>
+        <p>Tipspace is an interface to the Mïmis filesystem.</p>
       </message>
     </a>
     <header>
@@ -44,7 +60,7 @@
 
       <p>Start with the number of posibilities representable with a single binary digit: two &mdash; one labeled "zero" and the other "one."</p>
 
-      <object type="image/svg+xml" title="One dimensional number line" data="~/blog/virtual_bitches/one_bit.svg"/>
+      <img class="center" title="One dimensional number line"   src=".../blog/virtual_bitches/one_bit.svg"/>
     </section>
 
     <section>
@@ -52,7 +68,7 @@
 
       <p>Next step it up a dimension; two bits: four values.</p>
 
-      <object type="image/svg+xml" title="Two dimensional number line" data="~/blog/virtual_bitches/two_bit.svg"/>
+      <img class="center" title="Two dimensional number line"   src=".../blog/virtual_bitches/two_bit.svg"/>
     </section>
 
     <section>
@@ -60,7 +76,7 @@
 
       <p>Three bits: eight values.</p>
 
-      <object type="image/svg+xml" title="Three dimensional number line" data="~/blog/virtual_bitches/three_bit.svg"/>
+      <img class="center" title="Three dimensional number line" src=".../blog/virtual_bitches/three_bit.svg"/>
     </section>
 
     <section id="motivation">
@@ -84,19 +100,8 @@
           <tr><td><em>n</em></td><td>2<sup><em>n</em></sup></td></tr>
         </tbody>
       </table>
-      <object type="image/svg+xml" title="Three dimensional number line" data="~/blog/virtual_bitches/n versus 2^n.svg"/>
+      <img class="center" title="Three dimensional number line" src=".../blog/virtual_bitches/n versus 2^n.svg"/>
       </figure>
     </section>
-<!--
-    <script type="text/javascript">
-      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-    </script>
-    <script type="text/javascript">
-      var pageTracker = _gat._getTracker("UA-2592249-5");
-      pageTracker._initData();
-      pageTracker._trackPageview();
-    </script>
--->
   </body>
 </html>
