@@ -10,6 +10,10 @@ $.isObject = $.isObject ||
         return obj instanceof Object || $.type( obj ) == 'object'
     }
 
+//$.fn.style
+
+console.debug = console.log
+
 // Allow negative indexing for last element
 Array.prototype.__defineGetter__( -1, function() {
     return this.length > 0 && this[ this.length - 1 ] || undefined
@@ -19,7 +23,6 @@ Array.prototype.__defineSetter__( -1, function( val ) {
     var idx = this.length > 0 ? this.length - 1 : 0
     this[ idx ] = val
 } )
-
 
 String.prototype.concat = String.prototype.concat ||
     function() {
@@ -34,23 +37,29 @@ String.prototype.concat = String.prototype.concat ||
 mimis.each = Array.prototype.each =
     mimis.each || Array.prototype.each || function each( f, args ) {
         if( $.isFunction( f ) ) {
-            var out
-            for( var i = 0; i < this.length; i++ ) {
-                var ret = f.apply( this, [ this[i], i, args ] )
-                if( ret === true || ret === false ) {
-                    return ret
-                } else if( ret === undefined ) {
-                } else if( $.isArray( ret )
-                           || $.isString( ret )
-                           || ret.concatenable ) {
-                    out = out.concat( ret )
-                } else if( $.isFunction( ret ) ) {
-                    ret.call( this, out )
-                } else if( $.isObject( ret ) ) {
-                    out = $.extend( true, ret, out )
+            try {
+                var out
+                for( var i = 0; i < this.length; i++ ) {
+                    var ret = f.apply( this[i], [ this[i], i, args ] )
+                    if( ret === true || ret === false ) {
+                        return ret
+                    } else if( ret === undefined ) {
+                    } else if( $.isArray( ret )
+                               || $.isString( ret )
+                               || ret.concatenable ) {
+                        out = out.concat( ret )
+                    } else if( $.isFunction( ret ) ) {
+                        ret.call( this, out )
+                    } else if( $.isObject( ret ) ) {
+                        out = $.extend( true, ret, out )
+                    }
                 }
+                return out
+            } catch( e ) {
+                console.debug( 'ï:each: Exception In Loop: ' )
+                console.debug( e )
+                throw e
             }
-            return out
         }
     }
 
@@ -73,8 +82,6 @@ Array.prototype.__defineGetter__( 'empty', function() {
     return this.length == 0
 } )
 */
-
-console.debug = console.log
 
 String.prototype.startsWith = String.prototype.startsWith || function( str ) {
     return this.indexOf( str ) == 0
