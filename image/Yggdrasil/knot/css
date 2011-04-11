@@ -66,7 +66,7 @@ text {
     text-anchor: middle;
 }
 
-[pos='center'] [func='¿marker?'] circle {
+[func='¿marker?'] circle {
     stroke-width : 3;
     stroke-opacity : 1;
     stroke-dasharray : 0;
@@ -90,10 +90,20 @@ text {
     stroke : #078807;
 }
 
-[func='¿marker?'] { display : none; }
+[func='¿marker?'] { }
 
 /* ToDo: */
-[state='not hovered'] {
-    fill : red;
-    fill-opacity : .5;
+[state='not hovered'], [state='not hovered'] circle {
+    fill-opacity : .25;
+    stroke-opacity : .5;
+}
+
+[state='not hovered'] text {
+    fill-opacity : .25;
+    stroke-opacity : .25;
+}
+
+[state='not hovered'] circle {
+    fill-opacity : .1;
+    stroke-opacity : .1;
 }

@@ -2,8 +2,6 @@ $( function() {
     var $idxs = ( function() {
         var $idxs = []
 
-        var $svg = $('svg')
-
         // Group disperate indices
         $('[idx]').each( function() {
             var $g = $(this)
@@ -32,15 +30,6 @@ $( function() {
                                 //$h.css( { fillOpacity : .5 } ) // Doesn't work
                                 $h.attr( {
                                     state : ( idx != iidx ? 'not ' : '' ) + 'hovered',
-                                } )
-                                return
-                                $h.each( function() {
-                                    this.fill = this.fill || this.style.fill
-                                    this.fill.opacity = this.fill.opacity || this.style.fillOpacity
-                                    if( idx != iidx ) {
-                                        this.style.fill = 'red'
-                                        this.style.fillOpacity = .5
-                                    }
                                 } )
                             }
                         } )
