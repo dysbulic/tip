@@ -1,45 +1,59 @@
 $( function() {
     var $idxs = ( function() {
         var $idxs = []
-        console.log( $('svg') )
+
+        var $svg = $('svg')
 
         // Group disperate indices
         $('[idx]').each( function() {
             var $g = $(this)
             var idx = $g.idx = $g.idx || $g.attr( 'idx' )
-            console.log( $g )
-            $idxs[ idx ] = $idxs[ idx ] || $([])
-            $idxs[ idx ].add( $g )
+            $idxs[ idx ] = $idxs[ idx ] || $()
+            $idxs[ idx ] = $idxs[ idx ].add( $g )
+            //$g.css( { fillOpacity : .5 } ) // Doesn't work
         } )
-        
-        console.log( $idxs )
+
+
+        $idxs.each( function( $g ) {
+            if( $g ) {
+                $g.each( function() {
+                    this.style.fillOpacity = 1
+                } )
+            }
+        } )
 
         $idxs.each( function( $g, idx ) {
-            $g.hover(
-                function() {
-                    //console.log( '$idxs:ℓ:' + $idxs.length )
-                    $idxs.each( function( $h, iidx ) {
-                        if( $h ) {
-                            console.log( idx + " : " + iidx )
-                            if( idx != iidx ) {
-                                //$g.style = {
-                                $g.css( {
-                                    fill : 'red',
-                                    fillOpacity : .5,
+            if( $g ) {
+                $g.hover(
+                    function() {
+                        $idxs.each( function( $h, iidx ) {
+                            if( $h ) {
+                                if( idx != iidx ) {
+                                    //console.log( '$idxs:ℓ:' + $idxs.length )
+                                    //$h.style = { 'fill-opacity' : .5 }
+                                    //$h.css( { fillOpacity : .5 } ) // Doesn't work
+                                    $h.each( function() {
+                                        this.fill = this.fill || this.style.fill
+                                        this.style.fill = 'red'
+                                        this.fill.opacity = this.fill.opacity || this.style.fillOpacity
+                                        this.style.fillOpacity = .5
+                                    } )
+                                }
+                            }
+                        } )
+                    },
+                    function() {
+                        $idxs.each( function( $h, iidx ) {
+                            if( $h ) {
+                                $h.each( function() {
+                                    this.style.fill = this.fill
+                                    this.style.fillOpacity = this.fill.opacity
                                 } )
                             }
-                        }
-                    } )
-                },
-                function() {
-                    $idxs.each( function( $h, iidx ) {
-                        $g.css( {
-                            fill : 'red',
-                            fillOpacity : .5,
                         } )
-                    } )
-                }
-            )
+                    }
+                )
+            }
         } )
     } )()
 } )
