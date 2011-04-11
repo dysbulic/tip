@@ -1,0 +1,294 @@
+' Microsoft SQL Server Integration Services user script component
+' This is your new script component in Microsoft Visual Basic .NET
+' ScriptMain is the entrypoint class for script components
+
+Imports System
+Imports System.Data
+Imports System.Math
+Imports Microsoft.SqlServer.Dts.Pipeline
+Imports Microsoft.SqlServer.Dts.Pipeline.Wrapper
+Imports Microsoft.SqlServer.Dts.Runtime.Wrapper
+Imports System.Data.SqlClient
+Imports System.Text.RegularExpressions
+Imports System.Collections.Generic
+Imports System.Windows.Forms
+
+Public Class ScriptMain
+    Inherits UserComponent
+
+    Dim dataTime As DateTime = Nothing
+
+    Dim connMgr As IDTSConnectionManager90
+    Dim sectionIds As Dictionary(Of String, Integer)
+    'Reverse lookup for debugging
+    Dim sectionNames As Dictionary(Of Integer, String) = _
+        New Dictionary(Of Integer, String)
+    Private columnIds As Dictionary(Of Integer, Integer)
+    Private columnIndices As Dictionary(Of String, Integer) = _
+        New Dictionary(Of String, Integer)
+
+    Public Overrides Sub PreExecute()
+        Dim input As IDTSInput90 = ComponentMetaData.InputCollection(0)
+        Dim columnIdxs As Integer() = Me.GetColumnIndexes(input.ID)
+
+        connMgr = Me.Connections.sord
+
+        Try
+            Dim vars As IDTSVariables90
+            Dim varName As String = "dataTime"
+            VariableDispenser.LockForRead(varName)
+            VariableDispenser.GetVariables(vars)
+            Try
+                dataTime = CDate(vars(varName).Value)
+            Catch ex As Exception
+                Throw ex
+            Finally
+                vars.Unlock()
+            End Try
+        Catch ex As Exception
+            Throw ex
+        End Try
+
+        System.Windows.Forms.MessageBox.Show("Done: " & dataTime.ToString)
+
+        Using connection As SqlClient.SqlConnection = CType(connMgr.AcquireConnection(Nothing), SqlConnection)
+            ' Retrieve identifiers for sections
+            sectionIds = GetCourseIds(GetCourseStructure(), connection)
+            For Each item As KeyValuePair(Of String, Integer) In sectionIds
+                sectionNames.Add(item.Value, item.Key)
+            Next
+
+            ' Generate map of column indexes to section ids
+            columnIds = New Dictionary(Of Integer, Integer)
+            Dim idx As Integer = -1
+            For Each column As IDTSInputColumn90 In input.InputColumnCollection
+                idx += 1
+                Dim colName As String = Regex.Replace(column.Name, ".*?:\s*", "")
+                If colName = "Exam 2" Then
+                    colName = "NSS: " & colName ' Exam keeps its preface
+                End If
+                If Not column.Name = "person_id" And Not column.Name = "student_id" _
+                   And Not sectionIds.ContainsKey(colName) Then
+                    System.Windows.Forms.MessageBox.Show(column.Name & " : " & colName, "Unknown Column Name")
+                End If
+                'System.Windows.Forms.MessageBox.Show(column.Name & " : " & columnIdxs(idx) & ":" & input.InputColumnCollection.GetObjectIndexByID(column.ID), "Column Index")
+                'columnIds.Add(input.InputColumnCollection.GetObjectIndexByID(column.ID), sectionIds.Item(colName))
+                If sectionIds.ContainsKey(colName) Then
+                    columnIds.Add(columnIdxs(idx), sectionIds.Item(colName))
+                End If
+                columnIndices.Add(colName, columnIdxs(idx))
+            Next
+        End Using
+    End Sub
+
+    Public Overrides Sub ProcessInput(ByVal inputID As Integer, _
+                                      ByVal buffer As PipelineBuffer)
+        Using connection As SqlClient.SqlConnection = CType(connMgr.AcquireConnection(Nothing), SqlConnection)
+
+            Dim gradeInsert As New SqlClient.SqlCommand
+            gradeInsert.Connection = connection
+            gradeInsert.CommandText = _
+                ("INSERT INTO student_course_section_grade" _
+                & " (person_id, student_id, student_ref_course_section_id," _
+                & "  file_received_datetime, course_section_grade)" _
+                & " VALUES (@person_id, @student_id, @section_id," _
+                & "         @received_time, @grade)")
+            Dim personIdParam As SqlClient.SqlParameter = _
+                gradeInsert.Parameters.Add("@person_id", SqlDbType.Int)
+            Dim studentIdParam As SqlClient.SqlParameter = _
+                gradeInsert.Parameters.Add("@student_id", SqlDbType.Int)
+            Dim sectionIdParam As SqlClient.SqlParameter = _
+                gradeInsert.Parameters.Add("@section_id", SqlDbType.Int)
+            Dim receivedTimeParam As SqlClient.SqlParameter = _
+                gradeInsert.Parameters.Add("@received_time", SqlDbType.DateTime)
+            Dim gradeParam As SqlClient.SqlParameter = _
+                gradeInsert.Parameters.Add("@grade", SqlDbType.Decimal)
+
+            receivedTimeParam.Value = dataTime
+            While buffer.NextRow()
+                personIdParam.Value = buffer(columnIndices("person_id"))
+                studentIdParam.Value = buffer(columnIndices("student_id"))
+                For Each item As KeyValuePair(Of Integer, Integer) In columnIds
+                    gradeParam.Value = buffer(item.Key)
+                    sectionIdParam.Value = item.Value
+                    'System.Windows.Forms.MessageBox.Show(sectionNames(item.Value) & " : " & CStr(item.Key) & ":" & CStr(grade), "Grade")
+                    gradeInsert.ExecuteNonQuery()
+                Next
+            End While
+        End Using
+    End Sub
+
+    Function GetCourseIds(ByVal courseList As Dictionary(Of String, Object), _
+                          ByVal connection As SqlClient.SqlConnection, _
+                          Optional ByVal outList As Dictionary(Of String, Integer) = Nothing) _
+            As Dictionary(Of String, Integer)
+        If outList Is Nothing Then
+            outList = New Dictionary(Of String, Integer)
+        End If
+
+        ' The top level entries are courses
+        Dim courseSearch As New SqlClient.SqlCommand
+        courseSearch.Connection = connection
+        courseSearch.CommandText = _
+            ("SELECT student_ref_course_id FROM student_ref_course" _
+              & " WHERE course_master_title = @title")
+        Dim searchTitleParam As SqlClient.SqlParameter = _
+            courseSearch.Parameters.Add("@title", SqlDbType.VarChar)
+
+        Dim courseInsert As New SqlClient.SqlCommand
+        courseInsert.Connection = connection
+        courseInsert.CommandText = _
+            ("INSERT INTO student_ref_course (course_master_title, course_type)" _
+            & " VALUES (@title, @type);" _
+            & "SELECT student_ref_course_id FROM student_ref_course" _
+            & " WHERE student_ref_course_id = @@IDENTITY")
+        Dim insertTitleParam As SqlClient.SqlParameter = _
+            courseInsert.Parameters.Add("@title", SqlDbType.VarChar)
+        Dim insertTypeParam As SqlClient.SqlParameter = _
+            courseInsert.Parameters.Add("@type", SqlDbType.VarChar)
+
+        For Each item As KeyValuePair(Of String, Object) In courseList
+            If item.Value IsNot Nothing Then
+                searchTitleParam.Value = item.Key
+                'Dim id As Integer = Nothing
+                Dim id As Integer = -1
+                Using result As SqlClient.SqlDataReader = courseSearch.ExecuteReader()
+                    If result.HasRows Then
+                        result.Read()
+                        id = CInt(result.GetValue(0))
+                        'System.Windows.Forms.MessageBox.Show(item.Key & ": " & CStr(id), "Found Course")
+                        'ToDo: Assert no more records
+                    End If
+                End Using
+                'If id Is Nothing Then
+                If id = -1 Then
+                    insertTitleParam.Value = item.Key
+                    insertTypeParam.Value = "pre-clinical"
+                    id = CInt(courseInsert.ExecuteScalar())
+                    System.Windows.Forms.MessageBox.Show(item.Key & ": " & CStr(id), "Added Course")
+                End If
+                GetSectionIds(CType(item.Value, Dictionary(Of String, Object)), _
+                              id, connection, outList)
+                'GetCourseIds(CType(item.Value, Global.System.Collections.Generic.Dictionary(Of String, Object)))
+            End If
+        Next
+        Return outList
+    End Function
+
+    Sub GetSectionIds(ByVal sectionList As Dictionary(Of String, Object), _
+                      ByVal courseId As Integer, _
+                      ByVal connection As SqlClient.SqlConnection, _
+                      ByVal outList As Dictionary(Of String, Integer))
+        Dim sectionSearch As New SqlClient.SqlCommand
+        sectionSearch.Connection = connection
+        sectionSearch.CommandText = _
+            ("SELECT student_ref_course_section_id FROM student_ref_course_section" _
+              & " WHERE student_ref_course_id = @course_id AND section_title = @title")
+        Dim searchIdParam As SqlClient.SqlParameter = _
+            sectionSearch.Parameters.Add("@course_id", SqlDbType.Int)
+        Dim searchTitleParam As SqlClient.SqlParameter = _
+            sectionSearch.Parameters.Add("@title", SqlDbType.VarChar)
+
+        Dim sectionInsert As New SqlClient.SqlCommand
+        sectionInsert.Connection = connection
+        sectionInsert.CommandText = _
+            ("INSERT INTO student_ref_course_section (student_ref_course_id, section_title)" _
+            & " VALUES (@course_id, @title);" _
+            & "SELECT student_ref_course_section_id FROM student_ref_course_section" _
+            & " WHERE student_ref_course_section_id = @@IDENTITY")
+        Dim insertIdParam As SqlClient.SqlParameter = _
+            sectionInsert.Parameters.Add("@course_id", SqlDbType.Int)
+        Dim insertTitleParam As SqlClient.SqlParameter = _
+            sectionInsert.Parameters.Add("@title", SqlDbType.VarChar)
+
+        For Each item As KeyValuePair(Of String, Object) In sectionList
+            searchTitleParam.Value = item.Key
+            searchIdParam.Value = courseId
+            'Dim id As Integer = Nothing
+            Dim id As Integer = -1
+            Using result As SqlClient.SqlDataReader = sectionSearch.ExecuteReader()
+                If result.HasRows Then
+                    result.Read()
+                    id = CInt(result.GetValue(0))
+                    'System.Windows.Forms.MessageBox.Show(item.Key & ": " & CStr(id), "Found Section")
+                    'ToDo: Assert no more records
+                End If
+            End Using
+            'If id Is Nothing Then
+            If id = -1 Then
+                insertTitleParam.Value = item.Key
+                insertIdParam.Value = courseId
+                id = CInt(sectionInsert.ExecuteScalar())
+                System.Windows.Forms.MessageBox.Show(item.Key & ": " & CStr(id), "Added Section")
+            End If
+            outList.Add(item.Key, id)
+            If item.Value IsNot Nothing Then
+                GetSectionIds(CType(item.Value, Dictionary(Of String, Object)), _
+                              courseId, connection, outList)
+                'GetCourseIds(CType(item.Value, Global.System.Collections.Generic.Dictionary(Of String, Object)))
+            End If
+        Next
+    End Sub
+
+    Function GetCourseStructure() As Dictionary(Of String, Object)
+        ' This should be more compact and externalized
+        Dim classStructure As New Dictionary(Of String, Object)
+        classStructure.Add("Scientific Foundations of Medicine-Human Anatomy", Nothing)
+
+        Dim foundations As New Dictionary(Of String, Object)
+        With foundations
+            .Add("Macromolecules", Nothing)
+            .Add("Cell Physiology", Nothing)
+            .Add("Metabolism", Nothing)
+            .Add("Genetics", Nothing)
+            .Add("Pharmacology", Nothing)
+        End With
+        If dataTime.Year = 2003 Then
+            classStructure.Add("Scientific Foundations of Medicine (inc. Epidemiology, Macromolecules, Cell Physiology, Metabolism, Genetics, and Pharmacology)", foundations)
+        Else
+            classStructure.Add("Scientific Foundations of Medicine (inc. Macromolecules, Cell Physiology, Metabolism, Genetics, and Pharmacology)", foundations)
+        End If
+
+        Dim genes1 As New Dictionary(Of String, Object)
+        With genes1
+            .Add("Immunology I", Nothing)
+            .Add("Microbiology/Infectious Disease", Nothing)
+            .Add("Immunology II", Nothing)
+            .Add("Hematology/Oncology", Nothing)
+        End With
+        classStructure.Add("Genes to Society I (inc. Immunology, Microbiology/Infectious Disease, and Hematology/Oncology)", genes1)
+
+        Dim nerves As New Dictionary(Of String, Object)
+        With nerves
+            .Add("Neuroanatomy", Nothing)
+            .Add("NSS: Exam 2", Nothing)
+            .Add("Neuroscience", Nothing)
+        End With
+
+        Dim genes2 As New Dictionary(Of String, Object)
+        With genes2
+            .Add("Brain, Mind, & Behavior", Nothing)
+            .Add("Nervous System and Special Senses", nerves)
+        End With
+        classStructure.Add("Genes to Society II (inc. Brain, Mind, & Behavior, Nervous System and Special Senses)", genes2)
+
+        Dim genes3 As New Dictionary(Of String, Object)
+        With genes3
+            .Add("Cardiovascular", Nothing)
+            .Add("Respiratory", Nothing)
+            .Add("Renal", Nothing)
+        End With
+        classStructure.Add("Genes to Society III (inc. Cardiovascular, Respiratory, and Renal)", genes3)
+
+        Dim genes4 As New Dictionary(Of String, Object)
+        With genes4
+            .Add("GI Liver", Nothing)
+            .Add("Endocrine", Nothing)
+            .Add("Reproductive", Nothing)
+            .Add("Musculoskeletal", Nothing)
+        End With
+        classStructure.Add("Genes to Society IV", genes4)
+
+        Return classStructure
+    End Function
+End Class
