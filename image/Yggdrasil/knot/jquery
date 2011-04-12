@@ -19,6 +19,16 @@ $( function() {
             }
         } )
 
+        $('[func="label"] text').each( function() {
+            var $t = $(this)
+            console.log( $t.bbox() )
+            $t.before(
+                //$('<rect/>')
+                $(document.createElementNS( mimis.ns.svg, 'rect' ))
+                    .attr( $t.bbox() )
+            )
+        } )
+
         $idxs.each( function( $g, idx ) {
             if( $g ) {
                 $g.hover(

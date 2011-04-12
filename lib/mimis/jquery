@@ -288,3 +288,12 @@ if( mimis.ns.abbr == 'svg' &&
             return mimis.$root.get(0).getBBox()
         } )
 }
+
+if( mimis.ns.abbr == 'svg' ) {
+    $.fn.bbox = $.fn.bbox ||
+        function() {
+            // ToDo: Handle multiple items
+            var bbox = this[0].getBBox()
+            return bbox
+        }
+}
