@@ -27,14 +27,22 @@
 </div> 
 
 <div style="background-color: skyblue; border: 5px solid #DDD; -webkit-transition: -webkit-transform 2s ease-in-out" onmousedown="this.style.webkitTransform = 'rotate(+360deg)'" onmouseup="this.style.webkitTransform = 'rotate(0deg)'">
-<p>This div will do a spin the first time it is clicked!</p>
+<p>This div will spin when it is clicked!</p>
 <code><![CDATA[
 <div onmousedown="this.style.webkitTransform = 'rotate(+360deg)'"
-      onmouseup="this.style.webkitTransform = 'rotate(0deg)'"
+       onmouseup="this.style.webkitTransform = 'rotate(0deg)'"
    style="background-color: skyblue;
                     border: 5px solid #DDD;
-        -webkit-transition: -webkit-transform 2s ease-in-out"
-   />]]></code>
+        -webkit-transition: -webkit-transform 2s ease-in-out"/>]]></code>
+</div>
+
+<link rel="stylesheet" type="text/css" href="%23activeSpin/css"/>
+<div id="activeSpin">
+<p>This div will spin when clicked.</p>
+
+<code><![CDATA[<div id="activeSpin"/>]]></code>
+
+<object disp="row" class="indent" style="height: 10em" data="%23activeSpin/css"/>
 </div>
 
 <div style="background-color: maroon; color: white; -webkit-transition: all 500ms linear; border: 10px solid black;" onmouseover="this.style.border = '20px solid blue'" onmouseout="this.style.border = '10px solid white'"> 
@@ -55,11 +63,39 @@
 </div>
 </div>
 
+<link rel="stylesheet" type="text/css" href="%23rotZ/css"/>
 <div id="rotZ">
 <p>This box should invert colors and rotate 10° along the z-axis when hovered.</p>
 <code><![CDATA[<div id="rotZ"/>]]></code>
-<object disp="row" class="indent" style="height: 20em" data="css"/>
+<object disp="row" class="indent" style="height: 15em" data="%23rotZ/css"/>
 </div>
+
+<link rel="stylesheet" type="text/css" href="%23demoButton/css"/>
+<div id="demoButton" style="border: 2px dashed #666; background-color: darkgreen; color: white;">
+<p>The transform can also be used for scaling:</p>
+<button>I scale!</button>
+<object disp="row" class="indent" style="height: 5em" data="%23demoButton/css"/>
+</div>
+
+<link rel="stylesheet" type="text/css" href="%23timingFunctions/css"/>
+<div id="timingFunctions" style="border: 2px dashed #666; background-color: darkorange; color: white;">
+<div>default »</div> 
+<div style="-webkit-transition-timing-function: linear">linear »</div> 
+<div style="-webkit-transition-timing-function: ease-in">ease-in »</div> 
+<div style="-webkit-transition-timing-function: ease-out">ease-out »</div> 
+<div style="-webkit-transition-timing-function: ease-in-out">ease-in-out »</div> 
+<div style="-webkit-transition-timing-function: cubic-bezier(0,1,1,0)">cubic-bezier(0,1,1,0) »</div> 
+<object disp="row" class="indent" data="%23timingFunctions/css"/>
+</div>
+
+<link rel="stylesheet" type="text/css" href="%23spinner/css"/>
+<div id="spinner" style="border: 2px dashed #666; background-color: #CCC;">
+
+<div/>
+
+<object disp="row" class="indent" data="%23spinner/css"/>
+</div>
+
 
 </section>
 
