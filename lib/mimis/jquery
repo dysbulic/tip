@@ -117,10 +117,13 @@ mimis.__defineSetter__( 'uri', function( uri ) {
     return localStorage.mimis_uri = uri
 } )
 
+webkitNotifications = typeof webkitNotifications != 'undefined' ? webkitNotifications : {}
+
 if( webkitNotifications.__lookupGetter__( 'allowed' ) === undefined ) {
     webkitNotifications.__defineGetter__(
         'allowed',
         function() {
+
             webkitNotifications.ALLOWED = webkitNotifications.ALLOWED || 0
             return webkitNotifications.checkPermission() == webkitNotifications.ALLOWED
         } )

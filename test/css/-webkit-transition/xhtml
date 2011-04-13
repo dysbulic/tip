@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC
+ "+//ISBN 0-9673008-1-9//DTD OEB 1.0.1 Document//EN"
+ "http://openebook.org/dtds/oeb-1.0.1/oebdoc101.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<head profile="http://gmpg.org/xfn/11"> 
+<link rel="icon" type="image/svg+xml" href=".../revolution/Technoanarchist/logo/letter/" />
+<link rel="icon" type="image/png" href=".../revolution/Technoanarchist/logo/letter/png" />
+<link rel="stylesheet" type="text/css" href=".../style/blog/css"/>
+<link rel="stylesheet" type="text/css" href="css"/>
+<title>The -webkit-transition <acronym title="Cascading Stylesheets">CSS</acronym> Property</title>
+</head>
+<body>
+
+<p>Testing <a href="http://www.w3.org/TR/css3-transitions/">CSS transitions</a> in Webkit.</p>
+
+<section>
+<title><!--<Hypertext Markup Language>-->HTML<!--</>--></title>
+
+<div onmouseover="this.style.opacity = 0" onmouseout="this.style.opacity = 1" style="-webkit-transition: opacity 1s linear; background-color: #DDD; border: 5px solid black;"><p>This div will fade out when hovered over. In browsers that do not support this animation, there will be graceful degradation, as the div will simply fade out immediately.</p>
+<code><![CDATA[<div onmouseover="this.style.opacity = 0" onmouseout="this.style.opacity = 1" style="-webkit-transition: opacity 1s linear; background-color: #DDD; border: 5px solid black;"/>]]></code>
+</div> 
+
+<div style="text-align: center; margin: 1em auto; background-color: skyblue; border: 5px solid #DDD; -webkit-transition: -webkit-transform 3s ease-in" onmousedown="this.style.webkitTransform = 'rotate(+360deg)'" onmouseup="this.style.webkitTransform = 'rotate(0deg)'">
+<p>This div will do a spin the first time it is clicked!</p>
+<code><![CDATA[<div style="text-align: center; margin: 1em auto; background-color: skyblue; border: 5px solid #DDD; -webkit-transition: -webkit-transform 3s ease-in" onmousedown="this.style.webkitTransform = 'rotate(+360deg)'" onmouseup="this.style.webkitTransform = 'rotate(0deg)'"/>]]></code>
+</div>
+
+<div style="text-align: center; background-color: maroon; color: white; -webkit-transition: all 500ms linear; border: 10px solid black;" onmouseover="this.style.border = '20px solid blue'" onmouseout="this.style.border = '10px solid black'"> 
+<p>Borders can also be animated. This box has a simple border animation where the border will both grow in thickness and change color when the box is hovered.</p>
+<code><![CDATA[<div style="text-align: center; background-color: maroon; color: white; -webkit-transition: all 500ms linear; border: 10px solid black;" onmouseover="this.style.border = '20px solid blue'" onmouseout="this.style.border = '10px solid black'"/>]]></code>
+</div>
+
+<div id="rotZ">
+<p>This box should invert colors and rotate 10° along the z-axis when hovered.</p>
+<code><![CDATA[<div id="rotZ"/>]]></code>
+<object disp="row" class="indent" style="height: 20em" data="css"/>
+</div>
+
+</section>
+
+<section>
+<title><acronym title="Scalable Vector Graphics">SVG</acronym></title>
+
+<object disp="row" style="height: 25em" data=".../emotion/happy/ideogram/1/"/>
+
+<object disp="row" class="indent" style="height: 25em" data=".../emotion/happy/ideogram/1/css"/>
+
+</section>
+</body>
+</html>

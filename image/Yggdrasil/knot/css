@@ -24,21 +24,44 @@
  stroke : #17120E;
 }
 
-  [type="branch"][idx="1"], [func='¿marker?'] [idx="1"] circle {
+[type="branch"][idx="1"],
+[idx="1"] text,
+[func='¿marker?'] [idx="1"] circle {
     fill : #6e6106;
-} [type="branch"][idx="2"], [func='¿marker?'] [idx="2"] circle {
+}
+[type="branch"][idx="2"],
+[idx="2"] text,
+[func='¿marker?'] [idx="2"] circle {
     fill : #6e0606;
-} [type="branch"][idx="3"], [func='¿marker?'] [idx="3"] circle {
+}
+[type="branch"][idx="3"],
+[idx="3"] text,
+[func='¿marker?'] [idx="3"] circle {
     fill : #D1480B;
-} [type="branch"][idx="4"], [func='¿marker?'] [idx="4"] circle {
+}
+[type="branch"][idx="4"],
+[idx="4"] text,
+[func='¿marker?'] [idx="4"] circle {
     fill : #093CCB;
-} [type="branch"][idx="5"], [func='¿marker?'] [idx="5"] circle {
+}
+[type="branch"][idx="5"],
+[idx="5"] text,
+[func='¿marker?'] [idx="5"] circle {
     fill : #06496E;
-} [type="branch"][idx="6"], [func='¿marker?'] [idx="6"] circle {
+}
+[type="branch"][idx="6"],
+[idx="6"] text,
+[func='¿marker?'] [idx="6"] circle {
     fill : #AD2002;
-} [type="branch"][idx="7"], [func='¿marker?'] [idx="7"] circle {
+}
+[type="branch"][idx="7"],
+[idx="7"] text,
+[func='¿marker?'] [idx="7"] circle {
     fill : #880787;
-} [type="branch"][idx="8"], [func='¿marker?'] [idx="8"] circle {
+}
+[type="branch"][idx="8"],
+[idx="8"] text,
+[func='¿marker?'] [idx="8"] circle {
     fill : #078807;
 }
 
@@ -66,27 +89,47 @@ text {
     text-anchor: middle;
 }
 
+[func='¿marker?'] line,
 [func='¿marker?'] circle {
     stroke-width : 3;
     stroke-opacity : 1;
     stroke-dasharray : 0;
 }
 
-  [func='¿marker?'] [func='background'] [idx="1"] circle {
+[func='¿marker?'] line {
+    stroke-linecap : round;
+}
+
+[func='¿marker?'] [idx="1"] line,
+[func='¿marker?'] [idx="1"] circle {
     stroke : #6e6106;
-} [func='¿marker?'] [idx="2"] circle {
+}
+[func='¿marker?'] [idx="2"] line,
+[func='¿marker?'] [idx="2"] circle {
     stroke : #6e0606;
-} [func='¿marker?'] [idx="3"] circle {
+}
+[func='¿marker?'] [idx="3"] line,
+[func='¿marker?'] [idx="3"] circle {
     stroke : #D1480B;
-} [func='¿marker?'] [idx="4"] circle {
+}
+[func='¿marker?'] [idx="4"] line,
+[func='¿marker?'] [idx="4"] circle {
     stroke : #093CCB;
-} [func='¿marker?'] [idx="5"] circle {
+}
+[func='¿marker?'] [idx="5"] line,
+[func='¿marker?'] [idx="5"] circle {
     stroke : #06496E;
-} [func='¿marker?'] [idx="6"] circle {
+}
+[func='¿marker?'] [idx="6"] line,
+[func='¿marker?'] [idx="6"] circle {
     stroke : #AD2002;
-} [func='¿marker?'] [idx="7"] circle {
+}
+[func='¿marker?'] [idx="7"] line,
+[func='¿marker?'] [idx="7"] circle {
     stroke : #880787;
-} [func='¿marker?'] [idx="8"] circle {
+}
+[func='¿marker?'] [idx="8"] line,
+[func='¿marker?'] [idx="8"] circle {
     stroke : #078807;
 }
 
@@ -108,8 +151,43 @@ text {
     stroke-opacity : .1;
 }
 
-[func='label'] g { visibility: hidden; }
-[func='label'] [state='hovered'] text { visibility: visible; }
+[func='label'] [idx], [func='icon'] [idx] { visibility: hidden; }
+
+[func='label'] [idx][state='hovered'], [func='icon'] [idx][state='hovered'] { visibility: visible; }
+
 [func='label'] rect {
-    fill : green;
+    fill : #946C00;
+    fill-opacity : .5;
+}
+
+text {
+    font-family : 'Junius Unicode';
+    font-weight : bold;
+    font-size : 47pt;
+    position : relative;
+    top : 50px;
+}
+
+text {
+    stroke : #574000;
+    stroke-width : .5;
+}
+
+@namespace xlink 'http://www.w3.org/1999/xlink';
+
+use[xlink|href='#9_worlds'] { display: none; }
+
+p {
+    text-align: center;
+    border: 1.5px solid;
+    padding: 0em .5em;
+    display: table;
+    margin: auto;
+    border-radius: 3px;
+    font-size : 20pt;
+    background-color: #946C00;
+    background-opacity: .25;
+    color: #111;
+    text-shadow: -1px 0px #BBB, 1px 0px #BBB, 0px -1px #BBB, 0px 1px #BBB;
+    z-index : 3;
 }

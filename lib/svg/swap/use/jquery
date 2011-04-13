@@ -1,21 +1,24 @@
 $( function() {
-    console.debug( 'Replacing svg:use with inline svg' )
+    console.debug( 'Replacing use with inline documents' )
     $('use').each( function() {
         var $use = $(this)
         var link = $use.attr( 'xlink:href' )
         if( ! link ) {
-            link = $use.attr('href')
+            link = $use.attr( 'href' )
         }
 
-        if( link[0] != '#' && link.substring( link.length - 3 ) == 'svg' ) { // non-local svg image
+        if( link[0] != '#' ) { // non-local link
             $.get( link, function( data ) {
-                var $svg = $(data.documentElement)
-                $([ 'x', 'y', 'width', 'height', 'title' ]).each( function( idx, val ) {
-                    if( $use.attr( val ) != undefined ) {
-                        $svg.attr( val, $use.attr( val ) )
-                    }
-                } )
-                $use.replaceWith( $svg );
+                if( data.documentElement ) {
+                    var $doc = $(data.documentElement)
+                    var attrs = [ 'x', 'y', 'width', 'height', 'title' ]
+                    attrs.each( function( attr ) {
+                        if( $use.attr( attr ) != undefined ) {
+                            $doc.attr( attr, $use.attr( attr ) )
+                        }
+                    } )
+                    $use.replaceWith( $doc )
+                }
             } )
         }
     } )
