@@ -102,6 +102,10 @@ message [role='icon'] {
     float : left;
 }
 
+object[role='icon'] {
+    height : 3em;
+}
+
 body title { display : block }
 section > title {
     text-align: center;
@@ -112,11 +116,18 @@ section > title {
 section > section > title { font-size: 27pt; }
 section > section > section > title { font-size: 24pt; }
 
-[disp='ideogram'] {
+[func='ideogram'] {
     display : inline;
     width: 1em;
     height: 1em;
 }
+
+[func='ideogram']:hover {
+    opacity: .75;
+    background-color: yellow;
+    background-opacity: .5;
+}
+
 
 [disp='row'] {
     display: block;

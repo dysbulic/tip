@@ -18,17 +18,41 @@
 <title><!--<Hypertext Markup Language>-->HTML<!--</>--></title>
 
 <div onmouseover="this.style.opacity = 0" onmouseout="this.style.opacity = 1" style="-webkit-transition: opacity 1s linear; background-color: #DDD; border: 5px solid black;"><p>This div will fade out when hovered over. In browsers that do not support this animation, there will be graceful degradation, as the div will simply fade out immediately.</p>
-<code><![CDATA[<div onmouseover="this.style.opacity = 0" onmouseout="this.style.opacity = 1" style="-webkit-transition: opacity 1s linear; background-color: #DDD; border: 5px solid black;"/>]]></code>
+<code><![CDATA[
+<div onmouseover="this.style.opacity = 0"
+      onmouseout="this.style.opacity = 1"
+   style="-webkit-transition: opacity .5s cubic;
+            background-color: #DDD;
+                      border: 5px solid black"/>]]></code>
 </div> 
 
-<div style="text-align: center; margin: 1em auto; background-color: skyblue; border: 5px solid #DDD; -webkit-transition: -webkit-transform 3s ease-in" onmousedown="this.style.webkitTransform = 'rotate(+360deg)'" onmouseup="this.style.webkitTransform = 'rotate(0deg)'">
+<div style="background-color: skyblue; border: 5px solid #DDD; -webkit-transition: -webkit-transform 2s ease-in-out" onmousedown="this.style.webkitTransform = 'rotate(+360deg)'" onmouseup="this.style.webkitTransform = 'rotate(0deg)'">
 <p>This div will do a spin the first time it is clicked!</p>
-<code><![CDATA[<div style="text-align: center; margin: 1em auto; background-color: skyblue; border: 5px solid #DDD; -webkit-transition: -webkit-transform 3s ease-in" onmousedown="this.style.webkitTransform = 'rotate(+360deg)'" onmouseup="this.style.webkitTransform = 'rotate(0deg)'"/>]]></code>
+<code><![CDATA[
+<div onmousedown="this.style.webkitTransform = 'rotate(+360deg)'"
+      onmouseup="this.style.webkitTransform = 'rotate(0deg)'"
+   style="background-color: skyblue;
+                    border: 5px solid #DDD;
+        -webkit-transition: -webkit-transform 2s ease-in-out"
+   />]]></code>
 </div>
 
-<div style="text-align: center; background-color: maroon; color: white; -webkit-transition: all 500ms linear; border: 10px solid black;" onmouseover="this.style.border = '20px solid blue'" onmouseout="this.style.border = '10px solid black'"> 
+<div style="background-color: maroon; color: white; -webkit-transition: all 500ms linear; border: 10px solid black;" onmouseover="this.style.border = '20px solid blue'" onmouseout="this.style.border = '10px solid white'"> 
+<div style="-webkit-transition: all 500ms linear; border: 22px solid white;" onmouseover="this.style.border = '2px solid red'" onmouseout="this.style.border = '22px solid black'"> 
 <p>Borders can also be animated. This box has a simple border animation where the border will both grow in thickness and change color when the box is hovered.</p>
-<code><![CDATA[<div style="text-align: center; background-color: maroon; color: white; -webkit-transition: all 500ms linear; border: 10px solid black;" onmouseover="this.style.border = '20px solid blue'" onmouseout="this.style.border = '10px solid black'"/>]]></code>
+<code><![CDATA[
+<div onmouseover="this.style.border = '20px solid blue'"
+      onmouseout="this.style.border = '10px solid white'"
+   style="background-color: maroon;
+                     color: white;
+        -webkit-transition: all 500ms linear;
+                    border: 10px solid black;"> 
+  <div onmouseover="this.style.border = '2px solid red'"
+        onmouseout="this.style.border = '22px solid black'"
+     style="-webkit-transition: all 500ms linear;
+                        border: 22px solid white;"/>
+</div>]]></code>
+</div>
 </div>
 
 <div id="rotZ">
@@ -41,6 +65,8 @@
 
 <section>
 <title><acronym title="Scalable Vector Graphics">SVG</acronym></title>
+
+<p>This image should gradually change colors.</p>
 
 <object disp="row" style="height: 25em" data=".../emotion/happy/ideogram/1/"/>
 
