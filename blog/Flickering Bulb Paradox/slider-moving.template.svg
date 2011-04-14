@@ -1,0 +1,33 @@
+<?xml version="1.0" standalone="no"?>
+<?xml-stylesheet href="slider-and-rails.css" type="text/css"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:xi="http://www.w3.org/2001/XInclude"
+     viewBox="35 0 520 80">
+  <title>Slider and rails moving</title>
+  <defs>
+    <style type="text/css">
+      #bulb { fill: none; }
+      #filament { stroke: black; }
+    </style>
+  </defs>
+  <g transform="translate(0, .5)">
+    <!-- This doesn't work in Firefox 1.5 -->
+    <!-- <use xlink:href="#rails" transform="" /> -->
+    <xi:include xlink:href="slider-and-rails-at-rest.svg#xmlns(svg=http://www.w3.org/2000/svg)xpointer(//svg:g[@id='rails'])"/>
+  </g>
+  <g transform="translate(275, 0) scale(.5, 1)">
+    <g transform="translate(0, 0)">
+      <!-- <use xlink:href="#measurement" transform="translate(0, 0)" /> -->
+      <xi:include xlink:href="slider-and-rails-at-rest.svg#xmlns(svg=http://www.w3.org/2000/svg)xpointer(//svg:g[@id='measurement'])"/>
+      <text x="50" y="7.5">1m</text>
+    </g>
+    <g transform="translate(0, 25)">
+      <!-- <use xlink:href="slider-and-rails-at-rest.svg#slider" /> -->
+      <xi:include xlink:href="slider-and-rails-at-rest.svg#xmlns(svg=http://www.w3.org/2000/svg)xpointer(//svg:g[@id='slider'])"/>
+    </g>
+  </g>
+  <g transform="translate(350, 50)">
+    <xi:include xlink:href="slider-and-rails-at-rest.svg#xmlns(svg=http://www.w3.org/2000/svg)xpointer(//svg:g[@id='arrow'])"/>
+  </g>
+</svg>
