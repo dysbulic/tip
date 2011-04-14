@@ -11,13 +11,18 @@ $( function() {
             $.get( link, function( data ) {
                 if( data.documentElement ) {
                     var $doc = $(data.documentElement)
-                    var attrs = [ 'x', 'y', 'width', 'height', 'title' ]
+                    var attrs = [ 'x', 'y', 'width', 'height', 'title', 'transform' ]
                     attrs.each( function( attr ) {
                         if( $use.attr( attr ) != undefined ) {
                             $doc.attr( attr, $use.attr( attr ) )
                         }
                     } )
                     $use.replaceWith( $doc )
+                    mimis.trigger( '.../lib/svg/swap/use/replacement',
+                                   {
+                                       $use : $use,
+                                       $doc : $doc,
+                                   } )
                 }
             } )
         }
