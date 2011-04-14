@@ -12,7 +12,7 @@ $.isObject = $.isObject ||
 
 //$.fn.style
 
-console.debug = console.log
+console.debug = console.info
 
 // Allow negative indexing for last element
 Array.prototype.__defineGetter__( -1, function() {
@@ -300,3 +300,16 @@ if( mimis.ns.abbr == 'svg' ) {
             return bbox
         }
 }
+
+$( function() {
+    $('head').each( function() {
+        var $head = $(this)
+        var $titles
+        if( $head.children( 'title' ) == 0
+            && ( $titles = $head.parent().find( 'section > title' ) ).size() > 0 ) {
+            $head.append(
+                $('<title/>').text( $titles.get( 0 ).text() )
+            )
+        }
+    } )
+} )
