@@ -6,7 +6,8 @@ $( function() {
         if( ! link ) {
             link = $use.attr( 'href' )
         }
-
+        
+        var $doc
         if( link[0] != '#' ) { // non-local link
             $.get( link, function( data ) {
                 if( data.documentElement ) {
@@ -25,6 +26,8 @@ $( function() {
                                    } )
                 }
             } )
+        } else {
+            $use.replaceWith( $(link).clone( true ) )
         }
     } )
 } )
