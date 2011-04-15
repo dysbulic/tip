@@ -12,7 +12,6 @@
     stroke-opacity : 0.3;
             stroke : black;
       stroke-width : 0.4;
-              fill : #071448;
 }
 
 [type="branch"] {
@@ -47,24 +46,19 @@
 } [idx="9"] * {
                 fill : #6E6106;
     background-color : #6E6106;
+} [idx="A"] * {
+                fill : #071448;
+    background-color : #071448;
+} [idx="B"] * {
+                fill : #071448 ! important;
+    background-color : #071448 ! important;
+} [idx="C"] * {
+                fill : #071448;
+    background-color : #071448;
 }
 
-text {
-    font-family : Bellerose;
-      font-size : 13pt;
-    text-anchor : middle;
-}
-
-[func='¿marker?'] line,
-[func='¿marker?'] circle {
-        stroke-width : 3;
-      stroke-opacity : 1;
-    stroke-dasharray : 0;
-}
-
-[func='¿marker?'] line {
-    stroke-linecap : round;
-}
+<game  see=".../book/by/China Miéville/The City &amp; The City/">
+   <g pos="top"><g idx="A">
 
 [func='¿marker?'] [idx="1"] line,
 [func='¿marker?'] [idx="1"] circle {
@@ -97,6 +91,27 @@ text {
 [func='¿marker?'] [idx="8"] line,
 [func='¿marker?'] [idx="8"] circle {
     stroke : #078807;
+}
+[func='¿marker?'] [idx="9"] line,
+[func='¿marker?'] [idx="9"] circle {
+    stroke : #071448;
+}
+
+text {
+    font-family : Bellerose;
+      font-size : 13pt;
+    text-anchor : middle;
+}
+
+[func='¿marker?'] line,
+[func='¿marker?'] circle {
+        stroke-width : 3;
+      stroke-opacity : 1;
+    stroke-dasharray : 0;
+}
+
+[func='¿marker?'] line {
+    stroke-linecap : round;
 }
 
 svg:hover [func='¿marker?'] line { stroke-opacity: .25 }
@@ -146,25 +161,22 @@ text {
 svg:hover use[xlink|href='#9_worlds'],
  svg:hover use[id="9 worlds rotated copy"] { opacity : .25 }
 
-svg > *:hover [pos='center'] [func='background'] {
-       stroke-opacity : 0.4;
-         fill-opacity : 0.6;
-               stroke : #EDEAFE;
-         stroke-width : 0.5;
+/*
+svg > *:hover [pos='center'] [func='background'],
+ svg > [pos='center']:hover  [func='background'] {
+*/
+[pos='center'] [func='background'] {
+               stroke : #301800;
+     stroke-dasharray : 0.5 0.5;
        stroke-linecap : round;
-     stroke-dasharray : 0.5, 0.5;
+      stroke-linejoin : round;
+       stroke-opacity : 0.4;
+         stroke-width : 0.5;
                  fill : #FAF6E8;
+         fill-opacity : 0.25;
 }
-
 svg:hover [pos='center'] [func='background'] {
-     fill-opacity : 0.9;
-}
-
-[func='background'][pos='inner'] {
-              stroke : #301800;
-     stroke-linejoin : round;
-      stroke-opacity : 0.9;
-        fill-opacity : 0.1;
+         fill-opacity : 0.6;
 }
 
 p {
