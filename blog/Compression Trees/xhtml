@@ -2,6 +2,7 @@
  "+//ISBN 0-9673008-1-9//DTD OEB 1.0.1 Document//EN"
  "http://openebook.org/dtds/oeb-1.0.1/oebdoc101.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:t="tip:∅"
       xmlns:xi="http://www.w3.org/2001/XInclude">
 <head profile="http://gmpg.org/xfn/11"> 
 <link rel="icon" type="image/svg+xml" href=".../revolution/Technoanarchist/logo/letter/" />
@@ -12,21 +13,41 @@
 <title>Compression Trees</title>
 </head>
 <body>
-<h1>Compression Trees</h1>
-<h2>by Will Holcomb</h2>
-
-<hr/>
+<section>
+<title>Compression Trees</title>
 
 <style type="text/css"><![CDATA[
-(* I'm going to write descriptors for tree decorators with the expectation that a team of programmers will adapt <is=.../lib/mimis/2. ̅0>Mìmís</> to interpret and execute these decorators. *)
+(* I'm going to write descriptors for tree decorators with the expectation that a team of programmers will adapt <is=.../lib/mimis/2. ̅0>Mìmís</> to apply these decorators. *)
 
 / > section > title[ text() == 'Abstract' ] {
 }
 ]]></style>
+
 <section>
+
 <title>Abstract</title>
 
-<p><a href=".../lib/mimis/">Mïmis</a> is a <acronym title="peer=to-peer">P2P</acronym> storage system. Its structure draws from a variety of sources and I want to try to describe it so I can enlist help in developing it.</p>
+<p><a href=".../lib/mimis/">Mïmis</a> is a <acronym title="peer=to-peer">P2P</acronym> storage system. It intelligently combines contributions from all the nodes into the network into a navigable system. This is accomplished in part through an abstract representation of the local reseources as communicated to the network. This paper discusses the abstraction of the filesystem, specifically the efficient distributed invalidation of hash trees.</p>
+</section>
+
+<section>
+<title>Mïmis URIs</title>
+
+<ul>
+<li>A Publicly Released Work: <a href=".../book/by/Nancy Kress/Sleepless/">.../book/Sleepless/by/Nancy Kress/</a></li>
+<li>A <a href=".../blog/Compression Trees/">.../blog/Compression Trees/</a></li>
+</ul>
+
+</section>
+
+<section id=".../lib/mimis/1/structure/">
+<title>The Structure of Mïmis 1.0</title>
+
+<ul type="named iconographs">
+<li>
+
+</li>
+</ul>
 </section>
 
 <p>I'll build the concept up from a traditional filesystem tree:</p>
@@ -111,8 +132,17 @@
 
 <p></p>
 
-<h2>Indirected Binaries</h2>
+<section>
+<title>Indirected Binaries</title>
+
+<p>At some depth of <a href=".../lib/bebnf/">parsing</a>, information can be thought of as <q>coherent</q>, meaning that there is an inter-relationship between the constituent parts <t:t t="⋑">such that</t:t> removing a part will disrupt the gestalt.</p>
+
+<p>For example, a <a href="http://stackoverflow.com/questions/1563883/decoding-a-jpeg-huffman-block-table">Huffman block</a> in a JPEG where changing any of the bits affects all of the decoded bits.</p>
+
+<p>
+
 
 <p>All binary files are stored as links to <code>.../hashes/</code></p>
+</section>
 </body>
 </html>
