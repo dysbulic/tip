@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/css" href="css" ?>
 <svg xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink"
-     viewBox="0 0 300 100">
+     viewBox="0 0 300 200">
   <title>Mïmis Structure</title>
   <script xlink:href=".../lib/jquery/js"           type="application/javascript" />
   <script xlink:href=".../lib/mimis/jquery"        type="application/javascript" />
@@ -10,51 +10,81 @@
   <script xlink:href="jquery"                      type="application/javascript" />
   <g id="chrome" idx="(2|A).1">
     <g func="background">
-      <rect rx="1" ry="1"  y="0" x="0" height="500" width="300"/>
+      <rect rx="1" ry="1"  y="0" x="0" height="400" width="300"/>
     </g>
     <g func="label">
-      <g transform="translate(20, 50)"><!--←Pad,yMid-->
-        <g transform="translate(50)"><!-- 100x100 centered icon -->
+      <g func="line"><g transform="translate(10, 50)"><!--←Pad,yMid-->
+        <g func="named icon"><g transform="translate(50)"><!-- 100x100 centered icon -->
           <g transform="scale(.8)"><g transform="translate(-50, -50)">
             <use xlink:href=".../co/Google/Chrome/ideogram/" width="100" height="100"/>
           </g></g>
-          <circle style="fill: red" r="3"/>
-        </g>
-        <g transform="translate(60, 20)">
-          <text>Chrome</text>
-        </g>
-      </g>
+          <g func="text"><g transform="translate(50,0)"><!-- new box -->
+            <g transform="translate(0, 20)"><!-- text vertical position = center -->
+              <text>Chrome</text>
+            </g>
+          </g></g>
+        </g></g>
+      </g></g>
     </g>
     
-    <g idx="1"><g transform="translate(20,100)">
-      <g func="background">
-        <rect rx="1" ry="1" height="400" width="90%"/>
-      </g>
-      <g transform="translate(30, 237)"><g transform="scale(.7)">
-        <use xlink:href=".../lib/mimis/logo/button/" width="100" height="100"/>
-      </g></g>
-      <text y="291.43567" x="102.71676">Extension</text>
-      
-      <g idx="1">
+    <g transform="translate(15,100)"><!-- Nested Item -->
+      <g id="crx">
         <g func="background">
-          <rect rx="1" ry="1" height="235.7" width="364.8" y="331.9" x="-3.366"/>
+          <rect rx="1" ry="1" height="300" width="270"/>
         </g>
-        <g transform="translate(20, 345)"><g transform="scale(.85)">
-          <use xlink:href=".../image/logo/Sun/Java/Duke/" width="100" height="100"/>
-        </g></g>
-        <text y="409" x="108">Applet</text>
-      </g>
+        <g func="label">
+          <g transform="translate(10, 50)"><!--←Pad,yMid-->
+            <g transform="translate(50)"><!-- 100x100 centered icon -->
+              <g transform="scale(.8)"><g transform="translate(-50, -50)">
+                <use xlink:href=".../lib/mimis/logo/button/" width="100" height="100"/>
+              </g></g>
+            </g>
+            <g transform="translate(100, 20)">
+              <text>Extension</text>
+            </g>
+          </g>
+        </g>
       
-      <g idx="1" transform="">
-        <g func="background">
-          <rect rx="1" ry="1" height="107.8" width="327" y="441.1" x="12.8"/>
+        <g transform="translate(20,100)"><!-- Nested Item -->
+          <g id="jvm">
+            <g func="background">
+              <rect rx="1" ry="1" height="200" width="250"/>
+            </g>
+            <g func="label">
+              <g transform="translate(10, 50)"><!--←Pad,yMid-->
+                <g transform="translate(50)"><!-- 100x100 centered icon -->
+                  <g transform="scale(.8)"><g transform="translate(-50, -50)">
+                    <use xlink:href=".../image/logo/Sun/Java/Duke/" width="100" height="100"/>
+                  </g></g>
+                </g>
+              </g>
+              <g transform="translate(100, 20)">
+                <text>Applet</text>
+              </g>
+            </g>
+          </g>
+   
+          <g transform="translate(20,100)"><!-- Nested Item -->
+            <g id="neo4j">
+              <g func="background">
+                <rect rx="1" ry="1" height="100" width="225"/>
+              </g>
+              <g func="label">
+                <g transform="translate(10, 50)"><!--←Pad,yMid-->
+                  <g transform="translate(50)"><!-- 100x100 centered icon -->
+                    <g transform="scale(.8)"><g transform="translate(-50, -50)">
+                      <use xlink:href=".../image/logo/Neo4j//" width="100" height="100"/>
+                    </g></g>
+                  </g>
+                </g>
+                <g transform="translate(100, 20)">
+                  <text>Neo4j</text>
+                </g>
+              </g>
+            </g>
+          </g>
         </g>
-        <g transform="translate(27, 445)"><g transform="scale(.85)">
-          <use xlink:href=".../image/logo/Neo4j//" width="100" height="100"/>
-        </g></g>
-        <text>Neo4j</text>
       </g>
-    </g>
     </g>
   </g>
   <g idx="3." id="filesystem">
