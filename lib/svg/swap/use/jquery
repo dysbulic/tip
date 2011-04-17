@@ -11,6 +11,22 @@ $( function() {
         if( link[0] != '#' ) { // non-local link
             $.get( link, function( data ) {
                 if( data.documentElement ) {
+                    // SVG CSSs are linked as XML processing instructions
+                    data.childNodes.each( function() {
+                        if( this instanceof ProcessingInstruction ) {
+                            var match = this.data.match( /(type='.*?')\s+(href)='(.*?)'\s*/ )
+                            if( match ) {
+                                var base = link.replace( /\/[^\/]*$/, '/' )
+                                this.data = ( match[1] + ' '
+                                              + match[2] + '="' + base + match[3] + '"' )
+                                //document.insertBefore( this, document.documentElement )
+                                //document.insertBefore( this, document.firstChild )
+                                document.insertBefore( this, document.childNodes[0] )
+                            
+                                console.dir( document )
+                            }
+                        }
+                    } )
                     var $doc = $(data.documentElement)
                     var attrs = [ 'x', 'y', 'width', 'height', 'title', 'transform' ]
                     attrs.each( function( attr ) {
