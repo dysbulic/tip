@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Copyright (c) 2007 Andy Parkins
 #
@@ -204,12 +204,14 @@ generate_email_header()
 	cat <<-EOF
 	To: $recipients
 	Subject: ${emailprefix}$projectdesc $refname_type, $short_refname, ${change_type}d. $describe
-	Content-Type: text/plain; charset=utf-8
+	Content-Type: text/html; charset=utf-8
 	X-Git-Refname: $refname
 	X-Git-Reftype: $refname_type
 	X-Git-Oldrev: $oldrev
 	X-Git-Newrev: $newrev
 
+        EOF
+        <html><body><pre>
 	This is an automated email from the git hooks/post-receive script. It was
 	generated because a ref change was pushed to the repository containing
 	the project "$projectdesc".
@@ -227,6 +229,7 @@ generate_email_footer()
 	hooks/post-receive
 	--${SPACE}
 	$projectdesc
+        </pre></body></html>
 	EOF
 }
 
