@@ -40,7 +40,9 @@
         },
     }
     
-    function label() {
+    function label( cfg ) {
+        var ideogram = cfg.ideogram
+        var text = cfg.text
         return ( mimis.$elm( 'g', { func : 'label' } ).append
                  ( mimis.$elm( 'g', { func : 'line' } ).append
                    ( mimis.$elm( 'g', t.t( pad.left, row.height / 2 ) ).append
@@ -49,20 +51,22 @@
                          ( mimis.$elm( 'g', t.s( .8 ) ).append
                            ( mimis.$elm( 'g', t.t( -row.height / 2, -col.width / 2 ) ).append
                              ( mimis.$elm( 'use', $.extend( def.use, {
-                                 'xlink:href' : '.../co/Google/Chrome/ideogram/',
+                                 'xlink:href' : ideogram,
                              } ) ) )
                            )
-                         )
-                       ).append
-                       ( mimis.$elm( 'g', { func : 'text' } ).append
-                         ( mimis.$elm( 'g', t.t( col.width / 2 ) ).append
-                           ( mimis.$elm( 'g', t.t( 0, row.height / 5 ) ).append
-                             ( mimis.$elm( 'text' ).text( 'Chrome' ) ) ) ) )
+                         ).append
+                         ( mimis.$elm( 'g', { func : 'text' } ).append
+                           ( mimis.$elm( 'g', t.t( col.width / 2 ) ).append
+                             ( mimis.$elm( 'g', t.t( 0, row.height / 5 ) ).append
+                               ( mimis.$elm( 'text' ).text( text ) ) ) ) )
+                       )
                      )
                    )
                  )
                )
     }
+
+    var width = 400
 
     $('script:last').after(
         mimis.$elm( 'g', {
@@ -71,53 +75,61 @@
         } ).append
         ( mimis.$elm('g', { func : 'background' } ).append
           ( mimis.$elm( 'rect', $.extend( def.rect, {
-              height : 400,
-              width : 300,
-          } ) ) ).append
-          ( label() )
+              height : 4 * row.height,
+              width : width,
+          } ) ) )
+        ).append
+        ( label( {
+            ideogram : '.../co/Google/Chrome/ideogram/',
+            text : 'Chrome',
+        } ) ).append
+        ( mimis.$elm('g', t.t(15,100) ).append
+          ( mimis.$elm('g', { id : 'crx' } ).append
+            ( mimis.$elm('g', { func : 'background' } ).append
+              ( mimis.$elm( 'rect', $.extend( def.rect, {
+                  height : 3 * row.height,
+                  width : width - 30,
+              } ) ) )
+            ).append
+            ( label( {
+                ideogram : '.../lib/mimis/logo/button/',
+                text : 'Extension',
+            } ) )
+          ).append
+          ( mimis.$elm('g', t.t(15,100) ).append
+            ( mimis.$elm('g', { id : 'jvm' } ).append
+              ( mimis.$elm('g', { func : 'background' } ).append
+                ( mimis.$elm( 'rect', $.extend( def.rect, {
+                    height : 2 * row.height,
+                    width : width - 60,
+                } ) ) )
+              ) .append
+              ( label( {
+                  ideogram : '.../image/logo/Sun/Java/Duke/',
+                  text : 'Applet',
+              } ) )
+            ).append
+            ( mimis.$elm('g', t.t(15,100) ).append
+              ( mimis.$elm('g', { id : 'neo4j' } ).append
+                ( mimis.$elm('g', { func : 'background' } ).append
+                  ( mimis.$elm( 'rect', $.extend( def.rect, {
+                      height : 1 * row.height,
+                      width : width - 90,
+                  } ) ) )
+                ) .append
+                ( label( {
+                    ideogram : '.../image/logo/Neo4j/',
+                    text : 'Neo4j',
+                } ) )
+              )
+            )
+          )
         )
     )
 } )()
 
 
 /*
-  <g id="chrome" idx="(2|A).1">
-    <g func="background">
-      <rect rx="1" ry="1"  y="0" x="0" height="400" width="300"/>
-    </g>
-    <g func="label">
-      <g func="line"><g transform="translate(10, 50)"><!--←Pad,yMid-->
-        <g func="named icon"><g transform="translate(50)"><!-- 100x100 centered icon -->
-          <g transform="scale(.8)"><g transform="translate(-50, -50)">
-            <use xlink:href=".../co/Google/Chrome/ideogram/" width="100" height="100"/>
-          </g></g>
-          <g func="text"><g transform="translate(50,0)"><!-- new box -->
-            <g transform="translate(0, 20)"><!-- text vertical position = center -->
-              <text>Chrome</text>
-            </g>
-          </g></g>
-        </g></g>
-      </g></g>
-    </g>
-    
-    <g transform="translate(15,100)"><!-- Nested Item -->
-      <g id="crx">
-        <g func="background">
-          <rect rx="1" ry="1" height="300" width="270"/>
-        </g>
-        <g func="label">
-          <g transform="translate(10, 50)"><!--←Pad,yMid-->
-            <g transform="translate(50)"><!-- 100x100 centered icon -->
-              <g transform="scale(.8)"><g transform="translate(-50, -50)">
-                <use xlink:href=".../lib/mimis/logo/button/" width="100" height="100"/>
-              </g></g>
-            </g>
-            <g transform="translate(100, 20)">
-              <text>Extension</text>
-            </g>
-          </g>
-        </g>
-      
         <g transform="translate(20,100)"><!-- Nested Item -->
           <g id="jvm">
             <g func="background">
@@ -146,7 +158,7 @@
                 <g transform="translate(10, 50)"><!--←Pad,yMid-->
                   <g transform="translate(50)"><!-- 100x100 centered icon -->
                     <g transform="scale(.8)"><g transform="translate(-50, -50)">
-                      <use xlink:href=".../image/logo/Neo4j//" width="100" height="100"/>
+                      <use xlink:href="/" width="100" height="100"/>
                     </g></g>
                   </g>
                 </g>
