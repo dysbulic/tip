@@ -1,0 +1,811 @@
+set ANSI_NULLS ON
+set QUOTED_IDENTIFIER ON
+go
+
+
+-- =============================================
+-- Author:		kuangyi
+-- Create date: 10/2009
+-- Description:	<Description,,>
+
+-- change on 03112010
+-- use evalue_answer instead of evalue_answer_details
+
+-- 
+-- changes requirement on 01/20/2010
+--
+--1.       For all Clerkship (_____ rating in Clerkship) and Residency (___ rating as Y1 Resident) ratings please use 2 decimal points (0.36) instead of 3 decimal points (0.362)
+--2.       Wait to add the Clerkship ratings data till after students graduate.
+--Only after a student is graduated, we include the student's data in the calculation.
+--3.       For each of the Clerkship ratings variables please add the following:
+--a.       Standard Deviation
+--b.      Number of Students Counted - is the total number of students who graduated in that class
+--c.       Number of Evaluations Counted - is the sum of evaluations for each student in a particular class
+--d.      Replace the end statement with this:
+--This is the average rating by Attendings and Residents during students’ Clerkships (core, advanced, elective, etc.)  1-5 Scale with 1 = Unacceptable and 5 = Outstanding
+--4.       Please check the data for PROCEDURAL SKILLS rating in Clerkships.  It shouldn’t be that low.
+--Please omit all 0s from Clerkship ratings variables.  
+--5.       For the COMPREHENSIVE CLINICAL SKILLS EXAM: History Gathering, Physical Exam, Patient Note, and IPS variables please put the values in percents (58%) instead of decimals (0.584). Use the following description as a footnote to the data
+--Currently, 12 cases comprise the CCSE.  Prior to 2009, there were 8 cases (in 2007) or 6 cases (in 2006).
+--For example, for COMPREHENSIVE CLINICAL SKILLS EXAM: IPS the full description would read
+--The interpersonal skills scores is one component of the high-stakes OSCE taken prior to graduation.  Currently, 12 cases comprise the CCSE.  Prior to 2009, there were 8 cases (in 2007) or 6 cases (in 2006).
+--6.  For the USMPLE: Step 2: Clinical Skills: omit the average and standard deviation.
+
+
+-- New requirement on 12/09/2009 
+-- Kuangyi
+-- Medical Knowledge rating in Clerkships = Basic Science Knowledge rating in Clerkship.
+-- Pre-Clinical Course Performance = Overall Year 1 and Year 2 Average
+-- Clinical Skills Performance = Introduction to Medicine II - Clinical Skills
+-- Clerkship Performance = Medical Student years: Year 3 and 4 Performance (page 3 or 8) with just the following: 
+		--Ambulatory Medicine Basic Clerkship, 
+		--Emergency Medicine Basic Clerkship, 
+		--Gynecology/Obstetrics Basic Clerkship, 
+		--Medicine Basic Clerkship, Neurology Basic Clerkship, 
+		--Ophthalmology Basic Clerkship, 
+		--Pediatrics/Neonatology Basic Clerkship, 
+		--Psychiatry Basic Clerkship,
+		--Surgery Basic Clerkship
+--Patient, Physician, and Society Performance = There are four different data points for this: 
+		--1) Physician and Society- 1st year, 
+		--2) Physician and Society- 2nd year, 
+		--3) Physician and Society- 3rd year, 
+		--4) Physician and Society- 4th year
+
+
+-- New requirement on 12/09/2009 
+-- Kuangyi
+
+-- Add pass count and fail count for USMLE CS
+-- =============================================
+ALTER PROCEDURE [dbo].[Rpt_competency_Proc]
+@start_year int,
+@end_year int
+--	@start_year varchar(4),
+--	@end_year varchar(4),
+--	@type varchar(2)
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+	delete from [dbo].[rpt_competency_stat]
+	delete from [dbo].[rpt_competency]
+
+
+	create table #year 
+	(
+		id char(4)
+	)
+
+	declare @i int
+	set @i = 0
+	begin
+	
+		while ( @start_year + @i <= @end_year )
+		begin
+			insert into #year ( id ) values (cast(@start_year + @i  as char(4))  )
+			set @i= @i+1
+		end
+	end 
+
+select id from #year
+
+--insert USMLE info into [rpt_competency_stat]
+insert into [dbo].[rpt_competency_stat] 
+select 'USMLE1', 1, 'USMLE_TWO_DIGIT_SCORE STEP 1',y.id , t_avg, t_stdev,t_ct,t_max,t_min from
+	(SELECT student_ref_class_of.class_of_desc,
+	cast(round(avg(cast(student_usmle_details.three_digit_score as decimal(10,1))),2) as decimal(10,1)) as t_avg, 
+	cast(round(stdev(cast(student_usmle_details.three_digit_score as decimal(10,1))),2) as decimal(10,1)) as t_stdev, 
+	count(student_usmle_details.three_digit_score) as t_ct,
+	max(student_usmle_details.three_digit_score) as t_max,
+	min(student_usmle_details.three_digit_score) as t_min
+from student_usmle_details 
+inner join student_degree_objective_status on student_usmle_details.person_id= student_degree_objective_status.person_id 
+inner join student_ref_class_of on student_ref_class_of.student_ref_class_of_id= student_degree_objective_status.student_ref_class_of_id 
+WHERE student_usmle_details.usmle_jhu_type = 'Step1' 
+and student_ref_class_of.class_of_desc <> 'Hold' 
+and student_degree_objective_status.time_status_desc <> 'LOA'
+and student_usmle_details.three_digit_score<>0
+group by student_ref_class_of.class_of_desc ) 
+tt right join #year y on tt.class_of_desc = y.id
+
+insert into [dbo].[rpt_competency_stat] 
+select 'USMLE2CK', 2, 'USMLE_TWO_DIGIT SCORE STEP 2: CK',y.id , t_avg, t_stdev,t_ct,t_max,t_min from
+	(SELECT student_ref_class_of.class_of_desc,
+	cast(round(avg(cast(student_usmle_details.three_digit_score as decimal(10,1))),2) as decimal(10,1)) as t_avg, 
+	cast(round(stdev(cast(student_usmle_details.three_digit_score as decimal(10,1))),2) as decimal(10,1)) as t_stdev, 
+	count(student_usmle_details.three_digit_score) as t_ct, 
+	max(student_usmle_details.three_digit_score) as t_max,  
+	min(student_usmle_details.three_digit_score) as t_min
+from student_usmle_details 
+inner join student_degree_objective_status on student_usmle_details.person_id= student_degree_objective_status.person_id 
+inner join student_ref_class_of on student_ref_class_of.student_ref_class_of_id= student_degree_objective_status.student_ref_class_of_id 
+WHERE student_usmle_details.usmle_jhu_type = 'Step2CK' 
+and student_ref_class_of.class_of_desc <> 'Hold' 
+and student_degree_objective_status.time_status_desc <> 'LOA'
+and student_usmle_details.three_digit_score<>0
+group by student_ref_class_of.class_of_desc) 
+tt right join #year y on tt.class_of_desc = y.id
+
+
+insert into [dbo].[rpt_competency_stat] 
+select 'USMLE2CS', 3, 'USMLE_TWO_DIGIT SCORE STEP 2: CS',y.id , t_avg, t_stdev,t_ct,t_max,t_min from
+	(SELECT student_ref_class_of.class_of_desc,
+	cast(round(avg(case student_usmle_details.pass_or_fail
+			when 'P' then 1.0
+			when 'F' then 0.0 
+		end),3) as decimal(10,3)) as t_avg ,
+	cast(round(stdev(case student_usmle_details.pass_or_fail
+			when 'P' then 1.0
+			when 'F' then 0.0 
+		end),3) as decimal(10,3)) as t_stdev,
+	count(student_usmle_details.pass_or_fail) as t_ct, null as t_max,null as t_min
+from student_usmle_details 
+inner join student_degree_objective_status on student_usmle_details.person_id= student_degree_objective_status.person_id 
+inner join student_ref_class_of on student_ref_class_of.student_ref_class_of_id= student_degree_objective_status.student_ref_class_of_id 
+WHERE student_usmle_details.usmle_jhu_type = 'Step2CS' 
+and student_ref_class_of.class_of_desc <> 'Hold' 
+and student_degree_objective_status.time_status_desc <> 'LOA'
+group by student_ref_class_of.class_of_desc) 
+tt right join #year y on tt.class_of_desc = y.id
+
+-- Kuangyi 12/20/2009
+-- add Count of pass and fail for USMLE CS 
+insert into [dbo].[rpt_competency_stat] 
+select 'USMLE2CS_P', 4, 'USMLE_TWO_DIGIT SCORE STEP 2: CS',y.id , t_avg, t_stdev,t_ct,t_max,t_min from
+	(SELECT student_ref_class_of.class_of_desc,
+	null as t_avg,
+	null as t_stdev,
+	count(student_usmle_details.pass_or_fail) as t_ct, null as t_max,null as t_min
+from student_usmle_details 
+inner join student_degree_objective_status on student_usmle_details.person_id= student_degree_objective_status.person_id 
+inner join student_ref_class_of on student_ref_class_of.student_ref_class_of_id= student_degree_objective_status.student_ref_class_of_id 
+WHERE student_usmle_details.usmle_jhu_type = 'Step2CS' 
+and student_ref_class_of.class_of_desc <> 'Hold' 
+and student_degree_objective_status.time_status_desc <> 'LOA'
+and student_usmle_details.pass_or_fail = 'P'
+group by student_ref_class_of.class_of_desc) 
+tt right join #year y on tt.class_of_desc = y.id
+
+insert into [dbo].[rpt_competency_stat] 
+select 'USMLE2CS_F', 5, 'USMLE_TWO_DIGIT SCORE STEP 2: CS',y.id , t_avg, t_stdev,t_ct,t_max,t_min from
+	(SELECT student_ref_class_of.class_of_desc,
+	null as t_avg,
+	null as t_stdev,
+	count(student_usmle_details.pass_or_fail) as t_ct, null as t_max,null as t_min
+from student_usmle_details 
+inner join student_degree_objective_status on student_usmle_details.person_id= student_degree_objective_status.person_id 
+inner join student_ref_class_of on student_ref_class_of.student_ref_class_of_id= student_degree_objective_status.student_ref_class_of_id 
+WHERE student_usmle_details.usmle_jhu_type = 'Step2CS' 
+and student_ref_class_of.class_of_desc <> 'Hold' 
+and student_degree_objective_status.time_status_desc <> 'LOA'
+and student_usmle_details.pass_or_fail = 'F'
+group by student_ref_class_of.class_of_desc) 
+tt right join #year y on tt.class_of_desc = y.id
+
+
+--ccse
+insert into [dbo].[rpt_competency_stat] 
+select 'CCSE', 1, 'CCSE_HXTotal', 
+y.id ,tt.c_avg, tt.c_stdev, tt.c_ct, tt.c_max,tt.c_min 
+from
+( 
+select  
+cast(avg(cast(c.Hx_total as decimal (10,2))) as decimal (10,2)) as c_avg ,
+cast(stdev(cast(c.Hx_total as decimal (10,2))) as decimal (10,2)) as c_stdev,
+count(c.Hx_total ) as c_ct,
+cast(max(c.Hx_total ) as decimal (10,2)) as c_max,
+cast(min(c.Hx_total ) as decimal (10,2))  as c_min, s_ref.class_of_desc
+from 
+(
+select rank() over ( partition by person_id order by ccse_id desc) as rank, *
+from ccse 
+) c
+inner join person p on c.person_id = p.person_id
+inner join student_degree_objective_status o on o.person_id = p.person_id 
+inner join student_ref_class_of s_ref on o.student_ref_class_of_id = s_ref.student_ref_class_of_id
+where s_Ref.class_of_desc <> 'Hold' 
+and o.time_status_desc <> 'LOA'
+and c.rank = 1
+group by s_ref.class_of_desc 
+) tt
+right join #year y on tt.class_of_desc = y.id
+
+
+insert into [dbo].[rpt_competency_stat] 
+select 'CCSE', 2, 'CCSE_PETotal', y.id ,
+tt.c_avg, tt.c_stdev,tt.c_ct, tt.c_max,tt.c_min from
+( 
+select  
+cast(avg(cast(c.pe_total as decimal (10,2))) as decimal (10,2)) as c_avg ,
+cast(stdev(cast(c.pe_total as decimal (10,2))) as decimal (10,2)) as c_stdev,
+count(c.pe_total ) as c_ct,
+cast(max(c.pe_total ) as decimal (10,2)) as c_max,
+cast(min(c.pe_total ) as decimal (10,2))  as c_min, s_ref.class_of_desc
+from 
+(
+select rank() over ( partition by person_id order by ccse_id desc) as rank, *
+from ccse 
+) c
+inner join person p on c.person_id = p.person_id
+inner join student_degree_objective_status o on o.person_id = p.person_id 
+inner join student_ref_class_of s_ref on o.student_ref_class_of_id = s_ref.student_ref_class_of_id
+where s_Ref.class_of_desc <> 'Hold' 
+and o.time_status_desc <> 'LOA'
+and c.rank = 1
+group by s_ref.class_of_desc 
+) tt
+right join #year y on tt.class_of_desc = y.id
+
+
+insert into [dbo].[rpt_competency_stat] 
+select 'CCSE', 3, 'CCSE_NoteTotal', y.id,
+tt.c_avg, tt.c_stdev,tt.c_ct, tt.c_max,tt.c_min from
+( 
+select  
+cast(avg(cast(c.note_total as decimal (10,2))) as decimal (10,2)) as c_avg ,
+cast(stdev(cast(c.note_total as decimal (10,2))) as decimal (10,2)) as c_stdev,
+count(c.note_total ) as c_ct,
+cast(max(c.note_total ) as decimal (10,2)) as c_max,
+cast(min(c.note_total ) as decimal (10,2))  as c_min, s_ref.class_of_desc
+from 
+(
+select rank() over ( partition by person_id order by ccse_id desc) as rank, *
+from ccse 
+) c
+inner join person p on c.person_id = p.person_id
+inner join student_degree_objective_status o on o.person_id = p.person_id 
+inner join student_ref_class_of s_ref on o.student_ref_class_of_id = s_ref.student_ref_class_of_id
+where s_Ref.class_of_desc <> 'Hold' 
+and o.time_status_desc <> 'LOA'
+and c.rank = 1
+group by s_ref.class_of_desc 
+) tt
+right join #year y on tt.class_of_desc = y.id
+
+
+insert into [dbo].[rpt_competency_stat] 
+select 'CCSE', 3, 'CCSE_CommTotal', y.id,
+tt.c_avg, tt.c_stdev,tt.c_ct, tt.c_max,tt.c_min from
+( 
+select  
+cast(avg(cast(c.comm_total as decimal (10,2))) as decimal (10,2)) as c_avg ,
+cast(stdev(cast(c.comm_total as decimal (10,2))) as decimal (10,2)) as c_stdev,
+count(c.comm_total ) as c_ct,
+cast(max(c.comm_total ) as decimal (10,2)) as c_max,
+cast(min(c.comm_total ) as decimal (10,2))  as c_min, s_ref.class_of_desc
+from 
+(
+select rank() over ( partition by person_id order by ccse_id desc) as rank, *
+from ccse 
+) c
+inner join person p on c.person_id = p.person_id
+inner join student_degree_objective_status o on o.person_id = p.person_id 
+inner join student_ref_class_of s_ref on o.student_ref_class_of_id = s_ref.student_ref_class_of_id
+where s_Ref.class_of_desc <> 'Hold' 
+and o.time_status_desc <> 'LOA'
+and c.rank = 1
+group by s_ref.class_of_desc 
+) tt
+right join #year y on tt.class_of_desc = y.id
+
+
+--pdq
+declare @pdq_col varchar(10)
+declare @index int
+set @index = 2
+while @index < 23
+begin 
+
+	set @pdq_col = 'q' + cast(@index as varchar(10))
+	print @pdq_col
+
+	declare @sql varchar(1200)
+	set @sql = '	insert into [dbo].[rpt_competency_stat] 
+	select t.pdq_type,t.pdq_order,pdq_ref.item_text,t.id,t.pdq_avg,t.pdq_stdev,t.pdq_count,t.pdq_max,t.pdq_min from
+	(
+		select ''PDQ'' as pdq_type, '+cast(@index as varchar(10))+' as pdq_order,'''+@pdq_col+''' as pdq_id, y.id,
+		tt.pdq_avg,tt.pdq_stdev,tt.pdq_count,tt.pdq_max,tt.pdq_min from
+
+		( select 
+		cast(round(avg(cast('+@pdq_col+' as float)),2) as nvarchar(10)) as pdq_avg,
+		cast(round(stdev(cast('+@pdq_col+' as float)),2) as nvarchar(10)) as pdq_stdev,
+		count('+@pdq_col+') as pdq_count,
+		max('+@pdq_col+') as pdq_max,
+		min('+@pdq_col+') as pdq_min , s_ref.class_of_desc
+		from ( select * from program_director_questionnaire where '+@pdq_col+' <> 6) as p
+        inner join student_degree_objective_status o on o.person_id = p.person_id 
+        inner join student_ref_class_of s_ref on o.student_ref_class_of_id = s_ref.student_ref_class_of_id
+		group by s_ref.class_of_desc ) 
+		tt RIGHT JOIN  #year y on y.id = tt.class_of_desc
+		
+	)  t 
+	Inner join program_director_ref_question pdq_ref 
+	on t.pdq_id = pdq_ref.item_number'
+
+	print (@sql)
+
+	exec(@sql)
+
+	
+    set @index = @index + 1
+end
+
+--e_value
+insert into [dbo].[rpt_competency_stat] 
+select 'E',1,b.qt2, b.y2, a.t_avg, t_stdev,t_num,t_numE ,null from 
+ (select  cast(avg(cast(e.numeric_answer as decimal (10,2))) as decimal (10,2)) as t_avg ,
+    cast(stdev(cast(e.numeric_answer as decimal (10,2))) as decimal (10,2)) as t_stdev,
+    count(distinct e.person_id) as t_num,
+    count(e.evalue_user_id) as t_numE,
+  e_ref.question_topic  as qt1, ref_c.class_of_desc y1
+from evalue_answer e 
+inner join student_degree_objective_status o on e.person_id= o.person_id 
+inner join student_ref_class_of ref_c on ref_c.student_ref_class_of_id= o.student_ref_class_of_id 
+join evalue_ref_activity ea on e.evalue_ref_activity_id = ea.evalue_ref_activity_id
+join rpt_ref_evalue_mapping e_ref_m on e_ref_m.question_topic_syn = e.question_topic
+join rpt_ref_evalue e_ref on e_ref.order_number = e_ref_m.rpt_ref_evalue_id
+join rpt_ref_evalue_activity_mapping ref_ea on ea.activity_name = ref_ea.activity_name -- HS 8/31/2010 added
+where 
+--( ea.activity_name like '%clerkship%' OR ea.content_desc like '%clerkship%' ) -- HS 8/31/2010 removed
+--	and 
+	ref_c.class_of_desc <> 'Hold' 
+	and o.time_status_desc <> 'LOA'
+	and e.numeric_answer <> 0
+	--and o.current_student = 0
+    and e.evalue_user_id not in ( select b.evalue_user_id from
+		(
+			select count(a.evalue_user_id) over ( partition by a.evalue_user_id  ) as ct , a.*  from 
+			(
+				select  rm1.category, r1.evalue_user_id  from 
+				evalue_user_rank r1 
+				join rpt_ref_evalue_rank_mapping rm1 on r1.rank_name = rm1.rank_name
+				group by rm1.category, r1.evalue_user_id 
+			) a 
+		) b
+		where b.category = 'Omitted' and b.ct = 1
+)
+group by ref_c.class_of_desc,e_ref.question_topic 
+) a
+right join 
+( 
+select distinct question_topic as qt2, id as y2 from rpt_ref_evalue , #year 
+) b on a.qt1 = b.qt2 and a.y1 = b.y2 
+
+
+
+----USMLE
+insert into [dbo].[rpt_competency]
+select 'U',1,display_name, 'Average', class_of_desc, average, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'USMLE1'
+
+insert into [dbo].[rpt_competency]
+select 'U',2,display_name, 'Standard Deviation', class_of_desc, std_dev, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'USMLE1'
+
+insert into [dbo].[rpt_competency]
+select 'U',3,display_name, 'Max score', class_of_desc, [max], getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'USMLE1'
+
+insert into [dbo].[rpt_competency]
+select 'U',4,display_name, 'Min score', class_of_desc, [min], getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'USMLE1'
+
+insert into [dbo].[rpt_competency]
+select 'U',5,display_name, 'Scores Counted', class_of_desc, number, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'USMLE1'
+
+
+insert into [dbo].[rpt_competency]
+select 'U',6,display_name, 'Average', class_of_desc, average, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'USMLE2CK'
+
+insert into [dbo].[rpt_competency]
+select 'U',7,display_name, 'Standard Deviation', class_of_desc, std_dev, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'USMLE2CK'
+
+insert into [dbo].[rpt_competency]
+select 'U',8,display_name, 'Max score', class_of_desc, [max], getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'USMLE2CK'
+
+insert into [dbo].[rpt_competency]
+select 'U',9,display_name, 'Min score', class_of_desc, [min], getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'USMLE2CK'
+
+insert into [dbo].[rpt_competency]
+select 'U',10,display_name, 'Scores Counted', class_of_desc, number, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'USMLE2CK'
+
+
+-- kuangyi 12/19/2009
+insert into [dbo].[rpt_competency]
+select 'U',11,display_name, 'Pass Scores Counted', class_of_desc, 
+ISNULL(number,0), getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'USMLE2CS_P'
+
+insert into [dbo].[rpt_competency]
+select 'U',12,display_name, 'Fail Scores Counted', class_of_desc, 
+ISNULL(number,0), getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'USMLE2CS_F'
+
+-- 01/20/2010 modified by Kuangyi
+-- 6.  For the USMPLE: Step 2: Clinical Skills: omit the average and standard deviation.
+
+--insert into [dbo].[rpt_competency]
+--select 'U',13,display_name, 'Average', class_of_desc, average, getdate()
+--from dbo.rpt_competency_stat 
+--where report_type = 'USMLE2CS'
+--
+--insert into [dbo].[rpt_competency]
+--select 'U',14,display_name, 'Standard Deviation', class_of_desc, std_dev, getdate()
+--from dbo.rpt_competency_stat 
+--where report_type = 'USMLE2CS'
+
+insert into [dbo].[rpt_competency]
+select 'U',15,display_name, 'Scores Counted', class_of_desc, number, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'USMLE2CS'
+
+-- PDQ
+insert into [dbo].[rpt_competency]
+select 'PD',1,display_name, 'Average', class_of_desc, average, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'PDQ'
+
+insert into [dbo].[rpt_competency]
+select 'PD',2,display_name, 'Standard Deviation', class_of_desc, std_dev, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'PDQ'
+
+insert into [dbo].[rpt_competency]
+select 'PD',3,display_name, 'Max score', class_of_desc, [max], getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'PDQ'
+
+insert into [dbo].[rpt_competency]
+select 'PD',4,display_name, 'Min score', class_of_desc, [min], getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'PDQ'
+
+insert into [dbo].[rpt_competency]
+select 'PD',5,display_name, 'Counted', class_of_desc, number, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'PDQ'
+
+--E*value
+insert into [dbo].[rpt_competency]
+select 'E',1,display_name, 'Average', class_of_desc, average, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'E'
+
+
+insert into [dbo].[rpt_competency]
+select 'E',2,display_name, 'Standard Deviation', class_of_desc, std_dev, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'E'
+
+
+insert into [dbo].[rpt_competency]
+select 'E',3,display_name, 'Number of Students Counted', class_of_desc, number, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'E'
+
+
+insert into [dbo].[rpt_competency]
+select 'E',4,display_name, 'Number of Evaluations Counted', class_of_desc, [max], getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'E'
+
+
+-- ccse
+insert into [dbo].[rpt_competency]
+select 'C',1,display_name, 'Average', class_of_desc, average, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'CCSE'
+
+insert into [dbo].[rpt_competency]
+select 'C',2,display_name, 'Standard Deviation', class_of_desc, std_dev, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'CCSE'
+
+insert into [dbo].[rpt_competency]
+select 'C',3,display_name, 'Max score', class_of_desc, [max], getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'CCSE'
+
+insert into [dbo].[rpt_competency]
+select 'C',4,display_name, 'Min score', class_of_desc, [min], getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'CCSE'
+
+insert into [dbo].[rpt_competency]
+select 'C',5,display_name, 'Counted', class_of_desc, number, getdate()
+from dbo.rpt_competency_stat 
+where report_type = 'CCSE'
+
+
+-- new requirements on 12/09/2009
+-- Medical student years data
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Overall Year 1 and 2 Average' and sub_dimension = 'Average'
+and [type] = 'O'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Overall Year 1 and 2 Average' and sub_dimension = 'Standard Deviation'
+and [type] = 'O'
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Overall Year 1 and 2 Average' and sub_dimension = 'Grades Counted'
+and [type] = 'O'
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Introduction to Medicine II - Clinical Skills' and sub_dimension = 'Average'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Introduction to Medicine II - Clinical Skills' and sub_dimension = 'Standard Deviation'
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Introduction to Medicine II - Clinical Skills' and sub_dimension = 'Grades Counted'
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Overall Year 3 and 4 Average' and sub_dimension = 'Average'
+and [type] = 'O'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Overall Year 3 and 4 Average' and sub_dimension = 'Standard Deviation'
+and [type] = 'O'
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Overall Year 3 and 4 Average' and sub_dimension = 'Grades Counted'
+and [type] = 'O'
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Ambulatory Medicine Basic Clerkship' and sub_dimension = 'Average'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Ambulatory Medicine Basic Clerkship' and sub_dimension = 'Standard Deviation'
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Ambulatory Medicine Basic Clerkship' and sub_dimension = 'Grades Counted'
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Emergency Medicine Basic Clerkship' and sub_dimension = 'Average'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Emergency Medicine Basic Clerkship' and sub_dimension = 'Standard Deviation'
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Emergency Medicine Basic Clerkship' and sub_dimension = 'Grades Counted'
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Gynecology/Obstetrics Basic Clerkship' and sub_dimension = 'Average'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Gynecology/Obstetrics Basic Clerkship' and sub_dimension = 'Standard Deviation'
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Gynecology/Obstetrics Basic Clerkship' and sub_dimension = 'Grades Counted'
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Medicine Basic Clerkship' and sub_dimension = 'Average'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Medicine Basic Clerkship' and sub_dimension = 'Standard Deviation'
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Medicine Basic Clerkship' and sub_dimension = 'Grades Counted'
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Neurology Basic Clerkship' and sub_dimension = 'Average'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Neurology Basic Clerkship' and sub_dimension = 'Standard Deviation'
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Neurology Basic Clerkship' and sub_dimension = 'Grades Counted'
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Ophthalmology Basic Clerkship' and sub_dimension = 'Average'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Ophthalmology Basic Clerkship' and sub_dimension = 'Standard Deviation'
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Ophthalmology Basic Clerkship' and sub_dimension = 'Grades Counted'
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Pediatrics/Neonatology Basic Clerkship' and sub_dimension = 'Average'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Pediatrics/Neonatology Basic Clerkship' and sub_dimension = 'Standard Deviation'
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Pediatrics/Neonatology Basic Clerkship' and sub_dimension = 'Grades Counted'
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Psychiatry Basic Clerkship' and sub_dimension = 'Average'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Psychiatry Basic Clerkship' and sub_dimension = 'Standard Deviation'
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Psychiatry Basic Clerkship' and sub_dimension = 'Grades Counted'
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Surgery Basic Clerkship' and sub_dimension = 'Average'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Surgery Basic Clerkship' and sub_dimension = 'Standard Deviation'
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Surgery Basic Clerkship' and sub_dimension = 'Grades Counted'
+
+
+-------------
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Physician and Society-1st year' and sub_dimension = 'Average'
+and [type] = 'P'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Physician and Society-1st year' and sub_dimension = 'Standard Deviation'
+and [type] = 'P'
+
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Physician and Society-1st year' and sub_dimension = 'Grades Counted'
+and [type] = 'P'
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Physician and Society-2nd year' and sub_dimension = 'Average'
+and [type] = 'P'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Physician and Society-2nd year' and sub_dimension = 'Standard Deviation'
+and [type] = 'P'
+
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Physician and Society-2nd year' and sub_dimension = 'Grades Counted'
+and [type] = 'P'
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Physician and Society-3rd year' and sub_dimension = 'Average'
+and [type] = 'P'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Physician and Society-3rd year' and sub_dimension = 'Standard Deviation'
+and [type] = 'P'
+
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Physician and Society-3rd year' and sub_dimension = 'Grades Counted'
+and [type] = 'P'
+
+
+insert into [dbo].[rpt_competency]
+select 'M',1,dimension, 'Average', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Physician and Society-4th year' and sub_dimension = 'Average'
+and [type] = 'P'
+
+insert into [dbo].[rpt_competency]
+select 'M',2,dimension, 'Standard Deviation', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Physician and Society-4th year' and sub_dimension = 'Standard Deviation'
+and [type] = 'P'
+
+
+insert into [dbo].[rpt_competency]
+select 'M',3,dimension, 'Grades Counted', cohort_year, number, getdate()
+from dbo.rpt_medical_student 
+where dimension = 'Physician and Society-4th year' and sub_dimension = 'Grades Counted'
+and [type] = 'P'
+
+drop table #year
+
+END
