@@ -17,7 +17,7 @@
 
 <hr/>
 
-<style type="text/css"><![CDATA[
+<style type="text/cssx"><![CDATA[
 (* I'm going to write descriptors for tree decorators with the expectation that a team of programmers will adapt <is=.../lib/mimis/2. ̅0>Mìmís</> to interpret and execute these decorators. *)
 
 / > section > title[ text() == 'Abstract' ] {
@@ -29,36 +29,69 @@
 <p><a href=".../lib/mimis/">Mïmis</a> is a <acronym title="peer=to-peer">P2P</acronym> storage system. Its structure draws from a variety of sources and I want to try to describe it so I can enlist help in developing it.</p>
 </section>
 
-<p>I'll build the concept up from a traditional filesystem tree:</p>
+<section>
+<title>The Traditional Filesystem</title>
+<p>The traditional filesystem tree is a set of files grouped into folders:</p>
 
 <object style="height: 300px" data="filesystem/traditional/svg"/>
+</section>
 
+<section>
+<title>Hash Function</title>
 <!--<xi:include href=".../define/science/computer/function/hash/xhtml"/>-->
 
-<p>A hash function is a mathmatical operation that takes a value and transforms it into a fixed-width hash code. These are used in computer science to generate <q>unique</q> identifiers for files. It is possible for two files to have the same hash, but the probability is vanishingly small.</p>
+<p>A hash function is a mathmatical operation that transforms a series of bits into a fixed-width hash code. So, for example, <acronym title="Simple Hashing Algorithm">sha</acronym>-256 can be performed on any file to produce a <em>likely unique</em> identifier.</p>
 
-<p>For example, the function that I am using for the initial version of Mïmis is <acronym title="Simple Hashing Algorithm">sha</acronym>-256. It converts the bytes in a file into a 256-bit hash. The number of possible values representible by 256 bits is:</p>
+<p>While it is possible for two files with different bits to produce the same hash, the probability is vanishingly small. For example, the number of possible values representible by 256 bits is: 2<sup>256</sup> ≅ 1.1579209 × 10<sup>77</sup></p>
 
-<p class="center">2<sup>256</sup> ≅ 1.1579209 × 10<sup>77</sup></p>
+<p>For reference, <a href="http://www.madsci.org/posts/archives/may98/892502124.Ph.r.html">the net estimates there are 1.2 × 10<sup>57</sup> atoms in the solar system</a>.</p>
+</section>
 
-<p>For reference, the net <a href="http://www.madsci.org/posts/archives/may98/892502124.Ph.r.html">estimates</a> there are 1.2 × 10<sup>57</sup> atoms in the solar system.</p>
+<section>
+<title>Converting Filesystems to Hash Trees</title>
 
-<p>The first transformation is to take each file and rename it to its hash value:</p>
+<ol>
+<li>
+<section>
+<title>Hash Files</title>
+<p>Take each file and rename it to its hash value:</p>
 
 <object style="height: 300px" data="filesystem/hash/filenames/svg"/>
-
+</section>
+</li>
+<li>
+<section>
+<title>Order By Hash Names</title>
 <p>These filenames can now be ordered by their names:</p>
 
 <object style="height: 300px" data="filesystem/hash/filenames/ordered/svg"/>
+</section>
+</li>
+<li>
+<section>
+<title>Hash Collections</title>
 
-<p>Now the files in each directory can be concatenated and hashed to produce a hash name for the directory: <em style="visibility: hidden">(It may be permissible to just hash the bytes of the names rather than the bytes of the files. That would also be unique and though it would collide with a file containing that series of bytes, I'm not sure that matters.)</em></p>
+<p>The ordered list of filenames is now hashed to produce a hash name for the directory:</p>
 
 <object style="height: 300px" data="filesystem/hash/directories/svg"/>
 
-<p>Those directories can now be ordered and the process repeated to generate a hash for higher level directories:</p>
+<p><em>Note that it is not the contents of the files that is hashed, but the names. Using the actual bits of the files would also produce a unique hash identifier for the directory, but concatenating the names allows the actual bits to be removed.</em></p>
+</section>
+</li>
+<li>
+<section>
+<title>Recurse</title>
+
+<p>The process can be repeated to generate a hash for higher level directories:</p>
 
 <object style="height: 300px" data="filesystem/hash/names/svg"/>
+</section>
+</li>
+</ol>
+</section>
 
+<section>
+<title>Implications</title>
 <p>Drawn in a more conventional tree form, this structure would be:</p>
 
 <object style="height: 300px" data="filesystem/hash/tree/svg"/>
