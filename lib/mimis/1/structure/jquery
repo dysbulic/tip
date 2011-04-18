@@ -1,10 +1,34 @@
-$('script:last').after(
-    $('<g/>')
-        .attr( {
-            id: 'tchrome',
-            idx: '(2|A).1',
-        } )
-)
+( function() {
+    var def = { rect : {
+        rx : 1,
+        ry : 1,
+        x : 0,
+        y : 0,
+        width : 100,
+        height : 100,
+    } }
+
+    $('script:last').after(
+        $('<g/>')
+            .attr( {
+                id: 'chrome',
+                idx: '(2|A).1',
+            } )
+            .append(
+                $('<g/>')
+                    .attr( {
+                    func : 'background',
+                    } )
+                    .append(
+                        $('<rect/>')
+                            .attr( $extend( def.rect, {
+                                height : 400,
+                                width : 300,
+                            } ) )
+                    )
+            )
+    )
+} )()
 
 
 /*

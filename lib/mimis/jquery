@@ -56,8 +56,7 @@ mimis.each = Array.prototype.each =
                 }
                 return out
             } catch( e ) {
-                console.debug( 'ï:each: Exception In Loop: ' )
-                console.debug( e )
+                console.debug( 'ï:each: Exception In Loop: ', e )
                 throw e
             }
         }
@@ -294,41 +293,47 @@ if( mimis.ns.abbr == 'svg' &&
 mimis.scroll = mimis.scroll || {}
 
 if( mimis.$root.viewBox ) {
-    mimis.$root.bind( 'mousewheel', function( evt ) {
-        // Zoom in or out, keeping the location under the pointer fixed
-        var box = mimis.$root.viewBox
-        var imp = mimis.scroll.imp || .1
-        imp *= evt.wheelDelta / -120 // One scroll
+    ( function() {
+        var initialBox
 
-        function transform() {
-            if( evt.shiftKey ) {
-                if( evt.ctrlKey ) {
-                    return { y : box.y + box.width * imp }
+        // ToDo: Allow mode changes to stick without key holding
+
+        mimis.$root.bind( 'mousewheel', function( evt ) {
+            // Zoom in or out, keeping the location under the pointer fixed
+            var box = mimis.$root.viewBox
+            initialBox = initialBox || box
+            var imp = mimis.scroll.imp || .1
+            imp *= evt.wheelDelta / -120 // One scroll
+            
+            function transform() {
+                if( evt.shiftKey ) {
+                    if( evt.ctrlKey ) {
+                        return { y : box.y + box.width * imp }
+                    } else {
+                        return { x : box.x + box.height * imp }
+                    }
                 } else {
-                    return { x : box.x + box.height * imp }
-                }
-            } else {
-                var delta = {
-                    width : box.width * imp,
-                    height : box.height * imp,
-                }
-                // Needs to be the percentage across the image
-                var pos = {
-                    x : evt.clientX / window.innerWidth,
-                    y : evt.clientY / window.innerHeight,
-                }
-                
-                return {
-                    x : box.x - delta.width * pos.x,
-                    y : box.y - delta.height * pos.y,
-                    width : box.width + delta.width,
-                    height : box.height + delta.height,
+                    var delta = {
+                        width : box.width * imp,
+                        height : box.height * imp,
+                    }
+                    // Needs to be the percentage across the image
+                    var pos = {
+                        x : evt.clientX / window.innerWidth,
+                        y : evt.clientY / window.innerHeight,
+                    }
+                    
+                    return {
+                        x : box.x - delta.width * pos.x,
+                        y : box.y - delta.height * pos.y,
+                        width : box.width + delta.width,
+                        height : box.height + delta.height,
+                    }
                 }
             }
-        }
-        console.log( evt )
-        mimis.$root.viewBox = $.extend( box, transform() )
-    } )
+            mimis.$root.viewBox = $.extend( box, transform() )
+        } )
+    } )()
 }
 
 if( mimis.ns.abbr == 'svg' &&
