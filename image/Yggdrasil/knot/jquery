@@ -1,6 +1,6 @@
 $( function() {
     var $idxs = ( function() {
-        var $idxs = []
+        var $idxs = {}
 
         // Group disperate indices
         $('[idx]').each( function() {
@@ -10,24 +10,13 @@ $( function() {
             $idxs[ idx ] = $idxs[ idx ].add( $g )
         } )
 
-
-        $idxs.each( function( $g ) {
-            if( $g ) {
-                $g.each( function() {
-                    //this.style.fillOpacity = 1
-                } )
+        $idxs.each = function( f ) {
+            for( idx in $idxs ) {
+                if( idx != 'each' ) {
+                    f.apply( $idxs[ idx ], [ $idxs[ idx ], idx ] )
+                }
             }
-        } )
-
-        $('[func="label"] text').each( function() {
-            var $t = $(this)
-            console.log( $t.bbox() )
-            $t.before(
-                //$('<rect/>')
-                $(document.createElementNS( mimis.ns.svg, 'rect' ))
-                    .attr( $t.bbox() )
-            )
-        } )
+        }
 
         $idxs.each( function( $g, idx ) {
             if( $g ) {
@@ -37,7 +26,6 @@ $( function() {
                             if( $h ) {
                                 //console.log( '$idxs:ℓ:' + $idxs.length )
                                 //$h.style = { 'fill-opacity' : .5 }
-                                //$h.css( { fillOpacity : .5 } ) // Doesn't work
                                 $h.attr( {
                                     state : ( idx != iidx ? 'not ' : '' ) + 'hovered',
                                 } )
