@@ -387,18 +387,7 @@ if( mimis.ns.abbr == 'svg' ) {
 }
 
 if( mimis.ns.abbr == 'svg' ) {
-    ( function() {
-        var jQuery = $
-        $ = function() {
-            var match
-            if( arguments.length == 1 && jQuery.isFunction( arguments[0].match ) ) {
-                match = arguments[0].match( /<(\S+)\/>/ )
-            }
-            if( match ) {
-                return jQuery( document.createElementNS( mimis.ns, match[ 1 ] ) )
-            } else {
-                jQuery.apply( this, arguments )
-            }
-        }
-    } )()
+    mimis.$elm = function( name ) {
+        return $( document.createElementNS( mimis.ns, name ) )
+    }
 }
