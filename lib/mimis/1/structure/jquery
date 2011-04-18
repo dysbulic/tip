@@ -1,32 +1,79 @@
 ( function() {
-    var def = { rect : {
-        rx : 1,
-        ry : 1,
-        x : 0,
-        y : 0,
-        width : 100,
-        height : 100,
-    } }
+    var row = { height : 100 }
+    var col =  { width  : 100 }
+    var def = {
+        rect : {
+            rx : 1,
+            ry : 1,
+            x : 0,
+            y : 0,
+            width : col.width,
+            height : row.height,
+        },
+        use : {
+            width : col.width,
+            height : row.height,
+        },
+    }
+
+    var pad = {
+        left : 10,
+    }
+
+    // Format transform
+    var t = {
+        t : function( a, b ) {
+            return {
+                transform : ( "translate("
+                              + a
+                              + ( b && ( ',' + b ) || '' )
+                              + ")" )
+            }
+        },
+        s : function( a, b ) {
+            return {
+                transform : ( "scale("
+                              + a
+                              + ( b && ( ',' + b ) || '' )
+                              + ")" )
+            }
+        },
+    }
+    
+    function label() {
+        return ( mimis.$elm( 'g', { func : 'label' } ).append
+                 ( mimis.$elm( 'g', { func : 'line' } ).append
+                   ( mimis.$elm( 'g', t.t( pad.left, row.height / 2 ) ).append
+                     ( mimis.$elm( 'g', { func : 'named icon' } ).append
+                       ( mimis.$elm( 'g', t.t( col.width / 2 ) ).append
+                         ( mimis.$elm( 'g', t.s( .8 ) ).append
+                           ( mimis.$elm( 'g', t.t( -row.height / 2, -col.width / 2 ) ).append
+                             ( mimis.$elm( 'use', $.extend( def.use, {
+                                 'xlink:href' : '.../co/Google/Chrome/ideogram/',
+                             } ) ) )
+                           )
+                         )
+                       ).append
+                       ( mimis.$elm( 'g', { func : 'text' } ).append
+                         ( mimis.$elm( 'g', t.t( col.width / 2 ) ).append
+                           ( mimis.$elm( 'g', t.t( 0, row.height / 5 ) ).append
+                             ( mimis.$elm( 'text' ).text( 'Chrome' ) ) ) ) )
+                     )
+                   )
+                 )
+               )
+    }
 
     $('script:last').after(
-        mimis.$elm('g')
-            .attr( {
-                id: 'chrome',
-                idx: '(2|A).1',
-            } )
-            .append(
-                mimis.$elm('g')
-                    .attr( {
-                        func : 'background',
-                    } )
-                    .append(
-                        mimis.$elm('rect')
-                            .attr( $.extend( def.rect, {
-                                height : 400,
-                                width : 300,
-                            } ) )
-                    )
-            )
+        mimis.$elm( 'g', {
+            id: 'chrome',
+            idx: '(2|A).1',
+        } ).append
+        ( mimis.$elm('g', { func : 'background' } ).append
+          ( mimis.$elm( 'rect', $.extend( def.rect, {
+              height : 400,
+              width : 300,
+          } ) ) ) )
     )
 } )()
 

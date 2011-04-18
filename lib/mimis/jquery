@@ -387,7 +387,13 @@ if( mimis.ns.abbr == 'svg' ) {
 }
 
 if( mimis.ns.abbr == 'svg' ) {
-    mimis.$elm = function( name ) {
-        return $( document.createElementNS( mimis.ns, name ) )
+    mimis.$elm = function( name, attrs ) {
+        var $elem = $( document.createElementNS( mimis.ns, name ) )
+        if( attrs && attrs.each ) {
+            attrs.each( function( val, attr ) {
+                $elem.attr( attr, val )
+            } )
+        }
+        return $elem
     }
 }
