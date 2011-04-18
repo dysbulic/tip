@@ -389,10 +389,10 @@ if( mimis.ns.abbr == 'svg' ) {
 if( mimis.ns.abbr == 'svg' ) {
     mimis.$elm = function( name, attrs ) {
         var $elem = $( document.createElementNS( mimis.ns, name ) )
-        if( attrs && attrs.each ) {
-            attrs.each( function( val, attr ) {
-                $elem.attr( attr, val )
-            } )
+        if( attrs ) {
+            for( attr in attrs ) {
+                $elem.attr( attr, attrs[ attr ] )
+            }
         }
         return $elem
     }
