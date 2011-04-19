@@ -21,6 +21,7 @@
 
     var pad = {
         left : 10,
+        bottom : 10,
     }
 
     // Format transform
@@ -44,44 +45,48 @@
     }
     
     function label( cfg ) {
-        with( cfg ) {
-            return ( mimis.$g( { func : 'label' } ).append
-                     ( mimis.$g( { func : 'line' } ).append
-                       ( mimis.$g ( t.t( pad.left, row.height / 2 ) ).append
-                         ( mimis.$g( { func : 'named icon' } ).append
-                           ( mimis.$g( t.t( col.width / 2 ) ).append
-                             ( mimis.$g( t.s( .8 ) ).append
-                               ( mimis.$g( t.t( -row.height / 2, -col.width / 2 ) ).append
-                                 ( mimis.$use( $.extend( def.use, {
-                                     'xlink:href' : ideogram,
-                                 } ) ) )
-                               )
-                             ).append
-                             ( mimis.$g( { func : 'text' } ).append
-                               ( mimis.$g( t.t( col.width / 2 ) ).append
-                                 ( mimis.$g( t.t( 0, row.height / 5 ) ).append
-                                   ( mimis.$text(
-                                       text
-                                   ) )
+        with( mimis ) {
+            with( cfg ) {
+                return ( $g( { func : 'label' } )
+                         ( $g( { func : 'line' } )
+                           ( $g ( t.t( pad.left, row.height / 2 ) )
+                             ( $g( { func : 'named icon' } )
+                               ( $g( t.t( col.width / 2 ) )
+                                 ( $g( t.s( .8 ) )
+                                   ( $g( t.t( -row.height / 2, -col.width / 2 ) )
+                                     ( $use( $.extend( def.use, {
+                                         'xlink:href' : ideogram,
+                                     } ) ) )
+                                   )
+                                 )
+                                 ( $g( { func : 'text' } )
+                                   ( $g( t.t( col.width / 2 ) )
+                                     ( $g( t.t( 0, row.height / 5 ) )
+                                       ( $text(
+                                           text
+                                       ) )
+                                     )
+                                   )
                                  )
                                )
                              )
                            )
                          )
-                       )
-                     )
-                   )
+                       ).$elem
+            }
         }
     }
-
+        
     function _background( cfg ) {
-        with( cfg ) {
-            return ( mimis.$g( { func : 'background' } ).append
-                     ( mimis.$rect( {
-                         height : row.height * ( depth.below + 1 ),
-                         width : display.width - depth.above * 10,
-                     } ) )
-                   )
+        with( mimis ) {
+            with( cfg ) {
+                return ( $g( { func : 'background' } )
+                         ( $rect( {
+                             height : row.height * ( depth.below + 1 ) + ( depth.below * pad.bottom ),
+                             width : display.width - depth.above * 30,
+                         } ) )
+                       ).$elem
+            }
         }
     }
 
@@ -89,89 +94,47 @@
         //return _background( cfg )
         return _background( $.extend( cfg, def ) )
     }
-
+    
     function indentedGroup( cfg ) {
         return mimis.$g( t.t( 15, 100 ) )
     }
 
-    $('script:last').after(
-        ( mimis.$a( { 'xlink:href' : 'http://www.google.com/chrome/' } ).append
-          ( mimis.$g( { id : 'chrome' } ).append
-            ( background( { depth : { above : 0, below : 3 } } ) ).append
-            ( label( { ideogram : '.../co/Google/Chrome/ideogram/', text : 'Chrome' } ) ).append()
+
+    with( mimis ) {
+        $('script:last').after(
+            ( $a( { 'xlink:href' : 'http://www.google.com/chrome/' } )
+              ( $g( { id : 'chrome' } ).$elem
 /*
-            ( indentedGroup().append
-              ( mimis.$a( { 'xlink:href' : 'Chrome/extension/' } ).append
-                ( mimis.$g( { id : 'crx' } ).append
-                  ( background( { depth : { above : 1, below : 2 } } ) ).append
-                  ( label( { ideogram : '.../lib/mimis/logo/button/', text : 'Extension' } ) ).append
-                  ( indentedGroup().append
-                    ( mimis.$a( { 'xlink:href' : 'java/src/org/dhappy/mimis/CacheAgentApplet.java' } ).append
-                      ( mimis.$g( { id : 'jvm' } ).append
-                        ( background( { depth : { above : 2, below : 1 } } ) ).append
-                        ( label( { ideogram : '.../image/logo/Sun/Java/Duke/', text : 'Applet' } ) ).append
-                        ( indentedGroup().append
-                          ( mimis.$a( { 'xlink:href' : 'http://neo4j.org' } ).append
-                            ( mimis.$g( { id : 'neo4j' } ).append
-                              ( background( { depth : { above : 3, below : 0 } } ) ).append
-                              ( label( { ideogram : '.../image/logo/Neo4j/', text : 'Neo4j' } ) )
+                ( background( { depth : { above : 0, below : 3 } } ) )
+                ( label( { ideogram : '.../co/Google/Chrome/ideogram/', text : 'Chrome' } ) )
+                ( indentedGroup()
+                  ( mimis.$a( { 'xlink:href' : 'Chrome/extension/' } )
+                    ( mimis.$g( { id : 'crx' } )
+                      ( background( { depth : { above : 1, below : 2 } } ) )
+                      ( label( { ideogram : '.../lib/mimis/logo/button/', text : 'Extension' } ) )
+                      ( indentedGroup()
+                        ( mimis.$a( { 'xlink:href' : 'java/src/org/dhappy/mimis/CacheAgentApplet.java' } )
+                          ( mimis.$g( { id : 'jvm' } )
+                            ( background( { depth : { above : 2, below : 1 } } ) )
+                            ( label( { ideogram : '.../image/logo/Sun/Java/Duke/', text : 'Applet' } ) )
+                            ( indentedGroup()
+                              ( mimis.$a( { 'xlink:href' : 'http://neo4j.org' } )
+                                ( mimis.$g( { id : 'neo4j' } )
+                                  ( background( { depth : { above : 3, below : 0 } } ) )
+                                  // Chrashes 
+                                  //( label( { ideogram : '.../image/logo/Neo4j/', text : 'Neo4j' } ) )
+                                )
+                              )
                             )
                           )
                         )
                       )
                     )
                   )
-                )
-              )
-            )
-*/
-          )
+                ).$elem
+  */
+              ).$elem
+            ).$elem
         )
-    )
+    }
 } )()
-
-
-/*
-        <g transform="translate(20,100)"><!-- Nested Item -->
-          <g id="jvm">
-            <g func="background">
-              <rect rx="1" ry="1" height="200" width="250"/>
-            </g>
-            <g func="label">
-              <g transform="translate(10, 50)"><!--←Pad,yMid-->
-                <g transform="translate(50)"><!-- 100x100 centered icon -->
-                  <g transform="scale(.8)"><g transform="translate(-50, -50)">
-                    <use xlink:href=".../image/logo/Sun/Java/Duke/" width="100" height="100"/>
-                  </g></g>
-                </g>
-              </g>
-              <g transform="translate(100, 20)">
-                <text>Applet</text>
-              </g>
-            </g>
-          </g>
-   
-          <g transform="translate(20,100)"><!-- Nested Item -->
-            <g id="neo4j">
-              <g func="background">
-                <rect rx="1" ry="1" height="100" width="225"/>
-              </g>
-              <g func="label">
-                <g transform="translate(10, 50)"><!--←Pad,yMid-->
-                  <g transform="translate(50)"><!-- 100x100 centered icon -->
-                    <g transform="scale(.8)"><g transform="translate(-50, -50)">
-                      <use xlink:href="/" width="100" height="100"/>
-                    </g></g>
-                  </g>
-                </g>
-                <g transform="translate(100, 20)">
-                  <text>Neo4j</text>
-                </g>
-              </g>
-            </g>
-          </g>
-        </g>
-      </g>
-    </g>
-  </g>
-*/

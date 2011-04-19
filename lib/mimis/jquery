@@ -387,7 +387,7 @@ if( mimis.ns.abbr == 'svg' ) {
 }
 
 if( mimis.ns.abbr != 'html' ) {
-    mimis.$elm = mimis.$elm || function( name, attrs ) {
+    mimis.$elem = mimis.$elem || function( name, attrs ) {
         var $elem = $( document.createElementNS( mimis.ns, name ) )
         if( attrs ) {
             for( attr in attrs ) {
@@ -409,29 +409,31 @@ if( mimis.ns.abbr != 'html' ) {
 }
 
 if( mimis.ns.abbr == 'svg' ) {
-    mimis.$g = mimis.$g || function() {
-        var args = Array.prototype.slice.call( arguments )
-        args.unshift( 'g' )
-        return mimis.$elm.apply( this, args )
-    }
+    [ 'use', 'rect' ].each( function( attr ) {
+        var name = '$' + attr
+        mimis[ name ] = mimis[ name ] || function() {
+            var args = Array.prototype.slice.call( arguments )
+            args.unshift( attr )
+            return mimis.$elem.apply( this, args )
+        }
+    } )
 
-    mimis.$use = mimis.$use || function() {
-        var args = Array.prototype.slice.call( arguments )
-        args.unshift( 'use' )
-        return mimis.$elm.apply( this, args )
-    }
-
-    mimis.$a = mimis.$a || function() {
-        var args = Array.prototype.slice.call( arguments )
-        args.unshift( 'a' )
-        return mimis.$elm.apply( this, args )
-    }
-
-    mimis.$rect = mimis.$rect || function() {
-        var args = Array.prototype.slice.call( arguments )
-        args.unshift( 'rect' )
-        return mimis.$elm.apply( this, args )
-    }
+    // Nesting
+    ;[ 'g', 'a' ].each( function( attr ) {
+        var name = '$' + attr
+        mimis[ name ] = mimis[ name ] || function() {
+            var args = Array.prototype.slice.call( arguments )
+            args.unshift( attr )
+            var $elem = mimis.$elem.apply( this, args )
+            function append( $new ) {
+                //$elem.append.apply( $, arguments )
+                $elem.append( $new )
+                return append
+            }
+            append.$elem = $elem
+            return append
+        }
+    } )
 
     mimis.$text = mimis.$text || function() {
         var args = Array.prototype.slice.call( arguments )
