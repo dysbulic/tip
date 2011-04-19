@@ -14,17 +14,17 @@
                 ry : 1,
                 x : 0,
                 y : 0,
-                width : col.width,
+                width  : col.width,
                 height : row.height,
             },
             use : {
-                width : col.width,
+                width  : col.width,
                 height : row.height,
             },
             display : {
-                width : 4 * col.width,
+                width : 3.75 * col.width,
             },
-            indent : 15,
+            indent : 10,
             current : {
                 width : 4 *  col.width,
             },
@@ -34,20 +34,10 @@
     // Format transform
     var t = {
         t : function( a, b ) {
-            return {
-                transform : ( "translate("
-                              + a
-                              + ( b && ( ',' + b ) || '' )
-                              + ")" )
-            }
+            return { transform : ( "translate(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
         },
         s : function( a, b ) {
-            return {
-                transform : ( "scale("
-                              + a
-                              + ( b && ( ',' + b ) || '' )
-                              + ")" )
-            }
+            return { transform : ( "scale(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
         },
     }
     
@@ -89,7 +79,7 @@
                 return ( $g( { func : 'background' } )
                          ( $rect( {
                              height : row.height * ( depth.below + 1 ) + ( depth.below * pad.bottom ),
-                             width  : current.width,
+                             width  : display.width - ( depth.above * 2 * indent ),
                          } ) )
                        ).$elem
             }
@@ -101,9 +91,7 @@
         function nest() {
             with( mimis ) { with( def ) { with( t ) {
             var delta = 2 * indent
-                console.log( 'n', current.width, indent )
             current.width -= delta
-                console.log( 'n', current.width, indent )
             var ret = $g( t( indent, row.height ) ).apply( this, arguments )
             current.width += delta
             return ret
@@ -123,23 +111,16 @@
             } } }
         }
 
-        var $test = l( { chrome : 'http://www.google.com/chrome/' } )(
-            //background( { depth : { above : 0, below : 3 } } )
-            label( { ideogram : '.../co/Google/Chrome/ideogram/', text : 'Chrome' } )
-        ).$elem
-
-        $('script:last').after( $test )
-        
         $('script:last').after(
-            ( l( { chrome : 'http://www.google.com/chrome/' } )
+            $g( {} )(l( { chrome : 'http://www.google.com/chrome/' } )
               ( background( { depth : { above : 0, below : 3 } } ) )
               ( label( { ideogram : '.../co/Google/Chrome/ideogram/', text : 'Chrome' } ) )
               ( nest
-                ( l( { crx : 'Chrome/extension/' } )
+                ( l( { crx : '.../lib/mimis/Chrome/extension/' } )
                   ( background( { depth : { above : 1, below : 2 } } ) )
                   ( label( { ideogram : '.../lib/mimis/logo/button/', text : 'Extension' } ) )
                   ( nest
-                    ( l( { jvm : 'java/src/org/dhappy/mimis/CacheAgentApplet.java' } )
+                    ( l( { jvm : '.../lib/mimis/java/src/org/dhappy/mimis/CacheAgentApplet.java' } )
                       ( background( { depth : { above : 2, below : 1 } } ) )
                       ( label( { ideogram : '.../image/logo/Sun/Java/Duke/', text : 'Applet' } ) )
                       ( nest
@@ -152,7 +133,7 @@
                   ).$elem
                 ).$elem
               ).$elem
-            )
+            ).$elem
         )
     } } }
 } )()
