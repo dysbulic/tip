@@ -398,14 +398,16 @@ generate_update_branch_email()
                 echo "</pre>"
 	fi
 
+        if [ -z "not -z" ]; then # No print
 	echo ""
 	if [ -z "$rewind_only" ]; then
-		echo "Those revisions listed above that are new to this repository have"
-		echo "not appeared on any other notification email; so we list those"
-		echo "revisions in full, below."
+		cat <<EOF
 
-		echo ""
-		echo $LOGBEGIN
+<p>Those revisions listed above that are new to this repository have not appeared on any other notification email; so we list those revisions in full, below.</p>
+
+		$LOGBEGIN
+EOF
+
 		show_new_revisions
 
 		# XXX: Need a way of detecting whether git rev-list actually
@@ -413,9 +415,11 @@ generate_update_branch_email()
 		# revisions added by this update" message
 
 		echo $LOGEND
+
 	else
 		echo "No new revisions were added by this update."
 	fi
+        fi
 
 	# The diffstat is shown from the old revision to the new revision.
 	# This is to show the truth of what happened in this change.
