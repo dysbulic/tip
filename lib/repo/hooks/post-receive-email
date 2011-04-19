@@ -210,13 +210,10 @@ generate_email_header()
 	X-Git-Oldrev: $oldrev
 	X-Git-Newrev: $newrev
 
-        EOF
-        <html><body><pre>
-	This is an automated email from the git hooks/post-receive script. It was
-	generated because a ref change was pushed to the repository containing
-	the project "$projectdesc".
+        <html><body>
+	<p>This is an automated email from the <a href="http://dhappy.org/.../lib/repo/hooks/post-receive-email">post-receive-email</a> script. It was generated because a ref change was pushed to the repository containing the project "$projectdesc".</p>
 
-	The $refname_type, $short_refname has been ${change_type}d
+	<p>The $refname_type, $short_refname has been ${change_type}d:</p>
 	EOF
 }
 
@@ -224,12 +221,7 @@ generate_email_footer()
 {
 	SPACE=" "
 	cat <<-EOF
-
-
-	hooks/post-receive
-	--${SPACE}
-	$projectdesc
-        </pre></body></html>
+        </body></html>
 	EOF
 }
 
@@ -240,6 +232,7 @@ generate_email_footer()
 #
 generate_create_branch_email()
 {
+    return # Don't show log
 	# This is a new branch and so oldrev is not valid
 	echo "        at  $newrev ($newrev_type)"
 	echo ""
@@ -424,8 +417,8 @@ generate_update_branch_email()
 	# - including the undoing of previous revisions in the case of
 	# non-fast-forward updates.
 	echo ""
-	echo "Summary of changes:"
-	git diff-tree --stat --summary --find-copies-harder $oldrev..$newrev
+	echo "Summary of changes: $oldrev..$newrev"
+	git diff-tree --stat --summary --find-copies-harder --pretty="format:" --name-only $oldrev..$newrev
 }
 
 #
