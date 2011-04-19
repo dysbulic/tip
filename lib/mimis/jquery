@@ -439,8 +439,10 @@ if( mimis.ns.abbr == 'svg' ) {
         var args = Array.prototype.slice.call( arguments )
         var txt = args.shift()
         args.unshift( 'text' )
-        var $text = mimis.$elm.apply( this, args )
+        var $text = mimis.$elem.apply( this, args )
         $text.text( txt )
         return $text
     }
 }
+
+mimis.x = mimis.x || $.extend

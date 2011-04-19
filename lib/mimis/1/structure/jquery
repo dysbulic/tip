@@ -45,36 +45,38 @@
     }
     
     function label( cfg ) {
-        with( mimis ) {
+        with( mimis ) { with( t ) {
             with( cfg ) {
-                return ( $g( { func : 'label' } )
-                         ( $g( { func : 'line' } )
-                           ( $g ( t.t( pad.left, row.height / 2 ) )
-                             ( $g( { func : 'named icon' } )
-                               ( $g( t.t( col.width / 2 ) )
-                                 ( $g( t.s( .8 ) )
-                                   ( $g( t.t( -row.height / 2, -col.width / 2 ) )
-                                     ( $use( $.extend( def.use, {
-                                         'xlink:href' : ideogram,
-                                     } ) ) )
-                                   )
-                                 )
-                                 ( $g( { func : 'text' } )
-                                   ( $g( t.t( col.width / 2 ) )
-                                     ( $g( t.t( 0, row.height / 5 ) )
-                                       ( $text(
-                                           text
-                                       ) )
-                                     )
-                                   )
-                                 )
-                               )
-                             )
-                           )
-                         )
-                       ).$elem
+                return ( $g( {               func : 'label'      } )
+                         ( $g( {             func : 'line'       } )
+                           ( $g (            t( pad.left,        row.height / 2 ) )
+                             ( $g( {         func : 'named icon' } )
+                               ( $g(         t( col.width / 2 ) )
+                                 (
+                                     $g(     s( .8 ) )
+                                     ( $g(   t( -row.height / 2, -col.width / 2 ) )
+                                       ( $use( x( def.use, {
+                                           'xlink:href' : ideogram,
+                                       } ) )
+                                       ).$elem
+                                     ).$elem
+                                 )(
+                                     $g( {   func : 'text' } )
+                                     ( $g(   t( col.width / 2 ) )
+                                       ( $g( t( 0, row.height / 5 ) )
+                                         ( $text(
+                                             text
+                                         ) ).$elem
+                                       ).$elem
+                                     ).$elem
+                                 ).$elem
+                               ).$elem
+                             ).$elem
+                           ).$elem
+                         ).$elem
+                       )
             }
-        }
+        } }
     }
         
     function _background( cfg ) {
@@ -83,7 +85,7 @@
                 return ( $g( { func : 'background' } )
                          ( $rect( {
                              height : row.height * ( depth.below + 1 ) + ( depth.below * pad.bottom ),
-                             width : display.width - depth.above * 30,
+                             width  : display.width - depth.above * 30,
                          } ) )
                        ).$elem
             }
@@ -102,12 +104,12 @@
 
     with( mimis ) {
         $('script:last').after(
-            $a( { 'xlink:href' : 'http://www.google.com/chrome/' } )
+            ( $a( { 'xlink:href' : 'http://www.google.com/chrome/' } )
               ( $g( { id : 'chrome' } )
-                ( background( { depth : { above : 0, below : 3 } } ) ).$elem
-/*
+                ( background( { depth : { above : 0, below : 3 } } ) )
                 ( label( { ideogram : '.../co/Google/Chrome/ideogram/', text : 'Chrome' } ) )
-                ( indentedGroup()
+                ( indentedGroup().$elem
+/*
                   ( mimis.$a( { 'xlink:href' : 'Chrome/extension/' } )
                     ( mimis.$g( { id : 'crx' } )
                       ( background( { depth : { above : 1, below : 2 } } ) )
@@ -133,8 +135,9 @@
                   )
                 ).$elem
   */
-//              ).$elem
+                ).$elem
               ).$elem
+            )
         )
     }
 } )()
