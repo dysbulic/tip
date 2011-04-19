@@ -80,6 +80,7 @@
     }
         
     function background( cfg ) {
+        cfg = cfg || {}
         with( mimis ) { with( def ) { with( cfg ) {
             //console.log( current.width )
             return ( $g( { func : 'background' } )
@@ -120,8 +121,14 @@
                            ( $g( s( icon.scale ) )
                              ( $g( t( -col.width / 2, -row.height / 2 ) )
                                ( background( { width : col.width } ) )
-                               ( $use( x( def.use, { 'xlink:href' : ideogram } ) ) )
-                               .$elem
+                               ( $g( t( col.width / 2, row.height / 2 ) )
+                                 ( $g( s( icon.scale ) )
+                                   ( $g( t( -col.width / 2, -row.height / 2 ) )
+                                     ( $use( x( def.use, { 'xlink:href' : ideogram } ) ) )
+                                     .$elem
+                                   ).$elem
+                                 ).$elem
+                               ).$elem
                              ).$elem
                            ).$elem
                          ).$elem
@@ -172,14 +179,14 @@
             )
             ( $g( t( 0, 400 ) )
               ( link( { fs : '.../' } )
-                ( background( { depth : { above : 0, below : 0 } } ) )
+                ( background() )
                 ( label( { ideogram : '.../computer/filesystem/ideogram/', text : 'Filesystem' } ) )
                 .$elem
               ).$elem
             )
             ( $g( t( 0, -row.height ) )
               ( link( { http : 'http://goo.gl' } )
-                ( background( { depth : { above : 0, below : 0 } } ) )
+                ( background() )
                 ( label( { ideogram : '.../proto/http/ideogram/', text : 'HTTP' } ) )
                 .$elem
               ).$elem
@@ -188,8 +195,8 @@
               ( link( { xmpp : 'http://xmpp.org' } )
                 ( $g( t( 0, -row.height ) )
                   ( background( {
-                      depth : { above : 0, below : 0 },
                       height : 2 * row.height,
+                      width  : 3 * col.width + 3 * pad.left,
                   } ) )
                   .$elem
                 )
