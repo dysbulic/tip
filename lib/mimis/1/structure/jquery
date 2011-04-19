@@ -31,8 +31,6 @@
         } )
     }      
 
-    console.log( def )
-
     // Format transform
     var t = {
         t : function( a, b ) {
@@ -103,11 +101,13 @@
 
     with( mimis ) { with( def ) { with( t ) {
         function nest() {
+            with( mimis ) { with( def ) { with( t ) {
             var delta = 2 * indent
             current.width -= delta
             var ret = $g( t( indent, row.height ) ).apply( this, arguments )
             current.width += delta
             return ret
+            } } }
         }
 
         function l( cfg ) {
@@ -137,7 +137,7 @@
                       ( label( { ideogram : '.../image/logo/Sun/Java/Duke/', text : 'Applet' } ) )
                       ( nest
                         ( l( { neo4j : 'http://neo4j.org' } )
-                          ( background( { depth : { above : 3, below : 0 } } ) )
+                          ( background( { depth : { above : 3, below : 0 } } ) ).$elem
                           // Chrashes 
                           //( label( { ideogram : '.../image/logo/Neo4j/', text : 'Neo4j' } ) )
                         ).$elem
