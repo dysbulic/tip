@@ -184,6 +184,8 @@ mimis.set = mimis.set ||
         return ret
     }
 
+
+
 mimis.load = mimis.load || function() {
     return mimis.each.call( arguments, function( uri ) {
         var ret
@@ -191,12 +193,23 @@ mimis.load = mimis.load || function() {
             url : uri,
             dataType : 'text', // ECMAScript Object Notation
             async : false,
-            success : function( eson ) {
-                ret = eval( "( function() { return " + eson + " } )()" )
+            success : function( data, state, xhr ) {
+                console.log( xhr.getAllResponseHeaders() )
+                ret = data
+                if( var processor = mimis.load.type[ xhr.getResponseHeader( '' ) ] ) {
+                    ret = processor( ret )
+                }
             },
         } )
         return ret
     } )
+}
+
+mimis.load.type = mimis.load.type || {
+    'text/eson' : function( eson ) {
+        eval( "( function() { return " + data + " } )()" )
+    },
+    
 }
 
 // Extract namespaces
