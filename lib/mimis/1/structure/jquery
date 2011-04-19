@@ -14,6 +14,9 @@
             width : col.width,
             height : row.height,
         },
+        display : {
+            width : 4 * col.width,
+        }
     }
 
     var pad = {
@@ -41,88 +44,87 @@
     }
     
     function label( cfg ) {
-        var ideogram = cfg.ideogram
-        var text = cfg.text
-        return ( mimis.$elm( 'g', { func : 'label' } ).append
-                 ( mimis.$elm( 'g', { func : 'line' } ).append
-                   ( mimis.$elm( 'g', t.t( pad.left, row.height / 2 ) ).append
-                     ( mimis.$elm( 'g', { func : 'named icon' } ).append
-                       ( mimis.$elm( 'g', t.t( col.width / 2 ) ).append
-                         ( mimis.$elm( 'g', t.s( .8 ) ).append
-                           ( mimis.$elm( 'g', t.t( -row.height / 2, -col.width / 2 ) ).append
-                             ( mimis.$elm( 'use', $.extend( def.use, {
-                                 'xlink:href' : ideogram,
-                             } ) ) )
+        with( cfg ) {
+            return ( mimis.$g( { func : 'label' } ).append
+                     ( mimis.$g( { func : 'line' } ).append
+                       ( mimis.$g ( t.t( pad.left, row.height / 2 ) ).append
+                         ( mimis.$g( { func : 'named icon' } ).append
+                           ( mimis.$g( t.t( col.width / 2 ) ).append
+                             ( mimis.$g( t.s( .8 ) ).append
+                               ( mimis.$g( t.t( -row.height / 2, -col.width / 2 ) ).append
+                                 ( mimis.$use( $.extend( def.use, {
+                                     'xlink:href' : ideogram,
+                                 } ) ) )
+                               )
+                             ).append
+                             ( mimis.$g( { func : 'text' } ).append
+                               ( mimis.$g( t.t( col.width / 2 ) ).append
+                                 ( mimis.$g( t.t( 0, row.height / 5 ) ).append
+                                   ( mimis.$text(
+                                       text
+                                   ) )
+                                 )
+                               )
+                             )
                            )
-                         ).append
-                         ( mimis.$elm( 'g', { func : 'text' } ).append
-                           ( mimis.$elm( 'g', t.t( col.width / 2 ) ).append
-                             ( mimis.$elm( 'g', t.t( 0, row.height / 5 ) ).append
-                               ( mimis.$elm( 'text' ).text( text ) ) ) ) )
+                         )
                        )
                      )
                    )
-                 )
-               )
+        }
     }
 
-    var width = 400
+    function _background( cfg ) {
+        with( cfg ) {
+            return ( mimis.$g( { func : 'background' } ).append
+                     ( mimis.$rect( {
+                         height : row.height * ( depth.below + 1 ),
+                         width : display.width - depth.above * 10,
+                     } ) )
+                   )
+        }
+    }
+
+    function background( cfg ) {
+        //return _background( cfg )
+        return _background( $.extend( cfg, def ) )
+    }
+
+    function indentedGroup( cfg ) {
+        return mimis.$g( t.t( 15, 100 ) )
+    }
 
     $('script:last').after(
-        mimis.$elm( 'g', {
-            id: 'chrome',
-            idx: '(2|A).1',
-        } ).append
-        ( mimis.$elm('g', { func : 'background' } ).append
-          ( mimis.$elm( 'rect', $.extend( def.rect, {
-              height : 4 * row.height,
-              width : width,
-          } ) ) )
-        ).append
-        ( label( {
-            ideogram : '.../co/Google/Chrome/ideogram/',
-            text : 'Chrome',
-        } ) ).append
-        ( mimis.$elm('g', t.t(15,100) ).append
-          ( mimis.$elm('g', { id : 'crx' } ).append
-            ( mimis.$elm('g', { func : 'background' } ).append
-              ( mimis.$elm( 'rect', $.extend( def.rect, {
-                  height : 3 * row.height,
-                  width : width - 30,
-              } ) ) )
-            ).append
-            ( label( {
-                ideogram : '.../lib/mimis/logo/button/',
-                text : 'Extension',
-            } ) )
-          ).append
-          ( mimis.$elm('g', t.t(15,100) ).append
-            ( mimis.$elm('g', { id : 'jvm' } ).append
-              ( mimis.$elm('g', { func : 'background' } ).append
-                ( mimis.$elm( 'rect', $.extend( def.rect, {
-                    height : 2 * row.height,
-                    width : width - 60,
-                } ) ) )
-              ) .append
-              ( label( {
-                  ideogram : '.../image/logo/Sun/Java/Duke/',
-                  text : 'Applet',
-              } ) )
-            ).append
-            ( mimis.$elm('g', t.t(15,100) ).append
-              ( mimis.$elm('g', { id : 'neo4j' } ).append
-                ( mimis.$elm('g', { func : 'background' } ).append
-                  ( mimis.$elm( 'rect', $.extend( def.rect, {
-                      height : 1 * row.height,
-                      width : width - 90,
-                  } ) ) )
-                ) .append
-                ( label( {
-                    ideogram : '.../image/logo/Neo4j/',
-                    text : 'Neo4j',
-                } ) )
+        ( mimis.$a( { 'xlink:href' : 'http://www.google.com/chrome/' } ).append
+          ( mimis.$g( { id : 'chrome' } ).append
+            ( background( { depth : { above : 0, below : 3 } } ) ).append
+            ( label( { ideogram : '.../co/Google/Chrome/ideogram/', text : 'Chrome' } ) ).append()
+/*
+            ( indentedGroup().append
+              ( mimis.$a( { 'xlink:href' : 'Chrome/extension/' } ).append
+                ( mimis.$g( { id : 'crx' } ).append
+                  ( background( { depth : { above : 1, below : 2 } } ) ).append
+                  ( label( { ideogram : '.../lib/mimis/logo/button/', text : 'Extension' } ) ).append
+                  ( indentedGroup().append
+                    ( mimis.$a( { 'xlink:href' : 'java/src/org/dhappy/mimis/CacheAgentApplet.java' } ).append
+                      ( mimis.$g( { id : 'jvm' } ).append
+                        ( background( { depth : { above : 2, below : 1 } } ) ).append
+                        ( label( { ideogram : '.../image/logo/Sun/Java/Duke/', text : 'Applet' } ) ).append
+                        ( indentedGroup().append
+                          ( mimis.$a( { 'xlink:href' : 'http://neo4j.org' } ).append
+                            ( mimis.$g( { id : 'neo4j' } ).append
+                              ( background( { depth : { above : 3, below : 0 } } ) ).append
+                              ( label( { ideogram : '.../image/logo/Neo4j/', text : 'Neo4j' } ) )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
               )
             )
+*/
           )
         )
     )

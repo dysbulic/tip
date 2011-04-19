@@ -386,14 +386,59 @@ if( mimis.ns.abbr == 'svg' ) {
     } )
 }
 
-if( mimis.ns.abbr == 'svg' ) {
-    mimis.$elm = function( name, attrs ) {
+if( mimis.ns.abbr != 'html' ) {
+    mimis.$elm = mimis.$elm || function( name, attrs ) {
         var $elem = $( document.createElementNS( mimis.ns, name ) )
         if( attrs ) {
             for( attr in attrs ) {
-                $elem.attr( attr, attrs[ attr ] )
+                var val = attrs[ attr ]
+                var match = attr.match( /^([^:]+):(.*)$/ )
+                if( match ) {
+                    var ns = { abbr : match[ 1 ] }
+                    attr = match[ 2 ]
+                    $elem.each( function() {
+                        this.setAttributeNS( mimis.ns[ ns.abbr ], attr, val )
+                    } )
+                } else {
+                    $elem.attr( attr, val )
+                }
             }
         }
         return $elem
+    }
+}
+
+if( mimis.ns.abbr == 'svg' ) {
+    mimis.$g = mimis.$g || function() {
+        var args = Array.prototype.slice.call( arguments )
+        args.unshift( 'g' )
+        return mimis.$elm.apply( this, args )
+    }
+
+    mimis.$use = mimis.$use || function() {
+        var args = Array.prototype.slice.call( arguments )
+        args.unshift( 'use' )
+        return mimis.$elm.apply( this, args )
+    }
+
+    mimis.$a = mimis.$a || function() {
+        var args = Array.prototype.slice.call( arguments )
+        args.unshift( 'a' )
+        return mimis.$elm.apply( this, args )
+    }
+
+    mimis.$rect = mimis.$rect || function() {
+        var args = Array.prototype.slice.call( arguments )
+        args.unshift( 'rect' )
+        return mimis.$elm.apply( this, args )
+    }
+
+    mimis.$text = mimis.$text || function() {
+        var args = Array.prototype.slice.call( arguments )
+        var txt = args.shift()
+        args.unshift( 'text' )
+        var $text = mimis.$elm.apply( this, args )
+        $text.text( txt )
+        return $text
     }
 }
