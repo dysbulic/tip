@@ -47,23 +47,23 @@
     function label( cfg ) {
         with( mimis ) { with( t ) {
             with( cfg ) {
-                return ( $g( {               func : 'label'      } )
-                         ( $g( {             func : 'line'       } )
-                           ( $g (            t( pad.left,        row.height / 2 ) )
-                             ( $g( {         func : 'named icon' } )
-                               ( $g(         t( col.width / 2 ) )
+                return ( $g( {               func : 'label'                      } )
+                         ( $g( {             func : 'line'                       } )
+                           ( $g (            t( pad.left,        row.height / 2  ) )
+                             ( $g( {         func : 'named icon'                 } )
+                               ( $g(         t( col.width / 2                    ) )
                                  (
-                                     $g(     s( .8 ) )
-                                     ( $g(   t( -row.height / 2, -col.width / 2 ) )
+                                     $g(     s( .8                               ) )
+                                     ( $g(   t( -row.height / 2, -col.width / 2  ) )
                                        ( $use( x( def.use, {
                                            'xlink:href' : ideogram,
                                        } ) )
                                        ).$elem
                                      ).$elem
                                  )(
-                                     $g( {   func : 'text' } )
-                                     ( $g(   t( col.width / 2 ) )
-                                       ( $g( t( 0, row.height / 5 ) )
+                                     $g( {   func : 'text'                       } )
+                                     ( $g(   t( col.width / 2                    ) )
+                                       ( $g( t( 0,                row.height / 5 ) )
                                          ( $text(
                                              text
                                          ) ).$elem
@@ -97,22 +97,17 @@
         return _background( $.extend( cfg, def ) )
     }
     
-    function indentedGroup( cfg ) {
-        return mimis.$g( t.t( 15, 100 ) )
-    }
-
-
-    with( mimis ) {
+    with( mimis ) { with( t ) {
         $('script:last').after(
             ( $a( { 'xlink:href' : 'http://www.google.com/chrome/' } )
               ( $g( { id : 'chrome' } )
                 ( background( { depth : { above : 0, below : 3 } } ) )
                 ( label( { ideogram : '.../co/Google/Chrome/ideogram/', text : 'Chrome' } ) )
-                ( indentedGroup().$elem
+                ( $g( t( 15, 100 ) )
+                  ( $a( { 'xlink:href' : 'Chrome/extension/' } )
+                    ( $g( { id : 'crx' } )
+                      ( background( { depth : { above : 1, below : 2 } } ) ).$elem
 /*
-                  ( mimis.$a( { 'xlink:href' : 'Chrome/extension/' } )
-                    ( mimis.$g( { id : 'crx' } )
-                      ( background( { depth : { above : 1, below : 2 } } ) )
                       ( label( { ideogram : '.../lib/mimis/logo/button/', text : 'Extension' } ) )
                       ( indentedGroup()
                         ( mimis.$a( { 'xlink:href' : 'java/src/org/dhappy/mimis/CacheAgentApplet.java' } )
@@ -131,10 +126,9 @@
                           )
                         )
                       )
-                    )
-                  )
-                ).$elem
   */
+                    ).$elem
+                  ).$elem
                 ).$elem
               ).$elem
             )
