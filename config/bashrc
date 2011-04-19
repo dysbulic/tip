@@ -99,33 +99,13 @@ function addtoserver() {
     git remote add webserver "ssh://wjholcomb@madstones.com/~/$remotedir/"
 }
 
-function tx() {
-    ( 
-        cd ~/tip
-        git commit -m checkpoint .
-        git submodule foreach git commit -m checkpoint . \|\| true
-    )
-}
+alias tx="git commit -a -m checkpoint"
+
 MIRROR[${#MIRROR[*]}]="origin"
 MIRROR[${#MIRROR[*]}]="web"
-function pub() {
-    (
-        cd ~/tip
-        for mirror in ${MIRROR[@]}; do
-            echo "Publishing to: $mirror"
-            git submodule foreach git push "$mirror" master \|\| true
-            git push "$mirror" master
-        done
-    )
-}
 
-function sub() {
-    (
-        cd ~/tip
-        git submodule foreach git pull origin master \|\| true
-        git pull origin master
-    )
-}
+alias pub="git push '$mirror' master"
+alias sub="git pull '$mirror' master"
 
 function dump-home-to-media() {
     DIR=/media/home/
