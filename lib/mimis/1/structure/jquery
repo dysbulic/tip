@@ -28,6 +28,10 @@
             current : {
                 width : 4 *  col.width,
             },
+            depth : {
+                above : 0,
+                below : 0,
+            },
         } )
     }      
 
@@ -37,10 +41,10 @@
             return { transform : ( "translate(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
         },
         s : function( a, b ) {
-            return { transform : ( "scale(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
+            return { transform : (     "scale(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
         },
         r : function( a, b ) {
-            return { transform : ( "rotate(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
+            return { transform : (    "rotate(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
         },
     }
     
@@ -52,7 +56,7 @@
                            ( $g( {           func : 'named icon'                 } )
                              ( $g(           t( col.width / 2                    ) )
                                ( $g( {       func : 'icon'                       } )
-                                 ( $g(       s( .8                               ) )
+                                 ( $g(       s( icon.scale                       ) )
                                    ( $g(     t( -row.height / 2, -col.width / 2  ) )
                                      ( $use( x( def.use, { 'xlink:href' : ideogram } ) ) ).$elem
                                    ).$elem
@@ -76,18 +80,58 @@
     }
         
     function background( cfg ) {
-        with( mimis ) { with( def ) {
-            with( cfg ) {
-                console.log( current.width )
-                return ( $g( { func : 'background' } )
-                         ( $rect( {
+        with( mimis ) { with( def ) { with( cfg ) {
+            //console.log( current.width )
+            return ( $g( { func : 'background' } )
+                     ( $rect( x (
+                         {
                              height : row.height * ( depth.below + 1 ) + ( depth.below * pad.bottom ),
                              width  : display.width - ( depth.above * 2 * indent ),
-                         } ) )
-                       ).$elem
-            }
-        } }
+                         },
+                         cfg
+                     ) ) ).$elem
+                   )
+        } } }
     }
+
+    // link
+    function link( cfg ) {
+        with( mimis ) { with( def ) { with( cfg ) {
+            // ToDo: Handle more than 1
+            for( key in cfg ) {
+                var $$tail = $g( { id : key } )
+                var $$head = $a( { 'xlink:href' : cfg[ key ] } )( $$tail.$elem )
+                $$tail.$elem = $$head.$elem
+                return $$tail
+            }
+        } } }
+    }
+
+    mimis.__defineGetter__( 'nil', function() {
+        return mimis.$g()
+    } )
+
+    function icon( cfg ) {
+        with( mimis ) { with( def ) { with( t ) { with( cfg ) {
+            return ( ( ! href ? nil : $a( { 'xlink:href' : href } ) )
+                     ( ( ! id ? nil : $g( { id : id } ) )
+                       ( $g( { func : 'icon' } )
+                         ( $g( t( col.width / 2, row.height / 2 ) )
+                           ( $g( s( icon.scale ) )
+                             ( $g( t( -col.width / 2, -row.height / 2 ) )
+                               ( background( { width : col.width } ) )
+                               ( $use( x( def.use, { 'xlink:href' : ideogram } ) ) )
+                               .$elem
+                             ).$elem
+                           ).$elem
+                         ).$elem
+                       ).$elem
+                     ).$elem
+                   )
+        } } } }
+    }
+
+    icon.scale = icon.scale || .8
 
     with( mimis ) { with( def ) { with( t ) {
         // Will fail on multiple children
@@ -101,34 +145,21 @@
             } } }
         }
 
-        // Append to 
-        function l( cfg ) {
-            with( mimis ) { with( def ) { with( cfg ) {
-                // ToDo: Handle more than 1
-                for( key in cfg ) {
-                    var $$tail = $g( { id : key } )
-                    var $$head = $a( { 'xlink:href' : cfg[ key ] } )( $$tail.$elem )
-                    $$tail.$elem = $$head.$elem
-                    return $$tail
-                }
-            } } }
-        }
-
         $('script:last').after(
             $g()
-            ( l( { chrome : 'http://www.google.com/chrome/' } )
+            ( link( { chrome : 'http://www.google.com/chrome/' } )
               ( background( { depth : { above : 0, below : 3 } } ) )
               ( label( { ideogram : '.../co/Google/Chrome/ideogram/', text : 'Chrome' } ) )
               ( nest
-                ( l( { crx : '.../lib/mimis/Chrome/extension/' } )
+                ( link( { crx : '.../lib/mimis/Chrome/extension/' } )
                   ( background( { depth : { above : 1, below : 2 } } ) )
                   ( label( { ideogram : '.../lib/mimis/logo/button/', text : 'Extension' } ) )
                   ( nest
-                    ( l( { jvm : '.../lib/mimis/java/src/org/dhappy/mimis/CacheAgentApplet.java' } )
+                    ( link( { jvm : '.../lib/mimis/java/src/org/dhappy/mimis/CacheAgentApplet.java' } )
                       ( background( { depth : { above : 2, below : 1 } } ) )
                       ( label( { ideogram : '.../image/logo/Sun/Java/Duke/', text : 'Applet' } ) )
                       ( nest
-                        ( l( { neo4j : 'http://neo4j.org' } )
+                        ( link( { neo4j : 'http://neo4j.org' } )
                           ( background( { depth : { above : 3, below : 0 } } ) )
                           ( label( { ideogram : '.../image/logo/Neo4j/', text : 'Neo4j' } ) ).$elem
                         ).$elem
@@ -139,21 +170,37 @@
               ).$elem
             )
             ( $g( t( 0, 400 ) )
-              ( l( { fs : '.../' } )
+              ( link( { fs : '.../' } )
                 ( background( { depth : { above : 0, below : 0 } } ) )
                 ( label( { ideogram : '.../computer/filesystem/ideogram/', text : 'Filesystem' } ) ).$elem
               ).$elem
             )
-            ( $g( t( 0, -100 ) )
-              ( l( { http : 'http://goo.gl' } )
+            ( $g( t( 0, -row.height ) )
+              ( link( { http : 'http://goo.gl' } )
                 ( background( { depth : { above : 0, below : 0 } } ) )
                 ( label( { ideogram : '.../proto/http/ideogram/', text : 'HTTP' } ) ).$elem
               ).$elem
             )
-            ( $g( t( -100, 400 ) )( $g( r( -90 ) )
-              ( l( { xmpp : 'http://xmpp.org' } )
-                ( background( { depth : { above : 0, below : 0 } } ) )
-                ( label( { ideogram : '.../proto/xmpp/ideogram/', text : 'XMPP' } ) ).$elem
+            ( $g( t( -col.width, 400 ) )( $g( r( -90 ) )
+              ( link( { xmpp : 'http://xmpp.org' } )
+                ( $g( t( 0, -row.height ) )
+                  ( background( {
+                      depth : { above : 0, below : 0 },
+                      height : 2 * row.height,
+                  } ) )
+                  .$elem
+                )
+                ( label( { ideogram : '.../proto/xmpp/ideogram/', text : 'XMPP' } ) )
+                ( $g( t( pad.left, -row.height ) )
+                  ( icon( { href : 'http://fb.me', ideogram : '.../co/Facebook/ideogram/', id : 'facebook' } ) )
+                  ( $g( t( col.width ) )
+                    ( icon( { href : 'http://goo.gl', ideogram : '.../co/Google/ideogram/', id : 'google' } ) )
+                    ( $g( t( col.width ) )
+                      ( icon( { href : '.../lib/tip/', ideogram : '.../lib/tip/ideogram/', id : 'tip' } ) )
+                      .$elem
+                    ).$elem
+                  ).$elem
+                ).$elem
               ).$elem ).$elem
 /*
   <g idx="3." id="filesystem">
@@ -169,17 +216,17 @@
     <g id="facebook">
       <rect fill="#3b5998"/>
       <g transform="translate(27, 445)"><g transform="scale(.85)">
-        <use xlink:href=".../co/Facebook/ideogram/" width="100" height="100"/>
+        <use xlink:href="" width="100" height="100"/>
       </g></g>
     </g>
     <g id="google">
-      <rect fill="#f8f7ef"/>
+      <rect fill=""/>
       <g transform="translate(27, 445)"><g transform="scale(.85)">
-        <use xlink:href=".../co/Google/ideogram/" width="100" height="100"/>
+        <use xlink:href="" width="100" height="100"/>
       </g></g>
     </g>
     <g id="tip">
-      <rect fill="#f8f7ef"/>
+      <rect fill=""/>
       <g transform="translate(27, 445)"><g transform="scale(.85)">
         <use xlink:href=".../lib/tip/ideogram/" width="100" height="100"/>
       </g></g>
