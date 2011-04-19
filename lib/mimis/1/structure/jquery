@@ -1,28 +1,35 @@
 ( function() {
-    var row = { height : 100 }
-    var col =  { width  : 100 }
     var def = {
-        rect : {
-            rx : 1,
-            ry : 1,
-            x : 0,
-            y : 0,
-            width : col.width,
-            height : row.height,
+        row : { height : 100 },
+        col : { width  : 100 },
+        pad : {
+            left : 10,
+            bottom : 10,
         },
-        use : {
-            width : col.width,
-            height : row.height,
-        },
-        display : {
-            width : 4 * col.width,
-        }
     }
-
-    var pad = {
-        left : 10,
-        bottom : 10,
-    }
+    with( def ) {
+        mimis.x( def, {
+            rect : {
+                rx : 1,
+                ry : 1,
+                x : 0,
+                y : 0,
+                width : col.width,
+                height : row.height,
+            },
+            use : {
+                width : col.width,
+                height : row.height,
+            },
+            display : {
+                width : 4 * col.width,
+            },
+            indent : 15,
+            current : {
+                width : 4 *  col.width,
+            },
+        } )
+    }      
 
     // Format transform
     var t = {
@@ -45,7 +52,7 @@
     }
     
     function label( cfg ) {
-        with( mimis ) { with( t ) {
+        with( mimis ) { with( def ) { with( t ) {
             with( cfg ) {
                 return ( $g( {               func : 'label'                      } )
                          ( $g( {             func : 'line'                       } )
@@ -76,62 +83,68 @@
                          ).$elem
                        )
             }
-        } }
+        } } }
     }
         
-    function _background( cfg ) {
-        with( mimis ) {
+    function background( cfg ) {
+        with( mimis ) { with( def ) {
             with( cfg ) {
                 return ( $g( { func : 'background' } )
                          ( $rect( {
                              height : row.height * ( depth.below + 1 ) + ( depth.below * pad.bottom ),
-                             width  : display.width - depth.above * 30,
+                             width  : current.width,
                          } ) )
                        ).$elem
             }
-        }
+        } }
     }
 
-    function background( cfg ) {
-        //return _background( cfg )
-        return _background( $.extend( cfg, def ) )
-    }
-    
-    with( mimis ) { with( t ) {
-        $('script:last').after(
-            ( $a( { 'xlink:href' : 'http://www.google.com/chrome/' } )
-              ( $g( { id : 'chrome' } )
-                ( background( { depth : { above : 0, below : 3 } } ) )
-                ( label( { ideogram : '.../co/Google/Chrome/ideogram/', text : 'Chrome' } ) )
-                ( $g( t( 15, 100 ) )
-                  ( $a( { 'xlink:href' : 'Chrome/extension/' } )
-                    ( $g( { id : 'crx' } )
-                      ( background( { depth : { above : 1, below : 2 } } ) ).$elem
-/*
-                      ( label( { ideogram : '.../lib/mimis/logo/button/', text : 'Extension' } ) )
-                      ( indentedGroup()
-                        ( mimis.$a( { 'xlink:href' : 'java/src/org/dhappy/mimis/CacheAgentApplet.java' } )
-                          ( mimis.$g( { id : 'jvm' } )
-                            ( background( { depth : { above : 2, below : 1 } } ) )
-                            ( label( { ideogram : '.../image/logo/Sun/Java/Duke/', text : 'Applet' } ) )
-                            ( indentedGroup()
-                              ( mimis.$a( { 'xlink:href' : 'http://neo4j.org' } )
-                                ( mimis.$g( { id : 'neo4j' } )
-                                  ( background( { depth : { above : 3, below : 0 } } ) )
-                                  // Chrashes 
-                                  //( label( { ideogram : '.../image/logo/Neo4j/', text : 'Neo4j' } ) )
-                                )
-                              )
-                            )
-                          )
+    with( mimis ) { with( def ) { with( t ) {
+        function nest() {
+            var delta = 2 * indent
+            current.width -= delta
+            var ret = $g( t( indent, row.height ) ).apply( this, arguments )
+            current.width += delta
+            return ret
+        }
+
+        function l( cfg ) {
+            with( mimis ) { with( def ) { with( cfg ) {
+                // ToDo: Handle more than 1
+                for( key in cfg ) {
+                    return function() {
+                        return $a( { 'xlink:href' : cfg[ key ] } )(
+                            $g( { id : key } ).apply( this, arguments ).$elem
                         )
-                      )
-  */
+                    }
+                }
+            } } }
+        }
+
+        $('script:last').after(
+            ( l( { chrome : 'http://www.google.com/chrome/' } )
+              ( background( { depth : { above : 0, below : 3 } } ) )
+              ( label( { ideogram : '.../co/Google/Chrome/ideogram/', text : 'Chrome' } ) )
+              ( nest
+                ( l( { crx : 'Chrome/extension/' } )
+                  ( background( { depth : { above : 1, below : 2 } } ) )
+                  ( label( { ideogram : '.../lib/mimis/logo/button/', text : 'Extension' } ) )
+                  ( nest
+                    ( l( { jvm : 'java/src/org/dhappy/mimis/CacheAgentApplet.java' } )
+                      ( background( { depth : { above : 2, below : 1 } } ) )
+                      ( label( { ideogram : '.../image/logo/Sun/Java/Duke/', text : 'Applet' } ) )
+                      ( nest
+                        ( l( { neo4j : 'http://neo4j.org' } )
+                          ( background( { depth : { above : 3, below : 0 } } ) )
+                          // Chrashes 
+                          //( label( { ideogram : '.../image/logo/Neo4j/', text : 'Neo4j' } ) )
+                        ).$elem
+                      ).$elem
                     ).$elem
                   ).$elem
                 ).$elem
               ).$elem
-            )
+            ).$elem
         )
-    }
+    } } }
 } )()
