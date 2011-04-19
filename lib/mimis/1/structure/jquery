@@ -55,22 +55,20 @@
         with( mimis ) { with( def ) { with( t ) {
             with( cfg ) {
                 return ( $g( {               func : 'label'                      } )
-                         ( $g( {             func : 'line'                       } )
-                           ( $g (            t( pad.left,        row.height / 2  ) )
-                             ( $g( {         func : 'named icon'                 } )
+                         ( $g (              t( pad.left,        row.height / 2  ) )
+                           ( $g( {           func : 'named icon'                 } )
+                             ( $g(           t( col.width / 2                    ) )
+                               ( $g( {       func : 'icon'                       } )
+                                 ( $g(       s( .8                               ) )
+                                   ( $g(     t( -row.height / 2, -col.width / 2  ) )
+                                     ( $use( x( def.use, { 'xlink:href' : ideogram } ) ) )
+                                   )
+                                 )
+                               )
                                ( $g(         t( col.width / 2                    ) )
-                                 (
-                                   $g(       s( .8                               ) )
-                                     ( $g(   t( -row.height / 2, -col.width / 2  ) )
-                                       ( $use( x( def.use, {
-                                           'xlink:href' : ideogram,
-                                       } ) )
-                                       ).$elem
-                                     ).$elem
-                                 )(
-                                   $g( {     func : 'text'                       } )
-                                     ( $g(   t( col.width / 2                    ) )
-                                       ( $g( t( 0,                row.height / 5 ) )
+                                 ( $g( {     func : 'name'                       } )
+                                   ( $g(     t( col.width / 2                    ) )
+                                     ( $g(   t( 0,                row.height / 5 ) )
                                          ( $text( text ) ).$elem
                                        ).$elem
                                      ).$elem
@@ -112,11 +110,9 @@
             with( mimis ) { with( def ) { with( cfg ) {
                 // ToDo: Handle more than 1
                 for( key in cfg ) {
-                    return function() {
-                        return $a( { 'xlink:href' : cfg[ key ] } )(
-                            $g( { id : key } ).apply( this, arguments ).$elem
-                        )
-                    }
+                    return $a( { 'xlink:href' : cfg[ key ] } )(
+                        $g( { id : key } ).apply( this, arguments ).$elem
+                    )
                 }
             } } }
         }
