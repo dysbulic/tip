@@ -137,11 +137,15 @@ svg:hover [func='¿marker?'] line { stroke-opacity: .25 }
 }
 
 [func='label'] [idx],
- [func='icon'] [idx] { opacity : 0; }
+ [func='icon'] [idx] {
+      fill-opacity : 0;
+    stroke-opacity : 0;
+}
 
 [func='label'] [idx][state='hovered'],
  [func='icon'] [idx][state='hovered'] {
-    fill-opacity : 1;
+      fill-opacity : 1;
+    stroke-opacity : 1;
 }
 
 [func='label'] rect {

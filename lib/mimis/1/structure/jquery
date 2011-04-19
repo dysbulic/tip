@@ -61,13 +61,13 @@
                                ( $g( {       func : 'icon'                       } )
                                  ( $g(       s( .8                               ) )
                                    ( $g(     t( -row.height / 2, -col.width / 2  ) )
-                                     ( $use( x( def.use, { 'xlink:href' : ideogram } ) ) )
-                                   )
-                                 )
+                                     ( $use( x( def.use, { 'xlink:href' : ideogram } ) ) ).$elem
+                                   ).$elem
+                                 ).$elem
                                )
                                ( $g(         t( col.width / 2                    ) )
                                  ( $g( {     func : 'name'                       } )
-                                   ( $g(     t( col.width / 2                    ) )
+                                   ( $g(     t( pad.left                         ) )
                                      ( $g(   t( 0,                row.height / 5 ) )
                                          ( $text( text ) ).$elem
                                        ).$elem
@@ -85,6 +85,7 @@
     function background( cfg ) {
         with( mimis ) { with( def ) {
             with( cfg ) {
+                console.log( current.width )
                 return ( $g( { func : 'background' } )
                          ( $rect( {
                              height : row.height * ( depth.below + 1 ) + ( depth.below * pad.bottom ),
@@ -96,32 +97,39 @@
     }
 
     with( mimis ) { with( def ) { with( t ) {
+        // Will fail on multiple children
         function nest() {
             with( mimis ) { with( def ) { with( t ) {
             var delta = 2 * indent
+                console.log( 'n', current.width, indent )
             current.width -= delta
+                console.log( 'n', current.width, indent )
             var ret = $g( t( indent, row.height ) ).apply( this, arguments )
             current.width += delta
             return ret
             } } }
         }
 
+        // Append to 
         function l( cfg ) {
             with( mimis ) { with( def ) { with( cfg ) {
                 // ToDo: Handle more than 1
                 for( key in cfg ) {
-                    return $a( { 'xlink:href' : cfg[ key ] } )(
-                        $g( { id : key } ).apply( this, arguments ).$elem
-                    )
+                    var $$tail = $g( { id : key } )
+                    var $$head = $a( { 'xlink:href' : cfg[ key ] } )( $$tail.$elem )
+                    $$tail.$elem = $$head.$elem
+                    return $$tail
                 }
             } } }
         }
 
-        $('script:last').after(
-            l( { chrome : 'http://www.google.com/chrome/' } ).$elem
-        )
+        var $test = l( { chrome : 'http://www.google.com/chrome/' } )(
+            //background( { depth : { above : 0, below : 3 } } )
+            label( { ideogram : '.../co/Google/Chrome/ideogram/', text : 'Chrome' } )
+        ).$elem
 
-
+        $('script:last').after( $test )
+        
         $('script:last').after(
             ( l( { chrome : 'http://www.google.com/chrome/' } )
               ( background( { depth : { above : 0, below : 3 } } ) )
@@ -136,16 +144,15 @@
                       ( label( { ideogram : '.../image/logo/Sun/Java/Duke/', text : 'Applet' } ) )
                       ( nest
                         ( l( { neo4j : 'http://neo4j.org' } )
-                          ( background( { depth : { above : 3, below : 0 } } ) ).$elem
-                          // Chrashes 
-                          //( label( { ideogram : '.../image/logo/Neo4j/', text : 'Neo4j' } ) )
+                          ( background( { depth : { above : 3, below : 0 } } ) )
+                          ( label( { ideogram : '.../image/logo/Neo4j/', text : 'Neo4j' } ) ).$elem
                         ).$elem
                       ).$elem
                     ).$elem
                   ).$elem
                 ).$elem
               ).$elem
-            ).$elem
+            )
         )
     } } }
 } )()
