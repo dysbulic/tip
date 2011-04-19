@@ -417,8 +417,13 @@ generate_update_branch_email()
 	# - including the undoing of previous revisions in the case of
 	# non-fast-forward updates.
 	echo ""
-	echo "Summary of changes: $oldrev..$newrev"
-	git diff-tree --stat --summary --find-copies-harder --pretty="format:" --name-only $oldrev..$newrev
+	echo "<p>Changes:</p>"
+	#git diff-tree --stat --summary --find-copies-harder $oldrev..$newrev
+        echo "<ul>"
+	for file in $(git diff-tree --name-only -r $oldrev..$newrev); do
+            echo "<li><a href='http://dhappy.org/.../$file'>$file</a></li>"
+        done
+        echo "</ul>"
 }
 
 #
