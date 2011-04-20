@@ -47,25 +47,27 @@
 
 </section>
 
-<section>
+<section id="fs">
 <title>Filesystem Tree</title>
-<p>A java program running in an applet is monitoring the filesystem and mirroring its structure to a neo4j instance. A simple tree can be created with </p>
+<p>A java program running in an applet is monitoring the filesystem and mirroring its structure to a neo4j instance. So, the filesystem:</p>
 
 <object style="height: 300px" data="filesystem/traditional/svg"/>
+
+<p>Becomes the graph:</p>
+
+<object style="height: 300px" data="filesystem/tree/svg"/>
 </section>
 
 <section>
 <title>Hash Function</title>
 
-<p>A hash function is a mathmatical operation that transforms a series of bits into a fixed-width hash code. So, for example, <acronym title="Simple Hashing Algorithm">sha</acronym>-256 can be performed on any file to produce a <em>likely unique</em> identifier.</p>
-
-<p>While it is possible for two files with different bits to produce the same hash, the probability is vanishingly small. For example, the number of possible values representible by 256 bits is: 2<sup>256</sup> ≅ 1.1579209 × 10<sup>77</sup></p>
-
-<p>For reference, <a href="http://www.madsci.org/posts/archives/may98/892502124.Ph.r.html">the net estimates there are 1.2 × 10<sup>57</sup> atoms in the solar system</a>.</p>
+<p>A hash function is a mathmatical operation that transforms a series of bits into a fixed-width hash code. So, for example, I can run a program that takes any file and performs a <acronym title="Simple Hashing Algorithm">sha</acronym>-256 hash of it. This will be a 256-bit <em>likely unique</em> identifier for that file.</p>
 </section>
 
 <section>
 <title>Converting Filesystems to Hash Trees</title>
+
+<p>Hash functions will be used to build hash trees. Equivalencies between hash trees derived through different methods and used to efficiently manage a distributed cache.
 
 <ol>
 <li>
