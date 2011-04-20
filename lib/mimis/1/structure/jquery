@@ -1,42 +1,8 @@
 ( function() {
-    var def = {
-        row : { height : 100 },
-        col : { width  : 100 },
-        pad : {
-            left : 10,
-            bottom : 10,
-        },
-    }
-    with( def ) {
-        mimis.x( def, {
-            rect : {
-                rx : 1,
-                ry : 1,
-                x : 0,
-                y : 0,
-                width  : col.width,
-                height : row.height,
-            },
-            use : {
-                width  : col.width,
-                height : row.height,
-            },
-            display : {
-                width : 3.75 * col.width,
-            },
-            indent : 10,
-            current : {
-                width : 4 *  col.width,
-            },
-            depth : {
-                above : 0,
-                below : 0,
-            },
-        } )
-    }      
+    var def = mimis.load( '.../lib/tip/def/eson' )      
 
     // Format transform
-    var t = {
+    var transform = {
         t : function( a, b ) {
             return { transform : ( "translate(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
         },
@@ -49,7 +15,7 @@
     }
     
     function label( cfg ) {
-        with( mimis ) { with( def ) { with( t ) {
+        with( mimis ) { with( def ) { with( transform ) {
             with( cfg ) {
                 return ( $g( {               func : 'label'                      } )
                          ( $g (              t( pad.left,        row.height / 2  ) )
@@ -80,6 +46,7 @@
     }
         
     function background( cfg ) {
+        cfg = cfg || {}
         with( mimis ) { with( def ) { with( cfg ) {
             //console.log( current.width )
             return ( $g( { func : 'background' } )
@@ -94,7 +61,6 @@
         } } }
     }
 
-    // link
     function link( cfg ) {
         with( mimis ) { with( def ) { with( cfg ) {
             // ToDo: Handle more than 1
@@ -112,7 +78,7 @@
     } )
 
     function icon( cfg ) {
-        with( mimis ) { with( def ) { with( t ) { with( cfg ) {
+        with( mimis ) { with( def ) { with( transform ) { with( cfg ) {
             return ( ( ! href ? nil : $a( { 'xlink:href' : href } ) )
                      ( ( ! id ? nil : $g( { id : id } ) )
                        ( $g( { func : 'icon' } )
@@ -120,8 +86,14 @@
                            ( $g( s( icon.scale ) )
                              ( $g( t( -col.width / 2, -row.height / 2 ) )
                                ( background( { width : col.width } ) )
-                               ( $use( x( def.use, { 'xlink:href' : ideogram } ) ) )
-                               .$elem
+                               ( $g( t( col.width / 2, row.height / 2 ) )
+                                 ( $g( s( icon.scale ) )
+                                   ( $g( t( -col.width / 2, -row.height / 2 ) )
+                                     ( $use( x( def.use, { 'xlink:href' : ideogram } ) ) )
+                                     .$elem
+                                   ).$elem
+                                 ).$elem
+                               ).$elem
                              ).$elem
                            ).$elem
                          ).$elem
@@ -133,10 +105,10 @@
 
     icon.scale = icon.scale || .8
 
-    with( mimis ) { with( def ) { with( t ) {
+    with( mimis ) { with( def ) { with( transform ) {
         // Will fail on multiple children
         function nest() {
-            with( mimis ) { with( def ) { with( t ) {
+            with( mimis ) { with( def ) { with( transform ) {
             var delta = 2 * indent
             current.width -= delta
             var ret = $g( t( indent, row.height ) ).apply( this, arguments )
@@ -144,6 +116,8 @@
             return ret
             } } }
         }
+
+        console.debug( 'h' )
 
         $('script:last').after(
             $g()
@@ -172,14 +146,23 @@
             )
             ( $g( t( 0, 400 ) )
               ( link( { fs : '.../' } )
-                ( background( { depth : { above : 0, below : 0 } } ) )
+                ( background().append
+                  ( $path( [
+                      { move : [ [  .9,   0 ] ] },
+                      { line : [ [   0, -.2 ],
+                                 [ -.1,   0 ],
+                                 [   0, -.1 ],
+                                 [  .15,  0 ],
+                                 [   0,  .3 ], ] },
+                  ] ) )
+                )
                 ( label( { ideogram : '.../computer/filesystem/ideogram/', text : 'Filesystem' } ) )
                 .$elem
               ).$elem
             )
             ( $g( t( 0, -row.height ) )
               ( link( { http : 'http://goo.gl' } )
-                ( background( { depth : { above : 0, below : 0 } } ) )
+                ( background() )
                 ( label( { ideogram : '.../proto/http/ideogram/', text : 'HTTP' } ) )
                 .$elem
               ).$elem
@@ -188,8 +171,8 @@
               ( link( { xmpp : 'http://xmpp.org' } )
                 ( $g( t( 0, -row.height ) )
                   ( background( {
-                      depth : { above : 0, below : 0 },
                       height : 2 * row.height,
+                      width  : 3 * col.width + 3 * pad.left,
                   } ) )
                   .$elem
                 )

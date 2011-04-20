@@ -10,6 +10,8 @@ $.isObject = $.isObject ||
         return obj instanceof Object || $.type( obj ) == 'object'
     }
 
+mimis.x = mimis.x || $.extend
+
 //$.fn.style
 
 console.debug = console.info
@@ -45,13 +47,16 @@ mimis.each = Array.prototype.each =
                         return ret
                     } else if( ret === undefined ) {
                     } else if( $.isArray( ret )
-                               || $.isString( ret )
                                || ret.concatenable ) {
+                        out = out || []
+                        out = out.concat( ret )
+                    } else if( $.isString( ret ) ) {
+                        out = out || '' 
                         out = out.concat( ret )
                     } else if( $.isFunction( ret ) ) {
                         ret.call( this, out )
                     } else if( $.isObject( ret ) ) {
-                        out = $.extend( true, ret, out )
+                        out = mimis.x( true, ret, out )
                     }
                 }
                 return out
@@ -130,7 +135,7 @@ if( webkitNotifications.__lookupGetter__( 'allowed' ) === undefined ) {
 
 mimis.notify = mimis.notify ||
     function( config ) {
-        config = $.extend( true, config, {
+        config = mimis.x( true, config, {
             icon : 'icon/48/png',
             title : 'Mïmis',
             message : ( 'You are being notified by: '
@@ -184,6 +189,8 @@ mimis.set = mimis.set ||
         return ret
     }
 
+
+
 mimis.load = mimis.load || function() {
     return mimis.each.call( arguments, function( uri ) {
         var ret
@@ -191,13 +198,42 @@ mimis.load = mimis.load || function() {
             url : uri,
             dataType : 'text', // ECMAScript Object Notation
             async : false,
-            success : function( eson ) {
-                ret = eval( "( function() { return " + eson + " } )()" )
+            success : function( data, state, xhr ) {
+                ret = data
+
+                var type = xhr.getResponseHeader( 'Content-Type' )
+                var parser
+                if( parser = mimis.load.parser[ type ] ) {
+                    ret = parser( ret )
+                }
             },
         } )
         return ret
     } )
 }
+
+mimis.load.parser = mimis.load.parser || {
+    'application/eson' : function( eson ) {
+        try {
+            return eval( "( function() { return " + eson + " } )()" )
+        } catch( e ) {
+            log.error( e )
+        }
+    },
+    'text/json' : function( json ) {
+        return JSON.parse( data ) 
+    },
+    'text/xml' : function( xml ) {
+        var parser = new DOMParser()
+	return parser.parseFromString( xml, 'text/xml' )
+    },
+}
+
+mimis.load.parser = mimis.x( mimis.load.parser, {
+    'application/xhtml+xml' : mimis.load.parser[ 'text/xml' ],
+    'image/svg+xml' : mimis.load.parser[ 'text/xml' ],
+} )
+
 
 // Extract namespaces
 mimis.ns = mimis.ns ||
@@ -278,8 +314,8 @@ if( mimis.ns.abbr == 'svg' &&
         'viewBox',
         function( box ) {
             box =
-                $.extend( mimis.$root.viewBox,
-                          box )
+                mimis.x( mimis.$root.viewBox,
+                         box )
             var vals = [
                 box.x, box.y, box.width, box.height
             ]
@@ -331,7 +367,7 @@ if( mimis.$root.viewBox ) {
                     }
                 }
             }
-            mimis.$root.viewBox = $.extend( box, transform() )
+            mimis.$root.viewBox = mimis.x( box, transform() )
         } )
     } )()
 }
@@ -380,7 +416,7 @@ if( mimis.ns.abbr == 'svg' ) {
                 fx.start = $.isNaN( fx.start ) ? 0 : parseFloat( fx.start )
                 fx.end = $.isNaN( fx.end ) ? 0 : parseFloat( fx.start )
             }
-            console.debug( $.extend( {}, fx ) )
+            console.debug( mimis.x( {}, fx ) )
             fx.$elem.attr( attr, fx.start + fx.pos * ( fx.end - fx.start ) )
         }
     } )
@@ -439,10 +475,62 @@ if( mimis.ns.abbr == 'svg' ) {
         var args = Array.prototype.slice.call( arguments )
         var txt = args.shift()
         args.unshift( 'text' )
-        var $text = mimis.$elem.apply( this, args )
-        $text.text( txt )
-        return $text
+        return ( mimis.$elem.apply( this, args )
+                 .text( txt ) )
+    }
+
+    mimis.$path = mimis.$path || function() {
+        var args = Array.prototype.slice.call( arguments )
+        var path = args.shift()
+        args.unshift( 'path' )
+
+        console.debug( 'h' )
+
+        function line( points ) {
+            var width = 400
+            var height = 100
+            var out = ''
+            points.each( function( point ) {
+                var p = {
+                    x : point[0],
+                    y : point[1],
+                }
+                if( p.x / width < .1 ) {
+                    p.x *= width
+                }
+                if( p.y / height < .1 ) {
+                    p.y *= height
+                }
+                out += p.x + ',' + p.y + ' '
+            } )
+            return out
+        }
+
+        var serializer = function( path ) {
+            var out = 'm 0,0'
+            path.each( function( elem ) {
+                for( shape in elem ) {
+                    switch( shape ) {
+                    case 'line':
+                        out += ' l ' + line( elem[ shape ] )
+                        break
+                    case 'move':
+                        out += ' m ' + line( elem[ shape ] )
+                        break
+                    }
+                }
+            } )
+            return out
+        }
+
+        return ( mimis.$elem.apply( this, args )
+                 .attr( {
+                     get d() {
+                         var callee = arguments.callee
+                         path = callee.path || path
+                         serializer = callee.serializer || serializer
+                         return serializer( path )
+                     },
+                 } ) )
     }
 }
-
-mimis.x = mimis.x || $.extend
