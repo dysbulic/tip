@@ -591,7 +591,7 @@ export LOCAL="$__HASHDIR"
 export REMOTE="wjholcomb@madstones.com"
 ARGS="--rsh=ssh --partial --progress --verbose --recursive --archive --compress"
 
-alias hashbins="find \( -name jpg -or -name png -or -name odp -or -name mpeg -or -name avi -or -name webm \) -print0 | xargs -0 lnhash"
+alias hashbins="find \( -name jpg -or -name png -or -name gif -or -name odp -or -name mpeg -or -name avi -or -name webm -or -name ttf \) -print0 | xargs -0 lnhash"
 
 alias pushhashes="eval rsync $ARGS \"\$LOCAL\" \"\$REMOTE:\$__HASHDIR\""
 alias pullhashes="rsync $ARGS \"\$REMOTE:\$__HASHDIR\" \"\$LOCAL\""

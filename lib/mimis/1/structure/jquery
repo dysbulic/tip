@@ -146,15 +146,16 @@
             )
             ( $g( t( 0, 400 ) )
               ( link( { fs : '.../' } )
-                ( background() )
-                ( $path( [
-                    { line : [ [  .8,  0 ],
-                               [   0,  3 ],
-                               [ -.1,  0 ],
-                               [   0, .1 ],
-                               [  .2,  0 ],
-                               [   0, -3 ], ] }
-                ] ) )
+                ( background().append
+                  ( $path( [
+                      { move : [ [  .9,   0 ] ] },
+                      { line : [ [   0, -.2 ],
+                                 [ -.1,   0 ],
+                                 [   0, -.1 ],
+                                 [  .15,  0 ],
+                                 [   0,  .3 ], ] },
+                  ] ) )
+                )
                 ( label( { ideogram : '.../computer/filesystem/ideogram/', text : 'Filesystem' } ) )
                 .$elem
               ).$elem

@@ -513,6 +513,10 @@ if( mimis.ns.abbr == 'svg' ) {
                     switch( shape ) {
                     case 'line':
                         out += ' l ' + line( elem[ shape ] )
+                        break
+                    case 'move':
+                        out += ' m ' + line( elem[ shape ] )
+                        break
                     }
                 }
             } )
@@ -525,7 +529,7 @@ if( mimis.ns.abbr == 'svg' ) {
                          var callee = arguments.callee
                          path = callee.path || path
                          serializer = callee.serializer || serializer
-                         return 'm 0,0 l 100,100 300,300' //serializer( path )
+                         return serializer( path )
                      },
                  } ) )
     }
