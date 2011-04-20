@@ -202,9 +202,9 @@ mimis.load = mimis.load || function() {
                 ret = data
 
                 var type = xhr.getResponseHeader( 'Content-Type' )
-                var processor
-                if( processor = mimis.load.type[ type ] ) {
-                    ret = processor( ret )
+                var parser
+                if( parser = mimis.load.parser[ type ] ) {
+                    ret = parser( ret )
                 }
             },
         } )
@@ -212,9 +212,13 @@ mimis.load = mimis.load || function() {
     } )
 }
 
-mimis.load.type = mimis.load.type || {
+mimis.load.parser = mimis.load.parser || {
     'application/eson' : function( eson ) {
-        return eval( "( function() { return " + eson + " } )()" )
+        try {
+            return eval( "( function() { return " + eson + " } )()" )
+        } catch( e ) {
+            log.error( e )
+        }
     },
     'text/json' : function( json ) {
         return JSON.parse( data ) 
@@ -225,9 +229,9 @@ mimis.load.type = mimis.load.type || {
     },
 }
 
-mimis.load.type = mimis.x( mimis.load.type, {
-    'application/xhtml+xml' : mimis.load.type[ 'text/xml' ],
-    'image/svg+xml' : mimis.load.type[ 'text/xml' ],
+mimis.load.parser = mimis.x( mimis.load.parser, {
+    'application/xhtml+xml' : mimis.load.parser[ 'text/xml' ],
+    'image/svg+xml' : mimis.load.parser[ 'text/xml' ],
 } )
 
 
@@ -482,17 +486,37 @@ if( mimis.ns.abbr == 'svg' ) {
 
         console.debug( 'h' )
 
+        function line( points ) {
+            var width = 400
+            var height = 100
+            var out = ''
+            points.each( function( point ) {
+                var p = {
+                    x : point[0],
+                    y : point[1],
+                }
+                if( p.x / width < .1 ) {
+                    p.x *= width
+                }
+                if( p.y / height < .1 ) {
+                    p.y *= height
+                }
+                out += p.x + ',' + p.y + ' '
+            } )
+            return out
+        }
+
         var serializer = function( path ) {
             var out = ''
             path.each( function( elem ) {
                 for( shape in elem ) {
                     switch( shape ) {
                     case 'line':
-                        console.log( elem[ shape ] )
+                        out += 'l' + line( elem[ shape ] )
                     }
                 }
             } )
-            
+            return out
         }
 
         return ( mimis.$elem.apply( this, args )
@@ -501,7 +525,7 @@ if( mimis.ns.abbr == 'svg' ) {
                          var callee = arguments.callee
                          path = callee.path || path
                          serializer = callee.serializer || serializer
-                         return serializer.call( path )
+                         return serializer( path )
                      },
                  } ) )
     }
