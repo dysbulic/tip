@@ -55,7 +55,7 @@
 
 <p>Becomes the graph:</p>
 
-<object style="height: 300px" data="filesystem/tree/svg"/>
+<object style="height: 300px" data="filesystem/tree/mirror/0/"/>
 </section>
 
 <section>
@@ -67,57 +67,64 @@
 <section>
 <title>Converting Filesystems to Hash Trees</title>
 
-<p>Hash functions will be used to build hash trees. Equivalencies between hash trees derived through different methods and used to efficiently manage a distributed cache.
+<p>Overlay graphs may now be built in Neo4j to align with the filesystem tree.</p>
 
 <ol>
 <li>
 <section>
 <title>Hash Files</title>
-<p>Take each file and rename it to its hash value:</p>
+<p>The first nodes to add are the sha-256 hashes for each of the files:</p>
 
-<object style="height: 300px" data="filesystem/hash/filenames/svg"/>
+<object style="height: 400px" data="filesystem/tree/mirror/1/"/>
 </section>
 </li>
+
 <li>
 <section>
-<title>Order By Hash Names</title>
-<p>These filenames can now be ordered by their names:</p>
+<title>Order Contents</title>
+<p>Order the hash nodes within each directory:</p>
 
-<object style="height: 300px" data="filesystem/hash/filenames/ordered/svg"/>
+<object style="height: 500px" data="filesystem/tree/mirror/1/sorted/"/>
 </section>
 </li>
+
 <li>
 <section>
-<title>Hash Collections</title>
+<title>Hash Hashes</title>
+<p>The bytes of the hash values for the files are then hashed to produce a new hash:</p>
 
-<p>The ordered list of filenames is now hashed to produce a hash name for the directory:</p>
-
-<object style="height: 300px" data="filesystem/hash/directories/svg"/>
-
-<p><em>Note that it is not the contents of the files that is hashed, but the names. Using the actual bits of the files would also produce a unique hash identifier for the directory, but concatenating the names allows the actual bits to be removed.</em></p>
+<object style="height: 600px" data="filesystem/tree/mirror/2/"/>
 </section>
 </li>
+
 <li>
 <section>
-<title>Recurse</title>
+<title>Order Contents</title>
+<p>The higher-level directory can then be ordered according to those entries:</p>
 
-<p>The process can be repeated to generate a hash for higher level directories:</p>
+<object style="height: 500px" data="filesystem/tree/mirror/2/sorted/"/>
+</section>
+</li>
 
-<object style="height: 300px" data="filesystem/hash/names/svg"/>
+<li>
+<section>
+<title>Hash Hashes</title>
+<p>Repeat the process of ordering and hashing hashes recursively to produce a tree:</p>
+
+<object style="height: 700px" data="filesystem/tree/mirror/3/"/>
+</section>
+</li>
+
+<li>
+<section>
+<title>Data-Presence Trees</title>
+
+<p>This produces an isomorphic tree with a unique identifier for the state of each position in the directory tree:</p>
+
+<object style="height: 700px" data="filesystem/tree/mirror/3/mapped/"/>
 </section>
 </li>
 </ol>
-</section>
-
-<section>
-<title>Implications</title>
-<p>Drawn in a more conventional tree form, this structure would be:</p>
-
-<object style="height: 300px" data="filesystem/hash/tree/svg"/>
-
-<p></p>
-
-<p>There are three main changes to the system:</p>
 </section>
 
 <section>
