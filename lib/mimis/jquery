@@ -507,12 +507,12 @@ if( mimis.ns.abbr == 'svg' ) {
         }
 
         var serializer = function( path ) {
-            var out = ''
+            var out = 'm 0,0'
             path.each( function( elem ) {
                 for( shape in elem ) {
                     switch( shape ) {
                     case 'line':
-                        out += 'l' + line( elem[ shape ] )
+                        out += ' l ' + line( elem[ shape ] )
                     }
                 }
             } )
@@ -525,7 +525,7 @@ if( mimis.ns.abbr == 'svg' ) {
                          var callee = arguments.callee
                          path = callee.path || path
                          serializer = callee.serializer || serializer
-                         return serializer( path )
+                         return 'm 0,0 l 100,100 300,300' //serializer( path )
                      },
                  } ) )
     }
