@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="icon" href=".../revolution/Technoanarchist/logo/letter/" />
+<link rel="stylesheet" type="text/css" href=".../style/blog/css"/>
+<link rel="stylesheet" type="text/css" href="css"/>
+</head>
+<body>
+<section>
+<title>Calories per Capita</title>
+
+<p>This globe:</p>
+
+<iframe src=".../lib/tip/globe/"/>
+
+<p>Regions are shaded / opaqued:</p>
+<ul>
+  <li>green if the region has calories / capita > minimum required for health </li>
+  <li>red if less</li>
+  <li>the highest ratio is purple</li>
+  <li>the lowest ratio is orange</li>
+</ul>
+
+<p>The code for creating the image should look like:</p>
+
+<!--<script type="application/javascript">-->
+<pre><![CDATA[
+mimis.i( tip.globe( {
+  data : mimis.load( 'geo/food/consumption/' ),
+  map : { color : function() { } },
+} ) )
+]]></pre>
+</section>
+</body>
+</html>
