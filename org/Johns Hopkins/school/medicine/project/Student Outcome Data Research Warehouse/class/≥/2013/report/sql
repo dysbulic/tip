@@ -1,31 +1,3 @@
--- From: http://www.sommarskog.se/arrays-in-sql-2005.html#CSV
---CREATE FUNCTION iter$simple_strlist_to_tbl (@list nvarchar(MAX))
---   RETURNS @tbl TABLE (str text NOT NULL) AS
---BEGIN
---   DECLARE
---     @pos        int,
---     @nextpos    int,
---     @valuelen   int
-
---   SELECT @pos = 0, @nextpos = 1
-
---   WHILE @nextpos > 0
---   BEGIN
---      SELECT @nextpos = charindex(',', @list, @pos + 1)
---      SELECT @valuelen = CASE WHEN @nextpos > 0
---                              THEN @nextpos
---                              ELSE len(@list) + 1
---                         END - @pos - 1
---      INSERT @tbl (number)
---         VALUES (substring(@list, @pos + 1, @valuelen))
---      SELECT @pos = @nextpos
---   END
---   RETURN
---END
-
-SELECT shlf_exm_dsc, COUNT(shlf_exm_std_a_grd) AS count, AVG(shlf_exm_std_a_grd) AS avg, STDEV(shlf_exm_std_a_grd) AS stddev
---FROM student_shlf_exm_a INNER JOIN dbo.iter$simple_strlist_to_tbl(@exams) i ON i.str = shlf_exm_dsc WHERE
-FROM student_shlf_exm_a WHERE
-shlf_exm_dsc IN ( @exams ) AND
-YEAR(shlf_exm_std_a_exm_dt) IN ( @year )
-GROUP BY shlf_exm_dsc
+select a.*, b.display_name, b.description from [dbo].[rpt_competency] a  inner join competency_name_mapping b on a.dimension = b.sord_name
+where cohort_year in ( @year ) and [type]= @type and dimension in ( @dimension ) and class = @class
+order by inserted_datetime, display_order
