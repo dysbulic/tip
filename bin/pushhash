@@ -1,0 +1,81 @@
+#!/bin/bash
+
+HASHDIR=".../hashes/sha256"
+
+ROOTDIR=${HASHDIR%%/*}
+[ -e "$ROOTDIR" ] || {
+    echo "Root Directory Missing: $ROOTDIR"
+    exit -1
+}
+
+#ToDo: Add getopt
+
+mkdir -pv "$HASHDIR"
+
+ARGS="$(
+    IFS=$'\x00'
+    #echo "$*"
+    for file in "$@"; do
+        echo -n "$file"
+        perl -e 'print "\0"'
+    done
+)"
+echo "$ARGS"
+# Doesn't work – Nulls omitted
+
+ARGS=()
+for file in "$@"; do
+    ARGS=( "${ARGS[@]}" "$file" )
+done
+
+DEST="$MIMIS_ORIGIN"
+[ -z "$DEST" ] && DEST="$(git remote -v | grep -e "^origin	ssh://.* (push)$" | perl -pe 's|^origin	ssh://(.+?)/.*|\1|')"
+
+[ -z "$DEST" ] && {
+    echo 'Error: No destination server found'
+    echo
+    ARGS=
+}
+
+[[ -z "$ARGS" || $#ARGS == 0 ]] && {
+    echo "Usage: $0 [file]+"
+    echo " Pushes the hashes for a list of files to:"
+    echo "    $MIMIS_ORIGIN"
+    echo "    A SSH endpoint of git:~/.../"
+    echo
+    [ -n "$DEST" ] && {
+        echo ' $DEST:'$DEST
+        echo
+    }
+    echo " Will call lnhash if a file is not a hash link."
+    echo
+    echo " find -name ttf -print0 | xargs -0 pushhash"
+    exit -2
+}
+
+exit
+
+
+for file in "$@"; do
+    [ -d "$file" ] && {
+        echo "Skipping Directory: $file"
+        continue
+    }
+    [ -L "$file" ] && {
+        echo "Skipping Link: $file"
+        echo -n "  $file -> "
+        readlink "$file"
+        continue
+    }
+    [ ! -e "$file" ] && {
+        echo "Skipping Non-existent: $file"
+        continue
+    }
+
+    HASH=$($HASHCMD "$file" | sed -e 's| .*||')
+    echo "Move: $file → $HASHDIR/$HASH"
+    mv "$file" "$HASHDIR/$HASH"
+    echo "Link: $HASHDIR/$HASH ↔ $file"
+    ln -s "$HASHDIR/$HASH" "$file"
+done
+
