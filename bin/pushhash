@@ -1,12 +1,6 @@
 #!/bin/bash
 
-HASHDIR=".../hashes/sha256"
-
-ROOTDIR=${HASHDIR%%/*}
-[ -e "$ROOTDIR" ] || {
-    echo "Root Directory Missing: $ROOTDIR"
-    exit -1
-}
+HASHDIR=".../hashes/sha256/"
 
 #ToDo: Add getopt
 
@@ -22,6 +16,15 @@ ARGS="$(
 )"
 # Doesn't work – Nulls omitted
 
+ROOTDIR="${HASHDIR%%/*}"
+
+[ -e "$ROOTDIR" ] || {
+    echo $'\x0A'' Error: Missing Root Directory: '$ROOTDIR
+    
+}
+
+
+
 ARGS=()
 for file in "$@"; do
     ARGS=( "${ARGS[@]}" "$file" )
@@ -32,7 +35,6 @@ DEST="$MIMIS_ORIGIN"
 
 [ -z "$DEST" ] && {
     echo 'Error: No destination server found'
-    echo
     ARGS=
 }
 
@@ -51,18 +53,18 @@ DEST="$MIMIS_ORIGIN"
     exit -2
 }
 
-exit
-
-
-for file in "$@"; do
-    [ -d "$file" ] && {
-        echo "Skipping Directory: $file"
-        continue
-    }
+while $#ARGS > 0; do
+    file="(${ARGS[@]:1})"
     [ -L "$file" ] && {
+        dest="$(readlink "$file")"
+        [ "${dest#
         echo "Skipping Link: $file"
         echo -n "  $file -> "
-        readlink "$file"
+        
+        continue
+    }
+    [ -d "$file" ] && {
+        echo "Skipping Directory: $file"
         continue
     }
     [ ! -e "$file" ] && {
