@@ -43,13 +43,12 @@ DEST="$MIMIS_ORIGIN"
     echo "    $MIMIS_ORIGIN"
     echo "    A SSH endpoint of git:~/.../"
     echo
-    [ -n "$DEST" ] && {
-        echo ' $DEST:'$DEST
-        echo
-    }
     echo " Will call lnhash if a file is not a hash link."
     echo
     echo " find -name ttf -print0 | xargs -0 pushhash"
+    [ -n "$DEST" ] && {
+        echo $'\x0A'' $DEST:'$DEST
+    }
     exit -2
 }
 
