@@ -1,0 +1,137 @@
+set ANSI_NULLS ON
+set QUOTED_IDENTIFIER ON
+go
+
+
+ALTER PROCEDURE [dbo].[rpt_competency_ge2013_proc] 
+	@start_year int,
+	@end_year int
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	DELETE FROM [dbo].[rpt_competency_ge2013]
+	DELETE FROM [dbo].[rpt_competency_ge2013_tree_map]
+	DELETE FROM [dbo].[rpt_competency_ge2013_metric]
+
+	DECLARE @DepthID INT
+	DECLARE @Depth-1ID INT
+	DECLARE @Depth-2ID INT
+
+	-- Root
+ 	INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Core Clerkship Shelf Exam Performance')
+	SET @DepthID = SCOPE_IDENTITY()
+
+	-- New Child
+ 	INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Scientific Foundations of Medicine')
+	SET @Depth-1ID = @DepthID
+	SET @DepthID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @Depth-1ID, @DepthID )
+
+	-- Leaf
+	INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Macromolecules')
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Cell Physiology')
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Metabolism')
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Genetics')
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Pharmacology')
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
+
+	-- Recurse
+	SELECT competency_id FROM [dbo].[rpt_competency_ge2013_tree_map] INTO @Depth-1ID WHERE child_id = @Depth-1ID
+
+	-- New Child
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Genes to Society I')
+	SET @Depth-1ID = @DepthID
+	SET @DepthID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @Depth-1ID, @DepthID )
+
+	-- New Parent
+	SET @ParentID = SCOPE_IDENTITY()
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Immunology I')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Microbiology/Infectious Disease')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Immunology II')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Hematology/Oncology')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Genes to Society II')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Nervous System and Special Senses')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Neuroanatomy')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('NSS: Exam 2')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Neuroscience')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Genes to Society III')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Cardiovascular')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Respiratory')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Renal')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Genes to Society IV')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('GI Liver')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Endocrine')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Reproductive')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Musculoskeletal')
+	SET @ChildID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+
+
+    -- Insert statements for procedure here
+	--SELECT <@Param1, sysname, @p1>, <@Param2, sysname, @p2>
+END
+
