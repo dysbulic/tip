@@ -4,8 +4,6 @@ HASHDIR=".../hashes/sha256/"
 
 #ToDo: Add getopt
 
-mkdir -pv "$HASHDIR"
-
 ARGS="$(
     IFS=$'\x00'
     #echo "$*"
@@ -16,19 +14,12 @@ ARGS="$(
 )"
 # Doesn't work – Nulls omitted
 
-ROOTDIR="${HASHDIR%%/*}"
-
-[ -e "$ROOTDIR" ] || {
-    echo $'\x0A'' Error: Missing Root Directory: '$ROOTDIR
-    
-}
-
-
 
 ARGS=()
 for file in "$@"; do
     ARGS=( "${ARGS[@]}" "$file" )
 done
+
 
 DEST="$MIMIS_ORIGIN"
 [ -z "$DEST" ] && DEST="$(git remote -v | grep -e "^origin	ssh://.* (push)$" | perl -pe 's|^origin	ssh://(.+?)/.*|\1|')"
@@ -57,7 +48,7 @@ while $#ARGS > 0; do
     file="(${ARGS[@]:1})"
     [ -L "$file" ] && {
         dest="$(readlink "$file")"
-        [ "${dest#
+        [ "${dest#$
         echo "Skipping Link: $file"
         echo -n "  $file -> "
         
