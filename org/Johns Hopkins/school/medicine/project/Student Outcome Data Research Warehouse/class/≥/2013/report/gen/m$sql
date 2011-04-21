@@ -17,18 +17,17 @@ BEGIN
 	DELETE FROM [dbo].[rpt_competency_ge2013_metric]
 
 	DECLARE @DepthID INT
-	DECLARE @Depth-1ID INT
-	DECLARE @Depth-2ID INT
+	DECLARE @Depth2ID INT
 
 	-- Root
  	INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Core Clerkship Shelf Exam Performance')
 	SET @DepthID = SCOPE_IDENTITY()
 
-	-- New Child
+	-- New Group
  	INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Scientific Foundations of Medicine')
-	SET @Depth-1ID = @DepthID
+	SET @Depth2ID = @DepthID
 	SET @DepthID = SCOPE_IDENTITY()
-	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @Depth-1ID, @DepthID )
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @Depth2ID, @DepthID )
 
 	-- Leaf
 	INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Macromolecules')
@@ -47,44 +46,42 @@ BEGIN
 	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
 
 	-- Recurse
-	SELECT competency_id FROM [dbo].[rpt_competency_ge2013_tree_map] INTO @Depth-1ID WHERE child_id = @Depth-1ID
+	SELECT competency_id FROM [dbo].[rpt_competency_ge2013_tree_map] INTO @Depth2ID WHERE child_id = @Depth2ID
 
-	-- New Child
+	-- New Group
     INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Genes to Society I')
-	SET @Depth-1ID = @DepthID
 	SET @DepthID = SCOPE_IDENTITY()
-	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @Depth-1ID, @DepthID )
-
-	-- New Parent
-	SET @ParentID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @Depth2ID, @DepthID )
 
     INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Immunology I')
-	SET @ChildID = SCOPE_IDENTITY()
-	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
 
     INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Microbiology/Infectious Disease')
-	SET @ChildID = SCOPE_IDENTITY()
-	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
 
     INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Immunology II')
-	SET @ChildID = SCOPE_IDENTITY()
-	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
 
     INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Hematology/Oncology')
-	SET @ChildID = SCOPE_IDENTITY()
-	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
 
+	-- Recurse
+	SELECT competency_id FROM [dbo].[rpt_competency_ge2013_tree_map] INTO @Depth2ID WHERE child_id = @Depth2ID
+
+	-- New Group
     INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Genes to Society II')
-	SET @ChildID = SCOPE_IDENTITY()
-	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+	SET @DepthID = SCOPE_IDENTITY()
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @Depth2ID, @DepthID )
+
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('')
 
     INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Nervous System and Special Senses')
-	SET @ChildID = SCOPE_IDENTITY()
-	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
+
+
 
     INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Neuroanatomy')
-	SET @ChildID = SCOPE_IDENTITY()
-	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @ParentID, @ChildID )
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
 
     INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('NSS: Exam 2')
 	SET @ChildID = SCOPE_IDENTITY()
