@@ -73,7 +73,8 @@ BEGIN
 	SET @DepthID = SCOPE_IDENTITY()
 	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @Depth2ID, @DepthID )
 
-    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('')
+    INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Brain, Mind, & Behavior')
+	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
 
     INSERT INTO [dbo].[rpt_competency_ge2013] (name) VALUES ('Nervous System and Special Senses')
 	INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] (competency_id, child_id) VALUES ( @DepthID, SCOPE_IDENTITY() )
