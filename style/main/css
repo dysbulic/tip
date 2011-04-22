@@ -1,4 +1,5 @@
 @import url('.../style/align/css');
+@import url('.../font/css');
 
 html {
 /*
@@ -108,10 +109,10 @@ object[role='icon'] {
 
 title { margin: 0 }
 
-body title { display : block }
-section > title {
+body title, body author { display : block }
+section > title, section > author {
     text-align: center;
-    font-size: 30pt; font-weight: bold; font-family: Bellerose;
+    font-weight: bold; font-family: Bellerose;
     margin: 0;
     padding: 0;
 }
@@ -119,8 +120,19 @@ section > title + title {
     font-style: italic;
     font-size: 22pt;
 }
-section > section > title { font-size: 27pt; }
-section > section > section > title { font-size: 24pt; }
+
+section > title                     { font-size: 30pt }
+section > author,
+section > section > title           { font-size: 26pt }
+section > section > author,
+section > section > section > title { font-size: 22pt }
+
+/* Doesn't look right in Chrome */
+section > title { line-height: 1.5em }
+
+author:before { content: 'by: ' }
+
+h2 { font-family: 'Fago No Bold' }
 
 [func='ideogram'] {
     display : inline;
@@ -134,9 +146,9 @@ section > section > section > title { font-size: 24pt; }
     background-opacity: .5;
 }
 
-
-[disp='row'] {
+[func='row'] {
     display: block;
-    width: 100%;
+    max-width: 100%;
+    margin: auto;
 }
 
