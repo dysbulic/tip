@@ -44,29 +44,34 @@ DEST="$MIMIS_ORIGIN"
     exit -2
 }
 
-while $#ARGS > 0; do
-    file="(${ARGS[@]:1})"
+function visitNode() {
+    file="$1"
+    echo "Visiting: $file"
     [ -L "$file" ] && {
         dest="$(readlink "$file")"
-        [ "${dest#$
-        echo "Skipping Link: $file"
-        echo -n "  $file -> "
-        
-        continue
-    }
+        [ "${dest#$HASHDIR}" != "$dest" ] && { # isa hash link
+            rsync --progress "$dest" "$DEST:"
+        } || {
+            echo "Skipping Link: $file"
+        }
+    } ||
     [ -d "$file" ] && {
-        echo "Skipping Directory: $file"
-        continue
-    }
+        pushd "$file" > /dev/null
+        for child in *; do
+            visitNode "$child"
+        done
+        popd > /dev/null
+    } ||
     [ ! -e "$file" ] && {
-        echo "Skipping Non-existent: $file"
-        continue
+        echo " Skipping Null: $file"
+    } || {
+        echo " Ignoring File: $file"
     }
-
-    HASH=$($HASHCMD "$file" | sed -e 's| .*||')
-    echo "Move: $file → $HASHDIR/$HASH"
-    mv "$file" "$HASHDIR/$HASH"
-    echo "Link: $HASHDIR/$HASH ↔ $file"
-    ln -s "$HASHDIR/$HASH" "$file"
+}
+    
+until [ ${#ARGS} == 0 ]; do
+    file="${ARGS[0]}"
+    ARGS="(${ARGS[@]:1})"
+    visitNode "$file"
 done
 
