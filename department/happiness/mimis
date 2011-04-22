@@ -1,11 +1,71 @@
 $('script:last').after(
     ( function() {
-        var cfg = mimis.load( 'sections/eson' )
+        var sections = mimis.load( 'sections/eson' )
+        console.log( sections )
+
         var angle : {
             min : 50,
             max : 300,
         }
         var root = mimis.nil
+
+        function $c( cfg ) {
+            var $circle = mimis.$circle.apply( this, arguments )
+            $circle.append(
+                $anim( {
+                    what : 'r',
+                    to : cfg.r,
+                    over : '250ms',
+                } )
+            )
+            return $circle
+        }
+
+        with( mimis ) { with( transform ) { with( cfg ) {
+            nil(
+                $c( { id : 'outer', r : 74.5, } )
+            )(
+                $c( { id : 'inner', r : 54.0, } )
+            )(
+                $c( { id :  'back', r : 64.3, } )
+            )(
+                $g( { id : 'title' } )(
+                    $text( {
+                        text : mimis.load( 'title/utf8' ),
+                        path : [
+                            { move : [ 75, 75 ] },
+                            { move : [  0, 59 ] },
+                            { arc  : [ 59, 59, -30, 1, 1, .001, 0 ] },
+                        ]
+                    } )
+                )(
+                    $g( { id : 'motto' } )(
+                    $text( {
+                        text : mimis.load( 'motto/utf8' ),
+                        path : $c( { r : 69 } ),
+                    } )
+                )
+
+                )
+            )
+        }
+
+/*
+    <g transform="translate(75,75)">
+    <g transform="translate(0,4)">
+    <g transform="scale(.52)">
+    <a xlink:href=".../revolution/Technoanarchist/">
+    <use xlink:href=".../image/kitten/head/svg" height="100" width="100" y="-50" x="-50" />
+          </a>
+        </g>
+      </g>
+    <g transform="translate(0,32)">
+    <g transform="scale(.8)">
+    <use xlink:href="image/paws/&amp;/flowers/svg" height="100" width="100" y="-50" x="-50" />
+        </g>
+      </g>
+    </g>
+*/
 
         var delta = with( angle ) { Math.abs( min, max ) } / $(cfg).size()
         $.each( cfg, function( val, key, idx ) {
