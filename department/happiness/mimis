@@ -1,0 +1,32 @@
+$('script:last').after(
+    ( function() {
+        var cfg = mimis.load( 'sections/eson' )
+        var angle : {
+            min : 50,
+            max : 300,
+        }
+        var root = mimis.nil
+
+        var delta = with( angle ) { Math.abs( min, max ) } / $(cfg).size()
+        $.each( cfg, function( val, key, idx ) {
+            console.log( key )
+            with( mimis ) { with( transform ) { with( cfg ) {
+                nil( $g( t.t( 0, -40 ) )
+                     ( $g( t.s( .29 ) )
+                       ( $a( {
+                           id : key,
+                           'xlink:href' : uri,
+                           title : title,
+                       } )
+                         ( $use( {
+                             'xlink:href' : img,
+                         } ) )
+                         .$elem
+                       ).$elem
+                     ).$elem
+                   )
+            } } }
+        } )
+        return nil.$elem
+    } )()
+)
