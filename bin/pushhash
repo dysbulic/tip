@@ -50,23 +50,25 @@ function visitNode() {
     [ -L "$file" ] && {
         dest="$(readlink "$file")"
         [ "${dest#$HASHDIR}" != "$dest" ] && { # isa hash link
-            rsync --progress "$dest" "$DEST:"
+            rsync --progress "$dest" "$DEST:$dest"
         } || {
             echo "Skipping Link: $file"
         }
-    } ||
+        return
+    }
     [ -d "$file" ] && {
         pushd "$file" > /dev/null
         for child in *; do
             visitNode "$child"
         done
         popd > /dev/null
-    } ||
-    [ ! -e "$file" ] && {
-        echo " Skipping Null: $file"
-    } || {
-        echo " Ignoring File: $file"
+        return
     }
+    [ ! -e "$file" ] && {
+        echo "ꝇ: $file"
+        return
+    }
+    echo " Ignoring File: $file"
 }
     
 until [ ${#ARGS} == 0 ]; do
