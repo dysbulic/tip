@@ -534,3 +534,17 @@ if( mimis.ns.abbr == 'svg' ) {
                  } ) )
     }
 }
+
+// Format transform
+mimis.transform = mimis.x( mimis.transform, {
+    t : function( a, b ) {
+        return { transform : ( "translate(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
+    },
+    s : function( a, b ) {
+        return { transform : (     "scale(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
+    },
+    r : function( a, b ) {
+        return { transform : (    "rotate(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
+    },
+} )
+    

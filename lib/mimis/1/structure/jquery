@@ -1,19 +1,6 @@
 ( function() {
     var def = mimis.load( '.../lib/tip/def/eson' )      
 
-    // Format transform
-    var transform = {
-        t : function( a, b ) {
-            return { transform : ( "translate(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
-        },
-        s : function( a, b ) {
-            return { transform : (     "scale(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
-        },
-        r : function( a, b ) {
-            return { transform : (    "rotate(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
-        },
-    }
-    
     function label( cfg ) {
         with( mimis ) { with( def ) { with( transform ) {
             with( cfg ) {

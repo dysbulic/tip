@@ -1,0 +1,79 @@
+#!/bin/bash
+
+HASHDIR=".../hashes/sha256/"
+
+#ToDo: Add getopt
+
+ARGS="$(
+    IFS=$'\x00'
+    #echo "$*"
+    for file in "$@"; do
+        echo -n "$file"
+        perl -e 'print "\0"'
+    done
+)"
+# Doesn't work – Nulls omitted
+
+
+ARGS=()
+for file in "$@"; do
+    ARGS=( "${ARGS[@]}" "$file" )
+done
+
+
+DEST="$MIMIS_ORIGIN"
+[ -z "$DEST" ] && DEST="$(git remote -v | grep -e "^origin	ssh://.* (push)$" | perl -pe 's|^origin	ssh://(.+?)/.*|\1|')"
+
+[ -z "$DEST" ] && {
+    echo 'Error: No destination server found'
+    ARGS=
+}
+
+[[ -z "$ARGS" || $#ARGS == 0 ]] && {
+    echo "Usage: $0 [file]+"
+    echo " Pushes the hashes for a list of files to:"
+    echo "    $MIMIS_ORIGIN"
+    echo "    A SSH endpoint of git:~/.../"
+    echo
+    echo " Will call lnhash if a file is not a hash link."
+    echo
+    echo " find -name ttf -print0 | xargs -0 pushhash"
+    [ -n "$DEST" ] && {
+        echo $'\x0A'' $DEST:'$DEST
+    }
+    exit -2
+}
+
+function visitNode() {
+    file="$1"
+    echo "Visiting: $file"
+    [ -L "$file" ] && {
+        dest="$(readlink "$file")"
+        [ "${dest#$HASHDIR}" != "$dest" ] && { # isa hash link
+            rsync --progress "$dest" "$DEST:$dest"
+        } || {
+            echo "Skipping Link: $file"
+        }
+        return
+    }
+    [ -d "$file" ] && {
+        pushd "$file" > /dev/null
+        for child in *; do
+            visitNode "$child"
+        done
+        popd > /dev/null
+        return
+    }
+    [ ! -e "$file" ] && {
+        echo "ꝇ: $file"
+        return
+    }
+    echo " Ignoring File: $file"
+}
+    
+until [ ${#ARGS} == 0 ]; do
+    file="${ARGS[0]}"
+    ARGS="(${ARGS[@]:1})"
+    visitNode "$file"
+done
+
