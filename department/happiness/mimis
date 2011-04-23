@@ -2,7 +2,7 @@ $('script:last').after(
     ( function() {
         var sections = mimis.load( 'sections/eson' )
         console.log( sections )
-
+        
         var angle : {
             min : 50,
             max : 300,
@@ -20,7 +20,7 @@ $('script:last').after(
             )
             return $circle
         }
-
+        
         with( mimis ) { with( transform ) { with( cfg ) {
             nil(
                 $c( { id : 'outer', r : 74.5, } )
@@ -40,15 +40,16 @@ $('script:last').after(
                     } )
                 )(
                     $g( { id : 'motto' } )(
-                    $text( {
-                        text : mimis.load( 'motto/utf8' ),
-                        path : $c( { r : 69 } ),
-                    } )
-                )
-
+                        $text( {
+                            text : mimis.load( 'motto/utf8' ),
+                            path : $c( { r : 69 } ),
+                        } )
+                    )
                 )
             )
-        }
+        } } }
+
+        
 
 /*
     <g transform="translate(75,75)">
@@ -66,7 +67,7 @@ $('script:last').after(
       </g>
     </g>
 */
-
+                                            
         var delta = with( angle ) { Math.abs( min, max ) } / $(cfg).size()
         $.each( cfg, function( val, key, idx ) {
             console.log( key )

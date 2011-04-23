@@ -106,7 +106,7 @@
 (if (file-exists-p javascript-file)
     (progn (load javascript-file)
            (setq auto-mode-alist
-                 (append '(("\\(js\\|jquery\\|json\\|mql\\|tipscript\\|\\.?rhino\\)$" . javascript-mode)) auto-mode-alist))
+                 (append '(("\\(js\\|jquery\\|json\\|mql\\|tipscript\\|\\.?rhino\\|mimis\\)$" . javascript-mode)) auto-mode-alist))
            (message "javascript mode loaded"))
   (setq auto-mode-alist
         (append '(("jquery|\\.js$" . c-mode)) auto-mode-alist)))
