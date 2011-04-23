@@ -3,7 +3,7 @@ $('script:last').after(
         var sections = mimis.load( 'sections/eson' )
         console.log( sections )
         
-        var angle : {
+        var angle = {
             min : 50,
             max : 300,
         }
@@ -68,7 +68,8 @@ $('script:last').after(
     </g>
 */
                                             
-        var delta = with( angle ) { Math.abs( min, max ) } / $(cfg).size()
+        var delta
+        with( angle ) { delta = Math.abs( min, max ) / $(cfg).size() }
         $.each( cfg, function( val, key, idx ) {
             console.log( key )
             with( mimis ) { with( transform ) { with( cfg ) {
