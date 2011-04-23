@@ -453,7 +453,7 @@ if( mimis.ns.abbr == 'svg' ) {
             },
         }
 
-        functions elem( attr, args ) {
+        function elem( attr, args ) {
             args = Array.prototype.slice.call( args )
             with( mimis ) {
                 args[0] = x( {}, args[ 0 ], defs[ attr ] )
@@ -464,7 +464,9 @@ if( mimis.ns.abbr == 'svg' ) {
 
         [ 'use', 'rect', 'circle' ].each( function( attr ) {
             var name = '$' + attr
-            mimis[ name ] = mimis[ name ] || elem( attr, arguments )
+            mimis[ name ] = mimis[ name ] || function() {
+                return elem( attr, arguments )
+            }
         } )
 
         // Nesting
