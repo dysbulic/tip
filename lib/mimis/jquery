@@ -453,13 +453,13 @@ if( mimis.ns.abbr == 'svg' ) {
             },
         }
 
-        function elem( attr, args ) {
-            args = Array.prototype.slice.call( args )
+        function elem( attr, cfg ) {
+            var args = Array.prototype.slice.call( cfg )
             with( mimis ) {
                 var def = defs[ attr ]
                 args[ 0 ] = x( args[ 0 ], defs[ attr ] )
             }
-            args = args.unshift( attr )
+            var named = args.unshift( attr )
             return mimis.$elem.apply( this, args )
         }
 
@@ -551,7 +551,7 @@ if( mimis.ns.abbr == 'svg' ) {
 
         mimis.$anim = mimis.$anim || function() {
             var args = Array.prototype.slice.call( arguments )
-            var cfg = args[ 0 ]
+            var cfg = args[ 0 ] || {}
             cfg.__defineGetter__( 'attributeName', function() { return cfg.what } )
             cfg.__defineGetter__(           'dur', function() { return cfg.over } )
             //args.unshift(  )
