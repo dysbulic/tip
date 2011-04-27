@@ -20,9 +20,11 @@ $('script:last').after(
             )
             return $circle
         }
+
+        return $c( { id : 'outer', r : 74.5, } )
         
         with( mimis ) { with( transform ) {
-            nil(
+            root(
                 $c( { id : 'outer', r : 74.5, } )
             )(
                 $c( { id : 'inner', r : 54.0, } )
@@ -71,7 +73,7 @@ $('script:last').after(
         $.each( cfg, function( val, key, idx ) {
             console.log( key )
             with( mimis ) { with( transform ) { with( cfg ) {
-                nil( $g( t.t( 0, -40 ) )
+                root( $g( t.t( 0, -40 ) )
                      ( $g( t.s( .29 ) )
                        ( $a( {
                            id : key,
@@ -87,6 +89,6 @@ $('script:last').after(
                    )
             } } }
         } )
-        return nil.$elem
+        return root.$elem
     } )()
 )

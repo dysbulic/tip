@@ -456,9 +456,10 @@ if( mimis.ns.abbr == 'svg' ) {
         function elem( attr, args ) {
             args = Array.prototype.slice.call( args )
             with( mimis ) {
-                args[0] = x( {}, args[ 0 ], defs[ attr ] )
+                var def = defs[ attr ]
+                args[ 0 ] = x( args[ 0 ], defs[ attr ] )
             }
-            args.unshift( attr )
+            args = args.unshift( attr )
             return mimis.$elem.apply( this, args )
         }
 
@@ -488,7 +489,7 @@ if( mimis.ns.abbr == 'svg' ) {
             // <text><textPath startOffset="50%" xlink:href="#title path"></textPath></text>
             var args = Array.prototype.slice.call( arguments )
             var txt = args.shift()
-            args.unshift( 'text' )
+            args = args.unshift( 'text' )
             return ( mimis.$elem.apply( this, args )
                      .text( txt ) )
         }
@@ -496,7 +497,7 @@ if( mimis.ns.abbr == 'svg' ) {
         mimis.$path = mimis.$path || function() {
             var args = Array.prototype.slice.call( arguments )
             var path = args.shift()
-            args.unshift( 'path' )
+            args = args.unshift( 'path' )
             
             console.debug( 'h' )
 
@@ -553,7 +554,7 @@ if( mimis.ns.abbr == 'svg' ) {
             var cfg = args[ 0 ]
             cfg.__defineGetter__( 'attributeName', function() { return cfg.what } )
             cfg.__defineGetter__(           'dur', function() { return cfg.over } )
-            args.unshift(  )
+            //args.unshift(  )
             return elem( 'animate', args )
         }
         
