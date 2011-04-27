@@ -445,95 +445,122 @@ if( mimis.ns.abbr != 'html' ) {
 }
 
 if( mimis.ns.abbr == 'svg' ) {
-    [ 'use', 'rect' ].each( function( attr ) {
-        var name = '$' + attr
-        mimis[ name ] = mimis[ name ] || function() {
-            var args = Array.prototype.slice.call( arguments )
+    ( function() {
+        var defs = {
+            circle : {
+                cx : '50%',
+                cy : '50%',
+            },
+        }
+
+        function elem( attr, args ) {
+            args = Array.prototype.slice.call( args )
+            with( mimis ) {
+                args[0] = x( {}, args[ 0 ], defs[ attr ] )
+            }
             args.unshift( attr )
             return mimis.$elem.apply( this, args )
         }
-    } )
 
-    // Nesting
-    ;[ 'g', 'a' ].each( function( attr ) {
-        var name = '$' + attr
-        mimis[ name ] = mimis[ name ] || function() {
-            var args = Array.prototype.slice.call( arguments )
-            args.unshift( attr )
-            var $elem = mimis.$elem.apply( this, args )
-            function append( $new ) {
-                //$elem.append.apply( $, arguments )
-                $elem.append( $new )
+        [ 'use', 'rect', 'circle' ].each( function( attr ) {
+            var name = '$' + attr
+            mimis[ name ] = mimis[ name ] || function() {
+                return elem( attr, arguments )
+            }
+        } )
+
+        // Nesting
+        ;[ 'g', 'a' ].each( function( attr ) {
+            var name = '$' + attr
+            var name = '$' + attr
+            mimis[ name ] = mimis[ name ] || function() {
+                var $elem = elem( attr, arguments )
+                function append( $new ) {
+                    $elem.append( $new )
+                    return append
+                }
+                append.$elem = $elem
                 return append
             }
-            append.$elem = $elem
-            return append
+        } )
+
+        mimis.$text = mimis.$text || function() {
+            // <text><textPath startOffset="50%" xlink:href="#title path"></textPath></text>
+            var args = Array.prototype.slice.call( arguments )
+            var txt = args.shift()
+            args.unshift( 'text' )
+            return ( mimis.$elem.apply( this, args )
+                     .text( txt ) )
         }
-    } )
+        
+        mimis.$path = mimis.$path || function() {
+            var args = Array.prototype.slice.call( arguments )
+            var path = args.shift()
+            args.unshift( 'path' )
+            
+            console.debug( 'h' )
 
-    mimis.$text = mimis.$text || function() {
-        var args = Array.prototype.slice.call( arguments )
-        var txt = args.shift()
-        args.unshift( 'text' )
-        return ( mimis.$elem.apply( this, args )
-                 .text( txt ) )
-    }
-
-    mimis.$path = mimis.$path || function() {
-        var args = Array.prototype.slice.call( arguments )
-        var path = args.shift()
-        args.unshift( 'path' )
-
-        console.debug( 'h' )
-
-        function line( points ) {
-            var width = 400
-            var height = 100
-            var out = ''
-            points.each( function( point ) {
-                var p = {
-                    x : point[0],
-                    y : point[1],
-                }
-                if( p.x / width < .1 ) {
-                    p.x *= width
-                }
-                if( p.y / height < .1 ) {
-                    p.y *= height
-                }
-                out += p.x + ',' + p.y + ' '
-            } )
-            return out
-        }
-
-        var serializer = function( path ) {
-            var out = 'm 0,0'
-            path.each( function( elem ) {
-                for( shape in elem ) {
-                    switch( shape ) {
-                    case 'line':
-                        out += ' l ' + line( elem[ shape ] )
-                        break
-                    case 'move':
-                        out += ' m ' + line( elem[ shape ] )
-                        break
+            function line( points ) {
+                var width = 400
+                var height = 100
+                var out = ''
+                points.each( function( point ) {
+                    var p = {
+                        x : point[0],
+                        y : point[1],
                     }
-                }
-            } )
-            return out
+                    if( p.x / width < .1 ) {
+                        p.x *= width
+                    }
+                    if( p.y / height < .1 ) {
+                        p.y *= height
+                    }
+                    out += p.x + ',' + p.y + ' '
+                } )
+                return out
+            }
+            
+            var serializer = function( path ) {
+                var out = 'm 0,0'
+                path.each( function( elem ) {
+                    for( shape in elem ) {
+                        switch( shape ) {
+                        case 'line':
+                            out += ' l ' + line( elem[ shape ] )
+                            break
+                        case 'move':
+                            out += ' m ' + line( elem[ shape ] )
+                            break
+                        }
+                    }
+                } )
+                return out
+            }
+            
+            return ( mimis.$elem.apply( this, args )
+                     .attr( {
+                         get d() {
+                             var callee = arguments.callee
+                             path = callee.path || path
+                             serializer = callee.serializer || serializer
+                             return serializer( path )
+                         },
+                     } ) )
         }
 
-        return ( mimis.$elem.apply( this, args )
-                 .attr( {
-                     get d() {
-                         var callee = arguments.callee
-                         path = callee.path || path
-                         serializer = callee.serializer || serializer
-                         return serializer( path )
-                     },
-                 } ) )
-    }
+        mimis.$anim = mimis.$anim || function() {
+            var args = Array.prototype.slice.call( arguments )
+            var cfg = args[ 0 ]
+            cfg.__defineGetter__( 'attributeName', function() { return cfg.what } )
+            cfg.__defineGetter__(           'dur', function() { return cfg.over } )
+            args.unshift(  )
+            return elem( 'animate', args )
+        }
+
+        mimis.$c = mimis.$c || mimis.$circle
+    } )()
 }
+
 
 // Format transform
 mimis.transform = mimis.x( mimis.transform, {
@@ -547,4 +574,18 @@ mimis.transform = mimis.x( mimis.transform, {
         return { transform : (    "rotate(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
     },
 } )
-    
+  
+// ToDo: Insert icon if not present  
+// <html:link rel="icon" href=".../revolution/Technoanarchist/" />
+
+if( true ) {
+    $( function() {
+        window.moveTo( 0, 0 )
+
+        if( top.window.outerHeight < screen.availHeight
+            || top.window.outerWidth < screen.availWidth ) {
+            top.window.outerHeight = screen.availHeight
+            top.window.outerWidth = screen.availWidth
+        }
+    } )
+}
