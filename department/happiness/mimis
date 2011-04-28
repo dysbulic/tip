@@ -24,13 +24,14 @@ $('script:last').after(
         with( mimis ) { return root( $c( { id : 'outer', r : 74.5, } ) ).$elem; }
 
         with( mimis ) { with( transform ) {
-            root(
+            return root(
                 $c( { id : 'outer', r : 74.5, } )
             )(
                 $c( { id : 'inner', r : 54.0, } )
             )(
                 $c( { id :  'back', r : 64.3, } )
-            )(
+            ).$elem
+            root(
                 $g( { id : 'title' } )(
                     $text( {
                         text : mimis.load( 'title/utf8' ),
