@@ -23,11 +23,13 @@ $('script:last').after(
 
         with( mimis ) { with( transform ) {
             return root(
-                $c( { id : 'outer', r : 74.5, } )
-            )(
-                $c( { id : 'inner', r : 54.0, } )
-            )(
-                $c( { id :  'back', r : 64.3, } )
+                $g( { id : 'band', r : 74.5, } )(
+                    $c( { id : 'outer', r : 74.5, } )
+                )(
+                    $c( { id : 'inner', r : 54.0, } )
+                )(
+                    $c( { id :  'back', r : 64.3, } )
+                ).$elem
             ).$elem
             root(
                 $g( { id : 'title' } )(
