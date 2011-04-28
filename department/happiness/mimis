@@ -24,13 +24,15 @@ $('script:last').after(
         with( mimis ) { with( transform ) {
             var $band = $c( { func : 'band', r : 74.5, } )
             return root(
-                $g( { idx : 1, rdx : -3 } )( $band.clone() ).$elem
-            )(
-                $g( { idx : 2, rdx : -2 } )( $band.clone() ).$elem
-            )(
-                $g( { idx : 3, rdx : -1 } )( $band.clone() ).$elem
-            )(
-                $g( { idx : 4, rdx : -1 } )( $band.clone() ).$elem
+                $g( { func : 'band' } )(
+                    $g( { idx : 1 } )( $band.clone() ).$elem
+                )(
+                    $g( { idx : 2 } )( $band.clone() ).$elem
+                )(
+                    $g( { idx : 3 } )( $band.clone() ).$elem
+                )(
+                    $g( { idx : 4 } )( $band.clone() ).$elem
+                ).$elem
             ).$elem
             root(
                 $g( { id : 'title' } )(
