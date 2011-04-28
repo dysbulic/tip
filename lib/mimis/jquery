@@ -471,14 +471,14 @@ if( mimis.ns.abbr == 'svg' ) {
             if( cfg.path ) {
                 return elem( 'path', arguments )
                     .attr( {
-                        d : ( ( 'm' + [ cfg.r, 0 ].join( ',' ) )
+                        d : ( ( 'm' + [ cfg.r, 12 ].join( ',' ) )
                               + ( 'a' +
                                   [
                                       [ cfg.r, cfg.r ].join( ',' ), // rx, ry
                                       0, // rotation
                                       1, // large arc?
                                       1, // sweep?
-                                      [ 0, .001 ].join( ',' ), // x, y
+                                      [ -.001, 0 ].join( ',' ), // x, y
                                   ].join( ' ' )
                                 )
                             ),
