@@ -1,13 +1,7 @@
 $('script:last').after(
     ( function() {
-        var sections = mimis.load( 'sections/eson' )
-
         mimis.$root.viewBox = { width : 150, height : 150 }
         
-        var angle = {
-            min : 50,
-            max : 300,
-        }
         var root = mimis.nil()
 
         function $c( cfg ) {
@@ -22,8 +16,8 @@ $('script:last').after(
         }
 
         with( mimis ) { with( transform ) {
-            function $band() { return $c( { func : 'band', r : 63 } ) }
-            return root(
+            function $band() { return $c( { func : 'band', r : 64 } ) }
+            root(
                 $g( { func : 'band' } )(
                     $g( { idx : 1 } )( $band() ).$elem
                 )(
@@ -34,7 +28,7 @@ $('script:last').after(
                     $g( { id : 'title' } )(
                         $text( {
                             text : mimis.load( 'title/utf8' ),
-                            $path : $c( { r : 58, path : true } ),
+                            $path : $c( { r : 59, path : true } ),
                         } )
                     ).$elem
                 )(
@@ -49,7 +43,7 @@ $('script:last').after(
                         } )
                     ).$elem
                 ).$elem
-            ).$elem
+            )
         } }
 /*
     <g transform="translate(75,75)">
@@ -68,26 +62,33 @@ $('script:last').after(
     </g>
 */
                                             
+        var sections = mimis.load( 'sections/eson' )
+        var angle = {
+            min : 50,
+            max : 300,
+        }
+
         var delta
-        with( angle ) { delta = Math.abs( min, max ) / $(cfg).size() }
-        $.each( section, function( val, key, idx ) {
+        with( angle ) { delta = Math.abs( min, max ) / $(sections).size() }
+        $.each( sections, function( section, key, idx ) {
             console.log( key )
-            with( mimis ) { with( transform ) { with( cfg ) {
-                root( $g( t.t( 0, -40 ) )
-                     ( $g( t.s( .29 ) )
-                       ( $a( {
-                           id : key,
-                           'xlink:href' : uri,
-                           title : title,
-                       } )
-                         ( $use( {
-                             'xlink:href' : img,
-                         } ) )
-                         .$elem
-                       ).$elem
-                     ).$elem
-                   )
-            } } }
+            with( mimis ) { with( transform ) {
+                root(
+                    $g( t( 0, -40 ) )(
+                        $g( s( .29 ) )(
+                            $a( {
+                                id : key,
+                                'xlink:href' : uri,
+                                title : section.title,
+                            } )(
+                                $use( {
+                                    'xlink:href' : section.img,
+                                } )
+                            ).$elem
+                        ).$elem
+                    ).$elem
+                )
+            } }
         } )
         return root.$elem
     } )()
