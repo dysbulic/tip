@@ -471,13 +471,15 @@ if( mimis.ns.abbr == 'svg' ) {
         } )
 
         function nest( attr ) {
-            var $elem = elem( attr, arguments )
-            function append( $new ) {
-                $elem.append( $new )
+            return function() {
+                var $elem = elem( attr, arguments )
+                function append( $new ) {
+                    $elem.append( $new )
+                    return append
+                }
+                append.$elem = $elem
                 return append
             }
-            append.$elem = $elem
-            return append
         }
 
         // Nesting
@@ -486,16 +488,20 @@ if( mimis.ns.abbr == 'svg' ) {
             mimis[ name ] = mimis[ name ] || nest( attr )
         } )
 
+        function $text( text ) {
+            return $( document.createTextNode( text ) )
+        }
+
         mimis.$text = mimis.$text || function( cfg ) {
             // <text><textPath xlink:href="#title path"></textPath></text>
             var id = Math.random() * Number.MAX_VALUE
-            return nest( 'text' )(
-                elem( 'textPath', {
+            return nest( 'text' )()(
+                nest( 'textPath' )( {
                     startOffset : '50%',
-                    'xlink:href' : '#' + cfg.$path.attr( 'id' ),
-                } )
-                    .text( cfg.text )
-            )
+                   'xlink:href' : '#' + cfg.$path.attr( 'id' ),
+                } )(
+                    $text( cfg.text )
+            ).$elem
         }
         
         mimis.$path = mimis.$path || function() {
