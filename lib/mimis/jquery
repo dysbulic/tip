@@ -470,11 +470,8 @@ if( mimis.ns.abbr == 'svg' ) {
             }
         } )
 
-        // Nesting
-        ;[ 'g', 'a' ].each( function( attr ) {
-            var name = '$' + attr
-            var name = '$' + attr
-            mimis[ name ] = mimis[ name ] || function() {
+        function nest() {
+            return function() {
                 var $elem = elem( attr, arguments )
                 function append( $new ) {
                     $elem.append( $new )
@@ -483,13 +480,18 @@ if( mimis.ns.abbr == 'svg' ) {
                 append.$elem = $elem
                 return append
             }
+        }
+
+        // Nesting
+        ;[ 'g', 'a' ].each( function( attr ) {
+            var name = '$' + attr
+            var name = '$' + attr
+            mimis[ name ] = mimis[ name ] || nest( name )
         } )
 
-        mimis.$text = mimis.$text || function() {
+        mimis.$text = mimis.$text || function( cfg ) {
             // <text><textPath startOffset="50%" xlink:href="#title path"></textPath></text>
-            var args = Array.prototype.slice.call( arguments )
-            var txt = args.shift()
-            args.unshift( 'text' )
+            
             return ( mimis.$elem.apply( this, args )
                      .text( txt ) )
         }
