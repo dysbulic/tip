@@ -471,15 +471,13 @@ if( mimis.ns.abbr == 'svg' ) {
         } )
 
         function nest( attr ) {
-            return function() {
-                var $elem = elem( attr, arguments )
-                function append( $new ) {
-                    $elem.append( $new )
-                    return append
-                }
-                append.$elem = $elem
+            var $elem = elem( attr, arguments )
+            function append( $new ) {
+                $elem.append( $new )
                 return append
             }
+            append.$elem = $elem
+            return append
         }
 
         // Nesting
