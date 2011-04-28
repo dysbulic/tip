@@ -296,7 +296,7 @@ if( mimis.ns.abbr == 'svg' &&
     mimis.$root.__defineGetter__(
         'viewBox',
         function() {
-            var attr = $(this).attr( 'viewBox' )
+            var attr = $(this).attr( 'viewBox' ) || '0 0 100 100'
             var split = attr.split( ' ' )
             // ToDo: handle unset viewBox
             return {
@@ -471,16 +471,28 @@ if( mimis.ns.abbr == 'svg' ) {
             if( cfg.path ) {
                 return elem( 'path', arguments )
                     .attr( {
-                        d : ( ( 'm' + [ cfg.r, 12 ].join( ',' ) )
-                              + ( 'a' +
-                                  [
-                                      [ cfg.r, cfg.r ].join( ',' ), // rx, ry
-                                      0, // rotation
-                                      1, // large arc?
-                                      1, // sweep?
-                                      [ -.001, 0 ].join( ',' ), // x, y
-                                  ].join( ' ' )
-                                )
+                        d : ( 'm' + [ '75', '75' ].join( ',' )
+                              + ( function() {
+                                  return ! cfg.reverse
+                                      ? ( 'm' + [ 0, cfg.r ].join( ',' )
+                                          + ( 'a' +
+                                              [
+                                                  [ cfg.r, cfg.r ].join( ',' ), // rx, ry
+                                                  0, // rotation
+                                                  1, // large arc?
+                                                  1, // sweep?
+                                                  [ .001, 0 ].join( ',' ), // x, y
+                                              ].join( ' ' ) ) )
+                                      : ( 'm' + [ 0, -cfg.r ].join( ',' )
+                                          + ( 'a' +
+                                              [
+                                                  [ cfg.r, cfg.r ].join( ',' ), // rx, ry
+                                                  0, // rotation
+                                                  1, // large arc?
+                                                  0, // sweep?
+                                                  [ .001, 0 ].join( ',' ), // x, y
+                                              ].join( ' ' ) ) )
+                              } )()
                             ),
                     } )
             } else {
