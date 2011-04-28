@@ -1,7 +1,6 @@
 $('script:last').after(
     ( function() {
         var sections = mimis.load( 'sections/eson' )
-        console.log( sections )
         
         var angle = {
             min : 50,
@@ -10,26 +9,25 @@ $('script:last').after(
         var root = mimis.nil()
 
         function $c( cfg ) {
-            var $circle = mimis.$circle.apply( this, arguments )
-            $circle.append(
-                $anim( {
-                    what : 'r',
-                    to : cfg.r,
-                    over : '250ms',
-                } )
-            )
-            return $circle
+            return mimis.$circle.apply( this, arguments )
+                .append(
+                    mimis.$anim( {
+                        what : 'r',
+                        to : cfg.r,
+                        over : '250ms',
+                    } )
+                )
         }
 
         with( mimis ) { with( transform ) {
-            var $band = $c( { func : 'band', r : 60, } )
+            function $band() { return $c( { func : 'band', r : 63, path : true } ) }
             return root(
                 $g( { func : 'band' } )(
-                    $g( { idx : 1 } )( $band.clone() ).$elem
+                    $g( { idx : 1 } )( $band() ).$elem
                 )(
-                    $g( { idx : 2 } )( $band.clone() ).$elem
+                    $g( { idx : 2 } )( $band() ).$elem
                 )(
-                    $g( { idx : 3 } )( $band.clone() ).$elem
+                    $g( { idx : 3 } )( $band() ).$elem
                 )(
                     $g( { id : 'motto' } )(
                         $text( {

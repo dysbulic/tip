@@ -450,7 +450,10 @@ if( mimis.ns.abbr == 'svg' ) {
             circle : {
                 cx : '50%',
                 cy : '50%',
-                get id() { return ( Math.random() * Number.MAX_VALUE ).toString( 36 ) },
+                get id() { return ( Math.random() * Number.MAX_VALUE ).toString( 36 ).substring( 0, 10 ) },
+            },
+            path : {
+                get id() { return ( Math.random() * Number.MAX_VALUE ).toString( 36 ).substring( 0, 10 ) },
             },
         }
 
@@ -463,8 +466,29 @@ if( mimis.ns.abbr == 'svg' ) {
             var named = args.unshift( attr )
             return mimis.$elem.apply( this, args )
         }
+        
+        mimis.$circle = function( cfg ) {
+            if( cfg.path ) {
+                return elem( 'path', arguments )
+                    .attr( {
+                        d : ( ( 'm' + [ cfg.r, 0 ].join( ',' ) )
+                              + ( 'a' +
+                                  [
+                                      [ cfg.r, cfg.r ].join( ',' ), // rx, ry
+                                      0, // rotation
+                                      1, // large arc?
+                                      1, // sweep?
+                                      [ 0, .001 ].join( ',' ), // x, y
+                                  ].join( ' ' )
+                                )
+                            ),
+                    } )
+            } else {
+                return elem( 'circle', arguments )
+            }
+        }
 
-        [ 'use', 'rect', 'circle' ].each( function( attr ) {
+        ;[ 'use', 'rect', 'circle' ].each( function( attr ) {
             var name = '$' + attr
             mimis[ name ] = mimis[ name ] || function() {
                 return elem( attr, arguments )
