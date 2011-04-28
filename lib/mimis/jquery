@@ -450,9 +450,7 @@ if( mimis.ns.abbr == 'svg' ) {
             circle : {
                 cx : '50%',
                 cy : '50%',
-                id : ( function() {
-                    return Math.random() * Number.MAX_VALUE
-                } )(),
+                get id() { return Math.random() * Number.MAX_VALUE },
             },
         }
 
@@ -497,14 +495,18 @@ if( mimis.ns.abbr == 'svg' ) {
 
         mimis.$text = mimis.$text || function( cfg ) {
             // <text><textPath xlink:href="#title path"></textPath></text>
-            return nest( 'text' )()(
-                nest( 'textPath' )( {
-                    startOffset : '50%',
-                   'xlink:href' : '#' + cfg.$path.attr( 'id' ),
-                } )(
-                    $text( cfg.text )
+            return nest( 'defs' )()(
+                cfg.$path.clone()
+            ).$elem.after(
+                nest( 'text' )()(
+                    nest( 'textPath' )( {
+                        startOffset : '50%',
+                        'xlink:href' : '#' + cfg.$path.attr( 'id' ),
+                    } )(
+                        $text( cfg.text )
+                    ).$elem
                 ).$elem
-            ).$elem
+            )
         }
         
         mimis.$path = mimis.$path || function() {
