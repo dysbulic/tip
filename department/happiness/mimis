@@ -30,6 +30,13 @@ $('script:last').after(
                     $g( { idx : 2 } )( $band.clone() ).$elem
                 )(
                     $g( { idx : 3 } )( $band.clone() ).$elem
+                )(
+                    $g( { id : 'motto' } )(
+                        $text( {
+                            text : mimis.load( 'motto/utf8' ),
+                            path : $c( { r : 69, path : true } ),
+                        } )
+                    ).$elem
                 ).$elem
             ).$elem
             
