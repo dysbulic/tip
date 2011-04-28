@@ -489,7 +489,7 @@ if( mimis.ns.abbr == 'svg' ) {
             // <text><textPath startOffset="50%" xlink:href="#title path"></textPath></text>
             var args = Array.prototype.slice.call( arguments )
             var txt = args.shift()
-            args = args.unshift( 'text' )
+            args.unshift( 'text' )
             return ( mimis.$elem.apply( this, args )
                      .text( txt ) )
         }
@@ -497,7 +497,7 @@ if( mimis.ns.abbr == 'svg' ) {
         mimis.$path = mimis.$path || function() {
             var args = Array.prototype.slice.call( arguments )
             var path = args.shift()
-            args = args.unshift( 'path' )
+            args.unshift( 'path' )
             
             console.debug( 'h' )
 
