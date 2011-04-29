@@ -1,5 +1,5 @@
 $('script:last').after(
-    ( function() {
+    ( function( cfg ) {
         mimis.$root.viewBox = { width : 150, height : 150 }
         
         var root = mimis.nil()
@@ -9,42 +9,44 @@ $('script:last').after(
                 .append(
                     mimis.$anim( {
                         what : 'r',
-                        to : cfg.r,
+                          to : cfg.r,
                         over : '250ms',
                     } )
                 )
         }
 
         with( mimis ) { with( transform ) {
-            function $band() { return $c( { func : 'band', r : 64 } ) }
-            root(
-                $g( { func : 'band' } )(
-                    $g( { idx : 1 } )( $band() ).$elem
-                )(
-                    $g( { idx : 2 } )( $band() ).$elem
-                )(
-                    $g( { idx : 3 } )( $band() ).$elem
-                )(
-                    $g( { id : 'title' } )(
-                        $text( {
-                            text : mimis.load( 'title/utf8' ),
-                            $path : $c( { r : 59, path : true } ),
-                        } )
-                    ).$elem
-                )(
-                    $g( { id : 'motto' } )(
-                        $text( {
-                            text : mimis.load( 'motto/utf8' ),
-                            $path : $c( {
-                                r : 69,
-                                path : true,
-                                reverse : true,
-                            } ),
-                        } )
-                    ).$elem
+            function $b() { return $c( { func : 'band', r : 64 } ) }
+            
+            var $band = $g( { func : 'band' } )
+            for( var idx = 1; idx <= 3; idx++ ) {
+                $band = $band( $g( { idx : idx } )( $b() ).$elem )
+            }
+
+            root( $band(
+                $g( { id : 'title' } )(
+                    $text( {
+                        text : mimis.load( 'title/utf8' ),
+                        $path : $c( { r : 59, path : true } ),
+                    } )
                 ).$elem
-            )
+            )(
+                $g( { id : 'motto' } )(
+                    $text( {
+                        text : mimis.load( 'motto/utf8' ),
+                        $path : $c( {
+                            r : 69,
+                            path : true,
+                            reverse : true,
+                        } ),
+                    } )
+                ).$elem
+            ).$elem )
         } }
+
+        root(
+            $g()
+        )
 /*
     <g transform="translate(75,75)">
     <g transform="translate(0,4)">
