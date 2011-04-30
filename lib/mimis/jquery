@@ -455,6 +455,12 @@ if( mimis.ns.abbr == 'svg' ) {
             path : {
                 get id() { return ( Math.random() * Number.MAX_VALUE ).toString( 36 ).substring( 0, 10 ) },
             },
+            use : {
+                x : -50,
+                y : -50,
+                 width : 100,
+                height : 100,
+            },
         }
 
         function elem( attr, cfg ) {
@@ -506,7 +512,9 @@ if( mimis.ns.abbr == 'svg' ) {
             if( href[0] == '#' ) { // non-local link
                 return elem( 'use', arguments )
             }
-            
+        
+            cfg = mimis.x( cfg, defs[ 'use' ] )
+    
             var insP = mimis.nil()
             $.get( href, function( data ) {
                 if( data.documentElement ) {
@@ -524,14 +532,14 @@ if( mimis.ns.abbr == 'svg' ) {
                             }
                         }
                     } )
-
+                    
                     insP( $(data.documentElement)
                           .attr( cfg ) )
                 }
             } )
             return insP.$elem
         }
-
+        
 
         ;[ 'use', 'rect', 'circle' ].each( function( attr ) {
             var name = '$' + attr
