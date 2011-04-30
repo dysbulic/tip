@@ -6,12 +6,7 @@ function( doc ) {
         if( ! link ) { link = $style.attr( 'href' ) }
         
         if( link[0] != '#' ) { // non-local link
-            $.get( link, function( data ) {
-                if( data.documentElement ) {
-                    console.debug( 'Unexpected: This CSS has a documentElement')
-                }
-                $style.text( data )
-            } )
+            $style.text( mimis.load( link ) )
         }
     } )
 }
