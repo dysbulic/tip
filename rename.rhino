@@ -1,28 +1,34 @@
 //!/bin/js
 
-load( '.../lib/xregexp/js' )
-load( '.../lib/array/each/js' )
+( function() {
+    load( '.../lib/xregexp/js' )
+    load( '.../lib/mimis/array/js' )
 
-importPackage( java.io )
+    importPackage( java.io )
 
-// spanDir() accepts two parameters
-// The first is a string representing a directory path
-// The second is a closure that accepts a parameter of type
-// java.io.File
+    var regex = XRegExp( "(?<month> [0-9]+ ) [-/.\\s]  # month\n\
+                      (?<day>   [0-9]+ ) [-/.\\s]  # day  \n\
+                      (?<year>  [0-9]+ )           # year   ",
+                     "x" ) 
+
+    var input = "04/20/2009"
+    input.replace( regex, "${year}-${month}-${day}" ) // "2009-04-20"
+
+    var match = regex.exec( input )
+    console.log( match.month ) // "04"
+
+    //regex instanceof RegExp // true
+    //regex.constructor == RegExp // true
+    
+    return
+    
 function spanDir( dir, dirHandler ) {
     var list = new File(dir).listFiles()
 
     list.each( function( file ) {
-        // If it's a directory, recursive call spanDir()
-        // so that we end up doing a scan of
-        // the directory tree
         if( file.isDirectory() ) {
             //spanDir( list[ i ].getAbsolutePath(), dirHandler )
         }
-        // Pass the File object to the handler that
-        // the caller has specified regardless of whether
-        // the File object is a directory.
-        
         dirHandler( file )
     } )
 }
@@ -33,3 +39,4 @@ function showIt( file ) {
 }
 
 spanDir( '.', showIt )
+} )()
