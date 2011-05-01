@@ -1,0 +1,27 @@
+$('script:last').after(
+    ( function( cfg ) {
+        mimis.$root.viewBox = { width : 170, height : 100 }
+        
+        var root = mimis.nil()
+
+        with( mimis ) { with( transform ) {
+            root(
+                $g( t( 0, 50 ) )(
+                    $g( x( t( -70 ) ) )(
+                        $rect()
+                    ).$elem
+                )(
+                    $g( x( t( 0 ) ) )(
+                        $rect()
+                    ).$elem
+                )(
+                    $g( x( t( 70 ) ) )(
+                        $rect()
+                    ).$elem
+                ).$elem
+            )
+        } }
+
+        return root.$elem
+    } )()
+)
