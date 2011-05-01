@@ -4,22 +4,16 @@ $('script:last').after(
         
         var root = mimis.nil()
 
+        function $elem( nest ) {
+            return nest.$elem
+        }
+
         with( mimis ) { with( transform ) {
-            root(
-                $g( t( 0, 50 ) )(
-                    $g( x( t( -70 ) ) )(
-                        $rect()
-                    ).$elem
-                )(
-                    $g( x( t( 0 ) ) )(
-                        $rect()
-                    ).$elem
-                )(
-                    $g( x( t( 70 ) ) )(
-                        $rect()
-                    ).$elem
-                ).$elem
-            )
+            root( $elem(
+                $g( t( 0, 50 ) )( $elem(
+                    $g( t( -70 ) )( $rect() ) ) )( $elem(
+                        $g( t(   0 ) )( $rect() ) ) )( $elem(
+                            $g( t(  70 ) )( $rect() ) ) ) ) )
         } }
 
         return root.$elem
