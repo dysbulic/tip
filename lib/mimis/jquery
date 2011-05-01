@@ -127,9 +127,9 @@ if( webkitNotifications.__lookupGetter__( 'allowed' ) === undefined ) {
     webkitNotifications.__defineGetter__(
         'allowed',
         function() {
-
-            webkitNotifications.ALLOWED = webkitNotifications.ALLOWED || 0
-            return webkitNotifications.checkPermission() == webkitNotifications.ALLOWED
+            return ( webkitNotifications.checkPermission
+                     ? webkitNotifications.checkPermission() == webkitNotifications.PERMISSION_ALLOWED
+                     : false )
         } )
 }
 
@@ -139,11 +139,11 @@ mimis.notify = mimis.notify ||
             icon : 'icon/48/png',
             title : 'Mïmis',
             message : ( 'You are being notified by: '
-                        + arguments.caller.name ),
+                        + ( arguments.caller ? arguments.caller.name : 'someone' ) ),
             timeout : 10000,
         } )
         
-        if( webkitNotifications.checkPermission() == webkitNotifications.PERMISSION_ALLOWED ) {
+        if( webkitNotifications.allowed ) {
             with( config ) {
                 var notification =
                     webkitNotifications.createNotification(
@@ -162,6 +162,8 @@ mimis.notify = mimis.notify ||
 
 mimis.get = mimis.get ||
     function( store, varName ) {
+        varName = varName || ''
+        console.debug( 'mimis.get', store )
         var parts = varName.split( /[,\/]/ )
         if( parts.each( function( part ) {
             if( store[ part ] === undefined ) {
@@ -177,6 +179,8 @@ mimis.get = mimis.get ||
 mimis.set = mimis.set ||
     function( store, varName, val ) {
         var ret = store
+        varName = varName || ''
+        console.debug( 'mimis.set', store )
         var parts = varName.split( /[,\/]/ )
         var ultimate = parts.pop()
         parts.each( function( part ) {
@@ -457,6 +461,12 @@ if( mimis.ns.abbr == 'svg' ) {
                 get id() { return ( Math.random() * Number.MAX_VALUE ).toString( 36 ).substring( 0, 10 ) },
             },
             use : {
+                x : -50,
+                y : -50,
+                 width : 100,
+                height : 100,
+            },
+            rect : {
                 x : -50,
                 y : -50,
                  width : 100,
