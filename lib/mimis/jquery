@@ -234,11 +234,12 @@ mimis.load.parser = mimis.x( mimis.load.parser, {
     'image/svg+xml' : mimis.load.parser[ 'text/xml' ],
 } )
 
+mimis.link = mimis.link || mimis.load
 
 // Extract namespaces
 mimis.ns = mimis.ns ||
     ( function() {
-        var ns = mimis.load( '.../lib/mimis/ns/abbreviations/eson' )
+        var ns = mimis.link( '.../lib/mimis/ns/abbreviations/eson' )
         document.documentElement.attributes.each( function( ) {
             if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
                 var name = match[1] || ''
@@ -516,7 +517,7 @@ if( mimis.ns.abbr == 'svg' ) {
             var insP = mimis.nil()
             $.get( href, function( data ) {
                 if( data.documentElement ) {
-                    var replaceScripts = mimis.load( '.../lib/mimis/inline/xlink/style/' )
+                    var replaceScripts = mimis.link( '.../lib/mimis/inline/xlink/style/' )
                     var doc = replaceScripts( data.documentElement )
                     cfg = mimis.x( {}, defs[ 'use' ], cfg )
                     insP( $(doc).attr( cfg ) )
