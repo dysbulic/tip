@@ -12,80 +12,55 @@ $.isObject = $.isObject ||
 
 mimis.x = mimis.x || $.extend
 
+mimis.load = mimis.load || function( uri ) {
+//    return mimis.each.call( arguments, function( uri ) {
+    return ( function( uri ) {
+        var ret
+        $.ajax( {
+            url : uri,
+            dataType : 'text',
+            async : false,
+            success : function( data, state, xhr ) {
+                ret = data
+
+                var type = xhr.getResponseHeader( 'Content-Type' )
+                var parser
+                if( parser = mimis.load.parser[ type ] ) {
+                    ret = parser( ret )
+                }
+            },
+        } )
+        return ret
+    } )
+}
+
+mimis.load.parser = mimis.load.parser || {
+    'application/eson' : function( eson ) { // ECMAScript Object Notation
+        try {
+            return eval( "( function() { return " + eson + " } )()" )
+        } catch( e ) {
+            log.error( e )
+        }
+    },
+    'text/json' : function( json ) {
+        return JSON.parse( data ) 
+    },
+    'text/xml' : function( xml ) {
+        var parser = new DOMParser()
+	return parser.parseFromString( xml, 'text/xml' )
+    },
+}
+
+mimis.load.parser = mimis.x( mimis.load.parser, {
+    'application/xhtml+xml' : mimis.load.parser[ 'text/xml' ],
+    'image/svg+xml' : mimis.load.parser[ 'text/xml' ],
+} )
+
 //$.fn.style
 
 console.debug = console.info
 
-// Allow negative indexing for last element
-Array.prototype.__defineGetter__( -1, function() {
-    return this.length > 0 && this[ this.length - 1 ] || undefined
-} )
-
-Array.prototype.__defineSetter__( -1, function( val ) {
-    var idx = this.length > 0 ? this.length - 1 : 0
-    this[ idx ] = val
-} )
-
-String.prototype.concat = String.prototype.concat ||
-    function() {
-        var out = ''
-        mimis.each.apply( arguments, function() {
-            out += this.toString()
-        } )
-        return out
-    }
-
-// Add array iterator
-mimis.each = Array.prototype.each =
-    mimis.each || Array.prototype.each || function each( f, args ) {
-        if( $.isFunction( f ) ) {
-            try {
-                var out
-                for( var i = 0; i < this.length; i++ ) {
-                    var ret = f.apply( this[i], [ this[i], i, args ] )
-                    if( ret === true || ret === false ) {
-                        return ret
-                    } else if( ret === undefined ) {
-                    } else if( $.isArray( ret )
-                               || ret.concatenable ) {
-                        out = out || []
-                        out = out.concat( ret )
-                    } else if( $.isString( ret ) ) {
-                        out = out || '' 
-                        out = out.concat( ret )
-                    } else if( $.isFunction( ret ) ) {
-                        ret.call( this, out )
-                    } else if( $.isObject( ret ) ) {
-                        out = mimis.x( true, ret, out )
-                    }
-                }
-                return out
-            } catch( e ) {
-                console.debug( 'ï:each: Exception In Loop: ', e )
-                throw e
-            }
-        }
-    }
-
-String.prototype.each = String.prototype.each || Array.prototype.each
-
-if( NodeList.prototype != null ) {
-    NodeList.prototype.each = NodeList.prototype.each || Array.prototype.each
-}
-
-if( NamedNodeMap.prototype != null ) {
-    NamedNodeMap.prototype.each = NamedNodeMap.prototype.each || function( f ) {
-        Array.prototype.each.apply( this, [ function( attr, idx ) {
-            f.apply( attr, [ attr.nodeValue, attr.name ] )
-        } ] )
-    }
-}
-
-/*
-Array.prototype.__defineGetter__( 'empty', function() {
-    return this.length == 0
-} )
-*/
+mimis.load( 'array/mimis' )
 
 String.prototype.startsWith = String.prototype.startsWith || function( str ) {
     return this.indexOf( str ) == 0
@@ -192,51 +167,6 @@ mimis.set = mimis.set ||
         store[ ultimate ] = val
         return ret
     }
-
-
-
-mimis.load = mimis.load || function() {
-    return mimis.each.call( arguments, function( uri ) {
-        var ret
-        $.ajax( {
-            url : uri,
-            dataType : 'text', // ECMAScript Object Notation
-            async : false,
-            success : function( data, state, xhr ) {
-                ret = data
-
-                var type = xhr.getResponseHeader( 'Content-Type' )
-                var parser
-                if( parser = mimis.load.parser[ type ] ) {
-                    ret = parser( ret )
-                }
-            },
-        } )
-        return ret
-    } )
-}
-
-mimis.load.parser = mimis.load.parser || {
-    'application/eson' : function( eson ) {
-        try {
-            return eval( "( function() { return " + eson + " } )()" )
-        } catch( e ) {
-            log.error( e )
-        }
-    },
-    'text/json' : function( json ) {
-        return JSON.parse( data ) 
-    },
-    'text/xml' : function( xml ) {
-        var parser = new DOMParser()
-	return parser.parseFromString( xml, 'text/xml' )
-    },
-}
-
-mimis.load.parser = mimis.x( mimis.load.parser, {
-    'application/xhtml+xml' : mimis.load.parser[ 'text/xml' ],
-    'image/svg+xml' : mimis.load.parser[ 'text/xml' ],
-} )
 
 mimis.link = mimis.link || mimis.load
 
