@@ -1,0 +1,25 @@
+( function() {
+    var class2type = {}
+    var classes = "Boolean Number String Function Array Date RegExp Object".split(" ")
+    
+    for( var i = 0; i < classes.length; i++ ) {
+	class2type[ "[object " + name + "]" ] = name.toLowerCase()
+    }
+
+    var $ = {
+        type: function( obj ) {
+	    return obj == null ?
+		String( obj ) :
+		class2type[ toString.call(obj) ] || "object";
+	},
+    }
+
+    return mimis.x( {
+	isFunction: function( obj ) {
+		return $.type( obj ) === "function";
+	},
+	isArray: Array.isArray || function( obj ) {
+		return $.type( obj ) === "array";
+	},
+    } )
+} )()

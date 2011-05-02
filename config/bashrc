@@ -7,10 +7,10 @@ if [ "$PS1" ]; then
     host=$(hostname)
     [ "$host" = "OPT980-4s7g9p1" ] && host="jhu"
     PS1='\n\u@\h\[\033[1;35m\]:\[\033[0m\]\w\[\033[1;33m\]\$\[\033[0m\] '
-    PS1='\n@$host\[\033[1;35m\]:\[\033[0m\]$(
+    PS1='\n\[\033[1;33m\]@\[\033[0m\]$host\[\033[1;35m\]:\[\033[0m\]$(
 dir=$(pwd)
 [ "$dir" != "${dir#$(echo ~)}" ] && dir="~${dir#$(echo ~)}"
-[ "$dir" != "${dir%/...}" ] && dir="∅"
+[ "$dir" != "${dir##*/...}" ] && dir="\[\033[34m\]∅\[\033[0m\]${dir##*/...}"
 echo $dir
 )\[\033[1;33m\]:\[\033[0m\] '
 fi
@@ -41,8 +41,8 @@ done
 export LANG="en_US.UTF-8"
 export LC_ALL=$LANG
 
-# Make javascripts executable
-# echo ':javascript:M:://!::/usr/bin/js:' > /proc/sys/fs/binfmt_misc/register
+# Make javascripts executable #ToDo: shorten
+alias reg_javascript="sudo sh -c \"echo ':javascript:M:://!::/usr/bin/js:' \> /proc/sys/fs/binfmt_misc/register\""
 
 # ToDo: make sorting workflow easier by greying out windows quickly
 #function setactive() { termcolor('black'); }
@@ -108,6 +108,9 @@ function addtoserver() {
 }
 
 alias tx="git commit -a -m checkpoint"
+
+alias sync="git pull && git push"
+alias sync="git pull origin master && git push origin master"
 
 MIRROR[${#MIRROR[*]}]="origin"
 MIRROR[${#MIRROR[*]}]="web"

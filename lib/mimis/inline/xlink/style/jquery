@@ -1,0 +1,12 @@
+function( doc ) {
+    console.debug( 'Replacing styles with inline documents' )
+    $(doc).find( "style['xlink:href']" ).each( function() {
+        var $style = $(this)
+        var link = $style.attr( 'xlink:href' )
+        if( ! link ) { link = $style.attr( 'href' ) }
+        
+        if( link[ 0 ] != '#' ) { // non-local link
+            $style.text( mimis.load( link ) )
+        }
+    } )
+}
