@@ -28,7 +28,7 @@ INSERT INTO @startIds
       ON containing_tree.child_id = tree.competency_id
    WHERE containing_tree.path NOT LIKE '%|' + CAST(tree.competency_id AS VARCHAR(MAX)) + '|%' -- Avoid cycles
 )
-SELECT Leaves.id, AVG( score )
+SELECT Leaves.id, child_id, depth -- AVG( score )
 FROM  Leaves
-INNER JOIN rpt_competency_ge2013_score score ON Leaves.child_id = score.competency_id
-GROUP BY Leaves.id
+--INNER JOIN rpt_competency_ge2013_score score ON Leaves.child_id = score.competency_id
+--GROUP BY Leaves.id
