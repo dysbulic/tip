@@ -5,18 +5,20 @@
 --					FROM [dbo].[rpt_competency_ge2013] c
 --						INNER JOIN [dbo].[rpt_competency_ge2013_score] s ON c.id = s.competency_id
 
-;WITH Leaves ( id, child_id, depth, path ) AS
-( SELECT tree.competency_id, tree.child_id, 1, '|' + CAST(tree.competency_id AS VARCHAR(MAX)) + '|'
+;WITH nodes ( id, child_id, depth, path ) AS
+( SELECT tree.node_id, tree.child_id, 1, '|' + CAST(tree.node_id AS VARCHAR(MAX)) + '|'
     FROM rpt_competency_ge2013_tree_map tree
-    WHERE tree.competency_id IN ( SELECT DISTINCT id FROM rpt_competency_ge2013 )
+    WHERE tree.node_id IN ( SELECT DISTINCT id FROM rpt_competency_ge2013 )
   UNION ALL
-  SELECT containing_tree.id, tree.child_id, depth + 1, containing_tree.path  + '|' + CAST(tree.competency_id AS VARCHAR(MAX)) + '|'
+  SELECT supertree.id, tree.child_id, depth + 1, supertree.path  + '|' + CAST(tree.node_id AS VARCHAR(MAX)) + '|'
     FROM rpt_competency_ge2013_tree_map tree
-    INNER JOIN Leaves containing_tree -- recursive join
-      ON containing_tree.child_id = tree.competency_id
-   WHERE containing_tree.path NOT LIKE '%|' + CAST(tree.competency_id AS VARCHAR(MAX)) + '||' + CAST(tree.competency_id AS VARCHAR(MAX)) + '|%' -- Avoid cycles
+    INNER JOIN nodes supertree -- recursive join
+      ON supertree.child_id = tree.node_id
+   WHERE supertree.path NOT LIKE '%|' + CAST(tree.node_id AS VARCHAR(MAX)) + '|%' -- Avoid cycles
 )
-SELECT Leaves.id, child_id, depth -- AVG( score )
-FROM  Leaves
+SELECT * -- child_id, AVG( score ) AS AVG
+--FROM Leaves
+FROM rpt_competency_ge2013_tree_map tree
+WHERE node_id NOT IN ( SELECT child_id FROM nodes )
 --INNER JOIN rpt_competency_ge2013_score score ON Leaves.child_id = score.competency_id
---GROUP BY Leaves.id
+--GROUP BY Leaves.id, child_id
