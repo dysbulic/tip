@@ -1,23 +1,25 @@
-CREATE TABLE IF NOT EXISTS #ObjectRelations ( Id varchar(20), NextId varchar(20) )
+--IF NOT EXISTS ( SELECT * FROM sysobjects
+--				  WHERE id = object_id( N'[dbo].[#ObjectRelations]' ) AND OBJECTPROPERTY( id, N'IsUserTable') = 1 )
+CREATE TABLE #ObjectRelations( id varchar(20), nextId varchar(20) )
 
 /* Cycle */
 /*
-insert into #ObjectRelations values ('A', 'B')
-insert into #ObjectRelations values ('B', 'C') 
-insert into #ObjectRelations values ('C', 'A')
+INSERT INTO #ObjectRelations VALUES ('A', 'B')
+INSERT INTO #ObjectRelations VALUES ('B', 'C') 
+INSERT INTO #ObjectRelations VALUES ('C', 'A')
 */
 
 /* Multi root */
-insert into #ObjectRelations values ('G', 'B')
-insert into #ObjectRelations values ('A', 'B') 
-insert into #ObjectRelations values ('B', 'C')
-insert into #ObjectRelations values ('B', 'X')
-insert into #ObjectRelations values ('C', 'E') 
-insert into #ObjectRelations values ('C', 'D') 
-insert into #ObjectRelations values ('E', 'F') 
-insert into #ObjectRelations values ('D', 'F') 
+INSERT INTO #ObjectRelations VALUES ('G', 'B')
+INSERT INTO #ObjectRelations VALUES ('A', 'B') 
+INSERT INTO #ObjectRelations VALUES ('B', 'C')
+INSERT INTO #ObjectRelations VALUES ('B', 'X')
+INSERT INTO #ObjectRelations VALUES ('C', 'E') 
+INSERT INTO #ObjectRelations VALUES ('C', 'D') 
+INSERT INTO #ObjectRelations VALUES ('E', 'F') 
+INSERT INTO #ObjectRelations VALUES ('D', 'F') 
 
-declare @startIds table ( Id varchar(20) primary key )
+declare @startIds table ( Id VARCHAR(20) primary key )
 
 ;WITH 
     Ids (Id) AS ( SELECT Id FROM #ObjectRelations ),
@@ -37,7 +39,7 @@ INSERT INTO @startIds
     FROM #ObjectRelations rel
     WHERE rel.Id IN ( SELECT Id FROM @startIds )
   UNION ALL
-  SELECT rel.Id, rel.NextId, [Level] + 1, RecObjects.Path + ', ' + rel.Id
+  SELECT rel.Id, rel.NextId, [Level] + 1, RecObjects.Path + '' + rel.Id
     FROM #ObjectRelations rel
    INNER JOIN Objects RecObjects -- recursive join
       ON rel.Id = RecObjects.NextId
