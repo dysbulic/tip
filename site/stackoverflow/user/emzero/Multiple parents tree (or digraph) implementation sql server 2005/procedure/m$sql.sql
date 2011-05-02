@@ -31,9 +31,6 @@ INSERT INTO @startIds
   SELECT DISTINCT Ids.Id FROM Ids
     LEFT JOIN NextIds on Ids.Id = NextIds.Id
     WHERE NextIds.Id IS NULL
-  --UNION
-    /* So let's just pick anyone. (the way I will be getting the starting object for a cyclic doesn't matter for the regarding problem)*/
-    --SELECT TOP 1 Id FROM Ids
 
 SELECT * FROM @startIds
 
