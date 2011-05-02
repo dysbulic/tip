@@ -24,7 +24,7 @@ DECLARE @startIds TABLE ( id VARCHAR(20) PRIMARY KEY )
 
 --INSERT INTO @startIds SELECT TOP 1 id FROM #ObjectRelations
 ;WITH 
-    Ids (Id) AS ( SELECT Id FROM #ObjectRelations ),
+        Ids (Id) AS ( SELECT Id FROM #ObjectRelations ),
     NextIds (Id) AS ( SELECT NextId FROM #ObjectRelations )
 INSERT INTO @startIds
   /* This select will not return anything since there are not objects without predecessor, because it's a cyclic of course */
@@ -51,4 +51,4 @@ SELECT * FROM @startIds
 --FROM    Objects
 --ORDER BY [Level]
 
-drop table #ObjectRelations
+DROP TABLE #ObjectRelations
