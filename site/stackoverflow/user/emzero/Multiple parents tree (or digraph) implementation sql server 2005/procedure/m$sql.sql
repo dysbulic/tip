@@ -1,6 +1,7 @@
 --IF NOT EXISTS ( SELECT * FROM sysobjects
 --				  WHERE id = object_id( N'[dbo].[#ObjectRelations]' ) AND OBJECTPROPERTY( id, N'IsUserTable') = 1 )
-CREATE TABLE #ObjectRelations( id varchar(20), nextId varchar(20) )
+IF OBJECT_ID('tempdb..#ObjectRelations') IS NULL 
+	CREATE TABLE #ObjectRelations( id varchar(20), nextId varchar(20) )
 
 /* Cycle */
 /*
@@ -19,8 +20,9 @@ INSERT INTO #ObjectRelations VALUES ('C', 'D')
 INSERT INTO #ObjectRelations VALUES ('E', 'F') 
 INSERT INTO #ObjectRelations VALUES ('D', 'F') 
 
-declare @startIds table ( Id VARCHAR(20) primary key )
+DECLARE @startIds TABLE ( id VARCHAR(20) PRIMARY KEY )
 
+--INSERT INTO @startIds SELECT TOP 1 id FROM #ObjectRelations
 ;WITH 
     Ids (Id) AS ( SELECT Id FROM #ObjectRelations ),
     NextIds (Id) AS ( SELECT NextId FROM #ObjectRelations )
@@ -29,25 +31,27 @@ INSERT INTO @startIds
   SELECT DISTINCT Ids.Id FROM Ids
     LEFT JOIN NextIds on Ids.Id = NextIds.Id
     WHERE NextIds.Id IS NULL
-  UNION
+  --UNION
     /* So let's just pick anyone. (the way I will be getting the starting object for a cyclic doesn't matter for the regarding problem)*/
-    SELECT TOP 1 Id FROM Ids
+    --SELECT TOP 1 Id FROM Ids
 
-;WITH Objects (Id, NextId, [Level], Path) AS
-( -- This is the 'Anchor' or starting point of the recursive query
-  SELECT rel.Id, rel.NextId, 1, CAST(rel.Id as VARCHAR(MAX))
-    FROM #ObjectRelations rel
-    WHERE rel.Id IN ( SELECT Id FROM @startIds )
-  UNION ALL
-  SELECT rel.Id, rel.NextId, [Level] + 1, RecObjects.Path + '' + rel.Id
-    FROM #ObjectRelations rel
-   INNER JOIN Objects RecObjects -- recursive join
-      ON rel.Id = RecObjects.NextId
-   WHERE RecObjects.Path NOT LIKE '%' + rel.Id + '%'
+SELECT * FROM @startIds
 
-)
-SELECT DISTINCT Id, NextId, [Level], Path
-FROM    Objects
-ORDER BY [Level]
+--;WITH Objects (Id, NextId, [Level], Path) AS
+--( -- This is the 'Anchor' or starting point of the recursive query
+--  SELECT rel.Id, rel.NextId, 1, CAST(rel.Id as VARCHAR(MAX))
+--    FROM #ObjectRelations rel
+--    WHERE rel.Id IN ( SELECT Id FROM @startIds )
+--  UNION ALL
+--  SELECT rel.Id, rel.NextId, [Level] + 1, RecObjects.Path + '' + rel.Id
+--    FROM #ObjectRelations rel
+--   INNER JOIN Objects RecObjects -- recursive join
+--      ON rel.Id = RecObjects.NextId
+--   WHERE RecObjects.Path NOT LIKE '%' + rel.Id + '%'
+--
+--)
+--SELECT DISTINCT Id, NextId, [Level], Path
+--FROM    Objects
+--ORDER BY [Level]
 
 drop table #ObjectRelations
