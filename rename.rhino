@@ -7,8 +7,46 @@ var console = console !== undefined ? console : { log : print, debug : print }
     load( '.../lib/mimis/array/js' )
 
     importPackage( java.io )
+    importPackage( java.util )
+    importPackage( org.apache.tools.ant )
+    importPackage( org.apache.tools.ant.types )
+    importPackage( org.apache.tools.ant.types.resources )
+
+    log.debug( "Starting: FileLoader" );
+
+        FileSet files = new FileSet();
+        Project project = new Project();
+        project.setBasedir( "." );
+        files.setProject(project);
+        files.setDir( project.getBaseDir() );
+        files.setFollowSymlinks( false );
+
+        files.setIncludes( "**/*ml" );
+
+        log.debug( "Matched " + files.size() + " files" );
+
+        for( Iterator iter = files.iterator(); iter.hasNext(); ) {
+            Resource resource = (Resource)iter.next();
+            try {
+                if( resource instanceof FileResource ) {
+                    Mimis.load( resource.getName(),
+                                ((FileResource)resource).getFile() );
+                } else {
+                    Mimis.load( resource.getName(), resource.getInputStream() );
+                }
+            } catch( IOException ioe ) {
+                log.error( "Loading: " + resource.getName(), ioe );
+            }
+        }
+        
+        Mimis.shutdown();
+        log.debug( "Finished: FileLoader" );
+    }
+}
 
     var line = XRegExp( '(?<author> .*?) - (?<title> .*)', 'x' ) 
+
+
 
     function spanDir( dir, func ) {
         var list = new File( dir ).listFiles()
@@ -21,10 +59,15 @@ var console = console !== undefined ? console : { log : print, debug : print }
         } )
     }
     
+    function mkdir( path ) {
+    }
+
     function log( dir ) {
         var path = this.getPath()
         var match
         if( ( match = line.exec( path ) ) !== null ) {
+            mkdir( 'by/' + match.author + '/' + match.title )
+     
             console.log( match.author )
         } else {
             console.log( 'No Match: ' + path )
