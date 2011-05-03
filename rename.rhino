@@ -18,6 +18,16 @@ var console = ( console !== undefined
     var line = XRegExp( '(?<author> .*?) - (?<title> .*)', 'x' ) 
 
     function spanDir( dir, visitor ) {
+        var def = { visitor : {
+            pre : function() {},
+            post : function() {},
+            dir : {
+                pre : function() {},
+                post : function() {},
+            },
+        } }
+        visitor = mimis.x( def.visitor, visitor )
+
         var list = new File( dir ).listFiles()
         
         list.each( function( file ) {
@@ -26,6 +36,8 @@ var console = ( console !== undefined
                 visitor.dir.pre.call( file, list )
                 spanDir( file.getAbsolutePath(), visitor )
                 visitor.dir.pre.call( file, list )
+            } else {
+                visitor.file.call( file, list )
             }
             visitor.post.call( file, list )
         } )
