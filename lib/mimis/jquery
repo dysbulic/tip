@@ -120,7 +120,6 @@ mimis.x = mimis.x || $.extend
 
 mimis.load = mimis.load ||
         ( function() {
-            console.log( 'l' )
             function parse( ret, type ) {
                 var parser
                 if( parser = mimis.load.parser[ type ] ) {
@@ -180,8 +179,6 @@ mimis.load.parser = mimis.x( mimis.load.parser, {
 
 console.debug = console.info
 
-mimis.load( '.../lib/mimis/array/js' )
-
 String.prototype.startsWith = String.prototype.startsWith || function( str ) {
     return this.indexOf( str ) == 0
 }
@@ -189,6 +186,8 @@ String.prototype.startsWith = String.prototype.startsWith || function( str ) {
 String.prototype.endsWith = String.prototype.endsWith || function( str ) {
     return this.lastIndexOf( str ) == this.length - str.length
 }
+
+mimis.load( '.../lib/mimis/array/js' )
 
 mimis.bind = mimis.bind || function( name, listener ) {
     $(window).bind( 'mimis.' + name, listener )
