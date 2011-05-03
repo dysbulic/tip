@@ -10,73 +10,42 @@ var console = ( console !== undefined
 
 ;( function() {
     load( '.../lib/xregexp/js' )
-    load( '.../lib/mimis/array/js' )
+    load( '.../lib/mimis/js' )
 
     importPackage( java.io )
     importPackage( java.util )
-    importPackage( org.apache.tools.ant )
-    importPackage( org.apache.tools.ant.types )
-    importPackage( org.apache.tools.ant.types.resources )
-
-    console.debug( 'Starting: FileLoader' )
-
-    var files = new FileSet()
-    var project = new Project()
-    project.setBasedir( '.' )
-    files.setProject( project )
-    files.setDir( project.getBaseDir() )
-    files.setFollowSymlinks( false )
-
-    files.setIncludes( '**/' )
-    files.setIncludes( '**/*' )
-    files.setExcludes( '**/.git/' )
-    files.setExcludes( '**/.gitignore' )
-    files.setExcludes( '**/.htaccess' )
-
-    console.debug( 'Matched ' + files.size() + ' files' )
-
-    for( var iter = files.iterator(); iter.hasNext(); ) {
-        var resource = iter.next()
-        try {
-            if( resource.getFile !== undefined ) {
-                //Mimis.load( resource.getName(), resource.getFile() )
-                console.log( 'f:' + resource.getName() )
-            } else {
-                console.log( 'i:' + resource.getName() )
-                //Mimis.load( resource.getName(), resource.getInputStream() )
-            }
-        } catch( ioe ) {
-            console.error( "Loading: " + resource.getName(), ioe );
-        }
-    }
 
     var line = XRegExp( '(?<author> .*?) - (?<title> .*)', 'x' ) 
 
-    function spanDir( dir, func ) {
+    function spanDir( dir, visitor ) {
         var list = new File( dir ).listFiles()
         
         list.each( function( file ) {
+            visitor.pre.call( file, list )
             if( file.isDirectory() ) {
-                //spanDir( list[ i ].getAbsolutePath(), dirHandler )
+                visitor.dir.pre.call( file, list )
+                spanDir( file.getAbsolutePath(), visitor )
+                visitor.dir.pre.call( file, list )
             }
-            func.call( file, list )
+            visitor.post.call( file, list )
         } )
     }
     
     function mkdir( path ) {
     }
 
-    function log( dir ) {
-        var path = this.getPath()
-        var match
-        if( ( match = line.exec( path ) ) !== null ) {
-            mkdir( 'by/' + match.author + '/' + match.title )
-     
-            console.log( match.author )
-        } else {
-            console.log( 'No Match: ' + path )
+    var visitor {
+        post : function( dir ) {
+            var path = this.getPath()
+            var match
+            if( ( match = line.exec( path ) ) !== null ) {
+                mkdir( 'by/' + match.author + '/' + match.title )
+                console.log( match.author )
+            } else {
+                console.log( 'No Match: ' + path )
+            }
         }
+    }        
+        spanDir( '.', visitor )
     }
-
-    spanDir( '.', log )
 } )()
