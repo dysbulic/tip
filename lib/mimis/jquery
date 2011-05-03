@@ -128,34 +128,32 @@ mimis.load = mimis.load ||
                 }
                 return ret
             }
-            return ( true ? {} : {} )
-            //( ( $.ajax !== undefined )
-/*
-              ? function( uri ) {
-                  var ret
-                  $.ajax( {
-                      url : uri,
-                      dataType : 'text',
-                      async : false,
-                      success : function( data, state, xhr ) {
-                          ret = parse( data, xhr.getResponseHeader( 'Content-Type' ) )
-                      },
-                  } )
-                  return ret
-              }
-              : function( uri ) {
-                  var ret
-                  if( uri.startsWith( '...' ) ) {
-                      ret = parse( readFile( uri ), 'application/eson' )
-                  } else {
-                      ret = parse( readUrl( uri ), 'application/eson' )
-                  }
-                  return ret
-              } )
-*/
+            return (
+                ( $.ajax !== undefined )
+                    ? function( uri ) {
+                        var ret
+                        $.ajax( {
+                            url : uri,
+                            dataType : 'text',
+                            async : false,
+                            success : function( data, state, xhr ) {
+                                ret = parse( data, xhr.getResponseHeader( 'Content-Type' ) )
+                            },
+                        } )
+                        return ret
+                    }
+                : function( uri ) {
+                    var ret
+                    if( uri.startsWith( '...' ) ) {
+                        ret = parse( readFile( uri ), 'application/eson' )
+                    } else {
+                        ret = parse( readUrl( uri ), 'application/eson' )
+                    }
+                    return ret
+                }
+            )
         } )()
 
-console.log( mimis.load )
 mimis.load.parser = mimis.load.parser || {
     'application/eson' : function( eson ) { // ECMAScript Object Notation
         try {
