@@ -9,160 +9,162 @@ var console = ( console !== undefined
                     error : print,
                 } )
 
-var ext$ = ( function () { return this } )().$
-var $ = ext$ !== undefined ? ext$ :
+var $ =
     ( function() {
-        var class2type = {}
-        var classes = 'Boolean Number String Function Array Date RegExp Object'.split(' ')
-        
-        for( var i = 0; i < classes.length; i++ ) {
-            var name = classes[ i ]
-	    class2type[ "[object " + name + "]" ] = name.toLowerCase()
-        }
-        
-        function type( obj ) {
-	    return obj == null ?
-		String( obj ) :
-		class2type[ toString.call( obj ) ] || 'object'
-	}
-        
-        var $ = {
-	    isFunction : function( obj ) {
-		return type( obj ) === 'function'
-	    },
-	    isArray : typeof Array.isArray !== 'undefined' ? Array.isArray : function( obj ) {
-		return type( obj ) === 'array'
-	    },
-            isString : function( str ) {
-                return str instanceof String || type( str ) === 'string'
-            },
-            isObject : function( obj ) {
-                return obj instanceof Object || type( obj ) === 'object'
-            },
-	    isPlainObject : function( obj ) {
-              	if( ! obj || type( obj ) !== 'object' ) { // || obj.nodeType || $.isWindow( obj ) ) { // Important?
-		    return false
-		}
-
-	        var hasOwn = Object.prototype.hasOwnProperty
-
-		if( obj.constructor
-                    && ! hasOwn.call( obj, 'constructor' )
-                    && ! hasOwn.call( obj.constructor.prototype, 'isPrototypeOf' ) ) {
-		    return false
-		}
-
-		var key
-		for( key in obj ) {} // inhereted properties postcede own
-
-		return key === undefined || hasOwn.call( obj, key )
-            },
-        }
-
-        $.extend = function() {
-	    var target = arguments[0] || {}
-	    var deep = false
-	    var i = 1
-
-	    // Handle a deep copy situation
-	    if( typeof target === 'boolean' ) {
-		deep = target
-		target = arguments[1] || {}
-		// skip the boolean and the target
-		i = 2
-	    }
-            
-	    // Handle case when target is a string or something (possible in deep copy)
-	    if( ! $.isObject( target ) && ! $.isFunction( target ) ) {
-		target = {}
-	    }
-            
-	    var length = arguments.length
-            
-	    // extend jQuery itself if only one argument is passed
-	    if( length === i ) {
-		target = this
-		--i
-	    }
-            
-	    var options, name, src, copy, copyIsArray, clone
-
-	    for( ; i < length; i++ ) {
-		// Only deal with non-null/undefined values
-		if( ( options = arguments[ i ] ) != null ) {
-		    // Extend the base object
-		    for( name in options ) {
-			src = target[ name ]
-			copy = options[ name ]
-                        
-			// Prevent never-ending loop
-			if ( target === copy ) {
-			    continue
-			}
-                        
-			// Recurse if we're merging plain objects or arrays
-			if( deep && copy && ( $.isPlainObject( copy ) || ( copyIsArray = $.isArray( copy ) ) ) ) {
-			    if ( copyIsArray ) {
-				copyIsArray = false
-				clone = src && $.isArray(src) ? src : []
-                            } else {
-				clone = src && $.isPlainObject( src ) ? src : {}
-			    }
-                            
-			    // Never move original objects, clone them
-			    target[ name ] = $.extend( deep, clone, copy )
-                            
-			    // Don't bring in undefined values
-			} else if ( copy !== undefined ) {
-			    target[ name ] = copy
-			}
-		    }
-		}
-	    }
-	    return target
-        }
-        return $
+        var $ = ( function () { return this } )().$
+        return ( $ !== undefined ? $ :
+                 ( function() {
+                     var class2type = {}
+                     var classes = 'Boolean Number String Function Array Date RegExp Object'.split(' ')
+                     
+                     for( var i = 0; i < classes.length; i++ ) {
+                         var name = classes[ i ]
+	                 class2type[ "[object " + name + "]" ] = name.toLowerCase()
+                     }
+                     
+                     function type( obj ) {
+	                 return obj == null ?
+		             String( obj ) :
+		             class2type[ toString.call( obj ) ] || 'object'
+	             }
+                     
+                     var $ = {
+	                 isFunction : function( obj ) {
+		             return type( obj ) === 'function'
+	                 },
+	                 isArray : typeof Array.isArray !== 'undefined' ? Array.isArray : function( obj ) {
+		             return type( obj ) === 'array'
+	                 },
+                         isString : function( str ) {
+                             return str instanceof String || type( str ) === 'string'
+                         },
+                         isObject : function( obj ) {
+                             return obj instanceof Object || type( obj ) === 'object'
+                         },
+	                 isPlainObject : function( obj ) {
+              	             if( ! obj || type( obj ) !== 'object' ) { // || obj.nodeType || $.isWindow( obj ) ) { // Important?
+		                 return false
+		             }
+                             
+	                     var hasOwn = Object.prototype.hasOwnProperty
+                             
+		             if( obj.constructor
+                                 && ! hasOwn.call( obj, 'constructor' )
+                                 && ! hasOwn.call( obj.constructor.prototype, 'isPrototypeOf' ) ) {
+		                 return false
+		             }
+                             
+		             var key
+		             for( key in obj ) {} // inhereted properties postcede own
+                             
+		             return key === undefined || hasOwn.call( obj, key )
+                         },
+                     }
+                     
+                     $.extend = function() {
+	                 var target = arguments[0] || {}
+	                 var deep = false
+	                 var i = 1
+                         
+	                 // Handle a deep copy situation
+	                 if( typeof target === 'boolean' ) {
+		             deep = target
+		             target = arguments[1] || {}
+		             // skip the boolean and the target
+		             i = 2
+	                 }
+                         
+	                 // Handle case when target is a string or something (possible in deep copy)
+	                 if( ! $.isObject( target ) && ! $.isFunction( target ) ) {
+		             target = {}
+	                 }
+                         
+	                 var length = arguments.length
+                         
+	                 // extend jQuery itself if only one argument is passed
+	                 if( length === i ) {
+		             target = this
+		             --i
+	                 }
+                         
+	                 var options, name, src, copy, copyIsArray, clone
+                         
+	                 for( ; i < length; i++ ) {
+		             // Only deal with non-null/undefined values
+		             if( ( options = arguments[ i ] ) != null ) {
+		                 // Extend the base object
+		                 for( name in options ) {
+			             src = target[ name ]
+			             copy = options[ name ]
+                                     
+			             // Prevent never-ending loop
+			             if ( target === copy ) {
+			                 continue
+			             }
+                                     
+			             // Recurse if we're merging plain objects or arrays
+			             if( deep && copy && ( $.isPlainObject( copy ) || ( copyIsArray = $.isArray( copy ) ) ) ) {
+			                 if ( copyIsArray ) {
+				             copyIsArray = false
+				             clone = src && $.isArray(src) ? src : []
+                                         } else {
+				             clone = src && $.isPlainObject( src ) ? src : {}
+			                 }
+                                         
+			                 // Never move original objects, clone them
+			                 target[ name ] = $.extend( deep, clone, copy )
+                                         
+			                 // Don't bring in undefined values
+			             } else if ( copy !== undefined ) {
+			                 target[ name ] = copy
+			             }
+		                 }
+		             }
+	                 }
+	                 return target
+                     }
+                     return $
+                 } )()
+               )
     } )()
-
-console.debug( 'gen:$' )
-
+    
 mimis.x = mimis.x || $.extend
-
+    
 mimis.load = mimis.load ||
-        ( function() {
-            function parse( ret, type ) {
-                var parser
-                if( parser = mimis.load.parser[ type ] ) {
-                    ret = parser( ret )
-                }
-                return ret
+    ( function() {
+        function parse( ret, type ) {
+            var parser
+            if( parser = mimis.load.parser[ type ] ) {
+                ret = parser( ret )
             }
-            return (
-                ( $.ajax !== undefined )
-                    ? function( uri ) {
-                        var ret
-                        $.ajax( {
-                            url : uri,
-                            dataType : 'text',
-                            async : false,
-                            success : function( data, state, xhr ) {
-                                ret = parse( data, xhr.getResponseHeader( 'Content-Type' ) )
-                            },
-                        } )
-                        return ret
-                    }
-                : function( uri ) {
+            return ret
+        }
+        return (
+            ( $.ajax !== undefined )
+                ? function( uri ) {
                     var ret
-                    if( uri.startsWith( '...' ) ) {
-                        ret = parse( readFile( uri ), 'application/javascript' )
-                    } else {
-                        ret = parse( readUrl( uri ), 'application/javascript' )
-                    }
+                    $.ajax( {
+                        url : uri,
+                        dataType : 'text',
+                        async : false,
+                        success : function( data, state, xhr ) {
+                            ret = parse( data, xhr.getResponseHeader( 'Content-Type' ) )
+                        },
+                    } )
                     return ret
+                    }
+            : function( uri ) {
+                var ret
+                if( uri.startsWith( '...' ) ) {
+                    ret = parse( readFile( uri ), 'application/javascript' )
+                } else {
+                    ret = parse( readUrl( uri ), 'application/javascript' )
                 }
-            )
-        } )()
-
+                    return ret
+            }
+        )
+    } )()
+    
 mimis.load.parser = mimis.load.parser || {
     'application/eson' : function( eson ) { // ECMAScript Object Notation
         try {
@@ -195,6 +197,8 @@ mimis.load.parser = mimis.x( mimis.load.parser, {
 //$.fn.style
 
 console.debug = console.info
+
+console.debug( 'gen:$' )
 
 String.prototype.startsWith = String.prototype.startsWith || function( str ) {
     return this.indexOf( str ) == 0
