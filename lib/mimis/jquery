@@ -128,8 +128,11 @@ mimis.load = mimis.load ||
                 }
                 return ret
             }
-            return {}
-            ;( $.ajax !== undefined
+            return
+            ( $.ajax !== undefined
+              ? {}
+              : {} )
+/*
               ? function( uri ) {
                   var ret
                   $.ajax( {
@@ -151,6 +154,7 @@ mimis.load = mimis.load ||
                   }
                   return ret
               } )
+*/
         } )()
 
 console.log( mimis.load )
