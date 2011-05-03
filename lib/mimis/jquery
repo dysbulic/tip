@@ -1,5 +1,121 @@
 var mimis = mimis || {}
 
+var $ = $ !== undefined ? $ :
+    ( function() {
+        var class2type = {}
+        var classes = "Boolean Number String Function Array Date RegExp Object".split(" ")
+        
+        for( var i = 0; i < classes.length; i++ ) {
+            var name = classes[ i ]
+	    class2type[ "[object " + name + "]" ] = name.toLowerCase()
+        }
+        
+        function type( obj ) {
+	    return obj == null ?
+		String( obj ) :
+		class2type[ toString.call(obj) ] || "object";
+	}
+        
+        var $ = {
+	    isFunction : function( obj ) {
+		return type( obj ) === 'function'
+	    },
+	    isArray : typeof Array.isArray != 'undefined' ? Array.isArray : function( obj ) {
+		return type( obj ) === 'array'
+	    },
+            isString : function( str ) {
+                return str instanceof String || type( str ) == 'string'
+            },
+            isObject : function( obj ) {
+                return obj instanceof Object || $.type( obj ) == 'object'
+            },
+	    isPlainObject : function( obj ) {
+              	if( ! obj || type( obj ) !== 'object' ) { // || obj.nodeType || $.isWindow( obj ) ) { // Important?
+		    return false
+		}
+
+	        var hasOwn = Object.prototype.hasOwnProperty
+
+		if( obj.constructor
+                    && ! hasOwn.call( obj, 'constructor' )
+                    && ! hasOwn.call( obj.constructor.prototype, 'isPrototypeOf' ) ) {
+		    return false
+		}
+
+		var key
+		for( key in obj ) {}
+
+		return key === undefined || hasOwn.call( obj, key )
+            },
+        }
+
+        $.extend = function() {
+	    var target = arguments[0] || {}
+	    var deep = false
+	    var i = 1
+
+	    // Handle a deep copy situation
+	    if( typeof target === 'boolean' ) {
+		deep = target
+		target = arguments[1] || {}
+		// skip the boolean and the target
+		i = 2
+	    }
+            
+	    // Handle case when target is a string or something (possible in deep copy)
+	    if( ! $.isObject( target ) && ! $.isFunction( target ) ) {
+		target = {}
+	    }
+            
+	    var length = arguments.length
+            
+	    // extend jQuery itself if only one argument is passed
+	    if( length === i ) {
+		target = this
+		--i
+	    }
+            
+	    var options, name, src, copy, copyIsArray, clone
+
+	    for( ; i < length; i++ ) {
+		// Only deal with non-null/undefined values
+		if( ( options = arguments[ i ] ) != null ) {
+		    // Extend the base object
+		    for( name in options ) {
+			src = target[ name ]
+			copy = options[ name ]
+                        
+			// Prevent never-ending loop
+			if ( target === copy ) {
+			    continue
+			}
+                        
+			// Recurse if we're merging plain objects or arrays
+			if( deep && copy && ( jQuery.isPlainObject(copy) || (copyIsArray = jQuery.isArray(copy)) ) ) {
+			    if ( copyIsArray ) {
+				copyIsArray = false;
+				clone = src && jQuery.isArray(src) ? src : [];
+                                
+			    } else {
+				clone = src && jQuery.isPlainObject(src) ? src : {};
+			    }
+                            
+			    // Never move original objects, clone them
+			    target[ name ] = jQuery.extend( deep, clone, copy );
+                            
+			    // Don't bring in undefined values
+			} else if ( copy !== undefined ) {
+			    target[ name ] = copy;
+			}
+		    }
+		}
+	    }
+	    return target
+        }
+        return $
+    } )()
+
+
 $.isString = $.isString ||
     function( str ) {
         return str instanceof String || $.type( str ) == 'string'
@@ -12,25 +128,27 @@ $.isObject = $.isObject ||
 
 mimis.x = mimis.x || $.extend
 
-mimis.load = mimis.load || function( uri ) {
-//    return mimis.each.call( arguments, function( uri ) {
-    var ret
-    $.ajax( {
-        url : uri,
-        dataType : 'text',
-        async : false,
-        success : function( data, state, xhr ) {
-            ret = data
-            
-            var type = xhr.getResponseHeader( 'Content-Type' )
-            var parser
-            if( parser = mimis.load.parser[ type ] ) {
-                ret = parser( ret )
-            }
-            },
-    } )
-    return ret
-}
+mimis.load = mimis.load ||
+    ( $.ajax !== undefined
+      ? function( uri ) {
+          var ret
+          $.ajax( {
+              url : uri,
+              dataType : 'text',
+              async : false,
+              success : function( data, state, xhr ) {
+                  ret = data
+                  var type = xhr.getResponseHeader( 'Content-Type' )
+                  var parser
+                  if( parser = mimis.load.parser[ type ] ) {
+                      ret = parser( ret )
+                  }
+              },
+          } )
+          return ret
+      }
+      : function( uri ) {
+      } )
 
 mimis.load.parser = mimis.load.parser || {
     'application/eson' : function( eson ) { // ECMAScript Object Notation
@@ -172,13 +290,15 @@ mimis.link = mimis.link || mimis.load
 mimis.ns = mimis.ns ||
     ( function() {
         var ns = mimis.link( '.../lib/mimis/ns/abbreviations/eson' )
-        document.documentElement.attributes.each( function( ) {
+/*
+        document !== undefined && document.documentElement.attributes.each( function( ) {
             if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
                 var name = match[1] || ''
                 var href = this.nodeValue
                 ns[ name ] = href
             }
         } )
+*/
         // Reverse map
         for( abbr in ns ) {
             if( abbr != '' ) {
@@ -213,7 +333,7 @@ mimis.endpoint = mimis.endpoint || {
     },
 }
 
-mimis.$root = mimis.$root || $(document.documentElement)
+//mimis.$root = mimis.$root || $(document.documentElement)
 
 mimis.parse = mimis.parse || {}
 

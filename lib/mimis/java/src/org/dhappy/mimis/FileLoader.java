@@ -9,10 +9,10 @@ import java.util.Iterator;
 import java.util.Date;
 import java.text.DateFormat;
 
+import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.Project;
-import org.apache.tools.ant.types.FileSet;
 
 public class FileLoader {
     private static Log log = LogFactory.getLog( FileLoader.class );
