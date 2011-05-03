@@ -1,46 +1,33 @@
 //!/bin/js
 
+//var console = console !== undefined ? console : { log : print }
+
 ( function() {
-    load( '.../lib/xregexp/js' )
-    load( '.../lib/mimis/array/js' )
+//    load( '.../lib/xregexp/js' )
+//    load( '.../lib/mimis/array/js' )
 
-    //importPackage( java.io )
+    importPackage( java.io )
 
-    print( 'Start' )
-    var regex = XRegExp( "(?<month> [0-9]+ ) [-/.\\s]  # month\n\
-                      (?<day>   [0-9]+ ) [-/.\\s]  # day  \n\
-                      (?<year>  [0-9]+ )           # year   ",
-                     'x' ) 
-    print( 'Start' )
-
-    var input = "04/20/2009"
-    print( input )
-
-    input.replace( regex, "${year}-${month}-${day}" ) // "2009-04-20"
-
-    var match = regex.exec( input )
-    print( match.month ) // "04"
-
-    //regex instanceof RegExp // true
-    //regex.constructor == RegExp // true
+//    var line = XRegExp( '(?<author> .*?) - (?<title> .*)', 'x' ) 
+/*
+    function spanDir( dir, func ) {
+        var list = new File( dir ).listFiles()
+        
+        list.each( function( file ) {
+            if( file.isDirectory() ) {
+                //spanDir( list[ i ].getAbsolutePath(), dirHandler )
+            }
+            func.call( file, list )
+        } )
+    }
     
-    return
-    
-function spanDir( dir, dirHandler ) {
-    var list = new File(dir).listFiles()
+    function log( dir ) {
+        var path = this.getPath()
+        //var match = line.exec( path )
+        //console.log( match.author )
+        console.log( path )
+    }
 
-    list.each( function( file ) {
-        if( file.isDirectory() ) {
-            //spanDir( list[ i ].getAbsolutePath(), dirHandler )
-        }
-        dirHandler( file )
-    } )
-}
-
-function showIt( file ) {
-    var path = file.getPath()
-    print( path )
-}
-
-spanDir( '.', showIt )
+    spanDir( '.', log )
+*/
 } )()
