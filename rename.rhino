@@ -14,7 +14,7 @@ var console = ( console !== undefined
     importPackage( org.apache.tools.ant.types )
     importPackage( org.apache.tools.ant.types.resources )
 
-    log.debug( "Starting: FileLoader" );
+    console.debug( "Starting: FileLoader" );
 
     var files = new FileSet()
     var project = new Project()
@@ -25,7 +25,7 @@ var console = ( console !== undefined
 
     files.setIncludes( '**/*ml' )
 
-    log.debug( 'Matched ' + files.size() + ' files' );
+    console.debug( 'Matched ' + files.size() + ' files' );
 
     for( var iter = files.iterator(); iter.hasNext(); ) {
         var resource = iter.next()
