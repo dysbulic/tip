@@ -189,16 +189,18 @@ String.prototype.endsWith = String.prototype.endsWith || function( str ) {
 
 mimis.load( '.../lib/mimis/array/js' )
 
+mimis.$window = $.isFunction( $ ) ? $(window) : undefined
+
 mimis.bind = mimis.bind || function( name, listener ) {
-    $(window).bind( 'mimis.' + name, listener )
+    mimis.$window.bind( 'mimis.' + name, listener )
 }
 
 mimis.unbind = mimis.unbind || function( name, listener ) {
-    $(window).unbind( 'mimis.' + name, listener )
+    mimis.$window.unbind( 'mimis.' + name, listener )
 }
 
 mimis.trigger = mimis.trigger || function( name, extra ) {
-    $(window).trigger( 'mimis.' + name, extra )
+    mimis.$window.trigger( 'mimis.' + name, extra )
 }
 
 mimis.__defineGetter__( 'uri', function() {
@@ -446,7 +448,7 @@ if( mimis.ns.abbr == 'svg' ) {
         }
 }
 
-$( function() {
+$.isFunction( $ ) && $( function() {
     $('head').each( function() {
         var $head = $(this)
         var $titles
@@ -478,7 +480,7 @@ if( mimis.ns.abbr == 'svg' ) {
     } )
 }
 
-if( mimis.ns.abbr != 'html' ) {
+if( mimis.ns.abbr != 'html' && document ) {
     mimis.$elem = mimis.$elem || function( name, attrs ) {
         var $elem = $( document.createElementNS( mimis.ns, name ) )
         if( attrs ) {
