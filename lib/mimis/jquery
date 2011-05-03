@@ -1,5 +1,13 @@
 var mimis = mimis || {}
 
+var console = ( console !== undefined
+                ? console
+                : {
+                      log : print,
+                    debug : print,
+                    error : print,
+                } )
+
 ;( function() {
 var ext$ = ( function () { return this } )().$
 var $ = ext$ !== undefined ? ext$ :
