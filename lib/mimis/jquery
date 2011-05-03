@@ -93,21 +93,20 @@ var $ = $ !== undefined ? $ :
 			}
                         
 			// Recurse if we're merging plain objects or arrays
-			if( deep && copy && ( jQuery.isPlainObject(copy) || (copyIsArray = jQuery.isArray(copy)) ) ) {
+			if( deep && copy && ( $.isPlainObject( copy ) || ( copyIsArray = $.isArray( copy ) ) ) ) {
 			    if ( copyIsArray ) {
-				copyIsArray = false;
-				clone = src && jQuery.isArray(src) ? src : [];
-                                
-			    } else {
-				clone = src && jQuery.isPlainObject(src) ? src : {};
+				copyIsArray = false
+				clone = src && $.isArray(src) ? src : []
+                            } else {
+				clone = src && $.isPlainObject( src ) ? src : {}
 			    }
                             
 			    // Never move original objects, clone them
-			    target[ name ] = jQuery.extend( deep, clone, copy );
+			    target[ name ] = $.extend( deep, clone, copy )
                             
 			    // Don't bring in undefined values
 			} else if ( copy !== undefined ) {
-			    target[ name ] = copy;
+			    target[ name ] = copy
 			}
 		    }
 		}
