@@ -1,13 +1,16 @@
 var mimis = mimis || {}
 
 ;( function() {
-var console = ( console !== undefined
-                ? console
-                : {
-                      log : print,
-                    debug : print,
-                    error : print,
-                } )
+var console =
+    ( function() {
+        var console = ( function () { return this } )().console
+        return ( console !== undefined ? console :
+                 {
+                       log : print,
+                     debug : print,
+                     error : print,
+                 } )
+    } )()
 
 var $ =
     ( function() {
@@ -61,7 +64,7 @@ var $ =
                          },
                      }
                      
-                     $.extend = function() {
+                     $.extend = $.extend || function() {
 	                 var target = arguments[0] || {}
 	                 var deep = false
 	                 var i = 1
