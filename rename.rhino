@@ -23,9 +23,11 @@ var console = console !== undefined ? console : { log : print, debug : print }
     
     function log( dir ) {
         var path = this.getPath()
-        var match = line.exec( path )
-        console.log( match.author )
-        //console.log( path )
+        if( ( var match = line.exec( path ) ) !== null ) {
+            console.log( match.author )
+        } else {
+            console.log( 'No Match: ' + path )
+        }
     }
 
     spanDir( '.', log )
