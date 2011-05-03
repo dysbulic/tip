@@ -5,7 +5,7 @@ var mimis = mimis || {}
 var $ = $ !== undefined ? $ :
     ( function() {
         var class2type = {}
-        var classes = "Boolean Number String Function Array Date RegExp Object".split(" ")
+        var classes = 'Boolean Number String Function Array Date RegExp Object'.split(' ')
         
         for( var i = 0; i < classes.length; i++ ) {
             var name = classes[ i ]
@@ -15,21 +15,21 @@ var $ = $ !== undefined ? $ :
         function type( obj ) {
 	    return obj == null ?
 		String( obj ) :
-		class2type[ toString.call(obj) ] || "object";
+		class2type[ toString.call( obj ) ] || 'object'
 	}
         
         var $ = {
 	    isFunction : function( obj ) {
 		return type( obj ) === 'function'
 	    },
-	    isArray : typeof Array.isArray != 'undefined' ? Array.isArray : function( obj ) {
+	    isArray : typeof Array.isArray !== 'undefined' ? Array.isArray : function( obj ) {
 		return type( obj ) === 'array'
 	    },
             isString : function( str ) {
-                return str instanceof String || type( str ) == 'string'
+                return str instanceof String || type( str ) === 'string'
             },
             isObject : function( obj ) {
-                return obj instanceof Object || $.type( obj ) == 'object'
+                return obj instanceof Object || type( obj ) === 'object'
             },
 	    isPlainObject : function( obj ) {
               	if( ! obj || type( obj ) !== 'object' ) { // || obj.nodeType || $.isWindow( obj ) ) { // Important?
@@ -45,7 +45,7 @@ var $ = $ !== undefined ? $ :
 		}
 
 		var key
-		for( key in obj ) {}
+		for( key in obj ) {} // inhereted properties postcede own
 
 		return key === undefined || hasOwn.call( obj, key )
             },
@@ -120,26 +120,33 @@ var $ = $ !== undefined ? $ :
 mimis.x = mimis.x || $.extend
 
 mimis.load = mimis.load ||
-    ( $.ajax !== undefined
-      ? function( uri ) {
-          var ret
-          $.ajax( {
-              url : uri,
-              dataType : 'text',
-              async : false,
-              success : function( data, state, xhr ) {
-                  ret = data
-                  var type = xhr.getResponseHeader( 'Content-Type' )
-                  var parser
-                  if( parser = mimis.load.parser[ type ] ) {
-                      ret = parser( ret )
-                  }
-              },
-          } )
-          return ret
-      }
-      : function( uri ) {
-          console.log( 'l:' + uri )
+        ( function() {
+            function parse( ret, type ) {
+                var parser
+                if( parser = mimis.load.parser[ type ] ) {
+                    ret = parser( ret )
+                }
+                return ret
+            }
+            ( $.ajax !== undefined
+              ? function( uri ) {
+                  var ret
+                  $.ajax( {
+                      url : uri,
+                      dataType : 'text',
+                      async : false,
+                      success : function( data, state, xhr ) {
+                          ret = parse( data, xhr.getResponseHeader( 'Content-Type' ) )
+                      },
+                  } )
+                  return ret
+              }
+              : function( uri ) {
+                  var ret
+                  if( uri.startsWith( '...' ) ) {
+                      ret = readFile( uri )
+                  } else {
+              ret = 
       } )
 
 mimis.load.parser = mimis.load.parser || {
