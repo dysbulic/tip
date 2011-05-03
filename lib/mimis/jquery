@@ -127,6 +127,7 @@ mimis.load = mimis.load ||
                 }
                 return ret
             }
+            return
             ( $.ajax !== undefined
               ? function( uri ) {
                   var ret
@@ -143,10 +144,12 @@ mimis.load = mimis.load ||
               : function( uri ) {
                   var ret
                   if( uri.startsWith( '...' ) ) {
-                      ret = readFile( uri )
+                      ret = parse( readFile( uri ), 'application/eson' )
                   } else {
-              ret = 
-      } )
+                      ret = parse( readUrl( uri ), 'application/eson' )
+                  }
+              } )
+        } )()
 
 mimis.load.parser = mimis.load.parser || {
     'application/eson' : function( eson ) { // ECMAScript Object Notation
