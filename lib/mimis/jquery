@@ -12,7 +12,8 @@ var console =
                  } )
     } )()
 
-    print( console.debug )
+console.log( console.debug )
+
 var $ =
     ( function() {
         var $ = ( function () { return this } )().$
@@ -200,7 +201,7 @@ mimis.load.parser = mimis.x( mimis.load.parser, {
 
 //$.fn.style
 
-console.debug = console.info
+console.debug = console.debug || console.info
 
 console.debug( 'gen:$' )
 
