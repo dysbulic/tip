@@ -1,8 +1,8 @@
 var mimis = mimis || {}
 
 ;( function() {
-
-var $ = $ !== undefined ? $ :
+var ext$ = ( function () { return this } )().$
+var $ = ext$ !== undefined ? ext$ :
     ( function() {
         console.debug( 'gen:$' )
 
@@ -129,7 +129,6 @@ mimis.load = mimis.load ||
                 }
                 return ret
             }
-            console.log( $ )
             return (
                 ( $.ajax !== undefined )
                     ? function( uri ) {
