@@ -2,7 +2,11 @@
 
 var console = ( console !== undefined
                 ? console
-                : { log : print, debug : print, error : print } )
+                : {
+                      log : print,
+                    debug : print,
+                    error : print,
+                } )
 
 ;( function() {
     load( '.../lib/xregexp/js' )
@@ -14,7 +18,7 @@ var console = ( console !== undefined
     importPackage( org.apache.tools.ant.types )
     importPackage( org.apache.tools.ant.types.resources )
 
-    console.debug( "Starting: FileLoader" );
+    console.debug( 'Starting: FileLoader' )
 
     var files = new FileSet()
     var project = new Project()
@@ -23,17 +27,21 @@ var console = ( console !== undefined
     files.setDir( project.getBaseDir() )
     files.setFollowSymlinks( false )
 
-    files.setIncludes( '**/*ml' )
+    files.setIncludes( '**/*' )
+    files.setExcludes( '**/.git/' )
+    files.setExcludes( '**/.gitignore' )
+    files.setExcludes( '**/.htaccess' )
 
-    console.debug( 'Matched ' + files.size() + ' files' );
+    console.debug( 'Matched ' + files.size() + ' files' )
 
     for( var iter = files.iterator(); iter.hasNext(); ) {
         var resource = iter.next()
         try {
             if( resource.getFile !== undefined ) {
                 //Mimis.load( resource.getName(), resource.getFile() )
-                console.log( resource.getName(), resource.getFile() )
+                console.log( 'f:' + resource.getName() )
             } else {
+                console.log( 'i:' + resource.getName() )
                 //Mimis.load( resource.getName(), resource.getInputStream() )
             }
         } catch( ioe ) {
