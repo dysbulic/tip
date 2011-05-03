@@ -23,7 +23,8 @@ var console = console !== undefined ? console : { log : print, debug : print }
     
     function log( dir ) {
         var path = this.getPath()
-        if( ( var match = line.exec( path ) ) !== null ) {
+        var match
+        if( ( match = line.exec( path ) ) !== null ) {
             console.log( match.author )
         } else {
             console.log( 'No Match: ' + path )
