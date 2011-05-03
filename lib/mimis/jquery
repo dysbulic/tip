@@ -4,6 +4,8 @@ var mimis = mimis || {}
 
 var $ = $ !== undefined ? $ :
     ( function() {
+        console.debug( 'gen:$' )
+
         var class2type = {}
         var classes = 'Boolean Number String Function Array Date RegExp Object'.split(' ')
         
@@ -127,6 +129,7 @@ mimis.load = mimis.load ||
                 }
                 return ret
             }
+            console.log( $ )
             return (
                 ( $.ajax !== undefined )
                     ? function( uri ) {
@@ -295,7 +298,7 @@ mimis.link = mimis.link || mimis.load
 mimis.ns = mimis.ns ||
     ( function() {
         var ns = mimis.link( '.../lib/mimis/ns/abbreviations/eson' )
-/*
+
         document !== undefined && document.documentElement.attributes.each( function( ) {
             if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
                 var name = match[1] || ''
@@ -303,7 +306,7 @@ mimis.ns = mimis.ns ||
                 ns[ name ] = href
             }
         } )
-*/
+
         // Reverse map
         for( abbr in ns ) {
             if( abbr != '' ) {
