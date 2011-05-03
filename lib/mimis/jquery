@@ -120,6 +120,7 @@ mimis.x = mimis.x || $.extend
 
 mimis.load = mimis.load ||
         ( function() {
+            console.log( 'l' )
             function parse( ret, type ) {
                 var parser
                 if( parser = mimis.load.parser[ type ] ) {
@@ -127,8 +128,8 @@ mimis.load = mimis.load ||
                 }
                 return ret
             }
-            return
-            ( $.ajax !== undefined
+            return {}
+            ;( $.ajax !== undefined
               ? function( uri ) {
                   var ret
                   $.ajax( {
@@ -152,6 +153,7 @@ mimis.load = mimis.load ||
               } )
         } )()
 
+console.log( mimis.load )
 mimis.load.parser = mimis.load.parser || {
     'application/eson' : function( eson ) { // ECMAScript Object Notation
         try {
