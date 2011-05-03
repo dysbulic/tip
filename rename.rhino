@@ -1,6 +1,6 @@
 //!/bin/js
 
-//var console = console !== undefined ? console : { log : print }
+var console = console !== undefined ? console : ( function() { return { log : print } } )()
 
 ( function() {
 //    load( '.../lib/xregexp/js' )
