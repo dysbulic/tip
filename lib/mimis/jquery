@@ -154,9 +154,9 @@ mimis.load = mimis.load ||
                 : function( uri ) {
                     var ret
                     if( uri.startsWith( '...' ) ) {
-                        ret = parse( readFile( uri ), 'application/eson' )
+                        ret = parse( readFile( uri ), 'application/javascript' )
                     } else {
-                        ret = parse( readUrl( uri ), 'application/eson' )
+                        ret = parse( readUrl( uri ), 'application/javascript' )
                     }
                     return ret
                 }
@@ -167,6 +167,13 @@ mimis.load.parser = mimis.load.parser || {
     'application/eson' : function( eson ) { // ECMAScript Object Notation
         try {
             return eval( "( function() { return " + eson + " } )()" )
+        } catch( e ) {
+            log.error( e )
+        }
+    },
+    'application/javascript' : function( javascript ) {
+        try {
+            return eval( javascript )
         } catch( e ) {
             log.error( e )
         }
