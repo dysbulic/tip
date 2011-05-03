@@ -1,17 +1,15 @@
 //!/bin/js
 
-var console = undefined
-//var console = ( ( console !== undefined ) ? ( console ) : ( { log : null } ) )
-
+var console = console !== undefined ? console : { log : null }
 
 ;( function() {
-//    load( '.../lib/xregexp/js' )
-//    load( '.../lib/mimis/array/js' )
+    load( '.../lib/xregexp/js' )
+    load( '.../lib/mimis/array/js' )
 
     importPackage( java.io )
 
-//    var line = XRegExp( '(?<author> .*?) - (?<title> .*)', 'x' ) 
-/*
+    var line = XRegExp( '(?<author> .*?) - (?<title> .*)', 'x' ) 
+
     function spanDir( dir, func ) {
         var list = new File( dir ).listFiles()
         
@@ -31,5 +29,4 @@ var console = undefined
     }
 
     spanDir( '.', log )
-*/
 } )()
