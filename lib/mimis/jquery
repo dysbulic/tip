@@ -482,7 +482,7 @@ if( mimis.ns.abbr == 'svg' ) {
 
 if( mimis.ns.abbr != 'html' && document ) {
     mimis.$elem = mimis.$elem || function( name, attrs ) {
-        var $elem = $( document.createElementNS( mimis.ns, name ) )
+        var $elem = $(document.createElementNS( mimis.ns, name ))
         if( attrs ) {
             for( attr in attrs ) {
                 var val = attrs[ attr ]
@@ -616,7 +616,7 @@ if( mimis.ns.abbr == 'svg' ) {
         } )
 
         function $text( text ) {
-            return $( document.createTextNode( text ) )
+            return $(document.createTextNode( text ))
         }
 
         mimis.$text = mimis.$text || function( cfg ) {
@@ -720,7 +720,7 @@ mimis.transform = mimis.x( mimis.transform, {
 // ToDo: Insert icon if not present  
 // <html:link rel="icon" href=".../revolution/Technoanarchist/" />
 
-if( true ) {
+if( false ) {
     $( function() {
         window.moveTo( 0, 0 )
 
