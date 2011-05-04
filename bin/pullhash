@@ -2,17 +2,9 @@
 
 for arg in "$@"; do
     LINK="$(readlink "$arg")"
-    [[ "$arg" != "$LINK" && ! -e "$arg" ]] && {
-        echo "Skip Broken Link: $arg"
-        continue
-    }
-    [ ! -L "$arg" ] && {
-        echo "Skip Non-link: $arg"
-        continue
-    }
-    
+
     ENDPOINT="$MIMIS_ORIGIN"
-    [ ! -e "$LINK" ] && {
+    [[ ! -z "$LINK" && ! -e "$LINK" ]] && {
         [ -z "$ENDPOINT" ] && {
             ENDPOINT="$(git remote -v | grep -e "^origin	ssh://.* (push)$" | perl -pe 's|^origin	ssh://(.+?)/.*|\1|')"
         }
