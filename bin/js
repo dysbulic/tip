@@ -27,4 +27,4 @@ if [ $isOpenJDK -gt 0 ]; then
     JAVA_OPTS="-Xbootclasspath:/usr/lib/jvm/java-6-openjdk/jre/lib/rt.jar"
 fi
 
-echo $JAVA_CMD $JAVA_OPTS -classpath $JAVA_CLASSPATH $JAVA_MAIN "$@"
+$JAVA_CMD $JAVA_OPTS -classpath $JAVA_CLASSPATH $JAVA_MAIN "$@"
