@@ -161,10 +161,11 @@ mimis.load = mimis.load ||
                     }
             : function( uri ) {
                 var ret
-                var match
-                if( ( match = /^\.\.\.\/(.*)\/([^\/]*)$/.match( uri ) ) != null ) {
-                    console.log( match )
-                    ret = parse( readFile( uri ), 'application/javascript' )
+                var file
+                if( ( file = /^\.\.\.\/(.*)\/([^\/]*)$/.match( uri ) ) != null ) {
+                    file.__defineGetter__( 'path', function() { return match[1] } )
+                    file.__defineGetter__( 'type', function() { return match[2] } )
+                    ret = parse( readFile( uri ), file.type )
                 } else {
                     ret = parse( readUrl( uri ), 'application/javascript' )
                 }
