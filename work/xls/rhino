@@ -4,14 +4,14 @@ load( '.../lib/mimis/js' )
 
 var HSSFWorkbook = org.apache.poi.hssf.usermodel.HSSFWorkbook
 var POIFSFileSystem = org.apache.poi.poifs.filesystem.POIFSFileSystem
+var FileInputStream = java.io.FileInputStream
 
 try {
-    console.log( this.getClass( this ) )
-    console.log( 'p' )
     var workbook = (
         new HSSFWorkbook(
             new POIFSFileSystem( 
-                this.getClass().getResourceAsStream(
+                //this.getClass().getResourceAsStream(
+                new FileInputStream(
                     'test.xlsx'
                 )
             )
