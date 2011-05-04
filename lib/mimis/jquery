@@ -170,33 +170,38 @@ mimis.load = mimis.load ||
     } )()
     
 mimis.load.parser = mimis.load.parser || {
-    'application/eson' : function( eson ) { // ECMAScript Object Notation
+    eson : function( eson ) { // ECMAScript Object Notation
         try {
             return eval( "( function() { return " + eson + " } )()" )
         } catch( e ) {
             console.error( e )
         }
     },
-    'application/javascript' : function( javascript ) {
+    js : function( javascript ) {
         try {
             return eval( javascript )
         } catch( e ) {
             console.error( e )
         }
     },
-    'text/json' : function( json ) {
+    json : function( json ) {
         return JSON.parse( data ) 
     },
-    'text/xml' : function( xml ) {
+    xml : function( xml ) {
         var parser = new DOMParser()
 	return parser.parseFromString( xml, 'text/xml' )
     },
 }
 
-mimis.load.parser = mimis.x( mimis.load.parser, {
-    'application/xhtml+xml' : mimis.load.parser[ 'text/xml' ],
-    'image/svg+xml' : mimis.load.parser[ 'text/xml' ],
-} )
+with( mimis.load.parser ) {
+    mimis.load.parser = mimis.x( mimis.load.parser, {
+        'application/eson' : eson,
+        'application/javascript' : js,
+        'text/json' : json,
+        'text/xml' : xml,
+        'application/xhtml+xml' : xml,
+        'image/svg+xml' : xml,
+    } )
 
 //$.fn.style
 
