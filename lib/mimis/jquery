@@ -133,7 +133,9 @@ var $ =
     } )()
     
 mimis.x = mimis.x || $.extend
-    
+
+RegExp.prototype.match = RegExp.prototype.match || RegExp.prototype.exec
+
 mimis.load = mimis.load ||
     ( function() {
         function parse( ret, type ) {
