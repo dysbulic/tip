@@ -85,9 +85,30 @@ if( mimis.$root.__lookupGetter__( 'bbox' ) === undefined ) {
         } )
 }
 
+$.fn = $.fn || {}
 $.fn.bbox = $.fn.bbox ||
     function() {
         // ToDo: Handle multiple items
         var bbox = this[0].getBBox()
         return bbox
     }
+
+( function() {
+    var attrs = [ 'x', 'y', 'width', 'height' ]
+    attrs.each( function( attr ) {
+        $.fx.step[ attr ] = $.fx.step[ attr ] || function( fx ) {
+            if( ! fx.initialized ) {
+                fx.initialized = true
+                fx.$elem = $(fx.elem)
+                fx.start = fx.$elem.attr( attr )
+                // ToDo: Handle percentage lengths
+                // ToDo: Migrate to css: 
+                fx.start = $.isNaN( fx.start ) ? 0 : parseFloat( fx.start )
+                fx.end = $.isNaN( fx.end ) ? 0 : parseFloat( fx.start )
+            }
+            console.debug( mimis.x( {}, fx ) )
+            fx.$elem.attr( attr, fx.start + fx.pos * ( fx.end - fx.start ) )
+        }
+    } )
+} )()
+
