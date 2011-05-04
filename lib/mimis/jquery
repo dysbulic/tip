@@ -150,10 +150,20 @@ mimis.load = mimis.load ||
                 ? function( uri ) {
                     var ret
                     $.ajax( {
+                        type : 'HEAD',
                         url : uri,
                         dataType : 'text',
                         async : false,
                         success : function( data, state, xhr ) {
+                            console.log( arguments )
+                        },
+                    } )
+                    $.ajax( {
+                        url : uri,
+                        dataType : 'text',
+                        async : false,
+                        success : function( data, state, xhr ) {
+                            console.log( arguments )
                             ret = parse( data, xhr.getResponseHeader( 'Content-Type' ) )
                         },
                     } )
