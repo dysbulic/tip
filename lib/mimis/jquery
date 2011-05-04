@@ -328,12 +328,7 @@ mimis.link = mimis.link || mimis.load
 // Extract namespaces
 mimis.ns = mimis.ns ||
     ( function() {
-
-        console.debug( 'gen:$' )
-
         var ns = mimis.link( '.../lib/mimis/ns/abbreviations/eson' )
-
-        console.debug( 'gen:$' )
 
         typeof document !== 'undefined' && document.documentElement.attributes.each( function( ) {
             if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
@@ -359,7 +354,6 @@ mimis.ns = mimis.ns ||
         return ns
     } )()
 
-console.debug( 'gen:$' )
 mimis.status = mimis.status ||
     ( function() {
         var status = 'not loaded'
@@ -389,6 +383,7 @@ mimis.parse.position = mimis.parse.position ||
 
 mimis.parse.length = mimis.parse.length || mimis.parse.position
 
+console.debug( 'gen:$' )
 if( mimis.ns.abbr == 'svg' &&
     mimis.$root.__lookupGetter__( 'viewBox' ) === undefined ) {
     mimis.$root.__defineGetter__(
