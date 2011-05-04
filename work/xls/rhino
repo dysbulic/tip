@@ -8,14 +8,14 @@ var FileInputStream = java.io.FileInputStream
 
 try {
     var workbook = (
-        new HSSFWorkbook(
+//        new HSSFWorkbook(
             new POIFSFileSystem( 
                 //this.getClass().getResourceAsStream(
                 new FileInputStream(
                     'test.xlsx'
                 )
             )
-        )
+//        )
     )
 
     var sheet = workbook.getSheetAt( 0 )
