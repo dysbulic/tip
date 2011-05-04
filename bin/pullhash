@@ -6,5 +6,13 @@ for arg in "$@"; do
         continue
     }
     LINK="$(readlink "$arg")"
-    echo $LINK
+    
+    ENDPOINT="$MIMIS_ORIGIN"
+    [ ! -e "$LINK" ] && {
+        [ -z "$ENDPOINT" ] && {
+            ENDPOINT="$(git remote -v | grep -e "^origin	ssh://.* (push)$" | perl -pe 's|^origin	ssh://(.+?)/.*|\1|')"
+        }
+        scp "$ENDPOINT:$LINK" "$LINK"
+    }
 done
+
