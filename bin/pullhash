@@ -12,6 +12,7 @@ for arg in "$@"; do
             echo 'Error: No destination server found'
             exit -1
         }
+        echo "Pulling: $arg"
         rsync "$ENDPOINT:$LINK" "$LINK"
     }
 done
