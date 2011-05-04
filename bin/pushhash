@@ -2,20 +2,14 @@
 
 #ToDo: Add getopt
 
-ARGS=()
-for file in "$@"; do
-    ARGS=( "${ARGS[@]}" "$file" )
-done
+HASHDIR=".../hashes/sha256/"
 
-DEST="$MIMIS_ORIGIN"
-[ -z "$DEST" ] && DEST="$(git remote -v | grep -e "^origin	ssh://.* (push)$" | perl -pe 's|^origin	ssh://(.+?)/.*|\1|')"
-
-[ -z "$DEST" ] && {
-    echo 'Error: No destination server found'
-    ARGS=
+ENDPOINT="$MIMIS_ORIGIN"
+[ -z "$ENDPOINT" ] && {
+    ENDPOINT="$(git remote -v | grep -e "^origin	ssh://.* (push)$" | perl -pe 's|^origin	ssh://(.+?)/.*|\1|')"
 }
 
-[[ -z "$ARGS" || $#ARGS == 0 ]] && {
+[ $# == 0 ] && {
     echo "Usage: $0 [file]+"
     echo " Pushes the hashes for a list of files to:"
     echo "    $MIMIS_ORIGIN"
@@ -24,21 +18,63 @@ DEST="$MIMIS_ORIGIN"
     echo " Will call lnhash if a file is not a hash link."
     echo
     echo " find -name ttf -print0 | xargs -0 pushhash"
-    [ -n "$DEST" ] && {
-        echo $'\x0A'' $DEST:'$DEST
+    [ -n "$ENDPOINT" ] && {
+        echo $'\x0A'' $ENDPOINT:'$ENDPOINT
     }
     exit -2
 }
+
+[ -z "$ENDPOINT" ] && {
+    echo 'Error: No destination server found'
+    exit -1
+}
+
+for arg in "$@"; do
+    LINK="$(readlink "$arg")"
+    [[ ! -z "$LINK" && ! -e "$arg" ]] && {
+        [ -z "$VERBOSE" ] || echo "Skip Broken Link: $arg"
+        continue
+    }
+    
+    [ "${LINK#$HASHDIR}" != "$LINK" ] && { # isa hash link
+        [ -z "$VERBOSE" ] || echo "Sending: $arg"
+        rsync "$LINK" "$ENDPOINT:$LINK"
+        continue
+    }
+    
+    [[ ! -z "$LINK" && -d "$LINK" ]] && {
+        [ -z "$VERBOSE" ] || echo "Skipping Dir Link: $arg"
+        continue
+    }
+
+    [[ ! -z "$LINK" && -f "$LINK" ]] && {
+        [ -z "$VERBOSE" ] || echo "Skipping File Link: $arg"
+        continue
+    }
+
+    [ ! -z "$LINK" ] && {
+        [ -z "$VERBOSE" ] || echo "Skipping Link: $arg"
+        continue
+    }
+
+    [ -d "$arg" ] && {
+        [ -z "$VERBOSE" ] || echo "Descending Into: $arg"
+        pushhash "$arg"*
+        continue
+    }
+
+    echo "U"
+done
 
 function visitNode() {
     file="$1"
     echo "Visiting: $file"
     [ -L "$file" ] && {
-        dest="$(readlink "$file")"
+        LINK="$(readlink "$file")"
         [ "${dest#$HASHDIR}" != "$dest" ] && { # isa hash link
-            rsync --progress "$dest" "$DEST:$dest"
+            rsync --progress "$LINK" "$DEST:$LINK"
         } || {
-            echo "Skipping Link: $file"
+            echo "Non-Hash Link: $file $LINK"
         }
         return
     }
@@ -57,9 +93,8 @@ function visitNode() {
     echo " Ignoring File: $file"
 }
     
-until [ ${#ARGS} == 0 ]; do
-    file="${ARGS[0]}"
-    ARGS="(${ARGS[@]:1})"
-    visitNode "$file"
-done
-
+# until [ ${#ARGS} == 0 ]; do
+#     file="${ARGS[0]}"
+#     ARGS="(${ARGS[@]:1})"
+#     visitNode "$file"
+# done
