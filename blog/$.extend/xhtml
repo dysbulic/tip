@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script type="application/javascript" src=".../lib/jquery/js"/>
+<script type="application/javascript" src=".../lib/mimis/js"/>
+<link rel="stylesheet" type="text/css" href=".../style/blog/"/>
+</head>
+<body>
+<section>
+<title>$.extend</title>
+
+<style type='text/css'>
+#skdvdflkng p { text-align: center }
+</style>
+<div id='skdvdflkng'>
+<p><code>var x = { a : 1, b : 2, c : 3 }</code></p>
+<p><code>var y = { a : 4, b : 5, c : 6 }</code></p>
+<p><code>var z = $.extend( x, y )</code></p>
+<p><code>z = { a : 4, b : 5, c : 6 }</code></p>
+<hr/>
+<p><code>var x = { a : 1, b : 2, c : 3 }</code></p>
+<p><code>var y = { a : 2, c : 2 }</code></p>
+<p><code>z = { a : 2, b : 2, c : 2 }</code></p>
+<hr/>
+<p><code>var defs = { a : 1, b : 2, c : 3 }</code></p>
+<p><code>var cfg = { a : 2, c : 2 }</code></p>
+<p><code>var obj = $.extend( {}, defs, cfg )</code></p>
+
+<script type="text/javascript">
+var x = { a : 1, b : 2, c : 3 }
+var y = { a : 2, c : 2 }
+console.log( $.extend( x, y ) )
+</script>
+</div>
+</section>
+</body>
+</html>

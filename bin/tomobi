@@ -1,0 +1,26 @@
+#!/bin/bash
+
+[ $# == 0 ] && {
+    echo 'Convert ebooks to mobi format'
+    echo 'Usage: tomobi [input]'
+    exit -1
+}
+
+for file in "$*"; do
+    output="${file%.*}mobi"
+
+    echo "Converting: $file"
+
+    args='--page-breaks-before="/"'
+    args="$args --chapter='//h:section/*[name()=\'h1\' or name()=\'h2\' or name()=\'h3\']'"
+
+    converter='ebook-convert'
+
+    #searchscript="%~dp0find_cover.js"
+    #cover=
+    #if not exist %searchscript% goto :postcover
+    #for /f "tokens=*" %%l in ('cscript /nologo %searchscript% %input%') do @set cover=%%l
+    #if not [%cover%]==[] @set args=%args% --cover="%~dp1%cover%"
+
+    ${converter} ${file} ${output} ${args} | tee tomobi.out.log
+done

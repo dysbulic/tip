@@ -1,66 +1,223 @@
 var mimis = mimis || {}
 
-$.isString = $.isString ||
-    function( str ) {
-        return str instanceof String || $.type( str ) == 'string'
+console = typeof console !== 'undefined' ? console :
+    {
+        log : print,
+        debug : print,
+        error : print,
     }
 
-$.isObject = $.isObject ||
-    function( obj ) {
-        return obj instanceof Object || $.type( obj ) == 'object'
-    }
+$ = typeof $ !== 'undefined' ? $ :
+    ( function() {
+        var class2type = {}
+        var classes = 'Boolean Number String Function Array Date RegExp Object'.split(' ')
+                     
+        for( var i = 0; i < classes.length; i++ ) {
+            var name = classes[ i ]
+	    class2type[ "[object " + name + "]" ] = name.toLowerCase()
+        }
+                     
+        function type( obj ) {
+	    return obj == null ?
+		String( obj ) :
+		class2type[ toString.call( obj ) ] || 'object'
+	}
+        
+        var $ = {
+	    isFunction : function( obj ) {
+		return type( obj ) === 'function'
+	    },
+	    isArray : typeof Array.isArray !== 'undefined' ? Array.isArray : function( obj ) {
+		return type( obj ) === 'array'
+	    },
+            isString : function( str ) {
+                             return str instanceof String || type( str ) === 'string'
+            },
+            isObject : function( obj ) {
+                return obj instanceof Object || type( obj ) === 'object'
+            },
+	    isPlainObject : function( obj ) {
+              	if( ! obj || type( obj ) !== 'object' ) { // || obj.nodeType || $.isWindow( obj ) ) { // Important?
+		    return false
+		}
+                
+	        var hasOwn = Object.prototype.hasOwnProperty
+                
+		if( obj.constructor
+                    && ! hasOwn.call( obj, 'constructor' )
+                    && ! hasOwn.call( obj.constructor.prototype, 'isPrototypeOf' ) ) {
+		    return false
+		}
+                
+		var key
+		for( key in obj ) {} // inhereted properties postcede own
+                
+		return key === undefined || hasOwn.call( obj, key )
+            },
+        }
+        
+        $.extend = $.extend || function() {
+	    var target = arguments[0] || {}
+	    var deep = false
+	                 var i = 1
+            
+	    // Handle a deep copy situation
+	    if( typeof target === 'boolean' ) {
+		deep = target
+		target = arguments[1] || {}
+		// skip the boolean and the target
+		i = 2
+	    }
+            
+	    // Handle case when target is a string or something (possible in deep copy)
+	    if( ! $.isObject( target ) && ! $.isFunction( target ) ) {
+		target = {}
+	    }
+            
+	    var length = arguments.length
+            
+	    // extend jQuery itself if only one argument is passed
+	    if( length === i ) {
+		target = this
+		--i
+	    }
+            
+	    var options, name, src, copy, copyIsArray, clone
+            
+	    for( ; i < length; i++ ) {
+		// Only deal with non-null/undefined values
+		if( ( options = arguments[ i ] ) != null ) {
+		    // Extend the base object
+		    for( name in options ) {
+			src = target[ name ]
+			copy = options[ name ]
+                        
+			// Prevent never-ending loop
+			if ( target === copy ) {
+			    continue
+			}
+                        
+			// Recurse if we're merging plain objects or arrays
+			if( deep && copy && ( $.isPlainObject( copy ) || ( copyIsArray = $.isArray( copy ) ) ) ) {
+			    if ( copyIsArray ) {
+				copyIsArray = false
+				clone = src && $.isArray(src) ? src : []
+                            } else {
+				clone = src && $.isPlainObject( src ) ? src : {}
+			    }
+                            
+			    // Never move original objects, clone them
+			    target[ name ] = $.extend( deep, clone, copy )
+                            
+			    // Don't bring in undefined values
+			} else if ( copy !== undefined ) {
+			    target[ name ] = copy
+			}
+		    }
+		}
+	    }
+	    return target
+        }
+        return $
+    } )()
 
+
+;( function() {
 mimis.x = mimis.x || $.extend
 
-mimis.load = mimis.load || function( uri ) {
-//    return mimis.each.call( arguments, function( uri ) {
-    return ( function( uri ) {
-        var ret
-        $.ajax( {
-            url : uri,
-            dataType : 'text',
-            async : false,
-            success : function( data, state, xhr ) {
-                ret = data
+RegExp.prototype.match = RegExp.prototype.match || RegExp.prototype.exec
 
-                var type = xhr.getResponseHeader( 'Content-Type' )
-                var parser
-                if( parser = mimis.load.parser[ type ] ) {
-                    ret = parser( ret )
+mimis.load = mimis.load ||
+    ( function() {
+        function parse( ret, type ) {
+            var parser
+            if( parser = mimis.load.parser[ type ] ) {
+                ret = parser( ret )
+            }
+            return ret
+        }
+        return (
+            ( $.ajax !== undefined )
+                ? function( uri ) {
+                    var ret
+                    $.ajax( {
+                        url : uri,
+                        dataType : 'text',
+                        async : false,
+                        success : function( data, state, xhr ) {
+                            ret = parse( data, xhr.getResponseHeader( 'Content-Type' ) )
+                        },
+                    } )
+                    return ret
+                    }
+            : function( uri ) {
+                var ret
+                var file
+                if( ( file = /^(\.\.\.)\/(.*)\/([^\/]*)$/.match( uri ) ) != null ) {
+                    file.__defineGetter__( 'root', function() { return file[1] } )
+                    file.__defineGetter__( 'path', function() { return file[2] } )
+                    file.__defineGetter__( 'type', function() { return file[3] } )
+                    ret = parse( readFile( uri ), file.type )
+                } else {
+                    ret = parse( readUrl( uri ), 'js' )
+                }
+                return ret
+            }
+        )
+    } )()
+    
+mimis.load.parser = mimis.load.parser || {}
+
+with( mimis.load.parser ) {
+    mimis.load.parser = mimis.x(
+        {
+            eson : function( eson ) { // ECMAScript Object Notation
+                try {
+                    return eval( "( function() { return " + eson + " } )()" )
+                } catch( e ) {
+                    console.error( e )
                 }
             },
-        } )
-        return ret
-    } )
+            js : function( javascript ) {
+                try {
+                    return eval( javascript )
+                } catch( e ) {
+                    console.error( e )
+                }
+            },
+            json : function( json ) {
+                return JSON.parse( data ) 
+            },
+            xml : function( xml ) {
+                var parser = new DOMParser()
+	        return parser.parseFromString( xml, 'text/xml' )
+            },
+        },
+        mimis.load.parser )
 }
 
-mimis.load.parser = mimis.load.parser || {
-    'application/eson' : function( eson ) { // ECMAScript Object Notation
-        try {
-            return eval( "( function() { return " + eson + " } )()" )
-        } catch( e ) {
-            log.error( e )
-        }
-    },
-    'text/json' : function( json ) {
-        return JSON.parse( data ) 
-    },
-    'text/xml' : function( xml ) {
-        var parser = new DOMParser()
-	return parser.parseFromString( xml, 'text/xml' )
-    },
+with( mimis.load.parser ) {
+    mimis.load.parser = mimis.x(
+        {
+            'application/eson' : eson,
+            'application/javascript' : js,
+            'text/json' : json,
+            'text/xml' : xml,
+        },
+        mimis.load.parser )
 }
 
-mimis.load.parser = mimis.x( mimis.load.parser, {
-    'application/xhtml+xml' : mimis.load.parser[ 'text/xml' ],
-    'image/svg+xml' : mimis.load.parser[ 'text/xml' ],
-} )
-
+with( mimis.load.parser ) {
+    mimis.load.parser = mimis.x(
+        {
+            'application/xhtml+xml' : 'text/xml',
+            'image/svg+xml' : 'text/xml',
+        },
+        mimis.load.parser )
+}
 //$.fn.style
 
-console.debug = console.info
-
-mimis.load( 'array/mimis' )
+console.debug = console.debug || console.info
 
 String.prototype.startsWith = String.prototype.startsWith || function( str ) {
     return this.indexOf( str ) == 0
@@ -70,16 +227,22 @@ String.prototype.endsWith = String.prototype.endsWith || function( str ) {
     return this.lastIndexOf( str ) == this.length - str.length
 }
 
+mimis.load( '.../lib/mimis/array/js' )
+
+mimis.BubblingException = mimis.BubblingException || function() {}
+
+mimis.$window = $.isFunction( $ ) ? $(window) : undefined
+
 mimis.bind = mimis.bind || function( name, listener ) {
-    $(window).bind( 'mimis.' + name, listener )
+    mimis.$window.bind( 'mimis.' + name, listener )
 }
 
 mimis.unbind = mimis.unbind || function( name, listener ) {
-    $(window).unbind( 'mimis.' + name, listener )
+    mimis.$window.unbind( 'mimis.' + name, listener )
 }
 
 mimis.trigger = mimis.trigger || function( name, extra ) {
-    $(window).trigger( 'mimis.' + name, extra )
+    mimis.$window.trigger( 'mimis.' + name, extra )
 }
 
 mimis.__defineGetter__( 'uri', function() {
@@ -174,13 +337,15 @@ mimis.link = mimis.link || mimis.load
 mimis.ns = mimis.ns ||
     ( function() {
         var ns = mimis.link( '.../lib/mimis/ns/abbreviations/eson' )
-        document.documentElement.attributes.each( function( ) {
+
+        typeof document !== 'undefined' && document.documentElement.attributes.each( function( ) {
             if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
                 var name = match[1] || ''
                 var href = this.nodeValue
                 ns[ name ] = href
             }
         } )
+
         // Reverse map
         for( abbr in ns ) {
             if( abbr != '' ) {
@@ -188,9 +353,9 @@ mimis.ns = mimis.ns ||
             }
         }
         ns[ 'default' ] = ns[ 'default' ] || 'html'
-        !ns[ '' ] && (
+        if( ! ns[ '' ] ) {
             ns[ '' ] = ns[ ns[ 'default' ] ]
-        )
+        }
         ns.valueOf = ns.toString =
             function() { return ns[ '' ] }
         ns.abbr = ns[ ns ]
@@ -215,7 +380,7 @@ mimis.endpoint = mimis.endpoint || {
     },
 }
 
-mimis.$root = mimis.$root || $(document.documentElement)
+//mimis.$root = mimis.$root || $(document.documentElement)
 
 mimis.parse = mimis.parse || {}
 
@@ -226,106 +391,9 @@ mimis.parse.position = mimis.parse.position ||
 
 mimis.parse.length = mimis.parse.length || mimis.parse.position
 
-if( mimis.ns.abbr == 'svg' &&
-    mimis.$root.__lookupGetter__( 'viewBox' ) === undefined ) {
-    mimis.$root.__defineGetter__(
-        'viewBox',
-        function() {
-            var attr = $(this).attr( 'viewBox' ) || '0 0 100 100'
-            var split = attr.split( ' ' )
-            // ToDo: handle unset viewBox
-            return {
-                x : mimis.parse.position( split[0] ),
-                y : mimis.parse.position( split[1] ),
-                width  : mimis.parse.length( split[2] ),
-                height : mimis.parse.length( split[3] ),
-            }
-        } )
-}
+mimis.load( '.../lib/mimis/' + mimis.ns.abbr + '/mimis' )
 
-if( mimis.ns.abbr == 'svg' &&
-    mimis.$root.__lookupSetter__( 'viewBox' ) === undefined ) {
-    mimis.$root.__defineSetter__(
-        'viewBox',
-        function( box ) {
-            box =
-                mimis.x( mimis.$root.viewBox,
-                         box )
-            var vals = [
-                box.x, box.y, box.width, box.height
-            ]
-            mimis.$root.attr( {
-                viewBox : vals.join( ' ' )
-            } )
-            return box
-        } )
-}
-
-mimis.scroll = mimis.scroll || {}
-
-if( mimis.$root.viewBox ) {
-    ( function() {
-        var initialBox
-
-        // ToDo: Allow mode changes to stick without key holding
-
-        mimis.$root.bind( 'mousewheel', function( evt ) {
-            // Zoom in or out, keeping the location under the pointer fixed
-            var box = mimis.$root.viewBox
-            initialBox = initialBox || box
-            var imp = mimis.scroll.imp || .1
-            imp *= evt.wheelDelta / -120 // One scroll
-            
-            function transform() {
-                if( evt.shiftKey ) {
-                    if( evt.ctrlKey ) {
-                        return { y : box.y + box.width * imp }
-                    } else {
-                        return { x : box.x + box.height * imp }
-                    }
-                } else {
-                    var delta = {
-                        width  : box.width * imp,
-                        height : box.height * imp,
-                    }
-                    // Needs to be the percentage across the image
-                    var pos = {
-                        x : evt.clientX / window.innerWidth,
-                        y : evt.clientY / window.innerHeight,
-                    }
-                    
-                    return {
-                        x : box.x - delta.width * pos.x,
-                        y : box.y - delta.height * pos.y,
-                        width  : box.width + delta.width,
-                        height : box.height + delta.height,
-                    }
-                }
-            }
-            mimis.$root.viewBox = mimis.x( box, transform() )
-        } )
-    } )()
-}
-
-if( mimis.ns.abbr == 'svg' &&
-    mimis.$root.__lookupGetter__( 'bbox' ) === undefined ) {
-    mimis.$root.__defineGetter__(
-        'bbox',
-        function() {
-            return mimis.$root.get(0).getBBox()
-        } )
-}
-
-if( mimis.ns.abbr == 'svg' ) {
-    $.fn.bbox = $.fn.bbox ||
-        function() {
-            // ToDo: Handle multiple items
-            var bbox = this[0].getBBox()
-            return bbox
-        }
-}
-
-$( function() {
+$.isFunction( $ ) && $( function() {
     $('head').each( function() {
         var $head = $(this)
         var $titles
@@ -338,266 +406,10 @@ $( function() {
     } )
 } )
 
-if( mimis.ns.abbr == 'svg' ) {
-    var attrs = [ 'x', 'y', 'width', 'height' ]
-    attrs.each( function( attr ) {
-        $.fx.step[ attr ] = $.fx.step[ attr ] || function( fx ) {
-            if( ! fx.initialized ) {
-                fx.initialized = true
-                fx.$elem = $(fx.elem)
-                fx.start = fx.$elem.attr( attr )
-                // ToDo: Handle percentage lengths
-                // ToDo: Migrate to css: 
-                fx.start = $.isNaN( fx.start ) ? 0 : parseFloat( fx.start )
-                fx.end = $.isNaN( fx.end ) ? 0 : parseFloat( fx.start )
-            }
-            console.debug( mimis.x( {}, fx ) )
-            fx.$elem.attr( attr, fx.start + fx.pos * ( fx.end - fx.start ) )
-        }
-    } )
-}
-
-if( mimis.ns.abbr != 'html' ) {
-    mimis.$elem = mimis.$elem || function( name, attrs ) {
-        var $elem = $( document.createElementNS( mimis.ns, name ) )
-        if( attrs ) {
-            for( attr in attrs ) {
-                var val = attrs[ attr ]
-                var match = attr.match( /^([^:]+):(.*)$/ )
-                if( match ) {
-                    var ns = { abbr : match[ 1 ] }
-                    attr = match[ 2 ]
-                    $elem.each( function() {
-                        this.setAttributeNS( mimis.ns[ ns.abbr ], attr, val )
-                    } )
-                } else {
-                    $elem.attr( attr, val )
-                }
-            }
-        }
-        return $elem
-    }
-}
-
-if( mimis.ns.abbr == 'svg' ) {
-    ( function() {
-        var defs = {
-            circle : {
-                cx : '50%',
-                cy : '50%',
-                get id() { return ( Math.random() * Number.MAX_VALUE ).toString( 36 ).substring( 0, 10 ) },
-            },
-            path : {
-                get id() { return ( Math.random() * Number.MAX_VALUE ).toString( 36 ).substring( 0, 10 ) },
-            },
-            use : {
-                x : -50,
-                y : -50,
-                 width : 100,
-                height : 100,
-            },
-            rect : {
-                x : -50,
-                y : -50,
-                 width : 100,
-                height : 100,
-            },
-        }
-
-        function elem( attr, cfg ) {
-            var args = Array.prototype.slice.call( cfg )
-            with( mimis ) {
-                var def = defs[ attr ]
-                args[ 0 ] = x( args[ 0 ], defs[ attr ] )
-            }
-            var named = args.unshift( attr )
-            return mimis.$elem.apply( this, args )
-        }
-        
-        mimis.$circle = function( cfg ) {
-            if( cfg.path ) {
-                return elem( 'path', arguments )
-                    .attr( {
-                        d : ( 'm' + [ '75', '75' ].join( ',' )
-                              + ( function() {
-                                  return ! cfg.reverse
-                                      ? ( 'm' + [ 0, cfg.r ].join( ',' )
-                                          + ( 'a' +
-                                              [
-                                                  [ cfg.r, cfg.r ].join( ',' ), // rx, ry
-                                                  0, // rotation
-                                                  1, // large arc?
-                                                  1, // sweep?
-                                                  [ .001, 0 ].join( ',' ), // x, y
-                                              ].join( ' ' ) ) )
-                                      : ( 'm' + [ 0, -cfg.r ].join( ',' )
-                                          + ( 'a' +
-                                              [
-                                                  [ cfg.r, cfg.r ].join( ',' ), // rx, ry
-                                                  0,
-                                                  1,
-                                                  0,
-                                                  [ .001, 0 ].join( ',' ),
-                                              ].join( ' ' ) ) )
-                              } )()
-                            ),
-                    } )
-            } else {
-                return elem( 'circle', arguments )
-            }
-        }
-
-        mimis.$use = mimis.$use || function( cfg ) {
-            var href = cfg[ 'xlink:href' ]
-            
-            if( href[0] == '#' ) { // non-local link
-                return elem( 'use', arguments )
-            }
-
-            var insP = mimis.nil()
-            $.get( href, function( data ) {
-                if( data.documentElement ) {
-                    var replaceScripts = mimis.link( '.../lib/mimis/inline/xlink/style/' )
-                    var doc = replaceScripts( data.documentElement )
-                    cfg = mimis.x( {}, defs[ 'use' ], cfg )
-                    insP( $(doc).attr( cfg ) )
-                }
-            } )
-            return insP.$elem
-        }
-        
-
-        ;[ 'use', 'rect', 'circle' ].each( function( attr ) {
-            var name = '$' + attr
-            mimis[ name ] = mimis[ name ] || function() {
-                return elem( attr, arguments )
-            }
-        } )
-
-        function nest( attr ) {
-            return function() {
-                var $elem = elem( attr, arguments )
-                function append( $new ) {
-                    $elem.append( $new )
-                    return append
-                }
-                append.$elem = $elem
-                return append
-            }
-        }
-
-        // Nesting
-        ;[ 'g', 'a' ].each( function( attr ) {
-            var name = '$' + attr
-            mimis[ name ] = mimis[ name ] || nest( attr )
-        } )
-
-        function $text( text ) {
-            return $( document.createTextNode( text ) )
-        }
-
-        mimis.$text = mimis.$text || function( cfg ) {
-            // <text><textPath xlink:href="#title path"></textPath></text>
-            return nest( 'defs' )()(
-                cfg.$path.clone()
-            ).$elem.after(
-                nest( 'text' )()(
-                    nest( 'textPath' )( {
-                        startOffset : '50%',
-                        'xlink:href' : '#' + cfg.$path.attr( 'id' ),
-                    } )(
-                        $text( cfg.text )
-                    ).$elem
-                ).$elem
-            )
-        }
-        
-        mimis.$path = mimis.$path || function() {
-            var args = Array.prototype.slice.call( arguments )
-            var path = args.shift()
-            args.unshift( 'path' )
-            
-            function line( points ) {
-                var width = 400
-                var height = 100
-                var out = ''
-                points.each( function( point ) {
-                    var p = {
-                        x : point[0],
-                        y : point[1],
-                    }
-                    if( p.x / width < .1 ) {
-                        p.x *= width
-                    }
-                    if( p.y / height < .1 ) {
-                        p.y *= height
-                    }
-                    out += p.x + ',' + p.y + ' '
-                } )
-                return out
-            }
-            
-            var serializer = function( path ) {
-                var out = 'm 0,0'
-                path.each( function( elem ) {
-                    for( shape in elem ) {
-                        switch( shape ) {
-                        case 'line':
-                            out += ' l ' + line( elem[ shape ] )
-                            break
-                        case 'move':
-                            out += ' m ' + line( elem[ shape ] )
-                            break
-                        }
-                    }
-                } )
-                return out
-            }
-            
-            return ( mimis.$elem.apply( this, args )
-                     .attr( {
-                         get d() {
-                             var callee = arguments.callee
-                             path = callee.path || path
-                             serializer = callee.serializer || serializer
-                             return serializer( path )
-                         },
-                     } ) )
-        }
-
-        mimis.$anim = mimis.$anim || function() {
-            var args = Array.prototype.slice.call( arguments )
-            var cfg = args[ 0 ] || {}
-            cfg.__defineGetter__( 'attributeName', function() { return cfg.what } )
-            cfg.__defineGetter__(           'dur', function() { return cfg.over } )
-            //args.unshift(  )
-            return elem( 'animate', args )
-        }
-
-        mimis.nil = mimis.nil || mimis.$g
-
-        mimis.$c = mimis.$c || mimis.$circle
-    } )()
-}
-
-
-// Format transform
-mimis.transform = mimis.x( mimis.transform, {
-    t : function( a, b ) {
-        return { transform : ( "translate(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
-    },
-    s : function( a, b ) {
-        return { transform : (     "scale(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
-    },
-    r : function( a, b ) {
-        return { transform : (    "rotate(" + a + ( b && ( ',' + b ) || '' ) + ")" ) }
-    },
-} )
-  
 // ToDo: Insert icon if not present  
 // <html:link rel="icon" href=".../revolution/Technoanarchist/" />
 
-if( true ) {
+if( false ) {
     $( function() {
         window.moveTo( 0, 0 )
 
@@ -608,3 +420,5 @@ if( true ) {
         }
     } )
 }
+
+} )()

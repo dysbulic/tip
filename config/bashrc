@@ -42,7 +42,8 @@ export LANG="en_US.UTF-8"
 export LC_ALL=$LANG
 
 # Make javascripts executable #ToDo: shorten
-alias reg_javascript="sudo sh -c \"echo ':javascript:M:://!::/usr/bin/js:' \> /proc/sys/fs/binfmt_misc/register\""
+alias reg_javascript="sudo \"echo ':javascript:M:://!::$(echo ~)/.../bin/js:' > /proc/sys/fs/binfmt_misc/register\""
+alias unreg_javascript="sudo \"echo -1 > /proc/sys/fs/binfmt_misc/javascript\""
 
 # ToDo: make sorting workflow easier by greying out windows quickly
 #function setactive() { termcolor('black'); }
@@ -73,6 +74,10 @@ function json() {
         cat "$file" | python -mjson.tool
     done
 }
+
+export USER_NAME="$(cat .../me/name/utf8)"
+
+alias bookz="ii -s irc.undernet.org -n '$(cat .../chat/alias/utf8)' -f '$USER_NAME'"
 
 # ToDo: Create a version that takes an arg that will create the directory is non-existent
 #function mv() {
@@ -609,3 +614,5 @@ alias pushhashes="eval rsync $ARGS \"\$LOCAL\" \"\$REMOTE:\$__HASHDIR\""
 alias pullhashes="rsync $ARGS \"\$REMOTE:\$__HASHDIR\" \"\$LOCAL\""
 
 alias print="eval echo \$OUT"
+
+[ "$(pwd)" == ~ ] && cd ...
