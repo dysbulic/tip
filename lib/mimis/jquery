@@ -1,6 +1,7 @@
 var mimis = mimis || {}
 
 ;( function() {
+// May be loaded in a webpage or in Rhino
 var console =
     ( function() {
         var console = ( function () { return this } )().console
@@ -316,7 +317,8 @@ mimis.link = mimis.link || mimis.load
 // Extract namespaces
 mimis.ns = mimis.ns ||
     ( function() {
-console.debug( 'gen:$' )
+
+        console.debug( 'gen:$' )
 
         var ns = mimis.link( '.../lib/mimis/ns/abbreviations/eson' )
 
