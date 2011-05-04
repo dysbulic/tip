@@ -318,6 +318,8 @@ mimis.ns = mimis.ns ||
     ( function() {
         var ns = mimis.link( '.../lib/mimis/ns/abbreviations/eson' )
 
+        console.debug( 'gen:$' )
+
         typeof document !== 'undefined' && document.documentElement.attributes.each( function( ) {
             if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
                 var name = match[1] || ''
