@@ -387,7 +387,7 @@ mimis.parse.position = mimis.parse.position ||
 mimis.parse.length = mimis.parse.length || mimis.parse.position
 
 console.debug( 'gen:$' )
-mimis.load( '.../lib/mimis/' + mimis.ns.abbr + '/jquery' )
+mimis.load( '.../lib/mimis/' + mimis.ns.abbr + '/mimis' )
 
 $.isFunction( $ ) && $( function() {
     $('head').each( function() {
@@ -401,47 +401,6 @@ $.isFunction( $ ) && $( function() {
         }
     } )
 } )
-
-if( mimis.ns.abbr == 'svg' ) {
-    var attrs = [ 'x', 'y', 'width', 'height' ]
-    attrs.each( function( attr ) {
-        $.fx.step[ attr ] = $.fx.step[ attr ] || function( fx ) {
-            if( ! fx.initialized ) {
-                fx.initialized = true
-                fx.$elem = $(fx.elem)
-                fx.start = fx.$elem.attr( attr )
-                // ToDo: Handle percentage lengths
-                // ToDo: Migrate to css: 
-                fx.start = $.isNaN( fx.start ) ? 0 : parseFloat( fx.start )
-                fx.end = $.isNaN( fx.end ) ? 0 : parseFloat( fx.start )
-            }
-            console.debug( mimis.x( {}, fx ) )
-            fx.$elem.attr( attr, fx.start + fx.pos * ( fx.end - fx.start ) )
-        }
-    } )
-}
-
-if( mimis.ns.abbr != 'html' && document ) {
-    mimis.$elem = mimis.$elem || function( name, attrs ) {
-        var $elem = $(document.createElementNS( mimis.ns, name ))
-        if( attrs ) {
-            for( attr in attrs ) {
-                var val = attrs[ attr ]
-                var match = attr.match( /^([^:]+):(.*)$/ )
-                if( match ) {
-                    var ns = { abbr : match[ 1 ] }
-                    attr = match[ 2 ]
-                    $elem.each( function() {
-                        this.setAttributeNS( mimis.ns[ ns.abbr ], attr, val )
-                    } )
-                } else {
-                    $elem.attr( attr, val )
-                }
-            }
-        }
-        return $elem
-    }
-}
 
 if( mimis.ns.abbr == 'svg' ) {
     ( function() {
