@@ -1,5 +1,72 @@
 #!/bin/bash
 
+#ToDo: Add getopt
+
+HASHDIR=".../hashes/sha256/"
+
+ENDPOINT="$MIMIS_ORIGIN"
+[ -z "$ENDPOINT" ] && {
+    ENDPOINT="$(git remote -v | grep -e "^origin	ssh://.* (push)$" | perl -pe 's|^origin	ssh://(.+?)/.*|\1|')"
+}
+
+[ $# == 0 ] && {
+    echo "Usage: $0 [file]+"
+    echo " Pushes the hashes for a list of files to:"
+    echo "    $MIMIS_ORIGIN"
+    echo "    A SSH endpoint of git:~/.../"
+    echo
+    echo " Will call lnhash if a file is not a hash link."
+    echo
+    echo " find -name ttf -print0 | xargs -0 pushhash"
+    [ -n "$ENDPOINT" ] && {
+        echo $'\x0A'' $ENDPOINT:'$ENDPOINT
+    }
+    exit -2
+}
+
+[ -z "$ENDPOINT" ] && {
+    echo 'Error: No destination server found'
+    exit -1
+}
+
+for arg in "$@"; do
+    LINK="$(readlink "$arg")"
+    [[ ! -z "$LINK" && ! -e "$arg" ]] && {
+        [ -z "$VERBOSE" ] || echo "Skip Broken Link: $arg"
+        continue
+    }
+    
+    [[ ! -z "$LINK" && ! -e "$LINK" ]] && {
+        [ -z "$VERBOSE" ] || echo "Pulling: $arg"
+        rsync --progress "$ENDPOINT:$LINK" "$LINK"
+        continue
+    }
+    
+    [[ ! -z "$LINK" && -d "$LINK" ]] && {
+        [ -z "$VERBOSE" ] || echo "Skipping Dir Link: $arg"
+        continue
+    }
+
+    [[ ! -z "$LINK" && -f "$LINK" ]] && {
+        [ -z "$VERBOSE" ] || echo "Skipping File Link: $arg"
+        continue
+    }
+
+    [ ! -z "$LINK" ] && {
+        [ -z "$VERBOSE" ] || echo "Skipping Link: $arg"
+        continue
+    }
+
+    [ -d "$arg" ] && {
+        arg="${arg%/}/"
+        [ -z "$VERBOSE" ] || echo "Descending Into: $arg"
+        pushhash "$arg"*
+        continue
+    }
+
+    echo "U"
+done
+
 for arg in "$@"; do
     LINK="$(readlink "$arg")"
 
