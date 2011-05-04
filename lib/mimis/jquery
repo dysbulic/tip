@@ -251,6 +251,7 @@ if( webkitNotifications.__lookupGetter__( 'allowed' ) === undefined ) {
         } )
 }
 
+console.debug( 'gen:$' )
 mimis.notify = mimis.notify ||
     function( config ) {
         config = mimis.x( true, config, {
@@ -342,7 +343,6 @@ mimis.ns = mimis.ns ||
         return ns
     } )()
 
-console.debug( 'gen:$' )
 mimis.status = mimis.status ||
     ( function() {
         var status = 'not loaded'
