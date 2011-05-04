@@ -1,25 +1,11 @@
 #!/bin/bash
 
-HASHDIR=".../hashes/sha256/"
-
 #ToDo: Add getopt
-
-ARGS="$(
-    IFS=$'\x00'
-    #echo "$*"
-    for file in "$@"; do
-        echo -n "$file"
-        perl -e 'print "\0"'
-    done
-)"
-# Doesn't work – Nulls omitted
-
 
 ARGS=()
 for file in "$@"; do
     ARGS=( "${ARGS[@]}" "$file" )
 done
-
 
 DEST="$MIMIS_ORIGIN"
 [ -z "$DEST" ] && DEST="$(git remote -v | grep -e "^origin	ssh://.* (push)$" | perl -pe 's|^origin	ssh://(.+?)/.*|\1|')"
