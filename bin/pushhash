@@ -58,6 +58,7 @@ for arg in "$@"; do
     }
 
     [ -d "$arg" ] && {
+        arg="${arg%/}/"
         [ -z "$VERBOSE" ] || echo "Descending Into: $arg"
         pushhash "$arg"*
         continue
