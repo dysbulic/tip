@@ -12,8 +12,6 @@ var console =
                  } )
     } )()
 
-console.log( console.debug )
-
 var $ =
     ( function() {
         var $ = ( function () { return this } )().$
@@ -203,8 +201,6 @@ mimis.load.parser = mimis.x( mimis.load.parser, {
 
 console.debug = console.debug || console.info
 
-console.debug( 'gen:$' )
-
 String.prototype.startsWith = String.prototype.startsWith || function( str ) {
     return this.indexOf( str ) == 0
 }
@@ -346,6 +342,7 @@ mimis.ns = mimis.ns ||
         return ns
     } )()
 
+console.debug( 'gen:$' )
 mimis.status = mimis.status ||
     ( function() {
         var status = 'not loaded'
