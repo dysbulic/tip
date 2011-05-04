@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for arg in "$@"; do
+    [ ! -L "$arg" ] && {
+        echo "Skip Non-link: $arg"
+        continue
+    }
+    LINK="$(readlink "$arg")"
+    echo $LINK
+done
