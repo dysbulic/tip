@@ -1,8 +1,20 @@
 #!/bin/sh
 
-JAVA_CMD="/usr/bin/java"
+JAVA_CMD=""
+
+IFS="
+"
+for path in $(cat .../lib/java/cmds/utf8); do
+    echo "$path"
+    [ -e "$path" ] && {
+        JAVA_CMD="$path"
+        break
+    }
+done
+echo "$JAVA_CMD"
+
 JAVA_OPTS=""
-JAVA_CLASSPATH="$(cat ~/.../config/rhino/jars/list/utf8 | tr "\n" ':')"
+JAVA_CLASSPATH="$(cat .../lib/rhino/jars/utf8 | tr "\n" ':')"
 JAVA_MAIN="org.mozilla.javascript.tools.shell.Main"
 
 ## Fix for #512498
