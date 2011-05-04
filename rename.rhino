@@ -57,13 +57,13 @@
         }
 
         function addPath( file ) {
-            file.__defineGetter__( 'path', function() {
-                var path = this.getPath()
+            return wrap( file ).__defineGetter__( 'path', function() {
+                var path = file.getPath()
                 if( path.startsWith( './' ) ) {
                     path = path.substring( 2 )
                 }
                 return path
-            }
+            } )
         }
 
         list.each( function( file ) {
