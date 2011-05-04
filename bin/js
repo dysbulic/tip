@@ -13,19 +13,34 @@ done
 
 CP=""
 
-# ToDo: Fix
-SCRIPT="$1"
-echo $(dirname $SCRIPT)
-
-for jar in $(cat .../lib/rhino/jars/utf8); do
+function addJar() {
+    jar="$1"
     pullhash "$jar"
     [ "$OSTYPE" == 'cygwin' ] && {
         echo "$CP"
         CP="$CP;$(cygpath -d "$jar")"
     } || {
         CP="$CP:$jar"
-    }        
+    }
+}
+
+# ToDo: Fix
+
+SCRIPT="$1"
+
+pushd "$(dirname $SCRIPT)" > /dev/null
+for jar in $(cat lib/rhino/jars/utf8); do
+    addJar "$jar"
 done
+popd > /dev/null
+
+echo $CP
+
+for jar in $(cat .../lib/rhino/jars/utf8); do
+    addJar "$jar"
+done
+
+echo $CP
 
 OPTS=""
 
