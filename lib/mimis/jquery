@@ -150,20 +150,10 @@ mimis.load = mimis.load ||
                 ? function( uri ) {
                     var ret
                     $.ajax( {
-                        type : 'HEAD',
                         url : uri,
                         dataType : 'text',
                         async : false,
                         success : function( data, state, xhr ) {
-                            console.log( arguments )
-                        },
-                    } )
-                    $.ajax( {
-                        url : uri,
-                        dataType : 'text',
-                        async : false,
-                        success : function( data, state, xhr ) {
-                            console.log( arguments )
                             ret = parse( data, xhr.getResponseHeader( 'Content-Type' ) )
                         },
                     } )
@@ -180,47 +170,59 @@ mimis.load = mimis.load ||
                 } else {
                     ret = parse( readUrl( uri ), 'js' )
                 }
-                    return ret
+                return ret
             }
         )
     } )()
     
-mimis.load.parser = mimis.load.parser || {
-    eson : function( eson ) { // ECMAScript Object Notation
-        try {
-            return eval( "( function() { return " + eson + " } )()" )
-        } catch( e ) {
-            console.error( e )
-        }
-    },
-    js : function( javascript ) {
-        try {
-            return eval( javascript )
-        } catch( e ) {
-            console.error( e )
-        }
-    },
-    json : function( json ) {
-        return JSON.parse( data ) 
-    },
-    xml : function( xml ) {
-        var parser = new DOMParser()
-	return parser.parseFromString( xml, 'text/xml' )
-    },
+mimis.load.parser = mimis.load.parser || {}
+
+with( mimis.load.parser ) {
+    mimis.load.parser = mimis.x(
+        {
+            eson : function( eson ) { // ECMAScript Object Notation
+                try {
+                    return eval( "( function() { return " + eson + " } )()" )
+                } catch( e ) {
+                    console.error( e )
+                }
+            },
+            js : function( javascript ) {
+                try {
+                    return eval( javascript )
+                } catch( e ) {
+                    console.error( e )
+                }
+            },
+            json : function( json ) {
+                return JSON.parse( data ) 
+            },
+            xml : function( xml ) {
+                var parser = new DOMParser()
+	        return parser.parseFromString( xml, 'text/xml' )
+            },
+        },
+        mimis.load.parser )
 }
 
 with( mimis.load.parser ) {
-    mimis.load.parser = mimis.x( mimis.load.parser, {
-        'application/eson' : eson,
-        'application/javascript' : js,
-        'text/json' : json,
-        'text/xml' : xml,
-    } )
+    mimis.load.parser = mimis.x(
+        {
+            'application/eson' : eson,
+            'application/javascript' : js,
+            'text/json' : json,
+            'text/xml' : xml,
+        },
+        mimis.load.parser )
+}
 
-    mimis.load.parser = mimis.x( mimis.load.parser, {
-        'application/xhtml+xml' : 'text/xml',
-        'image/svg+xml' : 'text/xml',
-    } )
+with( mimis.load.parser ) {
+    mimis.load.parser = mimis.x(
+        {
+            'application/xhtml+xml' : 'text/xml',
+            'image/svg+xml' : 'text/xml',
+        },
+        mimis.load.parser )
 }
 //$.fn.style
 
@@ -396,7 +398,6 @@ mimis.parse.position = mimis.parse.position ||
 
 mimis.parse.length = mimis.parse.length || mimis.parse.position
 
-console.debug( 'gen:$' )
 mimis.load( '.../lib/mimis/' + mimis.ns.abbr + '/mimis' )
 
 $.isFunction( $ ) && $( function() {
@@ -426,5 +427,6 @@ if( false ) {
         }
     } )
 }
+console.debug( 'gen:$' )
 
 } )()
