@@ -7,17 +7,7 @@ var POIFSFileSystem = org.apache.poi.poifs.filesystem.POIFSFileSystem
 var FileInputStream = java.io.FileInputStream
 
 try {
-    var workbook = (
-//        new HSSFWorkbook(
-            new POIFSFileSystem( 
-                //this.getClass().getResourceAsStream(
-                new FileInputStream(
-                    'test.xlsx'
-                )
-            )
-//        )
-    )
-
+    var workbook = new XSSFWorkbook( 'test.xlsx' )
     var sheet = workbook.getSheetAt( 0 )
 
     var rows = sheet.rowIterator()
