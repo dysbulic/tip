@@ -3,38 +3,40 @@
 load( '.../lib/mimis/js' )
 
 try {
-    var input = this.class.getResourceAsStream( 'test.xlsx' )
-        POIFSFileSystem fs = new POIFSFileSystem( input );
-        HSSFWorkbook wb = new HSSFWorkbook(fs);
-        HSSFSheet sheet = wb.getSheetAt(0);
-            
-            // Iterate over each row in the sheet
-        Iterator rows = sheet.rowIterator(); 
-        while( rows.hasNext() ) {           
-            HSSFRow row = (HSSFRow) rows.next();
-            System.out.println( "Row #" + row.getRowNum() );
+    var workbook = (
+        new HSSFWorkbook(
+            new POIFSFileSystem( 
+                this.class.getResourceAsStream(
+                    'test.xlsx'
+                )
+            )
+        )
+    )
+
+    var sheet = workbook.getSheetAt( 0 )
+
+    Iterator rows = sheet.rowIterator()
+    while( rows.hasNext() ) {           
+        var row = rows.next()
+        console.log( "Row #" + row.getRowNum() )
  
-                // Iterate over each cell in the row and print out the cell's content
-            Iterator cells = row.cellIterator();
-            while( cells.hasNext() ) {
-                HSSFCell cell = (HSSFCell) cells.next();
-                System.out.println( "Cell #" + cell.getCellNum() );
-                switch ( cell.getCellType() ) {
-                case HSSFCell.CELL_TYPE_NUMERIC:
-                    System.out.println( cell.getNumericCellValue() );
-                    break;
-                case HSSFCell.CELL_TYPE_STRING: 
-                    System.out.println( cell.getStringCellValue() );
-                    break;
-                default:
-                    System.out.println( "unsuported sell type" );
-                    break;
-                }
+        var cells = row.cellIterator()
+        while( cells.hasNext() ) {
+            var cell = cells.next()
+            console.log( "Cell #" + cell.getCellNum() )
+            switch ( cell.getCellType() ) {
+            case HSSFCell.CELL_TYPE_NUMERIC:
+                console.log( cell.getNumericCellValue() )
+                break
+            case HSSFCell.CELL_TYPE_STRING: 
+                console.log( cell.getStringCellValue() )
+                break
+            default:
+                console.log( 'Unsuported Cell Type' )
+                break
             }
-                
         }
-            
-    } catch ( IOException ex ) {
-        ex.printStackTrace();
     }
+} catch ( ioe ) {
+    console.log( ioe )
 }
