@@ -2,11 +2,16 @@
 
 load( '.../lib/mimis/js' )
 
+var HSSFWorkbook = org.apache.poi.hssf.usermodel.HSSFWorkbook
+var POIFSFileSystem = org.apache.poi.poifs.filesystem.POIFSFileSystem
+
 try {
+    console.log( this.getClass( this ) )
+    console.log( 'p' )
     var workbook = (
         new HSSFWorkbook(
             new POIFSFileSystem( 
-                this.class.getResourceAsStream(
+                this.getClass().getResourceAsStream(
                     'test.xlsx'
                 )
             )
@@ -15,7 +20,7 @@ try {
 
     var sheet = workbook.getSheetAt( 0 )
 
-    Iterator rows = sheet.rowIterator()
+    var rows = sheet.rowIterator()
     while( rows.hasNext() ) {           
         var row = rows.next()
         console.log( "Row #" + row.getRowNum() )
