@@ -1,11 +1,15 @@
 #!/bin/bash
 
 for arg in "$@"; do
+    LINK="$(readlink "$arg")"
+    [[ "$arg" != "$LINK" && ! -e "$arg" ]] && {
+        echo "Skip Broken Link: $arg"
+        continue
+    }
     [ ! -L "$arg" ] && {
         echo "Skip Non-link: $arg"
         continue
     }
-    LINK="$(readlink "$arg")"
     
     ENDPOINT="$MIMIS_ORIGIN"
     [ ! -e "$LINK" ] && {

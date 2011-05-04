@@ -13,6 +13,7 @@ done
 
 CP=""
 for jar in $(cat .../lib/rhino/jars/utf8); do
+    pullhash "$jar"
     [ "$OSTYPE" == 'cygwin' ] && {
         echo "$CP"
         CP="$CP;$(cygpath -d "$jar")"
@@ -37,5 +38,4 @@ fi
 
 MAIN="org.mozilla.javascript.tools.shell.Main"
 
-echo $CMD $OPTS -classpath $CP $MAIN "$@"
 $CMD $OPTS -classpath $CP $MAIN "$@"
