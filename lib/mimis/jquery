@@ -333,9 +333,9 @@ mimis.ns = mimis.ns ||
             }
         }
         ns[ 'default' ] = ns[ 'default' ] || 'html'
-        !ns[ '' ] && (
+        if( ! ns[ '' ] {
             ns[ '' ] = ns[ ns[ 'default' ] ]
-        )
+        }
         ns.valueOf = ns.toString =
             function() { return ns[ '' ] }
         ns.abbr = ns[ ns ]
