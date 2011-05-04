@@ -9,7 +9,32 @@
 
     var line = XRegExp( '(?<author> .*?) - (?<title> .*)', 'x' ) 
 
-    console.log( '!' )
+    function mkdir( path ) {
+        console.log( 'mkdir:' + path )
+    }
+
+    var visitor = {
+        dir : {
+            pre : function( dir ) {
+                console.log( 'pre:' + dir )
+            },
+        },
+               
+        post : function( dir ) {
+            console.log( File.prototype )
+            var path = this.getPath()
+            if( path.startsWith( './' ) ) {
+                path = path.substring( 2 )
+            }
+            var match
+            if( ( match = line.exec( path ) ) !== null ) {
+                mkdir( 'by/' + match.author + '/' + match.title )
+                console.log( match.author )
+            } else {
+                console.log( 'No Match: ' + path )
+            }
+        },
+    }
 
     function spanDir( dir, visitor ) {
         var def = { visitor : {
@@ -21,16 +46,23 @@
                 post : function() {},
             },
         } }
-        visitor = mimis.x( {}, def.visitor, visitor )
-
+        visitor = mimis.x( true, {}, def.visitor, visitor )
+        
         var list = new File( dir ).listFiles()
         
         list.each( function( file ) {
             visitor.pre.call( file, list )
             if( file.isDirectory() ) {
-                visitor.dir.pre.call( file, list )
-                spanDir( file.getAbsolutePath(), visitor )
-                visitor.dir.post.call( file, list )
+                try {
+                    visitor.dir.pre.call( file, list )
+                    spanDir( file.getAbsolutePath(), visitor )
+                    visitor.dir.post.call( file, list )
+                } catch( e ) {
+                    if( e instanceof mimis.BubblingException ) {
+                        throw e
+                    }
+                    console.log( 'v:' + e )
+                }
             } else {
                 visitor.file.call( file, list )
             }
@@ -38,21 +70,5 @@
         } )
     }
     
-    function mkdir( path ) {
-    }
-
-    var visitor = {
-        post : function( dir ) {
-            var path = this.getPath()
-            var match
-            if( ( match = line.exec( path ) ) !== null ) {
-                mkdir( 'by/' + match.author + '/' + match.title )
-                console.log( match.author )
-            } else {
-                console.log( 'No Match: ' + path )
-            }
-        }
-    }
-
     spanDir( '.', visitor )
 } )()
