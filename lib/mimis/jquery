@@ -205,8 +205,11 @@ with( mimis.load.parser ) {
         'application/javascript' : js,
         'text/json' : json,
         'text/xml' : xml,
-        'application/xhtml+xml' : xml,
-        'image/svg+xml' : xml,
+    } )
+
+    mimis.load.parser = mimis.x( mimis.load.parser, {
+        'application/xhtml+xml' : 'text/xml',
+        'image/svg+xml' : 'text/xml',
     } )
 }
 //$.fn.style
