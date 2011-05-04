@@ -48,17 +48,17 @@ for arg in "$@"; do
         continue
     }
     
-    [[ "$arg" != "$LINK" && -d "$LINK" ]] {
+    [[ "$arg" != "$LINK" && -d "$LINK" ]] && {
         echo "Skipping Dir Link: $arg"
         continue
     }
 
-    [[ "$arg" != "$LINK" && -f "$LINK" ]] {
+    [[ "$arg" != "$LINK" && -f "$LINK" ]] && {
         echo "Skipping File Link: $arg"
         continue
     }
 
-    [ "$arg" != "$LINK" ] {
+    [ "$arg" != "$LINK" ] && {
         echo "Skipping Link: $arg"
         continue
     }
