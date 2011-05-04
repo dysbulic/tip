@@ -31,35 +31,35 @@ ENDPOINT="$MIMIS_ORIGIN"
 
 for arg in "$@"; do
     LINK="$(readlink "$arg")"
-    [[ "$arg" != "$LINK" && ! -e "$arg" ]] && {
+    [[ ! -z "$LINK" && ! -e "$arg" ]] && {
         [ -z "$VERBOSE" ] || echo "Skip Broken Link: $arg"
-        continue
-    }
-    [ ! -L "$arg" ] && {
-        [ -z "$VERBOSE" ] || echo "Skip Non-link: $arg"
         continue
     }
     
     [ "${LINK#$HASHDIR}" != "$LINK" ] && { # isa hash link
-        [ -z "$VERBOSE" ] || {
-            echo "Sending: $arg"
-        }
+        [ -z "$VERBOSE" ] || echo "Sending: $arg"
         rsync "$LINK" "$ENDPOINT:$LINK"
         continue
     }
     
-    [[ "$arg" != "$LINK" && -d "$LINK" ]] && {
-        echo "Skipping Dir Link: $arg"
+    [[ ! -z "$LINK" && -d "$LINK" ]] && {
+        [ -z "$VERBOSE" ] || echo "Skipping Dir Link: $arg"
         continue
     }
 
-    [[ "$arg" != "$LINK" && -f "$LINK" ]] && {
-        echo "Skipping File Link: $arg"
+    [[ ! -z "$LINK" && -f "$LINK" ]] && {
+        [ -z "$VERBOSE" ] || echo "Skipping File Link: $arg"
         continue
     }
 
-    [ "$arg" != "$LINK" ] && {
-        echo "Skipping Link: $arg"
+    [ ! -z "$LINK" ] && {
+        [ -z "$VERBOSE" ] || echo "Skipping Link: $arg"
+        continue
+    }
+
+    [ -d "$arg" ] && {
+        [ -z "$VERBOSE" ] || echo "Descending Into: $arg"
+        pushhash "$arg/"*
         continue
     }
 
