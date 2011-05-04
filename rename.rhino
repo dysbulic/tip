@@ -1,32 +1,27 @@
 //!/bin/js
 
-var console = ( console !== undefined
-                ? console
-                : {
-                      log : print,
-                    debug : print,
-                    error : print,
-                } )
-
 ;( function() {
-    load( '.../lib/xregexp/js' )
     load( '.../lib/mimis/js' )
+    load( '.../lib/xregexp/js' )
 
     importPackage( java.io )
     importPackage( java.util )
 
     var line = XRegExp( '(?<author> .*?) - (?<title> .*)', 'x' ) 
 
+    console.log( '!' )
+
     function spanDir( dir, visitor ) {
         var def = { visitor : {
             pre : function() {},
             post : function() {},
+            file : function() {},
             dir : {
                 pre : function() {},
                 post : function() {},
             },
         } }
-        visitor = mimis.x( def.visitor, visitor )
+        visitor = mimis.x( {}, def.visitor, visitor )
 
         var list = new File( dir ).listFiles()
         
@@ -35,7 +30,7 @@ var console = ( console !== undefined
             if( file.isDirectory() ) {
                 visitor.dir.pre.call( file, list )
                 spanDir( file.getAbsolutePath(), visitor )
-                visitor.dir.pre.call( file, list )
+                visitor.dir.post.call( file, list )
             } else {
                 visitor.file.call( file, list )
             }
