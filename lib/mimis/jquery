@@ -159,7 +159,9 @@ mimis.load = mimis.load ||
                     }
             : function( uri ) {
                 var ret
-                if( uri.startsWith( '...' ) ) {
+                var match
+                if( ( match = /^\.\.\./.match( uri ) ) != null ) {
+                    console.log( match )
                     ret = parse( readFile( uri ), 'application/javascript' )
                 } else {
                     ret = parse( readUrl( uri ), 'application/javascript' )
