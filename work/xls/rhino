@@ -48,7 +48,7 @@ try {
                         each : function( func ) {
                             var nodeIterator = traverser.iterator()
                             while( nodeIterator.hasNext() ) {
-                                var node = nodeIterator.next()
+                                func( node( nodeIterator.next() ) )
                             }
                         },
                         get () { return traverser.currentPosition() },
