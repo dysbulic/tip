@@ -1,0 +1,83 @@
+( function() { return { Database : function( path ) {
+    var EmbeddedGraphDatabase = org.neo4j.kernel.EmbeddedGraphDatabase
+    var DynamicRelationshipType = org.neo4j.graphdb.DynamicRelationshipType
+    var Traverser = org.neo4j.graphdb.Traverser
+    var StopEvaluator = org.neo4j.graphdb.StopEvaluator
+    var ReturnableEvaluator = org.neo4j.graphdb.ReturnableEvaluator
+    var Direction = org.neo4j.graphdb.Direction
+    
+    var db = new EmbeddedGraphDatabase( path )
+    
+    function ext_node( node ) {
+        return {
+            rel : { to : function() {
+                arguments[0] && arguments[0].node && ( arguments[0] = arguments[0].node )
+                var rel = node.createRelationshipTo.apply( node, arguments )
+                return {
+                    prop : function() {
+                        if( arguments.length == 1 ) {
+                            return rel.getProperty.apply( rel, arguments )
+                        }
+                        return rel.setProperty.apply( rel, arguments )
+                    },
+                }
+            } },
+            prop : function() {
+                if( arguments.length == 1 ) {
+                    return node.getProperty.apply( node, arguments )
+                }
+                return node.setProperty.apply( node, arguments )
+            },
+            get node() {
+                return node
+            },
+            valueOf : function() {
+                return node
+            },
+            traverse : function( cfg ) {
+                var def = {
+                    order : Traverser.Order.DEPTH_FIRST,
+                    stop : StopEvaluator.END_OF_GRAPH,
+                    ret : ReturnableEvaluator.ALL_BUT_START_NODE,
+                    get rel() { return wrap.mk.rel( 'Unknown' ) },
+                    dir : Direction.OUTGOING,
+                }
+                cfg = mimis.x( {}, def, cfg )
+                var traverser = node.traverse.apply( node, [
+                    cfg.order, cfg.stop, cfg.ret, cfg.rel, cfg.dir
+                ] )
+                return {
+                    each : function( func ) {
+                        var nodeIterator = traverser.iterator()
+                        while( nodeIterator.hasNext() ) {
+                            func( ext_node( nodeIterator.next() ) )
+                        }
+                    },
+                    get pos() { return traverser.currentPosition() },
+                }
+            },
+        }
+    }
+    
+    var wrap = {
+        mk : {
+            get node() { return ext_node( db.createNode() ) },
+            get tx() {
+                var tx = db.beginTx()
+                return {
+                    get success() { return tx.success() },
+                    get finish() { return tx.finish() },
+                }
+            },
+            rel : DynamicRelationshipType.withName,
+        },
+        get ref() {
+            return ext_node( db.getReferenceNode() )
+        },
+        get shutdown() {
+            return db.shutdown()
+        },
+    }
+    
+    return wrap
+} } } )()

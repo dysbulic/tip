@@ -1,0 +1,17 @@
+( function() {
+    var url = 'jdbc:microsoft:sqlserver://'
+    var server = {
+        name : 'WELCHSORDDEV',
+        port : 1433,
+        db : 'sord_dev_will',
+        user : '',
+        pass : '',
+        select : { type : 'cursor' },
+    }
+    with( server ) {
+        server.uri = ( url + name + ':' + port + ';'
+                       + 'databaseName=' + db + ';'
+                       + 'selectMethod=' + select.type + ';' )
+    }
+    return server
+} )()
