@@ -3,80 +3,10 @@
 load( '.../lib/mimis/js' )
 
 var xls = mimis.load( '.../lib/mimis/xls/rhino' )
-var neo4j
-var EmbeddedGraphDatabase = org.neo4j.kernel.EmbeddedGraphDatabase
-var DynamicRelationshipType = org.neo4j.graphdb.DynamicRelationshipType
-var Traverser = org.neo4j.graphdb.Traverser
-var StopEvaluator = org.neo4j.graphdb.StopEvaluator
-var ReturnableEvaluator = org.neo4j.graphdb.ReturnableEvaluator
-var Direction = org.neo4j.graphdb.Direction
+var neo4j = mimis.load( '.../lib/mimis/neo4j/mimis' )
 
 try {
-    var dbPath = 'tmp/xls/neo4j/'
-    var db = ( function() {
-        var db = new EmbeddedGraphDatabase( dbPath )
-        
-        function ext_node( node ) {
-            return {
-                rel : { to : function() {
-                    arguments[0] && arguments[0].node && ( arguments[0] = arguments[0].node )
-                    var rel = node.createRelationshipTo.apply( node, arguments )
-                    return {
-                        prop : function() {
-                            if( arguments.length == 1 ) {
-                                return rel.getProperty.apply( rel, arguments )
-                            }
-                            return rel.setProperty.apply( rel, arguments )
-                        },
-                    }
-                } },
-                prop : function() {
-                    if( arguments.length == 1 ) {
-                        return node.getProperty.apply( node, arguments )
-                    }
-                    return node.setProperty.apply( node, arguments )
-                },
-                get node() {
-                    return node
-                },
-                valueOf : function() {
-                    return node
-                },
-                traverse : function() {
-                    var traverser = node.traverse.apply( node, arguments )
-                    return {
-                        each : function( func ) {
-                            var nodeIterator = traverser.iterator()
-                            while( nodeIterator.hasNext() ) {
-                                func( ext_node( nodeIterator.next() ) )
-                            }
-                        },
-                        get pos() { return traverser.currentPosition() },
-                    }
-                },
-            }
-        }
-
-        return {
-            mk : {
-                get node() { return ext_node( db.createNode() ) },
-                get tx() {
-                    var tx = db.beginTx()
-                    return {
-                        get success() { return tx.success() },
-                        get finish() { return tx.finish() },
-                    }
-                },
-                rel : DynamicRelationshipType.withName,
-            },
-            get ref() {
-                return ext_node( db.getReferenceNode() )
-            },
-            get shutdown() {
-                return db.shutdown()
-            },
-        }
-    } )()
+    var db = new neo4j.Database( 'tmp/xls/neo4j/' )
 
     var tx = db.mk.tx
     var knowsRel = db.mk.rel( 'knows' )
@@ -90,12 +20,9 @@ try {
 
         db.ref.rel.to( nodes[0], knowsRel )
 
-        var traverser = db.ref.traverse(
-            Traverser.Order.DEPTH_FIRST,
-            StopEvaluator.END_OF_GRAPH,
-            ReturnableEvaluator.ALL_BUT_START_NODE,
-            knowsRel,
-            Direction.OUTGOING )
+        var traverser = db.ref.traverse( {
+            rel : knowsRel,
+        } )
         
         traverser.each( function( node ) {
             console.log( node.prop( 'message' ) )
