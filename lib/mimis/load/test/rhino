@@ -3,8 +3,9 @@
 ( function() {
     var lib = '.../lib/mimis/js'
     
-    print( environment.OSTYPE )
-    
+    for( prop in environment ) {
+        print( prop + ' : ' + environment[ prop ] )
+    }
     return
 
     if( environment.OSTYPE == 'cygwin' ) {
