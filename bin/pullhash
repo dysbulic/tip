@@ -31,7 +31,8 @@ ENDPOINT="$MIMIS_ORIGIN"
 for arg in "$@"; do
     [ -z "$arg" ] && continue
 
-    LINK="$(readlink "$arg")"
+    LINK="$(readlink -f "$arg")"
+
 
     [[ ! -z "$LINK" && ! -e "$LINK" ]] && {
         [ -z "$VERBOSE" ] || echo "Pulling: $arg"
