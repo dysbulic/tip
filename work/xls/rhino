@@ -11,19 +11,12 @@ try {
     var dbPath = 'tmp/xls/neo4j/'
     var db = ( function() {
         var db = new EmbeddedGraphDatabase( dbPath )
-        return (
-            ( function() {
-                var ret = {
-                    node : {},
-                    get shutdown() {
-                        return db.shutdown()
-                    },
-                    tx : {},
-                }
-                ret.node.__defineGetter__( 'new', function() {
+        return {
+            mk : {
+                get node() {
                     var node = db.createNode()
                     return {
-                        relTo : function() {
+                        rel : { to : function() {
                             arguments[0] && arguments[0].node && ( arguments[0] = arguments[0].node )
                             var rel = node.createRelationshipTo.apply( node, arguments )
                             return {
@@ -31,7 +24,7 @@ try {
                                     return rel.setProperty.apply( rel, arguments )
                                 },
                             }
-                        },
+                        } },
                         prop : function() {
                             return node.setProperty.apply( node, arguments )
                         },
@@ -42,25 +35,25 @@ try {
                             return node
                         },
                     }
-                } )
-                ret.tx.__defineGetter__( 'new', function() {
+                },
+                get tx() {
                     var tx = db.beginTx()
                     return {
                         get success() { return tx.success() },
                         get finish() { return tx.finish() },
                     }
-                } )
-                return ret
-            } )()
-        )
+                },
+            },
+            get shutdown() {
+                return db.shutdown()
+            },
+        }
     } )()
-    
-    var mkrel = DynamicRelationshipType.withName
 
-    var tx = db.tx['new']
+    var tx = db.mk.tx
     try {
-        var nodes = [ db.node['new'], db.node['new'] ]
-        var rel = nodes[0].relTo( nodes[-1], mkrel( 'knows' ) )
+        var nodes = [ db.mk.node, db.mk.node ]
+        var rel = nodes[0].rel.to( nodes[-1], db.mk.rel( 'knows' ) )
     
         nodes[0].prop( 'message', 'Hello, ' )
         nodes[-1].prop( 'message', 'world!' )
@@ -69,6 +62,15 @@ try {
     } finally {
         tx.finish
     }
+
+     traverser = startNode.traverse( ... );
+    for ( Node node : traverser )
+    {
+        TraversalPosition currentPosition = traverser.currentPosition();
+    // Do something with the node and/or its position in the traversal
+    }
+
+
     db.shutdown
 
     var workbook = new xls.Workbook( 'test.xlsx' )
