@@ -3,7 +3,6 @@
     var args = Array.prototype.slice.call( arguments )
     args.each( function( obj ) {
         try {
-    console.log( '!' )
             for( prop in obj ) {
                 var getter = function() { return obj[ prop ] }
                 var setter = function( val ) { return obj[ prop ] = val }
@@ -14,5 +13,6 @@
             console.error( e )
         }
     } )
+    console.log( '!' )
     return out
 } } )()
