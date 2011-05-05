@@ -9,16 +9,20 @@ try {
     var dbPath = 'tmp/xls/neo4j/'
     var db = ( function() {
         var db = new EmbeddedGraphDatabase( dbPath )
-        return {
-            node : {
-                get new() {
+        return (
+            ( function() {
+                var ret = {
+                    node : {},
+                    get shutdown() {
+                        return db.shutdown()
+                    },
+                }
+                ret.node.__defineGetter__( 'new', function() {
                     return db.createNode()
-                },
-            },
-            get shutdown() {
-                return db.shutdown()
-            }
-        }
+                } )
+                return ret
+            } )()
+        )
     } )()
     
     var nodes = [ db.node.new, db.node.new ]
