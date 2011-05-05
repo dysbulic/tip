@@ -27,7 +27,6 @@ function addJar() {
     LINK="$(readlink -m "$LINK")"
 
     [ "$OSTYPE" == 'cygwin' ] && {
-        echo "$CP"
         CP="$CP;$(cygpath -w "$LINK")"
     } || {
         CP="$CP:$jar"
