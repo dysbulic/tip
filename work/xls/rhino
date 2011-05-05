@@ -15,31 +15,30 @@ try {
     var dbPath = 'tmp/xls/neo4j/'
     var db = ( function() {
         var db = new EmbeddedGraphDatabase( dbPath )
+        
+        function node( node ) {
+            rel : { to : function() {
+                arguments[0] && arguments[0].node && ( arguments[0] = arguments[0].node )
+                var rel = node.createRelationshipTo.apply( node, arguments )
+                return {
+                    prop : function() {
+                        return rel.setProperty.apply( rel, arguments )
+                    },
+                }
+            } },
+            prop : function() {
+                return node.setProperty.apply( node, arguments )
+            },
+            get node() {
+                return node
+            },
+            valueOf : function() {
+                return node
+            },
+        }
         return {
             mk : {
-                get node() {
-                    var node = db.createNode()
-                    return {
-                        rel : { to : function() {
-                            arguments[0] && arguments[0].node && ( arguments[0] = arguments[0].node )
-                            var rel = node.createRelationshipTo.apply( node, arguments )
-                            return {
-                                prop : function() {
-                                    return rel.setProperty.apply( rel, arguments )
-                                },
-                            }
-                        } },
-                        prop : function() {
-                            return node.setProperty.apply( node, arguments )
-                        },
-                        get node() {
-                            return node
-                        },
-                        valueOf : function() {
-                            return node
-                        },
-                    }
-                },
+                get node() { return node( db.createNode() ) },
                 get tx() {
                     var tx = db.beginTx()
                     return {
@@ -68,6 +67,8 @@ try {
         nodes[-1].prop( 'message', 'world!' )
         rel.prop( 'message', 'brave neo' )
 
+        db.ref.rel.to( nodes[-1], knowsRel )
+
         var traverser = db.ref.traverse(
             Traverser.Order.DEPTH_FIRST,
             StopEvaluator.END_OF_GRAPH,
@@ -75,6 +76,7 @@ try {
             knowsRel,
             Direction.OUTGOING )
 
+       
         var nodeIterator = traverser.iterator()
         while( nodeIterator.hasNext() ) {
             var node = nodeIterator.next()
