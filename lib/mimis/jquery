@@ -202,6 +202,8 @@ with( mimis.load.parser ) {
 with( mimis.load.parser ) {
     mimis.load.parser = mimis.x(
         {
+            jquery : js,
+            mimis : js,
             rhino : js,
             'application/eson' : eson,
             'application/javascript' : js,
@@ -396,6 +398,8 @@ mimis.parse.position = mimis.parse.position ||
 mimis.parse.length = mimis.parse.length || mimis.parse.position
 
 mimis.load( '.../lib/mimis/' + mimis.ns.abbr + '/mimis' )
+
+mimis.wrap = mimis.wrap || mimis.load( '.../lib/mimis/wrap/jquery' )
 
 $.isFunction( $ ) && $( function() {
     $('head').each( function() {
