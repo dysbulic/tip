@@ -28,11 +28,13 @@ function addJar() {
 
 SCRIPT="$1"
 
-pushd "$(dirname $SCRIPT)" > /dev/null
-for jar in $(cat lib/rhino/jars/utf8); do
-    addJar "$jar"
-done
-popd > /dev/null
+[ ! -z "$SCRIPT" ] && {
+    pushd "$(dirname $SCRIPT)" > /dev/null
+    for jar in $(cat lib/rhino/jars/utf8); do
+        addJar "$jar"
+    done
+    popd > /dev/null
+}
 
 for jar in $(cat .../lib/rhino/jars/utf8); do
     addJar "$jar"
