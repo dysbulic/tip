@@ -33,16 +33,19 @@
                                                                     while( cells.hasNext() ) {
                                                                         func( ( function() {
                                                                             var cell = cells.next()
+                                                                            function val() {
+                                                                                switch ( cell.getCellType() ) {
+                                                                                case XSSFCell.CELL_TYPE_NUMERIC:
+                                                                                    return cell.getNumericCellValue()
+                                                                                case XSSFCell.CELL_TYPE_STRING:
+                                                                                    return cell.getStringCellValue()
+                                                                                case XSSFCell.CELL_TYPE_BOOLEAN:
+                                                                                    return cell.getBooleanCellValue()
+                                                                                }
+                                                                            }
                                                                             return {
-                                                                                valueOf : function() {
-                                                                                    switch ( cell.getCellType() ) {
-                                                                                    case XSSFCell.CELL_TYPE_NUMERIC:
-                                                                                        return cell.getNumericCellValue()
-                                                                                    case XSSFCell.CELL_TYPE_STRING:
-                                                                                        return cell.getStringCellValue()
-                                                                                    }
-                                                                                },
-
+                                                                                valueOf : val,
+                                                                                toString : function() { return val().toString() }
                                                                             }
                                                                         } )() )
                                                                     }
