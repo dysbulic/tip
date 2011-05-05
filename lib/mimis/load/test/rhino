@@ -1,15 +1,19 @@
 //!/bin/js
 
-var lib = '.../lib/mimis/js'
+( function() {
+    var lib = '.../lib/mimis/js'
+    
+    print( environment.OSTYPE )
+    
+    return
 
-print( environment.OSTYPE )
-
-if( environment.OSTYPE == 'cygwin' ) {
-    lib = runCommand( 'cygpath', '-w', lib )
-}
-
-print( lib )
-
-//load( lib )
-
-//console.log( mimis.load( eson ) )
+    if( environment.OSTYPE == 'cygwin' ) {
+        lib = runCommand( 'cygpath', '-w', lib )
+    }
+    
+    print( lib )
+    
+    //load( lib )
+    
+    //console.log( mimis.load( eson ) )
+} )()
