@@ -5,10 +5,13 @@
     args.each( function( obj ) {
         try {
             for( prop in obj ) {
-                var getter = function() { return obj[ prop ] }
-                var setter = function( val ) { return obj[ prop ] = val }
-                out.__defineGetter__( prop, getter )
-                out.__defineSetter__( prop, setter )
+                ( function() {
+                    var attr = prop
+                    var getter = function() { return obj[ attr ] }
+                    var setter = function( val ) { return obj[ attr ] = val }
+                    out.__defineGetter__( prop, getter )
+                    out.__defineSetter__( prop, setter )
+                } )()
             }
         } catch( e ) {
             console.error( e )
