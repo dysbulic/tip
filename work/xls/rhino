@@ -14,12 +14,12 @@ try {
         var nodes = [ db.mk.node, db.mk.node ]
         var rel = nodes[0].rel.to( nodes[-1], knowsRel )
     
-        console.log( '!' )
         nodes[0].prop( 'message', 'Hello, ' )
         nodes[-1].prop( 'message', 'world!' )
         rel.prop( 'message', 'brave neo' )
 
         db.ref.rel.to( nodes[0], knowsRel )
+        console.log( '!' )
 
         var traverser = db.ref.traverse( {
             rel : knowsRel,
