@@ -24,6 +24,7 @@ try {
                     var node = db.createNode()
                     return {
                         relTo : function() {
+                            arguments[0] && arguments[0].node && ( arguments[0] = arguments[0].node )
                             var rel = node.createRelationshipTo.apply( node, arguments )
                             return {
                                 prop : function() {
@@ -33,6 +34,9 @@ try {
                         },
                         prop : function() {
                             node.setProperty.apply( node, arguments )
+                        },
+                        get node() {
+                            return node
                         },
                         valueOf : function() {
                             return node
