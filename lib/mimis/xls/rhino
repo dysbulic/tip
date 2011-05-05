@@ -25,7 +25,18 @@
                                                 each : function( func ) {
                                                     var rows = sheet.rowIterator()
                                                     while( rows.hasNext() ) {           
-                                                        func( rows.next() )
+                                                        func( ( function() {
+                                                            return {
+                                                                cells : {
+                                                                    each : function( func ) {
+                                                                        var cells = row.cellIterator()
+                                                                        while( cells.hasNext() ) {
+                                                                            func( cells.next() )
+                                                                        }
+                                                                    },
+                                                                },
+                                                            }
+                                                        } )() )
                                                     }
                                                 },
                                                 valueOf : function() { return sheet },
