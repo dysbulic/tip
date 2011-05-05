@@ -14,22 +14,25 @@
                         for( var i = 0; i < sheets.length; i++ ) {
                             ( function() {
                                 var idx = i
-                                var sheet, row
+                                var sheet, obj
                                 sheets.__defineGetter__( i, function() {
                                     if( sheet === undefined ) {
                                         sheet = workbook.getSheetAt( idx )
                                     }
-                                    if( row === undefined ) {
-                                        row = { row : {
-                                            each : function( func ) {
-                                                var rows = sheet.rowIterator()
-                                                while( rows.hasNext() ) {           
-                                                    func( rows.next() )
-                                                }
-                                            },
-                                        } }
+                                    if( obj === undefined ) {
+                                        obj = {
+                                            rows : {
+                                                each : function( func ) {
+                                                    var rows = sheet.rowIterator()
+                                                    while( rows.hasNext() ) {           
+                                                        func( rows.next() )
+                                                    }
+                                                },
+                                                valueOf : function() { return sheet },
+                                            }
+                                        }
                                     }
-                                    return row
+                                    return obj
                                 } )
                             } )()
                         }
