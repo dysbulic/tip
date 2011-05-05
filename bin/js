@@ -16,9 +16,12 @@ CP=""
 function addJar() {
     jar="$1"
     pullhash "$jar"
+
+    LINK="$jar"
+    LINK="$(readlink -m "$LINK")"
+
     [ "$OSTYPE" == 'cygwin' ] && {
-        echo "$CP"
-        CP="$CP;$(cygpath -d "$jar")"
+        CP="$CP;$(cygpath -w "$LINK")"
     } || {
         CP="$CP:$jar"
     }
@@ -28,11 +31,13 @@ function addJar() {
 
 SCRIPT="$1"
 
-pushd "$(dirname $SCRIPT)" > /dev/null
-for jar in $(cat lib/rhino/jars/utf8); do
-    addJar "$jar"
-done
-popd > /dev/null
+[ -e lib/rhino/jars/utf8 ] && {
+    pushd "$(dirname $SCRIPT)" > /dev/null
+    for jar in $(cat lib/rhino/jars/utf8); do
+        addJar "$jar"
+    done
+    popd > /dev/null
+}
 
 for jar in $(cat .../lib/rhino/jars/utf8); do
     addJar "$jar"

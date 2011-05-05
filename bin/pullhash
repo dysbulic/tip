@@ -31,11 +31,17 @@ ENDPOINT="$MIMIS_ORIGIN"
 for arg in "$@"; do
     [ -z "$arg" ] && continue
 
-    LINK="$(readlink -f "$arg")"
+    # Too many levels of symbolic links    
+    # LINK="$(readlink -f "$arg")"
+    LINK="$arg"
+    while [ "$LINK" != "$(readlink "$LINK")" ]; do
+        LINK="$(readlink "$LINK")"
+    done
+
     LINK="${LINK#$(echo ~)/}"
 
     [[ ! -z "$LINK" && ! -e "$LINK" ]] && {
-        [ -z "$VERBOSE" ] || echo "Pulling: $arg"
+        [ -z "$VERBOSE" ] || echo "Pulling: $arg ($LINK)"
         rsync --progress "$ENDPOINT:$LINK" "$LINK"
         continue
     }

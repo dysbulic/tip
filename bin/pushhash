@@ -38,7 +38,7 @@ for arg in "$@"; do
     
     [ "${LINK#$HASHDIR}" != "$LINK" ] && { # isa hash link
         [ -z "$VERBOSE" ] || echo "Sending: $arg"
-        rsync "$LINK" "$ENDPOINT:$LINK"
+        rsync --progress "$LINK" "$ENDPOINT:$LINK"
         continue
     }
     
