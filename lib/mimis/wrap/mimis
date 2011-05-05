@@ -1,15 +1,17 @@
-( function() {
-return function() {
+( function() { return function() {
     var out = {}
     var args = Array.prototype.slice.call( arguments )
     args.each( function( obj ) {
-        for( prop in obj ) {
-            var getter = function() { return obj[ prop ] }
-            var setter = function( val ) { return obj[ prop ] = val }
-            out.__defineGetter__( prop, getter )
-            out.__defineSetter__( prop, setter )
+        try {
+            for( prop in obj ) {
+                var getter = function() { return obj[ prop ] }
+                var setter = function( val ) { return obj[ prop ] = val }
+                out.__defineGetter__( prop, getter )
+                out.__defineSetter__( prop, setter )
+            }
+        } catch( e ) {
+            console.error( e )
         }
     } )
     return out
-}
-} )()
+} } )()
