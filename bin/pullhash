@@ -32,14 +32,22 @@ for arg in "$@"; do
     [ -z "$arg" ] && continue
 
     LINK="$(readlink -f "$arg")"
-
+    
 
     [[ ! -z "$LINK" && ! -e "$LINK" ]] && {
-        [ -z "$VERBOSE" ] || echo "Pulling: $arg"
+        [ -z "$VERBOSE" ] || echo "Pulling: $arg:$LINK"
         rsync --progress "$ENDPOINT:$LINK" "$LINK"
         continue
     }
     
+    [[ "$arg" != '.' && "$arg" != '..' && "$arg" != '...' \
+        && -d "$arg" && $(ls -1 "$arg" | wc -l) -gt 0 ]] && {
+        arg="${arg%/}/"
+        [ -z "$VERBOSE" ] || echo "Descending Into: $arg"
+        pullhash "$arg"*
+        continue
+    }
+
     [[ ! -z "$LINK" && -d "$LINK" ]] && {
         [ -z "$VERBOSE" ] || echo "Skipping Dir Link: $arg"
         continue
@@ -52,13 +60,6 @@ for arg in "$@"; do
 
     [ ! -z "$LINK" ] && {
         [ -z "$VERBOSE" ] || echo "Skipping Link: $arg"
-        continue
-    }
-
-    [[ -d "$arg" && $(ls -1 "$arg" | wc -l) -gt 0 ]] && {
-        arg="${arg%/}/"
-        [ -z "$VERBOSE" ] || echo "Descending Into: $arg"
-        pullhash "$arg"*
         continue
     }
 
