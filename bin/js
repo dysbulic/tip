@@ -52,7 +52,8 @@ isOpenJDK=$($JAVA_CMD -version 2>&1 | grep -i "OpenJDK" | wc -l)
 }
 
 [ "$OSTYPE" == 'cygwin' ] && {
-    OPTS="$OPTS -Dos.emulator=cygwin"
+    # OPTS="$OPTS -Dos.emulator=cygwin"
+    OPTS="$OPTS -Dos_emulator=cygwin"
     echo -n
 }
 
