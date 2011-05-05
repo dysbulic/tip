@@ -11,8 +11,8 @@ try {
     var workbook = new xls.Workbook( 'test.xlsx' )
     var sheet = workbook.getSheetAt( 0 )
 
-    var rows = sheet.rowIterator()
     console.log( '!' )
+    var rows = sheet.rowIterator()
     while( rows.hasNext() ) {           
         var row = rows.next()
         console.log( "Row #" + row.getRowNum() )
