@@ -87,13 +87,12 @@ try {
             ReturnableEvaluator.ALL_BUT_START_NODE,
             knowsRel,
             Direction.OUTGOING )
-
-       
+        
         var nodeIterator = traverser.iterator()
         while( nodeIterator.hasNext() ) {
             var node = nodeIterator.next()
             var pos = traverser.currentPosition()
-            console.log( node )
+            console.log( node.prop( 'message' )
         }
         tx.success
     } finally {
