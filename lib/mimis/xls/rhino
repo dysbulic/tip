@@ -2,6 +2,39 @@
     var XSSFWorkbook = org.apache.poi.xssf.usermodel.XSSFWorkbook
     var XSSFCell = org.apache.poi.xssf.usermodel.XSSFCell
     
+    function row( rows ) {
+        var row = rows.next()
+        return {
+            cells : {
+                each : function( func ) {
+                    var cells = row.cellIterator()
+                    while( cells.hasNext() ) {
+                        func( cell( cells ) )
+                    }
+                },
+            },
+            get num() { return row.getRowNum() },
+        }
+    } 
+    
+    function cell( cells ) {
+        var cell = cells.next()
+        function val() {
+            switch ( cell.getCellType() ) {
+            case XSSFCell.CELL_TYPE_NUMERIC:
+                return cell.getNumericCellValue()
+            case XSSFCell.CELL_TYPE_STRING:
+                return cell.getStringCellValue()
+            case XSSFCell.CELL_TYPE_BOOLEAN:
+                return cell.getBooleanCellValue()
+            }
+        }
+        return {
+            valueOf : val,
+            toString : function() { return val().toString() }
+        }
+    }                                                                } 
+
     return {
         Workbook : function( path ) {
             //return mimis.wrap( new XSSFWorkbook( path ) )
@@ -25,36 +58,7 @@
                                             rows : { each : function( func ) {
                                                 var rows = sheet.rowIterator()
                                                 while( rows.hasNext() ) {
-                                                    func( ( function() {
-                                                        var row = rows.next()
-                                                        return {
-                                                            cells : {
-                                                                each : function( func ) {
-                                                                    var cells = row.cellIterator()
-                                                                    while( cells.hasNext() ) {
-                                                                        func( ( function() {
-                                                                            var cell = cells.next()
-                                                                            function val() {
-                                                                                switch ( cell.getCellType() ) {
-                                                                                case XSSFCell.CELL_TYPE_NUMERIC:
-                                                                                    return cell.getNumericCellValue()
-                                                                                case XSSFCell.CELL_TYPE_STRING:
-                                                                                    return cell.getStringCellValue()
-                                                                                case XSSFCell.CELL_TYPE_BOOLEAN:
-                                                                                    return cell.getBooleanCellValue()
-                                                                                }
-                                                                            }
-                                                                            return {
-                                                                                valueOf : val,
-                                                                                toString : function() { return val().toString() }
-                                                                            }
-                                                                        } )() )
-                                                                    }
-                                                                },
-                                                            },
-                                                            get num() { return row.getRowNum() },
-                                                        }
-                                                    } )() )
+                                                    func( row( rows ) )
                                                 }
                                             } },
                                             valueOf : function() { return sheet },
