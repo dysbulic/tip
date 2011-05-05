@@ -132,6 +132,9 @@ mimis.load = mimis.load ||
         function parse( ret, type ) {
             var parser
             if( parser = mimis.load.parser[ type ] ) {
+                while( $.isString( parser ) ) {
+                    parser = mimis.load.parser[ parser ]
+                }
                 ret = parser( ret )
             }
             return ret
@@ -199,6 +202,7 @@ with( mimis.load.parser ) {
 with( mimis.load.parser ) {
     mimis.load.parser = mimis.x(
         {
+            rhino : js,
             'application/eson' : eson,
             'application/javascript' : js,
             'text/json' : json,
