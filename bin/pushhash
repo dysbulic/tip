@@ -64,7 +64,7 @@ for arg in "$@"; do
         continue
     }
 
-    echo "U"
+    [ -z "$REALLY_VERBOSE" ] || echo "File: $arg"
 done
 
 function visitNode() {
