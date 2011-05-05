@@ -31,9 +31,20 @@
                                                                 each : function( func ) {
                                                                     var cells = row.cellIterator()
                                                                     while( cells.hasNext() ) {
-                                                                        func(
-                                                                            cells.next()
-                                                                        )
+                                                                        func( ( function() {
+                                                                            var cell = cells.next()
+                                                                            return {
+                                                                                valueOf : function() {
+                                                                                    switch ( cell.getCellType() ) {
+                                                                                    case XSSFCell.CELL_TYPE_NUMERIC:
+                                                                                        return cell.getNumericCellValue()
+                                                                                    case XSSFCell.CELL_TYPE_STRING:
+                                                                                        return cell.getStringCellValue()
+                                                                                    }
+                                                                                },
+
+                                                                            }
+                                                                        } )() )
                                                                     }
                                                                 },
                                                             },

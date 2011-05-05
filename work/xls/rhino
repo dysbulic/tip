@@ -19,17 +19,6 @@ try {
         row.cells.each( function( cell ) {
             //console.log( "Cell #" + cell.getCellNum() )
             console.log( "Cell #" + cell )
-            switch ( cell.getCellType() ) {
-            case XSSFCell.CELL_TYPE_NUMERIC:
-                console.log( cell.getNumericCellValue() )
-                break
-            case XSSFCell.CELL_TYPE_STRING: 
-                console.log( cell.getStringCellValue() )
-                break
-            default:
-                console.log( 'Unsuported Cell Type' )
-                break
-            }
         } )
     } )
 } catch ( ioe ) {
