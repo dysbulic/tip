@@ -214,14 +214,16 @@ with( mimis.load.parser ) {
 }
 
 console.log( '!' )
-console.log( mimis.x )
 with( mimis.load.parser ) {
-    mimis.load.parser = mimis.x(
+    ( function() {
+        var __ = ( function() { return this } )()
+    __.mimis.load.parser = __.mimis.x(
         {
             'application/xhtml+xml' : 'text/xml',
             'image/svg+xml' : 'text/xml',
         },
-        mimis.load.parser )
+        __.mimis.load.parser )
+    } )()
 }
 
 console.log( '!' )
