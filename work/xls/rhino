@@ -28,12 +28,12 @@ try {
                             var rel = node.createRelationshipTo.apply( node, arguments )
                             return {
                                 prop : function() {
-                                    rel.setProperty.apply( rel, arguments )
+                                    return rel.setProperty.apply( rel, arguments )
                                 },
                             }
                         },
                         prop : function() {
-                            node.setProperty.apply( node, arguments )
+                            return node.setProperty.apply( node, arguments )
                         },
                         get node() {
                             return node
