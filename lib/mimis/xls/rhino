@@ -2,10 +2,8 @@
     var XSSFWorkbook = org.apache.poi.xssf.usermodel.XSSFWorkbook
     
     return {
-        Workbook : function() {
-            return {
-                test : 3,
-            }
+        Workbook : function( path ) {
+            return new XSSFWorkbook( path )
         },
     }
 } )()

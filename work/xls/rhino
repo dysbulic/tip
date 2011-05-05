@@ -3,7 +3,6 @@
 load( '.../lib/mimis/js' )
 
 var xls = mimis.load( '.../lib/mimis/xls/rhino' )
-console.log( new xls.Workbook( 'd' ).test )
 
 //var Workbook = load 
 var XSSFWorkbook = org.apache.poi.xssf.usermodel.XSSFWorkbook
@@ -12,7 +11,7 @@ var POIFSFileSystem = org.apache.poi.poifs.filesystem.POIFSFileSystem
 var FileInputStream = java.io.FileInputStream
 
 try {
-    var workbook = new XSSFWorkbook( 'test.xlsx' )
+    var workbook = new xls.Workbook( 'test.xlsx' )
     var sheet = workbook.getSheetAt( 0 )
 
     var rows = sheet.rowIterator()
