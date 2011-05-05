@@ -14,12 +14,11 @@
                         for( var i = 0; i < sheets.length; i++ ) {
                             ( function() {
                                 var idx = i
-                                var sheet
+                                var sheet, row
                                 sheets.__defineGetter__( i, function() {
                                     if( sheet === undefined ) {
                                         sheet = workbook.getSheetAt( idx )
                                     }
-
                                     if( row === undefined ) {
                                         row = {
                                             each : function( func ) {
