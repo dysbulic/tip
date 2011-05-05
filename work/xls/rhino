@@ -14,11 +14,9 @@ try {
     console.log( '!' )
 
     sheet.rows.each( function( row ) {
-        console.log( "Row #" + row.getRowNum() )
+        console.log( "Row #" + row.num )
  
-        var cells = row.cellIterator()
-        while( cells.hasNext() ) {
-            var cell = cells.next()
+        row.cells.each( function( cell ) {
             //console.log( "Cell #" + cell.getCellNum() )
             console.log( "Cell #" + cell )
             switch ( cell.getCellType() ) {

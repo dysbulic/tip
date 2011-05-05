@@ -25,17 +25,24 @@
                                                 each : function( func ) {
                                                     var rows = sheet.rowIterator()
                                                     while( rows.hasNext() ) {
-                                                        var row = {
-                                                            cells : {
-                                                                each : function( func ) {
-                                                                    var cells = row.cellIterator()
-                                                                    while( cells.hasNext() ) {
-                                                                        func( cells.next() )
-                                                                    }
-                                                                },
-                                                            },
-                                                        }
-                                                        func( row )
+                                                        func(
+                                                            ( function() {
+                                                                var row = rows.next()
+                                                                return {
+                                                                    cells : {
+                                                                        each : function( func ) {
+                                                                            var cells = row.cellIterator()
+                                                                            while( cells.hasNext() ) {
+                                                                                func(
+                                                                                    cells.next()
+                                                                                )
+                                                                            }
+                                                                        },
+                                                                    },
+                                                                    get num() { return row.getRowNum() },
+                                                                }
+                                                            } )()
+                                                        )
                                                     }
                                                 },
                                                 valueOf : function() { return sheet },
