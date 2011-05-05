@@ -32,7 +32,7 @@ for arg in "$@"; do
     [ -z "$arg" ] && continue
 
     LINK="$(readlink -f "$arg")"
-    
+    LINK="${LINK#$(echo ~)/}"
 
     [[ ! -z "$LINK" && ! -e "$LINK" ]] && {
         [ -z "$VERBOSE" ] || echo "Pulling: $arg:$LINK"
