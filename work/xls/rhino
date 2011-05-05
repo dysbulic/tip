@@ -7,8 +7,26 @@ var EmbeddedGraphDatabase = org.neo4j.kernel.EmbeddedGraphDatabase
 
 try {
     var dbPath = 'tmp/xls/neo4j/'
-    var db = new EmbeddedGraphDatabase( dbPath )
-    db.shutdown()
+    var db = ( function() {
+        var db = new EmbeddedGraphDatabase( dbPath )
+        return {
+            node : {
+                get new() {
+                    return db.createNode()
+                },
+            },
+            get shutdown() {
+                return db.shutdown()
+            }
+        }
+    } )()
+    
+    var nodes = [ db.node.new, db.node.new ]
+    var rel = nodes[0].relTo( nodes[-1], 'KNOWS' )
+ 
+    nodes[0].setProperty( 'message', 'Hello, ' )
+    nodes[-1].setProperty( 'message', 'world!' )
+    relationship.setProperty( 'message', 'brave neo' )
 
     var workbook = new xls.Workbook( 'test.xlsx' )
     var sheet = workbook.sheet[ 0 ]
@@ -19,8 +37,6 @@ try {
             console.log( 'Cell: ' + cell )
         } )
     } )
-
-
 } catch ( ioe ) {
     console.log( ioe )
 }
