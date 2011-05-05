@@ -31,7 +31,7 @@ function addJar() {
 
 SCRIPT="$1"
 
-[ -e lib/rhino/jars/utf8 ] && {
+[[ ! -z "$SCRIPT" && -e lib/rhino/jars/utf8 ]] && {
     pushd "$(dirname $SCRIPT)" > /dev/null
     for jar in $(cat lib/rhino/jars/utf8); do
         addJar "$jar"
