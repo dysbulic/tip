@@ -213,7 +213,6 @@ with( mimis.load.parser ) {
         mimis.load.parser )
 }
 
-console.log( '!' )
 with( mimis.load.parser ) {
     ( function() {
         var __ = ( function() { return this } )()
@@ -226,7 +225,6 @@ with( mimis.load.parser ) {
     } )()
 }
 
-console.log( '!' )
 console.debug = console.debug || console.info
 
 String.prototype.startsWith = String.prototype.startsWith || function( str ) {
@@ -403,11 +401,7 @@ mimis.parse.length = mimis.parse.length || mimis.parse.position
 
 mimis.load( '.../lib/mimis/' + mimis.ns.abbr + '/mimis' )
 
-console.log( '!' )
-
 mimis.wrap = mimis.wrap || mimis.load( '.../lib/mimis/wrap/mimis' )
-
-console.log( mimis.wrap )
 
 $.isFunction( $ ) && $( function() {
     $('head').each( function() {
