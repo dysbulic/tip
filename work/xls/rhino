@@ -43,7 +43,16 @@ try {
                     return node
                 },
                 traverse : function() {
-                    return node.traverse.apply( node, arguments )
+                    var traverser = node.traverse.apply( node, arguments )
+                    return {
+                        each : function( func ) {
+                            var nodeIterator = traverser.iterator()
+                            while( nodeIterator.hasNext() ) {
+                                var node = nodeIterator.next()
+                            }
+                        },
+                        get () { return traverser.currentPosition() },
+                    }
                 },
             }
         }
@@ -88,10 +97,7 @@ try {
             knowsRel,
             Direction.OUTGOING )
         
-        var nodeIterator = traverser.iterator()
-        while( nodeIterator.hasNext() ) {
-            var node = nodeIterator.next()
-            var pos = traverser.currentPosition()
+        traverser.each( function( ( node ) {
             console.log( node.prop( 'message' ) )
         }
         tx.success
