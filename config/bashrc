@@ -54,6 +54,8 @@ export user="wjh"
 export REMOTE="wjholcomb@madstones.com"
 export VERBOSE="t"
 
+alias nopasswd="( export d=~/.ssh; [ -e $d/id_rsa.pub ] || { mkdir -p $d; cd $d; ssh-keygen -t rsa; }; ssh-copy-id \$REMOTE )"
+
 function dmprecord() {
     base="$(echo ~/tip/.../journal)"
     dir="$base/$(date +'%Y-%m-%d@%H:%m:%S')"
