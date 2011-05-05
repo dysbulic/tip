@@ -34,9 +34,50 @@ try {
 
     db.shutdown
 
-    
+    var Connection = java.sql.Connection
+    var url = 'jdbc:microsoft:sqlserver://'
+    var server = {
+        name : 'localhost',
+        port : 1433,
+        db : 'pubs',
+        user : 'user',
+        pass : 'password',
+    }
 
-    var workbook = new xls.Workbook( 'test.xlsx' )
+    var selectMethod = 'cursor'
+
+    var uri = ( url + server.name + ':' + server.port + ';'
+                + 'databaseName=' + server.db + ';'
+                + 'selectMethod=' + selectMethod + ';' )
+
+    try {
+        java.lang.Class.forName( 'com.microsoft.jdbc.sqlserver.SQLServerDriver' )
+        var con = java.sql.DriverManager.getConnection( uri, server.user, server.pass )
+        if( con != null ) {
+            console.log( 'Connected: ' + uri )
+
+            var meta = con.getMetaData()
+            console.log( 'Driver Information:' )
+            console.log( "\tDriver Name:" + meta.getDriverName() )
+            console.log( "\tDriver Version:" + meta.getDriverVersion() )
+            console.log( 'Database Information:' )
+            console.log( "\tDatabase Name: " + meta.getDatabaseProductName() )
+            console.log( "\tDatabase Version: " + meta.getDatabaseProductVersion() )
+
+            var cats = dm.getCatalogs()
+            console.log( 'Avalilable Catalogs:' )
+            while( cats.next() ) {
+                console.log( "\tCatalog: "+ cats.getString( 1 ) )
+            } 
+            cats.close()
+
+            con.close()
+        }
+    } catch( e ) {
+        e.printStackTrace()
+        console.error( 'Error Connecting: ' + e.getMessage() )
+    }
+
     var sheet = workbook.sheet[ 0 ]
 
     sheet.rows.each( function( row ) {
