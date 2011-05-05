@@ -3,8 +3,13 @@
 load( '.../lib/mimis/js' )
 
 var xls = mimis.load( '.../lib/mimis/xls/rhino' )
+var EmbeddedGraphDatabase = org.neo4j.kernel.EmbeddedGraphDatabase
 
 try {
+    var dbPath = 'tmp/xls/neo4j/'
+    var db = new EmbeddedGraphDatabase( dbPath )
+    db.shutdown()
+
     var workbook = new xls.Workbook( 'test.xlsx' )
     var sheet = workbook.sheet[ 0 ]
 
