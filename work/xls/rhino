@@ -36,7 +36,9 @@ try {
                 valueOf : function() {
                     return node
                 },
-                traverse : node.traverse,
+                traverse : function() {
+                    return node.traverse.apply( node, arguments )
+                },
             }
         }
 
