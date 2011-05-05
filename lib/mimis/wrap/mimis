@@ -1,0 +1,33 @@
+( function() {
+    console.log( 'ï:wrap' )
+return function() {
+    var out = {}
+    var args = Array.prototype.slice.call( arguments )
+    args.each( function( obj ) {
+        for( prop in obj ) {
+            var getter = function() { return obj[ prop ] }
+            var setter = function( val ) { return obj[ prop ] = val }
+            var get
+            if( ( get = obj.__lookupGetter__( prop ) ) !== undefined ) {
+                getter =
+                    ( function() {
+                        var getter = get
+                        return function() { getter.apply( obj, arguments ) }
+                    } )()
+            }
+            var set
+            if( ( set = obj.__lookupSetter__( prop ) ) !== undefined ) {
+                setter =
+                    ( function() {
+                        var setter = set
+                        return function() { setter.apply( obj, arguments ) }
+                    } )()
+            }
+
+            out.__defineGetter__( prop, getter )
+            out.__defineSetter__( prop, setter )
+        }
+    } )
+    return out
+}
+} )()
