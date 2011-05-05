@@ -10,11 +10,27 @@
                 get sheet() {
                     if( sheets === undefined ) {
                         sheets = []
-                        for( var i = 0; i < workbook.getNumberOfSheets(); i++ ) {
+                        sheets.length = workbook.getNumberOfSheets()
+                        for( var i = 0; i < sheets.length; i++ ) {
                             ( function() {
                                 var idx = i
+                                var sheet
                                 sheets.__defineGetter__( i, function() {
-                                    return workbook.getSheetAt( idx )
+                                    if( sheet === undefined ) {
+                                        sheet = workbook.getSheetAt( idx )
+                                    }
+
+                                    if( row === undefined ) {
+                                        row = {
+                                            each : function( func ) {
+                                                var rows = sheet.rowIterator()
+                                                while( rows.hasNext() ) {           
+                                                    func( rows.next() )
+                                                }
+                                            },
+                                        }
+                                    }
+                                    return row
                                 } )
                             } )()
                         }

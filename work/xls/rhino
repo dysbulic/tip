@@ -13,9 +13,7 @@ try {
     var sheet = workbook.sheet[ 0 ]
     console.log( '!' )
 
-    var rows = sheet.rowIterator()
-    while( rows.hasNext() ) {           
-        var row = rows.next()
+    sheet.rows.each( function( row ) {
         console.log( "Row #" + row.getRowNum() )
  
         var cells = row.cellIterator()
