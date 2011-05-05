@@ -3,6 +3,7 @@
 load( '.../lib/mimis/js' )
 
 var XSSFWorkbook = org.apache.poi.xssf.usermodel.XSSFWorkbook
+var XSSFCell = org.apache.poi.xssf.usermodel.XSSFCell
 var POIFSFileSystem = org.apache.poi.poifs.filesystem.POIFSFileSystem
 var FileInputStream = java.io.FileInputStream
 
@@ -18,12 +19,13 @@ try {
         var cells = row.cellIterator()
         while( cells.hasNext() ) {
             var cell = cells.next()
-            console.log( "Cell #" + cell.getCellNum() )
+            //console.log( "Cell #" + cell.getCellNum() )
+            console.log( "Cell #" + cell )
             switch ( cell.getCellType() ) {
-            case HSSFCell.CELL_TYPE_NUMERIC:
+            case XSSFCell.CELL_TYPE_NUMERIC:
                 console.log( cell.getNumericCellValue() )
                 break
-            case HSSFCell.CELL_TYPE_STRING: 
+            case XSSFCell.CELL_TYPE_STRING: 
                 console.log( cell.getStringCellValue() )
                 break
             default:
