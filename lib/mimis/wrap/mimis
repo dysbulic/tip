@@ -1,9 +1,9 @@
 ( function() { return function() {
     var out = {}
     var args = Array.prototype.slice.call( arguments )
-    console.log( '!' )
     args.each( function( obj ) {
         try {
+    console.log( '!' )
             for( prop in obj ) {
                 var getter = function() { return obj[ prop ] }
                 var setter = function( val ) { return obj[ prop ] = val }
