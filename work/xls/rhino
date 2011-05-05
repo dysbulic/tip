@@ -34,7 +34,9 @@ try {
                         prop : function() {
                             node.setProperty.apply( node, arguments )
                         },
-                        
+                        valueOf : function() {
+                            return node
+                        },
                     }
                 } )
                 ret.tx.__defineGetter__( 'new', function() {
