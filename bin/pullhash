@@ -2,7 +2,8 @@
 
 #ToDo: Add getopt
 
-HASHDIR=".../hashes/sha256/"
+HASHDIR='.../hashes/sha256/'
+[ -e '...' ] && mkdir -p "$HASHDIR"
 
 ENDPOINT="$MIMIS_ORIGIN"
 [ -z "$ENDPOINT" ] && {
@@ -32,11 +33,11 @@ for arg in "$@"; do
     [ -z "$arg" ] && continue
 
     # Too many levels of symbolic links    
-    # LINK="$(readlink -f "$arg")"
-    LINK="$arg"
-    while [ "$LINK" != "$(readlink "$LINK")" ]; do
-        LINK="$(readlink "$LINK")"
-    done
+    LINK="$(readlink -m "$arg")"
+    # LINK="$arg"
+    # while [ "$LINK" != "$(readlink "$LINK")" ]; do
+    #     LINK="$(readlink "$LINK")"
+    # done
 
     LINK="${LINK#$(echo ~)/}"
 

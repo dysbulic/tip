@@ -4,12 +4,15 @@ load( '.../lib/mimis/js' )
 
 try {
     var Connection = java.sql.Connection
-    var SQLServerDriver = com.microsoft.jdbc.sqlserver.SQLServerDriver
     var server = mimis.load( '.../work/ssis/server/eson' )
+    var DriverManager = java.sql.DriverManager
 
     try {
-        java.lang.Class.forName( 'com.microsoft.jdbc.sqlserver.SQLServerDriver' )
-        var con = java.sql.DriverManager.getConnection( uri, server.user, server.pass )
+        var SQLServerDriver = com.microsoft.jdbc.sqlserver.SQLServerDriver
+        //console.log( SQLServerDriver )
+        //java.lang.Class.forName( 'com.microsoft.jdbc.sqlserver.SQLServerDriver' )
+        console.log( '!' )
+        var con = DriverManager.getConnection( uri, server.user, server.pass )
         if( con != null ) {
             console.log( 'Connected: ' + server.uri )
 
