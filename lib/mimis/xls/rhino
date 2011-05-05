@@ -20,15 +20,14 @@
                                         sheet = workbook.getSheetAt( idx )
                                     }
                                     if( row === undefined ) {
-                                        row = {
+                                        row = { row : {
                                             each : function( func ) {
                                                 var rows = sheet.rowIterator()
                                                 while( rows.hasNext() ) {           
                                                     func( rows.next() )
                                                 }
                                             },
-                                        }
-                                        console.log( row )
+                                        } }
                                     }
                                     return row
                                 } )
