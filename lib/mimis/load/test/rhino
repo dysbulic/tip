@@ -1,6 +1,9 @@
 //!/bin/js
 
 var lib = '.../lib/mimis/js'
+
+print( environment.OSTYPE )
+
 if( environment.OSTYPE == 'cygwin' ) {
     lib = runCommand( 'cygpath', '-w', lib )
 }
