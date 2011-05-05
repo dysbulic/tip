@@ -19,12 +19,12 @@ try {
         rel.prop( 'message', 'brave neo' )
 
         db.ref.rel.to( nodes[0], knowsRel )
-        console.log( '!' )
 
         var traverser = db.ref.traverse( {
             rel : knowsRel,
         } )
         
+        console.log( '!' )
         traverser.each( function( node ) {
             console.log( node.prop( 'message' ) )
         } )
