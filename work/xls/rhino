@@ -3,21 +3,14 @@
 load( '.../lib/mimis/js' )
 
 var xls = mimis.load( '.../lib/mimis/xls/rhino' )
-var XSSFCell = org.apache.poi.xssf.usermodel.XSSFCell
-var POIFSFileSystem = org.apache.poi.poifs.filesystem.POIFSFileSystem
-var FileInputStream = java.io.FileInputStream
 
 try {
     var workbook = new xls.Workbook( 'test.xlsx' )
-    console.log( '!' )
     var sheet = workbook.sheet[ 0 ]
-    console.log( '!' )
 
     sheet.rows.each( function( row ) {
         console.log( "Row #" + row.num )
- 
         row.cells.each( function( cell ) {
-            //console.log( "Cell #" + cell.getCellNum() )
             console.log( "Cell #" + cell )
         } )
     } )
