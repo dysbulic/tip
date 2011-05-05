@@ -35,7 +35,7 @@ for arg in "$@"; do
     LINK="${LINK#$(echo ~)/}"
 
     [[ ! -z "$LINK" && ! -e "$LINK" ]] && {
-        [ -z "$VERBOSE" ] || echo "Pulling: $arg:$LINK"
+        [ -z "$VERBOSE" ] || echo "Pulling: $arg"
         rsync --progress "$ENDPOINT:$LINK" "$LINK"
         continue
     }
