@@ -9,11 +9,13 @@ try {
     var sheet = workbook.sheet[ 0 ]
 
     sheet.rows.each( function( row ) {
-        console.log( "Row #" + row.num )
+        console.log( 'Row #' + row.num )
         row.cells.each( function( cell ) {
-            console.log( "Cell #" + cell )
+            console.log( 'Cell: ' + cell )
         } )
     } )
+
+
 } catch ( ioe ) {
     console.log( ioe )
 }
