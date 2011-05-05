@@ -7,8 +7,8 @@
             for( prop in obj ) {
                 ( function() {
                     var attr = prop
-                    var getter = function() { return obj[ attr ] }
-                    var setter = function( val ) { return obj[ attr ] = val }
+                    var getter = function() { return ( function() { return obj[ attr ] } ).call( obj ) }
+                    var setter = function( val ) { return ( function() { return obj[ attr ] = val } ).call( obj )
                     out.__defineGetter__( prop, getter )
                     out.__defineSetter__( prop, setter )
                 } )()
