@@ -20,7 +20,12 @@ try {
                     tx : {},
                 }
                 ret.node.__defineGetter__( 'new', function() {
-                    return db.createNode()
+                    var node = db.createNode()
+                    return {
+                        relTo : function() {
+                            node.createRelationshipTo.apply( node, arguments )
+                        },
+                    }
                 } )
                 ret.tx.__defineGetter__( 'new', function() {
                     return db.beginTx()
