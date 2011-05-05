@@ -23,11 +23,17 @@ try {
                     var rel = node.createRelationshipTo.apply( node, arguments )
                     return {
                         prop : function() {
+                            if( arguments.length == 1 ) {
+                                return rel.getProperty.apply( rel, arguments )
+                            }
                             return rel.setProperty.apply( rel, arguments )
                         },
                     }
                 } },
                 prop : function() {
+                    if( arguments.length == 1 ) {
+                        return node.getProperty.apply( node, arguments )
+                    }
                     return node.setProperty.apply( node, arguments )
                 },
                 get node() {
