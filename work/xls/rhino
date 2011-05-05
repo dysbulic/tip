@@ -12,7 +12,8 @@ try {
         //console.log( SQLServerDriver )
         //java.lang.Class.forName( 'com.microsoft.jdbc.sqlserver.SQLServerDriver' )
         console.log( '!' )
-        var con = DriverManager.getConnection( uri, server.user, server.pass )
+        var con =
+            DriverManager.getConnection( server.uri, server.user, server.pass )
         if( con != null ) {
             console.log( 'Connected: ' + server.uri )
 
