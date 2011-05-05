@@ -59,7 +59,7 @@ try {
 
         return {
             mk : {
-                get node() { return node( db.createNode() ) },
+                get node() { return ext_node( db.createNode() ) },
                 get tx() {
                     var tx = db.beginTx()
                     return {
@@ -70,7 +70,7 @@ try {
                 rel : DynamicRelationshipType.withName,
             },
             get ref() {
-                return node( db.getReferenceNode() )
+                return ext_node( db.getReferenceNode() )
             },
             get shutdown() {
                 return db.shutdown()
