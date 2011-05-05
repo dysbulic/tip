@@ -40,7 +40,8 @@
             //return mimis.wrap( new XSSFWorkbook( path ) )
             var workbook = new XSSFWorkbook( path )
             var sheets
-            return {
+            var obj
+            return obj = {
                 get sheet() {
                     if( sheets === undefined ) {
                         sheets = []
@@ -70,6 +71,11 @@
                         }
                     }
                     return sheets
+                },
+                sheets : {
+                    each : function() {
+                        obj.sheet.each.apply( obj.sheet, arguments )
+                    },
                 },
             }
         },
