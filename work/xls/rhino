@@ -75,7 +75,9 @@ try {
             knowsRel,
             Direction.OUTGOING )
 
-        for( var node in traverser ) {
+        var nodeIterator = traverser.iterator()
+        while( nodeIterator.hasNext() ) {
+            var node = nodeIterator.next()
             var pos = traverser.currentPosition()
             console.log( node )
         }
