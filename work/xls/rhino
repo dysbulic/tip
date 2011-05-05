@@ -6,6 +6,10 @@ var xls = mimis.load( '.../lib/mimis/xls/rhino' )
 var neo4j
 var EmbeddedGraphDatabase = org.neo4j.kernel.EmbeddedGraphDatabase
 var DynamicRelationshipType = org.neo4j.graphdb.DynamicRelationshipType
+var Traverser = org.neo4j.graphdb.Traverser
+var StopEvaluator = org.neo4j.graphdb.StopEvaluator
+var ReturnableEvaluator = org.neo4j.graphdb.ReturnableEvaluator
+var Direction = org.neo4j.graphdb.Direction
 
 try {
     var dbPath = 'tmp/xls/neo4j/'
