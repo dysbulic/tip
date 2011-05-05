@@ -10,8 +10,8 @@ try {
     try {
         var SQLServerDriver = com.microsoft.jdbc.sqlserver.SQLServerDriver
         //var driver = new SQLServerDriver()
-        java.lang.Class.forName( 'com.microsoft.jdbc.sqlserver.SQLServerDriver' ).newInstance()
-        //console.log( SQLServerDriver )
+        //java.lang.Class.forName( 'com.microsoft.jdbc.sqlserver.SQLServerDriver' ).newInstance()
+        console.log( typeof SQLServerDriver )
         console.log( '!' )
         var con =
             DriverManager.getConnection( server.uri, server.user, server.pass )
