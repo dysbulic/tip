@@ -58,6 +58,7 @@ alias unreg_javascript="sudo \"echo -1 > /proc/sys/fs/binfmt_misc/javascript\""
 export user="wjh"
 export REMOTE="wjholcomb@madstones.com"
 export VERBOSE="t"
+export MIMIS_ORIGIN="$REMOTE"
 
 alias nopasswd="( export d=~/.ssh; [ -e $d/id_rsa.pub ] || { mkdir -p $d; cd $d; ssh-keygen -t rsa; }; ssh-copy-id \$REMOTE )"
 
