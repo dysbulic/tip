@@ -12,7 +12,6 @@ console = typeof console !== 'undefined' ? console :
     }
 
 //console.log( environment[ 'os.emulator' ] )
-console.log( environment[ 'java.library.path' ] )
 
 try {
     var Connection = java.sql.Connection
@@ -67,7 +66,7 @@ try {
             console.log( "\tDatabase Name: " + meta.getDatabaseProductName() )
             console.log( "\tDatabase Version: " + meta.getDatabaseProductVersion() )
 
-            var cats = dm.getCatalogs()
+            var cats = meta.getCatalogs()
             console.log( 'Avalilable Catalogs:' )
             while( cats.next() ) {
                 console.log( "\tCatalog: "+ cats.getString( 1 ) )
