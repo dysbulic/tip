@@ -1,2 +1,2 @@
 all:
-        cat */js > test.js
+	cat */js > "\$(pwd | sed -e 's|.*\.\.\./lib/mimis/inhabit/win||')"/test.js
