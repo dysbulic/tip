@@ -30,7 +30,7 @@ try {
                 integratedSecurity : true,
             }
             //var auth = load( '.../work/ssis/server/auth/mimis' )
-            var out = mimis.out ||
+            var out = ( mimis && mimis.out ) ||
                 ( function() {
                     return new java.io.FileOutputStream( 'out.txt' )
                 } )()
