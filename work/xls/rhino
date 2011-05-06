@@ -46,7 +46,7 @@ console = typeof console !== 'undefined' ? console :
 
     mimis = typeof mimis !== 'undefined' ? mimis : {} 
     mimis.__defineGetter__( 'out', function() {
-        var store = File.createTempFile( 'mimis.out', 'log' )
+        var store = File.createTempFile( 'mimis.out.', '.log' )
         var jOut = new java.io.FileOutputStream( store )
         return {
             get stream() {
