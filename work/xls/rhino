@@ -30,7 +30,11 @@ try {
                 integratedSecurity : true,
             }
             //var auth = load( '.../work/ssis/server/auth/mimis' )
-            var cfg = { output : '' }
+            var out = mimis.out ||
+                ( function() {
+                    return new java.io.FileOutputStream( 'out.txt' )
+                } )()
+            var cfg = { output : out }
             runCommand( 'cygpath',
                         '-w',
                         '~/.../work/ssis/server/auth/mimis',
