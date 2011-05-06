@@ -127,6 +127,45 @@ $ = typeof $ !== 'undefined' ? $ :
 
 RegExp.prototype.match = RegExp.prototype.match || RegExp.prototype.exec
 
+if( mimis.__lookupGetter__( 'id' ) === undefined ) {
+    mimis.__defineGetter__( 'id', function() {
+        return ( ( Math.random() * Number.MAX_VALUE )
+                 .toString( 36 )
+                 .substring( 0, 10 ) )
+    } )
+}
+
+if( mimis.__lookupGetter__( 'out' ) === undefined ) {
+    mimis.__defineGetter__( 'out', function() {
+        //var store = File.createTempFile( 'mimis.out.', '.log' )
+        var store = new File( '.mimis.out.'
+                              + 
+                              + '.log' )
+        var jOut = new java.io.FileOutputStream( store )
+        return {
+            get stream() {
+                return jOut
+            },
+            toString : function() {
+                return readFile( store.getName() )
+            },
+        }
+    } )
+}
+    
+mimis.deref = mimis.deref ||
+    function( link ) {
+        if( typeof environment === 'undefined'
+            || environment[ 'os.emulator' ] != 'cygwin' ) {
+            return link
+        }
+        var out = mimis.out
+        runCommand( 'cygpath', '-w', link,
+                    { output : out.stream } )
+        var path = out.toString()
+        return path.substring( 0, path.length - 1 )
+    }
+    
 mimis.load = mimis.load ||
     ( function() {
         function parse( ret, type ) {
@@ -160,6 +199,8 @@ mimis.load = mimis.load ||
                     //file.__defineGetter__( 'root', function() { return file[1] } )
                     file.__defineGetter__( 'path', function() { return file[1] } )
                     file.__defineGetter__( 'type', function() { return file[2] } )
+                    console.log( 'l:' + uri )
+                    console.log( 'l:' + mimis.deref( uri ) )
                     ret = parse( readFile( uri ), file.type )
                 } else {
                     ret = parse( readUrl( uri ), 'js' )
