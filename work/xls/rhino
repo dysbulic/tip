@@ -34,9 +34,7 @@ try {
                             },
                         }
                     } )()
-                runCommand( 'cygpath',
-                            '-w',
-                            link,
+                runCommand( 'cygpath', '-w', link,
                             { output : out.stream } )
                 return out.toString()
             }
@@ -44,7 +42,7 @@ try {
             var pth = 'C:\\progra~1\\cygwin\\home\\wholcol1\\...\\hashes\\sha256\\8777a243e10e0825b0693ca200c2a55c03df6f726ddb2347d18c4bde9b2c43ba'
             console.log( pth )
             console.log( readFile( pth ) )
-            console.log( deref( '~/.../work/ssis/server/mimis' ) )
+            console.log( deref( '.../work/ssis/server/mimis' ) )
             console.log( readFile( deref( '~/.../work/ssis/server/mimis' ) ) )
         } )()
     
