@@ -1,8 +1,4 @@
 ( function() {
-    var url = 'jdbc:microsoft:sqlserver://'
-    var url = 'jdbc:sqlserver://'
-    var auth = mimis.load( '.../work/ssis/server/auth/mimis' )
-    console.log( auth )
     var server = mimis.x(
         {
             name : 'WELCHSORDDEV',
@@ -10,11 +6,12 @@
             port : 1433,
             db : 'sord_dev_will',
             select : { type : 'cursor' },
+            scheme : 'jdbc:sqlserver://',
         },
-        auth
+        mimis.load( '.../work/ssis/server/auth/mimis' )
     )
     with( server ) {
-        server.uri = ( url + name + ':' + port + ';'
+        server.uri = ( scheme + name + ':' + port + ';'
                        + 'databaseName=' + db + ';'
                        + 'selectMethod=' + select.type + ';' )
     }
