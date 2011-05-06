@@ -59,6 +59,7 @@ console = typeof console !== 'undefined' ? console :
                 console.log( store.getName() )
                 jOut.flush()
                 jOut.close()
+                store.close()
                 readFile( store.getName() )
                 return toString( store )
             },
