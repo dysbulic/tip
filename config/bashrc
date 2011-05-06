@@ -25,9 +25,8 @@ alias edit=emacs
 export EDITOR="emacs -nw"
 
 function cd() {
-    echo '!'
-    echo $#
-#    [ $# -eq 0 ] && { command cd ~/.../ } || { command cd "$@" }
+    [ $# -eq 0 ] && echo $#
+    #{ command cd ~/.../ } || { command cd "$@" }
     command cd "$@"
 }
 
