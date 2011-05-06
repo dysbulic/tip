@@ -13,6 +13,8 @@ console = typeof console !== 'undefined' ? console :
 
 //console.log( environment[ 'os.emulator' ] )
 
+( function() {
+
 try {
     var Connection = java.sql.Connection
     //var server = mimis.load( '.../work/ssis/server/mimis' )
@@ -80,7 +82,6 @@ try {
         console.error( 'Error Connecting: ' + e )
     }
 
-/*
     var neo4j = mimis.load( '.../lib/mimis/neo4j/mimis' )
     var db = new neo4j.Database( 'tmp/xls/neo4j/' )
 
@@ -119,7 +120,8 @@ try {
     }
 
     db.shutdown
-*/
 } catch ( ioe ) {
     console.log( ioe )
 }
+
+} )()
