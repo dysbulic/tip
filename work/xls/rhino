@@ -44,44 +44,11 @@ console = typeof console !== 'undefined' ? console :
         }
     }
 
-    mimis = typeof mimis !== 'undefined' ? mimis : {} 
-    
-    mimis.__defineGetter__( 'out', function() {
-        //var store = File.createTempFile( 'mimis.out.', '.log' )
-        var store = new File(
-            '.mimis.out.'
-                + ( Math.random() * Number.MAX_VALUE ).toString( 36 ).substring( 0, 10 )                + '.log'
-        )
-        var jOut = new java.io.FileOutputStream( store )
-        return {
-            get stream() {
-                return jOut
-            },
-            toString : function() {
-                return readFile( store.getName() )
-            },
-        }
-    } )
-
     try {
         var Connection = java.sql.Connection
-        //var server = mimis.load( '.../work/ssis/server/mimis' )
+        var server = mimis.load( '.../work/ssis/server/mimis' )
 
-        function deref( link ) {
-            var out = mimis.out
-            runCommand( 'cygpath', '-w', link,
-                        { output : out.stream } )
-            var path = out.toString()
-            return path.substring( 0, path.length - 1 )
-        }
-
-        var pth = 'C:\\progra~1\\cygwin\\home\\wholcol1\\...\\hashes\\sha256\\8777a243e10e0825b0693ca200c2a55c03df6f726ddb2347d18c4bde9b2c43ba'
-        //console.log( readFile( pth ) )
-        console.log( deref( '.../work/ssis/server/mimis' ) )
-        var pth = 'C:\\progra~1\\cygwin\\home\\wholcol1\\...\\work\\ssis\\server\\mimis'
-        pth = deref( '~/.../work/ssis/server/mimis' )
-        console.log( '"' + pth + '"' )
-        console.log( readFile( pth ) )
+        console.log( server )
 
         return
 
