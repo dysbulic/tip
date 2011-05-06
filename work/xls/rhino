@@ -32,14 +32,17 @@ try {
             //var auth = load( '.../work/ssis/server/auth/mimis' )
             var out = ( typeof mimis !== 'undefined' && mimis.out ) ||
                 ( function() {
-                    return new java.io.FileOutputStream( 'out.txt' )
+                    return {
+                        valueOf : function() {
+                            return new java.io.FileOutputStream( 'out.txt' )
+                        }
+                    }
                 } )()
-            var cfg = { output : out }
             runCommand( 'cygpath',
                         '-w',
                         '~/.../work/ssis/server/auth/mimis',
-                        cfg )
-            console.log( cfg.output )
+                        { output : out } )
+            console.log( out )
             var auth = load( 'C:\\progra~1\\cygwin\\home\\wholcol1\\...\\hashes\\sha256\\8777a243e10e0825b0693ca200c2a55c03df6f726ddb2347d18c4bde9b2c43ba' )
             for( prop in auth ) {
                 server[ prop ] = auth[ prop ]
