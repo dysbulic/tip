@@ -160,7 +160,6 @@ mimis.load = mimis.load ||
                     //file.__defineGetter__( 'root', function() { return file[1] } )
                     file.__defineGetter__( 'path', function() { return file[1] } )
                     file.__defineGetter__( 'type', function() { return file[2] } )
-                    console.log( file.type )
                     ret = parse( readFile( uri ), file.type )
                 } else {
                     ret = parse( readUrl( uri ), 'js' )
