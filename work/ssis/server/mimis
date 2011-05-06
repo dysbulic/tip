@@ -7,13 +7,15 @@
             db : 'sord_dev_will',
             select : { type : 'cursor' },
             scheme : 'jdbc:sqlserver://',
+            integratedSecurity : true,
         },
         mimis.load( '.../work/ssis/server/auth/mimis' )
     )
     with( server ) {
         server.uri = ( scheme + name + ':' + port + ';'
                        + 'databaseName=' + db + ';'
-                       + 'selectMethod=' + select.type + ';' )
+                       + 'selectMethod=' + select.type + ';'
+                       + 'integratedSecurity=' + integratedSecurity + ';' )
     }
     return server
 } )()
