@@ -4,6 +4,13 @@
 // ToDo: Mirror fs & load from mapping
 //load( '.../lib/mimis/js' )
 
+console = typeof console !== 'undefined' ? console :
+    {
+        log : print,
+        debug : print,
+        error : print,
+    }
+
 try {
     var Connection = java.sql.Connection
     //var server = mimis.load( '.../work/ssis/server/mimis' )
