@@ -52,18 +52,18 @@ done
 OPTS=''
 
 ## Ref: https://bugs.launchpad.net/ubuntu/+source/openjdk-6/+bug/255149
+JDKOPT=
 isOpenJDK=$($JAVA_CMD -version 2>&1 | grep -i "OpenJDK" | wc -l)
 [ $isOpenJDK -gt 0 ] && {
-    OPTS='-Xbootclasspath:/usr/lib/jvm/java-6-openjdk/jre/lib/rt.jar'
+    JDKOPT='-Xbootclasspath:/usr/lib/jvm/java-6-openjdk/jre/lib/rt.jar'
 }
 
+CYGOPT=
 [ "$OSTYPE" == 'cygwin' ] && {
-    # OPTS="$OPTS -Dos.emulator=cygwin"
-    OPTS="$OPTS -Dos_emulator=cygwin"
-    echo -n
+    CYGOPT='-Dos_emulator=cygwin'
 }
 
 MAIN='org.mozilla.javascript.tools.shell.Main'
 
 # echo $CMD $OPTS -classpath $CP $MAIN "$@"
-$CMD $OPTS -classpath $CP $MAIN "$@"
+$CMD $JDKOPT $CYGOPT -classpath $CP $MAIN "$@"
