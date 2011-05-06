@@ -26,7 +26,7 @@ console = typeof console !== 'undefined' ? console :
         var stream = new FileInputStream( file )
         try {
             var charset =
-                java.nio.charset.Charset.availableCharsets()[ 'UTF-8' ]
+                java.nio.charset.Charset.availableCharsets().get( 'UTF-8' )
             var reader = new BufferedReader(
                 new InputStreamReader( stream, charset )
             )
