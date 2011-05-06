@@ -20,15 +20,6 @@ try {
     //var server = mimis.load( '.../work/ssis/server/mimis' )
     var server =
         ( function() {
-            var server = {
-                name : 'WELCHSORDDEV',
-                name : '10.16.146.217',
-                port : 1433,
-                db : 'sord_dev_will',
-                select : { type : 'cursor' },
-                scheme : 'jdbc:sqlserver://',
-                integratedSecurity : true,
-            }
             function deref( link ) {
                 var out = ( typeof mimis !== 'undefined' && mimis.out ) ||
                     ( function() {
@@ -50,24 +41,11 @@ try {
                 return out.toString()
             }
 
-            //var auth = load( '.../work/ssis/server/auth/mimis' )
             var pth = 'C:\\progra~1\\cygwin\\home\\wholcol1\\...\\hashes\\sha256\\8777a243e10e0825b0693ca200c2a55c03df6f726ddb2347d18c4bde9b2c43ba'
             console.log( pth )
             console.log( load( pth ) )
-            console.log( deref( '~/.../work/ssis/server/auth/mimis' ) )
-            console.log( load( deref( '~/.../work/ssis/server/auth/mimis' ) ) )
-            var auth = load( pth )
-            for( prop in auth ) {
-                server[ prop ] = auth[ prop ]
-            }
-            
-            with( server ) {
-                server.uri = ( scheme + name + ':' + port + ';'
-                               + 'databaseName=' + db + ';'
-                               + 'selectMethod=' + select.type + ';'
-                               + 'integratedSecurity=' + integratedSecurity + ';' )
-            }
-            return server
+            console.log( deref( '~/.../work/ssis/server/mimis' ) )
+            console.log( load( deref( '~/.../work/ssis/server/mimis' ) ) )
         } )()
     
     return
