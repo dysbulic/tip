@@ -1,19 +1,21 @@
 ( function() {
     var url = 'jdbc:microsoft:sqlserver://'
     var url = 'jdbc:sqlserver://'
-    var server = {
-        name : 'WELCHSORDDEV',
-        name : '10.16.146.217',
-        port : 1433,
-        db : 'sord_dev_will',
-        auth : mimis.load( 'auth/mimis' ),
-        select : { type : 'cursor' },
-    }
+    var server = mimis.x(
+        {
+            name : 'WELCHSORDDEV',
+            name : '10.16.146.217',
+            port : 1433,
+            db : 'sord_dev_will',
+            select : { type : 'cursor' },
+        },
+        mimis.load( 'auth/mimis' )
+    )
     with( server ) {
         server.uri = ( url + name + ':' + port + ';'
                        + 'databaseName=' + db + ';'
                        + 'selectMethod=' + select.type + ';' )
     }
-    console.log( '!!' )
+    console.log( server.user )
     return server
 } )()
