@@ -21,7 +21,6 @@ console = typeof console !== 'undefined' ? console :
         var Reader = java.io.Reader
         var BufferedReader = java.io.BufferedReader
         var InputStreamReader = java.io.InputStreamReader
-        var StringBuilder = java.text.StringBuilder
 
         var stream = new FileInputStream( file )
         try {
@@ -30,7 +29,7 @@ console = typeof console !== 'undefined' ? console :
             var reader = new BufferedReader(
                 new InputStreamReader( stream, charset )
             )
-            var builder = new StringBuilder()
+            var builder = new StringBuffer()
             var buffer = new Array( 8192 )
             var read
             while( ( read = reader.read( buffer, 0, buffer.length ) ) > 0 ) {
