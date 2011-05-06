@@ -1,19 +1,35 @@
 //!/bin/js
 
-( function() {
-
-    print( readFile( '...' ) )
-    print( '!' )
-} )()
-
+// Symlinks don't work in the jvm
+// ToDo: Mirror fs & load from mapping
 //load( '.../lib/mimis/js' )
-
-/*
-quit()
 
 try {
     var Connection = java.sql.Connection
-    var server = mimis.load( '.../work/ssis/server/mimis' )
+    //var server = mimis.load( '.../work/ssis/server/mimis' )
+    var server =
+        ( function() {
+            var server = mimis.x(
+                {
+                    name : 'WELCHSORDDEV',
+                    name : '10.16.146.217',
+                    port : 1433,
+                    db : 'sord_dev_will',
+                    select : { type : 'cursor' },
+                    scheme : 'jdbc:sqlserver://',
+                    integratedSecurity : true,
+                },
+                mimis.load( '.../work/ssis/server/auth/mimis' )
+            )
+            with( server ) {
+                server.uri = ( scheme + name + ':' + port + ';'
+                               + 'databaseName=' + db + ';'
+                               + 'selectMethod=' + select.type + ';'
+                               + 'integratedSecurity=' + integratedSecurity + ';' )
+            }
+            return server
+        } )()
+    
     var DriverManager = java.sql.DriverManager
 
     try {
@@ -86,4 +102,3 @@ try {
 } catch ( ioe ) {
     console.log( ioe )
 }
-*/
