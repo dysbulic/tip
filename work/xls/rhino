@@ -5,14 +5,9 @@ load( '.../lib/mimis/js' )
 try {
     var Connection = java.sql.Connection
     var server = mimis.load( '.../work/ssis/server/mimis' )
-    console.log( server )
     var DriverManager = java.sql.DriverManager
 
     try {
-        //var SQLServerDriver = com.microsoft.jdbc.sqlserver.SQLServerDrive
-        //console.log( typeof SQLServerDriver )
-        //console.log( SQLServerDriver )
-        //var driver = new SQLServerDriver()
         java.lang.Class.forName( 'com.microsoft.sqlserver.jdbc.SQLServerDriver' ).newInstance()
         console.log( '!' )
         var con =
