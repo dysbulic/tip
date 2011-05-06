@@ -48,6 +48,7 @@ console = typeof console !== 'undefined' ? console :
     mimis.__defineGetter__( 'out', function() {
         var store = File.createTempFile( 'mimis.out.', '.log' )
         var jOut = new java.io.FileOutputStream( store )
+        jOut.write( 65 )
         return {
             get stream() {
                 return jOut
