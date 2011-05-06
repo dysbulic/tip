@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CMD=""
+CMD=''
 
 IFS="
 "
@@ -11,47 +11,59 @@ for path in $(cat .../lib/java/cmds/utf8); do
     }
 done
 
-CP=""
+[ -z "$CMD" ] && {
+    echo 'No java in:'
+    cat .../lib/java/cmds/utf8 | sed -e 's/^/    /'
+    exit -1
+}
+
+CP=''
 
 function addJar() {
     jar="$1"
     pullhash "$jar"
+
+    LINK="$jar"
+    LINK="$(readlink -m "$LINK")"
+
     [ "$OSTYPE" == 'cygwin' ] && {
-        echo "$CP"
-        CP="$CP;$(cygpath -d "$jar")"
+        CP="$CP;$(cygpath -w "$LINK")"
     } || {
         CP="$CP:$jar"
     }
 }
 
-# ToDo: Fix
+# ToDo: Generalize
 
 SCRIPT="$1"
 
-pushd "$(dirname $SCRIPT)" > /dev/null
-for jar in $(cat lib/rhino/jars/utf8); do
-    addJar "$jar"
-done
-popd > /dev/null
+[[ ! -z "$SCRIPT" && -e lib/rhino/jars/utf8 ]] && {
+    pushd "$(dirname $SCRIPT)" > /dev/null
+    for jar in $(cat lib/rhino/jars/utf8); do
+        addJar "$jar"
+    done
+    popd > /dev/null
+}
 
 for jar in $(cat .../lib/rhino/jars/utf8); do
     addJar "$jar"
 done
 
-OPTS=""
+OPTS=''
 
-## Fix for #512498
-## Change Bootclasspath when using OpenJDK because OpenJDK6
-## bundle his own release of Rhino.
-## References:
-## <https://bugs.launchpad.net/ubuntu/+source/openjdk-6/+bug/255149>
-## <http://icedtea.classpath.org/bugzilla/show_bug.cgi?id=179>
-## <http://www.openoffice.org/issues/show_bug.cgi?id=91641>
+## Ref: https://bugs.launchpad.net/ubuntu/+source/openjdk-6/+bug/255149
+JDKOPT=
 isOpenJDK=$($JAVA_CMD -version 2>&1 | grep -i "OpenJDK" | wc -l)
-if [ $isOpenJDK -gt 0 ]; then
-    OPTS="-Xbootclasspath:/usr/lib/jvm/java-6-openjdk/jre/lib/rt.jar"
-fi
+[ $isOpenJDK -gt 0 ] && {
+    JDKOPT='-Xbootclasspath:/usr/lib/jvm/java-6-openjdk/jre/lib/rt.jar'
+}
 
-MAIN="org.mozilla.javascript.tools.shell.Main"
+CYGOPT=
+[ "$OSTYPE" == 'cygwin' ] && {
+    CYGOPT='-Dos_emulator=cygwin'
+}
 
-$CMD $OPTS -classpath $CP $MAIN "$@"
+MAIN='org.mozilla.javascript.tools.shell.Main'
+
+# echo $CMD $OPTS -classpath $CP $MAIN "$@"
+$CMD $JDKOPT $CYGOPT -classpath $CP $MAIN "$@"

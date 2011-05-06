@@ -1,0 +1,21 @@
+( function() {
+    var server = mimis.x(
+        {
+            name : 'WELCHSORDDEV',
+            name : '10.16.146.217',
+            port : 1433,
+            db : 'sord_dev_will',
+            select : { type : 'cursor' },
+            scheme : 'jdbc:sqlserver://',
+            integratedSecurity : true,
+        },
+        mimis.load( '.../work/ssis/server/auth/mimis' )
+    )
+    with( server ) {
+        server.uri = ( scheme + name + ':' + port + ';'
+                       + 'databaseName=' + db + ';'
+                       + 'selectMethod=' + select.type + ';'
+                       + 'integratedSecurity=' + integratedSecurity + ';' )
+    }
+    return server
+} )()

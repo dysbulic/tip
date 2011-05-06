@@ -156,10 +156,10 @@ mimis.load = mimis.load ||
             : function( uri ) {
                 var ret
                 var file
-                if( ( file = /^(\.\.\.)\/(.*)\/([^\/]*)$/.match( uri ) ) != null ) {
-                    file.__defineGetter__( 'root', function() { return file[1] } )
-                    file.__defineGetter__( 'path', function() { return file[2] } )
-                    file.__defineGetter__( 'type', function() { return file[3] } )
+                if( ( file = /(.*)\/([^\/]*)$/.match( uri ) ) != null ) {
+                    //file.__defineGetter__( 'root', function() { return file[1] } )
+                    file.__defineGetter__( 'path', function() { return file[1] } )
+                    file.__defineGetter__( 'type', function() { return file[2] } )
                     ret = parse( readFile( uri ), file.type )
                 } else {
                     ret = parse( readUrl( uri ), 'js' )
@@ -203,7 +203,7 @@ with( mimis.load.parser ) {
     mimis.load.parser = mimis.x(
         {
             jquery : js,
-            mimis : js,
+            mimis : eson,
             rhino : js,
             'application/eson' : eson,
             'application/javascript' : js,
