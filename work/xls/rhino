@@ -12,6 +12,7 @@ if( mimis.__lookupGetter__( 'id' ) === undefined ) {
 
 if( mimis.__lookupGetter__( 'out' ) === undefined ) {
     mimis.__defineGetter__( 'out', function() {
+        var File = java.io.File
         //var store = File.createTempFile( 'mimis.out.', '.log' )
         var store = new File( '.mimis.out.' + mimis.id + '.log' )
         var jOut = new java.io.FileOutputStream( store )
