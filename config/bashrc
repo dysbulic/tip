@@ -24,10 +24,12 @@ alias edit=emacs
 
 export EDITOR="emacs -nw"
 
-#function cd() {
+function cd() {
+    echo '!'
 #    echo $#
 #    [ $# -eq 0 ] && { command cd ~/.../ } || { command cd "$@" }
-#}
+    command cd "$@"
+}
 
 export RSYNC_RSH=ssh
 export CVS_RSH=ssh
