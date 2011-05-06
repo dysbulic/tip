@@ -3,12 +3,10 @@
 ( function() {
     print( readFile( 'eson' ) )
 
-    if( typeof environment !== 'undefined'
-        && environment[ 'os.emulator' ] == 'cygwin' ) {
-        load( 'C:\\Program Files\\Mimis\\js' )
-    } else {
-        load( '.../lib/mimis/js' )
-    }
+    load( ( typeof environment !== 'undefined'
+            && environment[ 'os.emulator' ] == 'cygwin' )
+          ? 'C:\\Program Files\\Mimis\\js'
+          : '.../lib/mimis/js' )
 
     console.log( mimis.load( 'eson' ) )
 } )()
