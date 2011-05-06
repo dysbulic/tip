@@ -35,7 +35,9 @@ console = typeof console !== 'undefined' ? console :
             while( ( read = reader.read( buffer, 0, buffer.length ) ) > 0 ) {
                 builder.append( buffer, 0, read )
             }
-            return builder.toString()
+            var ret = builder.toString()
+            console.log( '!:' + ret )
+            return ret
         } finally {
             stream.close()
         }
@@ -43,41 +45,36 @@ console = typeof console !== 'undefined' ? console :
 
     mimis = typeof mimis !== 'undefined' ? mimis : {} 
     mimis.__defineGetter__( 'out', function() {
-        var store = File.createTempFile( 'mimis.out', 'log'
+        var store = File.createTempFile( 'mimis.out', 'log' )
         var jOut = new java.io.FileOutputStream( store )
         return {
             get stream() {
                 return jOut
             },
             toString : function() {
-                console.log( '!' )
                 return toString( store )
             },
         }
     } )
 
-try {
-    var Connection = java.sql.Connection
-    //var server = mimis.load( '.../work/ssis/server/mimis' )
-    var server =
-        ( function() {
-            function deref( link ) {
-                var out = ( typeof mimis !== 'undefined' && mimis.out ) ||
-                    ( function() {
-                    } )()
-                runCommand( 'cygpath', '-w', link,
-                            { output : out.stream } )
-                return out.toString()
-            }
+    try {
+        var Connection = java.sql.Connection
+        //var server = mimis.load( '.../work/ssis/server/mimis' )
 
-            var pth = 'C:\\progra~1\\cygwin\\home\\wholcol1\\...\\hashes\\sha256\\8777a243e10e0825b0693ca200c2a55c03df6f726ddb2347d18c4bde9b2c43ba'
-            //console.log( pth )
-            //console.log( readFile( pth ) )
-            console.log( deref( '.../work/ssis/server/mimis' ) )
-            console.log( readFile( deref( '~/.../work/ssis/server/mimis' ) ) )
-        } )()
-    
-    return
+        function deref( link ) {
+            var out = mimis.out
+            runCommand( 'cygpath', '-w', link,
+                        { output : out.stream } )
+            return out.toString()
+        }
+
+        var pth = 'C:\\progra~1\\cygwin\\home\\wholcol1\\...\\hashes\\sha256\\8777a243e10e0825b0693ca200c2a55c03df6f726ddb2347d18c4bde9b2c43ba'
+        //console.log( pth )
+        //console.log( readFile( pth ) )
+        console.log( deref( '.../work/ssis/server/mimis' ) )
+        console.log( readFile( deref( '~/.../work/ssis/server/mimis' ) ) )
+
+        return
 
     var DriverManager = java.sql.DriverManager
 
