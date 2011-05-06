@@ -28,9 +28,8 @@ try {
                 integratedSecurity : true,
             }
             //var auth = load( '.../work/ssis/server/auth/mimis' )
-            //runCommand( r'C:\progra~1\cygwin\bin\cygpath' )
             var cfg = { output : '' }
-            runCommand( 'C:\\progra~1\\cygwin\\bin\\cygpath',
+            runCommand( 'cygpath',
                         '.../work/ssis/server/auth/mimis',
                         cfg )
             console.log( cfg.output )
@@ -48,6 +47,8 @@ try {
             return server
         } )()
     
+    return
+
     var DriverManager = java.sql.DriverManager
 
     try {
