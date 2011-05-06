@@ -40,17 +40,18 @@ mimis.deref = mimis.deref ||
         return path.substring( 0, path.length - 1 )
     }
 
-
-// Symlinks don't work in the jvm
-// ToDo: Mirror fs & load from mapping
-load( mimis.deref( '.../lib/mimis/js' ) )
-
 console = typeof console !== 'undefined' ? console :
     {
         log : print,
         debug : print,
         error : print,
     }
+
+// Symlinks don't work in the jvm
+// ToDo: Mirror fs & load from mapping
+console.log( mimis.deref( '.../lib/mimis/js' ) )
+load( mimis.deref( '.../lib/mimis/js' ) )
+
 
 //console.log( environment[ 'os.emulator' ] )
 
