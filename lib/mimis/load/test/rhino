@@ -3,18 +3,7 @@
 ( function() {
     var lib = '.../lib/mimis/js'
     
-    for( prop in environment ) {
-        print( prop + ' : ' + environment[ prop ] )
-    }
-    return
-
-    if( environment.OSTYPE == 'cygwin' ) {
-        lib = runCommand( 'cygpath', '-w', lib )
-    }
-    
-    print( lib )
-    
-    //load( lib )
+    print( readFile( eson ) )
     
     //console.log( mimis.load( eson ) )
 } )()
