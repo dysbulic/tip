@@ -8,9 +8,10 @@ load( '.../lib/mimis/js' )
 
 //console.log( environment[ 'os.emulator' ] )
 
-;( function() {
+;
+( function() {
     var File = java.io.File
-
+    
     function toString( file ) {
         var FileInputStream = java.io.FileInputStream
         var Reader = java.io.Reader
@@ -32,91 +33,84 @@ load( '.../lib/mimis/js' )
                 builder.append( buffer, 0, read )
             }
             var ret = builder.toString()
-            console.log( '!:' + ret )
             return ret
         } finally {
             stream.close()
         }
     }
 
-    try {
-        var Connection = java.sql.Connection
-        var server = mimis.load( '.../work/ssis/server/mimis' )
+        var neo4j = mimis.load( '.../lib/mimis/neo4j/mimis' )
+        var db = new neo4j.Database( 'tmp/xls/neo4j/' )
 
-        console.log( 's:' + server )
-
-        return
-
-    var DriverManager = java.sql.DriverManager
-
-    try {
-        java.lang.Class.forName( 'com.microsoft.sqlserver.jdbc.SQLServerDriver' ).newInstance()
-        console.log( '!' )
-        var con =
-            DriverManager.getConnection( server.uri, server.user, server.pass )
-        if( con != null ) {
-            console.log( 'Connected: ' + server.uri )
-
-            var meta = con.getMetaData()
-            console.log( 'Driver Information:' )
-            console.log( "\tDriver Name:" + meta.getDriverName() )
-            console.log( "\tDriver Version:" + meta.getDriverVersion() )
-            console.log( 'Database Information:' )
-            console.log( "\tDatabase Name: " + meta.getDatabaseProductName() )
-            console.log( "\tDatabase Version: " + meta.getDatabaseProductVersion() )
-
-            var cats = meta.getCatalogs()
-            console.log( 'Avalilable Catalogs:' )
-            while( cats.next() ) {
-                console.log( "\tCatalog: "+ cats.getString( 1 ) )
-            } 
-            cats.close()
-
-            con.close()
-        }
-    } catch( e ) {
-        console.error( 'Error Connecting: ' + e )
-    }
-
-    var neo4j = mimis.load( '.../lib/mimis/neo4j/mimis' )
-    var db = new neo4j.Database( 'tmp/xls/neo4j/' )
-
-    var tx = db.mk.tx
-    try {
-        var xls = mimis.load( '.../lib/mimis/xls/rhino' )
-        var workbook = new xls.Workbook( 'test.xlsx' )
-        var node = { workbook : db.mk.node }
-        var rel = { workbook : db.mk.rel( 'workbook' ) }
-        db.ref.rel.to( node.workbook, rel.workbook )
-        workbook.sheets.each( function( sheet ) {
-            node.sheet = db.mk.node
-            node.workbook.rel.to( node.sheet, rel.workbook )
-            node.workbook.rel.to( node.sheet, db.mk.rel( 'sheet' ) )
-            sheet.rows.each( function( row ) {
-                node.row = db.mk.node
-                node.sheet.rel.to( node.row, rel.workbook )
-                node.sheet.rel.to( node.row, db.mk.rel( 'row' ) )
-                node.row.prop( 'num', row.num )
-                row.cells.each( function( cell ) {
-                    node.cell = db.mk.node
-                    node.row.rel.to( node.cell, rel.workbook )
-                    node.row.rel.to( node.cell, db.mk.rel( 'cell' ) )
-                    node.cell.prop( 'val', cell )
+        var tx = db.mk.tx
+        try {
+            var xls = mimis.load( '.../lib/mimis/xls/rhino' )
+            var workbook = new xls.Workbook( 'test.xlsx' )
+            var node = { workbook : db.mk.node }
+            var rel = { workbook : db.mk.rel( 'workbook' ) }
+            db.ref.rel.to( node.workbook, rel.workbook )
+            workbook.sheets.each( function( sheet ) {
+                node.sheet = db.mk.node
+                node.workbook.rel.to( node.sheet, rel.workbook )
+                node.workbook.rel.to( node.sheet, db.mk.rel( 'sheet' ) )
+                sheet.rows.each( function( row ) {
+                    node.row = db.mk.node
+                    node.sheet.rel.to( node.row, rel.workbook )
+                    node.sheet.rel.to( node.row, db.mk.rel( 'row' ) )
+                    node.row.prop( 'num', row.num )
+                    row.cells.each( function( cell ) {
+                        node.cell = db.mk.node
+                        node.row.rel.to( node.cell, rel.workbook )
+                        node.row.rel.to( node.cell, db.mk.rel( 'cell' ) )
+                        node.cell.prop( 'val', cell )
+                    } )
                 } )
             } )
-        } )
-
-        db.ref.traverse( { rel : rel.workbook } )
-            .each( function( node ) {
-                console.log( node )
-            } )
-        tx.success
-    } finally {
-        tx.finish
+            
+            db.ref.traverse( { rel : rel.workbook } )
+                .each( function( node ) {
+                    console.log( node )
+                } )
+            tx.success
+        } finally {
+            tx.finish
+        }
+        
+        db.shutdown
+    } catch ( ioe ) {
+        console.log( ioe )
     }
 
-    db.shutdown
-} catch ( ioe ) {
-    console.log( ioe )
-}
+   try {
+       var Connection = java.sql.Connection
+       var server = mimis.load( '.../work/ssis/server/mimis' )
+       
+       var DriverManager = java.sql.DriverManager
+
+       java.lang.Class.forName( 'com.microsoft.sqlserver.jdbc.SQLServerDriver' ).newInstance()
+
+       var con = DriverManager.getConnection( server.uri, server.user, server.pass )
+       if( con != null ) {
+           console.log( 'Connected: ' + server.uri )
+           
+           var meta = con.getMetaData()
+           console.log( 'Driver Information:' )
+           console.log( "\tDriver Name:" + meta.getDriverName() )
+           console.log( "\tDriver Version:" + meta.getDriverVersion() )
+           console.log( 'Database Information:' )
+           console.log( "\tDatabase Name: " + meta.getDatabaseProductName() )
+           console.log( "\tDatabase Version: " + meta.getDatabaseProductVersion() )
+           
+           var cats = meta.getCatalogs()
+           console.log( 'Avalilable Catalogs:' )
+           while( cats.next() ) {
+               console.log( "\tCatalog: "+ cats.getString( 1 ) )
+           } 
+           cats.close()
+
+           con.close()
+       }
+   } catch( e ) {
+       console.error( 'Error Connecting: ' + e )
+   }
 } )()
