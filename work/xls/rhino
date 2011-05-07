@@ -1,19 +1,52 @@
 //!/bin/js
 
-( function() {
 
-    print( readFile( '...' ) )
-    print( '!' )
-} )()
+// Symlinks don't work in the jvm
+// ToDo: Mirror fs & load from mapping
+//console.log( 'load( mimis.deref( \'.../lib/mimis/js\' ) )' )
+load( mimis.deref( '.../lib/mimis/js' ) )
 
-//load( '.../lib/mimis/js' )
+//console.log( environment[ 'os.emulator' ] )
 
-/*
-quit()
+;( function() {
+    var File = java.io.File
 
-try {
-    var Connection = java.sql.Connection
-    var server = mimis.load( '.../work/ssis/server/mimis' )
+    function toString( file ) {
+        var FileInputStream = java.io.FileInputStream
+        var Reader = java.io.Reader
+        var BufferedReader = java.io.BufferedReader
+        var InputStreamReader = java.io.InputStreamReader
+        var StringBuffer = java.lang.StringBuffer
+
+        var stream = new FileInputStream( file )
+        try {
+            var charset =
+                java.nio.charset.Charset.availableCharsets().get( 'UTF-8' )
+            var reader = new BufferedReader(
+                new InputStreamReader( stream, charset )
+            )
+            var builder = new StringBuffer()
+            var buffer = new Array( 8192 )
+            var read
+            while( ( read = reader.read( buffer, 0, buffer.length ) ) > 0 ) {
+                builder.append( buffer, 0, read )
+            }
+            var ret = builder.toString()
+            console.log( '!:' + ret )
+            return ret
+        } finally {
+            stream.close()
+        }
+    }
+
+    try {
+        var Connection = java.sql.Connection
+        var server = mimis.load( '.../work/ssis/server/mimis' )
+
+        console.log( 's:' + server )
+
+        return
+
     var DriverManager = java.sql.DriverManager
 
     try {
@@ -32,7 +65,7 @@ try {
             console.log( "\tDatabase Name: " + meta.getDatabaseProductName() )
             console.log( "\tDatabase Version: " + meta.getDatabaseProductVersion() )
 
-            var cats = dm.getCatalogs()
+            var cats = meta.getCatalogs()
             console.log( 'Avalilable Catalogs:' )
             while( cats.next() ) {
                 console.log( "\tCatalog: "+ cats.getString( 1 ) )
@@ -86,4 +119,5 @@ try {
 } catch ( ioe ) {
     console.log( ioe )
 }
-*/
+
+} )()
