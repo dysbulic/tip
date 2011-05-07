@@ -4,8 +4,6 @@ if( typeof environment !== 'undefined' && typeof mimis !== 'undefined' ) {
     load( '.../lib/mimis/load/js' )
 }
 
-console.log( '!' )
-
 ;( function() {
 RegExp.prototype.match = RegExp.prototype.match || RegExp.prototype.exec
     
@@ -19,7 +17,11 @@ String.prototype.endsWith = String.prototype.endsWith || function( str ) {
     return this.lastIndexOf( str ) == this.length - str.length
 }
 
+console.log( '!' )
+
 mimis.load( '.../lib/mimis/array/js' )
+
+console.log( '!' )
 
 mimis.BubblingException = mimis.BubblingException || function() {}
 
