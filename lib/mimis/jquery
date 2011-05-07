@@ -11,15 +11,11 @@ String.prototype.endsWith = String.prototype.endsWith || function( str ) {
     return this.lastIndexOf( str ) == this.length - str.length
 }
 
-console.log( '!' )
-
 mimis.load( '.../lib/mimis/array/js' )
-
-console.log( '!' )
 
 mimis.BubblingException = mimis.BubblingException || function() {}
 
-mimis.$window = $.isFunction( $ ) ? $(window) : undefined
+mimis.$window = mimis.$window || $.isFunction( $ ) ? $(window) : undefined
 
 mimis.bind = mimis.bind || function( name, listener ) {
     mimis.$window.bind( 'mimis.' + name, listener )
