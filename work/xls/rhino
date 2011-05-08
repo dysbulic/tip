@@ -1,10 +1,13 @@
 //!/bin/js
 
-// Symlinks don't work in the jvm
+console.log( '!' )
+
+// Symlinks don't work in the m$ jvm
 ( typeof environment !== 'undefined'
   && environment[ 'os.emulator' ] == 'cygwin' )
     && load( 'C:\\Program Files\\Mimis\\js' )
 
+console.log( '!' )
 load( '.../lib/mimis/js' )
 
 //console.log( environment[ 'os.emulator' ] )
