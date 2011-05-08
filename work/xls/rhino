@@ -12,13 +12,14 @@ load( '.../lib/mimis/js' )
 ( function() {
     var neo4j = mimis.load( '.../lib/mimis/neo4j/mimis' )
     var db = new neo4j.Database( 'tmp/xls/neo4j/' )
-    console.log( '!' )
+    var xls = mimis.load( '.../lib/mimis/xls/rhino' )
+
     var tx = db.mk.tx
     try {
-        var xls = mimis.load( '.../lib/mimis/xls/rhino' )
         var workbook = new xls.Workbook( 'test.xlsx' )
         var node = { workbook : db.mk.node }
         var rel = { workbook : db.mk.rel( 'workbook' ) }
+        console.log( '!' )
         db.ref.rel.to( node.workbook, rel.workbook )
         workbook.sheets.each( function( sheet ) {
             node.sheet = db.mk.node
