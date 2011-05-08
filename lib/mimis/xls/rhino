@@ -32,7 +32,10 @@
         }
         return {
             valueOf : val,
-            toString : function() { return val().toString() },
+            toString : function() {
+                console.log( 'xls.cell.toString' )
+                return val().toString()
+            },
         }
     }
   
