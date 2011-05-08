@@ -19,9 +19,9 @@ load( '.../lib/mimis/js' )
         var workbook = new xls.Workbook( 'test.xlsx' )
         var node = { workbook : db.mk.node }
         var rel = { workbook : db.mk.rel( 'workbook' ) }
-        console.log( '!' )
         db.ref.rel.to( node.workbook, rel.workbook )
         workbook.sheets.each( function( sheet ) {
+        console.log( '!' )
             node.sheet = db.mk.node
             node.workbook.rel.to( node.sheet, rel.workbook )
             node.workbook.rel.to( node.sheet, db.mk.rel( 'sheet' ) )
