@@ -25,12 +25,12 @@ load( '.../lib/mimis/js' )
             node.workbook.rel.to( node.sheet, rel.workbook )
             node.workbook.rel.to( node.sheet, db.mk.rel( 'sheet' ) )
             sheet.rows.each( function( row ) {
-                console.log( '!: ' + sheet )
                 node.row = db.mk.node
                 node.sheet.rel.to( node.row, rel.workbook )
                 node.sheet.rel.to( node.row, db.mk.rel( 'row' ) )
                 node.row.prop( 'num', row.num )
                 row.cells.each( function( cell ) {
+                    console.log( '!: ' + sheet )
                     node.cell = db.mk.node
                     node.row.rel.to( node.cell, rel.workbook )
                     node.row.rel.to( node.cell, db.mk.rel( 'cell' ) )
