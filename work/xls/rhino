@@ -40,13 +40,15 @@ load( '.../lib/mimis/js' )
         
         db.ref.traverse( { rel : rel.workbook } )
             .each( function( node ) {
-                console.log( node )
+                console.log( typeof node.prop )
             } )
         tx.success
     } finally {
         tx.finish
         db.shutdown
     }
+
+    return
     
     try {
         var Connection = java.sql.Connection
