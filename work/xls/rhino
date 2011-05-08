@@ -30,15 +30,16 @@ load( '.../lib/mimis/js' )
                 node.sheet.rel.to( node.row, db.mk.rel( 'row' ) )
                 node.row.prop( 'num', row.num )
                 row.cells.each( function( cell ) {
-                    console.log( '!: ' + sheet )
                     node.cell = db.mk.node
                     node.row.rel.to( node.cell, rel.workbook )
                     node.row.rel.to( node.cell, db.mk.rel( 'cell' ) )
                     node.cell.prop( 'val', cell )
+                    console.log( '!: ' + cell )
                 } )
             } )
         } )
         
+        console.log( '!: ' + sheet )
         db.ref.traverse( { rel : rel.workbook } )
             .each( function( node ) {
                 console.log( node )
