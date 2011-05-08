@@ -24,6 +24,9 @@
             } },
             prop : function() {
                 if( arguments.length == 1 ) {
+                    if( ! node.hasProperty.apply( node, arguments ) ) {
+                        return undefined
+                    }
                     return node.getProperty.apply( node, arguments )
                 }
                 return node.setProperty.apply( node, arguments )

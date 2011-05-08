@@ -40,7 +40,7 @@ load( '.../lib/mimis/js' )
         
         db.ref.traverse( { rel : rel.workbook } )
             .each( function( node ) {
-                console.log( typeof node.prop )
+                console.log( typeof node.prop( 'val' ) )
             } )
         tx.success
     } finally {
