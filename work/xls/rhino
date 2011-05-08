@@ -1,9 +1,10 @@
 //!/bin/js
 
 // Symlinks don't work in the jvm
-// ToDo: Mirror fs & load from mapping
-//console.log( 'load( mimis.deref( \'.../lib/mimis/js\' ) )' )
-//load( mimis.deref( '.../lib/mimis/js' ) )
+( typeof environment !== 'undefined'
+  && environment[ 'os.emulator' ] == 'cygwin' )
+    && load( 'C:\\Program Files\\Mimis\\js' )
+
 load( '.../lib/mimis/js' )
 
 //console.log( environment[ 'os.emulator' ] )
