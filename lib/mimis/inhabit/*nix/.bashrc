@@ -1,1 +1,1 @@
-.../config/bash/login/bash
+.../lib/bash/login/bash
