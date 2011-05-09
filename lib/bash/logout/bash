@@ -12,7 +12,11 @@ while [ -z "$ACTION" ]; do
         SEC=$(( $SEC - 1 ))
     done
 
+    echo $'\012'"Action: '$ACTION' ($SEC )"
+
     [ $SEC -eq -1 ] && ACTION='Y'
+
+    echo $'\012'"Action: '$ACTION' ($SEC)"
 
     case "$ACTION" in
         [\?] )
