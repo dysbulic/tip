@@ -11,18 +11,27 @@ while [ $SEC -gt 0 ]; do
     SEC=$(( $SEC - 1 ))
 done
 
+[ $SEC -eq -1 ] && ACTION='Y'
+
 case "$ACTION" in
     [\?] )
-        echo $'\012'"?"
-    ;;[\ b] )
+        echo <<EOF
+ y: yes
+ n: no
+ b: break
+EOF
+    ;;[\ bB] )
         echo $'\012'"<Break/>"
         exit -5
-    ;;[n] )
+    ;;[nN] )
+        exit -1
+    ;;[yY] )
+        git add .
         exit -1
     ;;'' )
         # You might have hit return or space
     ;;
 esac
 
-echo $'\012'"A: '$ACTION'"
-# git add -n .
+tx
+sync
