@@ -119,7 +119,7 @@ mimis.set = mimis.set ||
 
 mimis.link = mimis.link || mimis.load
 
-// Extract namespaces
+if( typeof document !== 'undefined' ) { // Extract namespaces
 mimis.ns = mimis.ns ||
     ( function() {
         var ns = mimis.link( '.../lib/mimis/ns/abbreviations/eson' )
@@ -147,6 +147,7 @@ mimis.ns = mimis.ns ||
         ns.abbr = ns[ ns ]
         return ns
     } )()
+}
 
 mimis.status = mimis.status ||
     ( function() {
@@ -174,8 +175,6 @@ mimis.parse.position = mimis.parse.position ||
     function( pos ) {
         return parseFloat( pos )
     }
-
-    console.log( '*' )
 
 mimis.parse.length = mimis.parse.length || mimis.parse.position
 
