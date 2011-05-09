@@ -1,7 +1,5 @@
 //!/bin/js
 
-print( '!' )
-
 // Symlinks don't work in the m$ jvm
 ( typeof environment !== 'undefined'
   && environment[ 'os.emulator' ] == 'cygwin' )
@@ -13,50 +11,11 @@ load( '.../lib/mimis/js' )
 
 print( '!' )
 
-//console.log( environment[ 'os.emulator' ] )
-
 ;
 ( function() {
     var neo4j = mimis.load( '.../lib/mimis/neo4j/mimis' )
     var db = new neo4j.Database( 'tmp/xls/neo4j/' )
-    var xls = mimis.load( '.../lib/mimis/xls/rhino' )
 
-    var tx = db.mk.tx
-    try {
-        var workbook = new xls.Workbook( 'test.xlsx' )
-        var node = { workbook : db.mk.node }
-        var rel = { workbook : db.mk.rel( 'workbook' ) }
-        db.ref.rel.to( node.workbook, rel.workbook )
-        workbook.sheets.each( function( sheet ) {
-            node.sheet = db.mk.node
-            node.workbook.rel.to( node.sheet, rel.workbook )
-            node.workbook.rel.to( node.sheet, db.mk.rel( 'sheet' ) )
-            sheet.rows.each( function( row ) {
-                node.row = db.mk.node
-                node.sheet.rel.to( node.row, rel.workbook )
-                node.sheet.rel.to( node.row, db.mk.rel( 'row' ) )
-                node.row.prop( 'num', row.num )
-                row.cells.each( function( cell ) {
-                    node.cell = db.mk.node
-                    node.row.rel.to( node.cell, rel.workbook )
-                    node.row.rel.to( node.cell, db.mk.rel( 'cell' ) )
-                    node.cell.prop( 'val', cell.valueOf() )
-                } )
-            } )
-        } )
-        
-        db.ref.traverse( { rel : rel.workbook } )
-            .each( function( node ) {
-                console.log( node.prop( 'val' ) )
-            } )
-        tx.success
-    } finally {
-        tx.finish
-        db.shutdown
-    }
-
-    return
-    
     try {
         var Connection = java.sql.Connection
         var server = mimis.load( '.../work/ssis/server/mimis' )
@@ -83,7 +42,6 @@ print( '!' )
                 console.log( "\tCatalog: "+ cats.getString( 1 ) )
             } 
             cats.close()
-            
             con.close()
         }
     } catch ( ioe ) {
