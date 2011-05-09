@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cd ...
+git add -n .
+SEC=5
+while [ $SEC -gt 0 ]; do
+    read -p $'\015'"${SEC}s: Add? [?bYn] " -t 1 # -n 1
+    SEC=$(( $SEC - 1 ))
+    [ $? -eq 0 ] && SEC=-1
+    echo "Exit: $?"
+done
