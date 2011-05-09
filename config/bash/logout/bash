@@ -6,14 +6,14 @@ git add -n .
 ACTION=
 SEC=5
 while [ $SEC -gt 0 ]; do
-    read -p $'\015'"${SEC}s: Add? [? Yn] " -t 1 -n 1 ACTION
+    read -p $'\015'"${SEC}s: Add? [? bYn] " -t 1 -n 1 ACTION
     [ $? -eq 0 ] && SEC=0
     SEC=$(( $SEC - 1 ))
 done
 
 case "$ACTION" in
     [\?] ) echo $'\012'"?";;
-    ' ' ) echo 'g'; break;;
+    [ b] ) echo 'g'; break;;
 esac
 
 echo $'\012'"A: '$ACTION'"
