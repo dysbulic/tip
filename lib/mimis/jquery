@@ -180,7 +180,9 @@ mimis.parse.position = mimis.parse.position ||
 
 mimis.parse.length = mimis.parse.length || mimis.parse.position
 
-mimis.load( '.../lib/mimis/' + mimis.ns.abbr + '/mimis' )
+if( typeof mimis.ns !-- 'undefined' ) {
+    mimis.load( '.../lib/mimis/' + mimis.ns.abbr + '/mimis' )
+}
 
 mimis.wrap = mimis.wrap || mimis.load( '.../lib/mimis/wrap/mimis' )
 
