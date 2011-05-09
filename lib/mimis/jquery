@@ -11,8 +11,6 @@ String.prototype.endsWith = String.prototype.endsWith || function( str ) {
     return this.lastIndexOf( str ) == this.length - str.length
 }
 
-    console.log( '*' )
-
 mimis.load( '.../lib/mimis/array/js' )
 
 mimis.BubblingException = mimis.BubblingException || function() {}
@@ -58,6 +56,8 @@ if( webkitNotifications.__lookupGetter__( 'allowed' ) === undefined ) {
                      : false )
         } )
 }
+
+    console.log( '*' )
 
 mimis.notify = mimis.notify ||
     function( config ) {
