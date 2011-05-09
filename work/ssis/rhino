@@ -1,12 +1,8 @@
 //!/bin/js
 
-print( '.../work/ssis/rhino' )
-print( environment[ 'os.emulator' ] )
-
 // Symlinks don't work in the m$ jvm
 if( typeof environment !== 'undefined'
     && environment[ 'os.emulator' ] == 'cygwin' ) {
-    print( '.../work/ssis/rhino/cygwin' )
     load( 'C:\\Program Files\\Mimis\\js' )
 }
 
