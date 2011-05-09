@@ -11,4 +11,6 @@ while [ $SEC -gt 0 ]; do
     SEC=$(( $SEC - 1 ))
 done
 
-echo $'\012'"'$ACTION'"
+case "$ACTION" in
+    [\?] ) echo $'\012'"?";;
+esac
