@@ -17,8 +17,6 @@ mimis.BubblingException = mimis.BubblingException || function() {}
 
 mimis.$window = mimis.$window || $.isFunction( $ ) ? $(window) : undefined
 
-    console.log( '*' )
-
 mimis.bind = mimis.bind || function( name, listener ) {
     mimis.$window.bind( 'mimis.' + name, listener )
 }
@@ -176,6 +174,8 @@ mimis.parse.position = mimis.parse.position ||
     function( pos ) {
         return parseFloat( pos )
     }
+
+    console.log( '*' )
 
 mimis.parse.length = mimis.parse.length || mimis.parse.position
 
