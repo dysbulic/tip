@@ -12,8 +12,14 @@ while [ $SEC -gt 0 ]; do
 done
 
 case "$ACTION" in
-    [\?] ) echo $'\012'"?";;
-    [\ b] ) exit -5;;
+    ;;[\?] )
+        echo $'\012'"?"
+    ;;[\ b] )
+        echo $'\012'"<Break/>"
+        exit -5
+    ;;[n] )
+        exit -1
+    ;;
 esac
 
 echo $'\012'"A: '$ACTION'"
