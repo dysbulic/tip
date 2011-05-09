@@ -1,3 +1,14 @@
 #!/bin/bash
 
-make -C '.../lib/mimis/inhabit/win/cygdrive/c/Program Files/Mimis/'
+TYPE="$1"
+[ -z "$1" ] && TYPE="$OSTYPE"
+
+case "$TYPE" in
+    'cygwin' )
+        [ -n "$VERBOSE" ] && echo "Cygwin"
+        make -C '.../lib/mimis/inhabit/win/cygdrive/c/Program Files/Mimis/'
+    ;; 'linux-gnu' )
+        [ -n "$VERBOSE" ] && echo "*nix"
+        cp -a .../lib/mimis/inhabit/\*nix/* ~/
+    ;;
+esac
