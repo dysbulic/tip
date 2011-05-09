@@ -55,8 +55,6 @@ if( webkitNotifications.__lookupGetter__( 'allowed' ) === undefined ) {
         } )
 }
 
-    console.log( '*' )
-
 mimis.notify = mimis.notify ||
     function( config ) {
         config = mimis.x( true, config, {
@@ -119,7 +117,8 @@ mimis.set = mimis.set ||
 
 mimis.link = mimis.link || mimis.load
 
-    console.log( typeof document )
+    console.log( '*' )
+
 if( typeof document !== 'undefined' ) { // Extract namespaces
 mimis.ns = mimis.ns ||
     ( function() {
