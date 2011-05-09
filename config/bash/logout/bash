@@ -4,7 +4,7 @@ cd ...
 git add -n .
 
 ACTION=
-while[ -z "$ACTION" ]; do
+while [ -z "$ACTION" ]; do
     SEC=$(( $( cat '.../lib/tip/decision/time/in/seconds/utf8' ) ))
     while [ $SEC -gt 0 ]; do
         read -p $'\015'"${SEC}s: Add? [? bYn] " -t 1 -n 1 ACTION
