@@ -5,7 +5,10 @@ print( '.../work/ssis/rhino' )
 // Symlinks don't work in the m$ jvm
 ( typeof environment !== 'undefined'
   && environment[ 'os.emulator' ] == 'cygwin' )
-    && load( 'C:\\Program Files\\Mimis\\js' )
+    && ( function() {
+        print( '.../work/ssis/rhino/cygwin' )
+        load( 'C:\\Program Files\\Mimis\\js' )
+    } )()
 
 print( '!' )
 
