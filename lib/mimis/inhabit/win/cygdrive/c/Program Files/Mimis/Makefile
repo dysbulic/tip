@@ -2,6 +2,6 @@ OUTDIR = $(shell pwd | sed -e 's|.*\.\.\./lib/mimis/inhabit/win||')
 
 all:
 	mkdir -p "${OUTDIR}"
-	find -L -name ... -prune -or \( -name js -or -name rhino \) -print0 \
+	find -L -name ... -prune -or \( -name js -or -name rhino \) -depth 1 -print0 \
 	 | xargs -0 cat \
 	 > "${OUTDIR}/js"
