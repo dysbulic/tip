@@ -2,7 +2,7 @@ OUTDIR = $(shell pwd | sed -e 's|.*\.\.\./lib/mimis/inhabit/win||')
 
 all:
 	mkdir -p "${OUTDIR}"
-	find -L -depth 1 -name ... -prune \
+	find -L -maxdepth 1 -name ... -prune \
 		-or \( -name js -or -name rhino \) \
 		-print0 \
 	 | xargs -0 cat \
