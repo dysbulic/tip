@@ -16,14 +16,12 @@ print( '!' )
 
 ;
 ( function() {
-    var neo4j = mimis.load( '.../lib/mimis/neo4j/mimis' )
-    print( neo4j )
-    var db = new neo4j.Database( 'neo4j/instance/' )
-
     try {
         var Connection = java.sql.Connection
         var server = mimis.load( '.../work/ssis/server/mimis' )
         
+        print( 'typeof server:' + typeof server )
+
         var DriverManager = java.sql.DriverManager
         
         java.lang.Class.forName( 'com.microsoft.sqlserver.jdbc.SQLServerDriver' ).newInstance()
@@ -51,6 +49,12 @@ print( '!' )
     } catch ( ioe ) {
         console.log( ioe )
     }
+
+    return
+
+    var neo4j = mimis.load( '.../lib/mimis/neo4j/mimis' )
+    print( neo4j )
+    var db = new neo4j.Database( 'neo4j/instance/' )
 } )()
 
 print( '◄.../work/ssis/rhino' )
