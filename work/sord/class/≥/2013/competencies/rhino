@@ -62,13 +62,12 @@ load( '.../lib/mimis/js' )
             var root = addNode( '' )
 
             ;( function storeTree( cur, parent ) {
-                console.log( 'd:' + cur )
                 if( $.isString( cur ) ) {
                     parent.addChild( addNode( cur ) )
                 } else if( typeof cur === 'undefined' ) {
                     console.log( 'undef' )
                 } else if( $.isFunction( cur ) ) {
-                    cur( parent, parent.parent )
+                    cur( parent, con           )
                 } else if( typeof cur.each !== 'undefined' ) {
                     cur.each( function( elem ) {
                         storeTree( elem, parent )
