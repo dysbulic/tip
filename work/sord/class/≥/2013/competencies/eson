@@ -30,14 +30,16 @@
         'Comprehensive Basic Science Exam' : [
             'Comprehensive Basic Science'
         ],
-        'Clinical Skills Performance' : [
-            'Clinical Foundations of Medicine'
-/*
-	INSERT INTO [dbo].[rpt_competency_ge2013_score] ( competency_id, score, student_id )
-		SELECT @CurrentID, grade_equivalent, student_id
-			FROM [dbo].[student_course_details] d
-			WHERE course_master_title = 'Clinical Foundations of Medicine'
-*/
+        'Clinical Skills Performance' : {
+            'Clinical Foundations of Medicine' : function( parent, con ) {
+                var stmt = con.createStatement()
+                stmt.executeUpdate(
+	            'INSERT INTO rpt_competency_ge2013_score ( competency_id, score, student_id )'
+		        + ' SELECT ' + parent.id + ', grade_equivalent, student_id'
+		        + ' FROM student_course_details d'
+		        + " WHERE course_master_title = 'Clinical Foundations of Medicine'"
+                )
+            }
         ],
         'Clerkship Performance' : [
         ],
