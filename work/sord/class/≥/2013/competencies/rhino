@@ -11,9 +11,9 @@ load( '.../lib/mimis/js' )
 ( function() {
     ( function printTree( root ) {
         for( childName in root ) {
-            var child = tree[ childName ]
+            var child = root[ childName ]
             console.log( childName )
-            console.log( typeof child )
+            //console.log( typeof child )
             if( $.isString( child ) ) {
                 console.log( 'leaf' )
             } else if( typeof child.each !== 'undefined' ) {
