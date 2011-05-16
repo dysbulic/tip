@@ -13,7 +13,8 @@ load( '.../lib/mimis/js' )
         console.log( 'pt: ' + root )
         if( $.isString( child ) ) {
             console.log( 'leaf' )
-        } else if( typeof child.each !== 'undefined' ) {
+        } else if( typeof child !== 'undefined'
+                   && typeof child.each !== 'undefined' ) {
             child.each( printTree )
         } else if( $.isObject( root ) ) {
             for( childName in root ) {
