@@ -32,6 +32,8 @@ load( '.../lib/mimis/js' )
          
             var prefix = 'rpt_competency_ge2013_t'
             var tables = {}
+            var stmt = con.createStatement()
+            //stmt.executeUpdate( "INSERT INTO rpt_competency_ge2013_node (name) VALUES ('Testing')" )
             ;[ 'func', 'metric', 'node', 'score', 'tree_map' ].each( function( tbl ) {
                 var rs = stmt.executeUpdate(
                 //console.log(
@@ -43,8 +45,6 @@ load( '.../lib/mimis/js' )
                         + ' ' + mimis.load( 'tables/' + tbl + '/m$sql' )
                 )
             } )
-           var stmt = con.createStatement()
-            //stmt.executeUpdate( "INSERT INTO rpt_competency_ge2013_node (name) VALUES ('Testing')" )
 
             var ps = con.prepareCall( "INSERT INTO rpt_competency_ge2013_node (name) VALUES (?);"
                                       + ' SELECT @@IDENTITY' )
