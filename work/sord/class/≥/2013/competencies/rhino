@@ -31,15 +31,16 @@ load( '.../lib/mimis/js' )
             console.log( "\tDatabase Version: " + meta.getDatabaseProductVersion() )
          
             var stmt = con.createStatement()
-            stmt.executeUpdate( "INSERT INTO rpt_competency_ge2013_node (name) VALUES ('Testing')" )
+            //stmt.executeUpdate( "INSERT INTO rpt_competency_ge2013_node (name) VALUES ('Testing')" )
 
             var ps = con.prepareCall( "INSERT INTO rpt_competency_ge2013_node (name) VALUES ('?');"
                                       + 'SELECT @@IDENTITY' )
+            console.log( 'ps: ' + ps )
             ps.setString( 1, "Testin'" )
             ps.execute()
             var rs = ps.getResultSet()
             console.log( 'rs: ' + rs )
-            while( rs.next() ) {
+            if( rs != null && rs.next() ) {
                 console.log( 'id: ' + rs.getInt( 1 ) )
             }
             rs.close()
