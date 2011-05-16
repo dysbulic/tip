@@ -9,6 +9,52 @@ load( '.../lib/mimis/js' )
 
 ;
 ( function() {
+        var Connection = java.sql.Connection
+        var server = mimis.load( '.../work/ssis/server/mimis' )
+        
+        print( 'typeof server:' + typeof server )
+
+        var DriverManager = java.sql.DriverManager
+        var SQLServerDriver = com.microsoft.sqlserver.jdbc.SQLServerDriver
+        
+        java.lang.Class.forName( 'com.microsoft.sqlserver.jdbc.SQLServerDriver' ).newInstance()
+        
+        var con = DriverManager.getConnection( server.uri, server.user, server.pass )
+        if( con != null ) {
+            console.log( 'Connected: ' + server.uri )
+            
+            var meta = con.getMetaData()
+            console.log( 'Driver Information:' )
+            console.log( "\tDriver Name:" + meta.getDriverName() )
+            console.log( "\tDriver Version:" + meta.getDriverVersion() )
+            console.log( 'Database Information:' )
+            console.log( "\tDatabase Name: " + meta.getDatabaseProductName() )
+            console.log( "\tDatabase Version: " + meta.getDatabaseProductVersion() )
+            
+            var cats = meta.getCatalogs()
+            console.log( 'Avalilable Catalogs:' )
+            while( cats.next() ) {
+                var cat = cats.getString( 1 )
+                console.log( "\t" + cat )
+                try {
+                    var tables = meta.getTables( cat, null, null, null )
+                    while( tables.next() ) {
+                        var table = tables.getString( 3 )
+                        
+                        console.log( "\t\t" + table )
+                    }
+                    tables.close()
+                } catch( ex ) {
+                    console.error( ex )
+                }
+            } 
+            cats.close()
+            con.close()
+        }
+    } catch ( ioe ) {
+        console.log( ioe )
+    }
+
     ( function printTree( root ) {
         console.log( 'pt: ' + root )
         if( $.isString( root ) ) {
