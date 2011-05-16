@@ -51,7 +51,7 @@ load( '.../lib/mimis/js' )
                 pIns.setString( 1, name )
                 pIns.execute()
                 pIns.getMoreResults()
-                var rs = ps.getResultSet()
+                var rs = pIns.getResultSet()
                 var ret
                 if( rs != null && rs.next() ) {
                     ret = rs.getInt( 1 )
