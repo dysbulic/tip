@@ -38,7 +38,7 @@ load( '.../lib/mimis/js' )
                     "IF( EXISTS( SELECT * FROM INFORMATION_SCHEMA.TABLES"
                         + " WHERE TABLE_SCHEMA = 'dbo'"
                         + " AND TABLE_NAME = '" + prefix + '_' +tbl + "' ) )"
-                        + mimis.load( 'tables/' + tbl + '/m$sql'
+                        + mimis.load( 'tables/' + tbl + '/m$sql' )
                 )
             } )
            var stmt = con.createStatement()
