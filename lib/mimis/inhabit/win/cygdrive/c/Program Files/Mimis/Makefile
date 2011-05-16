@@ -12,4 +12,4 @@ all:
 	 | xargs -0 cat \
 	 >> "${OUTDIR}/js"
 
-	cat post/*/* > "${OUTDIR}/js"
+	cat post/*/* >> "${OUTDIR}/js"
