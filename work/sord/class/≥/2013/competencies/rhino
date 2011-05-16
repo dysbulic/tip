@@ -9,11 +9,18 @@ load( '.../lib/mimis/js' )
 
 ;
 ( function() {
-    var tree = mimis.load( 'eson' )
-    console.log( tree )
-    for( childName in tree ) {
-        var child = tree[ childName ]
-        console.log( childName )
-        console.log( typeof child )
-    }
+    ( function printTree( root ) {
+        for( childName in root ) {
+            var child = tree[ childName ]
+            console.log( childName )
+            console.log( typeof child )
+            if( $.isString( child ) ) {
+                console.log( 'leaf' )
+            } else if( typeof child.each !== 'undefined' ) {
+                child.each( printTree )
+            } else {
+                console.log( 'ukn' )
+            }
+        }
+    } )( mimis.load( 'eson' ) )
 } )()
