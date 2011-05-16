@@ -25,6 +25,7 @@ load( '.../lib/mimis/js' )
 
             // Create tables if they don't exist
             ;[ 'func', 'metric', 'node', 'score', 'tree_map' ].each( function( tbl ) {
+                stmt.executeUpdate( 'DROP TABLE ' + prefix + '_' + tbl )
                 stmt.executeUpdate(
                     "IF( NOT EXISTS("
                         + " SELECT * FROM INFORMATION_SCHEMA.TABLES"
