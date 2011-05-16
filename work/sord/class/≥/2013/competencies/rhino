@@ -38,6 +38,7 @@ load( '.../lib/mimis/js' )
             ps.setString( 1, "Testin'" )
             ps.execute()
             var rs = ps.getResultSet()
+            console.log( 'rs: ' + rs )
             while( rs.next() ) {
                 console.log( 'id: ' + rs.getInt( 1 ) )
             }
