@@ -35,7 +35,7 @@ load( '.../lib/mimis/js' )
 
             var rs = stmt.executeQuery( 'SELECT SCOPE_IDENTITY()' )
             while( rs.next() ) {
-                console.log( 'id: ' + rs.getString( 1 ) )
+                console.log( 'id: ' + rs.getInt( 1 ) )
             }
             rs.close()
 
