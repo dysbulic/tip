@@ -41,7 +41,7 @@ load( '.../lib/mimis/js' )
             ps.execute()
             console.log( 'c:' + ps.getUpdateCount() )
             var rs = ps.getResultSet()
-                console.log( 'rs: ' + rs )
+            console.log( 'rs: ' + rs )
             if( rs != null && rs.next() ) {
                 console.log( 'id: ' + rs.getInt( 1 ) )
                 rs.close()
@@ -53,7 +53,7 @@ load( '.../lib/mimis/js' )
             }
             rs.close()
 
-            ( function printTree( root ) {
+            ;( function printTree( root ) {
                 console.log( 'pt: ' + root )
                 if( $.isString( root ) ) {
                     console.log( 'leaf' )
