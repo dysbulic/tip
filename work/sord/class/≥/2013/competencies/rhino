@@ -41,6 +41,8 @@ load( '.../lib/mimis/js' )
             ps.execute()
             console.log( 'c:' + ps.getUpdateCount() )
             var rs = ps.getResultSet()
+            console.log( ps.getMoreResults() )
+            console.log( ps.getUpdateCount() )
             console.log( 'rs: ' + rs )
             if( rs != null && rs.next() ) {
                 console.log( 'id: ' + rs.getInt( 1 ) )
