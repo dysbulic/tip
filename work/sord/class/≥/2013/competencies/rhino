@@ -11,15 +11,15 @@ load( '.../lib/mimis/js' )
 ( function() {
     ( function printTree( root ) {
         console.log( 'pt: ' + root )
-        if( $.isString( child ) ) {
+        if( $.isString( root ) ) {
             console.log( 'leaf' )
-        } else if( typeof child !== 'undefined'
-                   && typeof child.each !== 'undefined' ) {
-            child.each( printTree )
+        } else if( typeof root === 'undefined' ) {
+            console.log( 'undef' )
+        } else if( typeof root.each !== 'undefined' ) {
+            root.each( printTree )
         } else if( $.isObject( root ) ) {
             for( childName in root ) {
-                var child = root[ childName ]
-                printTree( child )
+                printTree( root[ childName ] )
             }
         } else {
             console.log( 'ukn: ' + root )
