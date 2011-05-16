@@ -33,9 +33,10 @@ load( '.../lib/mimis/js' )
             var stmt = con.createStatement()
             //stmt.executeUpdate( "INSERT INTO rpt_competency_ge2013_node (name) VALUES ('Testing')" )
 
-            var ps = con.prepareCall( "INSERT INTO rpt_competency_ge2013_node (name) VALUES ('?');"
+            var ps = con.prepareCall( "INSERT INTO rpt_competency_ge2013_node (name) VALUES (?);"
                                       + ' SELECT @@IDENTITY' )
             console.log( 'ps: ' + ps )
+            
             ps.setString( 1, "Testin" )
             ps.execute()
             var rs = ps.getResultSet()
