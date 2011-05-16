@@ -40,12 +40,16 @@ load( '.../lib/mimis/js' )
             while( cats.next() ) {
                 var cat = cats.getString( 1 )
                 console.log( "\t" + cat )
-                var tables = meta.getTables( cat, null, null, null )
-                while( tables.next() ) {
-                    var table = tables.getString( 1 )
-                    console.log( "\t\t" + table )
+                try {
+                    var tables = meta.getTables( cat, null, null, null )
+                    while( tables.next() ) {
+                        var table = tables.getString( 2 )
+                        console.log( "\t\t" + table )
+                    }
+                    tables.close()
+                } catch( ex ) {
+                    console.error( e )
                 }
-                console.log( "\tCatalog: "+ cats.getString( 1 ) )
             } 
             cats.close()
             con.close()
