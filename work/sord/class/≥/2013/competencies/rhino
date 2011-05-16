@@ -20,20 +20,10 @@ load( '.../lib/mimis/js' )
         
         var con = DriverManager.getConnection( server.uri, server.user, server.pass )
         if( con != null ) {
-            console.log( 'Connected: ' + server.uri )
-            
-            var meta = con.getMetaData()
-            console.log( 'Driver Information:' )
-            console.log( "\tDriver Name:" + meta.getDriverName() )
-            console.log( "\tDriver Version:" + meta.getDriverVersion() )
-            console.log( 'Database Information:' )
-            console.log( "\tDatabase Name: " + meta.getDatabaseProductName() )
-            console.log( "\tDatabase Version: " + meta.getDatabaseProductVersion() )
-         
             var prefix = 'rpt_competency_ge2013_t'
-            var tables = {}
             var stmt = con.createStatement()
-            //stmt.executeUpdate( "INSERT INTO rpt_competency_ge2013_node (name) VALUES ('Testing')" )
+
+            // Create tables if they don't exist
             ;[ 'func', 'metric', 'node', 'score', 'tree_map' ].each( function( tbl ) {
                 stmt.executeUpdate(
                     "IF( NOT EXISTS("
@@ -46,47 +36,49 @@ load( '.../lib/mimis/js' )
             } )
 
             var pIns = con.prepareCall( "INSERT INTO " + prefix + "_node (name) VALUES (?);"
-                                      + ' SELECT @@IDENTITY' )
+                                        + 'SELECT @@IDENTITY' )
+            var pTree = con.prepareCall( "INSERT INTO " + prefix + "_tree_map (node_id, child_id) VALUES (?,?)" )
             function addNode( name ) {
                 pIns.setString( 1, name )
                 pIns.execute()
                 pIns.getMoreResults()
                 var rs = pIns.getResultSet()
-                var ret
+                var node = {
+                    addChild : function( child ) {
+                        pTree.setInt( 1, node.id )
+                        pTree.setInt( 2, child.id )
+                        pTree.execute()
+                        child.parent = node
+                    }
+                }
                 if( rs != null && rs.next() ) {
-                    ret = rs.getInt( 1 )
+                    node.id = rs.getInt( 1 )
                     rs.close()
                 }
                 return ret
             }
 
-            var pTree = con.prepareCall( "INSERT INTO " + prefix + "_tree_map (node_id, child_id) VALUES (?,?);"
-                                         + ' SELECT @@IDENTITY' )
-            function addChildTo( nodeId, childId ) {
-                pTree.setInt( 1, nodeId )
-                pTree.setInt( 2, childId )
-                pTree.execute()
-            }
+            var root = addNode( '' )
 
-            var rootId = addNode( '' )
-
-            ;( function storeTree( root, parentId ) {
-                if( $.isString( root ) ) {
-                    addChildTo( parentId, addNode( root ) )
-                } else if( typeof root === 'undefined' ) {
+            ;( function storeTree( cur, parent ) {
+                if( $.isString( cur ) ) {
+                    parent.addChild( addNode( cur ) )
+                } else if( typeof cur === 'undefined' ) {
                     console.log( 'undef' )
-                } else if( typeof root.each !== 'undefined' ) {
-                    root.each( storeTree, parentId )
-                } else if( $.isObject( root ) ) {
+                } else if( $.isFunction( cur ) ) {
+                    cur( parent, parent.parent )
+                } else if( typeof cur.each !== 'undefined' ) {
+                    cur.each( storeTree, parentId )
+                } else if( $.isObject( cur ) ) {
                     for( childName in root ) {
-                        var childId = addNode( childName )
-                        addChildTo( parentId, childId )
-                        storeTree( root[ childName ], childId )
+                        var child = addNode( childName )
+                        parent.addChild( child )
+                        storeTree( root[ childName ], child )
                     }
                 } else {
                     console.log( 'ukn: ' + root )
                 }
-            } )( mimis.load( 'eson' ), rootId )
+            } )( mimis.load( 'eson' ), root )
 
             var rs = stmt.executeQuery( 'SELECT id, name FROM rpt_competency_ge2013_t_node' )
             while( rs.next() ) {
