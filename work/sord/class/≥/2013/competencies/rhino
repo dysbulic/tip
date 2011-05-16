@@ -69,7 +69,9 @@ load( '.../lib/mimis/js' )
                 } else if( $.isFunction( cur ) ) {
                     cur( parent, parent.parent )
                 } else if( typeof cur.each !== 'undefined' ) {
-                    cur.each( storeTree, parent )
+                    cur.each( function( elem ) {
+                        storeTree( elem, parent )
+                    } )
                 } else if( $.isObject( cur ) ) {
                     for( childName in cur ) {
                         var child = addNode( childName )
