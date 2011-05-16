@@ -68,16 +68,9 @@ load( '.../lib/mimis/js' )
                 pTree.execute()
             }
 
-            var rs = stmt.executeQuery( 'SELECT id, name FROM rpt_competency_ge2013_t_node' )
-            while( rs.next() ) {
-                console.log( 'comp: ' + rs.getInt( 1 ) + ': ' + rs.getString( 2 ) )
-            }
-            rs.close()
-
             var rootId = addNode( '' )
 
             ;( function storeTree( root, parentId ) {
-                console.log( 'pt: ' + root )
                 if( $.isString( root ) ) {
                     addChildTo( parentId, addNode( root ) )
                 } else if( typeof root === 'undefined' ) {
@@ -94,6 +87,12 @@ load( '.../lib/mimis/js' )
                     console.log( 'ukn: ' + root )
                 }
             } )( mimis.load( 'eson' ), rootId )
+
+            var rs = stmt.executeQuery( 'SELECT id, name FROM rpt_competency_ge2013_t_node' )
+            while( rs.next() ) {
+                console.log( 'comp: ' + rs.getInt( 1 ) + ': ' + rs.getString( 2 ) )
+            }
+            rs.close()
 
             con.close()
         }
