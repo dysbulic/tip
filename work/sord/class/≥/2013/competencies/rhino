@@ -30,15 +30,17 @@ load( '.../lib/mimis/js' )
             console.log( "\tDatabase Name: " + meta.getDatabaseProductName() )
             console.log( "\tDatabase Version: " + meta.getDatabaseProductVersion() )
          
-            var prefix = 'rpt_competency_ge2013'
+            var prefix = 'rpt_competency_ge2013_t'
             var tables = {}
             ;[ 'func', 'metric', 'node', 'score', 'tree_map' ].each( function( tbl ) {
-                //var rs = stmt.executeUpdate(
-                console.log(
-                    "IF( EXISTS( SELECT * FROM INFORMATION_SCHEMA.TABLES"
+                var rs = stmt.executeUpdate(
+                //console.log(
+                    "IF( NOT EXISTS("
+                        + " SELECT * FROM INFORMATION_SCHEMA.TABLES"
                         + " WHERE TABLE_SCHEMA = 'dbo'"
-                        + " AND TABLE_NAME = '" + prefix + '_' +tbl + "' ) )"
-                        + mimis.load( 'tables/' + tbl + '/m$sql' )
+                        + " AND TABLE_NAME = '" + prefix + '_' +tbl + "'"
+                        + " ) )"
+                        + ' ' + mimis.load( 'tables/' + tbl + '/m$sql' )
                 )
             } )
            var stmt = con.createStatement()
