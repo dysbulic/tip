@@ -11,7 +11,9 @@ load( '.../lib/mimis/js' )
 ( function() {
     var tree = mimis.load( 'eson' )
     console.log( tree )
-    for( child in tree ) {
-        console.log( child )
+    for( childName in tree ) {
+        var child = tree[ childName ]
+        console.log( childName )
+        console.log( typeof child )
     }
 } )()
