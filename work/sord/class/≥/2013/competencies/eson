@@ -1,0 +1,44 @@
+{
+ 	'Core Clerkship Shelf Exam Performance' : [
+            'Neurology', 'Psychiatry', 'Gynecology/Obstetrics',
+            'Surgery', 'Medicine', 'Pediatrics'
+        ],
+        'Pre-Clinical Course Performance' : [ {
+            'Scientific Foundations of Medicine' : [
+ 	        'Macromolecules', 'Cell Physiology', 'Metabolism',
+                'Genetics', 'Pharmacology'
+            ],
+        } ],
+        'Genes to Society I' : [
+            'Immunology I', 'Microbiology/Infectious Disease',
+            'Immunology II', 'Hematology/Oncology'
+        ],
+        'Genes to Society II' : [
+            'Brain, Mind, & Behavior',
+            {
+	        'Nervous System and Special Senses' : [
+                    'Neuroanatomy', 'NSS: Exam 2', 'Neuroscience'
+                ],
+            }
+        ],
+        'Genes to Society III' : [
+            'Cardiovascular', 'Respiratory', 'Renal'
+        ],
+        'Genes to Society IV' : [
+            'GI Liver', 'Endocrine', 'Reproductive', 'Musculoskeletal'
+        ],
+        'Comprehensive Basic Science Exam' : [
+            'Comprehensive Basic Science'
+        ],
+        'Clinical Skills Performance' : [
+            'Clinical Foundations of Medicine'
+/*
+	INSERT INTO [dbo].[rpt_competency_ge2013_score] ( competency_id, score, student_id )
+		SELECT @CurrentID, grade_equivalent, student_id
+			FROM [dbo].[student_course_details] d
+			WHERE course_master_title = 'Clinical Foundations of Medicine'
+*/
+        ],
+        'Clerkship Performance' : [
+        ],
+}
