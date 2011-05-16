@@ -34,7 +34,7 @@
             'Clinical Foundations of Medicine' : function( parent, con ) {
                 var stmt = con.createStatement()
                 stmt.executeUpdate(
-	            'INSERT INTO rpt_competency_ge2013_score ( competency_id, score, student_id )'
+	            'INSERT INTO rpt_competency_ge2013_t_score ( competency_id, score, student_id )'
 		        + ' SELECT ' + parent.id + ', grade_equivalent, student_id'
 		        + ' FROM student_course_details d'
 		        + " WHERE course_master_title = 'Clinical Foundations of Medicine'"
