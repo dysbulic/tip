@@ -83,7 +83,7 @@ load( '.../lib/mimis/js' )
                 } else if( typeof root === 'undefined' ) {
                     console.log( 'undef' )
                 } else if( typeof root.each !== 'undefined' ) {
-                    root.each( printTree, parentId )
+                    root.each( storeTree, parentId )
                 } else if( $.isObject( root ) ) {
                     for( childName in root ) {
                         var childId = addNode( childName )
