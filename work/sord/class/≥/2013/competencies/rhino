@@ -31,51 +31,40 @@ load( '.../lib/mimis/js' )
             console.log( "\tDatabase Version: " + meta.getDatabaseProductVersion() )
          
             var stmt = con.createStatement()
-            var rs = stmt.executeUpdate( "INSERT INTO rpt_competency_ge2013_node (name) VALUES ('Testing')" )
+            stmt.executeUpdate( "INSERT INTO rpt_competency_ge2013_node (name) VALUES ('Testing')" )
+
+            var rs = stmt.executeQuery( 'SELECT SCOPE_IDENTITY()' )
+            while( rs.next() ) {
+                console.log( 'id: ' + rs.getString( 1 ) )
+            }
+            rs.close()
+
             var rs = stmt.executeQuery( 'SELECT name FROM rpt_competency_ge2013_node' )
             while( rs.next() ) {
                 console.log( 'comp: ' + rs.getString( 1 ) )
             }
             rs.close()
 
-            var cats = meta.getCatalogs()
-            console.log( 'Avalilable Catalogs:' )
-            while( cats.next() ) {
-                var cat = cats.getString( 1 )
-                console.log( "\t" + cat )
-                try {
-                    var tables = meta.getTables( cat, null, null, null )
-                    while( tables.next() ) {
-                        var table = tables.getString( 3 )
-                        
-                        console.log( "\t\t" + table )
+            ( function printTree( root ) {
+                console.log( 'pt: ' + root )
+                if( $.isString( root ) ) {
+                    console.log( 'leaf' )
+                } else if( typeof root === 'undefined' ) {
+                    console.log( 'undef' )
+                } else if( typeof root.each !== 'undefined' ) {
+                    root.each( printTree )
+                } else if( $.isObject( root ) ) {
+                    for( childName in root ) {
+                        printTree( root[ childName ] )
                     }
-                    tables.close()
-                } catch( ex ) {
-                    console.error( ex )
+                } else {
+                    console.log( 'ukn: ' + root )
                 }
-            } 
-            cats.close()
+            } )( mimis.load( 'eson' ) )
+
             con.close()
         }
     } catch ( ioe ) {
         console.log( ioe )
     }
-
-    ( function printTree( root ) {
-        console.log( 'pt: ' + root )
-        if( $.isString( root ) ) {
-            console.log( 'leaf' )
-        } else if( typeof root === 'undefined' ) {
-            console.log( 'undef' )
-        } else if( typeof root.each !== 'undefined' ) {
-            root.each( printTree )
-        } else if( $.isObject( root ) ) {
-            for( childName in root ) {
-                printTree( root[ childName ] )
-            }
-        } else {
-            console.log( 'ukn: ' + root )
-        }
-    } )( mimis.load( 'eson' ) )
 } )()
