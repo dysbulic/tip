@@ -39,8 +39,9 @@ load( '.../lib/mimis/js' )
             
             ps.setString( 1, "Testin'" )
             ps.execute()
+            console.log( 'c:' + ps.getUpdateCount() )
             var rs = ps.getResultSet()
-            console.log( 'rs: ' + rs )
+                console.log( 'rs: ' + rs )
             if( rs != null && rs.next() ) {
                 console.log( 'id: ' + rs.getInt( 1 ) )
                 rs.close()
