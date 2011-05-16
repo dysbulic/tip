@@ -35,52 +35,65 @@ load( '.../lib/mimis/js' )
             var stmt = con.createStatement()
             //stmt.executeUpdate( "INSERT INTO rpt_competency_ge2013_node (name) VALUES ('Testing')" )
             ;[ 'func', 'metric', 'node', 'score', 'tree_map' ].each( function( tbl ) {
-                var rs = stmt.executeUpdate(
-                //console.log(
+                stmt.executeUpdate(
                     "IF( NOT EXISTS("
                         + " SELECT * FROM INFORMATION_SCHEMA.TABLES"
                         + " WHERE TABLE_SCHEMA = 'dbo'"
-                        + " AND TABLE_NAME = '" + prefix + '_' +tbl + "'"
+                        + " AND TABLE_NAME = '" + prefix + '_' + tbl + "'"
                         + " ) )"
                         + ' ' + mimis.load( 'tables/' + tbl + '/m$sql' )
                 )
             } )
 
-            var ps = con.prepareCall( "INSERT INTO rpt_competency_ge2013_node (name) VALUES (?);"
+            var pIns = con.prepareCall( "INSERT INTO " + prefix + "_node (name) VALUES (?);"
                                       + ' SELECT @@IDENTITY' )
-            console.log( 'ps: ' + ps )
-            
-            ps.setString( 1, "Testin'" )
-            ps.execute()
-            ps.getMoreResults()
-            var rs = ps.getResultSet()
-            if( rs != null && rs.next() ) {
-                console.log( 'id: ' + rs.getInt( 1 ) )
-                rs.close()
+            function addNode( name ) {
+                pIns.setString( 1, name )
+                pIns.execute()
+                pIns.getMoreResults()
+                var rs = ps.getResultSet()
+                var ret
+                if( rs != null && rs.next() ) {
+                    ret = rs.getInt( 1 )
+                    rs.close()
+                }
+                return ret
             }
 
-            var rs = stmt.executeQuery( 'SELECT id, name FROM rpt_competency_ge2013_node' )
+            var pTree = con.prepareCall( "INSERT INTO " + prefix + "_tree_map (node_id, child_id) VALUES (?,?);"
+                                         + ' SELECT @@IDENTITY' )
+            function addChildTo( nodeId, childId ) {
+                pTree.setInt( 1, nodeId )
+                pTree.setInt( 2, childId )
+                pTree.execute()
+            }
+
+            var rs = stmt.executeQuery( 'SELECT id, name FROM rpt_competency_ge2013_t_node' )
             while( rs.next() ) {
                 console.log( 'comp: ' + rs.getInt( 1 ) + ': ' + rs.getString( 2 ) )
             }
             rs.close()
 
-            ;( function printTree( root ) {
+            var rootId = addNode( '' )
+
+            ;( function storeTree( root, parentId ) {
                 console.log( 'pt: ' + root )
                 if( $.isString( root ) ) {
-                    console.log( 'leaf' )
+                    addChildTo( parentId, addNode( root ) )
                 } else if( typeof root === 'undefined' ) {
                     console.log( 'undef' )
                 } else if( typeof root.each !== 'undefined' ) {
-                    root.each( printTree )
+                    root.each( printTree, parentId )
                 } else if( $.isObject( root ) ) {
                     for( childName in root ) {
-                        printTree( root[ childName ] )
+                        var childId = addNode( childName )
+                        addChildTo( parentId, childId )
+                        storeTree( root[ childName ], childId )
                     }
                 } else {
                     console.log( 'ukn: ' + root )
                 }
-            } )( mimis.load( 'eson' ) )
+            } )( mimis.load( 'eson' ), rootId )
 
             con.close()
         }
