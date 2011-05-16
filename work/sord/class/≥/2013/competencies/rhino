@@ -10,18 +10,20 @@ load( '.../lib/mimis/js' )
 ;
 ( function() {
     ( function printTree( root ) {
-        console.log( 'pt' )
-        for( childName in root ) {
-            var child = root[ childName ]
-            console.log( childName )
-            //console.log( typeof child )
-            if( $.isString( child ) ) {
-                console.log( 'leaf' )
-            } else if( typeof child.each !== 'undefined' ) {
-                child.each( printTree )
-            } else {
-                console.log( 'ukn' )
+        console.log( 'pt: ' + root )
+        if( $.isString( child ) ) {
+            console.log( 'leaf' )
+        } else if( typeof child.each !== 'undefined' ) {
+            child.each( printTree )
+        } else if( $.isObject( root ) ) {
+            for( childName in root ) {
+                var child = root[ childName ]
+                console.log( childName )
+                //console.log( typeof child )
             }
+        } else {
+            console.log( 'ukn: ' + root )
+        }
         }
     } )( mimis.load( 'eson' ) )
 } )()
