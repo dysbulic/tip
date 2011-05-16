@@ -32,8 +32,12 @@ load( '.../lib/mimis/js' )
             console.log( "\tDatabase Name: " + meta.getDatabaseProductName() )
             console.log( "\tDatabase Version: " + meta.getDatabaseProductVersion() )
          
-            //var stmt = con.createStatement()
-            //var rs = stmt.executeQuery( 'SELECT * FROM ' )
+            var stmt = con.createStatement()
+            var rs = stmt.executeQuery( 'SELECT name FROM rpt_competency_ge2013_node' )
+            while( rs.next() ) {
+                console.log( 'comp: ' + rs.getString( 1 ) )
+            }
+            rs.close()
    
             var cats = meta.getCatalogs()
             console.log( 'Avalilable Catalogs:' )
