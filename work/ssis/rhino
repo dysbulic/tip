@@ -38,6 +38,13 @@ load( '.../lib/mimis/js' )
             var cats = meta.getCatalogs()
             console.log( 'Avalilable Catalogs:' )
             while( cats.next() ) {
+                var cat = cats.getString( 1 )
+                console.log( "\t" + cat )
+                var tables = meta.getTables( cat )
+                while( tables.next() ) {
+                    var table = tables.getString( 1 )
+                    console.log( "\t\t" + table )
+                }
                 console.log( "\tCatalog: "+ cats.getString( 1 ) )
             } 
             cats.close()
