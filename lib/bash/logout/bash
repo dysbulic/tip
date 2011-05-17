@@ -1,0 +1,46 @@
+#!/bin/bash
+
+cd ...
+git add -n .
+
+ACTION=
+while [ -z "$ACTION" ]; do
+    SEC=$(( $( cat '.../lib/tip/decision/time/in/seconds/utf8' ) ))
+    while [ $SEC -gt 0 ]; do
+        read -p $'\015'"${SEC}s: Add? [? bYn] " -t 1 -n 1 ACTION
+        [ $? -eq 0 ] && SEC=0
+        SEC=$(( $SEC - 1 ))
+    done
+
+    echo $'\012'"Action: '$ACTION' ($SEC )"
+
+    [ $SEC -eq -1 ] && ACTION='Y'
+
+    echo $'\012'"Action: '$ACTION' ($SEC)"
+
+    case "$ACTION" in
+        [\?] )
+        echo <<EOF
+ y: yes
+ n: no
+ b: break
+EOF
+        ACTION=
+        ;;[\ bB] )
+            echo $'\012'"<Break/>"
+            exit -5
+        ;;[nN] )
+            exit -1
+        ;;[yY] )
+            git add .
+            exit 0
+        ;;'' )
+            # You might have hit return or space
+        ;;
+    esac
+done
+
+echo $'\012'"Action: '$ACTION'"
+
+tx
+sync

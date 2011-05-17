@@ -1,4 +1,6 @@
-( function() { return { Database : function( path ) {
+( function() {
+    console.log( 'db' )
+    return { Database : function( path ) {
     var EmbeddedGraphDatabase = org.neo4j.kernel.EmbeddedGraphDatabase
     var DynamicRelationshipType = org.neo4j.graphdb.DynamicRelationshipType
     var Traverser = org.neo4j.graphdb.Traverser
@@ -24,6 +26,9 @@
             } },
             prop : function() {
                 if( arguments.length == 1 ) {
+                    if( ! node.hasProperty.apply( node, arguments ) ) {
+                        return undefined
+                    }
                     return node.getProperty.apply( node, arguments )
                 }
                 return node.setProperty.apply( node, arguments )

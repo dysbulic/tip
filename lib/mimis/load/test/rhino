@@ -1,20 +1,12 @@
 //!/bin/js
 
 ( function() {
-    var lib = '.../lib/mimis/js'
-    
-    for( prop in environment ) {
-        print( prop + ' : ' + environment[ prop ] )
-    }
-    return
+    print( readFile( 'eson' ) )
 
-    if( environment.OSTYPE == 'cygwin' ) {
-        lib = runCommand( 'cygpath', '-w', lib )
-    }
-    
-    print( lib )
-    
-    //load( lib )
-    
-    //console.log( mimis.load( eson ) )
+    load( ( typeof environment !== 'undefined'
+            && environment[ 'os.emulator' ] == 'cygwin' )
+          ? 'C:\\Program Files\\Mimis\\js'
+          : '.../lib/mimis/js' )
+    console.log( '!' )
+    console.log( mimis.load( 'eson' ) )
 } )()

@@ -20,6 +20,7 @@
     function cell( cells ) {
         var cell = cells.next()
         function val() {
+            //console.log( 'xls.cell.val' )
             switch ( cell.getCellType() ) {
             case XSSFCell.CELL_TYPE_NUMERIC:
                 return cell.getNumericCellValue()
@@ -31,7 +32,10 @@
         }
         return {
             valueOf : val,
-            toString : function() { return val().toString() },
+            toString : function() {
+                //console.log( 'xls.cell.toString' )
+                return val().toString()
+            },
         }
     }
   

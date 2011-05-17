@@ -1,0 +1,29 @@
+( function() {
+    var File = java.io.File
+    var FileInputStream = java.io.FileInputStream
+    var Reader = java.io.Reader
+    var BufferedReader = java.io.BufferedReader
+    var InputStreamReader = java.io.InputStreamReader
+    var StringBuffer = java.lang.StringBuffer
+    
+    return function toString( file ) {
+        var stream = new FileInputStream( file )
+        try {
+            var charset =
+                java.nio.charset.Charset.availableCharsets().get( 'UTF-8' )
+            var reader = new BufferedReader(
+                new InputStreamReader( stream, charset )
+            )
+            var builder = new StringBuffer()
+            var buffer = new Array( 8192 )
+            var read
+            while( ( read = reader.read( buffer, 0, buffer.length ) ) > 0 ) {
+                builder.append( buffer, 0, read )
+            }
+            var ret = builder.toString()
+            return ret
+        } finally {
+            stream.close()
+        }
+    }
+} )()
