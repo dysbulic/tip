@@ -7,15 +7,11 @@
         'Medicine',
         'Pediatrics',
         function( parent, db ) {
-            db.exec(
-	        'INSERT INTO ${db.table.score} ( competency_id, score, student_id )'
-		    + ' SELECT ${parent.id}, grade_equivalent, student_id'
-		    + ' FROM student_course_details'
-		    + " WHERE course_master_title = 'Clinical Foundations of Medicine'",
-                {
-                    db : db,
-                    parent : parent,
-                } )
+            db.exec( mimis.load( 'exam/scores/sql' ),
+                     {
+                         db : db,
+                         parent : parent,
+                     } )
         }
     ],
     'Pre-Clinical Course Performance' : [ {
@@ -46,31 +42,30 @@
     'Genes to Society III' : [
         'Cardiovascular',
         'Respiratory',
-        'Renal'
+        'Renal',
     ],
     'Genes to Society IV' : [
         'GI Liver',
         'Endocrine',
         'Reproductive',
-        'Musculoskeletal'
+        'Musculoskeletal',
     ],
     'Comprehensive Basic Science Exam' : [
-        'Comprehensive Basic Science'
+        'Comprehensive Basic Science',
     ],
     'Clinical Skills Performance' : {
         'Clinical Foundations of Medicine' : function( parent, db ) {
-            db.exec(
-	        'INSERT INTO ${db.table.score} ( competency_id, score, student_id )'
-		    + ' SELECT ${parent.id}, grade_equivalent, student_id'
-		    + ' FROM student_course_details'
-		    + " WHERE course_master_title = 'Clinical Foundations of Medicine'",
+/*
+            db.exec( mimis.load( '' ),
                 {
                     db : db,
                     parent : parent,
                 } )
+*/
         }
     },
     'Clerkship Performance' : function( parent, db ) {
+/*
         db.query(
             ' SELECT student_ref_course_id as id, course_master_title as title'
             " FROM student_ref_course WHERE course_type = 'core clerkship'"
@@ -79,13 +74,14 @@
             parent.addChild( node )
             db.exec(
                 'INSERT INTO ${db.table.score} ( competency_id, score, student_id )'
-                    + ' SELECT ${result.id}, grade_equivalent, student_id'
+                    + ' SELECT ${node.id}, grade_equivalent, student_id'
                     + ' FROM student_course_details'
-                    + " WHERE course_master_title = '${result.title}'",
+                    + " WHERE course_master_title = '${node.title}'",
                 {
-                    result : result,
                     db : db,
+                    node : node,
                 } )
         } )
+*/
     },
 }
