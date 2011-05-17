@@ -1,0 +1,87 @@
+{
+    'Core Clerkship Shelf Exam Performance' : [
+        'Neurology',
+        'Psychiatry',
+        'Gynecology/Obstetrics',
+        'Surgery',
+        'Medicine',
+        'Pediatrics',
+        function( parent, db ) {
+            db.exec( mimis.load( '.../work/sord/class/≥/2013/exam/scores/sql' ),
+                     {
+                         db : db,
+                         parent : parent,
+                     } )
+        }
+    ],
+    'Pre-Clinical Course Performance' : [ {
+        'Scientific Foundations of Medicine' : [
+ 	    'Macromolecules',
+            'Cell Physiology',
+            'Metabolism',
+            'Genetics',
+            'Pharmacology',
+        ],
+    } ],
+    'Genes to Society I' : [
+        'Immunology I',
+        'Microbiology/Infectious Disease',
+        'Immunology II',
+        'Hematology/Oncology',
+    ],
+    'Genes to Society II' : [
+        'Brain, Mind, & Behavior',
+        {
+	    'Nervous System and Special Senses' : [
+                'Neuroanatomy',
+                'NSS: Exam 2',
+                'Neuroscience',
+            ],
+        }
+    ],
+    'Genes to Society III' : [
+        'Cardiovascular',
+        'Respiratory',
+        'Renal',
+    ],
+    'Genes to Society IV' : [
+        'GI Liver',
+        'Endocrine',
+        'Reproductive',
+        'Musculoskeletal',
+    ],
+    'Comprehensive Basic Science Exam' : [
+        'Comprehensive Basic Science',
+    ],
+    'Clinical Skills Performance' : {
+        'Clinical Foundations of Medicine' : function( parent, db ) {
+/*
+            db.exec( mimis.load( '' ),
+                {
+                    db : db,
+                    parent : parent,
+                } )
+*/
+        }
+    },
+    'Clerkship Performance' : function( parent, db ) {
+/*
+        db.query(
+            ' SELECT student_ref_course_id as id, course_master_title as title'
+            " FROM student_ref_course WHERE course_type = 'core clerkship'"
+        ).each( function( result ) {
+            var node = db.addNode( result.title )
+            parent.addChild( node )
+            db.exec(
+                'INSERT INTO ${db.table.score} ( competency_id, score, student_id )'
+                    + ' SELECT ${node.id}, grade_equivalent, student_id'
+                    + ' FROM student_course_details'
+                    + " WHERE course_master_title = '${node.title}'",
+                {
+                    db : db,
+                    node : node,
+                } )
+        } )
+*/
+    },
+}

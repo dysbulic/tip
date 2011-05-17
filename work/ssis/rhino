@@ -1,30 +1,24 @@
 //!/bin/js
 
-print( '.../work/ssis/rhino' )
+print( '►.../work/ssis/rhino' )
 
 // Symlinks don't work in the m$ jvm
-if( typeof environment !== 'undefined'
-    && environment[ 'os.emulator' ] == 'cygwin' ) {
+if( typeof environment !== 'undefined' && environment[ 'os.emulator' ] == 'cygwin' ) {
     load( 'C:\\Program Files\\Mimis\\js' )
 }
 
-print( '!' )
-
 load( '.../lib/mimis/js' )
-
-print( '!' )
 
 ;
 ( function() {
-    var neo4j = mimis.load( '.../lib/mimis/neo4j/mimis' )
-    print( neo4j )
-    var db = new neo4j.Database( 'neo4j/instance/' )
-
     try {
         var Connection = java.sql.Connection
         var server = mimis.load( '.../work/ssis/server/mimis' )
         
+        print( 'typeof server:' + typeof server )
+
         var DriverManager = java.sql.DriverManager
+        var SQLServerDriver = com.microsoft.sqlserver.jdbc.SQLServerDriver
         
         java.lang.Class.forName( 'com.microsoft.sqlserver.jdbc.SQLServerDriver' ).newInstance()
         
@@ -43,7 +37,19 @@ print( '!' )
             var cats = meta.getCatalogs()
             console.log( 'Avalilable Catalogs:' )
             while( cats.next() ) {
-                console.log( "\tCatalog: "+ cats.getString( 1 ) )
+                var cat = cats.getString( 1 )
+                console.log( "\t" + cat )
+                try {
+                    var tables = meta.getTables( cat, null, null, null )
+                    while( tables.next() ) {
+                        var table = tables.getString( 3 )
+                        
+                        console.log( "\t\t" + table )
+                    }
+                    tables.close()
+                } catch( ex ) {
+                    console.error( ex )
+                }
             } 
             cats.close()
             con.close()
@@ -51,4 +57,12 @@ print( '!' )
     } catch ( ioe ) {
         console.log( ioe )
     }
+
+    return
+
+    var neo4j = mimis.load( '.../lib/mimis/neo4j/mimis' )
+    print( neo4j )
+    var db = new neo4j.Database( 'neo4j/instance/' )
 } )()
+
+print( '◄.../work/ssis/rhino' )
