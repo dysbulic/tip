@@ -67,7 +67,10 @@ load( '.../lib/mimis/js' )
                 } else if( typeof cur === 'undefined' ) {
                     console.log( 'undef' )
                 } else if( $.isFunction( cur ) ) {
-                    cur( parent, con           )
+                    var db = {
+                        get stmt() { return con }
+                    }
+                    cur( parent, db )
                 } else if( typeof cur.each !== 'undefined' ) {
                     cur.each( function( elem ) {
                         storeTree( elem, parent )

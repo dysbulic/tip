@@ -1,78 +1,91 @@
 {
- 	'Core Clerkship Shelf Exam Performance' : [
-            'Neurology', 'Psychiatry', 'Gynecology/Obstetrics',
-            'Surgery', 'Medicine', 'Pediatrics',
-            function( parent, con ) {
-                var stmt = con.createStatement()
-                stmt.executeUpdate(
-	            'INSERT INTO rpt_competency_ge2013_t_score ( competency_id, score, student_id )'
-		        + ' SELECT ' + parent.id + ', grade_equivalent, student_id'
-		        + ' FROM student_course_details d'
-		        + " WHERE course_master_title = 'Clinical Foundations of Medicine'"
-                )
-            }
+    'Core Clerkship Shelf Exam Performance' : [
+        'Neurology',
+        'Psychiatry',
+        'Gynecology/Obstetrics',
+        'Surgery',
+        'Medicine',
+        'Pediatrics',
+        function( parent, db ) {
+            db.exec(
+	        'INSERT INTO ${db.table.score} ( competency_id, score, student_id )'
+		    + ' SELECT ${parent.id}, grade_equivalent, student_id'
+		    + ' FROM student_course_details'
+		    + " WHERE course_master_title = 'Clinical Foundations of Medicine'",
+                {
+                    db : db,
+                    parent : parent,
+                } )
+        }
+    ],
+    'Pre-Clinical Course Performance' : [ {
+        'Scientific Foundations of Medicine' : [
+ 	    'Macromolecules',
+            'Cell Physiology',
+            'Metabolism',
+            'Genetics',
+            'Pharmacology',
         ],
-        'Pre-Clinical Course Performance' : [ {
-            'Scientific Foundations of Medicine' : [
- 	        'Macromolecules', 'Cell Physiology', 'Metabolism',
-                'Genetics', 'Pharmacology'
+    } ],
+    'Genes to Society I' : [
+        'Immunology I',
+        'Microbiology/Infectious Disease',
+        'Immunology II',
+        'Hematology/Oncology',
+    ],
+    'Genes to Society II' : [
+        'Brain, Mind, & Behavior',
+        {
+	    'Nervous System and Special Senses' : [
+                'Neuroanatomy',
+                'NSS: Exam 2',
+                'Neuroscience',
             ],
-        } ],
-        'Genes to Society I' : [
-            'Immunology I', 'Microbiology/Infectious Disease',
-            'Immunology II', 'Hematology/Oncology'
-        ],
-        'Genes to Society II' : [
-            'Brain, Mind, & Behavior',
-            {
-	        'Nervous System and Special Senses' : [
-                    'Neuroanatomy', 'NSS: Exam 2', 'Neuroscience'
-                ],
-            }
-        ],
-        'Genes to Society III' : [
-            'Cardiovascular', 'Respiratory', 'Renal'
-        ],
-        'Genes to Society IV' : [
-            'GI Liver', 'Endocrine', 'Reproductive', 'Musculoskeletal'
-        ],
-        'Comprehensive Basic Science Exam' : [
-            'Comprehensive Basic Science'
-        ],
-        'Clinical Skills Performance' : {
-            'Clinical Foundations of Medicine' : function( parent, con ) {
-                var stmt = con.createStatement()
-                stmt.executeUpdate(
-	            'INSERT INTO rpt_competency_ge2013_t_score ( competency_id, score, student_id )'
-		        + ' SELECT ' + parent.id + ', grade_equivalent, student_id'
-		        + ' FROM student_course_details d'
-		        + " WHERE course_master_title = 'Clinical Foundations of Medicine'"
-                )
-            }
-        },
-        'Clerkship Performance' : function( parent, db ) {
-            db.query(
-                ' SELECT student_ref_course_id as id, course_master_title as title'
-                " FROM student_ref_course WHERE course_type = 'core clerkship'"
-            ).each( function( result ) {
-                var node = db.addNode( result.title )
-                parent.addChild( node )
-                var p = con.prepareCall( "INSERT INTO ${tree_map} (node_id, child_id) VALUES (?,?)" )
-                pIns.setString( 1, name )
-
-                stmt.executeUpdate(
-                    'INSERT INTO rpt_competency_ge2013_t_node] ( name ) VALUES ( @title )
-            SET @CurrentID = SCOPE_IDENTITY()
-            INSERT INTO [dbo].[rpt_competency_ge2013_tree_map] ( node_id, child_id )
-            VALUES ( @ParentID, @CurrentID )
-            INSERT INTO [dbo].[rpt_competency_ge2013_score] ( competency_id, score, student_id )
-            SELECT @CurrentID, grade_equivalent, student_id
-            FROM [dbo].[student_course_details] d
-            --WHERE course_id = @course_id
-            WHERE course_master_title = @title
-            FETCH next FROM c INTO @course_id, @title
-            END
-            CLOSE c
-            DEALLOCATE c
-        },
+        }
+    ],
+    'Genes to Society III' : [
+        'Cardiovascular',
+        'Respiratory',
+        'Renal'
+    ],
+    'Genes to Society IV' : [
+        'GI Liver',
+        'Endocrine',
+        'Reproductive',
+        'Musculoskeletal'
+    ],
+    'Comprehensive Basic Science Exam' : [
+        'Comprehensive Basic Science'
+    ],
+    'Clinical Skills Performance' : {
+        'Clinical Foundations of Medicine' : function( parent, db ) {
+            db.exec(
+	        'INSERT INTO ${db.table.score} ( competency_id, score, student_id )'
+		    + ' SELECT ${parent.id}, grade_equivalent, student_id'
+		    + ' FROM student_course_details'
+		    + " WHERE course_master_title = 'Clinical Foundations of Medicine'",
+                {
+                    db : db,
+                    parent : parent,
+                } )
+        }
+    },
+    'Clerkship Performance' : function( parent, db ) {
+        db.query(
+            ' SELECT student_ref_course_id as id, course_master_title as title'
+            " FROM student_ref_course WHERE course_type = 'core clerkship'"
+        ).each( function( result ) {
+            var node = db.addNode( result.title )
+            parent.addChild( node )
+            db.exec(
+                'INSERT INTO ${db.table.score} ( competency_id, score, student_id )'
+                    + ' SELECT ${result.id}, grade_equivalent, student_id'
+                    + ' FROM student_course_details'
+                    + " WHERE course_master_title = '${result.title}'",
+                {
+                    result : result,
+                    db : db,
+                } )
+        } )
+    },
 }
