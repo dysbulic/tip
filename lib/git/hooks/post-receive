@@ -18,10 +18,12 @@ home=$(echo ~)
 local="${current#${home}/}"
 lib="repo"
 root="${local#${lib}/}"
-type="git"
+type="git"OA
 dir="${root%/${type}}"
 
-pushd ~/"$dir"
+exit -1
+
+pushd ~/...
 pwd
 env -i git pull origin master
 env -i git remote | grep -q '^github$' && env -i git push github master
