@@ -1,8 +1,10 @@
 ( function() {
+    mimis.load( '.../lib/xregexp/js' )
+
     return {
         get stmt() { return con },
         exec : function( sql, env ) {
-            console.log( 'db.exec' )
+            console.log( 'db.exec:' + sql )
             return {
                 each : function( f ) {
                 }
