@@ -86,7 +86,19 @@ function ticker_module_message() {
  * @param array $edit only for "save" operation
  */
 function ticker_module_block( $op = 'list', $delta = 0, $edit = array() ) {  
+  $block = array();
 
+  if( $op == 'list' ) {
+    $block[0]['info'] = t( 'Ticker' );
+  } else if( $op == 'view' ) {
+    $today = getdate();
+
+    // midnight 1 week ago
+    $start_time = mktime(0, 0, 0,
+                         $today['mon'], ( $today['mday'] - 7 ), $today['year'] );
+    $end_time = $start_time + 60 * 60 * 24;
+  }
+  return $block;
 }
 
 /**
