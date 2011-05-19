@@ -1,32 +1,34 @@
 <?php
-function ticker_install() {
-  drupal_install_schema( 'ticker' );
-  db_query("DELETE FROM {cache}");
+function ticker_module_install() {
+  drupal_install_schema( 'ticker_module' );
+  db_query( 'DELETE FROM {cache}' );
 }
 
-function ticker_uninstall() {
-  drupal_uninstall_schema( 'ticker');
+function ticker_module_uninstall() {
+  drupal_uninstall_schema( 'ticker_module' );
 }
 
-function ticker_schema() {
-  $schema['ticker'] = array
+function ticker_module_schema() {
+  $schema['ticker_module'] = array
     ( 'fields' => array
       (	'id' => array
-	( 'type' => 'serial',
-	  'size' => 'big',
-	  'unsigned' => TRUE,
-	  'not null' => TRUE, 
-	  'description'=> "Log ID" ),
+	(
+         'type' => 'serial',
+         'size' => 'big',
+         'unsigned' => TRUE,
+         'not null' => TRUE, 
+         'description' => 'Log ID' ),
 	'timestamp' => array
-	( 'type' => 'int',
-	  'not null' => TRUE,
-	  'default' => 0, 
-	  'description'=> "Timestamp" ),
+	(
+         'type' => 'int',
+         'not null' => TRUE,
+         'default' => 0, 
+         'description' => 'Timestamp' ),
 	'message' => array
 	( 'type' => 'text',
 	  'not null' => FALSE, 
-	  'description'=> "Log messages." ),
-	// NOTE:  On MySQL, text fields cannot have default values.
+	  'description' => 'Log messages.' ),
+	// On MySQL, text fields cannot have default values.
         ),
       'primary key' => array( 'id' )
       // Don't put a comma after primary key definition,
