@@ -1,0 +1,39 @@
+<?php
+function ticker_module_install() {
+  drupal_install_schema( 'ticker_module' );
+  db_query( 'DELETE FROM {cache}' );
+}
+
+function ticker_module_uninstall() {
+  drupal_uninstall_schema( 'ticker_module' );
+}
+
+function ticker_module_schema() {
+  $schema['ticker_module'] = array
+    ( 'fields' => array
+      (	'id' => array
+	(
+         'type' => 'serial',
+         'size' => 'big',
+         'unsigned' => TRUE,
+         'not null' => TRUE, 
+         'description' => 'Log ID' ),
+	'timestamp' => array
+	(
+         'type' => 'int',
+         'not null' => TRUE,
+         'default' => 0, 
+         'description' => 'Timestamp' ),
+	'message' => array
+	( 'type' => 'text',
+	  'not null' => FALSE, 
+	  'description' => 'Log messages.' ),
+	// On MySQL, text fields cannot have default values.
+        ),
+      'primary key' => array( 'id' )
+      // Don't put a comma after primary key definition,
+      //  since doing so will cause database errors.
+    );
+    
+    return $schema;
+}
