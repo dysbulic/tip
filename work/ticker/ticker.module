@@ -6,10 +6,10 @@
 function ticker_help( $path ) {
   switch( $path ) {
   case 'admin/help#ticker':
-    $output = '<p>'.  t("ticker is a simple module to test functions and pages in Drupal") .'</p>';
+  case 'admin/help':
+    $output = file_get_contents( dirname( __FILE__ ) . '/admin/help/php' );
     break;
   }
-  $output = '<p>'.  t("ticker is a simple module to test functions and pages in Drupal") .'</p>';
   return $output;
 }
 
