@@ -1,36 +1,39 @@
-// Converts traditional drupal form elements to table
+// Shows 
 
 $( function() {
     jQuery.expr[':'].focus = jQuery.expr[':'].focus || function( elem ) {
         return elem === document.activeElement && ( elem.type || elem.href )
     }
 
-    console.log( 'hi' )
     $('#ticker-message-form .inputlist input').each( function() {
         var $input = $(this)
         var init = $input.val()
-        var $exe = $('<div/>')
+        var $exe = $('<div/>').css( { border: '2px solid transparent' } )
         $input.after( $exe )
-        $exe.html( init )
 
-        function showExe() {
-            $input.hide()
-            $exe.show()
+        var set = {
+            hover : function() {
+                $exe.hide()
+                $input.show()
+            },
+            leave : function() {
+                if( ! $input.is( ':focus' ) && $input.val() != '' ) {
+                    $exe.html( $input.val() )
+                    $input.hide()
+                    $exe.show()
+                    return true
+                }
+            },
         }
-        showExe()
-        function showInput() {
-            $exe.hide()
-            $input.show()
-        }
+        set.leave()
 
-        $exe.bind( 'mouseover', showInput )
-        $input.bind( 'mouseout',
-                     function() {
-                         console.log( 't' )
-                         if( ! $(this).is( ':focus' ) ) {
-                             showExe()
-                         }
-                     } )
-        $input.blur( showExe )
+        $exe.bind( 'mouseover', set.hover )
+        $input.bind( 'mouseout', set.leave )
+        $input.blur( set.leave )
+    } )
+    $('#ticker-message-form .inputlist').mouseover( function( evt ) {
+        if( evt.fromElement instanceof HTMLInputElement ) {
+            $(evt.fromElement).trigger( 'mouseout' ) // Not firing
+        }
     } )
 } )

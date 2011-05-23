@@ -39,18 +39,9 @@ function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {
     drupal_add_js( drupal_get_path( 'module', 'ticker' ) . '/type/anim/jquery');
 
     $block['content'] = '';
-    $today = getdate();
-
-    // midnight a week ago
-    $start_time = mktime( 0, 0, 0,
-                          $today['mon'], ( $today['mday'] - 7 ), $today['year'] );
-    // + 1 day
-    $end_time = $start_time + 60 * 60 * 24;
-
     $query = "SELECT id, message FROM {ticker}";
     
-    //$query_result =  db_query( $query, $start_time, $end_time );
-    $query_result =  db_query( $query );
+    $query_result = db_query( $query );
     while( $row = db_fetch_object( $query_result ) ) {
       if( $block['content'] == '' ) {   
         $block['content'] .= '<ul>';
@@ -61,7 +52,7 @@ function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {
     
     $block['subject'] = 'Ticker';
     
-    if( $block_content == '' ) {   
+    if( $block['content'] === '' ) {   
       $block['content'] = 'No Content';
     } else {
       $block['content'] .= '</ul>';
