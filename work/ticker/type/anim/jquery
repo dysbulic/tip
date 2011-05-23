@@ -1,0 +1,51 @@
+$( function () {
+    var items = new Array()
+    $('.block-ticker ul').children().hide().each( function() {
+	items.push( $(this).html() )
+    } )
+    var $display
+    $('.block-ticker').append( $display = $('<div/>') )
+    var i = 0
+    rotateTicker()
+
+    var text, count
+    function rotateTicker() {
+	if( i === items.length ) {
+	    i = 0
+	}
+        text = items[i]
+	count = 0
+	typetext()
+	setTimeout( rotateTicker, 5000 )
+	i++
+    }
+
+    var inTag = false
+    function typetext() {	
+	var curChar = text.substr( count, 1 )
+	if( curChar === '<' ) {
+            inTag = true
+        }
+	if( curChar === '>' ) {
+            inTag = false
+        }
+
+        var out = text.substr( 0, count++ )
+        if( out.length === 0 ) {
+            out = '&nbsp;'
+        }
+        $display.html( out )
+	
+        if( count < text.length + 1 ) {
+	    if( inTag ) {
+		typetext()
+	    } else {
+		setTimeout( typetext, 28 )
+	    }
+        } else {
+	    count = 1
+	    text = ''
+	}
+    }
+} )
+
