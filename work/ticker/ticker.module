@@ -7,7 +7,7 @@ function ticker_help( $path ) {
   switch( $path ) {
   case 'admin/help#ticker':
   case 'admin/help':
-    $output = file_get_contents( dirname( __FILE__ ) . '/admin/help/php' );
+    $output = file_get_contents( dirname( __FILE__ ) . '/admin/help/xhtml' );
     break;
   }
   return $output;
@@ -19,6 +19,49 @@ function ticker_help( $path ) {
 function ticker_perm() {
     return array( 'administer ticker',
                   'access ticker content' );
+}
+
+/**
+ * @param string $op = ( 'list' | 'view' | 'save' | 'configure' )
+ * @param integer $idx of block
+ * @param array $edit only for "save" operation
+ */
+function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {  
+  $block = array();
+
+  switch( $op ) {
+  case 'list':
+    $block[0]['info'] = t( 'Ticker' );
+    break;
+  case 'view':
+    $block_content = '';
+    $today = getdate();
+
+    // midnight a week ago
+    $start_time = mktime( 0, 0, 0,
+                          $today['mon'], ( $today['mday'] - 7 ), $today['year'] );
+    // + 1 day
+    $end_time = $start_time + 60 * 60 * 24;
+
+    $query = ( "SELECT nid, title, created" .
+               " FROM {node} WHERE created >= '%d'" .
+               " AND created <= '%d'" );
+
+    $query_result =  db_query( $query, $start_time, $end_time );
+    while( $links = db_fetch_object( $query_result ) ) {
+      $block_content .= l( $links->title, 'node/' . $links->nid ) . '<br />';
+    }
+    
+    $block['subject'] = 'Ticker';
+    
+    if( $block_content == '' ) {   
+      $block['content'] = 'No Content';
+    } else {
+      $block['content'] = $block_content;
+    }
+  }
+
+  return $block;
 }
 
 /**
@@ -79,27 +122,6 @@ function ticker_message() {
     }
     
     return $page_content;
-}
-
-/**
- * @param string $op one of "list", "view", "save" and "configure"
- * @param integer $delta code to identify the block
- * @param array $edit only for "save" operation
- */
-function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {  
-  $block = array();
-
-  if( $op == 'list' ) {
-    $block[0]['info'] = t( 'Ticker' );
-  } else if( $op == 'view' ) {
-    $today = getdate();
-
-    // midnight 1 week ago
-    $start_time = mktime(0, 0, 0,
-                         $today['mon'], ( $today['mday'] - 7 ), $today['year'] );
-    $end_time = $start_time + 60 * 60 * 24;
-  }
-  return $block;
 }
 
 /**
