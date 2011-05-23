@@ -1,0 +1,3 @@
+select a.*, b.display_name, b.description from [dbo].[rpt_competency_2013] a inner join competency_name_mapping b on a.dimension = b.sord_name
+where cohort_year in ( @year ) and [type]= @type and dimension in ( @dimension ) and class = @class
+order by inserted_datetime, display_order
