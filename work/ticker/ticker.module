@@ -32,11 +32,13 @@ function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {
   switch( $op ) {
   case 'list':
     $block[0]['info'] = t( 'Ticker' );
+    $block[0]['cache'] = BLOCK_CACHE_PER_ROLE;
+    $block[0]['cache'] = BLOCK_CACHE_GLOBAL;
     break;
   case 'view':
     drupal_add_js( drupal_get_path( 'module', 'ticker' ) . '/type/anim/jquery');
 
-    $block_content = '';
+    $block['content'] = '';
     $today = getdate();
 
     // midnight a week ago
@@ -45,20 +47,16 @@ function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {
     // + 1 day
     $end_time = $start_time + 60 * 60 * 24;
 
-    $query = ( "SELECT nid, title, created" .
-               " FROM {node} WHERE created >= '%d'" .
-               " AND created <= '%d'" );
-    $query = ( "SELECT id, message" .
-               " FROM {ticker}" );
+    $query = "SELECT id, message FROM {ticker}";
     
     //$query_result =  db_query( $query, $start_time, $end_time );
     $query_result =  db_query( $query );
     while( $row = db_fetch_object( $query_result ) ) {
-      if( $block_content == '' ) {   
-        $block_content .= '<ul>';
+      if( $block['content'] == '' ) {   
+        $block['content'] .= '<ul>';
       }
       //$block_content .= '<li>' . l( $row->message, 'node/' . $row->id ) . '</li>';
-      $block_content .= '<li>' . $row->message . '</li>';
+      $block['content'] .= '<li>' . $row->message . '</li>';
     }
     
     $block['subject'] = 'Ticker';
@@ -66,9 +64,15 @@ function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {
     if( $block_content == '' ) {   
       $block['content'] = 'No Content';
     } else {
-      $block_content .= '</ul>';
-      $block['content'] = $block_content;
+      $block['content'] .= '</ul>';
     }
+    break;
+  case 'configure':
+    // Only one set of settings per block
+    //$block = ticker_message_form();
+    break;
+  case 'save':
+    break;
   }
 
   return $block;
@@ -81,11 +85,11 @@ function ticker_menu() {
     $items = array();
     
     $items['admin/settings/ticker'] = array(
-       'title' => 'Ticker Module',
-       'description' => 'Administer Ticker Module Messages',
-       'page callback' => 'ticker_message',
-       'access arguments' => array( 'administer tinker_module' ),
-       'type' => MENU_NORMAL_ITEM,
+      'title' => 'Ticker Module',
+      'description' => 'Administer Ticker Module Messages',
+      'page callback' => 'ticker_message',
+      'access arguments' => array( 'administer tinker_module' ),
+      'type' => MENU_NORMAL_ITEM,
     );
     
     return $items;
@@ -119,26 +123,34 @@ function ticker_message() {
  * @return array of form data
  */
 function ticker_message_form() {
-  $get_messages = db_query( "SELECT * FROM {ticker} ORDER BY timestamp ASC" );
+  drupal_add_js( drupal_get_path( 'module', 'ticker' ) . '/admin/settings/jquery');
+
+  $default = array(
+    '#type' => 'textarea',
+    '#type' => 'textfield',
+    //'#title' => t('Message'),
+    '#size' => 100,
+    //'#description' => t( 'Enter HTML to add to the rotation' ),
+  );
+  $get_messages = db_query( 'SELECT * FROM {ticker} ORDER BY timestamp ASC' );
   if( $get_messages !== false ) {
+    $form['ticker_messages'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Messages'),
+      '#tree' => TRUE,
+      '#prefix' => '<div class="inputlist">',
+      '#suffix' => '</div>',
+    );
     while( $row = db_fetch_array( $get_messages ) ) { 
-      $form['ticker_message_' . $row['id']] = array(
-        '#type' => 'textarea',
-        '#type' => 'textfield',
-        '#title' => t('Message'),
-        '#size' => 100,
-        '#default_value' => $row['message'],
-        '#description' => t( 'Enter HTML to add to the rotation' ),
-      );
+      $form['ticker_messages']['message_' . $row['id']] =
+        array_merge( $default, array( '#default_value' => $row['message'] ) );
     }
   }
-  $form['ticker_message'] = array(
-    '#type' => 'textfield',
-    '#title' => t('New Message'),
-    '#default_value' => variable_get( 'ticker_message', '' ),
-    '#size' => 100,
-    '#description' => t( 'Enter HTML to add to the rotation' ),
-  );
+  $form['ticker_messages']['new_message'] =
+    array_merge( $default, array(
+      //'#title' => t('New Message'),
+      '#default_value' => variable_get( 'ticker_message', '' ),
+     ) );
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save Messages'),

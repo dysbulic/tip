@@ -6,7 +6,9 @@ $( function () {
     var $display
     $('.block-ticker').append( $display = $('<div/>') )
     var i = 0
-    rotateTicker()
+    if( items.length > 0 ) {
+        rotateTicker()
+    }
 
     var text, count
     function rotateTicker() {
