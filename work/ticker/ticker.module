@@ -46,10 +46,16 @@ function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {
     $query = ( "SELECT nid, title, created" .
                " FROM {node} WHERE created >= '%d'" .
                " AND created <= '%d'" );
-
-    $query_result =  db_query( $query, $start_time, $end_time );
-    while( $links = db_fetch_object( $query_result ) ) {
-      $block_content .= l( $links->title, 'node/' . $links->nid ) . '<br />';
+    $query = ( "SELECT id, message" .
+               " FROM {ticker}" );
+    
+    //$query_result =  db_query( $query, $start_time, $end_time );
+    $query_result =  db_query( $query );
+    while( $row = db_fetch_object( $query_result ) ) {
+      if( $block_content == '' ) {   
+        $block_content .= '<ul>';
+      }
+      $block_content .= '<li>' . l( $row->message, 'node/' . $row->id ) . '</li>';
     }
     
     $block['subject'] = 'Ticker';
@@ -57,6 +63,7 @@ function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {
     if( $block_content == '' ) {   
       $block['content'] = 'No Content';
     } else {
+      $block_content .= '</ul>';
       $block['content'] = $block_content;
     }
   }
@@ -70,14 +77,13 @@ function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {
 function ticker_menu() {
     $items = array();
     
-    $items['admin/settings/ticker'] = array
-      (
+    $items['admin/settings/ticker'] = array(
        'title' => 'Ticker Module',
        'description' => 'Administer Ticker Module Messages',
        'page callback' => 'ticker_message',
        'access arguments' => array( 'administer tinker_module' ),
        'type' => MENU_NORMAL_ITEM,
-       );
+    );
     
     return $items;
 }
@@ -90,11 +96,12 @@ function ticker_message() {
     
     $page_content .= drupal_get_form( 'ticker_message_form' );
     
-    $get_messages = db_query( "SELECT * FROM {ticker_log} ORDER BY timestamp DESC" );
+    $get_messages = db_query( "SELECT * FROM {ticker} ORDER BY timestamp DESC" );
     if( $get_messages !== false ) {
-      $page_content .= '<h2>Test Message Log</h2>';
       $row_count = 1;
       $id = 0;
+      $page_content .= '<h2>Ticker Messages</h2>';
+
       while( $row = db_fetch_array( $get_messages ) ) {
         $page_content .= '<p>';
         foreach( $row as $key => $value ) {
@@ -110,7 +117,7 @@ function ticker_message() {
               eval( $value );
               drupal_set_message( t( "Executed code:\n" ).strval( $value ) );
               // Only eval once
-              db_query( "UPDATE {ticker_log} SET message = '%s' WHERE id = %d", $value, $id );
+              db_query( "UPDATE {ticker} SET message = '%s' WHERE id = %d", $value, $id );
             }
             $page_content .= "<br/>\n";
           }
@@ -128,23 +135,40 @@ function ticker_message() {
  * @return array of form data
  */
 function ticker_message_form() {
-  $form['ticker_message'] = array
-    (
-     '#type' => 'textarea',
-     '#title' => t('Message'),
-     '#default_value' => variable_get( 'ticker_message', 'Default Message' ),
-     '#cols' => 50,
-     '#rows' => 5,
-     '#description' => t( 'Enter a test message.  Begin the message with "eval:" to execute PHPcode.' ),
-     );
+    $get_messages = db_query( "SELECT * FROM {ticker} ORDER BY timestamp DESC" );
+    if( $get_messages !== false ) {
+      while( $row = db_fetch_array( $get_messages ) ) { 
+        $val = ''
+        foreach( $row as $key => $value ) {
+          $val .= $key;
+        }
+        $form['ticker_message_' + $row->id] = array(
+          '#type' => 'textarea',
+          '#type' => 'textfield',
+          '#title' => t('Message'),
+          '#default_value' => $val . 'w',
+          '#cols' => 50,
+          '#rows' => 5,
+          '#description' => t( 'Enter a test message.  Begin the message with "eval:" to execute PHPcode.' ),
+        );
+      }
+    } else {
+        $form['ticker_message'] = array(
+          '#type' => 'textarea',
+          '#type' => 'textfield',
+          '#title' => t('Message'),
+          '#default_value' => variable_get( 'ticker_message', 'Default Message' ),
+          '#cols' => 50,
+          '#rows' => 5,
+          '#description' => t( 'Enter a test message.  Begin the message with "eval:" to execute PHPcode.' ),
+        );
+    }
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save Message'),
+  );
     
-    $form['submit'] = array
-      (
-       '#type' => 'submit',
-       '#value' => t('Save Message'),
-       );
-    
-    return $form;
+  return $form;
 }
 
 /**
@@ -165,11 +189,11 @@ function ticker_message_form_validate( $form, &$form_state ) {
  * @param form_state an array that contains user data
  */
 function ticker_message_form_submit( $form, &$form_state ) {
-  $test_message = $form_state['values']['ticker_message'];
-  $exe_query = db_query( "INSERT INTO {test_module_log} (timestamp, message) VALUES(%d, '%s')",
-                         time(), $test_message );
+  $message = $form_state['values']['ticker_message'];
+  $exe_query = db_query( "INSERT INTO {ticker} ( timestamp, message ) VALUES( %d, '%s' )",
+                         time(), $message );
    
-  $last_id = db_last_insert_id( '{ticker_log}','id' );
+  $last_id = db_last_insert_id( '{ticker}','id' );
   if( $exe_query !== false ) {
     $msg = 'Added message to log: %id';
     $vars = array( '%id' => $last_id );
@@ -178,7 +202,7 @@ function ticker_message_form_submit( $form, &$form_state ) {
   } else {
     $msg = 'Could not add message to log: ';
     $vars = array();
-    watchdog( 'test_module', $msg, $vars, WATCHDOG_ERROR );
+    watchdog( 'ticker', $msg, $vars, WATCHDOG_ERROR );
     drupal_set_message( t( 'Could not add message to log.' ) );
   }
   
