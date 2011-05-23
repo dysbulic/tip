@@ -1,8 +1,10 @@
 $( function () {
     var items = new Array()
-    $(".block-ticker ul").children().each( function() {
+    $('.block-ticker ul').children().hide().each( function() {
 	items.push( $(this).html() )
     } )
+    var $display
+    $('.block-ticker').append( $display = $('<div/>') )
     var i = 0
     rotateTicker()
 
@@ -28,7 +30,11 @@ $( function () {
             inTag = false
         }
 
-        $('.block-ticker').html( text.substr( 0, count++ ) )
+        var out = text.substr( 0, count++ )
+        if( out.length === 0 ) {
+            out = '&nbsp;'
+        }
+        $display.html( out )
 	
         if( count < text.length + 1 ) {
 	    if( inTag ) {

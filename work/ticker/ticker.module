@@ -57,7 +57,8 @@ function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {
       if( $block_content == '' ) {   
         $block_content .= '<ul>';
       }
-      $block_content .= '<li>' . l( $row->message, 'node/' . $row->id ) . '</li>';
+      //$block_content .= '<li>' . l( $row->message, 'node/' . $row->id ) . '</li>';
+      $block_content .= '<li>' . $row->message . '</li>';
     }
     
     $block['subject'] = 'Ticker';
@@ -125,6 +126,7 @@ function ticker_message_form() {
         '#type' => 'textarea',
         '#type' => 'textfield',
         '#title' => t('Message'),
+        '#size' => 100,
         '#default_value' => $row['message'],
         '#description' => t( 'Enter HTML to add to the rotation' ),
       );
@@ -134,9 +136,8 @@ function ticker_message_form() {
     '#type' => 'textfield',
     '#title' => t('New Message'),
     '#default_value' => variable_get( 'ticker_message', '' ),
-    '#cols' => 50,
-    '#rows' => 5,
-    '#description' => t( 'Enter a test message.  Begin the message with "eval:" to execute PHPcode.' ),
+    '#size' => 100,
+    '#description' => t( 'Enter HTML to add to the rotation' ),
   );
   $form['submit'] = array(
     '#type' => 'submit',
