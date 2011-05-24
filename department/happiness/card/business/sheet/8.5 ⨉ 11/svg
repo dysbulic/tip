@@ -1,43 +1,44 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- 8.5" = 21.59cm
-     11"  = 27.94cm
- -->
 <svg xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="11in" height="8.5in"
-     viewBox="0 0 1100 850"
-     id="business_cards"
-     version="1.0">
+     viewBox="0 0 1100 850">
+  <title>Sheet of Business Cards</title>
   <defs>
+    <script xlink:href='.../lib/mimis/js' type='application/javascript'/>
+    <style type="text/css" xlink:href='.../font/css'/>
     <style type="text/css">
       line {
         fill: none; stroke: black; stroke-width: 1.8;
-        stroke-linecap: butt; stroke-dasharray:7.2, 3.6;
+        stroke-linecap: butt; stroke-dasharray: 7.2, 3.6;
       }
       rect {
-        fill:none; stroke: black; stroke-width: 2.5;
-        stroke-linecap: round; stroke-linejoin: round; stroke-dasharray:5, 2.5, 1.25, 2.5;
+        fill: none; stroke: black; stroke-width: 2.5;
+        stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 5, 2.5, 1.25, 2.5;
       }
-      text { text-align: center; text-anchor: middle;    }
-      #email { font-size: 20px; font-family: Benjamin Franklin; }
+      text { text-align: center; text-anchor: middle; }
+      #email { font-size: 20px; font-family: 'Benjamin Franklin'; }
       #name { font-size: 34px; font-weight: bold; font-family: fancyPens; }
     </style>
     <g id="front">
-      <line x1="40" y1="120" x2="310" y2="120"/>
       <rect y="5" x="5" height="190" width="340" />
-      <text id="email" y="170" x="175">will@technoanarchy.org</text>
+      <line x1="40" y1="120" x2="310" y2="120"/>
+      <text id="email" y="170" x="175">will@dhappy.org</text>
       <text id="name" y="60" x="175">William Holcomb</text>
     </g>
   </defs>
-  <g id="fronts_col1">
-    <use x="25" y="25" xlink:href="#front" />
-    <use x="25" y="225" xlink:href="#front" />
-    <use x="25" y="425" xlink:href="#front" />
-    <use x="25" y="625" xlink:href="#front" />
-  </g>
-  <use x="350" y="0" xlink:href="#fronts_col1" />
-  <use x="700" y="0" xlink:href="#fronts_col1" />
-  <g id="backs_col1">
-    <use x="350" y="0" xlink:href="#fronts_col1" />
-  </g>
+<!--
+  <pageSet>
+    <page>
+-->
+      <g id="fronts_col">
+        <use x="0" y="0" xlink:href="#front" />
+        <use x="0" y="200" xlink:href="#front" />
+        <use x="0" y="400" xlink:href="#front" />
+        <use x="0" y="600" xlink:href="#front" />
+      </g>
+      <use x="350" y="0" xlink:href="#fronts_col" />
+      <use x="700" y="0" xlink:href="#fronts_col" />
+<!--
+    </page>
+  </pageSet>
+-->
 </svg>
