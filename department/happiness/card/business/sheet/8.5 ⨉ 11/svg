@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg"
-     xmlns:xlink="http://www.w3.org/1999/xlink"
-     viewBox="0 0 1100 850">
+<svg xmlns='http://www.w3.org/2000/svg'
+     xmlns:xlink='http://www.w3.org/1999/xlink'
+     viewBox='0 0 850 1100'>
   <title>Sheet of Business Cards</title>
   <defs>
     <script xlink:href='.../lib/mimis/js' type='application/javascript'/>
@@ -18,27 +18,40 @@
       #email { font-size: 20px; font-family: 'Benjamin Franklin'; }
       #name { font-size: 34px; font-weight: bold; font-family: fancyPens; }
     </style>
+    <g id='front'>
+      <rect y='5' x='5' height='190' width='340' />
+      <line x1='40' y1='120' x2='310' y2='120'/>
+      <text id='email' y='170' x='175'>will@dhappy.org</text>
+      <text id='name' y='60' x='175'>William Holcomb</text>
+    </g>
   </defs>
 <!--
   <pageSet>
--->
     <page>
-    <g id="front">
-      <rect y="5" x="5" height="190" width="340" />
-      <line x1="40" y1="120" x2="310" y2="120"/>
-      <text id="email" y="170" x="175">will@dhappy.org</text>
-      <text id="name" y="60" x="175">William Holcomb</text>
-    </g>
-      <g id="fronts_col">
-        <use x="0" y="0" xlink:href="#front" />
-        <use x="0" y="200" xlink:href="#front" />
-        <use x="0" y="400" xlink:href="#front" />
-        <use x="0" y="600" xlink:href="#front" />
+-->
+<rect x='0' y='0' width='850' height='1100'/>
+<g transform='rotate( 0 425,550 )'>
+      <g id='fronts_col'>
+        <!-- Page Height = p = 8.5'
+           - Card Height = c = 2'
+           - Space Between n Cards = ( p - ( c * n ) ) / ( n - 1 )
+           - ( 8.5' - ( 2' * 4 ) ) / ( 4 - 1 ) = .5' / 3 ≅ 1.6'
+          -->
+        <use x='0' y='0' xlink:href='#front' />
+        <use x='0' y='216' xlink:href='#front' />
+        <use x='0' y='432' xlink:href='#front' />
+        <use x='0' y='648' xlink:href='#front' />
       </g>
-      <use x="350" y="0" xlink:href="#fronts_col" />
-      <use x="700" y="0" xlink:href="#fronts_col" />
-    </page>
+      <!-- Page Width = p = 11'
+         - Card Width = c = 3.5'
+         - Space Between n Cards = ( p - ( c * n ) ) / ( n - 1 )
+         - ( 11' - ( 3.5' * 3 ) ) / ( 3 - 1 ) = .5' / 2 = .25'
+        -->
+      <use x='375' y='0' xlink:href='#fronts_col' />
+      <use x='750' y='0' xlink:href='#fronts_col' />
+</g>
 <!--
+    </page>
   </pageSet>
 -->
 </svg>
