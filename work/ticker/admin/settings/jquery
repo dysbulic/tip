@@ -7,18 +7,18 @@ $( function() {
 
     $('#ticker-message-form .inputlist input').each( function() {
         var $elem = $(this).css( { width: '100%' } )
-        var $input = $('<div/>').css( { postion: 'relative' } ).appendTo( $elem.parent() )
-        $elem.wrap( $input )
+        var $input = $('<div id="r"/>').css( { postion: 'relative' } )
+            .appendTo( $elem.parent() ).append( $elem )
         var init = $elem.val()
-        var $exe = $('<div/>').css( { padding: '2px' } )
+        var $exe = $('<div id="t"/>').css( { padding: '2px' } )
         $input.after( $exe )
 
         var set = {
-            get $exe() {
+            get $input() {
                 $exe.hide()
                 $input.show()
             },
-            get $input() {
+            get $exe() {
                 var val
                 if( ! $elem.is( ':focus' ) && ( val = $elem.val() ) != '' ) {
                     $exe.html( val )
@@ -31,28 +31,28 @@ $( function() {
         set.$exe
 
         var $reset = $('<div/>')
-            .css( { position: 'absolute', right: 0 } )
+            .addClass( 'reset button' )
+            .css( { position: 'absolute', right: '3em' } )
             .text( '↺' )
+            .hide()
             .click( function() {
                 $elem.val( init )
+                $reset.toggle( $elem.val() != init )
             } )
         $elem.before( $reset )
 
-        $elem.bind( 'keypress', function() {
-            $reset.toggle( $input.val() != init )
-            console.log( $input.val(), init )
+        $elem.bind( 'keyup', function() {
+            $reset.toggle( $elem.val() != init )
         } )
 
-        $exe.bind( 'mouseover', function() { set.$exe } )
-        $input.bind( 'mouseout blur', function() { set.$input } )
+        $exe.bind( 'mouseover', function() { set.$input } )
+        $input.bind( 'mouseout blur', function() { set.$exe } )
     } )
 
-/*
     // Mouseout not firing on dynamically displayed input elements in jquery 1.3.6
     $('#ticker-message-form .inputlist').mouseover( function( evt ) {
         if( evt.fromElement instanceof HTMLInputElement ) {
             $(evt.fromElement).trigger( 'mouseout' ) // Not firing
         }
     } )
-*/
 } )
