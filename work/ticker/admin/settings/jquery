@@ -5,7 +5,9 @@ $( function() {
         return elem === document.activeElement && ( elem.type || elem.href )
     }
 
+    var asInput = []
     $('#ticker-message-form .inputlist input').each( function() {
+
         var $elem = $(this).css( { width: '100%' } )
         var $input = $('<div id="r"/>').css( { postion: 'relative' } )
             .appendTo( $elem.parent() ).append( $elem )
@@ -13,21 +15,34 @@ $( function() {
         var $exe = $('<div id="t"/>').css( { padding: '2px' } )
         $input.after( $exe )
 
-        var set = {
+        var isInput = true
+        var set = {}
+        $.extend( set, {
             get $input() {
+                asInput = $.map( asInput, function( set ) {
+                    return set.$exe ? null : set
+                } )
+                console.log( asInput )
+
                 $exe.hide()
                 $input.show()
+                asInput.push( set )
+                isInput = true
             },
             get $exe() {
+                if( ! isInput ) {
+                    return true
+                }
                 var val
                 if( ! $elem.is( ':focus' ) && ( val = $elem.val() ) != '' ) {
                     $exe.html( val )
                     $input.hide()
                     $exe.show()
+                    isInput = false
                     return true
                 }
             },
-        }
+        } )
         set.$exe
 
         var $reset = $('<div/>')
@@ -49,10 +64,7 @@ $( function() {
         $input.bind( 'mouseout blur', function() { set.$exe } )
     } )
 
-    // Mouseout not firing on dynamically displayed input elements in jquery 1.3.6
+    // Mouseouts not always firing in jquery 1.3.6
     $('#ticker-message-form .inputlist').mouseover( function( evt ) {
-        if( evt.fromElement instanceof HTMLInputElement ) {
-            $(evt.fromElement).trigger( 'mouseout' ) // Not firing
-        }
     } )
 } )
