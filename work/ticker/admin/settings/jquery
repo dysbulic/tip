@@ -1,4 +1,4 @@
-// Shows 
+// Formats input fields to show a HTML example when not being edited.
 
 $( function() {
     jQuery.expr[':'].focus = jQuery.expr[':'].focus || function( elem ) {
@@ -6,34 +6,53 @@ $( function() {
     }
 
     $('#ticker-message-form .inputlist input').each( function() {
-        var $input = $(this)
-        var init = $input.val()
-        var $exe = $('<div/>').css( { border: '2px solid transparent' } )
+        var $elem = $(this).css( { width: '100%' } )
+        var $input = $('<div/>').css( { postion: 'relative' } ).appendTo( $elem.parent() )
+        $elem.wrap( $input )
+        var init = $elem.val()
+        var $exe = $('<div/>').css( { padding: '2px' } )
         $input.after( $exe )
 
         var set = {
-            hover : function() {
+            get $exe() {
                 $exe.hide()
                 $input.show()
             },
-            leave : function() {
-                if( ! $input.is( ':focus' ) && $input.val() != '' ) {
-                    $exe.html( $input.val() )
+            get $input() {
+                var val
+                if( ! $elem.is( ':focus' ) && ( val = $elem.val() ) != '' ) {
+                    $exe.html( val )
                     $input.hide()
                     $exe.show()
                     return true
                 }
             },
         }
-        set.leave()
+        set.$exe
 
-        $exe.bind( 'mouseover', set.hover )
-        $input.bind( 'mouseout', set.leave )
-        $input.blur( set.leave )
+        var $reset = $('<div/>')
+            .css( { position: 'absolute', right: 0 } )
+            .text( '↺' )
+            .click( function() {
+                $elem.val( init )
+            } )
+        $elem.before( $reset )
+
+        $elem.bind( 'keypress', function() {
+            $reset.toggle( $input.val() != init )
+            console.log( $input.val(), init )
+        } )
+
+        $exe.bind( 'mouseover', function() { set.$exe } )
+        $input.bind( 'mouseout blur', function() { set.$input } )
     } )
+
+/*
+    // Mouseout not firing on dynamically displayed input elements in jquery 1.3.6
     $('#ticker-message-form .inputlist').mouseover( function( evt ) {
         if( evt.fromElement instanceof HTMLInputElement ) {
             $(evt.fromElement).trigger( 'mouseout' ) // Not firing
         }
     } )
+*/
 } )
