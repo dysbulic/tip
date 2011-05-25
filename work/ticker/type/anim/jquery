@@ -7,8 +7,10 @@ $( function () {
 
     function LineManager( lines ) {
         this.idx = 0
+        var self = this
 
         this.step = function() {
+            console.log( this.hovered )
 	    if( this.hovered ) { return } 
             if( this.typer !== undefined ) { return }
             if( lines.length === 0 ) { return }
@@ -21,15 +23,8 @@ $( function () {
 
             this.typer = new Typer( lines[ this.idx++ ] )
 
-            var self = arguments.callee // setTimeout evaluates in global scope
-            setTimeout(
-                ( function() {
-                    return function() {
-                        self.apply( self, arguments )
-                    }
-                } )()
-                , 1000 ) //timeout.per.line )
-            //console.log( timeout )
+            var callee = arguments.callee // setTimeout evaluates in global scope
+            setTimeout( function() { callee.apply( self, arguments ) }, timeout.per.line )
         }
         this.step()
     }
@@ -38,6 +33,7 @@ $( function () {
         this.idx = 0
         this.timeout = 28 // timeout.per.char // Cannot read property 'char' of undefined
         text = text !== undefined ? text : ''
+        var self = this
         
         this.step = function() {
             //console.log( 'p', this, this.idx )
@@ -51,14 +47,8 @@ $( function () {
             $display.html( out + ' ' )
 
             if( this.idx < text.length ) {
-                var self = arguments.callee // setTimeout evaluates in global scope
-                setTimeout(
-                    ( function() {
-                        return function() {
-                            self.apply( self, arguments )
-                        }
-                    } )()
-                    , this.timeout )
+                var callee = arguments.callee // setTimeout evaluates in global scope
+                setTimeout( function() { callee.apply( self, arguments ) }, timeout.per.char )
             } else {
                 mgr.typer = undefined
             }
@@ -70,7 +60,9 @@ $( function () {
     $('ul.ticker')
         .after( $display = $('<div/>') )
         .hover(
-            function() { mgr.hovered = true },
+            function() {
+                mgr.hovered = true
+            },
             function() {
                 mgr.hovered = false
                 mgr.step()
