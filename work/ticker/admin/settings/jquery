@@ -6,16 +6,23 @@ $( function() {
     }
 
     var rows = []
-    $('#ticker-message-form .inputlist input').each( function( elem, idx ) {
+    function wrapElem( elem, idx ) {
         var $elem = $(elem).css( { width: '100%' } )
-        var $exe = $('<div/>').css( { padding: '2px' } )
         var $input = $('<div/>').css( { postion: 'relative' } )
             .appendTo( $elem.parent() ).append( $elem )
-            .after( $exe )
-        return
+        var $exe = $('<div/>').css( {
+            padding: '2px',
+            position: 'absolute',
+        } )
+        var $row = $('<div/>')
+            .css( { height: '1em' } )
+            .appendTo( $input.parent() ).append( $input )
+            .append( $exe )
+
         var isInput = true
         var row = {
             get isInput() { return isInput },
+            get empty() { return $elem.val() === '' },
             set : {
                 get $input() {
                     $exe.hide()
@@ -29,14 +36,15 @@ $( function() {
                     var val
                     if( ! $elem.is( ':focus' ) && ( val = $elem.val() ) != '' ) {
                         $exe.html( val )
-                        $input.fadeOut( 'fast' )
-                        $exe.fadeIn( 'fast' )
+                        $input.hide()
+                        $exe.show() //.fadeIn( 'fast' )
                         isInput = false
                         return true
                     }
                 },
             },
         }
+
         row.set.$exe
         rows.push( row )
 
@@ -52,20 +60,52 @@ $( function() {
             } )
         $elem.before( $reset )
 
+        function all$exe() {
+            $.each( rows, function( idx, row ) { row.set.$exe } )
+        }
+
         $elem.bind( 'keyup', function() {
             $reset.toggle( $elem.val() != init )
         } )
 
         $exe.bind( 'mouseover', function() {
-            for( var i = 0; i < rows.length; i++ ) {
-                if( i != idx ) { rows[i].set.$exe }
-            }
+            all$exe()
             row.set.$input
         } )
         $input.bind( 'mouseout blur', function() { row.set.$exe } )
-    } )
+        $input.bind( 'focus', all$exe )
 
-    // Mouseouts not always firing in jquery 1.3.6
-    $('#ticker-message-form .inputlist').mouseover( function( evt ) {
-    } )
+        return row
+    }
+
+    $('.inputlist input').each( function( idx, elem ) { wrapElem( elem, idx ) } )
+
+    function addNew( val ) {
+        var $input = $('<input/>')
+            .attr( {
+                type: 'input',
+                name: 'messages[new][]',
+            } )
+            .appendTo( $('<div/>').addClass( 'form-item' )
+                       .appendTo( $('.inputlist fieldset fieldset') ) )
+            .keyup( function() {
+                for( var i = 0; i < rows.length; i++ ) {
+                    if( rows[i].empty ) { return }
+                }
+                addNew()
+            } )
+        $input.val( val )
+        wrapElem( $input )
+    }
+
+    if( ! $.browser.msie ) {
+        $('.inputlist input[name="messages[new][1]"]')
+            .attr( { name: 'messages[new][]' } )
+            .keyup( function() {
+                for( var i = 0; i < rows.length; i++ ) {
+                    if( rows[i].empty ) { return }
+                }
+                addNew()
+            } )
+    }
 } )
