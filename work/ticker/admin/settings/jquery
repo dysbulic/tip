@@ -100,11 +100,12 @@ $( function() {
 
     $('.inputlist input').each( function( idx, elem ) { wrapElem( elem, idx ) } )
 
+    var newCount = 0 // '[]' array passing not ordering correctly in IE
     function addNew( val ) {
         var $input = $('<input type="text"/>')
             .attr( {
                 //type: 'text', // Occassional "cannot modify attribute" error in chrome
-                name: 'messages[new][]',
+                name: 'messages[new][' + ++newCount + ']',
             } )
             .appendTo( $('<div/>').addClass( 'form-item' )
                        .appendTo( $('.inputlist fieldset fieldset') ) )
@@ -122,5 +123,6 @@ $( function() {
 
     //$('.inputlist input[name="messages[new][]"]').live()
     $('.inputlist input[name="messages[new][]"]')
+        .attr( { name : 'messages[new][' + ++newCount + ']' } )
         .bind( 'keyup change', checkForBlanks )
 } )
