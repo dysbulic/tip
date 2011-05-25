@@ -128,7 +128,7 @@ function ticker_message_form() {
     '#type' => 'fieldset',
     '#tree' => TRUE,
   );
-  $form['messages']['new'][1] =
+  $form['messages']['new'][''] =
     array_merge( $default, array(
       //'#title' => t('New Message'),
       '#default_value' => variable_get( 'message', '' ),
@@ -162,6 +162,11 @@ function ticker_message_form_submit( $form, &$form_state ) {
   foreach( $messages as $idx => $message ) {
     if( $idx == 'new' ) {
       $new = $message;
+
+      // Dynamic array is truncated by drupal
+      // ToDo: Fix @ point of generation of $form_state
+      $new = $_POST['messages']['new'];
+
       if( isset( $new ) ) {
         if( ! is_array( $new ) ) { $new = array( $new ); }
         foreach( $new as $message ) {

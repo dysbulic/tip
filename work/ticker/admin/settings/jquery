@@ -11,11 +11,10 @@ $( function() {
         var $input = $('<div/>').css( { postion: 'relative' } )
             .appendTo( $elem.parent() ).append( $elem )
         var $exe = $('<div/>').css( {
-            padding: '2px',
-            position: 'absolute',
+            position: 'absolute'
         } )
         var $row = $('<div/>')
-            .css( { height: '1em' } )
+            .css( { height: '1em', position: 'relative' } )
             .appendTo( $input.parent() ).append( $input )
             .append( $exe )
 
@@ -51,7 +50,8 @@ $( function() {
         var init = $elem.val()
         var $reset = $('<div/>')
             .addClass( 'reset button' )
-            .css( { position: 'absolute', right: '3em' } )
+            .attr( { title: 'Revert' } )
+            .css( { position: 'absolute', right: '1.75em' } )
             .text( '↺' )
             .hide()
             .click( function() {
@@ -60,10 +60,22 @@ $( function() {
             } )
         $elem.before( $reset )
 
+        var $delete = $('<div/>')
+            .addClass( 'delete button' )
+            .attr( { title: 'Delete' } )
+            .css( { position: 'absolute', top: 0, right: '0em' } )
+            .text( '✖' )
+            .click( function() {
+                row.set.$input
+                $elem.val( '' )
+                $reset.toggle( $elem.val() != init )
+            } )
+        $row.append( $delete )
+
         function all$exe() {
             $.each( rows, function( idx, row ) { row.set.$exe } )
         }
-
+        
         $elem.bind( 'keyup', function() {
             $reset.toggle( $elem.val() != init )
         } )
@@ -81,6 +93,7 @@ $( function() {
     $('.inputlist input').each( function( idx, elem ) { wrapElem( elem, idx ) } )
 
     function addNew( val ) {
+        console.log( 'addNew' )
         var $input = $('<input type="text"/>')
             .attr( {
                 //type: 'text', // Occassional error in chrome
@@ -88,24 +101,19 @@ $( function() {
             } )
             .appendTo( $('<div/>').addClass( 'form-item' )
                        .appendTo( $('.inputlist fieldset fieldset') ) )
-            .change( function() {
-                for( var i = 0; i < rows.length; i++ ) {
-                    if( rows[i].empty ) { return }
-                }
-                addNew()
-            } )
+            .bind( 'keyup change', checkForBlanks )
         $input.val( val )
         wrapElem( $input )
     }
 
-    if( false && ! $.browser.msie ) {
-        $('.inputlist input[name="messages[new][1]"]')
-            .attr( { name: 'messages[new][]' } )
-            .change( function() {
-                for( var i = 0; i < rows.length; i++ ) {
-                    if( rows[i].empty ) { return }
-                }
-                addNew()
-            } )
-    }
+    function checkForBlanks() {
+        for( var i = 0; i < rows.length; i++ ) {
+            if( rows[i].empty ) { return }
+        }
+        addNew()
+    } 
+
+    //$('.inputlist input[name="messages[new][]"]').live()
+    $('.inputlist input[name="messages[new][]"]')
+        .bind( 'keyup change', checkForBlanks )
 } )
