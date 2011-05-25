@@ -43,8 +43,9 @@ load( '.../lib/mimis/js' )
                     var tables = meta.getTables( cat, null, null, null )
                     while( tables.next() ) {
                         var table = tables.getString( 3 )
+                        var type = tables.getString( 4 )
                         
-                        console.log( "\t\t" + table )
+                        console.log( "\t\t" + table + " (" + type + ")" )
                     }
                     tables.close()
                 } catch( ex ) {
