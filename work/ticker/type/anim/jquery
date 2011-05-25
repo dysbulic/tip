@@ -1,51 +1,42 @@
 $( function () {
     var items = new Array()
-    $('.block-ticker ul').children().hide().each( function() {
+    $('ul.ticker').children().hide().each( function() {
 	items.push( $(this).html() )
     } )
     var $display
-    $('.block-ticker').append( $display = $('<div/>') )
+    $('ul.ticker').after( $display = $('<div/>') )
     var i = 0
-    rotateTicker()
+    if( items.length > 0 ) {
+        rotateTicker()
+    }
 
-    var text, count
+    var text, idx
     function rotateTicker() {
 	if( i === items.length ) {
 	    i = 0
 	}
         text = items[i]
-	count = 0
+        idx = 0
 	typetext()
 	setTimeout( rotateTicker, 5000 )
-	i++
-    }
+        i++
+     }
 
-    var inTag = false
-    function typetext() {	
-	var curChar = text.substr( count, 1 )
-	if( curChar === '<' ) {
-            inTag = true
-        }
-	if( curChar === '>' ) {
-            inTag = false
-        }
+     function typetext() {	
+         var curChar = text.substr( idx, 1 )
+         if( curChar === '<' ) {
+             idx = text.indexOf( '>', idx )
+         }
 
-        var out = text.substr( 0, count++ )
-        if( out.length === 0 ) {
-            out = '&nbsp;'
-        }
-        $display.html( out )
-	
-        if( count < text.length + 1 ) {
-	    if( inTag ) {
-		typetext()
-	    } else {
-		setTimeout( typetext, 28 )
-	    }
-        } else {
-	    count = 1
-	    text = ''
-	}
+         var out = text.substr( 0, ++idx )
+         if( out.length === 0 ) {
+             out = ' '
+         }
+         $display.html( out + ' ' )
+
+         if( idx < text.length + 1 ) {
+             setTimeout( typetext, 28 )
+         }
     }
 } )
 
