@@ -10,14 +10,9 @@ $( function () {
         var self = this
 
         this.step = function() {
-            console.log( this.hovered )
 	    if( this.hovered ) { return } 
             if( this.typer !== undefined ) { return }
             if( lines.length === 0 ) { return }
-            if( this.lastChangeTime !== undefined
-                && ( new Date() ).getTime() - this.lastChangeTime < timeout.per.line ) {
-                return
-            }
 
 	    if( this.idx >= lines.length ) { this.idx = 0 }
 
@@ -31,17 +26,14 @@ $( function () {
 
     function Typer( text ) {
         this.idx = 0
-        this.timeout = 28 // timeout.per.char // Cannot read property 'char' of undefined
         text = text !== undefined ? text : ''
         var self = this
         
         this.step = function() {
-            //console.log( 'p', this, this.idx )
             var curChar = text.substr( this.idx, 1 )
             if( curChar === '<' ) {
                 this.idx = text.indexOf( '>', this.idx )
             }
-            //console.log( 'pp', this.idx )
 
             var out = text.substr( 0, ++this.idx )
             $display.html( out + ' ' )
@@ -58,15 +50,17 @@ $( function () {
 
     var lines = []
     $('ul.ticker')
-        .after( $display = $('<div/>') )
-        .hover(
-            function() {
-                mgr.hovered = true
-            },
-            function() {
-                mgr.hovered = false
-                mgr.step()
-            } )
+        .after(
+            $display = $('<div/>')
+                .hover(
+                    function() {
+                        mgr.hovered = true
+                    },
+                    function() {
+                        mgr.hovered = false
+                        mgr.step()
+                    } )
+        )
         .children().hide().each( function() {
 	    lines.push( $(this).html() )
         } )
