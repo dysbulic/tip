@@ -37,6 +37,7 @@ function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {
     break;
   case 'view':
     drupal_add_js( drupal_get_path( 'module', 'ticker' ) . '/type/anim/jquery');
+    drupal_add_css( drupal_get_path( 'module', 'ticker' ) . '/css');
 
     $block['content'] = '';
     $query = "SELECT id, message FROM {ticker}";
@@ -44,7 +45,7 @@ function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {
     $query_result = db_query( $query );
     while( $row = db_fetch_object( $query_result ) ) {
       if( $block['content'] == '' ) {   
-        $block['content'] .= '<ul>';
+        $block['content'] .= '<ul class="ticker">';
       }
       $block['content'] .= '<li>' . $row->message . '</li>';
     }
@@ -152,6 +153,7 @@ function ticker_message_form_validate( $form, &$form_state ) {
  * @param form_state an array that contains user data
  */
 function ticker_message_form_submit( $form, &$form_state ) {
+  //drupal_set_message( t('new_message length: ').strval( var_dump( $_POST ) ) );
   //drupal_set_message( t('new_message length: ').strval( var_dump( $form_state ) ) );
 
   $messages = ( isset( $form_state['values'] )

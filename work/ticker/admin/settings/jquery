@@ -81,14 +81,14 @@ $( function() {
     $('.inputlist input').each( function( idx, elem ) { wrapElem( elem, idx ) } )
 
     function addNew( val ) {
-        var $input = $('<input/>')
+        var $input = $('<input type="text"/>')
             .attr( {
-                type: 'input',
+                //type: 'text', // Occassional error in chrome
                 name: 'messages[new][]',
             } )
             .appendTo( $('<div/>').addClass( 'form-item' )
                        .appendTo( $('.inputlist fieldset fieldset') ) )
-            .keyup( function() {
+            .change( function() {
                 for( var i = 0; i < rows.length; i++ ) {
                     if( rows[i].empty ) { return }
                 }
@@ -98,10 +98,10 @@ $( function() {
         wrapElem( $input )
     }
 
-    if( ! $.browser.msie ) {
+    if( false && ! $.browser.msie ) {
         $('.inputlist input[name="messages[new][1]"]')
             .attr( { name: 'messages[new][]' } )
-            .keyup( function() {
+            .change( function() {
                 for( var i = 0; i < rows.length; i++ ) {
                     if( rows[i].empty ) { return }
                 }
