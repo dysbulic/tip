@@ -169,6 +169,9 @@ function ticker_message_form_submit( $form, &$form_state ) {
 
       if( isset( $new ) ) {
         if( ! is_array( $new ) ) { $new = array( $new ); }
+
+        $new = array_reverse( $new );
+        
         foreach( $new as $message ) {
           if( $message != '' ) {
             $query = db_query( "INSERT INTO {ticker} ( timestamp, message ) VALUES( %d, '%s' )",

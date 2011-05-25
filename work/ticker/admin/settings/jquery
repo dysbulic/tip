@@ -52,13 +52,20 @@ $( function() {
             .addClass( 'reset button' )
             .attr( { title: 'Revert' } )
             .css( { position: 'absolute', right: '1.75em' } )
-            .text( '↺' )
             .hide()
             .click( function() {
                 $elem.val( init )
                 $reset.toggle( $elem.val() != init )
             } )
+            .text( '↺' )
         $elem.before( $reset )
+
+	$reset.hide() // Not hidden @ this point
+        // DHSI internal pages run jquery 1.2
+	$reset.toggle = function( visible ) {
+		if( ! visible ) { $reset.hide() }
+		else { $reset.show() }
+	}
 
         var $delete = $('<div/>')
             .addClass( 'delete button' )
@@ -77,6 +84,7 @@ $( function() {
         }
         
         $elem.bind( 'keyup', function() {
+            //console.log( $elem.val() != init, $elem.val(), init )
             $reset.toggle( $elem.val() != init )
         } )
 
@@ -93,7 +101,6 @@ $( function() {
     $('.inputlist input').each( function( idx, elem ) { wrapElem( elem, idx ) } )
 
     function addNew( val ) {
-        console.log( 'addNew' )
         var $input = $('<input type="text"/>')
             .attr( {
                 //type: 'text', // Occassional "cannot modify attribute" error in chrome
