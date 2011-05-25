@@ -1,53 +1,84 @@
 $( function () {
-    var items = []
     var $display
-    var hovered = false
-    $('ul.ticker')
-        .after( $display = $('<div/>') )
-        .hover(
-            function() { hovered = true },
-            function() {
-                hovered = false
-                nextTicker()
-            } )
-        .children().hide().each( function() {
-	    items.push( $(this).html() )
-        } )
-
     var timeout = { per : {
         char : 28,
         line : 5000,
     } }
-    
-    function typer() {
-        this.idx = this.idx === undefined ? 0 : this.idx
-        this.text = this.text === undefined ? '' : this.text
 
-        var curChar = this.text.substr( this.idx, 1 )
-        if( curChar === '<' ) {
-            this.idx = this.text.indexOf( '>',this. idx )
+    function LineManager( lines ) {
+        this.idx = 0
+
+        this.step = function() {
+	    if( this.hovered ) { return } 
+            if( this.typer !== undefined ) { return }
+            if( lines.length === 0 ) { return }
+            if( this.lastChangeTime !== undefined
+                && ( new Date() ).getTime() - this.lastChangeTime < timeout.per.line ) {
+                return
+            }
+
+	    if( this.idx >= lines.length ) { this.idx = 0 }
+
+            this.typer = new Typer( lines[ this.idx++ ] )
+
+            var self = arguments.callee // setTimeout evaluates in global scope
+            setTimeout(
+                ( function() {
+                    return function() {
+                        self.apply( self, arguments )
+                    }
+                } )()
+                , 1000 ) //timeout.per.line )
+            //console.log( timeout )
         }
+        this.step()
+    }
+
+    function Typer( text ) {
+        this.idx = 0
+        this.timeout = 28 // timeout.per.char // Cannot read property 'char' of undefined
+        text = text !== undefined ? text : ''
         
-        var out = text.substr( 0, ++this.idx )
-        $display.html( out + ' ' )
+        this.step = function() {
+            //console.log( 'p', this, this.idx )
+            var curChar = text.substr( this.idx, 1 )
+            if( curChar === '<' ) {
+                this.idx = text.indexOf( '>', this.idx )
+            }
+            //console.log( 'pp', this.idx )
 
-        if( this.idx < this.text.length ) {
-            setTimeout( typer, timeout.per.char )
+            var out = text.substr( 0, ++this.idx )
+            $display.html( out + ' ' )
+
+            if( this.idx < text.length ) {
+                var self = arguments.callee // setTimeout evaluates in global scope
+                setTimeout(
+                    ( function() {
+                        return function() {
+                            self.apply( self, arguments )
+                        }
+                    } )()
+                    , this.timeout )
+            } else {
+                mgr.typer = undefined
+            }
         }
+        this.step()
     }
 
-    var lastChange
-    function nextTicker() {
-	if( hovered ) { return }
-        if( items.length === 0 ) { return }
-	if( i === items.length ) { i = 0 }
+    var lines = []
+    $('ul.ticker')
+        .after( $display = $('<div/>') )
+        .hover(
+            function() { mgr.hovered = true },
+            function() {
+                mgr.hovered = false
+                mgr.step()
+            } )
+        .children().hide().each( function() {
+	    lines.push( $(this).html() )
+        } )
 
-        typer.text = items[i]
-        typer.idx = 0
-	typer()
-        timeout = setTimeout( nextTicker, timeout.per.line )
-        console.log( timeout )
-        i++
-    }
+    var mgr = new LineManager( lines )
 } )
 
