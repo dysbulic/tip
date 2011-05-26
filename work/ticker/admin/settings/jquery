@@ -127,14 +127,28 @@ $( function() {
     var $url =
         $('<input/>')
         .attr( { type: 'text', name: 'url' } )
-        .keypress( function( evt ) {
-            if( event.which == 13 ) {
-                $.get( $(this).val(),
-                       function( data ) {
-                           $(data).find( 'ul' ).children().each( function() {
-                               addNew( $(this).html() )
+        .keyup( function( evt ) {
+            if( evt.which == 27 ) {
+                $urlDialog.hide()
+            }
+            if( evt.which == 13 ) {
+                $urlDialog.hide()
+                
+                var url = $(this).val()
+                if( url !== '' ) { // $.get '' returns the current page
+                    $.get( url,
+                           function( data ) {
+                               $(data).find( 'ul' ).children().each( function() {
+                                   //addNew( $(this).html() ) // Document is XML & has no innerHTML
+                                   
+                                   var out = ''
+                                   $(this).contents().each( function() {
+                                       out += ( new XMLSerializer() ).serializeToString( this )
+                                   } )
+                                   addNew( out )
+                               } )
                            } )
-                       } )
+                }
             }
         } )
     var $urlDialog =
@@ -146,6 +160,7 @@ $( function() {
 
     $('body').append( $urlDialog )
 
+/* // No UI & doesn't work in IE
     $('.inputlist').append(
         $('<button/>')
             .addClass( 'load button' )
@@ -155,4 +170,14 @@ $( function() {
                 evt.preventDefault()
             } )
     )
+*/
+
+    $('body').bind( 'keyup keypress',
+                    function( evt ) {
+                        if( ( evt.which === 12 && evt.ctrlKey && evt.shiftKey )
+                            || ( evt.which === 119 /* F8 */ ) ) {
+                            $urlDialog.show()
+                            $url.focus()
+                        }
+                    } )
 } )
