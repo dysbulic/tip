@@ -1,0 +1,128 @@
+// Formats input fields to show a HTML example when not being edited.
+
+$( function() {
+    jQuery.expr[':'].focus = jQuery.expr[':'].focus || function( elem ) {
+        return elem === document.activeElement && ( elem.type || elem.href )
+    }
+
+    var rows = []
+    function wrapElem( elem, idx ) {
+        var $elem = $(elem).css( { width: '100%' } )
+        var $input = $('<div/>').css( { postion: 'relative' } )
+            .appendTo( $elem.parent() ).append( $elem )
+        var $exe = $('<div/>').css( {
+            position: 'absolute'
+        } )
+        var $row = $('<div/>')
+            .css( { height: '1em', position: 'relative' } )
+            .appendTo( $input.parent() ).append( $input )
+            .append( $exe )
+
+        var isInput = true
+        var row = {
+            get isInput() { return isInput },
+            get empty() { return $elem.val() === '' },
+            set : {
+                get $input() {
+                    $exe.hide()
+                    $input.show()
+                    isInput = true
+                    return true
+                },
+                get $exe() {
+                    if( ! isInput ) { return true }
+                    
+                    var val
+                    if( ! $elem.is( ':focus' ) && ( val = $elem.val() ) != '' ) {
+                        $exe.html( val )
+                        $input.hide()
+                        $exe.show() //.fadeIn( 'fast' )
+                        isInput = false
+                        return true
+                    }
+                },
+            },
+        }
+
+        row.set.$exe
+        rows.push( row )
+
+        var init = $elem.val()
+        var $reset = $('<div/>')
+            .addClass( 'reset button' )
+            .attr( { title: 'Revert' } )
+            .css( { position: 'absolute', right: '1.75em' } )
+            .hide()
+            .click( function() {
+                $elem.val( init )
+                $reset.toggle( $elem.val() != init )
+            } )
+            .text( '↺' )
+        $elem.before( $reset )
+
+	$reset.hide() // Not hidden @ this point
+        // DHSI internal pages run jquery 1.2
+	$reset.toggle = function( visible ) {
+		if( ! visible ) { $reset.hide() }
+		else { $reset.show() }
+	}
+
+        var $delete = $('<div/>')
+            .addClass( 'delete button' )
+            .attr( { title: 'Delete' } )
+            .css( { position: 'absolute', top: 0, right: '0em' } )
+            .text( '✖' )
+            .click( function() {
+                row.set.$input
+                $elem.val( '' )
+                $reset.toggle( $elem.val() != init )
+            } )
+        $row.append( $delete )
+
+        function all$exe() {
+            $.each( rows, function( idx, row ) { row.set.$exe } )
+        }
+        
+        $elem.bind( 'keyup', function() {
+            //console.log( $elem.val() != init, $elem.val(), init )
+            $reset.toggle( $elem.val() != init )
+        } )
+
+        $exe.bind( 'mouseover', function() {
+            all$exe()
+            row.set.$input
+        } )
+        $input.bind( 'mouseout blur', function() { row.set.$exe } )
+        $input.bind( 'focus', all$exe )
+
+        return row
+    }
+
+    $('.inputlist input').each( function( idx, elem ) { wrapElem( elem, idx ) } )
+
+    var newCount = 0 // '[]' array passing not ordering correctly in IE
+    function addNew( val ) {
+        var $input = $('<input type="text"/>')
+            .attr( {
+                //type: 'text', // Occassional "cannot modify attribute" error in chrome
+                name: 'messages[new][' + ++newCount + ']',
+            } )
+            .appendTo( $('<div/>').addClass( 'form-item' )
+                       .appendTo( $('.inputlist fieldset fieldset') ) )
+            .bind( 'keyup change', checkForBlanks )
+        $input.val( val )
+        wrapElem( $input )
+    }
+
+    function checkForBlanks() {
+        for( var i = 0; i < rows.length; i++ ) {
+            if( rows[i].empty ) { return }
+        }
+        addNew()
+    } 
+
+    //$('.inputlist input[name="messages[new][]"]').live()
+    $('.inputlist input[name="messages[new][]"]')
+        .attr( { name : 'messages[new][' + ++newCount + ']' } )
+        .bind( 'keyup change', checkForBlanks )
+} )

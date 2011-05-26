@@ -1,0 +1,70 @@
+$( function () {
+    var $display
+    var timeout = { per : {
+        char : 28,
+        line : 5000,
+    } }
+
+    function LineManager( lines ) {
+        this.idx = 0
+        var self = this
+
+        this.step = function() {
+	    if( this.hovered ) { return } 
+            if( this.typer !== undefined ) { return }
+            if( lines.length === 0 ) { return }
+
+	    if( this.idx >= lines.length ) { this.idx = 0 }
+
+            this.typer = new Typer( lines[ this.idx++ ] )
+
+            var callee = arguments.callee // setTimeout evaluates in global scope
+            setTimeout( function() { callee.apply( self, arguments ) }, timeout.per.line )
+        }
+        this.step()
+    }
+
+    function Typer( text ) {
+        this.idx = 0
+        text = text !== undefined ? text : ''
+        var self = this
+        
+        this.step = function() {
+            var curChar = text.substr( this.idx, 1 )
+            if( curChar === '<' ) {
+                this.idx = text.indexOf( '>', this.idx )
+            }
+
+            var out = text.substr( 0, ++this.idx )
+            $display.html( out + ' ' )
+
+            if( this.idx < text.length ) {
+                var callee = arguments.callee // setTimeout evaluates in global scope
+                setTimeout( function() { callee.apply( self, arguments ) }, timeout.per.char )
+            } else {
+                mgr.typer = undefined
+            }
+        }
+        this.step()
+    }
+
+    var lines = []
+    $('ul.ticker')
+        .after(
+            $display = $('<div/>')
+                .hover(
+                    function() {
+                        mgr.hovered = true
+                    },
+                    function() {
+                        mgr.hovered = false
+                        mgr.step()
+                    } )
+        )
+        .children().hide().each( function() {
+	    lines.push( $(this).html() )
+        } )
+
+    var mgr = new LineManager( lines )
+} )
+
