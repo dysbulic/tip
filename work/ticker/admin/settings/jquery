@@ -48,34 +48,32 @@ $( function() {
         rows.push( row )
 
         var init = $elem.val()
-        var $reset = $('<div/>')
-            .addClass( 'reset button' )
+        var $revert = $('<div/>')
+            .addClass( 'revert button' )
             .attr( { title: 'Revert' } )
-            .css( { position: 'absolute', right: '1.75em' } )
             .hide()
             .click( function() {
                 $elem.val( init )
-                $reset.toggle( $elem.val() != init )
+                $revert.toggle( $elem.val() != init )
             } )
             .text( '↺' )
-        $elem.before( $reset )
+        $elem.before( $revert )
 
-	$reset.hide() // Not hidden @ this point
+	$revert.hide() // Not hidden @ this point
         // DHSI internal pages run jquery 1.2
-	$reset.toggle = function( visible ) {
-		if( ! visible ) { $reset.hide() }
-		else { $reset.show() }
+	$revert.toggle = function( visible ) {
+		if( ! visible ) { $revert.hide() }
+		else { $revert.show() }
 	}
 
         var $delete = $('<div/>')
             .addClass( 'delete button' )
             .attr( { title: 'Delete' } )
-            .css( { position: 'absolute', top: 0, right: '0em' } )
             .text( '✖' )
             .click( function() {
                 row.set.$input
                 $elem.val( '' )
-                $reset.toggle( $elem.val() != init )
+                $revert.toggle( $elem.val() != init )
             } )
         $row.append( $delete )
 
@@ -85,7 +83,7 @@ $( function() {
         
         $elem.bind( 'keyup', function() {
             //console.log( $elem.val() != init, $elem.val(), init )
-            $reset.toggle( $elem.val() != init )
+            $revert.toggle( $elem.val() != init )
         } )
 
         $exe.bind( 'mouseover', function() {
@@ -125,4 +123,36 @@ $( function() {
     $('.inputlist input[name="messages[new][]"]')
         .attr( { name : 'messages[new][' + ++newCount + ']' } )
         .bind( 'keyup change', checkForBlanks )
+
+    var $url =
+        $('<input/>')
+        .attr( { type: 'text', name: 'url' } )
+        .keypress( function( evt ) {
+            if( event.which == 13 ) {
+                $.get( $(this).val(),
+                       function( data ) {
+                           $(data).find( 'ul' ).children().each( function() {
+                               addNew( $(this).html() )
+                           } )
+                       } )
+            }
+        } )
+    var $urlDialog =
+        $('<div/>')
+        .addClass( 'dialog' )
+        .append( $('<div/>').addClass( 'background' ) )
+        .append( $url )
+        .hide()
+
+    $('body').append( $urlDialog )
+
+    $('.inputlist').append(
+        $('<button/>')
+            .addClass( 'load button' )
+            .text( '✚ Load <ul>' )
+            .click( function( evt ) {
+                $urlDialog.show()
+                evt.preventDefault()
+            } )
+    )
 } )
