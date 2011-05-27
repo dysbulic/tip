@@ -184,16 +184,27 @@ $( function() {
                         }
                     } )
 
-    $('.inputlist > fieldset > div').prepend(
-        $('<button/>')
-            .addClass( 'reorder button' )
-            .attr( { title: 'Reorder' } )
-            .text( '↕' )
-            .mousedown( function( evt ) {
-                row.set.$input
-                $elem.val( '' )
-                $revert.toggle( $elem.val() != init )
-                evt.preventDefault()
-            } )
-    )
+    var $float = $('<div/>').appendTo( $('.inputlist') )
+
+    $('.inputlist > fieldset > div').each( function( div ) {
+        var $div = $(div)
+            .prepend(
+                $('<button/>')
+        /*
+                    .addClass( 'reorder button' )
+                    .attr( { title: 'Reorder' } )
+                    .text( '↕' )
+                    .click( function( evt ) { evt.preventDefault() } )
+                    .mousedown( function( evt ) {
+                        $div.addClass( 'reordering' )
+                        row.set.$input
+                        $elem.val( '' )
+                        $revert.toggle( $elem.val() != init )
+                    } )
+                    .mouseup( function( evt ) {
+                        $div.removeClass( 'reordering' )
+                    } )
+*/
+            )
+    } )
 } )
