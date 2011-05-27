@@ -62,11 +62,6 @@ $( function() {
         $elem.before( $revert )
 
 	$revert.hide() // Not hidden @ this point
-        // DHSI internal pages run jquery 1.2
-	$revert.toggle = function( visible ) {
-		if( ! visible ) { $revert.hide() }
-		else { $revert.show() }
-	}
 
         var $delete = $('<div/>')
             .addClass( 'delete button' )
@@ -80,6 +75,16 @@ $( function() {
             } )
         $row.append( $delete )
 
+        // DHSI internal pages run jquery 1.2
+	$revert.toggle = function( visible ) {
+		if( ! visible ) { $revert.hide() }
+		else { $revert.show() }
+	}
+	$delete.toggle = function( visible ) {
+		if( ! visible ) { $delete.hide() }
+		else { $delete.show() }
+	}
+
         function all$exe() {
             $.each( rows, function( idx, row ) { row.set.$exe } )
         }
@@ -87,6 +92,7 @@ $( function() {
         $elem.bind( 'keyup', function() {
             //console.log( $elem.val() != init, $elem.val(), init )
             $revert.toggle( $elem.val() != init )
+            $delete.toggle( $elem.val() != '' )
         } )
 
         $exe.bind( 'mouseover', function() {
@@ -184,7 +190,20 @@ $( function() {
                         }
                     } )
 
-    var $float = $('<div/>').appendTo( $('.inputlist') )
+    var $float =
+        $('<div/>')
+        .css( { position: 'absolute', width: '100%' } )
+    var bounds = {
+        top: $('.inputlist > fieldset > div').eq(0).offset().top,
+        bottom: $('.inputlist').offset().top + $('.inputlist').height(),
+    }
+
+    $('body').mousemove( function( evt ) {
+        $float.css( { top: Math.max( bounds.top,
+                                     Math.min( bounds.bottom,
+                                               evt.pageY - bounds.top ) ) } )
+        $float.css( { top: evt.pageY - bounds.top + $float.height() / 2 } )
+    } )
 
     $('.inputlist > fieldset > div').each( function( idx, div ) {
         var $div = $(div)
@@ -195,14 +214,17 @@ $( function() {
                     .text( '↕' )
                     .click( function( evt ) { evt.preventDefault() } )
                     .mousedown( function( evt ) {
+                        $float.append( $div.clone() )
                         $div.addClass( 'reordering' )
-                        row.set.$input
-                        $elem.val( '' )
-                        $revert.toggle( $elem.val() != init )
-                    } )
-                    .mouseup( function( evt ) {
-                        $div.removeClass( 'reordering' )
                     } )
             )
+        $('body')
+            .mouseup( function( evt ) {
+                $float.empty()
+                $div.removeClass( 'reordering' )
+            } )
     } )
+    
+    $('.inputlist').css( { position: 'relative' } )
+    $float.appendTo( $('.inputlist fieldset') )
 } )
