@@ -14,6 +14,7 @@ $( function() {
             position: 'absolute'
         } )
         var $row = $('<div/>')
+            .addClass( 'input' )
             .css( { height: '1em', position: 'relative' } )
             .appendTo( $input.parent() ).append( $input )
             .append( $exe )
@@ -48,13 +49,14 @@ $( function() {
         rows.push( row )
 
         var init = $elem.val()
-        var $revert = $('<div/>')
+        var $revert = $('<button/>')
             .addClass( 'revert button' )
             .attr( { title: 'Revert' } )
             .hide()
-            .click( function() {
+            .click( function( evt ) {
                 $elem.val( init )
                 $revert.toggle( $elem.val() != init )
+                evt.preventDefault()
             } )
             .text( '↺' )
         $elem.before( $revert )
@@ -70,10 +72,11 @@ $( function() {
             .addClass( 'delete button' )
             .attr( { title: 'Delete' } )
             .text( '✖' )
-            .click( function() {
+            .click( function( evt ) {
                 row.set.$input
                 $elem.val( '' )
                 $revert.toggle( $elem.val() != init )
+                evt.preventDefault()
             } )
         $row.append( $delete )
 
@@ -106,7 +109,7 @@ $( function() {
                 name: 'messages[new][' + ++newCount + ']',
             } )
             .appendTo( $('<div/>').addClass( 'form-item' )
-                       .appendTo( $('.inputlist fieldset fieldset') ) )
+                       .appendTo( $('.inputlist fieldset') ) )
             .bind( 'keyup change', checkForBlanks )
         $input.val( val )
         wrapElem( $input )
@@ -180,4 +183,17 @@ $( function() {
                             $url.focus()
                         }
                     } )
+
+    $('.inputlist > fieldset > div').prepend(
+        $('<button/>')
+            .addClass( 'reorder button' )
+            .attr( { title: 'Reorder' } )
+            .text( '↕' )
+            .mousedown( function( evt ) {
+                row.set.$input
+                $elem.val( '' )
+                $revert.toggle( $elem.val() != init )
+                evt.preventDefault()
+            } )
+    )
 } )
