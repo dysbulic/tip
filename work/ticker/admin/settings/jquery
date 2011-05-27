@@ -186,11 +186,10 @@ $( function() {
 
     var $float = $('<div/>').appendTo( $('.inputlist') )
 
-    $('.inputlist > fieldset > div').each( function( div ) {
+    $('.inputlist > fieldset > div').each( function( idx, div ) {
         var $div = $(div)
             .prepend(
                 $('<button/>')
-        /*
                     .addClass( 'reorder button' )
                     .attr( { title: 'Reorder' } )
                     .text( '↕' )
@@ -204,7 +203,6 @@ $( function() {
                     .mouseup( function( evt ) {
                         $div.removeClass( 'reordering' )
                     } )
-*/
             )
     } )
 } )
