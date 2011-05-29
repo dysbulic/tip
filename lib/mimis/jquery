@@ -1,4 +1,6 @@
 ( function() {
+console.log( '►.../lib/mimis/jquery' )
+
 RegExp.prototype.match = RegExp.prototype.match || RegExp.prototype.exec
     
 console.debug = console.debug || console.info
@@ -117,7 +119,7 @@ mimis.set = mimis.set ||
 
 mimis.link = mimis.link || mimis.load
 
-// Extract namespaces
+if( typeof document !== 'undefined' ) { // Extract namespaces
 mimis.ns = mimis.ns ||
     ( function() {
         var ns = mimis.link( '.../lib/mimis/ns/abbreviations/eson' )
@@ -145,6 +147,7 @@ mimis.ns = mimis.ns ||
         ns.abbr = ns[ ns ]
         return ns
     } )()
+}
 
 mimis.status = mimis.status ||
     ( function() {
@@ -175,7 +178,9 @@ mimis.parse.position = mimis.parse.position ||
 
 mimis.parse.length = mimis.parse.length || mimis.parse.position
 
-mimis.load( '.../lib/mimis/' + mimis.ns.abbr + '/mimis' )
+if( typeof mimis.ns !== 'undefined' ) {
+    mimis.load( '.../lib/mimis/' + mimis.ns.abbr + '/mimis' )
+}
 
 mimis.wrap = mimis.wrap || mimis.load( '.../lib/mimis/wrap/mimis' )
 
@@ -207,4 +212,5 @@ if( false ) {
     } )
 }
 
+console.log( '◄.../lib/mimis/jquery' )
 } )()

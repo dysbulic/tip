@@ -1,0 +1,221 @@
+<?php
+/**
+ * @param path for which we're displaying help
+ * @return html help string for the path
+ */
+function ticker_help( $path ) {
+  switch( $path ) {
+  case 'admin/help#ticker':
+  case 'admin/help':
+    $output = file_get_contents( dirname( __FILE__ ) . '/admin/help/xhtml' );
+    break;
+  }
+  return $output;
+}
+
+/**
+ * @return array of permissions
+ */
+function ticker_perm() {
+    return array( 'administer ticker',
+                  'access ticker content' );
+}
+
+/**
+ * @param string $op = ( 'list' | 'view' | 'save' | 'configure' )
+ * @param integer $idx of block
+ * @param array $edit only for "save" operation
+ */
+function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {  
+  $block = array();
+
+  switch( $op ) {
+  case 'list':
+    $block[0]['info'] = t( 'Ticker' );
+    $block[0]['cache'] = BLOCK_CACHE_PER_ROLE;
+    $block[0]['cache'] = BLOCK_CACHE_GLOBAL;
+    break;
+  case 'view':
+    drupal_add_js( drupal_get_path( 'module', 'ticker' ) . '/type/anim/jquery');
+    drupal_add_css( drupal_get_path( 'module', 'ticker' ) . '/css');
+
+    $block['content'] = '';
+    $query = "SELECT id, message FROM {ticker}";
+    
+    $query_result = db_query( $query );
+    while( $row = db_fetch_object( $query_result ) ) {
+      if( $block['content'] == '' ) {   
+        $block['content'] .= '<ul class="ticker">';
+      }
+      $block['content'] .= '<li>' . $row->message . '</li>';
+    }
+    
+    $block['subject'] = 'Ticker';
+    
+    if( $block['content'] === '' ) {   
+      $block['content'] = 'No Content';
+    } else {
+      $block['content'] .= '</ul>';
+    }
+    break;
+  case 'configure': // Only one set of settings per block
+    $block = ticker_message_form();
+    break;
+  case 'save':
+    ticker_message_form_submit( null, &$edit );
+    break;
+  }
+
+  return $block;
+}
+
+/**
+ * @return array with this module's settings
+ */
+function ticker_menu() {
+    $items = array();
+    
+    $items['admin/settings/ticker'] = array(
+      'title' => 'Ticker Module',
+      'description' => 'Administer Ticker Module Messages',
+      'page callback' => 'ticker_message',
+      'access arguments' => array( 'administer tinker_module' ),
+      'type' => MENU_NORMAL_ITEM,
+    );
+    
+    return $items;
+}
+
+/**
+ * @return array of form data
+ */
+function ticker_message() {
+    return drupal_get_form( 'ticker_message_form' );
+}
+
+/**
+ * @return array of form data
+ */
+function ticker_message_form() {
+  drupal_add_js( drupal_get_path( 'module', 'ticker' ) . '/admin/settings/jquery');
+  drupal_add_css( drupal_get_path( 'module', 'ticker' ) . '/admin/settings/css');
+  
+  $default = array(
+    '#type' => 'textarea',
+    '#type' => 'textfield',
+    //'#title' => t('Message'),
+    '#size' => 100,
+    //'#description' => t( 'Enter HTML to add to the rotation' ),
+  );
+
+  $form['messages'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Messages'),
+    '#tree' => TRUE,
+    '#prefix' => '<div class="inputlist">',
+    '#suffix' => '</div>',
+  );
+    
+  $get_messages = db_query( 'SELECT * FROM {ticker} ORDER BY timestamp ASC' );
+  if( $get_messages !== false ) {
+    while( $row = db_fetch_array( $get_messages ) ) { 
+      $form['messages'][$row['id']] =
+        array_merge( $default, array( '#default_value' => $row['message'] ) );
+    }
+  }
+
+  $form['messages']['new'] = array(
+    '#type' => 'fieldset',
+    '#tree' => TRUE,
+  );
+  $form['messages']['new'][''] =
+    array_merge( $default, array(
+      //'#title' => t('New Message'),
+      '#default_value' => variable_get( 'message', '' ),
+     ) );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save Messages'),
+  );
+    
+  return $form;
+}
+
+/**
+ * @param form array of this module's settings
+ * @param form_state an array that contains this module's settings
+ */
+function ticker_message_form_validate( $form, &$form_state ) {
+}
+
+/**
+ * @param form an array that contains user data
+ * @param form_state an array that contains user data
+ */
+function ticker_message_form_submit( $form, &$form_state ) {
+  //drupal_set_message( t('new_message length: ').strval( var_dump( $_POST ) ) );
+  //drupal_set_message( t('new_message length: ').strval( var_dump( $form_state ) ) );
+
+  $messages = ( isset( $form_state['values'] )
+                ? $form_state['values']['messages']
+                : $form_state['messages'] );
+  foreach( $messages as $idx => $message ) {
+    if( $idx == 'new' ) {
+      $new = $message;
+
+      // Dynamic array is truncated by drupal
+      // ToDo: Fix @ point of generation of $form_state
+      $new = $_POST['messages']['new'];
+
+      if( isset( $new ) ) {
+        if( ! is_array( $new ) ) { $new = array( $new ); }
+
+        $new = array_reverse( $new ); // Arguments are pushed
+        
+        foreach( $new as $message ) {
+          if( $message != '' ) {
+            $query = db_query( "INSERT INTO {ticker} ( timestamp, message ) VALUES( %d, '%s' )",
+                               time(), $message );
+            if( $query !== false ) {
+              $id = db_last_insert_id( '{ticker}', 'id' );
+              watchdog( 'ticker',
+                        t( 'Added message (%id): %message' ),
+                        array(
+                          '%id' => $id,
+                          '%message' => $message,
+                        ),
+                        WATCHDOG_INFO );
+            } else {
+              watchdog( 'ticker',
+                        t( 'Could not add message: %message' ),
+                        array( '%message' => $message ),
+                        WATCHDOG_ERROR );
+            }
+          }
+        }
+      }
+    } else if( $message === '' ) { // Delete by setting to ""
+      $query = db_query( "DELETE FROM {ticker} WHERE id=%d", $idx );
+      if( $query !== false && db_affected_rows( $query ) > 0 ) {
+        watchdog( 'ticker',
+                  t( 'Deleted message: %id' ),
+                  array( '%id' => $idx ),
+                  WATCHDOG_INFO );
+      }
+    } else {
+      $query = db_query( "UPDATE {ticker} SET message='%s' WHERE id=%d AND message!='%s'",
+                         $message, $idx, $message );
+      if( $query !== false && db_affected_rows( $query ) > 0 ) {
+        watchdog( 'ticker',
+                  t( 'Updated message (%id): %message' ),
+                  array(
+                    '%id' => $idx,
+                    '%message' => $message,
+                  ),
+                  WATCHDOG_INFO );
+      }
+    }
+  }
+  
+  $form_state['redirect'] = 'admin/settings/ticker';
+}
