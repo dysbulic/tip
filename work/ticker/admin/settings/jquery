@@ -75,7 +75,7 @@ $( function() {
             } )
         $row.append( $delete )
 
-        // DHSI internal pages run jquery 1.2
+        // DHSI internal pages run jquery 1.2 which has no toggle(bool)
 	$revert.toggle = function( visible ) {
 		if( ! visible ) { $revert.hide() }
 		else { $revert.show() }
@@ -107,7 +107,7 @@ $( function() {
 
     $('.inputlist input').each( function( idx, elem ) { wrapElem( elem, idx ) } )
 
-    var newCount = 0 // '[]' array passing not ordering correctly in IE
+    var newCount = 0 // HTTP GET '[]' array passing not ordering correctly in IE
     function addNew( val ) {
         var $input = $('<input type="text"/>')
             .attr( {
@@ -129,9 +129,14 @@ $( function() {
     } 
 
     //$('.inputlist input[name="messages[new][]"]').live()
-    $('.inputlist input[name="messages[new][]"]')
-        .attr( { name : 'messages[new][' + ++newCount + ']' } )
-        .bind( 'keyup change', checkForBlanks )
+    $('.inputlist fieldset fieldset:last-child input').each( function() {
+        var $input = $(this)
+        console.log( $input )
+        var name = $input.attr( 'name' )
+        $input
+            .attr( { name : name.replace( '][', '][][' ) } )
+            .bind( 'keyup change', checkForBlanks )
+    } )
 
     var $url =
         $('<input/>')
