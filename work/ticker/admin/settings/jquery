@@ -192,6 +192,7 @@ $( function() {
 
     var $float =
         $('<div/>')
+        .addClass( 'floating copy' )
         .css( { position: 'absolute', width: '100%' } )
     var bounds = {
         top: $('.inputlist > fieldset > div').eq(0).offset().top,
@@ -202,7 +203,11 @@ $( function() {
         $float.css( { top: Math.max( bounds.top,
                                      Math.min( bounds.bottom,
                                                evt.pageY - bounds.top ) ) } )
-        $float.css( { top: evt.pageY - bounds.top + $float.height() / 2 } )
+        $float.css( {
+            top: Math.max( 0,
+                           Math.min( $('.inputlist').height() - $float.height() / 2,
+                                     evt.pageY - bounds.top + $float.height() / 2 ) )
+        } )
     } )
 
     $('.inputlist > fieldset > div').each( function( idx, div ) {
