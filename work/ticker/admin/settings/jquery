@@ -6,40 +6,40 @@ $( function() {
     }
 
     var rows = []
-    function wrapElem( elem, idx ) {
-        var $elem = $(elem).css( { width: '100%' } )
-        var $input = $('<div/>').css( { postion: 'relative' } )
-            .appendTo( $elem.parent() ).append( $elem )
-        var $exe = $('<div/>').css( {
-            position: 'absolute'
-        } )
-        var $row = $('<div/>')
-            .addClass( 'input' )
-            .css( { height: '1em', position: 'relative' } )
-            .appendTo( $input.parent() ).append( $input )
-            .append( $exe )
+    // Interlaces a row object and drupal generated fieldset
+    function wrapRow( fieldset, idx ) {
+        var $row = $(fieldset)
+            .addClass( 'input row' ) 
+            .css( { display: 'block', height: '1em', position: 'relative' } )
+        var $text = $row.find( '.text input' )
+            .css( { width: '100%' } )
+        $text.$holder = $('<div/>')
+            .css( { postion: 'relative' } )
+            .appendTo( $text.parent() ).append( $text )
+        var $exe = $('<div/>')
+            .css( { position: 'absolute' } )
+            .appendTo( $row )
 
         var isInput = true
         var row = {
             get isInput() { return isInput },
-            get empty() { return $elem.val() === '' },
+            get empty() { return $text.val() === '' },
+            set order() { },                
             set : {
                 get $input() {
                     $exe.hide()
-                    $input.show()
-                    isInput = true
-                    return true
+                    $text.show()
+                    return isInput = true
                 },
                 get $exe() {
                     if( ! isInput ) { return true }
                     
                     var val
-                    if( ! $elem.is( ':focus' ) && ( val = $elem.val() ) != '' ) {
+                    if( ! $text.is( ':focus' ) && ( val = $text.val() ) != '' ) {
                         $exe.html( val )
-                        $input.hide()
+                        $text.hide()
                         $exe.show() //.fadeIn( 'fast' )
-                        isInput = false
-                        return true
+                        return ! ( isInput = false )
                     }
                 },
             },
@@ -48,18 +48,18 @@ $( function() {
         row.set.$exe
         rows.push( row )
 
-        var init = $elem.val()
+        var init = $text.val()
         var $revert = $('<button/>')
             .addClass( 'revert button' )
             .attr( { title: 'Revert' } )
-            .hide()
             .click( function( evt ) {
-                $elem.val( init )
-                $revert.toggle( $elem.val() != init )
+                $text.val( init )
+                $revert.toggle( $text.val() != init )
                 evt.preventDefault()
             } )
             .text( '↺' )
-        $elem.before( $revert )
+            .hide()
+        $text.before( $revert )
 
 	$revert.hide() // Not hidden @ this point
 
@@ -69,8 +69,8 @@ $( function() {
             .text( '✖' )
             .click( function( evt ) {
                 row.set.$input
-                $elem.val( '' )
-                $revert.toggle( $elem.val() != init )
+                $text.val( '' )
+                $revert.toggle( $text.val() != init )
                 evt.preventDefault()
             } )
         $row.append( $delete )
@@ -89,52 +89,56 @@ $( function() {
             $.each( rows, function( idx, row ) { row.set.$exe } )
         }
         
-        $elem.bind( 'keyup', function() {
+        $text.bind( 'keyup', function() {
             //console.log( $elem.val() != init, $elem.val(), init )
-            $revert.toggle( $elem.val() != init )
-            $delete.toggle( $elem.val() != '' )
+            $revert.toggle( $text.val() != init )
+            $delete.toggle( $text.val() != '' )
         } )
 
         $exe.bind( 'mouseover', function() {
             all$exe()
             row.set.$input
         } )
-        $input.bind( 'mouseout blur', function() { row.set.$exe } )
-        $input.bind( 'focus', all$exe )
+        $text.bind( 'mouseout blur', function() { row.set.$exe } )
+        $text.bind( 'focus', all$exe )
 
         return row
     }
 
-    $('.inputlist input').each( function( idx, elem ) { wrapElem( elem, idx ) } )
+    $('.inputlist fieldset fieldset').each( function( idx, elem ) { wrapRow( elem, idx ) } )
 
     var newCount = 0 // HTTP GET '[]' array passing not ordering correctly in IE
     function addNew( val ) {
+        ++newCount
+        var $row = $('<fieldset/>')
         var $input = $('<input type="text"/>')
             .attr( {
                 //type: 'text', // Occassional "cannot modify attribute" error in chrome
-                name: 'messages[new][' + ++newCount + ']',
+                name: 'messages[new][' + newCount + ']',
             } )
             .appendTo( $('<div/>').addClass( 'form-item' )
-                       .appendTo( $('.inputlist fieldset') ) )
+                       .appendTo( $row.appendTo( $('.inputlist fieldset') ) ) )
             .bind( 'keyup change', checkForBlanks )
         $input.val( val )
-        wrapElem( $input )
+        wrapRow( $row )
     }
 
     function checkForBlanks() {
+        console.log( rows )
         for( var i = 0; i < rows.length; i++ ) {
             if( rows[i].empty ) { return }
         }
         addNew()
-    } 
+    }
 
+    ++newCount
     //$('.inputlist input[name="messages[new][]"]').live()
     $('.inputlist fieldset fieldset:last-child input').each( function() {
         var $input = $(this)
         console.log( $input )
         var name = $input.attr( 'name' )
         $input
-            .attr( { name : name.replace( '][', '][][' ) } )
+            .attr( { name : name.replace( '][', '][' + newCount + '][' ) } )
             .bind( 'keyup change', checkForBlanks )
     } )
 
