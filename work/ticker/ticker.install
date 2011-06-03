@@ -12,24 +12,34 @@ function ticker_schema() {
   $schema['ticker'] = array(
     'fields' => array(
       'id' => array(
+        'description' => 'Message ID',
         'type' => 'serial',
         'size' => 'big',
         'unsigned' => TRUE,
-        'not null' => TRUE, 
-        'description' => 'Log ID'
+        'not null' => TRUE,
+      ),
+      'indx' => array(
+        'description' => 'Display order. "order" and "index" are reserved',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => FALSE,
+        'default' => NULL,
       ),
       'timestamp' => array(
+        'description' => 'Timestamp',
         'type' => 'int',
         'not null' => TRUE,
-        'default' => 0, 
-        'description' => 'Timestamp'
+        'default' => 0,
       ),
       'message' => array(
+        'description' => 'Ticker messages',
         'type' => 'text',
-        'not null' => FALSE, 
-        'description' => 'Log messages.'
+        'not null' => FALSE,
       ),
       // On MySQL, text fields cannot have default values.
+    ),
+    'indexes' => array(
+      'msg_order' => array( 'indx' ),
     ),
     'primary key' => array( 'id' )
     // Don't put a comma after primary key definition,
