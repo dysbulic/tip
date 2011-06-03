@@ -3,7 +3,7 @@ package jhu.welch.atis.utils.httpchain;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 
 import org.apache.http.client.ClientProtocolException;
@@ -48,15 +48,15 @@ public class CLIDriver {
      * @return String Return a String time in "M/dd/yyyy h:mm:ss a" format 
      */
     private static String genereateLoginParamTime() {
-        Date now = new Date( System.currentTimeMillis() );		
+        Date now = new Date();
         SimpleDateFormat format = new SimpleDateFormat( AY_LONG_TIMEFORMAT);
         
         String rtn="";
         
         try {
-            rtn = URLEncoder.encode(format.format(now), UTF8);
+            rtn = URLEncoder.encode( format.format( now ), UTF8);
         } catch( UnsupportedEncodingException e ) {
-            e.printStackTrace();
+            log.error( e );
         }
         
         return rtn;
