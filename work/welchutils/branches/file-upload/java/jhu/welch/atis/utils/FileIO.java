@@ -1,5 +1,6 @@
 package jhu.welch.atis.utils;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import org.apache.log4j.Logger;
@@ -55,19 +56,25 @@ public class FileIO {
         if( buf == null ) {
             throw new NullPointerException( "buf is null" );
         }
+
+        File output = new File( filename );
+        File dir = output.getParentFile();
+
+        if( dir != null ) {
+            dir.mkdirs();
+        }
         
-        FileWriter fileWriter = null;
+        FileWriter writer = null;
         
         try {
-            fileWriter = new FileWriter( filename );
-            fileWriter.write( buf );
+            writer = new FileWriter( output );
+            writer.write( buf );
         } catch (IOException e) {
             log.error( e );
-            e.printStackTrace();
             throw new RuntimeException( e.getMessage(), e );
         } finally {
             try {
-                fileWriter.close();
+                writer.close();
             } catch( IOException e ) {
             }
         }
