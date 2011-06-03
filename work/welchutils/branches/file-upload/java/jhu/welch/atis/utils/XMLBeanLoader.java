@@ -6,13 +6,8 @@ import javax.xml.bind.Unmarshaller;
 
 public class XMLBeanLoader {
     private static XMLBeanLoader instance = null; 
-    private Object locker = new Object();
 	
-    /**
-     * Private constructor
-     */
     private XMLBeanLoader() {
-        // do nothing
     }
 	
     /**
@@ -36,28 +31,26 @@ public class XMLBeanLoader {
      * 
      * @return Object A matching Java Bean Object
      */
-    public Object loadBean(Class<?> aClass, String beanXMLFile){
+    public static synchronized Object loadBean( Class<?> aClass, String beanXMLFile ) {
         Object obj;
 	
         if( beanXMLFile == null ) {
             throw new RuntimeException( "Missing xml file" );
         }
 		
-        synchronized( locker ) {
-            obj = null;
+        obj = null;
 
-            try {
-                JAXBContext context = JAXBContext.newInstance( aClass );
-                Unmarshaller um = context.createUnmarshaller();
+        try {
+            JAXBContext context = JAXBContext.newInstance( aClass );
+            Unmarshaller um = context.createUnmarshaller();
 
-                obj = um.unmarshal( ClassLoader.getSystemResourceAsStream( beanXMLFile ) );
-            } catch (JAXBException jaxbE) {
-                jaxbE.printStackTrace();
-                throw new RuntimeException( "JAXB error: failed to load "
-                                            + beanXMLFile
-                                            + " with the message: \n"
-                                            + jaxbE.getMessage(), jaxbE );
-            }
+            obj = um.unmarshal( ClassLoader.getSystemResourceAsStream( beanXMLFile ) );
+        } catch (JAXBException jaxbE) {
+            jaxbE.printStackTrace();
+            throw new RuntimeException( "JAXB error: failed to load "
+                                        + beanXMLFile
+                                        + " with the message: \n"
+                                        + jaxbE.getMessage(), jaxbE );
         }
 		
         return obj;
