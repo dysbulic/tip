@@ -36,7 +36,7 @@ public class CLIDriver {
         for( String filename : args ) {
             log.debug( "Loading config: " + filename );
             hcc.loadConfig( filename );
-            hcc.putUrlVar( AYTIMEPARAM, genereateLoginParamTime() );
+            hcc.putUrlVar( AYTIMEPARAM, generateLoginParamTime() );
             hcc.runall();
         }
     }
@@ -47,7 +47,7 @@ public class CLIDriver {
      * 
      * @return String Return a String time in "M/dd/yyyy h:mm:ss a" format 
      */
-    private static String genereateLoginParamTime() {
+    private static String generateLoginParamTime() {
         Date now = new Date();
         SimpleDateFormat format = new SimpleDateFormat( AY_LONG_TIMEFORMAT);
         
