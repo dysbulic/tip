@@ -9,7 +9,6 @@ public class FileIO {
     private static FileIO instance = null;
     public static final String UTF8 = "UTF-8";
     private static Logger log = Logger.getLogger( FileIO.class );
-
 	
     /**
      * Get an instance of FileIO object
@@ -56,6 +55,8 @@ public class FileIO {
         if( buf == null ) {
             throw new NullPointerException( "buf is null" );
         }
+
+        log.debug( "Outputting to: " + filename );
 
         File output = new File( filename );
         File dir = output.getParentFile();

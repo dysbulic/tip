@@ -221,21 +221,23 @@ public class HttpChainsCaller {
      * @param entity HttpEntity object
      */
     private void handleHttpContent( HttpEntity entity ) {
+        log.debug( "handleHttpContent" );
         if( entity != null ) {
             try {
                 currentContent = EntityUtils.toString( entity );
 
-                //  If needs to preserve the content.
                 if( currentUrlChain.needSaveContent() ) {
-                    String fileName = currentUrlChain.getSaveContentFile();
-                    File aFile = new File( fileName );
-                    if( aFile.isDirectory() ){ 
-                        log.error( fileName + " is a directory");
+                    String filename = currentUrlChain.getSaveContentFile();
+                    File output = new File( filename ); 
+
+                    log.debug( "handleHttpContent: " + filename );
+
+                    if( output.isDirectory() ) {
+                        log.error( filename + " is a directory" );
                     } else {
-                        FileIO.getInstance().Write(fileName, currentContent);    
+                        FileIO.Write( filename, currentContent );    
                     }
                 }
-                
             } catch( ParseException e ) {
                 String msg = "Failed to load content: " + e.getMessage();
                 log.error( msg, e );
@@ -350,7 +352,6 @@ public class HttpChainsCaller {
         try {
             Thread.sleep( aChain.getWait() );
         } catch( InterruptedException e ) {
-            // do nothing
         }
     }
     
