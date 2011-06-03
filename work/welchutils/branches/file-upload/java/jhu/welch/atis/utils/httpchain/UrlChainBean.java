@@ -50,7 +50,7 @@ public class UrlChainBean {
 
     public boolean hasFileUpload() {
         return fileUpload != null;
-    }    
+    }
 
     public long getWait() {
         return wait;
@@ -69,7 +69,7 @@ public class UrlChainBean {
     }
 
     public boolean needSaveContent(){ 
-        return saveContentFile != null && ! saveContentFile.equals("");
+        return saveContentFile != null && ! saveContentFile.equals( "" );
     }
 	
     public int getRepeat() {

@@ -277,7 +277,7 @@ public class HttpChainsCaller {
      * 
      * @return HttpReqhestBase Return HttpGet or HttpPost object base on the url request
      */
-    private HttpRequestBase getHttpRequest( UrlChainBean aChain ) {
+    private HttpRequestBase getHttpRequest( UrlChainBean chain ) {
         return getHttpRequest( currentUrlChain.getUrl(), 
                                currentUrlChain.needPostMethod(), 
                                getPostData( currentUrlChain.getAposts() ) );
@@ -340,7 +340,7 @@ public class HttpChainsCaller {
      * 
      * @param UrlChainBean A ChainBean
      */
-    private void waiting(UrlChainBean aChain) {
+    private void waiting( UrlChainBean aChain ) {
         log.debug( String.format( "wait time: " + aChain.getWait() ) );
         
         try {
@@ -372,8 +372,10 @@ public class HttpChainsCaller {
                 }
             }
 
-            //FileBody fileBody = new FileBody(f);
-            //entity.addPart("file", fileBody);
+            if( currentUrlChain.hasFileUpload() ) {
+                FileBody fileBody = new FileBody( currentUrlChain.getFileUpload() );
+                entity.addPart( "file", fileBody );
+            }
         }
         
         return entity;
