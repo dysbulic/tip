@@ -3,11 +3,12 @@ package jhu.welch.atis.utils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import org.apache.log4j.Logger;
 
 public class FileIO {
     private static FileIO instance = null;
-    public static final String UTF8 = "UTF-8";
+    public static final Charset UTF8 = Charset.forName( "UTF-8" );
     private static Logger log = Logger.getLogger( FileIO.class );
 	
     /**

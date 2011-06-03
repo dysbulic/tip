@@ -27,6 +27,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -133,17 +136,15 @@ public class HttpChainsCaller {
     /**
      * Move to the next item in a chain
      * 
-     * @return int Return 1, if there is a next item.  Otherwise return 0.
+     * @return boolean Return , if there is a next item.  Otherwise return 0.
      */
-    public int next() {
-        chainPosition++;
-        if( urlChainBeans.size() > chainPosition ){ 
+    public boolean next() {
+        if( urlChainBeans.size() > ++chainPosition ){ 
             setCurrentChain();
-        } else {
-            return 0;
+            return true;
         }
-        
-        return 1; 
+
+        return false;
     }
     
     /**
@@ -176,7 +177,7 @@ public class HttpChainsCaller {
         if( currentUrlChain.isEnabled() ) {
             try {
                 // Enable redirect in a post request.  
-                // REMARK: RFC standard does not allowed redirect on a post request.
+                // REMARK: RFC standard does not allow redirect on a post request.
                 if( currentUrlChain.isPostRedirect() ) {
                    ((DefaultHttpClient)httpclient).setRedirectStrategy( new CustomRedirectStrategy() );
                 }
@@ -277,12 +278,9 @@ public class HttpChainsCaller {
      * @return HttpReqhestBase Return HttpGet or HttpPost object base on the url request
      */
     private HttpRequestBase getHttpRequest( UrlChainBean aChain ) {
-        HttpRequestBase rtn = null;        
-        
-        rtn = getHttpRequest( currentUrlChain.getUrl(), 
-                              currentUrlChain.needPostMethod(), 
-                              getPostData(currentUrlChain.getAposts() ) );
-        return rtn;
+        return getHttpRequest( currentUrlChain.getUrl(), 
+                               currentUrlChain.needPostMethod(), 
+                               getPostData( currentUrlChain.getAposts() ) );
     }
     
     /**
@@ -294,34 +292,30 @@ public class HttpChainsCaller {
      * 
      * @return HttpReqhestBase Return HttpGet or HttpPost object base on the url request
      */
-    private HttpRequestBase getHttpRequest( String aURL,
+    private HttpRequestBase getHttpRequest( String url,
                                             boolean isPost,
-                                            UrlEncodedFormEntity urlEncodedFormEntity ) {
-        if( aURL == null ) { 
+                                            HttpEntity postData ) {
+        if( url == null ) { 
             throw new IllegalArgumentException( "URL cannot be null" );
         }
         
-        HttpRequestBase rtn = null;
+        HttpRequestBase request = null;
         
-        String targetURL = parseDynamicURL( aURL );
+        String targetURL = parseDynamicURL( url );
         
-        if( log.isDebugEnabled() ) {
-               log.debug( String.format( "[%s]: %s", 
-                                         currentUrlChain.isEnabled() ? "ENABLED" : "DISABLED",
-                                         currentUrlChain.getUrl() ) );
-               log.debug( String.format( "Parsed URL %s", targetURL ) );
+        log.debug( String.format( "[%s]: %s", 
+                                  currentUrlChain.isEnabled() ? "ENABLED" : "DISABLED",
+                                  currentUrlChain.getUrl() ) );
+        log.debug( String.format( "Parsed URL %s", targetURL ) );
+        
+        if( isPost ) {
+            request = new HttpPost( targetURL );
+            ((HttpPost)request).setEntity( postData );
+        } else {
+            request = new HttpGet( url );
         }
         
-        if( isPost ) { 
-            rtn = new HttpPost( targetURL );
-            ((HttpPost)rtn).setEntity( urlEncodedFormEntity );
-        }
-        else {
-            rtn = new HttpGet(aURL);
-        }
-        
-        return rtn;
-        
+        return request;
     }
     
     /**
@@ -361,27 +355,28 @@ public class HttpChainsCaller {
      * 
      * @return UrlEncodedFormEntity Return an UrlEncodedFormEntity object.  Otherwise return null. 
      */
-    private UrlEncodedFormEntity getPostData(ArrayList<PostBean> posts) {
-        UrlEncodedFormEntity rtn = null;
+    protected HttpEntity getPostData( ArrayList<PostBean> posts ) {
+        MultipartEntity entity = null;
         
         if( ! posts.isEmpty() ) {
             List<NameValuePair> formParams = new ArrayList<NameValuePair>();
 
+            entity = new MultipartEntity();
+
             for( PostBean pb : posts ) {
-                formParams.add( new BasicNameValuePair( pb.getKey(), 
-                                                        pb.getValue() ) );
+                //formParams.add( new BasicNameValuePair( pb.getKey(), pb.getValue() ) );
+                try {
+                    entity.addPart( pb.getKey(), new StringBody( pb.getValue(), FileIO.UTF8 ) );
+                } catch( UnsupportedEncodingException e ) {
+                    log.error( e );
+                }
             }
 
-            try {
-                rtn = new UrlEncodedFormEntity( formParams, FileIO.UTF8 );
-            } catch( UnsupportedEncodingException e ) {
-                String msg = "UrlEncodedFormEntity failed with message: " + e.getMessage();
-                log.error( msg, e );
-                throw new RuntimeException( msg, e );
-            }
+            //FileBody fileBody = new FileBody(f);
+            //entity.addPart("file", fileBody);
         }
         
-        return rtn;
+        return entity;
     }
     
     
@@ -390,13 +385,11 @@ public class HttpChainsCaller {
      * 
      */
     public void runall() {
-        while( next() == 1 ) {
+        while( next() ) {
             int repeatCount = currentUrlChain.getRepeat();
-            
-            while( repeatCount > 0 ) {
-                setCurrentChain();
+            while( repeatCount-- > 0 ) {
+                reloadChain();
                 call();
-                repeatCount--;                
             }
         }
     }

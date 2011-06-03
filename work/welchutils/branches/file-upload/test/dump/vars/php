@@ -1,0 +1,24 @@
+<?php
+$indent = "  ";
+
+header( 'Content-type: text/plain' );
+
+function print_var( $var, $idx, $depth = 1 ) {
+  global $indent;
+
+  print str_repeat( $indent, $depth - 1 );
+  if( is_array( $var ) ) {
+    print "$idx:\n";
+    if( is_array( $var ) ) {
+      foreach( $var as $key => $value ) {
+        print_var( $value, $key, $depth + 1 );
+      }
+    }
+  } else {
+    print "[$idx] = $var\n";
+  }
+}
+
+if( count( $_GET ) > 0 ) {
+  print_var( $_GET, '$_GET' );
+}
