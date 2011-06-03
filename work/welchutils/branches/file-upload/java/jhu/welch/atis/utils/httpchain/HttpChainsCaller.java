@@ -306,7 +306,7 @@ public class HttpChainsCaller {
         log.debug( String.format( "[%s]: %s", 
                                   currentUrlChain.isEnabled() ? "ENABLED" : "DISABLED",
                                   currentUrlChain.getUrl() ) );
-        log.debug( String.format( "Parsed URL %s", targetURL ) );
+        log.debug( "Parsed URL: " + targetURL );
         
         if( isPost ) {
             request = new HttpPost( targetURL );
@@ -323,16 +323,16 @@ public class HttpChainsCaller {
      * 
      * @return String A parsed url string
      */
-    private String parseDynamicURL( String aUrl ) {
-        String rtn = aUrl;
+    private String parseDynamicURL( String url ) {
+        String newURL = url;
         
         for( String key : varUrlMap.keySet().toArray( new String[ varUrlMap.size() ] ) ) {
             String value = varUrlMap.get( key );
             String matcher = String.format( "%s%s%s", VARSEPERATOR, key, VARSEPERATOR );
-            rtn = rtn.replaceFirst( matcher, value );
+            newURL = newURL.replaceFirst( matcher, value );
         }
         
-        return rtn;
+        return newURL;
     }
     
     /**
@@ -400,7 +400,7 @@ public class HttpChainsCaller {
      * @param key Variable url key
      * @param value Variable url value
      */
-    public void putUrlVar(String key, String value){
+    public void putUrlVar( String key, String value ) {
         if( key == null ) { 
             throw new IllegalArgumentException( "key cannot be null" );
         }

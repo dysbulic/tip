@@ -56,6 +56,31 @@
       <url>http://cfdev.welch.jhmi.edu/users/fwong3/test/login.cfm</url>
       <saveContentFile>tmp/savedhtmls/login1.html</saveContentFile>
     </chain>
+
+    <chain>
+      <url>http://localhost/work/welchutils/branches/file-upload/test/dump/vars/?test=test&amp;text[]=one&amp;text[]=two</url>
+      <saveContentFile>tmp/savedhtmls/gettest.txt</saveContentFile>
+    </chain>
+
+    <chain>
+      <url>http://localhost/work/welchutils/branches/file-upload/test/dump/vars/?test=test</url>
+      <posts>
+        <post><key>test</key><value>test</value></post>
+        <post><key>text[]</key><value>one</value></post>
+        <post><key>text[]</key><value>two</value></post>
+      </posts>
+      <saveContentFile>tmp/savedhtmls/posttest.txt</saveContentFile>
+    </chain>
+
+    <chain>
+      <url>http://localhost/work/welchutils/branches/file-upload/test/dump/vars/</url>
+      <posts>
+        <post><key>test</key><value>test</value></post>
+        <post><key>text[]</key><value>one</value></post>
+        <post><key>text[]</key><value>two</value></post>
+      </posts>
+      <saveContentFile>tmp/savedhtmls/posttest.txt</saveContentFile>
+    </chain>
     
     <chain>
       <enabled>true</enabled>

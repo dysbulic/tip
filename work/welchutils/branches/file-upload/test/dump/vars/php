@@ -22,3 +22,12 @@ function print_var( $var, $idx, $depth = 1 ) {
 if( count( $_GET ) > 0 ) {
   print_var( $_GET, '$_GET' );
 }
+
+if( count( $_POST ) > 0 ) {
+  print_var( $_POST, '$_POST' );
+}
+
+if( count( $_FILE ) > 0 ) {
+  $files = array();
+  print_var( $_FILE, '$_FILE' );
+}
