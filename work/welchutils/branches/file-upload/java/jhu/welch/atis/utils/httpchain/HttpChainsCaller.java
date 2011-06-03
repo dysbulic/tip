@@ -373,8 +373,8 @@ public class HttpChainsCaller {
             }
 
             if( currentUrlChain.hasFileUpload() ) {
-                FileBody fileBody = new FileBody( currentUrlChain.getFileUpload() );
-                entity.addPart( "file", fileBody );
+                File file = new File( currentUrlChain.getFileUpload() );
+                entity.addPart( "file", new FileBody( file ) );
             }
         }
         
