@@ -40,7 +40,7 @@ function ticker_block( $op = 'list', $delta = 0, $edit = array() ) {
     drupal_add_css( drupal_get_path( 'module', 'ticker' ) . '/css');
 
     $block['content'] = '';
-    $query = "SELECT id, message FROM {ticker}";
+    $query = 'SELECT id, message FROM {ticker} ORDER BY indx, timestamp ASC';
     
     $query_result = db_query( $query );
     while( $row = db_fetch_object( $query_result ) ) {
@@ -97,15 +97,14 @@ function ticker_message() {
  * @return array of form data
  */
 function ticker_message_form() {
-  drupal_add_js( drupal_get_path( 'module', 'ticker' ) . '/admin/settings/jquery');
-  drupal_add_css( drupal_get_path( 'module', 'ticker' ) . '/admin/settings/css');
+  drupal_add_js( drupal_get_path( 'module', 'ticker' ) . '/admin/settings/jquery' );
+  drupal_add_css( drupal_get_path( 'module', 'ticker' ) . '/admin/settings/css' );
   
   $default = array(
+    //'#description' => t( 'Enter HTML to add to the rotation' ),
     '#type' => 'textarea',
     '#type' => 'textfield',
-    //'#title' => t('Message'),
     '#size' => 100,
-    //'#description' => t( 'Enter HTML to add to the rotation' ),
   );
 
   $form['messages'] = array(
@@ -116,22 +115,45 @@ function ticker_message_form() {
     '#suffix' => '</div>',
   );
     
-  $get_messages = db_query( 'SELECT * FROM {ticker} ORDER BY timestamp ASC' );
+  $get_messages = db_query( 'SELECT * FROM {ticker} ORDER BY indx, timestamp ASC' );
   if( $get_messages !== false ) {
     while( $row = db_fetch_array( $get_messages ) ) { 
-      $form['messages'][$row['id']] =
-        array_merge( $default, array( '#default_value' => $row['message'] ) );
+      $form['messages'][$row['id']] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Message: ' . $row['indx']),
+        '#tree' => TRUE,
+      );
+      $form['messages'][$row['id']]['text'] =
+        array_merge( $default, array( '#title' => t('Text'),
+                                      '#default_value' => $row['message'],
+                                      '#prefix' => '<div class="text">',
+                                      '#suffix' => '</div>' ) );
+      $form['messages'][$row['id']]['order'] =
+        array_merge( $default, array( '#title' => t('Order'),
+                                      '#default_value' => $row['indx'],
+                                      '#prefix' => '<div class="order">',
+                                      '#suffix' => '</div>' ) );
     }
   }
-
+    
   $form['messages']['new'] = array(
     '#type' => 'fieldset',
+    '#title' => t('New Message'),
     '#tree' => TRUE,
   );
-  $form['messages']['new'][''] =
+  $form['messages']['new']['text'] =
     array_merge( $default, array(
-      //'#title' => t('New Message'),
+      '#title' => t('Text'),
       '#default_value' => variable_get( 'message', '' ),
+      '#prefix' => '<div class="text">',
+      '#suffix' => '</div>',
+     ) );
+  $form['messages']['new']['order'] =
+    array_merge( $default, array(
+      '#title' => t('Order'),
+      '#default_value' => variable_get( 'order', '' ),
+      '#prefix' => '<div class="order">',
+      '#suffix' => '</div>',
      ) );
   $form['submit'] = array(
     '#type' => 'submit',
@@ -159,7 +181,8 @@ function ticker_message_form_submit( $form, &$form_state ) {
   $messages = ( isset( $form_state['values'] )
                 ? $form_state['values']['messages']
                 : $form_state['messages'] );
-  foreach( $messages as $idx => $message ) {
+
+  foreach( $messages as $idx => $message ) { 
     if( $idx == 'new' ) {
       $new = $message;
 
@@ -168,21 +191,23 @@ function ticker_message_form_submit( $form, &$form_state ) {
       $new = $_POST['messages']['new'];
 
       if( isset( $new ) ) {
-        if( ! is_array( $new ) ) { $new = array( $new ); }
+        // Input is a nested array if the javascript ran
+        if( isset( $new['text'] ) ) { $new = array( 0 => $new ); }
 
         $new = array_reverse( $new ); // Arguments are pushed
         
         foreach( $new as $message ) {
-          if( $message != '' ) {
-            $query = db_query( "INSERT INTO {ticker} ( timestamp, message ) VALUES( %d, '%s' )",
-                               time(), $message );
+          if( $message['text'] != '' ) {
+            $query = db_query( "INSERT INTO {ticker} ( timestamp, indx, message ) VALUES( %d, %d, '%s' )",
+                               time(), $message['order'], $message['text'] );
             if( $query !== false ) {
               $id = db_last_insert_id( '{ticker}', 'id' );
               watchdog( 'ticker',
-                        t( 'Added message (%id): %message' ),
+                        t( 'Added message (%id): "%message" @ %order' ),
                         array(
                           '%id' => $id,
-                          '%message' => $message,
+                          '%message' => $message['text'],
+                          '%order' => $message['order'],
                         ),
                         WATCHDOG_INFO );
             } else {
@@ -194,7 +219,7 @@ function ticker_message_form_submit( $form, &$form_state ) {
           }
         }
       }
-    } else if( $message === '' ) { // Delete by setting to ""
+    } else if( $message['text'] === '' ) { // Delete by setting to ""
       $query = db_query( "DELETE FROM {ticker} WHERE id=%d", $idx );
       if( $query !== false && db_affected_rows( $query ) > 0 ) {
         watchdog( 'ticker',
@@ -203,8 +228,10 @@ function ticker_message_form_submit( $form, &$form_state ) {
                   WATCHDOG_INFO );
       }
     } else {
-      $query = db_query( "UPDATE {ticker} SET message='%s' WHERE id=%d AND message!='%s'",
-                         $message, $idx, $message );
+      $query = db_query( "UPDATE {ticker} SET message = '%s', indx = %d"
+                         . " WHERE id = %d AND ( message != '%s' OR indx != %d )",
+                         $message['text'], $message['order'], $idx,
+                         $message['text'], $message['order'] );
       if( $query !== false && db_affected_rows( $query ) > 0 ) {
         watchdog( 'ticker',
                   t( 'Updated message (%id): %message' ),
