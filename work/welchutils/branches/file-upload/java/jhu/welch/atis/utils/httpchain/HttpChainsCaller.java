@@ -366,15 +366,15 @@ public class HttpChainsCaller {
             for( PostBean pb : posts ) {
                 //formParams.add( new BasicNameValuePair( pb.getKey(), pb.getValue() ) );
                 try {
-                    entity.addPart( pb.getKey(), new StringBody( pb.getValue(), FileIO.UTF8 ) );
+                    if( pb.getValue() != null ) {
+                        entity.addPart( pb.getKey(), new StringBody( pb.getValue(), FileIO.UTF8 ) );
+                    }
+                    if( pb.getFile() != null ) {
+                        entity.addPart( pb.getKey(), new FileBody( new File( pb.getFile() ) ) );
+                    }
                 } catch( UnsupportedEncodingException e ) {
                     log.error( e );
                 }
-            }
-
-            if( currentUrlChain.hasFileUpload() ) {
-                File file = new File( currentUrlChain.getFileUpload() );
-                entity.addPart( "file", new FileBody( file ) );
             }
         }
         
