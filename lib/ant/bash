@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -21,7 +21,6 @@ no_config=false
 use_jikes_default=false
 ant_exec_debug=false
 show_help=false
-
 for arg in "$@" ; do
   if [ "$arg" = "--noconfig" ] ; then
     no_config=true
@@ -82,7 +81,6 @@ fi
 cygwin=false;
 darwin=false;
 mingw=false;
-
 case "`uname`" in
   CYGWIN*) cygwin=true ;;
   Darwin*) darwin=true
@@ -94,25 +92,9 @@ case "`uname`" in
 esac
 
 if [ -z "$ANT_HOME" -o ! -d "$ANT_HOME" ] ; then
-  ## resolve links - $0 may be a link to ant's home
-  PRG="$0"
-  progname=`basename "$0"`
-
-  # need this for relative symlinks
-  while [ -h "$PRG" ] ; do
-    ls=`ls -ld "$PRG"`
-    link=`expr "$ls" : '.*-> \(.*\)$'`
-    if expr "$link" : '/.*' > /dev/null; then
-    PRG="$link"
-    else
-    PRG=`dirname "$PRG"`"/$link"
-    fi
-  done
-
-  ANT_HOME=`dirname "$PRG"`/..
-
-  # make it fully qualified
-  ANT_HOME=`cd "$ANT_HOME" > /dev/null && pwd`
+  if [ -d /usr/share/ant ] ; then
+     ANT_HOME=/usr/share/ant
+  fi
 fi
 
 # For Cygwin and Mingw, ensure paths are in UNIX format before
@@ -155,6 +137,13 @@ if [ ! -x "$JAVACMD" ] ; then
   echo "Error: JAVA_HOME is not defined correctly."
   echo "  We cannot execute $JAVACMD"
   exit 1
+fi
+
+# Add the Xerces 2 XML parser in the Debian version
+if [ -z "$LOCALCLASSPATH" ] ; then
+  LOCALCLASSPATH="/usr/share/java/xmlParserAPIs.jar:/usr/share/java/xercesImpl.jar"
+else
+  LOCALCLASSPATH="/usr/share/java/xmlParserAPIs.jar:/usr/share/java/xercesImpl.jar:$LOCALCLASSPATH"
 fi
 
 # Build local classpath using just the launcher in non-rpm mode or
