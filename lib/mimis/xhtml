@@ -34,13 +34,13 @@
 <li><a href="http://www.google.com/chrome/">Chrome</a></li>
 <li><a href="Chrome/extension/">Chrome extension</a></li>
 <li><a href="java/src/">Java</a> <a href="java/src/org/dhappy/mimis/CacheAgentApplet.java">applet</a></li>
+<li><a href="http://www.mozilla.org/rhino/">Rhino</a></li>
 <li><a href="http://neo4j.org">Neo4j</a></li>
+<li><a href="http://www.igniterealtime.org/projects/smack/">Smack</a></li>
 </ol>
 </object>
 
-<p>Neo4j holds <a href=".../blog/Compression Trees/">hash trees</a> and semantic overlays over them. In essence, a user just keeps coming up with terms related to what they're searching for and the available graph is partitioned based on those descriptors.</p>
-
-<p>The hash trees allow cache agents on disperate machines to communicate very succinctly about the state of the hash. They are communicating graph shards. Which is sorta what is happening currently with xml, there's just no widespread support for things like <a href="http://www.w3.org/TR/xinclude/">xinclude</a>.</p>
+<p>Neo4j holds <a href=".../blog/Compression Trees/">hash trees</a> and semantic overlays over them. In essence, a user just keeps coming up with terms related to what they're searching for and the available graph is dynamically partitioned until a single value is dereferenced.</p>
 </section>
 
 <section>
@@ -64,6 +64,8 @@
 <section>
 <title>Release Party</title>
 
+<p>One of the interesting applications of Mimis is an <a href=".../event/Burning Man/2011/The Rabbit Hole/">augmented reality game</a> to be played, amoung other places, at festivals.</p>
+
 <a href="http://burningman.com">
 <img class="center" src="http://burningman.com/art_of_burningman/images/11_theme.jpg" alt="Burning Man"/>
 </a>
@@ -83,16 +85,16 @@
   </message>
 </a>
 
-<p>The app engine application will try to maintain the largest up to date hash tree representing the state of the exterior network.</p>
+<p>The app engine application will simulate the network and attempt to efficiently organize cache invalidation and updating.</p>
 
-<p>The cluster application is simulating the network and trying to optimally release updates to the graph.</p>
-
-<p>It also provides the level of storage necessary to calulate the desired value for a string, meaning, how much do the people who produced that string think should be paid to consume it.</p>
+<p>It also aggregates publishes collections. For example, one project is the <a href="http://grooveshark.com/#/playlist/Revolution+number+5/51418209">Forest Gump III Soundtrack</a>. Each user creates a playlist of songs which capture a sense of our world now in the way that the Forrest Gump I &amp; II soundtracks captured the 50's and 60's.</p>
 
 </section>
 
 <section>
 <title>Release Party</title>
+
+<p>This map is overlaid on the <a href="http://earth.burningman.com/brc/2009/">Burning Man map</a> to form a game board comprised of cooperating theme camps.</p>
 
 <a href="http://dhappy.org">
 <object class="row" height="400" type="image/svg+xml" data="logo/button/svg"/>
