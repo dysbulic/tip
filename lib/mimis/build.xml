@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project default="jar">
+<project name="mimis" xmlns:ivy="antlib:org.apache.ivy.ant" default="jar">
   <loadproperties>
     <file file="java/build/properties"/>
   </loadproperties>
@@ -35,36 +35,35 @@
   </target>
   
   <target name="setup" depends="make-keychain" unless="setup.done">
-    <mkdir dir="build/" />
+    <mkdir dir="build" />
     <!-- Even with exclude ..., is still overflowing the heap -->
-    <copy todir="build/">
+    <copy todir="build">
       <fileset dir="java/src" followsymlinks="false">
         <include name="**/CacheAgentApplet.java"/>
         <exclude name="..." />
         <exclude name="**/..." />
       </fileset>
     </copy>
+
+    <ivy:retrieve />
+    <ivy:cachepath pathid="lib.path.id"/>
+
     <property name="setup.done" value="true" />
   </target>
-
   <target name="jar" depends="setup">
-    <javac srcdir="build/" destdir="build/" deprecation="on" includeantruntime="false">
+    <javac srcdir="build" destdir="build" deprecation="on"
+           classpathref="lib.path.id" includeantruntime="last">
       <!--<compilerarg value="-Xlint"/>-->
+<!--
       <classpath>
-        <pathelement location=".../lib/java/lib/java-plugin-jre-1.6.0_23.jar"/>
-        <pathelement location=".../lib/java/lib/smack-3.1.0.jar"/>
-        <pathelement location=".../lib/java/lib/neo4j-kernel-1.3-SNAPSHOT.jar"/>
-        <!--
-        <fileset dir="${user.home}/.../lib/java/lib" followsymlinks="false">
-          <include name="**/*.jar"/>
-          <exclude name="..." />
-          <exclude name="**/..." />
-        </fileset>
-        -->
+        <pathelement location="../java/plugin/plugin.jar"/>
       </classpath>
+-->
     </javac>
+
     <mkdir dir="${jar.dir}" />
-    <jar destfile="${jar}" basedir="build/">
+
+    <jar destfile="${jar}" basedir="build">
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Main-Class" value="${main.class}" />
@@ -101,4 +100,30 @@
     </javadoc>
   </target>
 
+  <property name="ivy.install.version" value="2.1.0-1" />
+  <condition property="ivy.home" value="${env.IVY_HOME}">
+    <isset property="env.IVY_HOME" />
+  </condition>
+  <property name="ivy.home" value="${user.home}/.ant" />
+  <property name="ivy.jar.dir" value="${ivy.home}/lib" />
+  <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+
+  <target name="download-ivy" unless="offline">
+    <mkdir dir="${ivy.jar.dir}"/>
+    <!-- download Ivy from web site so that it can be used even without any special installation -->
+    <get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+         dest="${ivy.jar.file}" usetimestamp="true"/>
+  </target>
+
+  <target name="init-ivy" depends="download-ivy">
+    <!-- try to load ivy here from ivy home, in case the user has not already dropped
+         it into ant's lib dir (note that the latter copy will always take precedence).
+         We will not fail as long as local lib dir exists (it may be empty) and
+         ivy is in at least one of ant's lib dir or the local lib dir. -->
+      <path id="ivy.lib.path">
+        <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+      </path>
+      <taskdef resource="org/apache/ivy/ant/antlib.xml"
+               uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+  </target>
 </project>
