@@ -1,0 +1,162 @@
+console.log( '►.../lib/mimis/deref/js' )
+
+mimis = typeof mimis !== 'undefined' ? mimis : {}
+
+if( mimis.__lookupGetter__( 'out' ) === undefined ) {
+    mimis.__defineGetter__( 'out', function() {
+        var File = java.io.File
+        //var store = File.createTempFile( 'mimis.out.', '.log' )
+	var rand = ( ( Math.random() * Number.MAX_VALUE )
+                     .toString( 36 )
+                     .substring( 0, 10 ) )
+
+        var store = new File( '.mimis.out.' + rand + '.log' )
+        var jOut = new java.io.FileOutputStream( store )
+        return {
+            get stream() {
+                return jOut
+            },
+            toString : function() {
+                return readFile( store.getName() )
+            },
+        }
+    } )
+}
+    
+mimis.deref = mimis.deref ||
+    function( link ) {
+        if( typeof environment === 'undefined'
+            || environment[ 'os.emulator' ] != 'cygwin' ) {
+            return link
+        }
+        var out = mimis.out
+        runCommand( 'cygpath', '-w', link,
+                    { output : out.stream } )
+        var path = out.toString()
+        return path.substring( 0, path.length - 1 )
+    }
+
+console.log( '◄.../lib/mimis/deref/js' )
+
+console.log( '►.../lib/mimis/load/js' )
+
+if( typeof load !== 'undefined' && typeof mimis.deref !== 'undefined' ) {
+    ( function () {
+        var load_ = load
+        load = function() {
+            var args = Array.prototype.slice.apply( arguments )
+            var dests = []
+            while( args.length > 0 ) {
+                dests.push( mimis.deref( args.shift() ) )
+            }
+            return load_.apply( this, dests )
+        }
+    } )()
+}
+
+$ = typeof $ !== 'undefined'
+    ? $
+    : ( typeof load !== 'undefined'
+        ? load( '.../lib/mimis/faux/jquery/js' )
+        : undefined )
+
+mimis.load = mimis.load ||
+    ( function() {
+        function parse( ret, type ) {
+            var parser
+            if( ( parser = mimis.load.parser[ type ] ) !== undefined ) {
+                while( $.isString( parser ) ) {
+                    parser = mimis.load.parser[ parser ]
+                }
+                ret = parser( ret )
+            }
+            return ret
+        }
+        return (
+            ( $.ajax !== undefined )
+                ? function( uri ) {
+                    var ret
+                    $.ajax( {
+                        url : uri,
+                        dataType : 'text',
+                        async : false,
+                        success : function( data, state, xhr ) {
+                            ret = parse( data, xhr.getResponseHeader( 'Content-Type' ) )
+                        },
+                    } )
+                    return ret
+                }
+            : function( uri ) {
+                var ret
+                var file
+                if( ( file = /(.*)\/([^\/]*)$/.match( uri ) ) != null ) {
+                    //file.__defineGetter__( 'root', function() { return file[1] } )
+                    file.__defineGetter__( 'path', function() { return file[1] } )
+                    file.__defineGetter__( 'type', function() { return file[2] } )
+                    ret = parse( readFile( uri ), file.type )
+                } else {
+                    ret = parse( readUrl( uri ), 'js' )
+                }
+                return ret
+            }
+        )
+    } )()
+
+mimis.load.parser = mimis.load.parser || {}
+
+with( mimis.load.parser ) {
+    mimis.load.parser = $.extend(
+        {
+            eson : function( eson ) { // ECMAScript Object Notation
+                try {
+                    return eval( "( function() { return " + eson + " } )()" )
+                } catch( e ) {
+                    console.error( e )
+                }
+            },
+            js : function( javascript ) {
+                try {
+                    return eval( javascript )
+                } catch( e ) {
+                    console.error( e )
+                }
+            },
+            json : function( json ) {
+                return JSON.parse( data ) 
+            },
+            xml : function( xml ) {
+                var parser = new DOMParser()
+                return parser.parseFromString( xml, 'text/xml' )
+            },
+            txt : function( txt ) {
+                return txt.toString()
+            },
+        },
+        mimis.load.parser )
+}
+
+with( mimis.load.parser ) {
+    ( function() {
+        var global = ( function() { return this } )()
+        global.mimis.load.parser = global.$.extend(
+            {
+                jquery : js,
+                mimis : eson,
+                rhino : js,
+                'application/eson' : eson,
+                'application/javascript' : js,
+                'text/json' : json,
+                'text/xml' : xml,
+            },
+            global.mimis.load.parser )
+
+        global.mimis.load.parser = global.$.extend(
+            {
+                'application/xhtml+xml' : 'text/xml',
+                'image/svg+xml' : 'text/xml',
+            },
+            global.mimis.load.parser )
+    } )()
+}
+
+console.log( '◀.../lib/mimis/load/js' )
