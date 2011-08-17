@@ -1,15 +1,20 @@
-console.log( '►.../lib/mimis/stdlib/jquery' )
+console.log( '▶.../lib/mimis/stdlib/jquery' )
 
 ;( function() {
 
-mimis.load( 'array/' )
-mimis.load( 'string/' )
-//mimis.load( 'bind/' )
-//mimis.load( 'notify/' )
-mimis.load( 'namespace/' )
-mimis.load( 'applet/')  // Browser-JVM bridge'
-mimis.load( 'hashtree/' )
+    console.log( typeof mimis.load )
+    console.log( mimis.base )
+
+load( mimis.base + 'stdlib/array/js' )
+
+mimis.load( mimis.base + 'stdlib/array/js' )
+console.log( '▶.../lib/mimis/stdlib/jquery' )
+mimis.load( mimis.base + 'stdlib/string/' )
+mimis.load( mimis.base + 'stdlib/notify/' )
+mimis.load( mimis.base + 'stdlib/namespace/' )
+mimis.load( mimis.base + 'stdlib/applet/')  // Browser-JVM bridge'
+mimis.load( mimis.base + 'stdlib/hashtree/' )
 
 } )()
 
-console.log( '<.../lib/mimis/stdlib/jquery' )
+console.log( '◀.../lib/mimis/stdlib/jquery' )

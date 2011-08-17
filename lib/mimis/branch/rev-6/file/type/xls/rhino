@@ -1,0 +1,87 @@
+( function() {
+    var XSSFWorkbook = org.apache.poi.xssf.usermodel.XSSFWorkbook
+    var XSSFCell = org.apache.poi.xssf.usermodel.XSSFCell
+    
+    function row( rows ) {
+        var row = rows.next()
+        return {
+            cells : {
+                each : function( func ) {
+                    var cells = row.cellIterator()
+                    while( cells.hasNext() ) {
+                        func( cell( cells ) )
+                    }
+                },
+            },
+            get num() { return row.getRowNum() },
+        }
+    }
+    
+    function cell( cells ) {
+        var cell = cells.next()
+        function val() {
+            //console.log( 'xls.cell.val' )
+            switch ( cell.getCellType() ) {
+            case XSSFCell.CELL_TYPE_NUMERIC:
+                return cell.getNumericCellValue()
+            case XSSFCell.CELL_TYPE_STRING:
+                return cell.getStringCellValue()
+            case XSSFCell.CELL_TYPE_BOOLEAN:
+                return cell.getBooleanCellValue()
+            }
+        }
+        return {
+            valueOf : val,
+            toString : function() {
+                //console.log( 'xls.cell.toString' )
+                return val().toString()
+            },
+        }
+    }
+  
+    return {
+        Workbook : function( path ) {
+            //return mimis.wrap( new XSSFWorkbook( path ) )
+            var workbook = new XSSFWorkbook( path )
+            var sheets
+            var obj
+            return obj = {
+                get sheet() {
+                    if( sheets === undefined ) {
+                        sheets = []
+                        sheets.length = workbook.getNumberOfSheets()
+                        for( var i = 0; i < sheets.length; i++ ) {
+                            ( function() {
+                                var idx = i
+                                var sheet, obj
+                                sheets.__defineGetter__( i, function() {
+                                    if( sheet === undefined ) {
+                                        sheet = workbook.getSheetAt( idx )
+                                    }
+                                    if( obj === undefined ) {
+                                        obj = {
+                                            rows : { each : function( func ) {
+                                                var rows = sheet.rowIterator()
+                                                while( rows.hasNext() ) {
+                                                    func( row( rows ) )
+                                                }
+                                            } },
+                                            valueOf : function() { return sheet },
+                                        }
+                                    }
+                                    return obj
+                                } )
+                            } )()
+                        }
+                    }
+                    return sheets
+                },
+                sheets : {
+                    each : function() {
+                        obj.sheet.each.apply( obj.sheet, arguments )
+                    },
+                },
+            }
+        },
+    }
+} )()

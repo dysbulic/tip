@@ -57,7 +57,7 @@ if( typeof load !== 'undefined' && typeof mimis.deref !== 'undefined' ) {
 $ = typeof $ !== 'undefined'
     ? $
     : ( typeof load !== 'undefined'
-        ? load( '.../lib/mimis/faux/jquery/js' )
+        ? load( mimis.base + 'faux/jquery/js' )
         : undefined )
 
 mimis.load = mimis.load ||
@@ -74,7 +74,7 @@ mimis.load = mimis.load ||
         }
         return (
             ( $.ajax !== undefined )
-                ? function( uri ) {
+                ? function( uri ) { // In browser
                     var ret
                     $.ajax( {
                         url : uri,
@@ -86,7 +86,7 @@ mimis.load = mimis.load ||
                     } )
                     return ret
                 }
-            : function( uri ) {
+            : function( uri ) { // In JVM
                 var ret
                 var file
                 if( ( file = /(.*)\/([^\/]*)$/.match( uri ) ) != null ) {
