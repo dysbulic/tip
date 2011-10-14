@@ -36,12 +36,16 @@ function addJar() {
 # ToDo: Generalize
 
 SCRIPT="$1"
+LIBS="lib/rhino/jars/utf8"
 
-[[ ! -z "$SCRIPT" && -e lib/rhino/jars/utf8 ]] && {
+[ ! -z "$SCRIPT" ] && {
     pushd "$(dirname $SCRIPT)" > /dev/null
-    for jar in $(cat lib/rhino/jars/utf8); do
-        addJar "$jar"
-    done
+    pwd
+    [ -e "$LIBS" ] && {
+        for jar in $(cat "$LIBS"); do
+            addJar "$jar"
+        done
+    }
     popd > /dev/null
 }
 
@@ -65,5 +69,5 @@ CYGOPT=
 
 MAIN='org.mozilla.javascript.tools.shell.Main'
 
-# echo $CMD $OPTS -classpath $CP $MAIN "$@"
+#echo $CMD $OPTS -classpath $CP $MAIN "$@"
 $CMD $JDKOPT $CYGOPT -classpath $CP $MAIN "$@"
