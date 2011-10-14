@@ -40,6 +40,9 @@ console.log( '◄.../lib/mimis/deref/js' )
 
 console.log( '►.../lib/mimis/load/js' )
 
+// On windows, files need to be dereferenced through cygpath
+// because the JVM cannot read them otherwise
+
 if( typeof load !== 'undefined' && typeof mimis.deref !== 'undefined' ) {
     ( function () {
         var load_ = load
@@ -89,14 +92,23 @@ mimis.load = mimis.load ||
             : function( uri ) { // In JVM
                 var ret
                 var file
-                if( ( file = /(.*)\/([^\/]*)$/.match( uri ) ) != null ) {
-                    //file.__defineGetter__( 'root', function() { return file[1] } )
-                    file.__defineGetter__( 'path', function() { return file[1] } )
-                    file.__defineGetter__( 'type', function() { return file[2] } )
-                    ret = parse( readFile( uri ), file.type )
-                } else {
-                    ret = parse( readUrl( uri ), 'js' )
-                }
+
+		try {
+                    if( ( file = /(.*)\/([^\/]*)$/.exec( uri ) ) != null ) {
+			//file.__defineGetter__( 'root', function() { return file[1] } )
+			file.__defineGetter__( 'path', function() { return file[1] } )
+			file.__defineGetter__( 'type', function() { return file[2] } )
+			ret = parse( readFile( uri ), file.type )
+                    } else {
+			ret = parse( readUrl( uri ), 'js' )
+                    }
+		} catch( ex ) {
+		    if( ex instanceof java.io.FileNotFoundException ) {
+			console.log( 'File not found: ' + uri )
+		    } else {
+			throw ex
+		    }
+		}
                 return ret
             }
         )
@@ -109,7 +121,9 @@ with( mimis.load.parser ) {
         {
             eson : function( eson ) { // ECMAScript Object Notation
                 try {
-                    return eval( "( function() { return " + eson + " } )()" )
+                    var str = "( function() { return " + eson + " } )()"
+                    //console.log( 'eson:' + str )
+                    return eval( str )
                 } catch( e ) {
                     console.error( e )
                 }

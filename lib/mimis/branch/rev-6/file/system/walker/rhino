@@ -9,21 +9,23 @@ print( '!' )
 
 load( '.../lib/mimis/branch/rev-6/js' )
 
-print( '!' )
-
-;
-( function() {
-    var neo4j = mimis.load( 'neo4j/mimis' )
+;( function() {
+    var neo4j = mimis.load( mimis.base + 'neo4j/mimis' )
     var db = new neo4j.Database( 'tmp/fs/neo4j/' )
-    var walker = mimis.load( 'file/type/xls/rhino' )
-
+    var fs = mimis.load( mimis.base + 'file/set/rhino' )
+    
     var tx = db.mk.tx
     try {
-        var workbook = new xls.Workbook( 'test.xlsx' )
-        var node = { workbook : db.mk.node }
-        var rel = { workbook : db.mk.rel( 'workbook' ) }
-        db.ref.rel.to( node.workbook, rel.workbook )
-        workbook.sheets.each( function( sheet ) {
+        var walker = new fs.FileSet( 'file/system/walker/default/fileset/xml' )
+
+/*
+        var node = { walker : db.mk.node }
+        var rel = { walker : db.mk.rel( 'filesystem walk' ) }
+        db.ref.rel.to( node.walker, rel.walker )
+*/
+        walker.files.each( function( file ) {
+            console.log( file )
+/*
             node.sheet = db.mk.node
             node.workbook.rel.to( node.sheet, rel.workbook )
             node.workbook.rel.to( node.sheet, db.mk.rel( 'sheet' ) )
@@ -39,50 +41,18 @@ print( '!' )
                     node.cell.prop( 'val', cell.valueOf() )
                 } )
             } )
+*/
         } )
         
+/*
         db.ref.traverse( { rel : rel.workbook } )
             .each( function( node ) {
                 console.log( node.prop( 'val' ) )
             } )
+*/
         tx.success
     } finally {
         tx.finish
         db.shutdown
-    }
-
-    return
-    
-    try {
-        var Connection = java.sql.Connection
-        var server = mimis.load( '.../work/ssis/server/mimis' )
-        
-        var DriverManager = java.sql.DriverManager
-        
-        java.lang.Class.forName( 'com.microsoft.sqlserver.jdbc.SQLServerDriver' ).newInstance()
-        
-        var con = DriverManager.getConnection( server.uri, server.user, server.pass )
-        if( con != null ) {
-            console.log( 'Connected: ' + server.uri )
-            
-            var meta = con.getMetaData()
-            console.log( 'Driver Information:' )
-            console.log( "\tDriver Name:" + meta.getDriverName() )
-            console.log( "\tDriver Version:" + meta.getDriverVersion() )
-            console.log( 'Database Information:' )
-            console.log( "\tDatabase Name: " + meta.getDatabaseProductName() )
-            console.log( "\tDatabase Version: " + meta.getDatabaseProductVersion() )
-            
-            var cats = meta.getCatalogs()
-            console.log( 'Avalilable Catalogs:' )
-            while( cats.next() ) {
-                console.log( "\tCatalog: "+ cats.getString( 1 ) )
-            } 
-            cats.close()
-            
-            con.close()
-        }
-    } catch ( ioe ) {
-        console.log( ioe )
     }
 } )()
