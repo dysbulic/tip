@@ -1,0 +1,98 @@
+//!/bin/js
+
+// Symlinks for the m$oft jvm
+if( typeof environment !== 'undefined' && environment[ 'os.emulator' ] == 'cygwin' ) {
+    load( 'C:\\Program Files\\Mimis\\js' )
+}
+
+load( '.../lib/mimis/js' )
+
+;
+( function() {
+    try {
+        var Connection = java.sql.Connection
+        var server = mimis.load( '.../work/ssis/server/mimis' )
+        
+        var DriverManager = java.sql.DriverManager
+        var SQLServerDriver = com.microsoft.sqlserver.jdbc.SQLServerDriver
+        
+        java.lang.Class.forName( 'com.microsoft.sqlserver.jdbc.SQLServerDriver' ).newInstance()
+        
+        var con = DriverManager.getConnection( server.uri, server.user, server.pass )
+        if( con != null ) {
+            var prefix = 'rpt_competency_ge2013_t'
+            var stmt = con.createStatement()
+
+            // Create tables if they don't exist
+            ;[ 'func', 'metric', 'node', 'score', 'tree_map' ].each( function( tbl ) {
+                stmt.executeUpdate( 'DROP TABLE ' + prefix + '_' + tbl )
+                stmt.executeUpdate(
+                    "IF( NOT EXISTS("
+                        + " SELECT * FROM INFORMATION_SCHEMA.TABLES"
+                        + " WHERE TABLE_SCHEMA = 'dbo'"
+                        + " AND TABLE_NAME = '" + prefix + '_' + tbl + "'"
+                        + " ) )"
+                        + ' ' + mimis.load( 'tables/' + tbl + '/m$sql' )
+                )
+            } )
+
+            var pIns = con.prepareCall( "INSERT INTO " + prefix + "_node (name) VALUES (?);"
+                                        + 'SELECT @@IDENTITY' )
+            var pTree = con.prepareCall( "INSERT INTO " + prefix + "_tree_map (node_id, child_id) VALUES (?,?)" )
+            function addNode( name ) {
+                pIns.setString( 1, name )
+                pIns.execute()
+                pIns.getMoreResults()
+                var rs = pIns.getResultSet()
+                var node = {
+                    addChild : function( child ) {
+                        pTree.setInt( 1, node.id )
+                        pTree.setInt( 2, child.id )
+                        pTree.execute()
+                        child.parent = node
+                    }
+                }
+                if( rs != null && rs.next() ) {
+                    node.id = rs.getInt( 1 )
+                    rs.close()
+                }
+                return node
+            }
+
+            var root = addNode( '' )
+
+            ;( function storeTree( cur, parent ) {
+                if( $.isString( cur ) ) {
+                    parent.addChild( addNode( cur ) )
+                } else if( typeof cur === 'undefined' ) {
+                    console.log( 'undef' )
+                } else if( $.isFunction( cur ) ) {
+                    var db = mimis.load( '.../lib/mimis/rdbms/eson' )
+                    cur( parent, db )
+                } else if( typeof cur.each !== 'undefined' ) {
+                    cur.each( function( elem ) {
+                        storeTree( elem, parent )
+                    } )
+                } else if( $.isObject( cur ) ) {
+                    for( childName in cur ) {
+                        var child = addNode( childName )
+                        parent.addChild( child )
+                        storeTree( cur[ childName ], child )
+                    }
+                } else {
+                    console.log( 'ukn: ' + root )
+                }
+            } )( mimis.load( 'eson' ), root )
+
+            var rs = stmt.executeQuery( 'SELECT id, name FROM rpt_competency_ge2013_t_node' )
+            while( rs.next() ) {
+                console.log( 'comp: ' + rs.getInt( 1 ) + ': ' + rs.getString( 2 ) )
+            }
+            rs.close()
+
+            con.close()
+        }
+    } catch ( ioe ) {
+        console.log( ioe )
+    }
+} )()
