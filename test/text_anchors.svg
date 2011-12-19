@@ -6,23 +6,16 @@
     <style type="text/css">
       rect { fill: lightblue; stroke: gray; }
       #green { fill: lightgreen; }
-      text { text-anchor: middle; text-align: center; font-size: 5px; }
+      text { text-anchor: start; font-size: 5px; }
     </style>
   </defs>
   <g transform="translate(10, 10)">
     <rect x="0" y="0" width="150" height="10" rx="2"/>
-    <text x="75" y="7"><![CDATA[<style> rect { fill: lightblue; } </style>]]></text>
-  </g>
-  <g transform="translate(10, 25)">
-    <rect id="green" x="0" y="0" width="150" height="10" rx="2"/>
-    <text x="75" y="7"><![CDATA[<style> #green { fill: lightgreen; } </style>]]></text>
-  </g>
-  <g transform="translate(10, 40)">
-    <rect x="0" y="0" width="150" height="10" rx="2" fill="pink"/>
-    <text x="75" y="7"><![CDATA[<rect fill="pink"/>]]></text>
-  </g>
-  <g transform="translate(10, 55)">
-    <rect x="0" y="0" width="150" height="10" rx="2" style="fill: lightyellow"/>
-    <text x="75" y="7"><![CDATA[<rect style="fill: lightyellow"/>]]></text>
+    <text>
+      <tspan><![CDATA[<style> rect { fill: lightblue; } </style>]]></tspan>
+    </text>
+    <text y="7" transform="scale(-1, 1)" style="text-anchor: end">
+      <tspan><![CDATA[<style> rect { fill: lightblue; } </style>]]></tspan>
+    </text>
   </g>
 </svg>
