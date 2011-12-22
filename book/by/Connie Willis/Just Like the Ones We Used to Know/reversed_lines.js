@@ -6,27 +6,32 @@
  */
 $( function() {
        var $body = $('body')
-       
        var $svg = $( document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' ) )
        $svg.attr( {
 		      width : $body.width(),
 		      height : $body.height(),
 		      viewBox : "0 0 " + $body.width() + " " + $body.height(),
 		  } )
-       
        var $forward = $( document.createElementNS( 'http://www.w3.org/2000/svg', 'foreignObject' ) )
        $forward.attr( {
 			  x : 0, y : 0,
 			  width : $body.width(), height : $body.height(),
 			  viewBox : "0 0 " + $body.width() + " " + $body.height(),
 		      } )
-       $svg.append( $forward )
-       
-       var $newBody = $( document.createElementNS( 'http://www.w3.org/1999/xhtml', 'body' ) )
-       $newBody.append( $svg )
+       var $reverse = $( document.createElementNS( 'http://www.w3.org/2000/svg', 'foreignObject' ) )
+       $reverse.attr( {
+			  x : -$body.width(), y : 0,
+			  width : $body.width(), height : $body.height(),
+			  transform : 'scale(-1,1)',
+			  viewBox : "0 0 " + $body.width() + " " + $body.height(),
+		      } )
 
-       var $html = $( document.createElementNS( 'http://www.w3.org/1999/xhtml', 'html' ) )
-       $html.append( $('head, body') )
-       $('html').append( $newBody )
-       $forward.append( $html )
+       var $holder = $('<div/>')
+       $holder.append( $body.children() )
+       $body.prepend( $svg )
+
+       $forward.append( $holder.children().clone( true ) )
+       $reverse.append( $holder.children() )
+       $svg.append( $forward )
+       $svg.append( $reverse )
    } )
