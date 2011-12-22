@@ -1,0 +1,1032 @@
+/*
+Theme Name: NotesIL
+Theme URI: http://notes.co.il/
+Description: Two-column theme with different color schemes. Based on the original design of http://notes.co.il by Jordan Lewinsky and built on top of the Sandbox theme.
+Version: 0.6-wpcom
+Author: Automattic
+Author URI: http://automattic.com/
+Tags: red, white, microformats, fixed-width, two-columns, left-sidebar, rtl-language-support, custom-colors, custom-background, translation-ready, blog, bright, clean, conservative, formal, geometric, light
+License: GNU General Public License v2.0
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+.entry-title,
+.entry-meta,
+#trackbacks-list,
+#respond {
+	clear: both;
+}
+div#container,
+div#primary {
+	margin-top: 2em;
+}
+form#commentform .form-label {
+	margin: 1em 0 0;
+}
+form#commentform span.required {
+	color: #c30;
+}
+form#commentform,
+form#commentform p {
+	padding: 0;
+}
+input#author,
+input#email,
+input#url,
+textarea#comment {
+	padding: 0.2em;
+	display: block;
+	margin-left: 120px;
+	margin-top: -20px;
+}
+#comments {
+	clear: both;
+	margin-top: 20px;
+}
+div.comments ol li {
+	margin: 0 0 3.5em;
+}
+textarea#comment {
+	height: 13em;
+	margin: 0 0 0.5em;
+	overflow: auto;
+}
+div.gallery {
+	clear: both;
+	height: 180px;
+	margin: 1em 0;
+	width: 100%;
+}
+p.wp-caption-text {
+	font-style: italic;
+}
+.hentry h2,
+.edit-link {
+	clear: both;
+}
+.page .edit-link {
+	padding-top: 10px;
+}
+div.gallery dl {
+	margin: 1em auto;
+	overflow: hidden;
+	text-align: center;
+}
+div.gallery dl.gallery-columns-1 {
+	width: 100%;
+}
+div.gallery dl.gallery-columns-2 {
+	width: 49%;
+}
+div.gallery dl.gallery-columns-3 {
+	width: 33%;
+}
+div.gallery dl.gallery-columns-4 {
+	width: 24%;
+}
+div.gallery dl.gallery-columns-5 {
+	width: 19%;
+}
+div#nav-above {
+	margin-bottom: 1em;
+}
+div#nav-below {
+	margin: 1em 0;
+}
+div#nav-images {
+	height: 150px;
+	margin: 1em 0;
+}
+div.navigation {
+	height: 1.25em;
+}
+div.navigation div.nav-next {
+	float: right;
+	text-align: right;
+}
+div.sidebar h3 {
+	font-size: 1.1em;
+}
+div.sidebar input#s {
+	width: 7em;
+}
+div.sidebar li {
+	list-style: none;
+	margin: 0 0 2em;
+}
+div.sidebar li form {
+	margin: 0.2em 0 0;
+	padding: 0;
+}
+div.sidebar ul ul li {
+	margin: 0;
+}
+div.sidebar ul ul ul {
+	margin: 0 0 0 0.5em;
+}
+div.gallery dl,
+div.navigation div.nav-previous {
+	float: left;
+}
+div#footer {
+	text-align: center;
+}
+div.gallery *,
+div.sidebar div,
+div.sidebar h3,
+div.sidebar ul {
+	margin: 0;
+	padding: 0;
+}
+
+/*
+LAYOUT: Two-Column (Left)
+*/
+html,
+body,
+div {
+	margin: 0;
+	padding: 0;
+}
+div#wrapper {
+	margin: 0 auto;
+}
+div#container {
+	width: 750px;
+	margin: 0 auto;
+}
+div#header h1,
+div#blog-description {
+	width: 750px;
+	margin: 0 auto;
+}
+div#content {
+	margin: 1em 0 10px -210px;
+	width: 530px;
+	float: right;
+}
+div.sidebar {
+	float: left;
+	overflow: hidden;
+	width: 190px;
+	margin-bottom: 10px;
+}
+div#secondary {
+	clear: left;
+}
+div#footer {
+	clear: both;
+	width: 750px;
+	margin: 10px auto 0;
+	min-height: 40px;
+	padding: 20px 0;
+}
+
+/*COLORS
+*/
+
+/*Default dark-red*/
+a,
+h2.entry-title,
+h2.entry-title a,
+div.sidebar ul li a:hover {
+	color: #BC0404;
+}
+a.published {
+	color: #000 !important;
+	border-bottom: 1px dotted;
+	text-decoration: none;
+}
+.post h3 {
+	color: #666;
+}
+a:hover,
+div.sidebar ul li a {
+	color: #00447C;
+}
+#header,
+#footer,
+th {
+	background: #BC0404;
+}
+#footer a,
+h1#blog-title,
+h1#blog-title span a,
+#header,
+#footer,
+div#blog-description,
+th {
+	color: #fff;
+}
+div.sidebar h3 {
+	color: #555;
+	border-color: #bdbdbd;
+}
+div.comment-meta,
+div.comment-actions,
+.trackback div.comment-author,
+.pingback div.comment-author {
+	background: #D5A8A8;
+}
+div.comment-meta,
+.trackback div.comment-author,
+.pingback div.comment-author,
+div#comments ul li.comment blockquote,
+table,
+td,
+th {
+	border-color: #9B9B9B;
+}
+div#comments div.singlecomment,
+#respond,
+div#comments h3 {
+	background: #E5E4E8;
+}
+h2.entry-title,
+blockquote {
+	border-color: #fff;
+}
+.buxaLT,
+.buxaST {
+	background: #FFC9C9;
+}
+
+/*black*/
+.black a,
+.black h2.entry-title,
+.black h2.entry-title a,
+.black div.sidebar ul li a:hover {
+	color: #000;
+}
+.black .post h3 {
+	color: #FF6600;
+}
+.black a:hover,
+.black div.sidebar ul li a {
+	color: #F60;
+}
+.black #header,
+.black #footer,
+.black th {
+	background: #000;
+}
+.black div.comment-meta,
+.black div.comment-actions,
+.black .trackback div.comment-author,
+.black .pingback div.comment-author {
+	background: #D6D6D6;
+}
+.black div.comment-meta,
+.black .trackback div.comment-author,
+.black .pingback div.comment-authorת div#comments ul li.comment blockquote,
+.black table,
+.black td,
+.black th {
+	border-color: #9B9B9B;
+}
+.black div#comments div.singlecomment {
+	background: #F1F1F1;
+}
+.black h2.entry-title,
+.black blockquote {
+	border-color: #000;
+}
+.buxaLT,
+.buxaST {
+	background: #CDCDCD;
+}
+
+/*darkblue*/
+.darkblue a,
+.darkblue h2.entry-title,
+.darkblue h2.entry-title a,
+.darkblue div.sidebar ul li a:hover {
+	color: #213970;
+}
+.darkblue .post h3 {
+	color: #3E6697;
+}
+.darkblue a:hover,
+.darkblue div.sidebar ul li a {
+	color: #D35B0A;
+}
+.darkblue #header,
+.darkblue #footer,
+.darkblue th {
+	background: #213970;
+}
+.darkblue div.comment-meta,
+.darkblue div.comment-actions,
+.darkblue .trackback div.comment-author,
+.darkblue .pingback div.comment-author {
+	background: #BABCD6;
+}
+.darkblue div.comment-meta,
+.darkblue .trackback div.comment-author,
+.darkblue .pingback div.comment-authorת div#comments ul li.comment blockquote,
+.darkblue table,
+.darkblue td,
+.darkblue th {
+	border-color: #AAB7D6;
+}
+.darkblue div#comments div.singlecomment {
+	background: #E5E4E8;
+}
+.darkblue h2.entry-title,
+.darkblue blockquote {
+	border-color: #213970;
+}
+.buxaLT,
+.buxaST {
+	background: #E2EDFB;
+}
+
+/*darkgreen*/
+.darkgreen a,
+.darkgreen h2.entry-title,
+.darkgreen h2.entry-title a,
+.darkgreen div.sidebar ul li a {
+	color: #3E6697;
+}
+.darkgreen .post h3 {
+	color: #3D750B;
+}
+.darkgreen a:hover,
+.darkgreen div.sidebar ul li a.hover {
+	color: #E27627;
+}
+.darkgreen #header,
+.darkgreen #footer,
+.darkgreen th {
+	background: #3D750B;
+}
+.darkgreen div.comment-meta,
+.darkgreen div.comment-actions,
+.darkgreen .trackback div.comment-author,
+.darkgreen .pingback div.comment-author {
+	background: #D4E0A4;
+}
+.darkgreen div.comment-meta,
+.darkgreen .trackback div.comment-author,
+.darkgreen .pingback div.comment-authorת div#comments ul li.comment blockquote,
+.darkgreen table,
+.darkgreen td,
+.darkgreen th {
+	border-color: #D4D4D4;
+}
+.darkgreen div#comments div.singlecomment {
+	background: #E5E4E8;
+}
+.darkgreen h2.entry-title,
+.darkgreen blockquote {
+	border-color: #3D750B;
+}
+.buxaLT,
+.buxaST {
+	background: #C1E7BC;
+}
+
+/*darkpurple*/
+.darkpurple a,
+.darkpurple h2.entry-title,
+.darkpurple h2.entry-title a,
+.darkpurple div.sidebar ul li a:hover {
+	color: #660066;
+}
+.darkpurple .post h3 {
+	color: #652865;
+}
+.darkpurple a:hover,
+.darkpurple div.sidebar ul li a {
+	color: #213970;
+}
+.darkpurple #header,
+.darkpurple #footer,
+.darkpurple th {
+	background: #660066;
+}
+.darkpurple div.comment-meta,
+.darkpurple div.comment-actions,
+.darkpurple .trackback div.comment-author,
+.darkpurple .pingback div.comment-author {
+	background: #BCA0BC;
+}
+.darkpurple div.comment-meta,
+.darkpurple .trackback div.comment-author,
+.darkpurple .pingback div.comment-authorת div#comments ul li.comment blockquote,
+.darkpurple table,
+.darkpurple td,
+.darkpurple th {
+	border-color: #CEABCE;
+}
+.darkpurple div#comments div.singlecomment {
+	background: #DFCADF;
+}
+.darkpurple h2.entry-title,
+.dark-purple blockquote {
+	border-color: #660066;
+}
+.buxaLT,
+.buxaST {
+	background: #FDE7FF;
+}
+
+/*grey*/
+.grey a,
+.grey h2.entry-title,
+.grey h2.entry-title a,
+.grey div.sidebar ul li a {
+	color: #6B6B6B;
+}
+.grey .post h3 {
+	color: #6B6B6B;
+}
+.grey a:hover,
+.grey div.sidebar ul li a:hover {
+	color: #BE4E4E;
+}
+.grey #header,
+.grey #footer,
+.grey th {
+	background: #6B6B6B;
+}
+.grey div.comment-meta,
+.grey div.comment-actions,
+.grey .trackback div.comment-author,
+.grey .pingback div.comment-author {
+	background: #BAC5D2;
+}
+.grey div.comment-meta,
+.grey .trackback div.comment-author,
+.grey .pingback div.comment-authorת div#comments ul li.comment blockquote,
+.grey table,
+.grey td,
+.grey th {
+	border-color: #D4D4D4;
+}
+.grey div#comments div.singlecomment {
+	background: #E5E4E8;
+}
+.grey h2.entry-title,
+.grey blockquote {
+	border-color: #6B6B6B;
+}
+.buxaLT,
+.buxaST {
+	background: #EBEBEB;
+}
+
+/*lightblue*/
+.lightblue a,
+.lightblue h2.entry-title,
+.lightblue h2.entry-title a,
+.lightblue div.sidebar ul li a {
+	color: #3E6697;
+}
+.lightblue .post h3 {
+	color: #3E6697;
+}
+.lightblue a:hover,
+.lightblue div.sidebar ul li a:hover {
+	color: #8E2525;
+}
+.lightblue #header,
+.lightblue #footer,
+.lightblue th {
+	background: #BAC5D2;
+}
+.lightblue div.comment-meta,
+.lightblue div.comment-actions,
+.lightblue .trackback div.comment-author,
+.lightblue .pingback div.comment-author {
+	background: #C7D4E3;
+}
+.lightblue div.comment-meta,
+.lightblue .trackback div.comment-author,
+.lightblue .pingback div.comment-authorת div#comments ul li.comment blockquote,
+.lightblue table,
+.lightblue td,
+.lightblue th {
+	border-color: #D4D4D4;
+}
+.lightblue div#comments div.singlecomment {
+	background: #E5E4E8;
+}
+.lightblue h2.entry-title,
+.lightblue blockquote {
+	border-color: #BAC5D2;
+}
+.buxaLT,
+.buxaST {
+	background: #DDE6FB;
+}
+
+/*lightgreen*/
+.lightgreen a,
+.lightgreen h2.entry-title,
+.lightgreen h2.entry-title a,
+.lightgreen div.sidebar ul li a:hover {
+	color: #BD6868;
+}
+.lightgreen .post h3 {
+	color: #BD6868;
+}
+.lightgreen a:hover,
+.lightgreen div.sidebar ul li a {
+	color: #213970;
+}
+.lightgreen #header,
+.lightgreen #footer,
+.lightgreen th {
+	background: #749881;
+}
+.lightgreen div.comment-meta,
+.lightgreen div.comment-actions,
+.lightgreen .trackback div.comment-author,
+.lightgreen .pingback div.comment-author {
+	background: #B8C9BE;
+}
+.lightgreen div.comment-meta,
+.lightgreen .trackback div.comment-author,
+.lightgreen .pingback div.comment-authorת div#comments ul li.comment blockquote,
+.lightgreen table,
+.lightgreen td,
+.lightgreen th {
+	border-color: #A9C8B4;
+}
+.lightgreen div#comments div.singlecomment {
+	background: #E1EFE6;
+}
+.lightgreen h2.entry-title,
+.lightgreen blockquote {
+	border-color: #749881;
+}
+.buxaLT,
+.buxaST {
+	background: #DDFBE8;
+}
+
+/*lightpurple*/
+.lightpurple a,
+.lightpurple h2.entry-title,
+.lightpurple h2.entry-title a,
+.lightpurple div.sidebar ul li a {
+	color: #666699;
+}
+.lightpurple .post h3 {
+	color: #9999CC;
+}
+.lightpurple a:hover,
+.lightpurple div.sidebar ul li a:hover {
+	color: #213970;
+}
+.lightpurple #header,
+.lightpurple #footer,
+.lightpurple th {
+	background: #9999CC;
+}
+.lightpurple div.comment-meta,
+.lightpurple div.comment-actions,
+.lightpurple .trackback div.comment-author,
+.lightpurple .pingback div.comment-author {
+	background: #D8D8E4;
+}
+.lightpurple div.comment-meta,
+.lightpurple .trackback div.comment-author,
+.lightpurple .pingback div.comment-authorת div#comments ul li.comment blockquote,
+.lightpurple table,
+.lightpurple td,
+.lightpurple th {
+	border-color: #CECEF4;
+}
+.lightpurple div#comments div.singlecomment {
+	background: #E3E3FA;
+}
+.lightpurple h2.entry-title,
+.lightpurple blockquote {
+	border-color: #B3B3E7;
+}
+.buxaLT,
+.buxaST {
+	background: #F3DEFF;
+}
+
+/*lightorange*/
+.lightorange a,
+.lightorange h2.entry-title,
+.lightorange h2.entry-title a,
+.lightorange div.sidebar ul li a {
+	color: #08782F;
+}
+.lightorange .post h3 {
+	color: #DC6700;
+}
+.lightorange a:hover,
+.lightorange div.sidebar ul li a:hover {
+	color: #DC6700;
+}
+.lightorange #header,
+.lightorange #footer,
+.lightorange th {
+	background: #DC6700;
+}
+.lightorange div.comment-meta,
+.lightorange div.comment-actions,
+.lightorange .trackback div.comment-author,
+.lightorange .pingback div.comment-author {
+	background: #F9C882;
+}
+.lightorange div.comment-meta,
+.lightorange .trackback div.comment-author,
+.lightorange .pingback div.comment-authorת div#comments ul li.comment blockquote,
+.lightorange table,
+.lightorange td,
+.lightorange th {
+	border-color: #D4D4D4;
+}
+.lightorange div#comments div.singlecomment {
+	background: #E5E4E8;
+}
+.lightorange h2.entry-title,
+.lightorange blockquote {
+	border-color: #DC6700;
+}
+.lightorange h2.entry-title {
+	border: 0;
+}
+.buxaLT,
+.buxaST {
+	background: #FAD4A7;
+}
+
+/*olive*/
+.olive a,
+.olive h2.entry-title,
+.olive h2.entry-title a,
+.olive div.sidebar ul li a {
+	color: #220;
+}
+.olive .post h3 {
+	color: #DC6700;
+}
+.olive a:hover,
+.olive div.sidebar ul li a:hover {
+	color: #f90;
+}
+.olive #header,
+.olive #footer,
+.olive th {
+	background: #660;
+}
+.olive div.comment-meta,
+.olive div.comment-actions,
+.olive .trackback div.comment-author,
+.olive .pingback div.comment-author {
+	background: #cc9;
+}
+.olive div.comment-meta,
+.olive .trackback div.comment-author,
+.olive .pingback div.comment-authorת div#comments ul li.comment blockquote,
+.olive table,
+.olive td,
+.olive th {
+	border-color: #D4D4A8;
+}
+.olive div#comments div.singlecomment {
+	background: #EEEEC3;
+}
+.olive blockquote {
+	border-color: #DC6700;
+}
+.buxaLT,
+.buxaST {
+	background: #D7E3D4;
+}
+
+/*strongbrown*/
+.strongbrown a,
+.strongbrown h2.entry-title,
+.strongbrown h2.entry-title a,
+.strongbrown div.sidebar ul li a {
+	color: #050;
+}
+.strongbrown .post h3 {
+	color: #050;
+}
+.strongbrown a:hover,
+.strongbrown div.sidebar ul li a:hover {
+	color: #f90;
+}
+.strongbrown #header,
+.strongbrown #footer,
+.strongbrown th {
+	background: #950;
+}
+.strongbrown div.comment-meta,
+.strongbrown div.comment-actions,
+.strongbrown .trackback div.comment-author,
+.strongbrown .pingback div.comment-author {
+	background: #CFAF88;
+}
+.strongbrown div.comment-meta,
+.strongbrown .trackback div.comment-author,
+.strongbrown .pingback div.comment-authorת div#comments ul li.comment blockquote,
+.strongbrown table,
+.strongbrown td,
+.strongbrown th {
+	border-color: #E3C8A6;
+}
+.strongbrown div#comments div.singlecomment {
+	background: #EDEDED;
+}
+.strongbrown blockquote {
+	border-color: #CD9B5C;
+}
+.buxaLT,
+.buxaST {
+	background: #E0C6A7;
+}
+
+/*
+DESIGN + TYPOGRAPHY
+*/
+body {
+	font-family: Arial, sans-serif;
+	font-size: 90%;
+}
+#header {
+	height: 80px;
+	padding-top: 20px;
+}
+#footer {
+	-moz-border-radius-topleft: 10px;
+	-moz-border-radius-topright: 10px;
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+a:hover {
+	text-decoration: none;
+}
+h1#blog-title,
+h1#blog-title span a {
+	text-decoration: none;
+}
+h1#blog-title img.blog-icon {
+	float: left;
+	margin-right: 8px;
+}
+h2.entry-title {
+	border-bottom: 1px solid;
+}
+h2.entry-title,
+h2.entry-title a {
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 1.2em;
+}
+h3 {
+	font-size: 1em;
+	margin: 3px 0;
+}
+div.entry-meta {
+	text-align: right;
+	font-size: 0.8em;
+	font-weight: bold;
+	clear: both;
+	padding-top: 25px;
+}
+div.entry-actions {
+	text-align: right;
+	font-size: 0.8em;
+	font-weight: bold;
+	clear: both;
+	margin-top: 5px;
+}
+div.sidebar h3 {
+	font-weight: 500;
+	font-family: Verdana, Tahoma, sans-serif;
+	margin-bottom: 6px;
+	border-bottom: 1px dotted;
+}
+div.sidebar ul {
+	list-style-type: none;
+}
+div.sidebar ul li {
+	list-style-type: none;
+	font-size: 0.9em;
+	line-height: 1.6em;
+}
+div#comments ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+div#comments ul li {
+	margin: 0 0 20px 0
+}
+div#comments ul.children {
+	margin: 10px 0 0 20px;
+}
+div.comment-meta {
+	height: 20px;
+}
+div.comment-meta,
+.trackback div.comment-author,
+.pingback div.comment-author {
+	padding: 6px 0px 6px 6px;
+	font-size: 0.9em;
+	line-height: 20px;
+	border-bottom: 4px solid;
+}
+.trackback div.comment-author,
+.pingback div.comment-author {
+	min-height: 20px;
+	height: auto;
+}
+div.comment-meta img.avatar {
+	float: right;
+	padding: 0 0 0 5px;
+	margin-top: -6px;
+}
+div.comment-meta span.fn,
+div.comment-meta span.comment-date {
+	float: left;
+}
+div.comment-actions {
+	font-size: 0.9em;
+	padding: 2px 0;
+	float: right;
+}
+div#comments div.singlecomment {
+	padding: 0;
+	margin: 0;
+}
+div#comments div.singlecomment p,
+div#comments ul li.comment blockquote {
+	padding: 4px;
+	margin: 0;
+}
+span.unapproved {
+	display: block;
+	padding: 4px;
+	margin: 0;
+	font-style: italic;
+	font-weight: bold;
+}
+div#comments ul li.comment blockquote {
+	margin: 4px 0 4px 20px;
+	padding: 0 4px 4px 4px;
+	border-left: 1px dotted;
+}
+#respond {
+	padding: 10px;
+}
+form#commentform p {
+	clear: both;
+	margin: 20px 0;
+	padding: 0;
+}
+#comments h3 {
+	font-family: Verdana, Tahoma, sans-serif;
+	font-weight: normal;
+	border-left: 14px solid #707070;
+	display: inline-block;
+	padding: 4px;
+	margin-bottom: 10px;
+}
+.form-label,
+.form-input {
+	margin: 1em 0 0;
+}
+.form-textarea {
+	clear: both;
+}
+#respond textarea {
+	width: 98%;
+}
+.form-label,
+.form-input {
+	display: block;
+	float: left;
+}
+.form-label {
+	width: 120px;
+}
+#respond input[type="text"] {
+	width: 160px;
+}
+.form-submit {
+	clear: left;
+}
+#respond .form-allowed-tags {
+	display: none;
+}
+#respond .comment-notes {
+	font-size: 12px;
+}
+blockquote {
+	margin-left: 10px;
+	padding-left: 10px;
+	border-left: 1px solid;
+}
+.entry-content embed,
+.entry-content object,
+.entry-content table,
+.entry-content img {
+	margin: 5px auto;
+}
+.entry-content img.size-auto,
+.entry-content img.size-full,
+.entry-content img.size-large,
+.entry-content img.size-medium,
+.entry-content .attachment img {
+	max-width: 100%;
+	width: auto;
+	height: auto;
+}
+.entry-content .entry-attachment img {
+	display: block;
+}
+td,
+th {
+	padding: 4px;
+	margin: 0;
+}
+div.sidebar li {
+	clear: both;
+}
+div.sidebar li.widget_notes_author img.avatar {
+	float: left;
+	margin: 0 8px 8px 0;
+}
+div.sidebar li.widget_notes_author h3 {
+	color: #000;
+	font-size: 12px;
+	line-height: 12px;
+	font-family: Arial, sans-serif;
+	font-weight: bold;
+	border: 0;
+}
+div.sidebar li.widget_notes_author p {
+	margin: 0;
+}
+table.recentcommentsavatar,
+table.recentcommentsavatar td {
+	border: 0;
+}
+.alignright,
+img.alignright {
+	float: right;
+	margin: 1em 0 0 1em;
+}
+.alignleft,
+img.alignleft {
+	float: left;
+	margin: 1em 1em 0 0;
+}
+.aligncenter,
+img.aligncenter {
+	display: block;
+	margin: 1em auto;
+	text-align: center;
+}
+.wp-caption {
+	border: 1px solid #ddd;
+	text-align: center;
+	background-color: #f3f3f3;
+	padding-top: 4px;
+	margin: 10px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+.wp-caption.aligncenter {
+	margin: 10px auto;
+}
+.wp-caption img {
+	margin: 0;
+	padding: 0;
+	border: 0 none;
+}
+.wp-caption p.wp-caption-text {
+	font-size: 11px;
+	line-height: 17px;
+	padding: 0 4px 5px;
+	margin: 0;
+}
+.widget_calendar table,
+.widget_calendar table td {
+	border: 1px solid #BDBDBD;
+	border-spacing: 0px;
+	border-collapse: collapse;
+	text-align: center;
+}
+.gallery-caption,
+.sticky,
+.bypostauthor {
+}
+.sharing {
+	clear: both;
+}

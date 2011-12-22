@@ -1,0 +1,166 @@
+/*
+Theme Name: Skeptical
+
+Adding support for language written in a Right To Left (RTL) direction is easy -
+it's just a matter of overwriting all the horizontal positioning attributes
+of your CSS stylesheet in a separate stylesheet file named rtl.css.
+
+http://codex.wordpress.org/Right_to_Left_Language_Support
+
+*/
+
+body {
+	direction: rtl;
+	unicode-bidi: embed;
+}
+input,
+textarea {
+	padding: 7px 7px 7px 0;
+}
+#logo {
+	float: right;
+}
+#topad {
+	float: left;
+}
+#navigation {
+	float: left;
+}
+#navigation ul.rss li {
+	float: right;
+}
+#navigation ul.rss li a {
+	background-position: right 25px;
+	margin: 0 20px 0 0;
+	padding: 17px 34px 17px 0;
+}
+.nav {
+	float: right;
+}
+.nav a:link,
+.nav a:visited {
+	margin: 0 0 0 1px;
+}
+.nav li {
+	float: right;
+}
+.nav ul {
+	float: right;
+	left: auto;
+	right: 0;
+}
+.nav li ul ul {
+	left: auto;
+	right: 100%
+}
+#footer-secondary h3 {
+	padding: 12px 15px 7px 0;
+}
+#sticky-posts .sticky-post .more {
+	background: url(images/ico-readmore.png) no-repeat left center;
+	padding: 0 0 0 17px;
+}
+.archive_header {
+	padding: 0 20px 0 0;
+}
+.catrss {
+	float: left;
+}
+.post.page {
+	margin-right: 20px;
+}
+.post .post-meta .post-date {
+	padding: 10px 15px 9px 0;
+}
+.post .main-image {
+	margin: 0 -20px 20px 0;
+}
+.post p.tags {
+	background: url(images/ico-tag.gif) no-repeat center right;
+	padding-left: 0;
+	padding-right: 25px;
+}
+.entry blockquote,
+.comment-content blockquote {
+	background: url(images/blockquote.png) no-repeat right 12px;
+	padding: 10px 50px 10px 20px;
+}
+.entry ul,
+.comment-content ul {
+	padding: 0 30px 0 0;
+}
+.entry ol,
+.comment-content ol {
+	padding: 0 30px 0 0;
+}
+.entry th,
+.comment-content th {
+	text-align: right;
+}
+.entry td,
+.comment-content td {
+	padding: 6px 0 6px 10px;
+}
+#author-avatar {
+	float: right;
+	margin-left: -65px;
+	margin-right: 0;
+}
+#author-description {
+	float: right;
+	margin-left: 0;
+	margin-right: 85px;
+}
+.nav-entries,
+.post-entries {
+	margin: 0 20px 0 0;
+}
+.widget ul ul {
+	padding: 10px 10px 0 0;
+}
+.widget input#s {
+	float: right;
+	margin: 0 0 5px 5px;
+	padding: 7px 7px 7px 0;
+}
+.widget input#searchsubmit,
+.widget_blog_subscription input[type="submit"] {
+	float: left;
+}
+.widget_authors img {
+	float: right;
+	padding-left: 10px;
+	padding-right: 0;
+}
+#comments {
+	margin-right: 20px;
+}
+#comments .comment .comment-container .comment-content {
+	float: right;
+}
+#comments .avatar {
+	float: right;
+	margin: 0 0 10px 10px;
+}
+#comments ul.children {
+	margin: 0 25px 0 0;
+}
+.pinglist li {
+	list-style-type: decimal;
+	margin: 0 20px 0 0;
+}
+.format-link .link a:after{
+	content: "\2190";
+	padding-left: 0;
+	padding-right: 6px;
+}
+.format-gallery .entry .gallery-thumb {
+	margin: 0 -20px 0 0;
+}
+#ie7 .widget ul li {
+	padding-right: 0 !important;
+}
+#ie7 #navigation .nav,
+#ie7 #navigation .rss {
+	float: right;
+}

@@ -1,0 +1,1078 @@
+/*
+Theme Name: Under the Influence
+Author URI: http://www.spaceperson.net/
+Description: Minimalist theme with admin panel for custom colors, two- or three-column-layout and various other options.
+Version: 1.03-wpcom
+Author: Spaceperson
+Tags: fixed-width, two-columns, three-columns, light, white, green, custom-colors, custom-header, theme-options, sticky-post, right-sidebar, translation-ready, rtl-language-support, custom-menu, artistic, blog, bright, clean, fashion, music, news, photography
+
+	Based on WordPress 2.9's default theme.
+	The CSS, XHTML and design is released under GPL:
+	http://www.opensource.org/licenses/gpl-license.php
+
+*/
+
+/* Typography & Colors */
+
+a {
+	color: #333;
+	text-decoration: none;
+	outline: none;
+}
+
+.attachment a {
+	border: none !important;
+}
+
+acronym, abbr, .caps {
+	font-size: 0.9em;
+	letter-spacing: 0.07em;
+}
+
+span.author {
+	font-size: 0.8em;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}
+
+span.author, #navigation ul li a, .navigation, .navigation a {
+	color: #999;
+}
+
+body {
+	font-size: 62.5%; /* Resets 1em to 10px */
+	font-family: 'Lucida Grande', Verdana, Arial, sans-serif;
+	color: #333;
+	text-align: center;
+}
+
+.entry th, .entry td {
+	padding: 5px;
+}
+
+.commentbox cite a {
+	color: #000;
+}
+
+code {
+	font: 1.1em 'Courier New', Courier, monospace;
+}
+
+.commentbox {
+	border: 1px solid #ccc;
+}
+
+.commentlist cite, #footer ul li, #footer ol li, h3 {
+	font-size: 1.3em;
+}
+
+.commentlist li, #commentform input, #commentform textarea, .nocomments {
+	font: 0.9em Arial, Helvetica, sans-serif;
+}
+
+.commentlist p {
+	font-weight: normal;
+	line-height: 1.5em;
+	text-transform: none;
+}
+
+.commentmetadata {
+	border-bottom: 1px solid #eee;
+}
+
+.commentmetadata a, .reply a {
+	border: none !important;
+}
+
+#content {
+	font-size: 1.2em;
+}
+
+#content_container .search, #footer .search {
+	border: none;
+}
+#sidebar #credits {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	border-top: 1px solid #ddd;
+	padding: 10px 0;
+	font-style: italic !important;
+}
+
+.description {
+	letter-spacing: 2px !important;
+}
+
+.entry {
+	line-height: 1.6em;
+}
+
+.entry a, .comment_body a {
+	border-bottom: 1px dotted #666;
+}
+
+.entry a img {
+	margin-bottom: -3px;
+}
+
+.entry a:hover {
+	color: #FFF;
+}
+
+.entry h1 {
+	font-size: 2.4em;
+}
+
+#footer .children a {
+	font-size: 12px;
+}
+
+#footer p {
+	text-align: center;
+}
+
+#footer ul li, #footer ol li {
+	letter-spacing: -1px;
+	border-bottom: 2px dotted #ddd;
+}
+
+.gallery a {
+	border: none !important;
+}
+
+.gallery img {
+	padding: 2px;
+	border: 1px solid #ccc;
+	width: auto;
+}
+
+h1, h1 a, h1 a:visited, h2, h2 a, h2 a:hover, h2 a:focus, h2 a:visited,
+h3, h3 a, h3 a:hover, h3 a:focus, h3 a:visited, #sidebar h2, #wp-calendar caption,
+cite, #navigation ul li a {
+	text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6, #navigation ul li, .description, .more-link, .commentlist cite {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	letter-spacing: -1px;
+	font-weight: normal;
+}
+
+h2 {
+	font-size: 1.8em;
+}
+
+h2, h2 a, h3, h3 a, #navigation ul li.current_page_item a, #navigation ul li a:hover,
+#navigation ul li a:focus, #commentform input, #commentform textarea, .entry a {
+	color: #333;
+}
+
+.archive h2.pagetitle,
+.search h2.pagetitle {
+	font-size: 21px;
+	margin: 20px 10px;
+}
+
+.nocomments {
+	font-style: italic;
+}
+
+#page {
+	text-align: left;
+}
+
+.post .date, .page .date {
+	border-bottom: 1px dotted #ccc;
+	text-transform: uppercase;
+	font-size: 0.7em;
+}
+
+.postmetadata {
+	border-top: 1px dotted #ccc;
+	border-bottom: 2px dotted #ddd;
+}
+
+.postmetadata a, .tags a {
+	border: none !important;
+}
+
+.postmetadata, .tags {
+	text-align: right;
+	font-size: 0.8em;
+}
+
+.more-link, #content_container .search, #footer .search, .navigation, .commentlist li ul li, #credits {
+	font-size: 1em;
+}
+
+.reply {
+	border: solid #ddd;
+	border-width: 1px 0 0 1px;
+	background-color: #fff;
+}
+
+.reply a {
+	color: #ccc;
+}
+
+#sidebar .children a {
+	font-size: 9px;
+}
+
+#sidebar ul ul li, #sidebar ul ol li {
+	border-bottom: 1px solid #eee;
+}
+
+#sidebar h2 {
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+small, #sidebar ul ul li, #sidebar ul ol li, #footer ul ul li, #footer ul ol li, .nocomments, .postmetadata, blockquote, strike, .tags, #credits, #credits a, #content_container .search, #footer .search, .post .date, .page .date {
+	color: #666;
+}
+
+small, .reply a {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 0.9em;
+	line-height: 1.5em;
+}
+
+.sticky {
+	background: #f7f7f7;
+}
+
+.sticky h2 {
+	font-style: italic;
+}
+
+.vcard {
+	float: left;
+	border: 1px solid #ddd;
+	padding: 2px;
+}
+
+#wp-calendar #prev, #wp-calendar #next {
+	font-size: 8pt;
+}
+
+#wp-calendar a {
+	text-decoration: none;
+	background-color: #eee;
+}
+
+#wp-calendar a:hover, #wp-calendar a:focus {
+	color: #fff;
+}
+
+#wp-calendar caption {
+	text-align: center;
+}
+
+#wp-calendar th {
+	font-style: normal;
+	text-transform: capitalize;
+}
+
+/* Typography & Colors */
+
+/* Structure */
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	margin: 0 0 20px 0;
+	padding: 0;
+}
+
+#page {
+	margin: 0;
+}
+
+.page #content {
+	padding-top: 10px;
+}
+
+#content_container {
+	clear: left;
+	margin: auto;
+}
+
+/*contains content, sidebar and navigation bar*/
+#content {
+	float: left;
+	margin-top: 10px;
+}
+
+.post, .search .page {
+	text-align: justify;
+	overflow: hidden;
+	margin: 0 13px 0 0;
+	padding: 12px 7px 12px 7px;
+}
+
+.singlepage .post, .singlepage .page {
+	padding: 0 20px 12px 12px;
+	float: none;
+}
+
+.post .date, .page .date {
+	width: 150px;
+}
+
+.entry {
+	margin-top: 10px;
+	position: relative;
+}
+
+.entry p {
+	margin: 10px 0px;
+}
+
+.postmetadata {
+	margin-top: 20px;
+	padding: 3px 0 3px;
+	clear: both;
+}
+
+hr {
+	display: block;
+	clear: both;
+	visibility: hidden;
+}
+
+.clear {
+	clear: both;
+}
+
+#footer {
+	margin: 20px auto 10px;
+	clear: both;
+	overflow: hidden;
+	padding-bottom: 20px;
+}
+
+#footer p {
+	padding: 20px 0;
+	clear: both;
+}
+
+/* Structure */
+
+/*	Headers */
+h1 {
+	margin: 0;
+}
+
+.entry h1, .entry h2, .entry h3, .entry h4, .entry h5, .entry h6 {
+	margin: 10px 0;
+}
+
+#title_box {
+	padding: 10px 25px 5px;
+	margin-left: 7px;
+	position: relative;
+	float: left;
+}
+
+.corner_bl, .corner_br, .corner_tr, .corner_tl {
+	position: absolute;
+}
+
+.corner_bl {
+	background: url(images/kreis.png) 0 10px;
+	left: 0;
+	bottom: 0;
+	width: 10px;
+	height: 10px;
+}
+
+.corner_br {
+	background: url(images/kreis.png) 10px 10px;
+	right: 0;
+	bottom: 0;
+	width: 10px;
+	height: 10px;
+}
+
+.corner_tr {
+	background: url(images/kreis_voll.png) 0 0;
+	right: -7px;
+	width: 7px;
+	height: 7px;
+	top: 0;
+}
+
+.corner_tl {
+	background: url(images/kreis_voll.png) 7px 0;
+	left: -7px;
+	width: 7px;
+	height: 7px;
+	top: 0;
+}
+
+h2 {
+	margin-top: 10px;
+}
+
+#sidebar h2 {
+	margin-top: 5px;
+	padding: 0;
+}
+
+h3#comments {
+	margin: 40px auto 10px;
+}
+
+h3#trackback {
+	margin: 40px auto 10px;
+}
+
+#footer h2 {
+	background: url(images/floral_kl.png) center bottom no-repeat;
+	padding-bottom: 15px;
+	position: relative;
+	z-index: 1;
+}
+
+/* Headers */
+
+/* Images */
+a img, .entry img {
+	padding: 2px;
+	border: 1px solid #ccc;
+	max-width: 100%;
+	width: auto;
+	height: auto;
+}
+
+/*	Using 'class="alignright"' on an image will (who would've
+	thought?!) align the image to the right. And using 'class="centered',
+	will of course center the image. This is much better than using
+	align="center", being much more futureproof (and valid) */
+.alignright {
+	float: right;
+}
+
+.alignleft {
+	float: left;
+}
+
+.mainpage .alignnone img {
+	max-width: 360px !important;
+	height: auto;
+}
+
+.centered {
+	text-align: center;
+	margin: 0 auto;
+}
+
+img.centered, img.alignright, img.alignleft {
+	padding: 2px;
+	border: 1px solid #ccc;
+}
+
+img.centered {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+img.alignright {
+	margin: 2px 0 2px 10px;
+	display: inline;
+}
+
+img.alignleft {
+	margin: 2px 10px 2px 0;
+	display: inline;
+}
+
+#three_column img.centered {
+	max-width: 380px;
+}
+
+#three_column img.alignright, #three_column img.left {
+	height: auto;
+}
+
+/* Images */
+
+/* Videos (flash content) */
+
+/*  Lists */
+.children {
+	margin-top: 0 !important;
+	padding-top: 0 !important;
+}
+
+.children li {
+	border: none !important;
+}
+
+.entry ul, .entry ol {
+	margin-left: 5px;
+	padding: 0 0 0 15px;
+}
+
+.entry ol ol li {
+	list-style: lower-latin;
+}
+
+.entry ol ol ol li {
+	list-style: lower-roman;
+}
+
+/* Navigation menu
+---------------------------
+*/
+#navigation {
+	background: url(images/background.png);
+	height: 25px;
+	padding: 3px 0 0 10px;
+	border-bottom: 1px solid #ddd;
+}
+#navigation ul.menu {
+	width: 970px;
+	margin: 0 auto;
+}
+#navigation ul li {
+	background: #fff url(images/top_gradient.png) 0 0 repeat-x;
+	position: relative;
+	float: left;
+	list-style: none;
+	margin: 2px 1px 0;
+	padding: 0;
+	border: 1px solid #ccc;
+	border-width: 1px 1px 0 1px;
+	border-radius-top-left: 5px;
+	border-radius-top-right: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	font-size: 11px;
+}
+#navigation .children li, #navigation .sub-menu li {
+	margin: 0;
+	border: 1px solid #ccc !important;
+	border-width: 1px !important;
+	border-radius: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+}
+#navigation a {
+	display: block;
+	padding: 3px 10px;
+	border: none !important;
+	font-size: 12px;
+	line-height: 16px;
+}
+#navigation ul ul {
+	display: none;
+	position: absolute;
+	top: 22px;
+	left: 0;
+	float: left;
+	z-index: 99999;
+}
+#navigation ul ul li {
+	min-width: 60px;
+}
+#navigation ul ul ul {
+	top: 4px;
+	left: 100%;
+}
+#navigation ul ul a {
+	min-width: 150px;
+	word-wrap: break-word;
+}
+#navigation ul li:hover > ul {
+	display: block;
+}
+#navigation li:hover > a, #navigation ul ul :hover > a, #navigation ul li.current_page_item > a, #navigation ul li.current-menu-ancestor > a, #navigation ul li.current-menu-item > a, #navigation ul li.current-menu-parent > a {
+	color: #333;
+}
+
+.postmetadata ul, .postmetadata li {
+	display: inline;
+	list-style: none;
+}
+
+#sidebar ul, #sidebar ul ol {
+	margin: 0;
+	padding: 0;
+}
+
+#sidebar ul li {
+	list-style: none;
+	margin-bottom: 15px;
+}
+
+#sidebar #credits li {
+	margin-bottom: 0;
+}
+
+#sidebar ul p, #sidebar ul select, #footer p, #footer select {
+	margin: 5px 0 8px;
+}
+
+#sidebar ul ul, #sidebar ul ol {
+	margin: 5px 0 0 10px;
+}
+
+#sidebar ul ul ul, #sidebar ul ol, #footer ul ul {
+	margin: 0 0 0 10px;
+}
+
+ol li, #sidebar ul ol li, #footer ol li {
+	list-style: decimal outside;
+}
+
+#sidebar ul ul li, #sidebar ul ol li, #footer ul li, #footer ol li {
+	margin: 3px 0 0;
+	padding: 0;
+}
+
+#footer ul, #footer ol {
+	padding-top: 10px;
+	margin-bottom: 20px;
+}
+
+#footer ul li {
+	list-style: none;
+}
+
+#footer .widget ul {
+	text-align: left;
+}
+
+/* Lists */
+
+/* Forms */
+
+#commentform {
+	margin: 5px 10px 0 0;
+}
+
+#commentform input {
+	width: 200px;
+	padding: 2px;
+	margin: 5px 5px 1px 0;
+}
+#commentform input[type="text"] {
+	display: block;
+	margin-bottom: 10px;
+}
+#commentform .required {
+	color: #f00;
+	margin: 0 5px;
+}
+
+#commentform .comment-notes .required {
+	margin: 0;
+}
+
+#commentform #author,
+#commentform #email,
+#commentform #url,
+#commentform textarea {
+	border: 1px solid #ddd;
+}
+
+#commentform #author:focus,
+#commentform #email:focus,
+#commentform #url:focus,
+#commentform textarea:focus {
+	border-color: #999;
+}
+
+#commentform textarea {
+	width: 80%;
+	padding: 2px;
+	margin-top: 10px;
+}
+
+#commentform #submit {
+	width: auto;
+}
+
+#content_container .search {
+	background: url(images/search.png) no-repeat;
+	border: 1px dotted #ccc;
+	padding-left: 20px;
+	height: 20px;
+	line-height: 20px;
+	margin-left: 10px;
+	width: 120px;
+}
+
+#content_container .center .search {
+	margin-top: 20px;
+}
+
+.entry form {
+/* This is mainly for password protected posts, makes them look better. */
+	text-align: center;
+}
+.entry form.contact-form {
+	text-align: left;
+}
+
+#footer .search {
+	background: url(images/search.png) no-repeat;
+	padding-left: 20px;
+	height: 20px;
+	width: 160px;
+	margin: 10px 0;
+}
+
+#respond {
+	margin-top: 30px;
+}
+
+select {
+	width: 130px;
+}
+
+/* Forms */
+
+/* Comments*/
+.alt {
+	margin: 0;
+	padding: 10px;
+}
+
+.pingback.alt {
+	padding: 10px 0;
+}
+
+.comment_body {
+	padding: 0 10px 5px 10px;
+	position: relative;
+}
+
+.commentbox {
+	margin-left: 60px;
+	border: 1px solid #ddd;
+}
+
+#commentform p {
+	margin: 5px 0;
+}
+
+#commentform .comment-form-comment label {
+	display: none;
+}
+
+#commentform .form-allowed-tags {
+	display: none;
+}
+
+.commentlist {
+	padding: 0;
+	text-align: justify;
+	width: 80%;
+}
+
+.commentlist li {
+	margin: 10px 0 0 20px;
+	padding: 10px 5px 0 0;
+	list-style: none;
+}
+
+.comment, .pingback {
+	list-style: none;
+}
+
+.comment_body p {
+	margin-right: 37px; /* so it doesn't run in to space taken by reply link */
+	line-height: 1.6em;
+}
+
+.comment_body p + p {
+	margin-top: 10px;
+}
+
+.commentlist li ul li {
+	margin: 0 -20px 0 20px;
+}
+
+.commentlist p {
+	margin: 10px 5px 10px 0;
+}
+
+.comment.bypostauthor .commentbox {
+	background-color: #eee;
+}
+
+.comment.bypostauthor .commentmetadata {
+	background: transparent;
+}
+
+.commentmetadata {
+	background: url(images/background.png);
+	padding: 5px 10px 3px 10px;
+	display: block;
+}
+
+.nocomments {
+	text-align: center;
+	margin: 0;
+	padding: 0;
+}
+
+.reply {
+	position: absolute;
+	right: -1px;
+	bottom: -1px;
+	padding: 0 5px;
+}
+
+#cancel-comment-reply-link {
+	color: #999;
+	font-size: 12px;
+	margin-left: 10px;
+	text-transform: lowercase;
+}
+
+#cancel-comment-reply-link:hover, #cancel-comment-reply-link:focus {
+	text-decoration: underline;
+}
+
+/* Comments */
+
+/* Sidebar */
+#sidebar {
+	padding-top: 16px;
+	float: right;
+}
+
+#sidebar form {
+	margin: 0;
+}
+
+/* Sidebar */
+
+/* Footer*/
+.cell-1, .cell-2, .cell-3 {
+	padding: 20px;
+	float: left;
+}
+
+#footer .divider {
+	border-top: 1px solid #ddd;
+	width: 50%;
+	margin: 0 auto;
+}
+
+#footer .line {
+	border-top: 1px solid #ccc;
+	margin-top: -8px;
+}
+
+#footer .widget {
+	text-align: center;
+	position: relative;
+}
+
+#footer .widget_tag_cloud .line, #footer .wp_widget_tag_cloud .line {
+	margin-bottom: 10px;
+}
+
+#footer .widget_tag_cloud {
+	margin-bottom: 15px;
+}
+
+/* Footer */
+#externalFooterLinks {
+	clear: both;
+}
+
+/* Calendar */
+#wp-calendar {
+	empty-cells: show;
+	margin: 10px auto 0;
+	width: 155px;
+}
+
+#wp-calendar #next a {
+	padding-right: 10px;
+	text-align: right;
+}
+
+#wp-calendar #prev a {
+	padding-left: 10px;
+	text-align: left;
+}
+
+#wp-calendar a {
+	display: block;
+}
+
+#wp-calendar caption {
+	background: url(images/background.png);
+	border-bottom: 1px solid #ddd;
+	padding: 2px 0;
+	text-align: center;
+	width: 100%;
+}
+
+#wp-calendar td {
+	padding: 3px 0;
+	text-align: center;
+}
+
+#wp-calendar td.pad:hover, #wp-calendar td.pad:focus {
+/* Doesn't work in IE */
+	background-color: #fff;
+}
+
+/* Calendar */
+
+/* Pagination */
+.navigation_box {
+	clear: both;
+}
+
+.navigation {
+	font-size: 1.5em;
+	margin: 10px auto 0;
+	padding-top: 5px;
+	text-align: center;
+}
+
+/* Pagination */
+
+/* Various Tags & Classes */
+acronym, abbr, span.caps {
+	cursor: help;
+}
+
+acronym, abbr {
+	border-bottom: 1px dashed #999;
+}
+
+blockquote {
+	min-height: 30px;
+	background: url(images/quote.png) no-repeat;
+	margin: 15px 30px 0 10px;
+	padding-left: 40px;
+}
+
+blockquote cite {
+	margin: 5px 0 0;
+	display: block;
+}
+
+.center {
+	text-align: center;
+}
+
+.gallery {
+	clear: both !important;
+	margin: 0 auto;
+	display: block;
+	overflow: hidden;
+}
+
+.gallery-caption {
+	margin-left: 0;
+}
+
+.gallery-item {
+	float: left;
+	margin: 10px 0 0 20px;
+	text-align: center;
+}
+
+.hidden {
+	display: none;
+}
+
+.ornament {
+	background: url(images/background.png);
+	height: 10px;
+}
+
+#content .ornament {
+	margin-top: 10px;
+	border-top: 1px solid #eee;
+	border-bottom: 1px solid #eee;
+}
+
+.more-link {
+	display: block;
+	float: right;
+	font-style: italic;
+	margin: 20px 0;
+	text-align: right;
+	padding: 0 5px;
+}
+
+.screen-reader-text {
+	position: absolute;
+	left: -1000em;
+}
+
+.widget_tag_cloud a {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	letter-spacing: -1px;
+	font-style: italic;
+	text-transform: lowercase;
+}
+
+/* Various Tags & Classes*/
+
+/* Captions */
+.aligncenter,
+div.aligncenter {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.wp-caption.alignleft {
+	margin: 0 10px 5px 0;
+}
+
+.wp-caption.alignright {
+	margin: 0 0 5px 10px;
+}
+
+.wp-caption-text {
+	padding-top: 10px;
+	text-align: center;
+	margin: 10px;
+}
+
+.wp-caption a {
+	margin: 0;
+	border: none;
+}
+
+.wp-caption img {
+	padding: 2px;
+	border: 1px solid #ccc;
+}
+
+.wp-caption p.wp-caption-text {
+	line-height: 17px;
+	margin: 0;
+}
+
+/* captions */
+
+.home .gallery br {
+	float: left;
+	clear: none !important;
+}
+
+.home object,
+.home embed {
+	max-width: 100%;
+}
