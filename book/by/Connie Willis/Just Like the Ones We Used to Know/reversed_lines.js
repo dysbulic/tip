@@ -12,6 +12,39 @@ $( function() {
 		      height : $body.height(),
 		      viewBox : "0 0 " + $body.width() + " " + $body.height(),
 		  } )
+
+       var $defs = $( document.createElementNS( 'http://www.w3.org/2000/svg', 'defs' ) )
+       $svg.prepend( $defs )
+
+       var $cPFwd = $( document.createElementNS( 'http://www.w3.org/2000/svg', 'clipPath' ) )
+       $cPFwd.attr( { id : 'forwardClip' } )
+       $defs.append( $cPFwd )
+
+       var $cPRev = $( document.createElementNS( 'http://www.w3.org/2000/svg', 'clipPath' ) )
+       $cPRev.attr( { id : 'reverseClip' } )
+       $defs.append( $cPRev )
+
+       var boxStart = 0
+       var lineHeight = 20
+       var maxHeight = $body.height()
+       while( boxStart < maxHeight ) {
+	   var $fwd = $( document.createElementNS( 'http://www.w3.org/2000/svg', 'rect' ) )
+	   $fwd.attr( {
+			   x : 0, y : boxStart,
+			   width : $body.width(), height : lineHeight,
+		       } )
+	   var $rev = $( document.createElementNS( 'http://www.w3.org/2000/svg', 'rect' ) )
+	   $rev.attr( {
+			   x : 0, y : boxStart + lineHeight,
+			   width : $body.width(), height : lineHeight,
+		       } )
+
+	   $cPFwd.append( $fwd )
+	   $cPRev.append( $rev )
+
+	   boxStart += 2 * lineHeight
+       }
+	   
        var $forward = $( document.createElementNS( 'http://www.w3.org/2000/svg', 'foreignObject' ) )
        $forward.attr( {
 			  x : 0, y : 0,
@@ -25,13 +58,28 @@ $( function() {
 			  transform : 'scale(-1,1)',
 			  viewBox : "0 0 " + $body.width() + " " + $body.height(),
 		      } )
-
        var $holder = $('<div/>')
        $holder.append( $body.children() )
        $body.prepend( $svg )
 
        $forward.append( $holder.children().clone( true ) )
        $reverse.append( $holder.children() )
-       $svg.append( $forward )
-       $svg.append( $reverse )
+       $svg.append( ( $( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
+		      .css( {
+				'clip-path' : 'url(#forwardClip)',
+			    } )
+		    ).append( $forward ) )
+       $svg.append( ( $( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
+		      .css( {
+				'clip-path' : 'url(#reverseClip)',
+			    } )
+		    ).append( $reverse ) )
+
+       $(document).keypress( function (evt) {
+				 if( String.fromCharCode( evt.charCode ) == "f" ) {
+				     $forward.hide()
+				 } else {
+				     forward.show()
+				 }
+			     } )
    } )
