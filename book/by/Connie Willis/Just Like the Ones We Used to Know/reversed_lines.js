@@ -64,22 +64,38 @@ $( function() {
 
        $forward.append( $holder.children().clone( true ) )
        $reverse.append( $holder.children() )
-       $svg.append( ( $( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
-		      .css( {
-				'clip-path' : 'url(#forwardClip)',
-			    } )
-		    ).append( $forward ) )
-       $svg.append( ( $( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
-		      .css( {
-				'clip-path' : 'url(#reverseClip)',
-			    } )
-		    ).append( $reverse ) )
 
-       $(document).keypress( function (evt) {
-				 if( String.fromCharCode( evt.charCode ) == "f" ) {
-				     $forward.hide()
-				 } else {
-				     forward.show()
-				 }
-			     } )
+       var $fwdClip = $( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
+       $svg.append( $fwdClip.append( $forward ) )
+
+       var $revClip = $( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
+       $svg.append( $revClip.append( $reverse ) )
+		    
+       function keyHandler( keyCode ) {
+	   switch( String.fromCharCode( keyCode ) ) {
+	   case "f": // Forward
+	       $forward.show()
+	       $reverse.hide()
+	       $fwdClip.css( { 'clip-path' : 'none' } )
+	       break;
+	   case "r": // Reverse
+	       $forward.hide()
+	       $reverse.show()
+	       $revClip.css( { 'clip-path' : 'none' } )
+	       break;
+	   case "i": // Interlaced
+	       $forward.show()
+	       $reverse.show()
+	       $fwdClip.css( { 'clip-path' : 'url(#forwardClip)' } )
+	       $revClip.css( { 'clip-path' : 'url(#reverseClip)' } )
+	       break;
+	   default:
+	       console.log( "Unknown: " +
+			    "(" + keyCode + "): " +
+			    String.fromCharCode( keyCode ) )
+	   }
+       }
+          
+       $(document).keypress( function( evt ) { keyHandler( evt.which ) } )
+       keyHandler( "i".charCodeAt(0) )
    } )
