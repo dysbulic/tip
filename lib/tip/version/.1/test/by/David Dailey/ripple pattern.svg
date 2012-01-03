@@ -1,0 +1,85 @@
+<svg      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+ version="1.1" onload="startup(evt)">
+<script>
+<![CDATA[
+var svgDocument=null;
+var svgRoot=null;
+var O=null;
+var svgns = 'http://www.w3.org/2000/svg';
+var xlinkns = 'http://www.w3.org/1999/xlink';
+var things=new Array("MSG","IE","F","G")
+var finalX=new Array()
+var finalY=new Array()
+function startup(evt){
+	O=evt.target
+	svgDocument=O.ownerDocument
+	svgRoot = svgDocument.documentElement;
+	im = svgDocument.getElementById("M");
+	Colors=new Array("red","orange","yellow","green")
+	rebuild('r')
+	r = svgDocument.getElementById("r");
+	r.setAttribute("fill","url(#bg)")
+	offset()
+}
+blu=.1
+incr=.005
+running=true
+function offset(){
+		if (!running) return
+		onestep(incr)
+		window.setTimeout("offset()",10)
+	}
+function onestep(inc){
+	for (j=0;j<nbands;j++){
+		band[j].setAttribute ("offset", blu+(j-1)/nbands);
+	}
+	blu=blu+inc
+	if ((blu>limit)){
+		blu=inc
+	}
+}
+function rebuild(T){
+	bg=svgDocument.createElementNS(svgns,"radialGradient");
+	bg.setAttribute("id", "bg");
+	nbands=12
+	limit=2/(nbands)
+   	svgRoot.appendChild(bg);
+	band=new Array(nbands)
+	for (i=0;i<nbands;i++){
+		band[i]=svgDocument.createElementNS(svgns,"stop");
+		band[i].setAttribute("offset",(i)/nbands)
+		if (i%2==0) {
+			band[i].setAttribute("stop-color","#f0f")
+			bani=svgDocument.createElementNS(svgns,"animateColor");
+			bani.setAttribute("attributeName", "stop-color")
+			bani.setAttribute("dur", "5s")
+			bani.setAttribute("values", "#f0f;#00f;#0ff;#fff;#f08")
+			bani.setAttribute("repeatCount", "indefinite")
+			band[i].appendChild(bani)
+		}
+		
+
+		else band[i].setAttribute("stop-color","#000")
+		bg.appendChild(band[i]);
+	}
+}
+//]]>
+</script>
+<defs>
+<pattern id="OP" patternUnits="userSpaceOnUse" x="0" y="0" width="80" height="30">
+<ellipse id="r" cx="40" cy="15" rx="80" ry="20" />
+</pattern> 
+<filter id="d" >
+	<feImage xlink:href="#r" result="grad" />
+	<feDisplacementMap scale="25" yChannelSelector="R" in="SourceGraphic" in2="grad"/>
+</filter> 
+
+</defs>
+<rect x="0" y="0" width="100%" height="100%" fill="black"/>
+
+<ellipse filter='url(#d)' fill="url(#OP)" cx="50%" cy="50%" rx="25%" ry="15%" onclick="running=!running;offset()">
+<animate attributeName="cx" dur="8s" values="30%;70%;30%"  repeatCount="indefinite"/>
+</ellipse>
+
+</svg>
+
