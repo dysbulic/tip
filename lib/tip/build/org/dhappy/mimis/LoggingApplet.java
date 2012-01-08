@@ -13,7 +13,6 @@ public class LoggingApplet extends JApplet {
     }
 
     public void start() {
-	System.out.println( "Start: " + LoggingApplet.class.getName() );
 	log.info( "Start: " + LoggingApplet.class.getName() );
     }
 
