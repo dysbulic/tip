@@ -21,6 +21,7 @@
     </exec>
   </target>
 
+<!--
   <target name="target-lib-check">
     <available file="target/lib"
                property="target.lib.exists" />
@@ -33,13 +34,15 @@
       <arg line="-s ../lib target/lib"/>
     </exec>
   </target>
+-->
   
   <target name="setup" depends="make-keychain" unless="setup.done">
     <mkdir dir="build/" />
     <!-- Even with exclude ..., is still overflowing the heap -->
     <copy todir="build/">
       <fileset dir="java/src" followsymlinks="false">
-        <include name="**/CacheAgentApplet.java"/>
+        <include name="**/EmptyApplet.java"/>
+        <include name="**/LoggingApplet.java"/>
         <exclude name="..." />
         <exclude name="**/..." />
       </fileset>
@@ -51,9 +54,11 @@
     <javac srcdir="build/" destdir="build/" deprecation="on" includeantruntime="false">
       <!--<compilerarg value="-Xlint"/>-->
       <classpath>
+<!--
         <pathelement location=".../lib/java/lib/java-plugin-jre-1.6.0_23.jar"/>
         <pathelement location=".../lib/java/lib/smack-3.1.0.jar"/>
         <pathelement location=".../lib/java/lib/neo4j-kernel-1.3-SNAPSHOT.jar"/>
+-->
         <!--
         <fileset dir="${user.home}/.../lib/java/lib" followsymlinks="false">
           <include name="**/*.jar"/>
@@ -72,10 +77,12 @@
                    value=".../lib/java/lib/neo4j-kernel-1.3-SNAPSHOT.jar .../lib/java/lib/geronimo-jta_1.1_spec-1.1.1.jar"/>
       </manifest>
     </jar>
+<!--
     <signjar jar=".../lib/java/lib/neo4j-kernel-1.3-SNAPSHOT.jar"
              alias="${jar.key.alias}" storepass="${jar.key.pass}" keystore="${jar.key.store}" />
     <signjar jar=".../lib/java/lib/geronimo-jta_1.1_spec-1.1.1.jar"
              alias="${jar.key.alias}" storepass="${jar.key.pass}" keystore="${jar.key.store}" />
+-->
     <signjar jar="${jar}" alias="${jar.key.alias}" storepass="${jar.key.pass}" keystore="${jar.key.store}" />
   </target>
 
