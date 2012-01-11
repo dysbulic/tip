@@ -22,29 +22,33 @@ public class FilesystemListApplet extends JApplet {
 	Logger.getLogger( FilesystemListApplet.class.getName() );
 
     public void init() {
-	log.info( "Initialized: " + FilesystemListApplet.class.getName() );
+	log.entering( FilesystemListApplet.class.getName(), "init" );
     }
 
     public void start() {
     }
     
-    public String[] list() {
-	return list( "c:/My Documents" );
+    public String[] ls() {
+	log.entering( FilesystemListApplet.class.getName(), "ls" );
+	return ls( "c:/My Documents" );
     }
 
-    public String[] list( String location ) {
+    public String[] ls( String location ) {
+	log.entering( FilesystemListApplet.class.getName(), "ls", location );
+	log.info( "LS called" );
 	return new String[] { location }; 
     }
 
     public void stop() {
-	log.info( "Stop: " + FilesystemListApplet.class.getName() );
+	log.entering( FilesystemListApplet.class.getName(), "stop" );
     }
 
     public void destroy() {
+	log.entering( FilesystemListApplet.class.getName(), "destroy" );
 	log.info( "Destroying: " + FilesystemListApplet.class.getName() );
     }
 
     public static void main( String[] args ) {
-	log.info( "Instantiated: " + FilesystemListApplet.class.getName() );
+	log.entering( FilesystemListApplet.class.getName(), "main" );
     }
 }
