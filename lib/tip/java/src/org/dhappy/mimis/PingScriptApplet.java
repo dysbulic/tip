@@ -32,7 +32,7 @@ public class PingScriptApplet extends JApplet {
 	String line;
 	try {
 	    try {
-		stream = PingScriptApplet.class.getResourceAsStream( script );
+		stream = this.getClass().getResourceAsStream( script );
 		if( stream == null ) {
 		    log.log( Level.WARNING, "Could not get: " + script );
 		} else {

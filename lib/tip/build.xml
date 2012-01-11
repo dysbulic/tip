@@ -50,11 +50,13 @@
         <include name="**/SetterTestApplet.java"/>
         <include name="**/FilesystemListApplet.java"/>
         <include name="**/DOMAccessorApplet.java"/>
+        <include name="**/FileListApplet.java"/>
         <exclude name="..." />
         <exclude name="**/..." />
       </fileset>
       <fileset dir="." followsymlinks="false">
         <include name="bin/"/>
+        <include name="lib/"/>
         <include name="test/"/>
         <exclude name="..." />
         <exclude name="**/..." />
@@ -67,6 +69,7 @@
     <javac srcdir="build/" destdir="build/" deprecation="on" includeantruntime="false">
       <!--<compilerarg value="-Xlint"/>-->
       <classpath>
+        <pathelement location=".../lib/jre/plugin/jar"/>
 <!--
         <pathelement location=".../lib/java/lib/java-plugin-jre-1.6.0_23.jar"/>
         <pathelement location=".../lib/java/lib/smack-3.1.0.jar"/>
