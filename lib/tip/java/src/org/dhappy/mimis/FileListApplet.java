@@ -32,45 +32,42 @@ public class FileListApplet extends JApplet {
 
     public void start() {
 	final JApplet applet = this;
-	AccessController.doPrivileged( new PrivilegedAction() {
-		public Object run() {
-		    InputStream stream = null;
-		    BufferedReader reader = null;
-		    final String script = "/bin/file/list/rhino";
-		    try {
-			stream = this.getClass().getResourceAsStream( script );
-			if( stream == null ) {
-			    log.warning( "Could not get: " + script );
-			} else {
-			    ScriptEngineManager engines = new ScriptEngineManager();
-			    ScriptEngine js = engines.getEngineByName( "javascript" );
-			    
-			    js.put( "hostApplet", applet );
-			    js.put( "window", JSObject.getWindow( applet ) );
-			    
-			    reader = new BufferedReader( new InputStreamReader( stream ) );
-			    
-			    try {
-				js.eval( reader );
-			    } catch( ScriptException se ) {
-				log.warning( se.getMessage() );
-			    }
-			}
-		    } finally {
-			try {
-			    if( reader != null ) {
-				reader.close();
-			    }
-			    if( stream != null ) {
-				stream.close();
-			    }
-			} catch( IOException ioe ) {
-			    log.warning( ioe.getMessage() );
-			}
-		    }
-		    return null;
+
+	InputStream stream = null;
+	BufferedReader reader = null;
+	final String script = "/bin/file/list/rhino";
+	
+	try {
+	    stream = this.getClass().getResourceAsStream( script );
+	    if( stream == null ) {
+		log.warning( "Could not get: " + script );
+	    } else {
+		ScriptEngineManager engines = new ScriptEngineManager();
+		ScriptEngine js = engines.getEngineByName( "javascript" );
+		
+		js.put( "hostApplet", applet );
+		js.put( "window", JSObject.getWindow( applet ) );
+		
+		reader = new BufferedReader( new InputStreamReader( stream ) );
+		
+		try {
+		    js.eval( reader );
+		} catch( ScriptException se ) {
+		    log.warning( se.getMessage() );
 		}
-	    } );
+	    }
+	} finally {
+	    try {
+		if( reader != null ) {
+		    reader.close();
+		}
+		if( stream != null ) {
+		    stream.close();
+		}
+	    } catch( IOException ioe ) {
+		log.warning( ioe.getMessage() );
+	    }
+	}
     }
     
     public String[] ls() {

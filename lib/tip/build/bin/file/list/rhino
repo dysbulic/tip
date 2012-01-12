@@ -5,13 +5,13 @@ var DOMUnsupportedException = com.sun.java.browser.dom.DOMUnsupportedException
 var DOMAccessException = com.sun.java.browser.dom.DOMAccessException
 
 var InputStream = java.io.InputStream
-var InputStream = java.io.InputStreamReader
+var InputStreamReader = java.io.InputStreamReader
 var BufferedReader = java.io.BufferedReader
 
 var service = null
 
-eval( 'print( "Entering: /bin/file/list/rhino" )' )
-print( "typeof load = " + typeof load )
+eval( 'print( "Entering: /bin/file/list/rhino\\n" )' )
+print( "typeof load = " + typeof load + "\n" )
 
 if( typeof load == 'undefined' ) {
     function load( resource ) {
@@ -43,6 +43,8 @@ if( typeof load == 'undefined' ) {
 }
 print( "typeof load = " + typeof load )
 load( '/lib/jquery/js' )
+
+print( $ )
 
 try {
     service = DOMService.getService( hostApplet )
