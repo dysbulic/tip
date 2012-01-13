@@ -1,0 +1,37 @@
+package org.dhappy.mimis;
+
+import java.util.logging.Logger;
+
+import java.util.List;
+
+import javax.swing.JApplet;
+
+public class JarFileApplet extends JApplet {
+    private static Logger log =
+	Logger.getLogger( JarFileApplet.class.getName() );
+
+    public void init() {
+	log.info( "Initialized: " + JarFileApplet.class.getName() );
+    }
+
+    public void start() {
+	try { 
+	    is = JarFileApplet.class.getResourceAsStream( "bin/hello/world/js" );
+	    br = new BufferedReader(new InputStreamReader(is));
+	    while (null != (line = br.readLine())) {
+		list.add(line);
+	    }
+    }
+
+    public void stop() {
+	log.info( "Stop: " + JarFileApplet.class.getName() );
+    }
+
+    public void destroy() {
+	log.info( "Destroying: " + JarFileApplet.class.getName() );
+    }
+
+    public static void main( String[] args ) {
+	log.info( "Instantiated: " + JarFileApplet.class.getName() );
+    }
+}
