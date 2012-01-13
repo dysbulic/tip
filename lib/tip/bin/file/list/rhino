@@ -4,28 +4,67 @@ var DOMAccessor = com.sun.java.browser.dom.DOMAccessor
 var DOMUnsupportedException = com.sun.java.browser.dom.DOMUnsupportedException
 var DOMAccessException = com.sun.java.browser.dom.DOMAccessException
 
+try {
+    var service = DOMService.getService( hostApplet )
+    var doc = service.invokeAndWait( new DOMAction( {
+	run : function( accessor ) {
+	    var doc = accessor.getDocument( hostApplet )
+	    return doc.getTitle()
+	}
+    } ) )
+    print( "Embedded in page w/ title: " + title + "\n" )
+} catch( e ) {
+    print( e )
+}
+
+var File = java.io.File
+
+var $holder = $('<div/>')
+$('body').append( $holder )
+
+function list( var path ) {
+    $holder.clear()
+    var root = new File( path )
+    
+    print( "Listing: " + path + "\n" )
+    for( file in root.listFiles() ) {
+	$holder.append( $('<a/>').attr( {
+	    href : file
+	} ) )
+	print( file + "\n" )
+    }
+}
+list( "c:\\" )
+
 var InputStream = java.io.InputStream
 var InputStreamReader = java.io.InputStreamReader
 var BufferedReader = java.io.BufferedReader
-
-var service = null
 
 eval( 'print( "Entering: /bin/file/list/rhino\\n" )' )
 print( "typeof load = " + typeof load + "\n" )
 
 if( typeof load == 'undefined' ) {
+    var navigator = {
+	userAgent : "mimis v.0.2",
+    }
+    
     function load( resource ) {
 	var stream = null
 	var reader = null
-	var line = ""
 	try {
 	    try {
 		stream = hostApplet.getResourceAsStream( resource )
 		if( stream == null ) {
-		    print( "Could not get: " + resource );
+		    print( "Could not get: " + resource + "\n" );
 		} else {
 		    reader = new BufferedReader( new InputStreamReader( stream ) )
-		    eval( reader )
+		    var line = ""
+		    var text = ""
+		    while( ( line = reader.readLine() ) != null ) {
+			text += line
+		    }
+		    print( text + "\n" )
+		    eval( text )
 		}
 	    } finally {
 		if( reader != null ) {
@@ -38,23 +77,10 @@ if( typeof load == 'undefined' ) {
 	} catch( e ) {
 	    print( "Error: " + e + "\n" )
 	}
-    	print( "here: " + resource )
     }
 }
-print( "typeof load = " + typeof load )
+print( "typeof load = " + typeof load + "\n" )
 load( '/lib/jquery/js' )
+//load( '/bin/hello/world/js' )
 
 print( $ )
-
-try {
-    service = DOMService.getService( hostApplet )
-    var doc = service.invokeAndWait( new DOMAction( {
-	run : function( accessor ) {
-	    var doc = accessor.getDocument( hostApplet )
-	    return doc.getTitle()
-	}
-    } ) )
-    print( "Embedded in page w/ title: " + title )
-} catch( e ) {
-    print( e )
-}
