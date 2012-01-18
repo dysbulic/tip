@@ -15,6 +15,8 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+import org.mozilla.javascript.tools.shell.Main;
+
 import javax.swing.JApplet;
 
 public class ScriptRunnerApplet extends JApplet {
@@ -28,7 +30,11 @@ public class ScriptRunnerApplet extends JApplet {
     public void start() {
 	InputStream stream = null;
 	BufferedReader reader = null;
-	String script = "/bin/hello/world/js";
+	String script = this.getParameter( "script" );
+	if( script == null ) {
+	    script = "/bin/hello/world/js";
+	}
+	
 	String line;
 	try {
 	    try {

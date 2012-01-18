@@ -17,14 +17,24 @@ import javax.script.ScriptException;
 
 import org.mozilla.javascript.tools.shell.Main;
 
+/*
+import net.sourceforge.htmlunit.corejs.javascript.Context;
+import net.sourceforge.htmlunit.corejs.javascript.Script;
+import net.sourceforge.htmlunit.corejs.javascript.Scriptable;
+*/
+
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Script;
+import org.mozilla.javascript.Scriptable;
+
 import javax.swing.JApplet;
 
-public class ScriptRunnerApplet extends JApplet {
+public class RhinoRunnerApplet extends JApplet {
     private static Logger log =
-	Logger.getLogger( ScriptRunnerApplet.class.getName() );
+	Logger.getLogger( RhinoRunnerApplet.class.getName() );
 
     public void init() {
-	log.info( "Initialized: " + ScriptRunnerApplet.class.getName() );
+	log.info( "Initialized: " + RhinoRunnerApplet.class.getName() );
     }
 
     public void start() {
@@ -38,20 +48,21 @@ public class ScriptRunnerApplet extends JApplet {
 	String line;
 	try {
 	    try {
-		stream = ScriptRunnerApplet.class.getResourceAsStream( script );
+		stream = RhinoRunnerApplet.class.getResourceAsStream( script );
 		if( stream == null ) {
 		    log.log( Level.WARNING, "Could not get: " + script );
 		} else {
-		    ScriptEngineManager engines = new ScriptEngineManager();
-		    ScriptEngine js = engines.getEngineByName( "javascript" );
-
 		    reader = new BufferedReader( new InputStreamReader( stream ) );
 
-		    try {
-			js.eval( reader );
-		    } catch( ScriptException se ) {
-			log.log( Level.WARNING, se.getMessage(), se );
-		    }
+		    Context context = Context.getCurrentContext();
+		    // compileReader( java.io.Reader in, java.lang.String sourceName,
+		    //                int lineno, java.lang.Object securityDomain )
+		    Script compiledScript = context.compileReader( reader, script, 0, null );
+		    Scriptable scope = context.initStandardObjects();
+
+		    Main rhino = new Main();
+
+		    rhino.evaluateScript( compiledScript, context, scope );
 		}
 	    } finally {
 		if( reader != null ) {
@@ -68,14 +79,14 @@ public class ScriptRunnerApplet extends JApplet {
 	
 
     public void stop() {
-	log.info( "Stop: " + ScriptRunnerApplet.class.getName() );
+	log.info( "Stop: " + RhinoRunnerApplet.class.getName() );
     }
 
     public void destroy() {
-	log.info( "Destroying: " + ScriptRunnerApplet.class.getName() );
+	log.info( "Destroying: " + RhinoRunnerApplet.class.getName() );
     }
 
     public static void main( String[] args ) {
-	log.info( "Instantiated: " + ScriptRunnerApplet.class.getName() );
+	log.info( "Instantiated: " + RhinoRunnerApplet.class.getName() );
     }
 }

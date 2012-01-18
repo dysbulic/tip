@@ -51,6 +51,7 @@
         <include name="**/FilesystemListApplet.java"/>
         <include name="**/DOMAccessorApplet.java"/>
         <include name="**/FileListApplet.java"/>
+        <include name="**/RhinoRunnerApplet.java"/>
         <exclude name="..." />
         <exclude name="**/..." />
       </fileset>
@@ -73,6 +74,8 @@
       <!--<compilerarg value="-Xlint"/>-->
       <classpath>
         <pathelement location=".../lib/jre/plugin/jar"/>
+        <pathelement location="lib/rhino/js/jar"/>
+        <pathelement location="lib/htmlunit/core/js/jar"/>
 <!--
         <pathelement location=".../lib/java/lib/java-plugin-jre-1.6.0_23.jar"/>
         <pathelement location=".../lib/java/lib/smack-3.1.0.jar"/>
@@ -93,7 +96,7 @@
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Main-Class" value="${main.class}" />
         <attribute name="Class-Path"
-                   value=".../lib/java/lib/neo4j-kernel-1.3-SNAPSHOT.jar .../lib/java/lib/geronimo-jta_1.1_spec-1.1.1.jar"/>
+                   value="lib/rhino/js/jar lib/htmlunit/core/js/jar"/>
       </manifest>
     </jar>
 <!--
@@ -103,6 +106,8 @@
              alias="${jar.key.alias}" storepass="${jar.key.pass}" keystore="${jar.key.store}" />
 -->
     <signjar jar="${jar}" alias="${jar.key.alias}" storepass="${jar.key.pass}" keystore="${jar.key.store}" />
+    <signjar jar="lib/rhino/js/jar" alias="${jar.key.alias}" storepass="${jar.key.pass}" keystore="${jar.key.store}" />
+    <signjar jar="lib/htmlunit/core/js/jar" alias="${jar.key.alias}" storepass="${jar.key.pass}" keystore="${jar.key.store}" />
   </target>
 
   <target name="javadoc" depends="setup">

@@ -17,6 +17,30 @@ try {
     print( e )
 }
 
+var File = java.io.File
+
+var $holder = $('<div/>')
+$('body').append( $holder )
+
+function list( var path ) {
+    $holder.clear()
+    var root = new File( path )
+    
+    print( "Listing: " + path + "\n" )
+    for( file in root.listFiles() ) {
+	$holder.append( $('<a/>')
+			.attr( {
+			    href : file
+			} )
+		      .click( function() {
+			  list( $(this).attr( 'href' ) )
+			  return false
+		      } ) )
+	print( file + "\n" )
+    }
+}
+list( "c:\\" )
+
 var InputStream = java.io.InputStream
 var InputStreamReader = java.io.InputStreamReader
 var BufferedReader = java.io.BufferedReader
