@@ -44,6 +44,7 @@ public class RhinoRunnerApplet extends JApplet {
 	if( script == null ) {
 	    script = "/bin/hello/world/js";
 	}
+	log.info( "Using script: " + script );
 	
 	String line;
 	try {
