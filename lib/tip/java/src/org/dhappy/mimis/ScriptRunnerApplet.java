@@ -15,6 +15,8 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+import netscape.javascript.JSObject;
+
 import org.mozilla.javascript.tools.shell.Main;
 
 import javax.swing.JApplet;
@@ -35,6 +37,10 @@ public class ScriptRunnerApplet extends JApplet {
 	if( script != null ) {
 	    eval( script );
 	}
+    }
+
+    public void eval( JSObject script ) {
+	log.info( "Eval script" );
     }
 
     public void eval( String script ) {
