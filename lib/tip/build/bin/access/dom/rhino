@@ -4,11 +4,14 @@ var DOMAccessor = com.sun.java.browser.dom.DOMAccessor
 var DOMUnsupportedException = com.sun.java.browser.dom.DOMUnsupportedException
 var DOMAccessException = com.sun.java.browser.dom.DOMAccessException
 
+var HTMLDocument = org.w3c.dom.html.HTMLDocument
+
 try {
     var service = DOMService.getService( hostApplet )
     var doc = service.invokeAndWait( new DOMAction( {
 	run : function( accessor ) {
 	    var doc = accessor.getDocument( hostApplet )
+            print( "typeof doc = " + typeof doc )
 	    return doc.getTitle()
 	}
     } ) )
