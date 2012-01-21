@@ -17,8 +17,6 @@ import javax.script.ScriptException;
 
 import netscape.javascript.JSObject;
 
-import org.mozilla.javascript.tools.shell.Main;
-
 import javax.swing.JApplet;
 
 public class ScriptRunnerApplet extends JApplet {
@@ -33,6 +31,8 @@ public class ScriptRunnerApplet extends JApplet {
     }
 
     public void start() {
+        js.put( "hostApplet", this );
+
 	String script = this.getParameter( "script" );
 	if( script != null ) {
 	    eval( script );
