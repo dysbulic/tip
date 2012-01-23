@@ -15,20 +15,38 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+import netscape.javascript.JSObject;
+
 import javax.swing.JApplet;
 
 public class ScriptRunnerApplet extends JApplet {
     private static Logger log =
 	Logger.getLogger( ScriptRunnerApplet.class.getName() );
 
+    ScriptEngineManager engines = new ScriptEngineManager();
+    ScriptEngine js = engines.getEngineByName( "javascript" );
+
     public void init() {
 	log.info( "Initialized: " + ScriptRunnerApplet.class.getName() );
     }
 
     public void start() {
+        js.put( "hostApplet", this );
+
+	String script = this.getParameter( "script" );
+	if( script != null ) {
+	    eval( script );
+	}
+    }
+
+    public void eval( JSObject script ) {
+	log.info( "Eval script" );
+    }
+
+    public void eval( String script ) {
 	InputStream stream = null;
 	BufferedReader reader = null;
-	String script = "/bin/hello/world/js";
+	
 	String line;
 	try {
 	    try {
@@ -36,9 +54,6 @@ public class ScriptRunnerApplet extends JApplet {
 		if( stream == null ) {
 		    log.log( Level.WARNING, "Could not get: " + script );
 		} else {
-		    ScriptEngineManager engines = new ScriptEngineManager();
-		    ScriptEngine js = engines.getEngineByName( "javascript" );
-
 		    reader = new BufferedReader( new InputStreamReader( stream ) );
 
 		    try {
@@ -56,10 +71,10 @@ public class ScriptRunnerApplet extends JApplet {
 		}
 	    }
 	} catch( IOException ioe ) {
-	    log.log( Level.WARNING, ioe.getMessage(), ioe );
+	    log.warning( ioe.getMessage() );
 	}
     }
-	
+    
 
     public void stop() {
 	log.info( "Stop: " + ScriptRunnerApplet.class.getName() );

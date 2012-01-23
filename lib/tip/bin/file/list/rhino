@@ -1,22 +1,3 @@
-var DOMService = com.sun.java.browser.dom.DOMService
-var DOMAction = com.sun.java.browser.dom.DOMAction
-var DOMAccessor = com.sun.java.browser.dom.DOMAccessor
-var DOMUnsupportedException = com.sun.java.browser.dom.DOMUnsupportedException
-var DOMAccessException = com.sun.java.browser.dom.DOMAccessException
-
-try {
-    var service = DOMService.getService( hostApplet )
-    var doc = service.invokeAndWait( new DOMAction( {
-	run : function( accessor ) {
-	    var doc = accessor.getDocument( hostApplet )
-	    return doc.getTitle()
-	}
-    } ) )
-    print( "Embedded in page w/ title: " + title + "\n" )
-} catch( e ) {
-    print( e )
-}
-
 var File = java.io.File
 
 var $holder = $('<div/>')
@@ -28,59 +9,15 @@ function list( var path ) {
     
     print( "Listing: " + path + "\n" )
     for( file in root.listFiles() ) {
-	$holder.append( $('<a/>').attr( {
-	    href : file
-	} ) )
+	$holder.append( $('<a/>')
+			.attr( {
+			    href : file
+			} )
+		      .click( function() {
+			  list( $(this).attr( 'href' ) )
+			  return false
+		      } ) )
 	print( file + "\n" )
     }
 }
 list( "c:\\" )
-
-var InputStream = java.io.InputStream
-var InputStreamReader = java.io.InputStreamReader
-var BufferedReader = java.io.BufferedReader
-
-eval( 'print( "Entering: /bin/file/list/rhino\\n" )' )
-print( "typeof load = " + typeof load + "\n" )
-
-if( typeof load == 'undefined' ) {
-    var navigator = {
-	userAgent : "mimis v.0.2",
-    }
-    
-    function load( resource ) {
-	var stream = null
-	var reader = null
-	try {
-	    try {
-		stream = hostApplet.getResourceAsStream( resource )
-		if( stream == null ) {
-		    print( "Could not get: " + resource + "\n" );
-		} else {
-		    reader = new BufferedReader( new InputStreamReader( stream ) )
-		    var line = ""
-		    var text = ""
-		    while( ( line = reader.readLine() ) != null ) {
-			text += line
-		    }
-		    print( text + "\n" )
-		    eval( text )
-		}
-	    } finally {
-		if( reader != null ) {
-		    reader.close()
-		}
-		if( stream != null ) {
-		    stream.close()
-		}
-	    }
-	} catch( e ) {
-	    print( "Error: " + e + "\n" )
-	}
-    }
-}
-print( "typeof load = " + typeof load + "\n" )
-load( '/lib/jquery/js' )
-//load( '/bin/hello/world/js' )
-
-print( $ )
