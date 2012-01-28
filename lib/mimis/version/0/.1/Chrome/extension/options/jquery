@@ -1,0 +1,44 @@
+$( function() {
+    function getVar( name ) {
+        return ( mimis.get( window, name ) 
+                 || mimis.get( localStorage, name ) )
+    }
+
+    $('input').each( function() {
+        var $input = $(this)
+        var val = getVar( $input.attr( 'name' ) )
+        $input.val( val )
+    } )
+  
+    function save() {
+        var status = ""
+        $('input').each( function() {
+            var $input = $(this)
+            var varName = $input.attr( 'name' )
+            var val = $input.val()
+
+            var current = localStorage[ name ]
+
+            if( val != getVar( varName ) ) {
+                mimis.set( localStorage, name, val )
+                status += ( ( status.length > 0 ? '\n' : '' )
+                            + '"' + name + '" set to: ' + val )
+            }
+        } )
+        if( status.length > 0 ) {
+            // ToDo: Generate HTML <ul/>
+            // http://www.chromium.org/developers/design-documents/desktop-notifications/api-specification
+            //webkitNotifications.createHTMLNotification( 'notification.html' )
+            
+            mimis.notify( {
+                title : 'Property Changed',
+                message : status,
+            } )
+        }
+    }
+
+    $('form').submit( function() {
+        save()
+        return false
+    } )
+} )

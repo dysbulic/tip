@@ -1,0 +1,216 @@
+( function() {
+console.log( '►.../lib/mimis/jquery' )
+
+RegExp.prototype.match = RegExp.prototype.match || RegExp.prototype.exec
+    
+console.debug = console.debug || console.info
+
+String.prototype.startsWith = String.prototype.startsWith || function( str ) {
+    return this.indexOf( str ) == 0
+}
+
+String.prototype.endsWith = String.prototype.endsWith || function( str ) {
+    return this.lastIndexOf( str ) == this.length - str.length
+}
+
+mimis.load( '.../lib/mimis/array/js' )
+
+mimis.BubblingException = mimis.BubblingException || function() {}
+
+mimis.$window = mimis.$window || $.isFunction( $ ) ? $(window) : undefined
+
+mimis.bind = mimis.bind || function( name, listener ) {
+    mimis.$window.bind( 'mimis.' + name, listener )
+}
+
+mimis.unbind = mimis.unbind || function( name, listener ) {
+    mimis.$window.unbind( 'mimis.' + name, listener )
+}
+
+mimis.trigger = mimis.trigger || function( name, extra ) {
+    mimis.$window.trigger( 'mimis.' + name, extra )
+}
+
+mimis.__defineGetter__( 'uri', function() {
+    var mimis_uri = mimis_uri || 'agent/cache/xhtml.xhtml'
+    localStorage.mimis_uri = 'http://dhappy.dyndns.org/lib/mimis/' + mimis_uri
+    
+    return ( localStorage.mimis_uri
+             || ( chrome && chrome.extension
+                  ? chrome.extension.getURL( mimis_uri )
+                  : 'http://mimis.dhappy.org/' + mimis_uri ) )
+} )
+
+mimis.__defineSetter__( 'uri', function( uri ) {
+    return localStorage.mimis_uri = uri
+} )
+
+webkitNotifications = typeof webkitNotifications != 'undefined' ? webkitNotifications : {}
+
+if( webkitNotifications.__lookupGetter__( 'allowed' ) === undefined ) {
+    webkitNotifications.__defineGetter__(
+        'allowed',
+        function() {
+            return ( webkitNotifications.checkPermission
+                     ? webkitNotifications.checkPermission() == webkitNotifications.PERMISSION_ALLOWED
+                     : false )
+        } )
+}
+
+mimis.notify = mimis.notify ||
+    function( config ) {
+        config = mimis.x( true, config, {
+            icon : 'icon/48/png',
+            title : 'Mïmis',
+            message : ( 'You are being notified by: '
+                        + ( arguments.caller ? arguments.caller.name : 'someone' ) ),
+            timeout : 10000,
+        } )
+        
+        if( webkitNotifications.allowed ) {
+            with( config ) {
+                var notification =
+                    webkitNotifications.createNotification(
+                        icon,
+                        title,
+                        message )
+                notification.show()
+                if( timeout ) {
+                    setTimeout( function() {
+                        notification.cancel()
+                    }, timeout )
+                }
+            }
+        }
+    }
+
+mimis.get = mimis.get ||
+    function( store, varName ) {
+        varName = varName || ''
+        console.debug( 'mimis.get', store )
+        var parts = varName.split( /[,\/]/ )
+        if( parts.each( function( part ) {
+            if( store[ part ] === undefined ) {
+                return false
+            } else {
+                store = store[ part ]
+            }
+        } ) ) {
+            return store
+        }
+    }
+
+mimis.set = mimis.set ||
+    function( store, varName, val ) {
+        var ret = store
+        varName = varName || ''
+        console.debug( 'mimis.set', store )
+        var parts = varName.split( /[,\/]/ )
+        var ultimate = parts.pop()
+        parts.each( function( part ) {
+            if( store[ part ] === undefined ) {
+                store[ part ] = {}
+            }
+            store = store[ part ]
+        } )
+        store[ ultimate ] = val
+        return ret
+    }
+
+mimis.link = mimis.link || mimis.load
+
+if( typeof document !== 'undefined' ) { // Extract namespaces
+mimis.ns = mimis.ns ||
+    ( function() {
+        var ns = mimis.link( '.../lib/mimis/ns/abbreviations/eson' )
+
+        typeof document !== 'undefined' && document.documentElement.attributes.each( function( ) {
+            if( match = /^(?:xmlns:?)(.*)/.exec( this.nodeName ) ) {
+                var name = match[1] || ''
+                var href = this.nodeValue
+                ns[ name ] = href
+            }
+        } )
+
+        // Reverse map
+        for( abbr in ns ) {
+            if( abbr != '' ) {
+                ns[ ns[ abbr ] ] = abbr
+            }
+        }
+        ns[ 'default' ] = ns[ 'default' ] || 'html'
+        if( ! ns[ '' ] ) {
+            ns[ '' ] = ns[ ns[ 'default' ] ]
+        }
+        ns.valueOf = ns.toString =
+            function() { return ns[ '' ] }
+        ns.abbr = ns[ ns ]
+        return ns
+    } )()
+}
+
+mimis.status = mimis.status ||
+    ( function() {
+        var status = 'not loaded'
+        function val() {
+            return status
+        }
+        return {
+            toString : val,
+            valueOf : val,
+        }
+    } )()
+
+mimis.endpoint = mimis.endpoint || { 
+    get http() {
+        return 'http://localhost'
+    },
+}
+
+//mimis.$root = mimis.$root || $(document.documentElement)
+
+mimis.parse = mimis.parse || {}
+
+mimis.parse.position = mimis.parse.position ||
+    function( pos ) {
+        return parseFloat( pos )
+    }
+
+mimis.parse.length = mimis.parse.length || mimis.parse.position
+
+if( typeof mimis.ns !== 'undefined' ) {
+    mimis.load( '.../lib/mimis/' + mimis.ns.abbr + '/mimis' )
+}
+
+mimis.wrap = mimis.wrap || mimis.load( '.../lib/mimis/wrap/mimis' )
+
+$.isFunction( $ ) && $( function() {
+    $('head').each( function() {
+        var $head = $(this)
+        var $titles
+        if( $head.children( 'title' ) == 0
+            && ( $titles = $head.parent().find( 'section > title' ) ).size() > 0 ) {
+            $head.append(
+                $('<title/>').text( $titles.get( 0 ).text() )
+            )
+        }
+    } )
+} )
+
+// ToDo: Insert icon if not present  
+// <html:link rel="icon" href=".../revolution/Technoanarchist/" />
+
+if( false ) {
+    $( function() {
+        window.moveTo( 0, 0 )
+
+        if( top.window.outerHeight < screen.availHeight
+            || top.window.outerWidth < screen.availWidth ) {
+            top.window.outerHeight = screen.availHeight
+            top.window.outerWidth = screen.availWidth
+        }
+    } )
+}
+
+console.log( '◄.../lib/mimis/jquery' )
+} )()

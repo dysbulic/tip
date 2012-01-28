@@ -1,0 +1,25 @@
+( function() { return function() {
+    var out = {}
+    var args = Array.prototype.slice.call( arguments )
+
+    args.each( function( obj ) {
+        try {
+            for( prop in obj ) {
+                if( $.isFunction( obj[ prop ] ) ) {
+                    out[ prop ] = obj[ prop ]
+                } else {
+                    ( function() {
+                        var attr = prop
+                        var getter = function() { return ( function() { return obj[ attr ] } ).call( obj ) }
+                        var setter = function( val ) { return ( function() { return obj[ attr ] = val } ).call( obj ) }
+                        out.__defineGetter__( prop, getter )
+                        out.__defineSetter__( prop, setter )
+                    } )()
+                }
+            }
+        } catch( e ) {
+            console.error( e )
+        }
+    } )
+    return out
+} } )()
