@@ -1,1 +1,0 @@
-../../../../himinbi.org/odin/powers_of_two.py
