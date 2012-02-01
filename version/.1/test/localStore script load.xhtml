@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC
+  "-//W3C//DTD XHTML+SMIL //EN"
+  "http://www.w3.org/2001/SMIL20/WD/xhtmlplussmil.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:smil="http://www.w3.org/2001/SMIL20">
+<head>
+  <title>localStore Script Loading</title>
+  <script type="application/javascript" src=".../lib/jquery/jquery.js"/>
+  <script type="application/javascript"><![CDATA[
+    ( function loadScript( script ) {
+        var content = localStorage[ script ]
+        if( content !== undefined && content !== null ) {
+            eval( content )
+        } else {
+            $.ajax( { async : true,
+                      dataType: 'script',
+                      url: script,
+                      error: function( xhr, status, error ) {
+                          console.log( 'HTTP Error: ' + error )
+                          console.log( ' while retrieving: ' + script )
+                      },
+                      success : function( data, status, xhr ) {
+                          localStorage[ script ] = data
+                          loadScript.apply( this, [ script ] )
+                      },
+                    } )
+        }
+    } )( '.../lib/tip/test/hello world.js' )
+   ]]></script>
+</head>
+<body>
+</body>
+</html>

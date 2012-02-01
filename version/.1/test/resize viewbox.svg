@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="-50 -50 100 100" width="100%" height="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:tip=".../lib/tip/2010/05/05/"
+     xmlns:html="http://www.w3.org/1999/xhtml"
+     xmlns:smil="http://www.w3.org/ns/SMIL30"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>Resize Viewbox</title>
+  <defs>
+    <style type="text/css">
+    </style>
+    <script type="text/javascript" xlink:href=".../lib/tip/Array.each.js"/>
+    <script type="text/javascript" xlink:href=".../lib/tip/List.js"/>
+    <script type="text/javascript" xlink:href=".../lib/jquery/jquery.js"/>
+    <script type="text/javascript" xlink:href=".../lib/tip/tip.jquery"/>
+
+    <script type="text/javascript"><![CDATA[
+        var scene = ( function() {
+            var scene = []
+            scene.capture = { frequency : { mHz : 10 } }
+            scene.tixels = []
+
+            var time = {
+                get now() { return ( new Date() ).getTime() }
+            }
+
+            var parsers = {
+                json : function() {
+                    return JSON.parse( this.text() )
+                },
+                javascript : function() {
+                    var content = ( this.data( 'content' )
+                                    || eval( '(function() { return ' + this.text().trim() + ' })()' ) )
+                    this.data( 'content', content )
+                    return content
+                },
+            }
+
+            function once() {
+                var now = time.now
+                scene.begin = scene.begin || now
+                
+                scene.clear
+                $.__.$( 'tip:script' ).children().each( function traverse() {
+                    var animation = parsers[ this.localName ].apply( $( this ) )
+                    if( animation ) {
+                        scene.push( animation )
+                    }
+                } )
+
+                scene.each( function( anim ) {
+                    anim.apply( this )
+                } )
+
+                scene.last = scene.last || scene.begin
+                scene.tixels.each( function( tixel ) {
+                    if( tixel.begin < now && tixel.end > scene.last ) {
+                        tixel.elem[ tixel.attr ] =
+                            interpolators[ typeof tixel.from ].apply( tixel )
+                    }
+                } )
+                scene.last = now
+            }
+
+            var interval = { id : undefined }
+
+            scene.__defineGetter__( 'clear', function() {
+                this.length = 0
+            } )
+
+            scene.__defineGetter__( 'once', once )
+            scene.__defineGetter__( 'go', function() {
+                if( interval.id === undefined ) {
+                    interval.id =
+                        setInterval( function() {
+                            once.apply( scene, arguments )
+                        },
+                                   scene.capture.frequency.mHz )
+                }
+                return this
+            } )
+            scene.__defineGetter__( 'stop', function() {
+                if( interval.id !== undefined ) {
+                    clearInterval( interval.id )
+                    interval.id = undefined
+                }
+                return this
+            } )
+            scene.__defineGetter__( 'running', function() {
+                return interval.id !== undefined
+            } )
+            scene.__defineGetter__( 'pause', function() {
+                return this.running ? this.stop : this.go
+            } )
+            return scene
+        } )()
+
+        $( window ).bind( 'load', function() {
+            scene.go
+        } )
+    ]]></script>
+    <style type="text/css">
+    </style>
+  </defs>
+  <tip:script>
+    <javascript id="resize"><![CDATA[
+      function() {
+        var win = __.load( '.../lib/tip/win.js' )
+        var view = __.load( '.../lib/tip/view.jquery' )
+        if( win && view ) {
+          view.x = -win.width / 2
+          view.y = -win.height / 2
+          view.width = win.width
+          view.height = win.height
+          view.tx
+          $( '#resize' ).remove()
+        }
+      }
+    ]]></javascript>
+    <javascript>
+    </javascript>
+  </tip:script>
+</svg>

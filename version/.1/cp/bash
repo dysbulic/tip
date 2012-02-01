@@ -1,0 +1,86 @@
+$!.../js
+
+env.cp_null_separated && env.IFS = '\0'
+
+/* The string divisor is the first character in the stream. The stream
+ * is guaranteed not to contain that character unless it represents a
+ * record ( or string ) separation.
+ *
+ * This represents a maximum limit on the longest non-pathological string.
+ * The goal of the intelligence is to generate the longest non-pathological string.
+ *
+ * Pathology is diagnosed through user feedback. The user is making tags through a
+ * namespace which aligns at certain points. The current implementation is a
+ * filesystem which aligns with structured datastore Freebase.
+ *
+ * The namespace I’ve decided to assign in my repository is ࢝, so anywhere a
+ * directory/file combo ࢝/mql is found in a traversal, the string at mql
+ * will interpret to a freebase object.
+ *
+ * The return value is merged with the directory contents and the git history.
+ * 
+ * This structure is navigable by shell programs which can perform arbitrarily
+ * complex actions. It is a dynamically programmable semantic computer.
+ * 
+ * For example, I just created a symlink from ߦ/bin/tohex to ߦ/bin/to/base/16/bash
+ * that is a structural logical statement about the operation of the overarching
+ * machine.
+ *
+ * The conglomeration of links involves at least these sources:
+   * The the filesystem which is the operating system’s guess as to the most current version of the filesystem
+   * A revision system built from a set symlinks necessary to (within the limits
+     * of disk space) to dereference:
+       * ߦhist/((((?:date ((?:year \d+)-)?((?:month (0*((1[0-2])|(\d{1,2}))))-))?((?:day \d+))){1,}(@))?
+         *      ((?:hour \d{1,})(:(?minute: \d+))(:(?:second \d+))(\.(?:millisecond \d+)))
+         *      (* ToDo: Another pattern with year, month and day variables
+       *           these are addressible as match/2/year/, etc. *))
+     * A set of XMPP bots and chatrooms
+       * "ߦpub Will Holcomb" as an address in that graph, for example.
+     * Freebase Queries ߦmql
+       * Or ߦmql/js or ࢝mql/python if the results need to be filtered to a new tree 
+
+ * ToDo: A FUSE driver for Mïmis
+   *     Ignores ... in recursive searches
+     *     Better yet, ߦproc/traversal/ignore is a null separated list of patterns to avoid
+   *     Uses the contents of /proc/sh/path/separator as the path separator
+   *     Uses the contents of /proc/࢝/record/separator as the IFS (maybe)
+   *       Yeah, you have to be able to specify substrings, so there has to
+     *       be a substring separator. You can’t have a hierarcy without at
+     *       least two bits to encode ( neighbor, parent, child, root )
+
+ * The trees are merged in reverse order of precedence. A stream is generated from
+ * each location with each preceeding operating being given mediated access to the 
+ * structure.
+ *
+ * The main difference between this graph, however and others is that there are
+ * two classes of links. Bidirectional and forward only. Moving backward through
+ * the tree represents undoing the operation of combining sources in which a
+ * specific computational path was followed.
+ *
+ * So the bidirectional path is the Freebase locations and the forward-only
+ * symlinks are a semantic encoding.
+ * 
+ * Navigating this composite graph is a simple process of aggregating the results
+ * of machines outputting subdivided strings. Navigating this machine can be
+ * done using the metaphors underlying the shell.
+ *
+ * This program is copy (࢝bin/cp). Files are either in git, in which case they
+ * can be copied without worry, or they are symlinks into ࢝hashes/.+/\d. If the file
+ * is a matching symlink then it is renamed to the base name postceded by \.\x{2}
+ */
+
+arguments.length  == 0 ]  {
+    echo "usage: cp <$file [$file]*>"
+    echo "usage: cp $file"
+    echo "        creates a new entry .../hashes/$algorithm/$timestamp/"
+    echo "          for the time of the command's initiation"
+    echo " This is the equivalent of a tree-based versioned touch."
+}
+
+FROM="$1"
+
+TIMESTAMP="$(date $(rd .../bin/cp/format/timestamp))"
+
+for file in "$*"; do
+    for file in $(find -type l); do
+ base=${file%࢝([0-9A-F]{2})}; idx=$((0x$1)); loop="while[ -e "$baseࠇ$idx" ]; do idx=$(tohex idx=$(($idx+1))); $baseࠇnew="$( i=1; while[ -e "${filecp "$(readlink *jar)" "$file.link
