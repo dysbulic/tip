@@ -5758,9 +5758,9 @@ jQuery.fn.extend({
 	},
 
 	append: function() {
+            console.log( 'Entering lib/jquery/js/append' )
+            console.log( arguments )
 		return this.domManip(arguments, true, function( elem ) {
-                    console.log( 'Entering lib/jquery/js/append' )
-                    console.log( elem )
 			if ( this.nodeType === 1 ) {
 				this.appendChild( elem );
 			}

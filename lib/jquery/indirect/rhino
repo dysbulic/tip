@@ -17,12 +17,12 @@ var $ = function() {
     if( window ) {
         var args = Array.prototype.slice.call( arguments )
         var $obj = window.call( 'indirectJQuery', args )
-        print( "Returned: " + $ret + "\n" )
+        print( "Returned: " + $obj.getMember( 'guid' ) + "\n" )
         var $ret = {
             append: function( $elem ) {
-                var guid = $elem.getMember( 'guid' )
+                var guid = 0 //$elem.getMember( 'guid' )
                 print( "Appending: " + $elem + " : " + guid + "\n" )
-                $obj.call( 'appendByGUID', [ $elem ] )
+                $obj.call( 'appendByGUID', [ guid, $elem ] )
             },
         }
     } else {
