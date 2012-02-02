@@ -20,7 +20,9 @@ var $ = function() {
         print( "Returned: " + $ret + "\n" )
         var $ret = {
             append: function( $elem ) {
-                $obj.call( 'append', [ $elem ] )
+                var guid = $elem.getMember( 'guid' )
+                print( "Appending: " + $elem + " : " + guid + "\n" )
+                $obj.call( 'appendByGUID', [ $elem ] )
             },
         }
     } else {

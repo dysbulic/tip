@@ -9,23 +9,20 @@
     <link rel="stylesheet" type="text/css" href=".../style/blog/" />
     <style type="text/css">
     </style>
+<!--
     <script type="text/javascript"
 	    src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
     </script>
+-->
+    <script type="text/javascript" src="lib/jquery/js"></script>
+    <script type="text/javascript" src="lib/jquery/indirect/js"></script>
     <script type="text/javascript">
-      console.log( 'Started' )
+      console.log( 'Entered: xhtml' )
       $( function() {
         var applet = $('applet').get(0)
-        //console.log( applet.eval )
-        applet.eval( '/bin/navigator/js' )
-        applet.eval( '/lib/jquery/indirect/rhino' )
+        applet.eval( '/lib/jquery/indirect/rhino' ) // paired w/ js above
         applet.eval( '/bin/file/list/rhino' )
       } )
-      function indirectJQuery() {
-        console.log( 'indirectJQuery called' )
-        console.log( arguments )
-        return $.apply( $, arguments )
-      }
     </script>
   </head>
   <body>

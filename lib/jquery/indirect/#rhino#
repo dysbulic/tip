@@ -16,11 +16,17 @@ var $ = function() {
     var window = JSObject.getWindow( hostApplet )
     if( window ) {
         var args = Array.prototype.slice.call( arguments )
-        var ret = window.call( 'indirectJQuery', args )
-        print( "Returned: " + ret + "\n" )
-        var ret = 
+        var $obj = window.call( 'indirectJQuery', args )
+        print( "Returned: " + $ret + "\n" )
+        var $ret = {
+            append: function( $elem ) {
+                var guid = $elem.getMember( 'guid' )
+                print( "Appending: " + $elem + " : " + guid + "\n" )
+                $obj.call( 'appendByGUID', [ guid, $elem ] )
+            },
+        }
     } else {
         print( "Couldn't get window" + "\n" )
     }
-    return ret
+    return $ret
 }
