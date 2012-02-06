@@ -5,28 +5,71 @@
  * hostApplet is a reference to the applet
  */
 
-//var $holder = $('<div/>')
-
 print( "Entering: jquery/indirect/" + "\n" )
+
+var clickHandlers = {} // Limit 1, atm
+var $rets = {}
 
 var JSObject = Packages.netscape.javascript.JSObject
 
 var $ = function() {
+
     print( "Entering: jquery/indirect/$" + "\n" )
     var window = JSObject.getWindow( hostApplet )
     if( window ) {
         var args = Array.prototype.slice.call( arguments )
         var $obj = window.call( 'indirectJQuery', args )
-        print( "Returned: " + $obj.getMember( 'guid' ) + "\n" )
+        var guid = $obj.getMember( 'guid' )
+
         var $ret = {
             append: function( $elem ) {
-                var guid = 0 //$elem.getMember( 'guid' )
-                print( "Appending: " + $elem + " : " + guid + "\n" )
-                $obj.call( 'appendByGUID', [ guid, $elem ] )
+                print( "Appending: " + $elem + " : " + $elem.guid + "\n" )
+                $obj.call( 'appendByGUID', [ $elem.guid ] )
+                return $ret
             },
+            empty: function() {
+                $obj.call( 'empty', [] )
+                return $ret
+            },
+            text: function( text ) {
+                var args = Array.prototype.slice.call( arguments )
+                var $text = $obj.call( 'text', args )
+                if( typeof text == 'undefined' ) {
+                    return $text
+                } else {
+                    return $ret
+                }
+            },
+            attr: function() {
+                var args = Array.prototype.slice.call( arguments )
+                var $attr = $obj.call( 'attr', args )
+                if( arguments.length == 1 && typeof arguments[0] == 'string' ) {
+                    return $attr
+                } else {
+                    return $ret
+                }
+            },
+            click: function( handler ) {
+                print( "/lib/jquery/indirect/$/click: " + guid + "\n" )
+                var args = Array.prototype.slice.call( arguments )
+                clickHandlers[ guid ] = handler
+                $obj.call( 'clickByGUID', [ guid ] )
+                return $ret
+            },
+            guid: guid,
         }
     } else {
         print( "Couldn't get window" + "\n" )
     }
+    $rets[ guid ] = $ret
     return $ret
+}
+
+function guidClicked( guid ) {
+    var handler = clickHandlers[ guid ]
+    if( handler ) {
+        handler.call( $rets[ guid ] )
+    } else {
+        print( "Couldn't get handler: " + guid + "\n" )
+    }
 }

@@ -4,20 +4,24 @@ var $holder = $('<div/>')
 $('body').append( $holder )
 
 function list( path ) {
-    $holder.clear()
+    $holder.empty()
     var root = new File( path )
     
     print( "Listing: " + path + "\n" )
-    for( file in root.listFiles() ) {
-	$holder.append( $('<a/>')
-			.attr( {
-			    href : file
-			} )
-		      .click( function() {
-			  list( $(this).attr( 'href' ) )
-			  return false
-		      } ) )
-	print( file + "\n" )
+    var files = root.listFiles()
+    for( idx in files ) {
+        var file = files[ idx ]
+	var $this =
+            $('<a/>')
+	    .attr( {
+		href : file.name
+	    } )
+	    .click( function() {
+		list( $this.attr( 'href' ) )
+		return false
+	    } )
+            .text( file.name )
+        $holder.append( $this )
     }
 }
-//list( "c:\\" )
+list( "c:\\" )
