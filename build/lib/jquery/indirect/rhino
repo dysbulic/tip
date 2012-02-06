@@ -7,13 +7,14 @@
 
 print( "Entering: jquery/indirect/" + "\n" )
 
-var clickHandlers = {} // Limit 1, atm
-var $rets = {}
+var clickHandlers = [] // Limit 1, atm
+var $rets = []
+
+clickHandlers[0] = "Testing"
 
 var JSObject = Packages.netscape.javascript.JSObject
 
 var $ = function() {
-
     print( "Entering: jquery/indirect/$" + "\n" )
     var window = JSObject.getWindow( hostApplet )
     if( window ) {
@@ -50,9 +51,9 @@ var $ = function() {
                 }
             },
             click: function( handler ) {
-                print( "/lib/jquery/indirect/$/click: " + guid + "\n" )
-                var args = Array.prototype.slice.call( arguments )
+                print( "/lib/jquery/indirect/$/click: " + guid + " : " + typeof handler + "\n" )
                 clickHandlers[ guid ] = handler
+                var args = Array.prototype.slice.call( arguments )
                 $obj.call( 'clickByGUID', [ guid ] )
                 return $ret
             },
@@ -67,9 +68,9 @@ var $ = function() {
 
 function guidClicked( guid ) {
     var handler = clickHandlers[ guid ]
-    if( handler ) {
+    if( handler != undefined ) {
         handler.call( $rets[ guid ] )
     } else {
-        print( "Couldn't get handler: " + guid + "\n" )
+        print( "Couldn't get handler: " + guid + " : " + clickHandlers[0] + "\n" )
     }
 }
