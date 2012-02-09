@@ -1,0 +1,71 @@
+$( function() {
+    var agentClass = 'org.dhappy.mimis.CacheAgentApplet'
+    var jar = ( chrome && chrome.extension
+                && chrome.extension.getURL( 'agent/cache/jar.jar' ) )
+    jar = 'http://loki/lib/mimis/agent/cache/jar.jar'
+    jar = 'jar.jar'
+
+    var onload = function() {
+        console.log( "Testing 'load' listener" )
+    }
+        
+/*
+    var $applet = ( $('<applet/>')
+                    .attr( {
+                        code : agentClass,
+                        codebase : jar.replace( /[^\/]*$/, '' ),
+                        archive : jar.replace( /.*\//, '' ),
+                    } )
+                    .bind( { 
+                        load : onload,
+                    } ) )
+*/
+    var $object = ( $('<object/>')
+                    .attr( {
+                        type : 'application/x-java-applet',
+                        //classid : 'java:' + agentClass,
+                        //codetype : 'application/java',
+                        //archive : jar,
+                    } )
+                    .bind( {
+                        load : onload,
+                    } ) )
+
+    var params = {
+        archive : jar,
+        code : agentClass,
+    }
+    $.each( params, function( name, val ) {
+            $object.append(
+                $('<param/>').attr( {
+                    name : name,
+                    value : val,
+                } )
+            )
+    } )
+
+    mimis = mimis || {}
+    mimis.applet = mimis.applet || {}
+
+    // ToDo: A non-destructive version of $.extend
+    $.extend( true, mimis.applet,
+              {
+                  load : ( function( config ) {
+                      var instance = ( $object.get( 0 ).get
+                                       ? $object.get( 0 )
+                                       : $applet.get( 0 ) )
+                      console.log( 'Load Callback' )
+                      mimis.trigger( 'load', {
+                          applet : instance,
+                      } )
+                  } )
+              }
+            )
+
+    var callback = function( id, data ) {
+        //console.log( 'callback:' + id )
+        return mimis.applet.instance.callback( id, data )
+    }
+
+    $('body').append( $object )
+} )

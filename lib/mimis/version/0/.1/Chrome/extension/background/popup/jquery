@@ -1,0 +1,32 @@
+$( function() {
+    var manifest = chrome.manifest
+        || ( function() {
+            var manifestURL = chrome.extension.getURL( 'manifest.json' )
+            var manifest
+            $.ajax( {
+                url : manifestURL,
+                dataType : 'json',
+                contentType : 'application/json',
+                async : false,
+                success : function( json ) {
+                    manifest = json
+                },
+            } )
+            return manifest
+        } )()
+    chrome.browserAction.setTitle( {
+        text : 'Mïmis v.' + manifest.version,
+    } )
+
+    var params = mimis.load( 'badge/eson' )
+    var param = params[ mimis.status ]
+
+    chrome.browserAction.setBadgeText( {
+        text : param.text,
+    } )
+
+    chrome.browserAction.setBadgeBackgroundColor( {
+        color : param.color,
+    } )
+
+} )

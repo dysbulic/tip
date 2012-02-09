@@ -1,0 +1,149 @@
+$( function() {
+    var $body = $body || $('body')
+    var links =
+        $.extend( {},
+                  links,
+                  mimis.links,
+                  mimis.load( '/.tip/lib/mimis/links/eson' ) )
+    
+    links.initial.each( function( link ) {
+        $body.append(
+            $('<a/>')
+                .attr( {
+                    href : link.href,
+                } )
+                .append(
+                    $('<object/>')
+                        .attr( $.extend
+                               ( link, 
+                                 {
+                                     class : 'icon',
+                                     type : 'image/svg+xml',
+                                     data : chrome.extension.getURL( link.icon ),
+                                 } ) )
+                        .bind( {
+                            load : function() { console.log( 'loaded' ) },
+                        } )
+                )
+        )
+    } )
+
+    var $status =
+        $('<input/>')
+        .attr( {
+            id : 'status',
+            type : 'text',
+        } )
+        .appendTo( $body )
+        .bind( {
+            keyPress : function() {
+            },
+        } )
+
+    ;( function() {
+        var statûs = $status.history = []
+        var binder = arguments.callee
+        var activeImage
+        $('object[class~="icon"]')
+            .each( function( idx ) {
+                // Load event does not fire on <object/>
+                if( idx == 0
+                    && ( this.contentDocument instanceof HTMLDocument // Fails
+                         || this.contentDocument.documentElement instanceof HTMLHtmlElement // Fails
+                         || this.contentDocument.documentElement.localName == 'html' ) ) {
+                    setTimeout( binder, 100 )
+                    return false
+                }
+                
+                $(document).bind( {
+                    mouseover : function() {
+                        var pop = statûs.pop()
+                        if( pop !== undefined ) {
+                            $status.val( pop )
+                        }
+                        activeImage = undefined
+                    },
+                } )
+
+                var $obj = $(this)
+                $(this.contentDocument).bind( {
+                    // mouseenter : // Doesn't work
+                    // mouseleave : // Doesn't work
+                    mouseover : function() {  // Fires repeadedly
+                        if( activeImage != this ) {
+                            statûs.push( $status.val() )
+                            $status.val( $obj.attr( 'title' ) )
+                            activeImage = this
+                        }
+                    },
+                    mousedown : function() {
+                        $obj.addClass( 'clicking' )
+                    },
+                    mouseup : function() {
+                        $obj.removeClass( 'clicking' )
+                    },
+                    click : function() {
+                        var uri = $obj.parent( 'a' ).attr( 'href' )
+                        if( uri.startsWith( '.../' ) ) {
+                            uri = mimis.endpoint.http + '/' + uri
+                        }
+                        chrome.tabs.getAllInWindow( undefined, function( tabs ) {
+                            if( ! tabs.each( function( tab ) {
+                                if( tab.url.startsWith( uri ) ) {
+                                    chrome.tabs.update( tab.id, {
+                                        selected : true,
+                                    } ) 
+                                    return true
+                                }
+                            } ) ) {
+                                chrome.tabs.create( {
+                                    url : uri,
+                                    selected : true,
+                                }, function( tab ) {
+                                } )
+                            }
+                        } )
+                        //self.close()
+                    },
+                    // mouseout : function() { // Fires repeadedly
+                }  )
+            } )
+    } )()
+        
+    var uri = mimis.uri
+
+    if( uri == undefined ) {
+        mimis.notify( {
+            icon : 'logo/svg',
+            message : 'mimis.uri is not defined',
+            href : 'options/xhtml.xhtml',
+        } )
+    }
+
+    // ToDo: Check against applet registered with background
+    chrome.tabs.getAllInWindow( undefined, function( tabs ) {
+        if( ! tabs.each( function( tab ) {
+            if( tab.url.startsWith( uri ) ) {
+                chrome.tabs.update( tab.id, {
+                    // ToDo: Flash favicon
+                } ) 
+                return true
+            }
+        } ) ) {
+            chrome.tabs.create( {
+                url : uri,
+                selected : false,
+                pinned : true,
+            }, function( tab ) {
+            } )
+        }
+    } )
+} )
+
+chrome.browserAction.setBadgeText( {
+    text : '❤',
+} )
+
+chrome.browserAction.setBadgeBackgroundColor( {
+    color : [ 200, 100, 100, 100 ],
+} )

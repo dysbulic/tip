@@ -15,6 +15,9 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
 import netscape.javascript.JSObject;
 
 import javax.swing.JApplet;
@@ -43,9 +46,8 @@ public class ScriptRunnerApplet extends JApplet {
 	log.info( "Eval script" );
     }
 
-    public void eval( String script ) {
+    public Object eval( String script ) {
 	InputStream stream = null;
-	BufferedReader reader = null;
 	
 	String line;
 	try {
@@ -54,18 +56,20 @@ public class ScriptRunnerApplet extends JApplet {
 		if( stream == null ) {
 		    log.log( Level.WARNING, "Could not get: " + script );
 		} else {
-		    reader = new BufferedReader( new InputStreamReader( stream ) );
+                    final BufferedReader reader = new BufferedReader( new InputStreamReader( stream ) );
 
-		    try {
-			js.eval( reader );
-		    } catch( ScriptException se ) {
-			log.log( Level.WARNING, se.getMessage(), se );
-		    }
+                    return AccessController.doPrivileged( new PrivilegedAction() {
+                            public Object run() {
+                                try {
+                                    return js.eval( reader );
+                                } catch( ScriptException se ) {
+                                    log.log( Level.WARNING, se.getMessage(), se );
+                                }
+                                return null;
+                            }
+                        } );
 		}
 	    } finally {
-		if( reader != null ) {
-		    reader.close();
-		}
 		if( stream != null ) {
 		    stream.close();
 		}
@@ -73,6 +77,7 @@ public class ScriptRunnerApplet extends JApplet {
 	} catch( IOException ioe ) {
 	    log.warning( ioe.getMessage() );
 	}
+        return null;
     }
     
 
