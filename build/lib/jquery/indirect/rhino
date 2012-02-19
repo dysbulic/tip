@@ -52,8 +52,12 @@ var $ = function() {
             },
             click: function( handler ) {
                 print( "/lib/jquery/indirect/$/click: " + guid + " : " + typeof handler + "\n" )
-                clickHandlers[ guid ] = handler
-                var args = Array.prototype.slice.call( arguments )
+                var inHandler = handler
+                clickHandlers[ $ret.guid ] = inHandler
+                clickHandlers[3] = function() {
+                    print( "/lib/jquery/indirect/$/clicked: " + $ret.guid + "\n" )
+                }
+                print( "/lib/jquery/indirect/$/click: " + guid + " : " + typeof clickHandlers[ guid ] + "\n" )
                 $obj.call( 'clickByGUID', [ guid ] )
                 return $ret
             },
@@ -71,6 +75,6 @@ function guidClicked( guid ) {
     if( handler != undefined ) {
         handler.call( $rets[ guid ] )
     } else {
-        print( "Couldn't get handler: " + guid + " : " + clickHandlers[0] + "\n" )
+        print( "Couldn't get handler: " + guid + " : " + clickHandlers[3] + "\n" )
     }
 }

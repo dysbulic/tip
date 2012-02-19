@@ -3,10 +3,9 @@ var File = java.io.File
 var $holder = $('<ol/>')
 $('body').append( $holder )
 
-
 function list( path ) {
     $holder.empty()
-    var root = new File( path )
+    var root = new File( new String( path ) )
     
     print( "Listing: " + path + "\n" )
     var files = root.listFiles()
