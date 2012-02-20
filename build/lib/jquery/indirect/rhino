@@ -1,4 +1,4 @@
-/**
+0/**
  * Provides a jQuery interface to the DOM of the page where an applet
  * is executing this script.
  *
@@ -41,8 +41,17 @@ var $ = function() {
                     return $ret
                 }
             },
-            attr: function() {
+            attr: function( arg1 ) {
                 var args = Array.prototype.slice.call( arguments )
+                
+                if( typeof arg1 == 'object' ) {
+                    var script = "(function() { return {} })()"
+                    var obj = window.eval( script )
+                    for( prop in arg1 ) {
+                        obj.setMember( prop, arg1[ prop ] ) 
+                    }
+                    args[0] = obj
+                }
                 var $attr = $obj.call( 'attr', args )
                 if( arguments.length == 1 && typeof arguments[0] == 'string' ) {
                     return $attr

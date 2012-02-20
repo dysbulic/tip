@@ -10,18 +10,22 @@ function list( path ) {
     print( "Listing: " + path + "\n" )
     var files = root.listFiles()
     for( idx in files ) {
-        var file = files[ idx ]
-	var $this =
-            $('<li/>')
-	    .attr( {
-		href : file.name
-	    } )
-	    .click( function() {
-		list( $this.attr( 'href' ) )
-		return false
-	    } )
-            .text( file.name )
-        $holder.append( $this )
+        ( function() { // $(this) workaround
+            var file = files[ idx ]
+	    var $item =
+                $('<li/>')
+	        .attr( {
+		    href : file.absolutePath
+	        } )
+	        .click( function() {
+                    var href = $item.attr( 'href' )
+                    print( "Clicked: " + href )
+		    list( href )
+		    return false
+	        } )
+                .text( file.name )
+            $holder.append( $item )
+        } )()
     }
 }
 list( "c:\\" )
