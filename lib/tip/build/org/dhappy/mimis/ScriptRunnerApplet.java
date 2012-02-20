@@ -79,7 +79,21 @@ public class ScriptRunnerApplet extends JApplet {
 	}
         return null;
     }
-    
+
+    public Object guidClicked( final int guid ) {
+        return AccessController.doPrivileged( new PrivilegedAction() {
+                public Object run() {
+                    try {
+                        String callback = "guidClicked(" + guid + ")";
+                        log.info( "ScriptRunnerApplet/guidClicked: " + callback );
+                        return js.eval( callback );
+                    } catch( ScriptException se ) {
+                        log.log( Level.WARNING, se.getMessage(), se );
+                    }
+                    return null;
+                }
+            } );
+    }
 
     public void stop() {
 	log.info( "Stop: " + ScriptRunnerApplet.class.getName() );
