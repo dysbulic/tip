@@ -1,23 +1,31 @@
 var File = java.io.File
 
-var $holder = $('<div/>')
+var $holder = $('<ol/>')
 $('body').append( $holder )
 
 function list( path ) {
-    $holder.clear()
-    var root = new File( path )
+    $holder.empty()
+    var root = new File( new String( path ) )
     
     print( "Listing: " + path + "\n" )
-    for( file in root.listFiles() ) {
-	$holder.append( $('<a/>')
-			.attr( {
-			    href : file
-			} )
-		      .click( function() {
-			  list( $(this).attr( 'href' ) )
-			  return false
-		      } ) )
-	print( file + "\n" )
+    var files = root.listFiles()
+    for( idx in files ) {
+        ( function() { // $(this) workaround
+            var file = files[ idx ]
+	    var $item =
+                $('<li/>')
+	        .attr( {
+		    href : file.absolutePath
+	        } )
+	        .click( function() {
+                    var href = $item.attr( 'href' )
+                    print( "Clicked: " + href )
+		    list( href )
+		    return false
+	        } )
+                .text( file.name )
+            $holder.append( $item )
+        } )()
     }
 }
-//list( "c:\\" )
+list( "c:\\" )

@@ -1,13 +1,16 @@
-/**
+0/**
  * Provides a jQuery interface to the DOM of the page where an applet
  * is executing this script.
  *
  * hostApplet is a reference to the applet
  */
 
-//var $holder = $('<div/>')
-
 print( "Entering: jquery/indirect/" + "\n" )
+
+var clickHandlers = [] // Limit 1, atm
+var $rets = []
+
+clickHandlers[0] = "Testing"
 
 var JSObject = Packages.netscape.javascript.JSObject
 
@@ -16,10 +19,71 @@ var $ = function() {
     var window = JSObject.getWindow( hostApplet )
     if( window ) {
         var args = Array.prototype.slice.call( arguments )
-        var ret = window.call( 'indirectJQuery', args )
-        print( "Returned: " + ret + "\n" )
-        var ret = window.call( 'indirectJQuery', [ ret ] )
+        var $obj = window.call( 'indirectJQuery', args )
+        var guid = $obj.getMember( 'guid' )
+
+        var $ret = {
+            append: function( $elem ) {
+                print( "Appending: " + $elem + " : " + $elem.guid + "\n" )
+                $obj.call( 'appendByGUID', [ $elem.guid ] )
+                return $ret
+            },
+            empty: function() {
+                $obj.call( 'empty', [] )
+                return $ret
+            },
+            text: function( text ) {
+                var args = Array.prototype.slice.call( arguments )
+                var $text = $obj.call( 'text', args )
+                if( typeof text == 'undefined' ) {
+                    return $text
+                } else {
+                    return $ret
+                }
+            },
+            attr: function( arg1 ) {
+                var args = Array.prototype.slice.call( arguments )
+                
+                if( typeof arg1 == 'object' ) {
+                    var script = "(function() { return {} })()"
+                    var obj = window.eval( script )
+                    for( prop in arg1 ) {
+                        obj.setMember( prop, arg1[ prop ] ) 
+                    }
+                    args[0] = obj
+                }
+                var $attr = $obj.call( 'attr', args )
+                if( arguments.length == 1 && typeof arguments[0] == 'string' ) {
+                    return $attr
+                } else {
+                    return $ret
+                }
+            },
+            click: function( handler ) {
+                print( "/lib/jquery/indirect/$/click: " + guid + " : " + typeof handler + "\n" )
+                var inHandler = handler
+                clickHandlers[ $ret.guid ] = inHandler
+                clickHandlers[3] = function() {
+                    print( "/lib/jquery/indirect/$/clicked: " + $ret.guid + "\n" )
+                }
+                print( "/lib/jquery/indirect/$/click: " + guid + " : " + typeof clickHandlers[ guid ] + "\n" )
+                $obj.call( 'clickByGUID', [ guid ] )
+                return $ret
+            },
+            guid: guid,
+        }
     } else {
         print( "Couldn't get window" + "\n" )
+    }
+    $rets[ guid ] = $ret
+    return $ret
+}
+
+function guidClicked( guid ) {
+    var handler = clickHandlers[ guid ]
+    if( handler != undefined ) {
+        handler.call( $rets[ guid ] )
+    } else {
+        print( "Couldn't get handler: " + guid + " : " + clickHandlers[3] + "\n" )
     }
 }
