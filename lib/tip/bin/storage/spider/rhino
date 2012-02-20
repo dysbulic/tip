@@ -1,0 +1,33 @@
+var File = java.io.File
+
+var $holder = $('<div/>')
+$('body').append( $holder )
+
+
+function process( path ) {
+    var root = ( path instanceof File ) ? path : new File( path )
+    
+    var files = root.listFiles()
+    for( idx in files ) {
+        var file = files[ idx ]
+	var $li =
+            $('<li/>')
+	    .attr( {
+		href : file.name,
+	    } )
+	    .click( function() {
+		show( $li.attr( 'href' ) )
+		return false
+	    } )
+            .text( file.name )
+        $holder.append( $li )
+        if( file.isDirectory() ) {
+            process( file )
+        }
+    }
+}
+process( "c:\\" )
+
+function show( path ) {
+    print( "Showing: " + path )
+}
