@@ -1,16 +1,30 @@
 var File = java.io.File
 
-var $holder = $('<ol/>')
-$('body').append( $holder )
+var $crumbList = $('<ol id="breadcrumbs"/>')
+$('body').append( $crumbList )
+
+var $fileList = $('<ol id="files"/>')
+$('body').append( $fileList )
 
 function list( path ) {
-    $holder.empty()
     var root = new File( new String( path ) )
+
+    $crumbList.append( $('<li/>')
+	               .attr( {
+		           href : root.absolutePath
+	               } )
+                       .click( function() {
+                           var href = $(this).attr( 'href' )
+		           list( href )
+                       } )
+                       .text( root.name ) )
+
+    $fileList.empty()
     
     print( "Listing: " + path + "\n" )
     var files = root.listFiles()
     for( idx in files ) {
-        ( function() { // $(this) workaround
+        ( function() { // incorrect $(this) workaround
             var file = files[ idx ]
 	    var $item =
                 $('<li/>')
@@ -18,13 +32,14 @@ function list( path ) {
 		    href : file.absolutePath
 	        } )
 	        .click( function() {
+                    print( "This is: " + this + "\n" )
                     var href = $item.attr( 'href' )
-                    print( "Clicked: " + href )
+                    print( "Clicked: " + href  + "\n" )
 		    list( href )
 		    return false
 	        } )
                 .text( file.name )
-            $holder.append( $item )
+            $fileList.append( $item )
         } )()
     }
 }

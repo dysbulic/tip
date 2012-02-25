@@ -7,14 +7,16 @@
 
 print( "Entering: jquery/indirect/" + "\n" )
 
+var JSObject = Packages.netscape.javascript.JSObject
+
 var clickHandlers = [] // Limit 1, atm
 var $rets = []
 
-clickHandlers[0] = "Testing"
-
-var JSObject = Packages.netscape.javascript.JSObject
-
-var $ = function() {
+var $ = function( arg1 ) {
+    if( arg1.isIndirectJQuery && arguments.length == 1 ) {
+        return arg1
+    }
+    
     print( "Entering: jquery/indirect/$" + "\n" )
     var window = JSObject.getWindow( hostApplet )
     if( window ) {
@@ -71,6 +73,7 @@ var $ = function() {
                 return $ret
             },
             guid: guid,
+            isIndirectJQuery: true,
         }
     } else {
         print( "Couldn't get window" + "\n" )
