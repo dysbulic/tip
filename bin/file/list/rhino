@@ -3,44 +3,51 @@ var File = java.io.File
 var $crumbList = $('<ol id="breadcrumbs"/>')
 $('body').append( $crumbList )
 
+var $crumbLists = []
+
 var $fileList = $('<ol id="files"/>')
 $('body').append( $fileList )
 
 function list( path ) {
     var root = new File( new String( path ) )
 
-    $crumbList.append( $('<li/>')
-	               .attr( {
-		           href : root.absolutePath
-	               } )
-                       .click( function() {
-                           var href = $(this).attr( 'href' )
-		           list( href )
-                       } )
-                       .text( root.name ) )
-
+    var $crumb =
+        $('<li/>')
+	.attr( {
+	    href : root.absolutePath,
+	} )
+        .click( function() {
+            var href = $(this).attr( 'href' )
+            while( $crumbLists.length >= this.idx ) {
+                var $list = $crumbLists.pop()
+                $list.remove()
+            }
+	    list( href )
+        } )
+        .text( root.name )
+    $crumbLists.push( $crumb )
+    $crumb.idx = $crumbLists.length
+    $crumbList.append( $crumb )
+    
     $fileList.empty()
     
     print( "Listing: " + path + "\n" )
     var files = root.listFiles()
     for( idx in files ) {
-        ( function() { // incorrect $(this) workaround
-            var file = files[ idx ]
-	    var $item =
-                $('<li/>')
-	        .attr( {
-		    href : file.absolutePath
-	        } )
-	        .click( function() {
-                    print( "This is: " + this + "\n" )
-                    var href = $item.attr( 'href' )
-                    print( "Clicked: " + href  + "\n" )
-		    list( href )
-		    return false
-	        } )
-                .text( file.name )
-            $fileList.append( $item )
-        } )()
+        var file = files[ idx ]
+	var $item =
+            $('<li/>')
+	    .attr( {
+		href : file.absolutePath,
+                type : root.isDirectory ? 'directory' : 'file',
+	    } )
+	    .click( function() {
+                var href = $(this).attr( 'href' )
+                print( "Clicked: " + href  + "\n" )
+		list( href )
+	    } )
+            .text( file.name )
+        $fileList.append( $item )
     }
 }
 list( "c:\\" )

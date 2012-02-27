@@ -31,7 +31,13 @@ var $ = function( arg1 ) {
                 return $ret
             },
             empty: function() {
-                $obj.call( 'empty', [] )
+                var args = Array.prototype.slice.call( arguments )
+                $obj.call( 'empty', args )
+                return $ret
+            },
+            remove: function() {
+                var args = Array.prototype.slice.call( arguments )
+                $obj.call( 'remove', args )
                 return $ret
             },
             text: function( text ) {
