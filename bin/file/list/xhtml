@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Filesystem Browser</title>
+    <link rel="stylesheet" type="text/css" href=".../style/blog/" />
+    <link rel="stylesheet" type="text/css" href="css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript"
+	    src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
+    </script>
+    <script type="text/javascript" src=".../lib/tip/lib/jquery/indirect/js"></script>
+    <script type="text/javascript">
+      console.log( 'Entered: xhtml' )
+      $( function() {
+        var applet = $('applet').get(0)
+        applet.eval( '/lib/jquery/indirect/rhino' ) // paired w/ js above
+        applet.eval( '/bin/file/list/rhino' )
+        //applet.eval( '/bin/storage/spider/rhino' )
+      } )
+    </script>
+  </head>
+  <body>
+    <h1>Tip</h1>
+
+<!--
+    <applet codebase="cache/agent/" archive="jar" code="org.dhappy.mimis.FileListApplet"
+	    width="100%" height="100">Tip</applet>
+-->
+    <applet codebase=".../lib/tip/cache/agent/" archive="jar" code="org.dhappy.mimis.ScriptRunnerApplet"
+	    width="100%" height="100">
+      <param name="script" value="/bin/hello/world/js"/>Tip</applet>
+  </body>
+</html>

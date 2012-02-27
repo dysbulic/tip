@@ -31,6 +31,13 @@ function list( path ) {
     
     $fileList.empty()
     
+    var type
+    if( root.isFile() ) { //root.isDirectory() ) { // always returns true
+        type = 'file'
+    } else {
+        type = 'directory'
+    }
+
     print( "Listing: " + path + "\n" )
     var files = root.listFiles()
     for( idx in files ) {
@@ -39,7 +46,7 @@ function list( path ) {
             $('<li/>')
 	    .attr( {
 		href : file.absolutePath,
-                type : root.isDirectory ? 'directory' : 'file',
+                type : file.isDirectory() ? 'directory' : 'file',
 	    } )
 	    .click( function() {
                 var href = $(this).attr( 'href' )
