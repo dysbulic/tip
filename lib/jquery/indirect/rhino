@@ -40,6 +40,15 @@ var $ = function( arg1 ) {
                 $obj.call( 'remove', args )
                 return $ret
             },
+            val: function() {
+                var args = Array.prototype.slice.call( arguments )
+                var val = $obj.call( 'val', args )
+                if( arguments.length == 0 ) {
+                    return val
+                } else {
+                    return $ret
+                }
+            },
             text: function( text ) {
                 var args = Array.prototype.slice.call( arguments )
                 var $text = $obj.call( 'text', args )
@@ -68,12 +77,7 @@ var $ = function( arg1 ) {
                 }
             },
             click: function( handler ) {
-                print( "/lib/jquery/indirect/$/click: " + guid + " : " + typeof handler + "\n" )
-                var inHandler = handler
                 clickHandlers[ $ret.guid ] = inHandler
-                clickHandlers[3] = function() {
-                    print( "/lib/jquery/indirect/$/clicked: " + $ret.guid + "\n" )
-                }
                 print( "/lib/jquery/indirect/$/click: " + guid + " : " + typeof clickHandlers[ guid ] + "\n" )
                 $obj.call( 'clickByGUID', [ guid ] )
                 return $ret
