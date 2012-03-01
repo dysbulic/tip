@@ -77,7 +77,7 @@ var $ = function( arg1 ) {
                 }
             },
             click: function( handler ) {
-                clickHandlers[ $ret.guid ] = inHandler
+                clickHandlers[ $ret.guid ] = handler
                 print( "/lib/jquery/indirect/$/click: " + guid + " : " + typeof clickHandlers[ guid ] + "\n" )
                 $obj.call( 'clickByGUID', [ guid ] )
                 return $ret

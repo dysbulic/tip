@@ -104,7 +104,7 @@
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Main-Class" value="${main.class}" />
         <attribute name="Class-Path"
-                   value=""/>
+                   value=".../lib/tip/lib/smack/jar .../lib/tip/lib/smack/x/jar"/>
       </manifest>
     </jar>
 <!--
@@ -114,8 +114,9 @@
              alias="${jar.key.alias}" storepass="${jar.key.pass}" keystore="${jar.key.store}" />
 -->
     <signjar jar="${jar}" alias="${jar.key.alias}" storepass="${jar.key.pass}" keystore="${jar.key.store}" />
+    <signjar jar="lib/smack/jar" alias="${jar.key.alias}" storepass="${jar.key.pass}" keystore="${jar.key.store}" />
+    <signjar jar="lib/smack/x/jar" alias="${jar.key.alias}" storepass="${jar.key.pass}" keystore="${jar.key.store}" />
 <!--
-    <signjar jar="lib/rhino/js/jar" alias="${jar.key.alias}" storepass="${jar.key.pass}" keystore="${jar.key.store}" />
     <signjar jar="lib/htmlunit/core/js/jar" alias="${jar.key.alias}" storepass="${jar.key.pass}" keystore="${jar.key.store}" />
 -->
   </target>
