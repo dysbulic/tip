@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-310 Homework #7</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math { margin-top: .75em; }
+      .title { font-variant: small-caps; }
+      object { width: 100%; }
+      th, td { padding: .25em .5em; border: 1px solid; text-align: center; }
+      #p3 { page-break-before: always; }
+      .outer > tr > td { border: none; }
+      .ps th { width: 5em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 310: Design and Analysis of Algorithms</h1>
+      <h2>Homework #7</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 13:10 Fri., 28 March 2008</h2>
+    </div>
+    <blockquote><p>All work should be done on your own. If you discuss this assignment in any way with anyone else, or find help for getting the answer from any source, you must state so clearly at the top of your submission. There should be no working together except to understand the question.</p></blockquote>
+    <ol>
+      <li id="p1">
+        <ol>
+          <li>
+            <div class="question">
+              <p>Show that the following greedy algorithm fails to find the minimum cut if you are given a network which arises from the bipartite cardinality matching problem:</p>
+              <ul>
+                <li>Place <em>s</em> in <em>S</em> and <em>t</em> in <em>T</em>.</li>
+                <li>Repeatedly consider adding all vertices to both <em>S</em> and <em>T</em>, and count the number of edges this would make go across the cut. (I.e. if <em>v</em> is placed in <em>S</em>, see how many edges <em>v</em> has to vertices already placed in <em>T</em>, and then repeat if placed in <em>T</em>.)</li>
+                <li>Choose to minimize the number of new edges which go across the cut from <em>S</em> to <em>T</em>.</li>
+                <li>If there's a tie, select the tied vertex that has the most edges which would go from <em>S</em> to <em>T</em> if placed in the other set.</li>
+              </ul>
+            </div>
+            <div class="answer">
+              <p>This algorithm is somewhat unintuitive. Consider the following bipartite matching problem considered as a max flow problem:</p>
+              <object style="height:250px" id="bipart" type="image/svg+xml" data="basic_bipartite.svg"></object>
+              <p>The basic bipartite cardinality matching problem is potential matches. <em>A</em> can only match with <em>1</em>, <em>B</em> can match with <em>1</em> or <em>3</em>, etc. A solution which will find the maximum number of matches can be found by representing the matching as a maximum flow problem with the following characteristics:</p>
+              <ul>
+                <li>"Producers" are represented as sources</li>
+                <li>"Consumers" are represented terminals</li>
+                <li>All edges are have a weight of one (c(<em>u</em>, <em>v</em>) = 1)</li>
+                <li>To simplify, all sources are bound to a single super-source and all terminals to a super-terminal</li>
+              </ul>
+
+              <p>A cut of the graph is simply a partition of the set of all vertices, <em>V</em>, into two sets, <em>S</em> and <em>T</em>, &SuchThat;</p>
+              <ul>
+                <li><em>s</em> &Element; <em>S</em></li>
+                <li><em>t</em> &Element; <em>T</em></li>
+                <li><em>S</em> &Union; <em>T</em> = <em>V</em></li>
+                <li><em>S</em> &Intersection; <em>T</em> = &empty;</li>
+              </ul>
+
+              <p>For any cut of the graph, there is an associated cost which is the sum of the edges which have one end in <em>S</em> and the other in <em>T</em>. Out of the 2<sup>|<em>V</em>| - 2</sup> possible cuts there is a minimum cost. This minimum cost is also the maximum flow through a graph. This makes sense because flow has to get from <em>s</em> in <em>S</em> to <em>t</em> in <em>T</em> and can only do so via edges that bridge <em>S</em> and <em>T</em>.</p>
+              <p>Consider a mincut for the original bipartite example:</p>
+              <object style="height:300px" id="bipart" type="image/svg+xml" data="basic_bipartite_mincut.svg"></object>
+              <p>For an edge to count toward the cut cost it must start in <em>S</em> and end in <em>T</em>. The dashed edges are the only edges that meet this criteria. There are three of them and the max flow can, through an examination of the graph, be seen to be three.</p>
+              <p>Drawing the graph and the cut is at times misleading. For example, the edge (<em>B</em>, <em>3</em>) crosses the drawn cut line, but note that it passes back out before arriving at <em>3</em>. Likewise the edge (<em>C</em>, <em>4</em>) crosses the line into <em>T</em>, but it originates there as well.</p>
+              <p>Recall that edges from <em>T</em> to <em>S</em> do not count toward the cost, so (<em>C</em>, <em>3</em>) does not contribute.</p>
+              <p>To examine the algorithm and it's potential issues, consider the following graph:</p>
+              <object style="height:110px" id="bipart" type="image/svg+xml" data="greedy_mincut_base.svg"></object>
+              <p>The optimum cut of this graph is of cost 1 and is simply:</p>
+              <object style="height:110px" id="bipart" type="image/svg+xml" data="greedy_mincut_optimum.svg"></object>
+              <p>The first iteration the state is as follows:</p>
+              <ul>
+                <li><em>S</em> = {<em>s</em>}</li>
+                <li><em>T</em> = {<em>t</em>}</li>
+                <li>
+                  <table>
+                    <tr>
+                      <th><em>v</em></th>
+                      <th>|{(<em>u</em>, <em>v</em>}| &SuchThat; <em>u</em> &Element; <em>S</em></th>
+                      <th>|{(<em>v</em>, <em>u</em>}| &SuchThat; <em>u</em> &Element; <em>T</em></th>
+                    </tr>
+                    <tr><td><em>A</em></td><td>1</td><td>0</td></tr>
+                    <tr><td><em>1</em></td><td>0</td><td>1</td></tr>
+                    <tr><td><em>2</em></td><td>0</td><td>1</td></tr>
+                  </table>
+                </li>
+              </ul>
+              <p>Adding <em>A</em> to <em>S</em> will minimize the number of edges from the current <em>S</em> to the current <em>T</em>. (Since there are 0 edges to the current <em>T</em> from <em>A</em>.</p>
+              <p>The minimum cut needs to be made between <em>s</em> and <em>A</em> and the algorithm now cannot find an optimum cut. It will ultimately end with a cut of cost 2:</p>
+              <object style="height:110px" id="bipart" type="image/svg+xml" data="greedy_mincut_actual.svg"></object>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Show that the following local improvement algorithm fails to find the minimum cut if you are given a network which arises from the bipartite cardinality matching problem:</p>
+              <ul>
+                <li>Start with an arbitrary cut.</li>
+                <li>If there is a vertex <em>v</em> which can be switched from one set to the other and reduce the number of edges which cross the cut from S to T, switch <em>v</em> to the other set.</li>
+                <li>Stop when no further improvements can be made.</li>
+              </ul>
+            </div>
+            <div class="answer">
+              <p>As is often the case with local improvement that relies on an arbitrary starting point, a poor solution can result from a poorly chosen starting point. Consider the following graph and cut:</p>
+              <object style="height:110px" id="bipart" type="image/svg+xml" data="improvement_base.svg"></object>
+              <p>There are four vertices that could be considered for flipping:</p>
+              <ol style="list-style: none;">
+                <li>A:
+                  <object style="height:110px" id="bipart" type="image/svg+xml" data="improvement_flip_A.svg"></object>
+                </li>
+                <li>B:
+                  <object style="height:110px" id="bipart" type="image/svg+xml" data="improvement_flip_B.svg"></object>
+                </li>
+                <li>1:
+                  <object style="height:110px" id="bipart" type="image/svg+xml" data="improvement_flip_1.svg"></object>
+                </li>
+                <li>2:
+                  <object style="height:110px" id="bipart" type="image/svg+xml" data="improvement_flip_2.svg"></object>
+                </li>
+              </ol>
+              <p>Each of these produces a cost of three which is more than the optimum solution of two.</p>
+              <object style="height:110px" id="bipart" type="image/svg+xml" data="improvement_optimum.svg"></object>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li id="p2">
+        <div class="question">
+          <p>
+            Show that there can be
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>&Omega;</mo><mfenced><msqrt><mi>n</mi></msqrt></mfenced></math>
+          phases of the max flow algorithm when Dinic's algorithm is run on a network which comes from a bipartite matching problem. (<em>Hint: Make the graph disconnected, and make each component require a different length augmenting path.</em>)
+          </p>
+        </div>
+        <div class="answer">
+          <p>See attached sheet.</p>
+        </div>
+      </li>
+      <li id="p3">
+        <div class="question">
+          <p>Suppose you have a graph such that for each vertex <em>v</em>, the neighborhood of <em>v</em> does not contain 3 independent vertices. Show that you can find a matching in such a graph in linear time. (<em>Hint: Build a breadth-first search tree, and do your search from the bottom of the search tree to the root.</em>)</p>
+        </div>
+        <div class="answer">
+          <p>Independent vertices in a graph are vertices which do not share an edge. Though the question does not say that the graph is a representation of a bipartite matching, we are asked to find a matching, so it is assumed this is the case.</p>
+          <p>In a flow diagram to find a bipartite matching there are always three levels of edges. These can be identified as:</p>
+          <ul>
+            <li>"Source" from the source to each of the set of producers &mdash; (<em>s</em>, <em>v</em>) &SuchThat; <em>v</em> &Element; <em>P</em></li>
+            <li>"Terminal" from each of the set of consumers to the terminal &mdash; (<em>v</em>, <em>t</em>) &SuchThat; <em>v</em> &Element; <em>C</em></li>
+            <li>"Preference" between the producers and the consumers depending on the characteristics of the matching &mdash; (<em>u</em>, <em>v</em>) &SuchThat; <em>u</em> &Element; <em>P</em>, <em>v</em> &Element; <em>C</em></li>
+          </ul>
+          <object style="height:300px" id="bipart" type="image/svg+xml" data="bipartite_edges.svg"></object>
+          <p>The problem is the producers in a bipartite matching are, by definition, independent, since they are only connected to consumers. In order for the source to not have three independent vertices, the producers would have to be connected to each other (or there could only be two of them). Therefore it is assumed that this is a general graph with edges all of weight 1 and a "matching" is a set of paths from <em>s</em> to <em>t</em>. Moreover, since a single path from <em>s</em> to <em>t</em> can be found for an arbitrary graph via search in O(<em>m</em> + <em>n</em>) time, it is assumed a "matching" refers to the maximal size set of paths from <em>s</em> to <em>t</em>.</p>
+          <p>The solution to such a problem is essentially given by the hint. Building a breadth-first search tree from the root with marking of nodes so they are not revisited would take O(<em>m</em> + <em>n</em>) time. Such a marked tree would not work in the general case because a node might be marked as used which is part of a path without which the maximal set of paths cannot be found. Because of the high degree of connectivity in this graph, this cannot happen.</p>
+          <p>In order for a node to be eliminated which is a part of necessary path the edges entering this node must be connected to nodes for which there is no alternate path. This would require three vertices to be independent which is contrary to the problem statement.</p>
+          <p>The paths in the non-repeated node breadth-first search tree that include an edge connected to the terminal are a maximal set of paths from <em>s</em> to <em>t</em>. This set of paths can be found in a tree with a maximum depth of <em>d</em> in time O(<em>d</em> &times; |{(<em>v</em>, <em>t</em>)}|)</p>
+        </div>
+      </li>
+      <li id="p4">
+        <div class="question">
+          <p>Suppose that a marriage broker is very worried about affairs among couples he arranged marriages for. The goal in the suspicious broker problem is to match as many married couples as possible with the additional constraint that if <em>m</em><sub>1</sub> is married to <em>f</em><sub>1</sub>, and <em>m</em><sub>2</sub> is married to <em>f</em><sub>2</sub> there can be no edge between <em>m</em><sub>1</sub> and <em>f</em><sub>2</sub>, or <em>m</em><sub>2</sub> and <em>f</em><sub>1</sub>.</p>
+          <p>Show that this problem is <acronym title="Non-deterministically Polynomial">NP</acronym>-complete for the matching of <em>k</em> couples. (<em>Hint: Use independent sets.</em>)</p>
+        </div>
+        <div class="answer">
+          <p>Consider Cook's theorem for proving NP-completeness. It devises a system for representing the tape and states of an arbitrary Turing machine as the components of a boolean satisfiability problem. This means that if the boolean satisfiability problem can be solved in polynomial time then the solution of an arbitrary Turing machine may be solved in polynomial time as well.</p>
+          <p>The above problem may be represented as a boolean satisfiability problem in a straightforward way using the following predicates:</p>
+          <ul>
+            <li>r(<em>m</em>, <em>f</em>) &rarr; <em>m</em> is married to <em>f</em> ((<em>m</em>, <em>f</em>) is a part of the matching solution)</li>
+            <li>a(<em>m</em>, <em>f</em>) &rarr; <em>m</em> is attracted to <em>f</em> (there exists an edge (<em>m</em>, <em>f</em>))</li>
+          </ul>
+          <p>The boolean statements are expansion of the possible values of:</p>
+          <p>&ForAll; <em>i</em>, <em>j</em> m(<em>m<sub>i</sub></em>, <em>f<sub>j</sub></em>) &Implies; &not;&Exists; <em>k</em> &ne; <em>j</em> &SuchThat; a(<em>m<sub>i</sub></em>, <em>f<sub>k</sub></em>)</p>
+          <p>This may be converted to a boolean statement using the equality: <em>A</em> &Implies; <em>B</em> &iff; &not;<em>B</em> &or; <em>A</em>.</p>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

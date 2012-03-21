@@ -1,0 +1,924 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>PSY-304B Homework #6</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math, table + math, math + table, table + table { margin-top: .75em; }
+      .data td, .data th { text-align: center; padding: .25em; border: 1px solid; }
+      td, th { padding: .25em .5em; border: 1px solid; }
+      .ellip td { text-align: center; }
+      table { margin: auto; }
+      .hl { background-color: #BBB; }
+      ol { margin-left: 0em; }
+      .answer { margin: 0em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY-304B: Quantitative Methods &amp; Experimental Design</h1>
+      <h2>Homework #6</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 14:35 Tues., 22 April 2008</h2>
+    </div>
+    <blockquote>
+      <p>For all problems, unless otherwise indicated, assume a Type 1 error rate = .05.</p>
+    </blockquote>
+    <ol>
+      <li>
+        <div class="question">
+          <p>An emotion researcher regularly uses different emotional stimuli within a given category (e.g., a set of happiness-inducing film clips) to elicit emotional responses among subjects. Let's say that she is interested in the degree to which variability in responses to happiness-inducing stimuli is due to variability among the stimuli themselves. She conducts an experiment in which 50 subjects are randomly assigned to one of 5 stimulus conditions (<em>n<sub>i</sub></em> = 10). Subjects in each stimulus condition are shown one film clip designed to elicit happiness. A different film clip is used in each condition. The 5 clips can be considered a random sample from a much larger population of potentially happiness-inducing clips. Self-report responses to each film clip are recorded on a 1 to 100 scale (higher scores indicate greater happiness).</p>
+          <p>The data are as follows:</p>
+
+          <table>
+            <tr><th>Clip #1</th><td>51</td><td>62</td><td>67</td><td>56</td><td>60</td><td>63</td><td>65</td><td>60</td><td>65</td><td>34</td></tr>
+            <tr><th>Clip #2</th><td>50</td><td>52</td><td>33</td><td>59</td><td>51</td><td>54</td><td>68</td><td>51</td><td>60</td><td>43</td></tr>
+            <tr><th>Clip #3</th><td>56</td><td>53</td><td>38</td><td>41</td><td>33</td><td>49</td><td>64</td><td>49</td><td>50</td><td>53</td></tr>
+            <tr><th>Clip #4</th><td>66</td><td>73</td><td>74</td><td>71</td><td>51</td><td>49</td><td>57</td><td>60</td><td>68</td><td>54</td></tr>
+            <tr><th>Clip #5</th><td>46</td><td>65</td><td>60</td><td>53</td><td>42</td><td>61</td><td>57</td><td>64</td><td>40</td><td>55</td></tr>
+          </table>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Indicate the null and alternative hypotheses.</p>
+            </div>
+            <div class="answer">
+              <p>H<sub>0</sub>: The amount of happiness induced by a film clip is a function solely from the viewer watching the clip and not from the clip itself. Essentially that these five clips are drawn from a random set of clips that are all equally happiness inducing.</p>
+              <p>If any element of this set of happiness inducing things was shown to everyone in the world the average response would be the same:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>H</mi><mn>0</mn></msub></mtd>
+                    <mtd><mo>:</mo></mtd>
+                    <mtd><msub><mi>&mu;</mi><mn>1</mn></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mi>&mu;</mi><mn>2</mn></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mi>&mu;</mi><mn>3</mn></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mo>&hellip;</mo></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mi>&mu;</mi><mn>&infin;</mn></msub></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>Another way of saying this is that the variability because of differences in the clips is zero:</p>
+              
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>H</mi><mn>0</mn></msub></mtd>
+                    <mtd><mo>:</mo></mtd>
+                    <mtd><msubsup><mi>&sigma;</mi><mi>clip</mi><mn>2</mn></msubsup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>H<sub>1</sub>: The amount of happiness induced by watching a file clip is a function of both the viewer and the clip being watched.</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>H</mi><mn>1</mn></msub></mtd>
+                    <mtd><mo>:</mo></mtd>
+                    <mtd><msubsup><mi>&sigma;</mi><mi>clip</mi><mn>2</mn></msubsup></mtd>
+                    <mtd><mo>&ne;</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                    <mtd><mo>&rArr;</mo></mtd>
+                    <mtd><msubsup><mi>&sigma;</mi><mi>clip</mi><mn>2</mn></msubsup></mtd>
+                    <mtd><mo>&gt;</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p><em>Recall that the variance can't be less than zero.</em></p>
+
+              <hr />
+              <p>Really what is being tested by this experiment is whatever method is being used to pick clips "designed to elicit happiness." The ANOVA doesn't seem the appropriate test however.</p>
+              <p>I'm assuming that if I designed a method for picking clips that elicit happiness I would like to prove that it works. I'll design a method of picking clips now that I believe won't work, alternating pictures of kittens and surgery, I can test if that won't work, but proving it won't be a surprising finding.</p>
+              <p>All that the ANOVA can do is fail to disprove that it doesn't work. Failing to disprove the null is not the same thing as supporting it. Instead of the ANOVA, a test is needed whose null hypothesis is that the means are unequal.</p>
+              <p>A situation where my experimental might genuinely be that the means are unequal is if these five clips were used in another experiment and I am hypothesizing that they were responsible for some of the variability in that experiment. In this situation though the clips are not random, they're fixed.</p>
+              <p>I suppose if the researcher has a very large sample of clips that are used to elicit happiness and she is spot checking the whole set by selecting five and testing them, then this experiment makes some sense. She would likely want to do contrasts then if the ANOVA failed.</p>
+              <p>Another option would be a set of clips that would be assumed to elicit similar amounts of happiness. Maybe I have five clips of puppies playing and I want to assess how much of the variability comes from the concept of "puppy" as opposed to the specific characteristics of the puppy playing. That makes sense as a research question.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Conduct a one-way ANOVA on these data. You can either use SAS or a hand computation. Indicate the value of your observed F and whether it is statistically significant. Interpret the results.</p>
+            </div>
+            <div class="answer">
+              <p>For this data, <a href="homework_6.R">R</a> produces:</p>
+              <pre>            Df Sum Sq Mean Sq F value  Pr(>F)
+Clip_Number  4 1139.7   284.9  3.2678 0.01954
+Residuals   45 3923.6    87.2</pre>
+              <p>The null hypothesis is rejected in this situation and the experimenter's belief that the clips are not equal in the amount of happiness they elicit is supported.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Indicate the expected values for the Mean Squares that you used to compute the F ratio of interest in the ANOVA that you conducted in part b.</p>
+            </div>
+            <div class="answer">
+              <p>For a one-way random effects design:</p>
+              <table class="data">
+                <tr><th>Effect</th><th>E(Mean Square)</th><th>H<sub>0</sub></th><th>E(Mean Square |<sub>H<sub>0</sub></sub>)</th></tr>
+                <tr>
+                  <td>Random</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                      <mtable>
+                        <mtr>
+                          <mtd>
+                            <msub><mi>&sigma;</mi><mi>&epsilon;</mi></msub>
+                            <mo>+</mo><mi>n</mi><msubsup><mi>&sigma;</mi><mi>Random</mi><mn>2</mn></msubsup>
+                          </mtd>
+                        </mtr>
+                      </mtable>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                      <mtable>
+                        <mtr>
+                          <mtd><msubsup><mi>&sigma;</mi><mi>Random</mi><mn>2</mn></msubsup></mtd>
+                          <mtd><mo>=</mo></mtd>
+                          <mtd><mn>0</mn></mtd>
+                        </mtr>
+                      </mtable>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                      <mtable>
+                        <mtr>
+                          <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                        </mtr>
+                      </mtable>
+                    </math>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Within</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                      <mtable>
+                        <mtr>
+                          <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                        </mtr>
+                      </mtable>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                      <mtable>
+                        <mtr>
+                          <mtd><mo>&Exists;</mo></mtd>
+                          <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                        </mtr>
+                      </mtable>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                      <mtable>
+                        <mtr>
+                          <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                        </mtr>
+                      </mtable>
+                    </math>
+                  </td>
+                </tr>
+              </table>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac>
+                      <html:acronym title="Mean Square Random Factor"><msub><mi>MS</mi><mi>Random</mi></msub></html:acronym>
+                      <html:acronym title="Mean Square Within"><msub><mi>MS</mi><mi>Within</mi></msub></html:acronym>
+                    </mfrac></mtd>
+                    <mtd><mo>~</mo></mtd>
+                    <mtd><msub>
+                      <mi>F</mi>
+                      <mfenced open="" close="">
+                        <msub><mi>df</mi><mi>Random</mi></msub>
+                        <msub><mi>df</mi><mi>Within</mi></msub>
+                    </mfenced>
+                    </msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub>
+                      <mi>F</mi>
+                      <mfenced open="" close="">
+                        <mrow><mfenced open="|" close="|">Random</mfenced><mo>-</mo><mn>1</mn></mrow>
+                        <mrow><mi>N</mi><mo>-</mo><mfenced open="|" close="|">Random</mfenced></mrow>
+                      </mfenced>
+                   </msub></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Based on these sample data, compute an unbiased estimate of the proportion of the total variability in self-report responses in the population that is due to variations in film clip content.</p>
+            </div>
+            <div class="answer">
+              <p>The proportion of the total variability from the randomness of the factor and not the samples, &rho;<sub>1</sub>, is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mo>&rho;</mo><mn>1</mn></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <msubsup><mi>&sigma;</mi><mi>Random</mi><mn>2</mn></msubsup>
+                      <mrow>
+                        <msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                        <mo>+</mo><msubsup><mi>&sigma;</mi><mi>Random</mi><mn>2</mn></msubsup>
+                      </mrow>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>This quantity requires an unbiased estimate of the variance from the factor:</p>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msubsup><mover><mi>&sigma;</mi><mo>&Hat;</mo></mover><mi>Random</mi><mn>2</mn></msubsup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfrac>
+                        <mrow><mi>n</mi><msubsup><mover><mi>&sigma;</mi><mo>&Hat;</mo></mover><mi>Random</mi><mn>2</mn></msubsup></mrow>
+                        <mi>n</mi>
+                      </mfrac>
+                      <mo>+</mo>
+                      <mfrac>
+                        <mrow>
+                          <msubsup><mover><mi>&sigma;</mi><mo>&Hat;</mo></mover><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                          <mo>-</mo><msubsup><mover><mi>&sigma;</mi><mo>&Hat;</mo></mover><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                        </mrow>
+                        <mi>n</mi>
+                      </mfrac>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                        <mrow>
+                          <mfenced><mrow>
+                            <mi>n</mi><msubsup><mover><mi>&sigma;</mi><mo>&Hat;</mo></mover><mi>Random</mi><mn>2</mn></msubsup>
+                            <mo>+</mo>
+                            <msubsup><mover><mi>&sigma;</mi><mo>&Hat;</mo></mover><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                          </mrow></mfenced>
+                          <mo>-</mo><msubsup><mover><mi>&sigma;</mi><mo>&Hat;</mo></mover><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                        </mrow>
+                        <mi>n</mi>
+                      </mfrac>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <mo>E</mo>
+                        <mfenced><html:acronym title="Mean Square Random Factor"><msub><mi>MS</mi><mi>Random</mi></msub></html:acronym></mfenced>
+                        <mo>-</mo>
+                        <mo>E</mo>
+                        <mfenced><html:acronym title="Mean Square Within"><msub><mi>MS</mi><mi>Within</mi></msub></html:acronym></mfenced>
+                      </mrow>
+                      <mi>n</mi>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mover><mo>&rho;</mo><mo>&Hat;</mo></mover><mn>1</mn></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <msubsup><mover><mi>&sigma;</mi><mo>&Hat;</mo></mover><mi>Random</mi><mn>2</mn></msubsup>
+                      <mrow>
+                        <msubsup><mover><mi>&sigma;</mi><mo>&Hat;</mo></mover><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                        <mo>+</mo><msubsup><mover><mi>&sigma;</mi><mo>&Hat;</mo></mover><mi>Random</mi><mn>2</mn></msubsup>
+                      </mrow>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mfrac>
+                        <mrow>
+                          <html:acronym title="Mean Square Random Factor"><msub><mi>MS</mi><mi>Random</mi></msub></html:acronym>
+                          <mo>-</mo><html:acronym title="Mean Square Within"><msub><mi>MS</mi><mi>Within</mi></msub></html:acronym>
+                        </mrow>
+                        <mi>n</mi>
+                      </mfrac>
+                      <mrow>
+                        <mfrac>
+                          <mrow>
+                            <html:acronym title="Mean Square Random Factor"><msub><mi>MS</mi><mi>Random</mi></msub></html:acronym>
+                            <mo>-</mo><html:acronym title="Mean Square Within"><msub><mi>MS</mi><mi>Within</mi></msub></html:acronym>
+                          </mrow>
+                          <mi>n</mi>
+                        </mfrac>
+                        <mo>+</mo>
+                        <html:acronym title="Mean Square Within"><msub><mi>MS</mi><mi>Within</mi></msub></html:acronym>
+                      </mrow>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <html:acronym title="Mean Square Random Factor"><msub><mi>MS</mi><mi>Random</mi></msub></html:acronym>
+                        <mo>-</mo><html:acronym title="Mean Square Within"><msub><mi>MS</mi><mi>Within</mi></msub></html:acronym>
+                      </mrow>
+                      <mrow>
+                        <html:acronym title="Mean Square Random Factor"><msub><mi>MS</mi><mi>Random</mi></msub></html:acronym>
+                        <mo>+</mo><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                        <html:acronym title="Mean Square Within"><msub><mi>MS</mi><mi>Within</mi></msub></html:acronym>
+                      </mrow>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>For this data, <a href="homework_6.R">R</a> calculates:</p>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mover><mo>&rho;</mo><mo>&Hat;</mo></mover><mn>1</mn></msub></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>0.1849</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>This means that 18.5% of the overall variability comes from a difference in the clips rather than from the subjects.</p>
+
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Why would we be unlikely to follow up this analysis with contrasts testing for differences between the means of the five film clips?</p>
+            </div>
+            <div class="answer">
+              <p>A contrast of these specific means will only tell if these individual clips are not equivalent in inducing happiness. It is not a generalizable research question.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>A pharmaceutical company is interested in comparing the efficacy of three drugs (A, B, and C) for the treatment of panic disorder. In this context, drug can be considered a fixed effect. Four hospitals are recruited for the study. At each hospital, three patients within each of the three drug conditions are treated. The post-treatment scores on an inventory of panic symptoms are as follows (lower scores indicate fewer symptoms and better treatment effects):</p>
+          <table class="data">
+            <tr><th>Hospital</th><th>Drug A</th><th>Drug B</th><th>Drug C</th></tr>
+            <tr><th rowspan="3">LA General</th><td>81</td><td>109</td><td>106</td></tr>
+            <tr><td>91</td><td>93</td><td>105</td></tr>
+            <tr><td>67</td><td>95</td><td>109</td></tr>
+            <tr><th rowspan="3">Chicago VA</th><td>86</td><td>105</td><td>111</td></tr>
+            <tr><td>75</td><td>111</td><td>106</td></tr>
+            <tr><td>79</td><td>95</td><td>102</td></tr>
+            <tr><th rowspan="3">Des Moines Baptist</th><td>89</td><td>106</td><td>115</td></tr>
+            <tr><td>95</td><td>115</td><td>117</td></tr>
+            <tr><td>99</td><td>102</td><td>106</td></tr>
+            <tr><th rowspan="3">Nashville Centennial</th><td>106</td><td>115</td><td>111</td></tr>
+            <tr><td>111</td><td>117</td><td>118</td></tr>
+            <tr><td>103</td><td>106</td><td>114</td></tr>
+          </table>
+        </div>
+        <div class="answer">
+          <p>Studies on this data is going to be interested in the expected value of a particular Hospital / Drug pair. The expected values (means) are:</p>
+          <table class="data">
+            <tr><th>Hospital</th><th>Drug A</th><th>Drug B</th><th>Drug C</th><th>Marginal</th></tr>
+            <tr><th>LA General</th><td>79.666</td><td>99.000</td><td>106.6667</td><td>95.111</td></tr>
+            <tr><th>Chicago VA</th><td>80.00000</td><td>103.6667</td><td>106.3333</td><td>96.666</td></tr>
+            <tr><th>Des Moines Baptist</th><td>94.333</td><td>107.6667</td><td>107.6667</td><td>103.222</td></tr>
+            <tr><th>Nashville Centennial</th><td>106.666</td><td>112.6667</td><td>114.3333</td><td>111.222</td></tr>
+            <tr><th>Marginal</th><td>90.166</td><td>105.750</td><td>108.750</td><td>101.555</td></tr>
+          </table>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Let’s assume that these four clinics are the sole customers of the pharmaceutical company. Thus, the company representatives who are supervising the study are not interested in generalizing the results beyond these four clinics.</p>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>What would be the expected values of each of the four relevant mean squares?</p>
+                </div>
+                <div class="answer">
+                  <p>For this section a new notation will be used:</p>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd><msubsup><mi>&theta;</mi><mi>x</mi><mn>2</mn></msubsup></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mrow>
+                            <munder><mo>&Sum;</mo><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&Element;</mo><mi>x</mi></mrow></munder>
+                            <msubsup><mi>x</mi><mi>i</mi><mn>2</mn></msubsup>
+                          </mrow>
+                          <mrow>
+                            <mfenced open="|" close="|"><mi>x</mi></mfenced><mo>-</mo><mn>1</mn>
+                          </mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mfrac>
+                            <mfenced open="|" close="|"><mi>x</mi></mfenced>
+                            <mrow><mfenced open="|" close="|"><mi>x</mi></mfenced><mo>-</mo><mn>1</mn></mrow>
+                          </mfrac>
+                          <msubsup><mi>&sigma;</mi><mi>x</mi><mn>2</mn></msubsup>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd><msubsup><mi>&theta;</mi><mfenced open="" close=""><mi>x</mi><mi>y</mi></mfenced><mn>2</mn></msubsup></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mrow>
+                            <munder>
+                              <mo>&Sum;</mo>
+                              <mrow>
+                                <msub><mfenced><mrow><mi>x</mi><mi>y</mi></mrow></mfenced><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+                                <mo>&Element;</mo><mi>x</mi><mo>&Cross;</mo><mi>y</mi>
+                              </mrow>
+                            </munder>
+                            <msubsup>
+                              <mfenced><mrow><mi>x</mi><mi>y</mi></mrow></mfenced>
+                              <mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced>
+                              <mn>2</mn>
+                            </msubsup>
+                          </mrow>
+                          <mrow>
+                            <mfenced><mrow>
+                              <mfenced open="|" close="|"><mi>x</mi></mfenced><mo>-</mo><mn>1</mn>
+                            </mrow></mfenced>
+                            <mfenced><mrow>
+                              <mfenced open="|" close="|"><mi>y</mi></mfenced><mo>-</mo><mn>1</mn>
+                            </mrow></mfenced>
+                          </mrow>
+                        </mfrac></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  
+                  <p>In this situation the hospitals are fixed factors and the analysis is simply a 4&times;3 fixed effects ANOVA. The characteristics of the mean squares are:</p>
+                  <table class="data">
+                    <tr><th>Effect</th><th>E(Mean Square)</th><th>H<sub>0</sub></th><th>E(Mean Square |<sub>H<sub>0</sub></sub>)</th><th>F-ratio</th></tr>
+                    <tr>
+                      <td>Fixed &alpha;</td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd>
+                                <msub><mi>&sigma;</mi><mi>&epsilon;</mi></msub>
+                                <mo>+</mo><mfenced open="|" close="|"><mi>&alpha;</mi></mfenced><mi>n</mi>
+                                <msubsup><mi>&theta;</mi><mi>&alpha;</mi><mn>2</mn></msubsup>
+                              </mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><msub><mi>&alpha;</mi><mi>i</mi></msub></mtd>
+                              <mtd><mo>=</mo></mtd>
+                              <mtd><mn>0</mn></mtd>
+                              <mtd><mo>&ForAll;</mo></mtd>
+                              <mtd><mi>i</mi></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mfrac>
+                            <html:acronym title="Mean Square &alpha;"><msub><mi>MS</mi><mi>&alpha;</mi></msub></html:acronym>
+                            <html:acronym title="Mean Square Within"><msub><mi>MS</mi><mi>Within</mi></msub></html:acronym>
+                          </mfrac>
+                        </math>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Fixed &beta;</td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd>
+                                <msub><mi>&sigma;</mi><mi>&epsilon;</mi></msub>
+                                <mo>+</mo><mfenced open="|" close="|"><mi>&beta;</mi></mfenced><mi>n</mi>
+                                <msubsup><mi>&theta;</mi><mi>&beta;</mi><mn>2</mn></msubsup>
+                              </mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><msub><mi>&beta;</mi><mi>i</mi></msub></mtd>
+                              <mtd><mo>=</mo></mtd>
+                              <mtd><mn>0</mn></mtd>
+                              <mtd><mo>&ForAll;</mo></mtd>
+                              <mtd><mi>i</mi></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mfrac>
+                            <html:acronym title="Mean Square &beta;"><msub><mi>MS</mi><mi>&beta;</mi></msub></html:acronym>
+                            <html:acronym title="Mean Square Within"><msub><mi>MS</mi><mi>Within</mi></msub></html:acronym>
+                          </mfrac>
+                        </math>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>&alpha; &times; &beta; Interaction</td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd>
+                                <msub><mi>&sigma;</mi><mi>&epsilon;</mi></msub>
+                                <mo>+</mo><mi>n</mi>
+                                <msubsup><mi>&theta;</mi><mfenced open="" close=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mn>2</mn></msubsup>
+                              </mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd>
+                                <msub>
+                                  <mfenced><mrow><mi>&alpha;</mi><mi>&beta;</mi></mrow></mfenced>
+                                  <mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced>
+                                </msub>
+                              </mtd>
+                              <mtd><mo>=</mo></mtd>
+                              <mtd><mn>0</mn></mtd>
+                              <mtd><mo>&ForAll;</mo></mtd>
+                              <mtd><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mfrac>
+                            <html:acronym title="Mean Square Interaction">
+                              <msub><mi>MS</mi><mfenced><mrow><mi>&alpha;</mi><mi>&beta;</mi></mrow></mfenced></msub>
+                            </html:acronym>
+                            <html:acronym title="Mean Square Within"><msub><mi>MS</mi><mi>Within</mi></msub></html:acronym>
+                          </mfrac>
+                        </math>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Within</td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><mo>&Exists;</mo></mtd>
+                              <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td></td>
+                    </tr>
+                  </table>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>What would be the null hypotheses for the main effects of drug and of hospital?</p>
+                </div>
+                <div class="answer">
+                  <ul>
+                    <li>Main Effect of Hospital &mdash; LA General, the Chicago VA, Des Moines Baptist and Nashville Centennial are, on average, equally effective in delivering drug treatments for panic disorders.</li>
+                    <li>Main Effect of Drug &mdash; Drugs A, B and C are overall equally equally effective in treating panic disorders.</li>
+                  </ul>
+                </div>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <div class="question">
+              <p>Now, let’s assume a different situation. Let’s say that these four hospitals can be considered a random sample of the extremely large number of hospitals around the world that the company sells to.</p>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>What would be the expected values of each of the four relevant mean squares?</p>
+                </div>
+                <div class="answer">
+                  <table class="data">
+                    <tr><th>Effect</th><th>E(Mean Square)</th><th>H<sub>0</sub></th><th>E(Mean Square |<sub>H<sub>0</sub></sub>)</th><th>F-ratio</th></tr>
+                    <tr>
+                      <td>Fixed &alpha;</td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd>
+                                <msub><mi>&sigma;</mi><mi>&epsilon;</mi></msub>
+                                <mo>+</mo><mi>n</mi>
+                                <msubsup><mi>&sigma;</mi><mfenced><mrow><mi>&alpha;</mi><mi>&beta;</mi></mrow></mfenced><mn>2</mn></msubsup>
+                                <mo>+</mo><mfenced open="|" close="|"><mi>&alpha;</mi></mfenced><mi>n</mi>
+                                <msubsup><mi>&theta;</mi><mi>&alpha;</mi><mn>2</mn></msubsup>
+                              </mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><msub><mi>&alpha;</mi><mi>i</mi></msub></mtd>
+                              <mtd><mo>=</mo></mtd>
+                              <mtd><mn>0</mn></mtd>
+                              <mtd><mo>&ForAll;</mo></mtd>
+                              <mtd><mi>i</mi></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd>
+                                <msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                                <mo>+</mo><mi>n</mi>
+                                <msubsup><mi>&sigma;</mi><mfenced><mrow><mi>&alpha;</mi><mi>&beta;</mi></mrow></mfenced><mn>2</mn></msubsup>
+                              </mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mfrac>
+                            <html:acronym title="Mean Square &alpha;"><msub><mi>MS</mi><mi>&alpha;</mi></msub></html:acronym>
+                            <html:acronym title="Mean Square Interaction">
+                              <msub><mi>MS</mi><mfenced><mrow><mi>&alpha;</mi><mi>&beta;</mi></mrow></mfenced></msub>
+                            </html:acronym>
+                          </mfrac>
+                        </math>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Random &beta;</td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd>
+                                <msub><mi>&sigma;</mi><mi>&epsilon;</mi></msub>
+                                <mo>+</mo><mfenced open="|" close="|"><mi>&beta;</mi></mfenced><mi>n</mi>
+                                <msubsup><mi>&sigma;</mi><mi>&beta;</mi><mn>2</mn></msubsup>
+                              </mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><msub><mi>&beta;</mi><mi>i</mi></msub></mtd>
+                              <mtd><mo>=</mo></mtd>
+                              <mtd><mn>0</mn></mtd>
+                              <mtd><mo>&ForAll;</mo></mtd>
+                              <mtd><mi>i</mi></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mfrac>
+                            <html:acronym title="Mean Square &beta;"><msub><mi>MS</mi><mi>&beta;</mi></msub></html:acronym>
+                            <html:acronym title="Mean Square Within"><msub><mi>MS</mi><mi>Within</mi></msub></html:acronym>
+                          </mfrac>
+                        </math>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>&alpha; &times; &beta; Interaction</td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd>
+                                <msub><mi>&sigma;</mi><mi>&epsilon;</mi></msub>
+                                <mo>+</mo><mi>n</mi>
+                                <msubsup><mi>&sigma;</mi><mfenced open="" close=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mn>2</mn></msubsup>
+                              </mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd>
+                                <msub>
+                                  <mfenced><mrow><mi>&alpha;</mi><mi>&beta;</mi></mrow></mfenced>
+                                  <mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced>
+                                </msub>
+                              </mtd>
+                              <mtd><mo>=</mo></mtd>
+                              <mtd><mn>0</mn></mtd>
+                              <mtd><mo>&ForAll;</mo></mtd>
+                              <mtd><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mfrac>
+                            <html:acronym title="Mean Square Interaction">
+                              <msub><mi>MS</mi><mfenced><mrow><mi>&alpha;</mi><mi>&beta;</mi></mrow></mfenced></msub>
+                            </html:acronym>
+                            <html:acronym title="Mean Square Within"><msub><mi>MS</mi><mi>Within</mi></msub></html:acronym>
+                          </mfrac>
+                        </math>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Within</td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><mo>&Exists;</mo></mtd>
+                              <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td>
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                          <mtable>
+                            <mtr>
+                              <mtd><msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup></mtd>
+                            </mtr>
+                          </mtable>
+                        </math>
+                      </td>
+                      <td></td>
+                    </tr>
+                  </table>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>What would be the null hypotheses for the main effects of drug and of hospital?</p>
+                </div>
+                <div class="answer">
+                  <ul>
+                    <li>Main Effect of Hospital &mdash; The hospital where a drug treatment is delivered does not affect the effectiveness of drug treatments for panic disorders.</li>
+                    <li>Main Effect of Drug &mdash; Drugs A, B and C are, overall, equally effective in treating panic disorders.</li>
+                  </ul>
+                </div>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <div class="question">
+              <p>Let’s assume that the assumption articulated in part b holds (i.e., hospitals as random samples).</p>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>Using SAS or other software, conduct an omnibus ANOVA that tests each of the main effects and the interaction. Summarize your results and conclusions.</p>
+                </div>
+                <div class="answer">
+                  <p>It turns out doing this is not easily explained in R, so I did it in SAS in the interests of surviving the end of the semester:</p>
+                  <pre> Source                     DF      Type I SS    Mean Square   F Value   Pr > F
+ drug                        2    2617.055556    1308.527778     30.83   &lt;.0001
+ hosp                        3    1523.638889     507.879630     11.97   &lt;.0001
+ drug*hosp                   6     441.611111      73.601852      1.73   0.1562</pre>
+                  <p>Both the hospital and the drug being used have a significant effect on the outcome of treatment of panic disorders. There is no evidince that a particular hospital does especially well or poorly with a particular drug.</p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Using SAS or other software, conduct a planned contrast (two-tailed) comparing the average of the A and B drug groups to drug C. Summarize your results and conclusions.</p>
+                </div>
+                <div class="answer">
+                  <pre>    Tests of Hypotheses Using the Type III MS for drug*hosp as an Error Term
+ Contrast                   DF    Contrast SS    Mean Square   F Value   Pr > F
+ drug 1&amp;2 vs 3               1    1160.013889    1160.013889     15.76   0.0074</pre>
+                  <p>There is a statistically significant probability that Drug C is less effective than the average of Drugs A and B.</p>
+                </div>
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </body>
+</html>

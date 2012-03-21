@@ -1,0 +1,103 @@
+table {
+  text-align: center;
+  margin: auto;
+  border-collapse: collapse;
+}
+
+table#langs {
+  width: 95%;
+}
+
+@media print {
+  table#langs {
+    width: 100%
+  }
+
+  col#hassaniya {
+    width: 50%;
+  }
+
+  th, td {
+/*
+    border-style: solid !important;
+    border-color: black !important;
+*/
+  }
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0px;
+  }
+}
+
+th, td {
+  vertical-align: middle;
+}
+
+thead {
+  background-color: rgb(48, 88, 169);
+  color: white;
+}
+
+thead td, thead th {
+  border-top: none;
+  border-bottom: double black;
+  border-left: double black;
+}
+
+thead td:first-child, thead th:first-child {
+  border-left: none;
+}
+
+table#langs > tbody > tr > td {
+  border: double black;
+}
+
+table#langs > tbody > tr > td:first-child,
+ table#langs > tbody > tr > th:first-child {
+  border-left: thin dashed gray;
+}
+
+table#langs > tbody > tr > td:last-child,
+ table#langs > tbody > tr > th:last-child {
+  border-right: thin dashed gray;
+}
+
+table.vocab > tbody > tr > td:last-child,
+ table.vocab > tbody > tr > th:last-child {
+  border-right: none;
+}
+
+table.vocab > tbody > tr > td:first-child,
+ table.vocab > tbody > tr > th:first-child {
+  border-left: none;
+}
+
+table.vocab > tbody > tr:first-child > td,
+ table.vocab > tbody > tr:first-child > th {
+  border-top: none;
+}
+
+table.vocab > tbody > tr:last-child > td,
+ table.vocab > tbody > tr:last-child > th {
+  border-bottom: none;
+}
+
+table#langs td:hover {
+  background-color: yellow;
+  color: rgb(38, 48, 129);
+}
+
+table.vocab {
+  width: 100%;
+  height: 100%;
+  page-break-inside: avoid;
+}
+
+table.vocab td {
+  border: thin dashed gray;
+}
+
+table.vocab td {
+  width: 50%;
+}

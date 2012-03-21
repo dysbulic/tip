@@ -1,0 +1,1111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-360 Homework #3</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <base href="http://odin.himinbi.org/classes/cs360/" />
+    <style type="text/css">
+      object { width: 100%; }
+      #family_tree { height: 250px; }
+      #four_adder { height: 300px; }
+      #romania_map { height: 300px; }
+      .proof { padding: 0; list-style: none; }
+      .proof li { margin-left: 1.5em; }
+      .proof li:first-child { margin-left: 0em; }
+      table.proof td { border-style: solid none; border-width: 1px; padding: .25em .5em; }
+      table.proof td:first-child { border-right: 1px solid; }
+      table.proof .nested td { padding-left: 1.25em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 360: Introduction to Artificial Intelligence</h1>
+      <h2>Homework #3</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>8 November 2007</h2>
+    </div>
+    <ol>
+      <li>
+        <h2>Predicates</h2>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Write axioms describing the predicates: GrandChild, GreatGrandparent, Brother, Sister, Daughter, Son, Aunt, Uncle, BrotherInLaw, SisterInLaw and FirstCousin.</p>
+            </div>
+            <div class="answer">
+              <p>These predicates are all relational and they should be read as <code>relation</code>(<em>a</em>,<em>b</em>) &Implies; <em>a</em> is a <code>relation</code> of <em>b</em>.</p>
+              <ul>
+                <li>
+                  <code>GrandChild</code>(<em>a</em>,<em>b</em>) &Implies;
+                  <code>parent</code>(<em>b</em>,<em>x</em>) &and; <code>parent</code>(<em>x</em>,<em>a</em>)
+                </li>
+                <li>
+                  <code>GreatGrandparent</code>(<em>a</em>,<em>b</em>) &Implies;
+                  <code>parent</code>(<em>a</em>,<em>x</em>) &and; <code>GrandChild</code>(<em>b</em>,<em>x</em>)
+                </li>
+                <li>
+                  <p>The Sibling relationship is added to make the expression of some future relationships simpler. In this situation, Sibling encompasses full, half and step siblings.</p>
+                  <ul>
+                    <li>
+                      <code>Sibling</code>(<em>a</em>,<em>b</em>) &Implies;
+                      <code>parent</code>(<em>x</em>,<em>a</em>) &and; <code>parent</code>(<em>x</em>,<em>b</em>) &and;
+                      <code>not_equal</code>(<em>a</em>,<em>b</em>)
+                    </li>
+                    <li><code>Sibling</code>(<em>a</em>,<em>b</em>) &Implies; <code>Sibling</code>(<em>b</em>,<em>a</em>)</li>
+                  </ul>
+                </li>
+                <li>
+                  <code>Brother</code>(<em>a</em>,<em>b</em>) &Implies;
+                  <code>Sibling</code>(<em>a</em>,<em>b</em>) &and; <code>gender</code>(<em>a</em>,'male')
+                </li>
+                <li>
+                  <code>Sister</code>(<em>a</em>,<em>b</em>) &Implies;
+                  <code>Sibling</code>(<em>a</em>,<em>b</em>) &and; <code>gender</code>(<em>a</em>,'female')
+                </li>
+                <li>
+                  <code>Son</code>(<em>a</em>,<em>b</em>) &Implies;
+                  <code>parent</code>(<em>b</em>,<em>a</em>) &and; <code>gender</code>(<em>a</em>,'male')
+                </li>
+                <li>
+                  <code>Daughter</code>(<em>a</em>,<em>b</em>) &Implies;
+                  <code>parent</code>(<em>b</em>,<em>a</em>) &and; <code>gender</code>(<em>a</em>,'female')
+                </li>
+                <li>
+                  <code>Uncle</code>(<em>a</em>,<em>b</em>) &Implies;
+                  <code>parent</code>(<em>x</em>,<em>b</em>) &and; <code>Sibling</code>(<em>x</em>,<em>a</em>)
+                    &and; <code>gender</code>(<em>a</em>,'male')
+                </li>
+                <li>
+                  <code>Aunt</code>(<em>a</em>,<em>b</em>) &Implies;
+                  <code>parent</code>(<em>x</em>,<em>b</em>) &and; <code>Sibling</code>(<em>x</em>,<em>a</em>)
+                    &and; <code>gender</code>(<em>a</em>,'female')
+                </li>
+                <li>
+                  <p><code>married</code> is a primitive relation, meaning it is not defined in terms of any other relations. It is necessary however to note that it is reflexive.</p>
+                  <ul>
+                    <li><code>married</code>(<em>a</em>,<em>b</em>) &Implies; <code>married</code>(<em>b</em>,<em>a</em>)</li>
+                  </ul>
+                </li>
+                <li>
+                  <code>BrotherInLaw</code>(<em>a</em>,<em>b</em>) &Implies;
+                  <code>married</code>(<em>b</em>,<em>x</em>) &and; <code>Sibling</code>(<em>a</em>,<em>x</em>)
+                    &and; <code>gender</code>(<em>a</em>,'male')
+                </li>
+                <li>
+                  <code>SisterInLaw</code>(<em>a</em>,<em>b</em>) &Implies;
+                  <code>married</code>(<em>b</em>,<em>x</em>) &and; <code>Sibling</code>(<em>a</em>,<em>x</em>)
+                    &and; <code>gender</code>(<em>a</em>,'female')
+                </li>
+                <li>
+                  <code>FirstCousin</code>(<em>a</em>,<em>b</em>) &Implies;
+                  <code>parent</code>(<em>x</em>,<em>a</em>) &and; <code>parent</code>(<em>y</em>,<em>b</em>) &and;
+                    <code>Sibling</code>(<em>x</em>,<em>y</em>)
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Express the proper definition of a <em>m</em><sup>th</sup> cousin removed <em>n</em> times in first-order logic.</p>
+            </div>
+            <div class="answer">
+              <p>From: <a href="http://www.tedpack.org/cousins.html">www.tedpack.org/cousins.html</a>:</p>
+              <ul>
+                <li>Children of siblings are first cousins</li>
+                <li>Children of first cousins are second cousins</li>
+                <li>Children of <em>m</em><sup>th</sup> cousins are (<em>m</em> + 1)<sup>th</sup> cousins</li>
+              </ul>
+              <p>Removedness is a function of generations, if two cousins are from different generations, they are removed that once for each generation.</p>
+              <p>The first step is to express the <em>m</em><sup>th</sup> cousin. This definition, for the sake of brevity expresses siblings as 0<sup>th</sup> cousins.</p>
+              <ul>
+                <li>
+                  <code>Cousin</code>(<em>a</em>,<em>b</em>,<em>m</em>) &Implies;
+                  (<code>greater</code>(<em>m</em>,0) &and; 
+                   <code>parent</code>(<em>x</em>,<em>a</em>) &and; <code>parent</code>(<em>y</em>,<em>b</em>) &and;
+                   <code>Cousin</code>(<em>x</em>,<em>y</em>,<em>m</em>-1)) &or;
+                  (<code>equal</code>(<em>m</em>,0) &and; <code>Sibling</code>(<em>a</em>,<em>b</em>))
+                </li>
+                <li><code>Cousin</code>(<em>a</em>,<em>b</em>,<em>m</em>) &Implies; <code>Cousin</code>(<em>b</em>,<em>a</em>,<em>m</em>)</li>
+              </ul>
+              <p>Next, a different predicate is added which is distinguished by the number of arguments. A <em>n</em> is added to represent "removed <em>n</em> times."</p>
+              <ul>
+                <li>
+                  <code>Cousin</code>(<em>a</em>,<em>b</em>,<em>m</em>,<em>n</em>) &Implies;
+                  (<code>greater</code>(<em>n</em>,0) &and; 
+                   (<code>parent</code>(<em>x</em>,<em>a</em>) &and; <code>Cousin</code>(<em>x</em>,<em>b</em>,<em>m</em>,<em>n</em>-1)) &or;
+                   (<code>parent</code>(<em>x</em>,<em>b</em>) &and; <code>Cousin</code>(<em>x</em>,<em>a</em>,<em>m</em>,<em>n</em>-1))) &or;
+                  (<code>equal</code>(<em>n</em>,0) &and; <code>Cousin</code>(<em>a</em>,<em>b</em>,<em>m</em>))
+                </li>
+                <li>
+                  <code>Cousin</code>(<em>a</em>,<em>b</em>,<em>m</em>,<em>n</em>) &Implies;
+                  <code>Cousin</code>(<em>b</em>,<em>a</em>,<em>m</em>,<em>n</em>)
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Write the basic facts of the following family tree using a suitable reasoning system:</p>
+              <object id="family_tree" type="image/svg+xml" data="family_tree.svg"></object>
+            </div>
+            <div class="answer">
+              <p>A suitable reasoning system would be Prolog. <a href="family_tree.prolog">family_tree.prolog</a> represents the above relations and predicates.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Using the same system, <code>Tell</code> it the sentences and <code>Ask</code> it who are Elizabeth's grandchildren, Diana's brothers-in-law, and Zara's great-grandparents.</p>
+            </div>
+            <div class="answer">
+              <p>Using gprolog and <a href="family_tree.prolog">family_tree.prolog</a>, the following results are derived:</p>
+              <ul>
+                <li>
+                  <code>grandchild</code>(<em>A</em>,'Elizabeth'). <em>(Elizabeth's grandchildren)</em>
+                  <ul>
+                    <li>A = 'Beatrice'</li>
+                    <li>A = 'Eugene'</li>
+                    <li>A = 'Peter'</li>
+                    <li>A = 'Zara'</li>
+                    <li>A = 'William'</li>
+                    <li>A = 'Harry'</li>
+                  </ul>
+                </li>
+                <li>
+                  <code>brotherInLaw</code>(<em>A</em>,'Diana'). <em>(Diana's brothers-in-law)</em>
+                  <ul>
+                    <li>A = 'Andrew'</li>
+                    <li><em>ToDo: There's a loop for some reason and it returns 'Andrew' over and over. Specifically it doesn't get to:</em></li>
+                    <li>A = 'Edward'</li>
+                  </ul>
+                </li>
+                <li>
+                  <code>greatGrandparent</code>(<em>A</em>,'Zara'). <em>(Zara's great-grandparents)</em>
+                  <ul>
+                    <li>A = 'George'</li>
+                    <li>A = 'Mum'</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>Any <em>m</em>-input, <em>n</em>-output gate or circuit may be represented using a predicate with <em>m</em> + <em>n</em> arguments, such that the predicate is true exactly when the inputs and outputs are consistent. For example, not-gates are described by the binary predicate <code>not</code>(<em>i</em>,<em>o</em>), for which <code>not</code>(0,1) and <code>not</code>(1,0) are known. Compositions of gate predicates are defined by conjunctions of gate predicates in which shared variables indicate direct connections. For example, a <code>nand</code> circuit can be composed from <code>and</code>s and <code>not</code>s:</p>
+          <p>
+            &forall;<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,<em>o<sub>a</sub></em>,<em>o</em>
+            <code>nand</code>(<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,<em>o</em>) &lArr;
+            <code>and</code>(<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,<em>o<sub>a</sub></em>) &and;
+            <code>not</code>(<em>o<sub>a</sub></em>,<em>o</em>)
+          </p>
+          <p>Using this representation, define and explain the queries you would use to verify:</p>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>A full one-bit adder</p>
+              <object id="adder" type="image/svg+xml" data="one_bit_adder.svg"></object>
+            </div>
+            <div class="answer">
+              <p>This predicate will be based off other existing predicates:</p>
+              <ul>
+                <li>
+                  <code>and</code>(<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,<em>o<sub>a</sub></em>)
+                  <ul>
+                    <li><code>and</code>(0,0,0)</li>
+                    <li><code>and</code>(0,1,0)</li>
+                    <li><code>and</code>(1,0,0)</li>
+                    <li><code>and</code>(1,1,1)</li>
+                  </ul>
+                </li>
+                <li>
+                  <code>or</code>(<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,<em>o<sub>o</sub></em>)
+                  <ul>
+                    <li><code>or</code>(0,0,0)</li>
+                    <li><code>or</code>(0,1,1)</li>
+                    <li><code>or</code>(1,0,1)</li>
+                    <li><code>or</code>(1,1,1)</li>
+                  </ul>
+                </li>
+                <li>
+                  <code>xor</code>(<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,<em>o<sub>x</sub></em>)
+                  <ul>
+                    <li><code>xor</code>(0,0,0)</li>
+                    <li><code>xor</code>(0,1,1)</li>
+                    <li><code>xor</code>(1,0,1)</li>
+                    <li><code>xor</code>(1,1,0)</li>
+                  </ul>
+                  <p><em>ToDo: Express <code>xor</code> as an implication.</em></p>
+                </li>
+              </ul>
+              <p>The adder then may be expressed as:</p>
+              <ul class="proof">
+                <li>
+                  &forall;<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,<em>i</em><sub>c</sub>,<em>o</em>,<em>o<sub>c</sub></em>
+                  <code>add</code>(<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,<em>i</em><sub>c</sub>,<em>o</em>,<em>o<sub>c</sub></em>) &lArr;
+                </li>
+                <li><code>xor</code>(<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,<em>x</em><sub>1</sub>) &and;</li>
+                <li><code>and</code>(<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,<em>a</em><sub>1</sub>) &and;</li>
+                <li><code>xor</code>(<em>i<sub>c</sub></em>,<em>x</em><sub>1</sub>,<em>o</em>) &and;</li>
+                <li><code>and</code>(<em>i<sub>c</sub></em>,<em>x</em><sub>1</sub>,<em>a</em><sub>2</sub>) &and;</li>
+                <li><code>or</code>(<em>a</em><sub>a</sub>,<em>a</em><sub>2</sub>,<em>o<sub>c</sub></em>)</li>
+              </ul>
+              <p>This predicate should produce these expressions:</p>
+              <ul>
+                <li>
+                  <code>add</code>(<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,<em>i</em><sub>c</sub>,<em>o</em>,<em>o<sub>c</sub></em>)
+                  <ul>
+                    <li><code>add</code>(0,0,0,0,0)</li>
+                    <li><code>add</code>(0,0,1,1,0)</li>
+                    <li><code>add</code>(0,1,0,1,0)</li>
+                    <li><code>add</code>(0,1,1,0,1)</li>
+                    <li><code>add</code>(1,0,0,1,0)</li>
+                    <li><code>add</code>(1,0,1,0,1)</li>
+                    <li><code>add</code>(1,1,0,0,1)</li>
+                    <li><code>add</code>(1,1,1,1,1)</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>A four-bit adder</p>
+              <object id="four_adder" type="image/svg+xml" data="four_bit_adder.svg"></object>
+            </div>
+            <div class="answer">
+              <p>This adder may be expressed in terms of the one-bit adder:</p>
+              <ul class="proof">
+                <li>
+                  &forall;<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,<em>x</em><sub>3</sub>,<em>x</em><sub>4</sub>,<!--
+                  --><em>y</em><sub>1</sub>,<em>y</em><sub>2</sub>,<em>y</em><sub>3</sub>,<em>y</em><sub>4</sub>,<!--
+                  --><em>z</em><sub>1</sub>,<em>z</em><sub>2</sub>,<em>z</em><sub>3</sub>,<em>z</em><sub>4</sub>,<em>z</em><sub>5</sub>
+                  <code>add4</code>(<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,<em>x</em><sub>3</sub>,<em>x</em><sub>4</sub>,<!--
+                  --><em>y</em><sub>1</sub>,<em>y</em><sub>2</sub>,<em>y</em><sub>3</sub>,<em>y</em><sub>4</sub>,<!--
+                  --><em>z</em><sub>1</sub>,<em>z</em><sub>2</sub>,<em>z</em><sub>3</sub>,<em>z</em><sub>4</sub>,<em>z</em><sub>5</sub>) &lArr;
+                </li>
+                <li>
+                  <code>add</code>(<em>x</em><sub>1</sub>,<em>y</em><sub>1</sub>,
+                                   0,<em>z</em><sub>1</sub>,<em>a</em><sub>1</sub>) &and;
+                </li>
+                <li>
+                  <code>add</code>(<em>x</em><sub>2</sub>,<em>y</em><sub>2</sub>,
+                                   <em>a</em><sub>1</sub>,<em>z</em><sub>2</sub>,<em>a</em><sub>2</sub>) &and;
+                </li>
+                <li>
+                  <code>add</code>(<em>x</em><sub>3</sub>,<em>y</em><sub>3</sub>,
+                                   <em>a</em><sub>2</sub>,<em>z</em><sub>3</sub>,<em>a</em><sub>3</sub>) &and;
+                </li>
+                <li>
+                  <code>add</code>(<em>x</em><sub>4</sub>,<em>y</em><sub>4</sub>,
+                                   <em>a</em><sub>3</sub>,<em>z</em><sub>4</sub>,<em>z</em><sub>5</sub>) &and;
+                </li>
+              </ul>
+              <p>The number of raw possible inputs is 2<sup>8</sup>. If the following reflexivity is recognized:</p>
+              <p>
+                <code>add4</code>(<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,<em>x</em><sub>3</sub>,<em>x</em><sub>4</sub>,<!--
+                --><em>y</em><sub>1</sub>,<em>y</em><sub>2</sub>,<em>y</em><sub>3</sub>,<em>y</em><sub>4</sub>,<!--
+                --><em>z</em><sub>1</sub>,<em>z</em><sub>2</sub>,<em>z</em><sub>3</sub>,<em>z</em><sub>4</sub>,<em>z</em><sub>5</sub>) &iff;
+                <code>add4</code>(<em>y</em><sub>1</sub>,<em>y</em><sub>2</sub>,<em>y</em><sub>3</sub>,<em>y</em><sub>4</sub>,<!--
+                --><em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,<em>x</em><sub>3</sub>,<em>x</em><sub>4</sub>,<!--
+                --><em>z</em><sub>1</sub>,<em>z</em><sub>2</sub>,<em>z</em><sub>3</sub>,<em>z</em><sub>4</sub>,<em>z</em><sub>5</sub>)
+              </p>
+              <p>This removes half the possibilities, but there are still 2<sup>7</sup> which are too many to list. Another identity is:</p>
+              <p>
+                <code>add4</code>(<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,<em>x</em><sub>3</sub>,<em>x</em><sub>4</sub>,<!--
+                -->0,0,0,0,<!--
+                --><em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,<em>x</em><sub>3</sub>,<em>x</em><sub>4</sub>,0)
+              </p>
+              <p>That removes an additional 2<sup>4</sup>, but there are still over 100. Some examples are:</p>
+              <ul>
+                <li>
+                  <code>add4</code>(<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,<em>x</em><sub>3</sub>,<em>x</em><sub>4</sub>,<!--
+                  --><em>y</em><sub>1</sub>,<em>y</em><sub>2</sub>,<em>y</em><sub>3</sub>,<em>y</em><sub>4</sub>,<!--
+                  --><em>z</em><sub>1</sub>,<em>z</em><sub>2</sub>,<em>z</em><sub>3</sub>,<em>z</em><sub>4</sub>) &lArr;
+                  <ul>
+                    <li><code>add4</code>(0,0,0,0,0,0,0,0,0,0,0,0)</li>
+                    <li><code>add4</code>(1,0,0,0,0,0,0,1,0,0,0,0)</li>
+                    <li><code>add4</code>(0,1,0,0,0,0,0,0,1,0,0,0)</li>
+                    <li><code>add4</code>(1,0,0,0,1,0,0,0,1,0,0,0)</li>
+                    <li><code>add4</code>(1,0,0,0,1,0,0,0,1,0,0,0)</li>
+                    <li><code>add4</code>(1,0,0,0,1,0,0,0,1,0,0,0)</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ol>
+        <div class="question">
+          <p>What kinds of queries are <em>not</em> supported by this representation that are supported by the representation in Section 8.4 of <cite>Artificial Intelligence</cite> by Russel and Norvig?</p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <h2>Expressing Sentences in First-Order Logic</h2>
+          <p>Represent each of the following sentences in first-order logic, using a consistent vocabulary (which you must define).</p>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>A computer system is intelligent if it can perform a task which, if performed by a human, requires intelligence.</p>
+            </div>
+            <div class="answer">
+              <p>task(x) &and; requires_human_intelligence(x) &and; computer(y) &and; can_perform(x,y) &Implies; is_intelligent(y)</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Every city has a dogcatcher who has been bitten by every dog in town.</p>
+            </div>
+            <div class="answer">
+              <p>&forall;z city(z) &Implies; &Exists;x &forall;y dog(y) &and; lives_in(y,z) &and; dogcatcher_for(x,z) &Implies; has_bitten(y,x)</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>There is an agent who sells policies only to people who are not insured.</p>
+            </div>
+            <div class="answer">
+              <p>An interesting ambiguity of this sentence is crystallized by this question "Does this agent sell policies to corporations?" It distinguishes whether "only to people who are not insured" means:</p>
+              <ul>
+                <li>All of the policies an agent sells are to people who are not insured. (The agent does not sell to anyone other than people.)</li>
+                <li>All of the policies an agent sells to people are to uninsured people. (Corporations may be uninsured or insured, that isn't specified.)</li>
+              </ul>
+              <p>The interpretation changes whether being a person is an antecedent or a consequent.</p>
+              <p>&Exists;x &forall;y,z agent(x) &and; person(y) &and; policy(z) &and; sells(x,y,z) &Implies; &not;insured(y)</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>A person born in the UK, each of whose parents is a UK citizen or a UK resident, is a UK citizen by birth.</p>
+            </div>
+            <div class="answer">
+              <p>It is assumed that "parents" refers to the sum total of an individuals parents. An orphan adopted by an individual would have a single parent legally. It is the legal definition that is used since citizenship is a legal matter.</p>
+              <ol>
+                <li>parent_of(x,y) &Implies; mother_of(x,y) &or; father_of(x,y) &or; adopted(x,y)</li>
+                <li>&forall;x &forall;y born_in(x,'UK') &and; parent_of(x,y) &and; (citizen_of(y,'UK') &or; resident_of(y,'UK')) &Implies; citizen_of(x,'UK')</li>
+              </ol>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>A person born outside the UK, one of whose parents is a UK citizen by birth, is a UK citizen by descent.</p>
+            </div>
+            <div class="answer">
+              <ol>
+                <li>parent_of(x,y) &Implies; mother_of(x,y) &or; father_of(x,y) &or; adopted(x,y)</li>
+                <li>&forall;x &Exists;y &not;born_in(x,'UK') &and; parent_of(x,y) &and; citizen_of(y,'UK') &Implies; citizen_of(x,'UK')</li>
+              </ol>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <h2>Conjunctive Normal Form</h2>
+          <p>Convert the following well-formed formulas to CNF.</p>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>[&not;(&forall;x P(x))] &Implies; [&Exists;x &not;P(x)]</p>
+            </div>
+            <div class="answer">
+              <ol>
+                <li>
+                  <p>Eliminate implications: (A &Implies; B &iff; &not;B &or; A)</p>
+                  <p>&not;[&Exists;x &not;P(x)] &or; [&not;(&forall;x P(x))]</p>
+                </li>
+                <li>
+                  <p>Reduce negation scope: (&not;&forall;x p &iff; &Exists;x &not;p; &not;&Exists;x p &iff; &forall;x &not;p)</p>
+                  <p>[&forall;x P(x)] &or; [&forall;x &not;P(x)]</p>
+                </li>
+                <li>
+                  <p>Drop qualifiers on now universally qualified variables:</p>
+                  <p>P(x) &or; &not;P(y)</p>
+                </li>
+              </ol>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>
+                &forall;x &Exists;y [(P(x,y) &Implies; Q(y,x)) &and; (Q(y,x) &Implies;
+                S(x,y))] &Implies; &Exists;x &forall;y [P(x,y) &Implies; S(x,y)]
+              </p>
+            </div>
+            <div class="answer">
+              <ol>
+                <li>
+                  <p>Eliminate implications:</p>
+                  <ol>
+                    <li>
+                      &forall;x &Exists;y [(&not;Q(y,x) &or; P(x,y)) &and; (&not;S(x,y) &or; Q(y,x))] &Implies;
+                      &Exists;x &forall;y [&not;S(x,y) &or; P(x,y)]
+                    </li>
+                    <li>
+                      &not;(&Exists;x &forall;y [&not;S(x,y) &or; P(x,y)]) &or;
+                      &forall;x &Exists;y [(&not;Q(y,x) &or; P(x,y)) &and; (&not;S(x,y) &or; Q(y,x))]
+                    </li>
+                  </ol>
+                </li>
+                <li>
+                  <p>Reduce negation scope:</p>
+                  <ol>
+                    <li>
+                      &forall;x &Exists;y &not;[&not;S(x,y) &or; P(x,y)] &or;
+                      &forall;x &Exists;y [(&not;Q(y,x) &or; P(x,y)) &and; (&not;S(x,y) &or; Q(y,x))]
+                    </li>
+                    <li>
+                      &forall;x &Exists;y [S(x,y) &and; &not;P(x,y)] &or;
+                      &forall;x &Exists;y [(&not;Q(y,x) &or; P(x,y)) &and; (&not;S(x,y) &or; Q(y,x))]
+                    </li>
+                  </ol>
+                </li>
+                <li>
+                  <p>Guarantee qualified variable uniqueness:</p>
+                  <ol>
+                    <li>
+                      &forall;x<sub>1</sub> &Exists;y<sub>1</sub> [S(x<sub>1</sub>,y<sub>1</sub>) &and; &not;P(x<sub>1</sub>,y<sub>1</sub>)] &or;
+                      &forall;x<sub>2</sub> &Exists;y<sub>2</sub> [(&not;Q(y<sub>2</sub>,x<sub>2</sub>) &or; P(x<sub>2</sub>,y<sub>2</sub>)) &and;
+                                                                   (&not;S(x<sub>2</sub>,y<sub>2</sub>) &or; Q(y<sub>2</sub>,x<sub>2</sub>))]
+                    </li>
+                  </ol>
+                </li>
+                <li>
+                  <p>Replace existential qualifiers with functions (skolemization):</p>
+                  <ol>
+                    <li>
+                      &forall;x<sub>1</sub> [S(x<sub>1</sub>,f<sub>1</sub>(x<sub>1</sub>)) &and; &not;P(x<sub>1</sub>,f<sub>1</sub>(x<sub>1</sub>))] &or;
+                      &forall;x<sub>2</sub> [(&not;Q(f<sub>2</sub>(x<sub>2</sub>),x<sub>2</sub>) &or; P(x<sub>2</sub>,f<sub>2</sub>(x<sub>2</sub>))) &and;
+                                             (&not;S(x<sub>2</sub>,f<sub>2</sub>(x<sub>2</sub>)) &or; Q(f<sub>2</sub>(x<sub>2</sub>),x<sub>2</sub>))]
+                    </li>
+                  </ol>
+                </li>
+                <li>
+                  <p>Drop qualifiers on now universally qualified variables:</p>
+                  <ol>
+                    <li>
+                      [S(x<sub>1</sub>,f<sub>1</sub>(x<sub>1</sub>)) &and; &not;P(x<sub>1</sub>,f<sub>1</sub>(x<sub>1</sub>))] &or;
+                      [(&not;Q(f<sub>2</sub>(x<sub>2</sub>),x<sub>2</sub>) &or; P(x<sub>2</sub>,f<sub>2</sub>(x<sub>2</sub>))) &and;
+                       (&not;S(x<sub>2</sub>,f<sub>2</sub>(x<sub>2</sub>)) &or; Q(f<sub>2</sub>(x<sub>2</sub>),x<sub>2</sub>))]
+                    </li>
+                  </ol>
+                </li>
+                <li>
+                  <p>For the safe of clarity, temporarily perform some substitutions:</p>
+                  <ul>
+                    <li>A = S(x<sub>1</sub>,f<sub>1</sub>(x<sub>1</sub>))</li>
+                    <li>B = P(x<sub>1</sub>,f<sub>1</sub>(x<sub>1</sub>))</li>
+                    <li>C = Q(f<sub>2</sub>(x<sub>2</sub>),x<sub>2</sub>)</li>
+                    <li>D = P(x<sub>2</sub>,f<sub>2</sub>(x<sub>2</sub>))</li>
+                    <li>E = S(x<sub>2</sub>,f<sub>2</sub>(x<sub>2</sub>))</li>
+                    <li>F = Q(f<sub>2</sub>(x<sub>2</sub>),x<sub>2</sub>)</li>
+                  </ul>
+                  <ol>
+                    <li>[A &and; &not;B] &or; [(&not;C &or; D) &and; (&not;E &or; F)]</li>
+                  </ol>
+                </li>
+                <li>
+                  <p>Distribute &and; over &or;:</p>
+                  <ol>
+                    <li>[A &or; ((&not;C &or; D) &and; (&not;E &or; F))] &and; [&not;B &or; ((&not;C &or; D) &and; (&not;E &or; F))]</li>
+                    <li>
+                      [(A &or; (&not;C &or; D)) &and; (A &or; (&not;E &or; F))]
+                      &and; [(&not;B &or; (&not;C &or; D)) &and; (&not;B &or; (&not;E &or; F))]
+                    </li>
+                    <li>
+                      [(A &or; &not;C &or; D) &and; (A &or; &not;E &or; F)]
+                      &and; [(&not;B &or; &not;C &or; D) &and; (&not;B &or; &not;E &or; F)]
+                    </li>
+                    <li>(A &or; &not;C &or; D) &and; (A &or; &not;E &or; F) &and; (&not;B &or; &not;C &or; D) &and; (&not;B &or; &not;E &or; F)</li>
+                  </ol>
+                </li>
+                <li>
+                  <p>The conjoined clauses resubstituted are:</p>
+                  <table>
+                    <tr>
+                      <td>(A &or; &not;C &or; D) &and;</td>
+                      <td rowspan="4" style="padding: 0 1em;">=</td>
+                      <td>
+                        (S(x<sub>1</sub>,f<sub>1</sub>(x<sub>1</sub>)) &or;
+                        &not;Q(f<sub>2</sub>(x<sub>2</sub>),x<sub>2</sub>) &or;
+                        P(x<sub>2</sub>,f<sub>2</sub>(x<sub>2</sub>))) &and;
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>(A &or; &not;E &or; F) &and;</td>
+                      <td>
+                        (S(x<sub>1</sub>,f<sub>1</sub>(x<sub>1</sub>)) &or;
+                        &not;S(x<sub>2</sub>,f<sub>2</sub>(x<sub>2</sub>)) &or;
+                        Q(f<sub>2</sub>(x<sub>2</sub>),x<sub>2</sub>)) &and;
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>(&not;B &or; &not;C &or; D) &and;</td>
+                      <td>
+                        (&not;P(x<sub>1</sub>,f<sub>1</sub>(x<sub>1</sub>)) &or;
+                        &not;Q(f<sub>2</sub>(x<sub>2</sub>),x<sub>2</sub>) &or;
+                        P(x<sub>2</sub>,f<sub>2</sub>(x<sub>2</sub>))) &and;
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>(&not;B &or; &not;E &or; F)</td>
+                      <td>
+                        (&not;P(x<sub>1</sub>,f<sub>1</sub>(x<sub>1</sub>)) &or;
+                        &not;S(x<sub>2</sub>,f<sub>2</sub>(x<sub>2</sub>)) &or;
+                        Q(f<sub>2</sub>(x<sub>2</sub>),x<sub>2</sub>))
+                      </td>
+                    </tr>
+                  </table>
+                </li>
+              </ol>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Write logical representations for the following sentences suitable for use with Generalized Modus Ponens:</p>
+            </div>
+            <div class="answer">
+              <p>According to Russel and Norvig, definite clauses are "a" form appropriate for Generalized Modus Ponens. Since no other suitable forms are mentioned, definite clauses will be used. Definite clauses are either:</p>
+              <ul>
+                <li>Atomic</li>
+                <li>
+                  An implication where:
+                  <ul>
+                    <li>The antecedent is a conjunction of positive literals</li>
+                    <li>The consequent is a single positive literal</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>Horses, cows and pigs are mammals.</p>
+                </div>
+                <div class="answer">
+                  <p>
+                    &forall;a <code>Horse</code>(<em>a</em>) &or; <code>Cow</code>(<em>a</em>) &or;
+                    <code>Pig</code>(<em>a</em>) &Implies; <code>Mammal</code>(<em>a</em>)
+                  </p>
+                  <p>As definite clauses, this would be written as:</p>
+                  <ul>
+                    <li>&forall;a <code>Horse</code>(<em>a</em>) &Implies; <code>Mammal</code>(<em>a</em>)</li>
+                    <li>&forall;a <code>Cow</code>(<em>a</em>) &Implies; <code>Mammal</code>(<em>a</em>)</li>
+                    <li>&forall;a <code>Pig</code>(<em>a</em>) &Implies; <code>Mammal</code>(<em>a</em>)</li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>The offspring of a horse is a horse.</p>
+                </div>
+                <div class="answer">
+                  <p>
+                    &forall;a,b <code>Horse</code>(<em>a</em>) &and; <code>Offspring</code>(<em>b</em>,<em>a</em>) &Implies;
+                    <code>Horse</code>(<em>b</em>)
+                  </p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Bluebeard is a horse.</p>
+                </div>
+                <div class="answer">
+                  <p><code>Horse</code>('Bluebeard')</p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Bluebeard is Charlie's parent.</p>
+                </div>
+                <div class="answer">
+                  <p><code>Parent</code>('Bluebeard','Charlie')</p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Offspring and parent are inverse relationships.</p>
+                </div>
+                <div class="answer">
+                  <p>
+                    &forall;a,b <code>Parent</code>(<em>a</em>,<em>b</em>) &iff; <code>Offspring</code>(<em>b</em>,<em>a</em>)
+                  </p>
+                  <p>As definite clauses, this would be written as:</p>
+                  <ul>
+                    <li>&forall;a <code>Parent</code>(<em>a</em>,<em>b</em>) &Implies; <code>Offspring</code>(<em>b</em>,<em>a</em>)</li>
+                    <li>&forall;a <code>Offspring</code>(<em>a</em>,<em>a</em>) &Implies; <code>Parent</code>(<em>b</em>,<em>a</em>)</li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Every mammal has a parent.</p>
+                </div>
+                <div class="answer">
+                  <p>
+                    &forall;a &Exists;b <code>Mammal</code>(<em>a</em>) &Implies; <code>Parent</code>(<em>b</em>,<em>a</em>)
+                  </p>
+                </div>
+              </li>
+            </ol>
+            <div class="question">
+              <p>Use those sentences to answer the following questions using a backward-chaining algorithm:</p>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>What is the proof tree generated by an exhaustive backward-chaining algorithm for the query &Exists;<em>h</em> <code>Horse</code>(<em>h</em>), where clauses are matched in the order given?</p>
+                </div>
+                <div class="answer">
+                  <object id="chaining" type="image/svg+xml" data="backward_chaining.svg"></object>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>What is noticeable about this domain?</p>
+                </div>
+                <div class="answer">
+                  <p>The search tree recurses infinitely because predicates are examined in the order listed and the first predicate with <code>Horse</code> as a consequent also has <code>Horse</code> as an antecedent and no binding.</p>
+                  <p>If the order of predicates in the expansion was different, then the algorithm would have expanded the <code>Parent</code> &Implies; <code>Offspring</code> predicate first. This would also have recursed infinitely alternating between the <code>Parent</code> and <code>Offspring</code> predicates.</p>
+                  <p>If the order was such that "Bluebeard is a horse" was before "The offspring of a horse is a horse," then <em>h</em> would have bound to <code>'Bluebeard'</code> immediately.</p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>How many solutions for <em>h</em> actually follow from the given sentences?</p>
+                </div>
+                <div class="answer">
+                  <p>Bluebeard is identified as a horse. The offspring of a horse is also a horse and Charlie is Bluebeard's offspring, so Charlie is a horse as well. There are two solutions.</p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>What is a method for finding all of them? (Smith <em>et al.</em> (1986) is potentially relevant.)</p>
+                </div>
+                <div class="answer">
+                  <p>If, along a branch of the search tree, predicates with unbound variables were not repeated unless a binding had taken place in that predicate then it would force a constant reduction in the unbound elements in a given predicate. Then a depth-first search with backtracking to try all possible expansions should find all the possible bindings.</p>
+                </div>
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>Given the following sentences in first-order logic:</p>
+          <ol>
+            <li>&forall;<em>x</em> &Exists;<em>y</em> (<em>x</em> &ge; <em>y</em>)</li>
+            <li>&Exists;<em>y</em> &forall;<em>x</em> (<em>x</em> &ge; <em>y</em>)</li>
+          </ol>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Assume that the variables range over the natural numbers, 0,1,2,&hellip;,&infin;, and "&ge;" means "greater than or equal to." Under this interpretation, translate the sentences into English:</p>
+            </div>
+            <div class="answer">
+              <ol>
+                <li>
+                  &forall;<em>x</em> &Exists;<em>y</em> (<em>x</em> &ge; <em>y</em>) &mdash;
+                  "Every number is greater than or equal to some number."
+                </li>
+                <li>
+                  &Exists;<em>y</em> &forall;<em>x</em> (<em>x</em> &ge; <em>y</em>) &mdash;
+                  "There is a number that every number is greater than or equal to."
+                </li>
+              </ol>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Is (A) true under this interpretation?</p>
+            </div>
+            <div class="answer">
+              <p><em>x</em> and <em>y</em> are not qualified as being unequal, so:</p>
+              <ol>
+                <li>&forall;x,y (<em>x</em> = <em>y</em>) &Implies; (<em>x</em> &ge; <em>y</em>)</li>
+                <li>&forall;x (<em>x</em> = <em>x</em>)</li>
+                <li>&forall;x,x (<em>x</em> = <em>x</em>) &Implies; (<em>x</em> &ge; <em>x</em>)</li>
+              </ol>
+              <p>The original statement then becomes:</p>
+              <ol>
+                <li>&forall;<em>x</em> &Exists;<em>y</em> (<em>x</em> &ge; <em>y</em>) &Implies;</li>
+                <li>&forall;<em>x</em> &Exists;<em>x</em> (<em>x</em> &ge; <em>x</em>)</li>
+              </ol>
+              <p>Which is true, since it is true &forall;x.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Is (B) true under this interpretation?</p>
+            </div>
+            <div class="answer">
+              <p>An existential statement needs only a single case to prove truth and for the natural numbers, every number is greater than or equal to 0, so the statement is true.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Does (A) logically entail (B)?</p>
+            </div>
+            <div class="answer">
+              <p>No. Assume that the domain for these numbers was &reals; rather than &naturals;. (A) remains true in that there is always a number less than any given number. (B) ceases to be true because there is no longer a lower bound.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Does (B) logically entail (A)?</p>
+            </div>
+            <div class="answer">
+              <p>Yes. (B) identifies a specific value from the domain over which the statement is defined. That value can then always be used to satisfy (A), so if (B) is true then (A) will be as well.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Using resolution, attempt to prove that (A) follows from (B). Show the unifying substitution at each resolution step. If the proof fails, explain where, how and why it breaks down.</p>
+            </div>
+            <div class="answer">
+              <ul>
+                <li>&forall;x &Exists;y (x &ge; y) &Implies; &Exists;y &forall;x (x &ge; y)</li>
+                <li>&not;(&Exists;y &forall;x (x &ge; y)) &or; &forall;x &Exists;y (x &ge; y)</li>
+                <li>&forall;y &Exists;x &not;(x &ge; y)) &or; &forall;x &Exists;y (x &ge; y)</li>
+                <li>&forall;y &not;(f(y) &ge; y)) &or; &forall;x (x &ge; f(x))</li>
+                <li>&not;(f(y) &ge; y)) &or; (x &ge; f(x))</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Using resolution, attempt to prove that (B) follows from (A). Show the unifying substitution at each resolution step. If the proof fails, explain where, how and why it breaks down.</p>
+            </div>
+            <div class="answer">
+              <ul>
+                <li>&Exists;y &forall;x (x &ge; y) &Implies; &forall;x &Exists;y (x &ge; y)</li>
+                <li>&not;(&forall;x &Exists;y (x &ge; y)) &or; &Exists;y &forall;x (x &ge; y)</li>
+                <li>&forall;y &not;(f(y) &ge; y) &or; &forall;x (x &ge; f(x))</li>
+                <li>&not;(f(y) &ge; y) &or; (x &ge; f(x))</li>
+              </ul>
+              <p>This is true since a number is either greater than or equal to or not greater than or equal to another (P &or; &not;P is true).</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>Consider the problem of planning a route for a robot to take from one city to another. The basic action taken by the robot is <code>Go</code>(<em>x</em>,<em>y</em>), which takes it from city <em>x</em> to city <em>y</em> if there is a direct route between those cities. <code>DirectRoute</code>(<em>x</em>,<em>y</em>) is true iff there is a direct route from <em>x</em> to <em>y</em>. Given a robot in Arad and attempting to reach Bucharest with a knowledge base modeling the following map:</p>
+          <object id="romania_map" type="image/svg+xml" data="romania_map.svg"></object>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Write a suitable logical description for the initial position of the robot.</p>
+            </div>
+            <div class="answer">
+              <p>The nature of this answer depends on the structure of how the reasoning system operates. The basic problem is that when the robot moves from one city to another, the fact of where it is changes. There are two basic approaches to this problem:</p>
+              <ul>
+                <li>
+                  <p>Universal Invariant Knowledge Base: The knowledge base essentially knows where the robot is at any point that it's knowledge spans. Since the robot is the only actor changing state in the world, an appropriate chronon, if ordering is the only needed function, would be a simple incremental count of the altered robot states. For this representation, the initial state would be:</p>
+                  <p><code>At</code>('robot','Arad',0)</p>
+                  <p>Which means "The robot is at Arad for step 0."</p>
+                </li>
+                <li>
+                  <p>Dynamic Current Knowledge Base: The knowledge base represents the current known state of the world. So far as planning this is frequently a more convenient representation. Predicates don't exist in isolation, but are coupled with possibility and effects axioms that determine when a predicate may be applied and what the results of the application are. In this representation, the robot being at Arad would simply be written as:</p>
+                  <p><code>At</code>('robot','Arad')</p>
+                  <p>The predicate would be removed from the knowledge base by the <code>Go</code> action.</p>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Write a suitable logical query whose solutions will provide possible paths to the goal.</p>
+            </div>
+            <div class="answer">
+              <p>The following solutions will use the Universal Invariant Knowledge Base because more semantic information is captured in the knowledge base. This is not always desirable, but this method increases information demonstrated in the solution and not stored within the reasoning engine.</p>
+              <p><code>At</code>('robot','Bucharest',<em>s</em>)</p>
+              <p>The binding for <em>s</em> will be the number of steps it took to reach Bucharest.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Write a sentence describing the <code>Go</code> action.</p>
+            </div>
+            <div class="answer">
+              <p><code>Go</code>(<em>a</em>,<em>x</em>,<em>y</em>) is read as <em>a</em> goes from <em>x</em> to <em>y</em>. This form is expanded a bit in an effort to provide greater efficiency. Specifically, it will never be productive to revisit a town that we have previously searched as a stop on the path. Since the knowledge base contains all previous states this seems relatively straightforward. The one condition is we may have visited a particular city at some point in the past before this particular <code>Go</code> process and in that case, it should be considered.</p>
+              <p>The reasoning is as follows:</p>
+              <table class="proof">
+                <tr>
+                  <td><em>a</em> goes from <em>x</em> to <em>y</em> starting at step <em>s</em><sub>0</sub> and ending at step <em>s</em></td>
+                  <td><code>Go</code>(<em>a</em>,<em>x</em>,<em>y</em>,<em>s</em><sub>0</sub>,<em>s</em>)</td>
+                </tr>
+                <tr>
+                  <td>if and only if</td>
+                  <td>&iff;</td>
+                </tr>
+                <tr>
+                  <td>the current city is the goal city</td>
+                  <td><code>=</code>(<em>x</em>,<em>y</em>)</td>
+                </tr>
+                <tr>
+                  <td>or ((this city has not been visited yet in the search</td>
+                  <td>
+                    &or; (&not;(<code>At</code>(<em>a</em>,<em>x</em>,<em>s<sub>t</sub></em>)
+                    &and; <code>&ge;</code>(<em>s<sub>t</sub></em>,<em>s</em><sub>0</sub>)
+                  </td>
+                </tr>
+                <tr>
+                  <td>other than currently)</td>
+                  <td>
+                    &or; (=(<em>s<sub>t</sub></em>,<em>s</em>) &and; <code>At</code>(<em>a</em>,<em>x</em>,<em>s<sub>t</sub></em>)))
+                  </td>
+                </tr>
+                <tr class="nested">
+                  <td>and the next city on the path is <em>x</em>'</td>
+                  <td>
+                    &and; <code>DirectRoute</code>(<em>x</em>,<em>x</em>')
+                  </td>
+                </tr>
+                <tr class="nested">
+                  <td>and the next step for the robot is <em>x</em>')</td>
+                  <td>
+                    &and; <code>Go</code>(<em>a</em>,<em>x</em>,<em>x</em>',<em>s</em><sub>0</sub>,<em>s</em> + 1))
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Suppose that following the direct route between two cities consumes an equal amount of fuel to the distance between those cities. The robot starts with fuel at full capacity. Augment your representation to include these considerations. Your action description should be such that the query you specified earlier will still result in feasible plans.</p>
+            </div>
+            <div class="answer">
+              <p>Since the steps are uniquely numbered, the gas can simply be tracked separately for each step with the predicate <code>Gas</code>(<em>a</em>,<em>g</em>,<em>s</em>) meaning agent <em>a</em> had a gas level of <em>g</em> at step <em>s</em>. A predicate <code>GasCapacity</code>(<em>b</em>,<em>c</em>) will also be added to represent <em>b</em> has a gas capacity of <em>c</em>.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Describe the initial situation and write a new rule of rules describing the <code>Go</code> action.</p>
+            </div>
+            <div class="answer">
+              <p>The initial is now.</p>
+              <p><code>At</code>('robot','Arad',0) &and; <code>GasCapacity</code>('robot',<em>c</em>) &and; <code>Gas</code>('robot',0,<em>c</em>)</p>
+              <table class="proof">
+                <tr>
+                  <td><em>a</em> goes from <em>x</em> to <em>y</em> starting at step <em>s</em><sub>0</sub> and ending at step <em>s</em></td>
+                  <td><code>Go</code>(<em>a</em>,<em>x</em>,<em>y</em>,<em>s</em><sub>0</sub>,<em>s</em>)</td>
+                </tr>
+                <tr>
+                  <td>if and only if</td>
+                  <td>&iff;</td>
+                </tr>
+                <tr>
+                  <td>the current city is the goal city</td>
+                  <td><code>=</code>(<em>x</em>,<em>y</em>)</td>
+                </tr>
+                <tr>
+                  <td>or ((this city has not been visited yet in the search</td>
+                  <td>
+                    &or; (&not;(<code>At</code>(<em>a</em>,<em>x</em>,<em>s<sub>t</sub></em>)
+                    &and; <code>&ge;</code>(<em>s<sub>t</sub></em>,<em>s</em><sub>0</sub>)
+                  </td>
+                </tr>
+                <tr>
+                  <td>other than currently)</td>
+                  <td>
+                    &or; (=(<em>s<sub>t</sub></em>,<em>s</em>) &and; <code>At</code>(<em>a</em>,<em>x</em>,<em>s<sub>t</sub></em>)))
+                  </td>
+                </tr>
+                <tr class="nested">
+                  <td>and the next city on the path is <em>x</em>'</td>
+                  <td>
+                    &and; <code>DirectRoute</code>(<em>x</em>,<em>x</em>')
+                  </td>
+                </tr>
+                <tr class="nested">
+                  <td>and the next step for the robot is <em>x</em>'</td>
+                  <td>
+                    &and; <code>Go</code>(<em>a</em>,<em>x</em>',<em>y</em>,<em>s</em><sub>0</sub>,<em>s</em> + 1)
+                  </td>
+                </tr>
+                <tr class="nested">
+                  <td>and there's enough gas to get to <em>x</em>'</td>
+                  <td>
+                    &and; (<code>Gas</code>(<em>a</em>,<em>g</em>,<em>s</em>)
+                           &and; <code>Distance</code>(<em>x</em>',<em>d</em>)
+                           &and; <code>&ge;</code>(<em>g</em>,<em>d</em>))
+                  </td>
+                </tr>
+                <tr class="nested">
+                  <td>and the amount of gas for the next step is reduced)</td>
+                  <td>
+                    &and; <code>Gas</code>(<em>a</em>,<em>g</em> - <em>d</em>,<em>s</em> + 1))
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Suppose some of your vertices are also gas stations, at which your robot can fill its tank. Extent the representation and write all the rules needed to describe gas stations, including the <code>FillUp</code> action.</p>
+            </div>
+            <div class="answer">
+              <p>The new predicates would be:</p>
+              <ul>
+                <li>
+                  <p>There is a gas stating in <em>x</em>.</p>
+                  <p><code>GasStationIn</code>(<em>x</em>)</p>
+                </li>
+                <li>
+                  <p>The agent <em>a</em> is filled up at step <em>s</em>. <em>a</em> may or may not be at a gas station, maybe someone carries a gas can from a city with a gas station. It doesn't really matter the method. Additionally, the robot is always filled completely by the <code>FillUp</code> action.</p>
+                  <p>
+                    <code>FillUp</code>(<em>a</em>,<em>s</em>) &Implies;
+                    <code>GasCapacity</code>('robot',<em>c</em>) &and; <code>Gas</code>(<em>a</em>,<em>c</em>,<em>s</em>)
+                  </p>
+                </li>
+              </ul>
+              <p>To make the representation clearer, I would move the adjustment of the gas level to an additional predicate which operates assuming that if a robot passes through a city with a gas station, it will fill up.</p>
+              <table class="proof">
+                <tr>
+                  <td>set the gas level for <em>a</em> at step <em>s</em> to level <em>g</em></td>
+                  <td><code>SetGas</code>(<em>a</em>,<em>s</em>,<em>g</em>)</td>
+                </tr>
+                <tr>
+                  <td>implies</td>
+                  <td>&Implies;</td>
+                </tr>
+                <tr>
+                  <td>the agent is in a city</td>
+                  <td><code>At</code>(<em>a</em>,<em>x</em>,<em>s</em>) &and;</td>
+                </tr>
+                <tr class="nested">
+                  <td>if the city has a station, fill up</td>
+                  <td>((<code>GasStationIn</code>(<em>x</em>) &and; <code>FillUp</code>(<em>a</em>,<em>s</em>))</td>
+                </tr>
+                <tr class="nested">
+                  <td>otherwise set the level requested</td>
+                  <td>&or; (&not;<code>GasStationIn</code>(<em>x</em>) &and; <code>Gas</code>(<em>a</em>,<em>g</em>,<em>s</em>)))</td>
+                </tr>
+              </table>
+              <p>The original <code>Go</code> predicate is modified as:</p>
+              <table class="proof">
+                <tr>
+                  <td><em>a</em> goes from <em>x</em> to <em>y</em> starting at step <em>s</em><sub>0</sub> and ending at step <em>s</em></td>
+                  <td><code>Go</code>(<em>a</em>,<em>x</em>,<em>y</em>,<em>s</em><sub>0</sub>,<em>s</em>)</td>
+                </tr>
+                <tr>
+                  <td>if and only if</td>
+                  <td>&iff;</td>
+                </tr>
+                <tr>
+                  <td>the current city is the goal city</td>
+                  <td><code>=</code>(<em>x</em>,<em>y</em>)</td>
+                </tr>
+                <tr>
+                  <td>or ((this city has not been visited yet in the search</td>
+                  <td>
+                    &or; (&not;(<code>At</code>(<em>a</em>,<em>x</em>,<em>s<sub>t</sub></em>)
+                    &and; <code>&ge;</code>(<em>s<sub>t</sub></em>,<em>s</em><sub>0</sub>)
+                  </td>
+                </tr>
+                <tr>
+                  <td>other than currently)</td>
+                  <td>
+                    &or; (=(<em>s<sub>t</sub></em>,<em>s</em>) &and; <code>At</code>(<em>a</em>,<em>x</em>,<em>s<sub>t</sub></em>)))
+                  </td>
+                </tr>
+                <tr class="nested">
+                  <td>and the next city on the path is <em>x</em>'</td>
+                  <td>
+                    &and; <code>DirectRoute</code>(<em>x</em>,<em>x</em>')
+                  </td>
+                </tr>
+                <tr class="nested">
+                  <td>and the next step for the robot is <em>x</em>'</td>
+                  <td>
+                    &and; <code>Go</code>(<em>a</em>,<em>x</em>',<em>y</em>,<em>s</em><sub>0</sub>,<em>s</em> + 1)
+                  </td>
+                </tr>
+                <tr class="nested">
+                  <td>and there's enough gas to get to <em>x</em>'</td>
+                  <td>
+                    &and; (<code>Gas</code>(<em>a</em>,<em>g</em>,<em>s</em>)
+                           &and; <code>Distance</code>(<em>x</em>',<em>d</em>)
+                           &and; <code>&ge;</code>(<em>g</em>,<em>d</em>))
+                  </td>
+                </tr>
+                <tr class="nested">
+                  <td>and the amount of gas for the next step is reduced)</td>
+                  <td>
+                    &and; <code>SetGas</code>(<em>a</em>,<em>g</em> - <em>d</em>,<em>s</em> + 1))
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>Construct a representation for exchange rates between currencies that allows fluctuations on a daily basis.</p>
+        </div>
+        <div class="answer">
+          <ul>
+            <li>The value of currencies are defined relative to each other.</li>
+            <li>There are set abbreviations for different currencies.</li>
+            <li>Certain currencies are "pegged" at a fixed rate to other currencies.</li>
+            <li>Currency values are constantly changing, but for the purpose of this problem the granularity will be daily.</li>
+          </ul>
+          <p>The basic predicate will be <code>Exchange</code>(<em>n</em>,<em>c</em><sub>1</sub>,<em>c</em><sub>2</sub>,<em>d</em>) which should be read as, "on date <em>d</em>, <em>n</em> of <em>c</em><sub>1</sub> was equal to one <em>c</em><sub>2</sub>." So, <code>Exchange</code>('0.68208','EUR','USD','2007-11-10') would be, "on Nov. 11, 2007, 0.68208 Euro was worth one US Dollar."</p>
+          <p>Primitive relationships between several of the major currencies would be defined. Since there are over 170 currencies, it is not realistic to define all permutations. <code>Exchange</code> would therefore have, in addition to some primitive definitions, an an expansion similar to the route finding algorithm for the robot:</p>
+          <table class="proof">
+            <tr>
+              <td><em>n</em> of currency <em>c</em><sub>1</sub> is worth one unit of <em>c</em><sub>2</sub> on date <em>d</em></td>
+              <td><code>Exchange</code>(<em>n</em>,<em>c</em><sub>1</sub>,<em>c</em><sub>2</sub>,<em>d</em>)</td>
+            </tr>
+            <tr>
+              <td>if and only if</td>
+              <td>&iff;</td>
+            </tr>
+            <tr>
+              <td>there is an intermediate currency on the conversion path between them</td>
+              <td>
+                <code>Exchange</code>(<em>n</em><sub>1</sub>,<em>c</em><sub>1</sub>,<em>c<sub>i</sub></em>,<em>d</em>) &and;
+                <code>Exchange</code>(<em>n</em><sub>2</sub>,<em>c<sub>i</sub></em>,<em>c</em><sub>2</sub>,<em>d</em>)
+              </td>
+            </tr>
+            <tr>
+              <td>implies</td>
+              <td>&Implies;</td>
+            </tr>
+            <tr>
+              <td>those rates combined form the rate for the requested exchange</td>
+              <td>
+                <code>Exchange</code>(<em>n</em><sub>1</sub> * <em>n</em><sub>2</sub>,<em>c</em><sub>1</sub>,<em>c</em><sub>2</sub>,<em>d</em>)
+              </td>
+            </tr>
+          </table>
+          <p>Another potentially useful relationship to recognize is the inverse:</p>
+          <p>
+            <code>Exchange</code>(<em>n</em>,<em>c</em><sub>1</sub>,<em>c<sub>2</sub></em>,<em>d</em>) &iff;
+            <code>Exchange</code>(1 / <em>n</em>,<em>c</em><sub>2</sub>,<em>c<sub>1</sub></em>,<em>d</em>)
+          </p>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

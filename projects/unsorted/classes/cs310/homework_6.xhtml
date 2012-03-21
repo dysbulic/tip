@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-310 Homework #6</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math { margin-top: .75em; }
+      .title { font-variant: small-caps; }
+      object { width: 100%; }
+      th, td { padding: .25em .5em; border: 1px solid; text-align: center; }
+      #p3 { page-break-before: always; }
+      .outer > tr > td { border: none; }
+      .ps th { width: 5em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 310: Design and Analysis of Algorithms</h1>
+      <h2>Homework #6</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 13:10 Wed., 19 March 2008</h2>
+    </div>
+    <blockquote><p>All work should be done on your own. If you discuss this assignment in any way with anyone else, or find help for getting the answer from any source, you must state so clearly at the top of your submission. There should be no working together except to understand the question.</p></blockquote>
+    <ol>
+      <li id="p1">
+        <div class="question">
+          <p>Prove that in any network, there is a way to start with 0 flow, and to add at most <em>m</em> augmenting paths which give you the maximum flow.</p>
+        </div>
+        <div class="answer">
+          <p>An algorithm is needed which eliminates at least one edge from consideration at each iteration.</p>
+          <p>A simple algorithm is to use a path search algorithm such as depth first search tracking and avoiding repeated edges. Only edges with a non-zero capacity are considered. Once a path is found increase flow along it to the minimum capacity along the path and decrease the capacities by all the edges by that much. The capacity of the minimum edge is now 0 and will not be considered again. Since this removes an edge from consideration each time, it can only be done <em>m</em> times.</p>
+          <p>The residual flow graph is simply an alternate representation of the flows and capacities in the original flow graph used to find paths more efficiently. The process of reducing the capacities described in the algorithm above could be used to update a residual flow graph by instead of reducing the capacity, moving weight from the forward edge to a residual edge. Since the original search was done on non-zero edges in the original graph these edges exist in the residual graph as well. Doing the search in the original graph however limits the number of edges to be eliminated to <em>m</em>.</p>
+        </div>
+      </li>
+      <li id="p2">
+        <div class="question">
+          <p>Prove that in any network the maximum flow is less than or equal to the current flow plus the combination of the number of edges times the largest flow that can be pushed along any path.</p>
+        </div>
+        <div class="answer">
+          <p>f<sub>max</sub> &le; f<sub>cur</sub> + (<em>m</em> max(<em>c</em>(<em>m<sub>i</sub></em>)))</p>
+          <p>While it is not always necessary (or even possible) for a flow network to be completely saturated for there to be the maximum flow between <em>s</em> and <em>t</em>, any completely saturated network will provide the maximum flow from <em>s</em> to <em>t</em>. In order to increase flow from <em>s</em> to <em>t</em>, flow has to be increased along some path through the network, and that is not possible in a saturated network where no edges have available capacity.</p>
+          <p>The flow necessary to saturate a network is the sum of the edge capacities.</p>
+          <p>f<sub>max</sub> &le; &Sum; c(<em>m<sub>i</sub></em>) &le; <em>m</em> max(<em>c</em>(<em>m<sub>i</sub></em>)</p>
+        </div>
+      </li>
+      <li id="p3">
+        <div class="question">
+          <p>Use the result of problem #2 to show that after <em>m</em> augmentations by the largest flow augmenting path, you have found at least 1/2 the flow of the network. This can be used to produce an algorithm that is polynomial in <em>n</em>, <em>m</em> and the log of the flow.</p>
+        </div>
+        <div class="answer">
+          <p>The largest flow augmenting path is the path from <em>s</em> to <em>t</em> in the residual flow graph with the maximum minimum capacity edge. Each edge in the network will have a capacity of at most max(<em>c</em>(<em>m<sub>i</sub></em>). The slowest growth of the total flow will be when a set of low capacity edges reduce the maximum capacity for an augmenting path. Each time a largest capacity path is added it will convert one of these forward edges to a back edge and removed from consideration. After <em>m</em> iterations even if all the edges are small, at least half will have been explored.</p>
+          <p>The relationship to the previous equation is unclear to me. It relates the maximum capacity and the maximum flow which makes sense, but then combining those concepts with the largest augmenting flow is unclear because the min cut can be orders of magnitude less than the maximum edge weight.</p>
+        </div>
+      </li>
+      <li id="p4">
+        <div class="question">
+          <p>One major mistake made on this assignment is to assume that the value if the largest augmenting path never increases as you increase by augmenting paths. Show that it is possible to augment along a largest augmenting path in <em>G<sub>f</sub></em>, and have the value of the largest augmenting path in <em>G<sub>f</sub></em> increase after this augmentation.</p>
+        </div>
+        <div class="answer">
+          <p>I'm having trouble finding this because the algorithms seem to essentially consume high capacity edges. All the examples I've tried only decrease the value. This assignment is very late and I need to get it turned in.</p>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

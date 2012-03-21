@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%" version="1.1">
+  <defs>
+    <filter id="bevel" filterUnits="objectBoundingBox" x="-10%" y="-10%"
+            width="150%" height="150%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="AlphaBlur" />
+      <feSpecularLighting in="AlphaBlur" surfaceScale="4" 
+                          specularConstant="0.5"
+                          specularExponent="1" result="AlphaBlurSpecular"
+                          style="lighting-color:rgb(255,255,255)">
+        <fePointLight x="-100" y="-10000" z="20000" />
+      </feSpecularLighting>
+      <feComposite in="AlphaBlurSpecular"  in2="SourceAlpha" 
+                   operator="in" result="output" />
+      <feComposite in="SourceGraphic" in2="output" operator="arithmetic"
+                   k1="0" k2=".75" k3="1" k4="0" />
+    </filter>
+    <!-- from: http://jan.kollhof.net/projects/svg/examples/index.svg -->
+    <filter id="brushedmetal" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="120%" height="120%" >
+      <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" seed="11" result="fnoise"/>
+      <feColorMatrix type="saturate" in="fnoise" values="0" result="desat"/>
+      <feGaussianBlur stdDeviation="20, 0.01" in="desat" result="blur"/>
+      <feComposite in="blur" in2="SourceGraphic" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="merge"/>
+      <feComposite in="merge" in2="SourceAlpha" operator="in" result="mask"/>
+    </filter>
+    <filter id="emboss" filterUnits="userSpaceOnUse" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.1" result="blur"/>
+      <feSpecularLighting in="blur" surfaceScale="1" specularConstant=".75"
+                          specularExponent="20" lighting-color="#bbbbbb"
+                          result="specOut">
+        <fePointLight x="-5000" y="-10000" z="10000"/>
+      </feSpecularLighting>
+      <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut"/>
+      <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint"/>
+    </filter>
+    <style type="text/css">
+      rect { filter: url(#brushedmetal); }
+      path { fill: #700; }
+    </style>
+    <path id="triangle" d="M 50 50 l 200 100 -200 100 z" />
+  </defs>
+  <g filter="url(#emboss)">
+    <rect x="10" y="10" rx="20" ry="20" width="280" height="280" />
+  </g>
+  <path d="M 50 50 l 200 100 -200 100 z" style="filter: url(#emboss);" />
+</svg>

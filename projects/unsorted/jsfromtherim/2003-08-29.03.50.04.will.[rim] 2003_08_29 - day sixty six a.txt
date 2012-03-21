@@ -1,0 +1,146 @@
+From will@himinbi.org Sat Aug 30 03:50:04 2003
+Received: from localhost.localdomain ([213.185.107.13])
+	by honors.tntech.edu (8.12.8/8.12.8) with ESMTP id h7U8nnEI009440
+	for <jsfromtherim@himinbi.org>; Sat, 30 Aug 2003 03:49:57 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by localhost.localdomain (8.12.8/8.12.8) with ESMTP id h7TMVPiF002768
+	for <jsfromtherim@himinbi.org>; Fri, 29 Aug 2003 22:31:25 GMT
+Date: Fri, 29 Aug 2003 22:31:25 +0000 (GMT)
+From: Will Holcomb <will@himinbi.org>
+X-X-Sender: will@localhost.localdomain
+To: Journals from Mauritania <jsfromtherim@himinbi.org>
+Message-ID: <Pine.LNX.4.44.0308292222190.2748-100000@localhost.localdomain>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+Subject: [rim] 2003/08/29 - day sixty six a
+Sender: jsfromtherim-admin@holcomb.info
+Errors-To: jsfromtherim-admin@holcomb.info
+X-BeenThere: jsfromtherim@holcomb.info
+X-Mailman-Version: 2.0.13
+Precedence: bulk
+List-Unsubscribe: <http://holcomb.info/mailman/listinfo/jsfromtherim>,
+	<mailto:jsfromtherim-request@holcomb.info?subject=unsubscribe>
+List-Id: Will's journals from Mauritania <jsfromtherim.holcomb.info>
+List-Post: <mailto:jsfromtherim@holcomb.info>
+List-Help: <mailto:jsfromtherim-request@holcomb.info?subject=help>
+List-Subscribe: <http://holcomb.info/mailman/listinfo/jsfromtherim>,
+	<mailto:jsfromtherim-request@holcomb.info?subject=subscribe>
+List-Archive: <http://holcomb.info/pipermail/jsfromtherim/>
+
+Tech geeky lesson for the morning... I'm going off to try and find a 
+wedding in about an hour, but I have a little time to kill. This morning 
+I've been learning about how the computer represents information because I 
+was contemplating trying to write a page that had the names of barnyard 
+animals in both English, French and Hassinya. The rub is that Hassinya is 
+written using Arabic characters (I've heard estimates that the two 
+languages share about 80% of their vocabulary.) I don't know how to make 
+the computer type Arabic characters though, and so I've been learning.
+
+A side affect of this is it may be useful to some of you to learn why some 
+of my emails don't look right when I use accented characters in French.
+
+To start at the beginning, to a computer the only thing that matters is
+bits. A string of 1's and 0's that it interprets and makes into useful
+information. A computer has no idea what the letter "A" is. All it knows
+is bits, so some standard correlation between bits and "A" has to be set
+up.
+
+The most common way currently is called the American Standard Code for
+Information Interchange (ASCII) and it breaks the string of bits into
+blocks of 8 (8 bits = 1 byte) and then has a standard mapping between each
+byte and a letter or punctuation mark. For example, the letter capitol a
+("A") is the bits 01000001.
+
+A side note on numbers and computers. We usually count in decimal (base
+10). Computers think in binary (base 2) and the numbers are usually
+prefixed with a 0b since decimal 11 looks exactly like binary 11 (which is
+3 in decimal). So I would write 0b11 so it is clear it is binary. Another
+problem is that strings of bits can get really long, so sometimes they are
+written as hexadecimal (base 16, written prefaced with 0x) which works
+well because a set of 4 bits can represent 0-F which are the characters
+for a hexadecimal number like 0-9 are for decimal:
+
+0b00 = 0 = 0x0   0b100 = 4 = 0x4   0b1000 =  8 = 0x8   0b1100 = 12 = 0xC
+0b01 = 1 = 0x1   0b101 = 5 = 0x5   0b1001 =  9 = 0x9   0b1101 = 13 = 0xD
+0b10 = 2 = 0x2   0b110 = 6 = 0x6   0b1010 = 10 = 0xA   0b1110 = 14 = 0xE
+0b11 = 3 = 0x1   0b111 = 7 = 0x7   0b1011 = 11 = 0xB   0b1111 = 15 = 0xF
+
+Ok, to continue, in ASCII the letters A-Z are the codes 0x41-0x5A and a-z 
+are 0x61-0x7A. Pretty simple. The problem is there are no codes for 
+letters like é or ö or ¡É.
+
+There's a standard called "unicode" that aims to set up encodings for
+almost all the characters in the world. (There are some really
+interesting statistics on what exactly this entails since some
+languages like Chinese have hundreds of thousands of characters. In
+particular since the language has been developing since long before
+Christ was born, there are thousands of dialects that have fallen out
+of usage, but there are still ancient documents written using them.)
+
+One way that unicode deals with this is to simply increase the number
+of bits for each letter. One byte = eight bits = 2^8 (256)
+possibilities. Two bytes = sixteen bits = 2^16 (65536)
+possibilities. There are a couple problems. One is that it doubles the
+size of any text, but more importantly it breaks all existing files
+completely since when they are read in they are interpreted as pairs
+of bytes rather than single bytes.
+
+The way that both of these problems is addressed is by doing
+"multi-byte" encoding. Instead of each letter being a certain number
+of bits, some letters are 8 bits, some 16, some 24 and some 32. What
+makes this possible is that ASCII is a 7-bit code, meaning that only 7
+of the 8 bits in a byte are used. (It goes from 0b00000000 to
+0b01111111.)
+
+That means that they simply assign the existing ASCII encodings to
+bytes which start with 0. Bytes which start with a 1 then are
+interpreted to mean "this byte and the next one are a letter." The
+most popular encoding which does this is utf-8.
+
+Some programs are not smart enough to do utf-8 though and will
+generally try to decode the file using iso-8859-1 which is another
+encoding that uses the same lower 7 bits as ASCII, but then adds 128
+new characters for the bytes that start with 1.
+
+There are more workarounds though to make things generally look right
+on western screens. For example the é character in utf-8 is 0b10000001
+(0x81) 0b11101001 (0xE9). So, the é would be interpreted as the two
+characters 0x81 (which is an invisible control character and doesn't
+make anything happen on the screen) and 0xE9 (which is the é character
+in iso-8859-1.) (Actually, all the iso-8859-1 characters work like
+that, so things in utf-8 will look right.)
+
+If I wanted to stick in a little Chinese (ÈÕ±¾º£) those three
+characters are 9 bytes, so there's no way for anything to happen other
+than for them to be misinterpreted. The bytes are:
+
+ 0x91 (invisible)
+ 0xC8 È
+ 0xD5 Õ
+ 0x91 (invisible)
+ 0xB1 ±
+ 0xBE ¾
+ 0x91 (invisible)
+ 0xBA º
+ 0xA3 £
+
+So, if you see Chinese in between the parenthesis you are decoding
+using utf-8, and if you see other stuff like below you are using
+iso-8859-1. (It is also possible you might see little boxes if you
+have no Chinese font on your computer.)
+
+The other problem that I am having now is that Linux uses utf-8 for
+international stuff and I am getting the occasional message in French
+encoded in iso-8859-1 (also called latin-1). What happens then is the
+accented letters are misinterpreted as the first byte of a multibyte
+pair, and it ends up eating the next character after the letter as
+well as displaying the wrong letter.
+
+Well, anyhow, that's a little on internationalization. Thanks for
+listening. Talking it out helped me to understand what is going on.
+
+Love,
+Will
+
+

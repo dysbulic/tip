@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:lj="http://www.livejournal.com">
+  <head>
+    <title>Smugmug RSS Scraper</title>
+    <link rel="stylesheet" href="../styles/main.css" type="text/css" />
+    <style type="text/css">
+      th, td { border: thin solid gray; }
+      table { border-collapse: collapse; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>This project has been supersceded by a <a href="smugmug_rss.phps">XML-RPC version</a>.</h1>
+    <h2>Smugmug RSS Generator</h2>
+    <p>The <a href="smugmug_rss_scraper.php">scraper</a> (<a href="smugmug_rss_scraper.phps">source</a>) is pretty simple. The process is:</p>
+    <ol>
+      <li>Retrieve the gallery that was requested</li>
+      <li>Run the HTML through <a href="http://xmlsoft.org/xmllint.html">xmllint</a> to make it XHTML</li>
+      <li>Process the XHTML through a SAX parser to pull out the salient information</li>
+      <li>Output RSS</li>
+    </ol>
+    <p>That second step took quite a bit of examining of smugmug's pages. Currently all the pages I am interested in working with are using the elegant style, so that's the only one I worked with. Things learned:</p>
+    <ul>
+      <li>Whoever programmed smugmug loves nested tables. My <a href="marcvalentin.smugmug.com.xhtml">testcase</a> from <a href="http://marcvalentin.smugmug.com">Marc's gallery</a> has 36 tables on it</li>
+      <li>
+        The breakdown of <a href="marcvalentin.smugmug.com.xhtml">those tables</a> are:
+        <table style="margin: auto; min-width: 75%;">
+          <tr><th>Table Number</th><th>Function</th></tr>
+          <tr><td>1</td><td>The banner across the top including the search and shopping icons</td></tr>
+          <tr><td>1:2</td><td>Layout for the banner</td></tr>
+          <tr><td>3</td><td>Header text "Marc Valentin's galleries"</td></tr>
+          <tr><td>4</td><td>Page intro with main thumbnail and description</td></tr>
+          <tr><td>5</td><td>Empty</td></tr>
+          <tr><td>6</td><td>Empty</td></tr>
+          <tr><td>7</td><td>Holder for galleries</td></tr>
+          <tr><td>7:8</td><td>Header for all the galleries</td></tr>
+          <tr><td>7:9</td><td>Left gallery in first row (Christmas)</td></tr>
+          <tr><td>7:9:10</td><td>Gallery desciption</td></tr>
+          <tr><td>7:11</td><td>Right gallery in first row (Halloween)</td></tr>
+          <tr><td>7:11:12</td><td>Gallery description</td></tr>
+          <tr><td>7:13,7:17,1:21,7:25,7:29</td><td>Left gallery</td></tr>
+          <tr><td>7:15,7:19,1:23,7:27</td><td>Right gallery</td></tr>
+          <tr><td>31</td><td>Empty</td></tr>
+          <tr><td>32</td><td>Photos by keyword</td></tr>
+          <tr><td>32:33</td><td>Photos by keyword header</td></tr>
+          <tr><td>34</td><td>Empty</td></tr>
+          <tr><td>35</td><td>Empty</td></tr>
+          <tr><td>36</td><td>Bottom navbar</td></tr>
+        </table>
+        (<a href="http://www.mozilla.org">Mozilla</a>'s DOM Inspector was really handy for figuring these out)
+      </li>
+      <li>The breakdown for <a href="ksuzannec.smugmug.com.xhtml">Suzanne's page</a> is similar. The difference is that she lacks a page intro (#4) and that table is missing along with one of the blanks (#5) following it</li>
+      <li><a href="dunsmore-eidson.smugmug.com.xhtml">Scott and Jess's</a> page is another variant which has a "featured galleries" section. This appears between the two blank tables (#5 and #6) following the description (#4)</li>
+      <li><a href="wheresbob.smugmug.com.xhtml">Robert's</a> page is the same as <a href="dunsmore-eidson.smugmug.com.xhtml">Scott and Jess's</a> and follows the same format</li>
+    </ul>
+    <p>My information is limited, but as best I can tell breaking stuff up by tables should work pretty well. I think I'll do the program as a state machine. The transitions will be a combination of tag and depth. So the notation is <code>[tag]:[class depth]</code>, so <code>table:2</code> would be a transition on a table which is nested inside another table. The actual depth in the tree might be something like 5 for things like &lt;html&gt;, &lt;body&gt; and &lt;td&gt;. The <code>2</code> means it is a second level table. Additionally, there are arbitrarily many ignored tags. If a transition is not defined for an input, it is just ignored.</p>
+    <div style="text-align: center"><img alt="Page Flowchart" src="smugmug_main_gallery.png" /></div>
+    <p>I'm pretty sure this will work and each section is atomic. Meaning, if I am buffing the output from the CDATA sections, I can clear the buffer before entering each state and on exit I won't have collected any extra garbage.</p>
+    <hr />
+    <p>The program is working for the main page, it seems. Unfortunately I've already blown a day on this project and I've just discovered a <a href="http://www.smugmug.com/hack/">XML-RPC</a> interface to the site. Dammit. Oh well, I'll continue later&hellip;</p>
+  </body>
+</html>

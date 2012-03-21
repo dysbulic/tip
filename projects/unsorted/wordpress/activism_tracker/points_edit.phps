@@ -1,0 +1,1 @@
+points_edit.php

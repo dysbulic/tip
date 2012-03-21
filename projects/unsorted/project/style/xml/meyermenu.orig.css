@@ -1,0 +1,48 @@
+/* This is the core of how everything works. Most of the rest are just positioning */
+.meyermenu, .meyermenu ul { padding: 0; margin: 0; border: 2px solid; }
+.meyermenu ul { display: none; border-top: none; position: absolute; top: 1.25em; }
+.meyermenu li:hover > ul { display: inherit; }
+
+.meyermenu a { display: block; line-height: 1.25em; }
+
+.meyermenu li { list-style-type: none; text-align: center; position: relative;
+                border: 2px solid transparent; }
+
+/* The default is for the menu to be to the left */
+.meyermenu ul { right: -2px; }
+.meyermenu.vertical.right ul, .meyermenu.tab ul { left: -2px; right: auto; }
+
+/* I don't know how to make them go left like they go right */
+.meyermenu.tab.right ul { }
+
+.meyermenu.vertical li.parent:hover:before, .meyermenu.vertical.right li.parent:before
+  { content: '◀ '; }
+.meyermenu.vertical.right li.parent:hover:after, .meyermenu.vertical li.parent:after
+  { content: ' ▶'; }
+.meyermenu.vertical li.parent:hover:after, .meyermenu.vertical.right li.parent:hover:before,
+ .meyermenu.vertical.right li.parent:after
+  { content: ''; }
+
+.meyermenu.vertical, .meyermenu.vertical ul { width: 9.5em; }
+.meyermenu.vertical li.parent:hover { border-top: 2px solid; }
+.meyermenu.vertical li.parent:hover
+  { margin-right: -9.75em; padding-right: 1em; text-align: right; border-right: 2px solid; }
+.meyermenu.vertical.right li.parent:hover
+  { margin: 0; margin-left: -9.75em; padding-left: 1em;
+    text-align: left; border-right: none; border-left: 2px solid; }
+
+.meyermenu.tab { text-align: left; }
+.meyermenu.tab.right { text-align: right; }
+
+.meyermenu.tab li.parent:after { content: ' ▼'; }
+.meyermenu.right.tab li.parent:before { content: '▼ '; }
+.meyermenu.right.tab li.parent:after { content: ''; }
+
+/* This is a hack and ineffective. Five nonparent li's in a row will throw it off */
+.meyermenu.tab li.parent, .meyermenu.tab li + li.parent, .meyermenu.tab li.parent + li,
+  .meyermenu.tab li + li + li.parent, .meyermenu.tab li.parent + li + li
+ { display: inline; }
+
+.meyermenu.tab, .meyermenu.tab ul { border: 2px solid; }
+.meyermenu.tab { line-height: 1.25em; }
+.meyermenu.tab li { background-color: transparent; padding: 0 .25em 0 .25em; width: 9.5em; }

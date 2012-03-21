@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Tracklist Web Services</title>
+    <link rel="stylesheet" type="text/css" href="../mixlists.css" />
+    <script type="text/javascript">//<![CDATA[
+    //]]></script>
+    <style type="text/css">
+    </style>
+  </head>
+  <body>
+    <h1><a href="../"><span class="firstletter">M</span>ixlists</a></h1>
+    <div id="content">
+      <p>Mixlists.com is backed by a modified version of the tracks database from <a href="http://musicbrainz.com">MusicBrainz</a> (MB). Modifications are done through a set of <acronym title="Asynchronous Javascript and XML">AJAX</acronym> pages accessing <acronym title="Representational State Transfer">REST</acronym> services. The avialable services are:</p>
+      
+      <ul>
+        <li><code><a href="compartist/">ws/compartist/</a></code> &bull; <acronym title="MusicBrainz">MB</acronym> has the concept of composite artists like "Akon and Eminem" which consist of two atomic artists, but the information is entered as an <a href="http://wiki.musicbrainz.org/AdvancedRelationships">advanced relationship</a> and those are frequently not well maintained. For Mixlists, I need more reliability, so this service allows access to those validation records and is used primarily to drive the <a href="../check_distinct_artists.html">validation app</a>.
+        <ul>
+          <li><code><a href="compartist/unidentified">ws/compartist/unidentified</a></code> &bull; returns ten unidentified potentially composite artists along with a score as to the likelihood that they are composite</li>
+          <li><code><a href="compartist/identify">ws/compartist/identify</a></code> &bull; POST to this with <code><acronym title="Artist MusicBrainz ID">artistmbid</acronym></code> and <code>iscomposite</code> set to <code>yes</code>/<code>no</code></li>
+          <li><code><a href="compartist/identified">ws/compartist/identified</a></code> &bull; returns ten artists</li>
+        </ul>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,246 @@
+ANSI COMPATIBLE MODE
+   |	CURSOR MOVEMENT COMMANDS
+   |	Cursor up					ESC [PnA
+   |	Cursor down					ESC [PnB
+   |	Cursor forward(right)				ESC [PnC
+   |	Cursor backward(left)				ESC [PnD
+   |	Direct cursor addressing			ESC [Pl;PcH
+   |	Direct cursor addressing			ESC [Pl;Pcf
+   |	Index						ESC D
+   |	Next line					ESC E
+   |	Reverse index					ESC M
+   |	Save cursor and attributes			ESC 7
+   |	Restore cursor and attributes			ESC 8
+   |	Insert Mode					ESC [4h
+   |	Overstrike Mode					ESC [4l
+   |	Delete character				ESC [PnP
+   |	Delete line					ESC [PnM
+   |	Insert line					ESC [PnL
+   |	Pn = Number of times to perform operation
+   |	Pl = Line or Row number
+   |	Pc = Column number
+   ->	LINE SIZE (DOUBLE-HEIGHT AND DOUBLE-WIDTH) COMMANDS
+   |	Change this line to double-height top half	ESC #3
+   |	Change this line to double-height bottom half	ESC #4
+   |	Change this line to single-width single-height	ESC #5
+   |	Change this line to double-width single-height	ESC #6
+   ->	CHARACTER ATTRIBUTES
+   	ESC [Ps;Ps;Ps;...,Psm
+	Ps =	0 or none	All attributes off
+		1		Bold on
+		4		Underscore on
+		5		Blink on
+		7		Reverse video on
+
+	ERASING
+	From cursor to end of line			ESC [K
+	From cursor to end of line			ESC [0K
+	From beginning of line to cursor		ESC [1K
+	Entire line containing to cursor		ESC [2K
+	From cursor to end of screen			ESC [J
+	From cursor to end of screen			ESC [0J
+	From beginning of screen to cursor		ESC [1J
+	Entire screen					ESC [2J
+
+PROGRAMMABLE LEDs
+	ESC [Ps;Ps;...Psq
+	ps =	0 or none		All LEDs off
+		1			L1 on
+		2			L2 on
+		3			L3 on
+		4			L4 on
+CHARACTER SETS (G0 AND G1 DESIGNATORS)
+	CHARACTER SET				G0 DESIGNATOR	G1 DESIGNATOR
+	United Kingdom(UK)			ESC (A		ESC )A
+	United States(USASCII)			ESC (B		ESC )B
+	Special graphics characters		ESC (0		ESC )0
+	 and line drawing set
+	Alternate character ROM			ESC (1		ESC )1
+	Alternate character ROM			ESC (2		ESC )2
+	 special graphics characters
+->	SCROLLING REGION
+	ESC [Pt;Pbr
+
+	Pt = Top row
+	Pb = Bottom row
+
+
+
+	TAB STOPS
+	Set tab at current column			ESC H
+	Clear tab at current column			ESC [g
+	Clear tab at current column			ESC [0g
+	Clear all tabs					ESC [3g
+
+MODES
+				       TO SET		    TO RESET
+	MODE NAME		MODE	    SEQUENCE	MODE	  SEQUENCE
+	Keyboard action		Locked      ESC [2h	Unlocked  ESC [2l
+	Insertion/replacement	Insert      ESC [4h     Replace   ESC [4l
+	Send/receive		Off         ESC [12h	On        ESC [12l
+	Line feed/new line	New line    ESC [20h	Line feed ESC [20l
+	Cursor key mode		Application ESC [?1h	Cursor	  ESC [?1l
+	ANSI/VT52 mode		ANSI	    ESC <	VT52	  ESC [?2l
+	Column mode		132 Col	    ESC [?3h	80 Col	  ESC [?3l
+	Scrolling mode		Smooth	    ESC [?4h	Jump	  ESC [?4l
+	Screen mode		Reverse     ESC [?5h	Normal    ESC [?5l
+	Origin mode		Relative    ESC [?6h	Absolute  ESC [?6l
+	Wraparound		On	    ESC [?7h	Off	  ESC [?7l
+	Auto repeat		On	    ESC [?8h	Off	  ESC [?8l
+	Print form feed		On          ESC [?18h   Off       ESC [?18l
+	Print extent		Full screen ESC [?19h   Scroll/rg ESC [?19l
+	Text cursor enable	On          ESC [?25h	Off       ESC [?25l
+	Interlace		On	    ESC [?9h    Off	  ESC [?9l
+	Graphic proc. option	On	    ESC 1	Off	  ESC 2
+	Keypad mode		Application ESC =	Numeric	  ESC >
+
+
+REPORTS
+	PRINTER STATUS REPORT
+	Invoked by					ESC [?15n
+	Response is					ESC [?Psn
+
+	Ps =	10					DTR is asserted on the
+							printer port. The
+							printer is ready.
+
+		11					DTR is not currently
+							asserted on the printer
+							port. The printer is
+							not ready.
+
+		13					DTR has not been
+							asserted on the printer
+							port since power up or
+							reset - in essence, I
+							have no printer.
+
+	TERMINAL TYPE REPORT
+	Invoked by					ESC [>c
+	Invoked by					ESC [>0c
+	Response is					ESC [Pt;Pv;Poc
+	Pt = terminal type
+	Pv = firmware version
+	Po = options installed
+
+	CURSOR POSITION REPORT
+	Invoked by					ESC [6n
+	Response is					ESC [Pl;PcR
+
+	STATUS REPORT
+	Invoked by					ESC [5n
+	Response is					ESC [Psn
+
+	Ps =	0					I have no malfunction
+		3					I have a malfunction
+
+	USER DEFINED KEYS REPORT
+	Invoked by					ESC [?25n
+	Response is					ESC [?Psn
+
+	Ps =	20					User defined keys
+							are unlocked.
+
+		21					User defined keys
+							are locked.
+	WHAT ARE YOU
+	Invoked by					ESC [c
+	Invoked by					ESC [0c
+	Response is					ESC [?1;Psc
+	
+	Ps =	0	Base VT100, no options
+		1	Processor option(STP)
+		2	Advanced video option(AVO)
+		3	AVO and STP
+		4	Graphics processor option(GPO)
+		5	GPO and STP
+		6	GPO and AVO
+		7	GPO, STP, and AVO
+
+	Alternately invoked by ESC Z (not recommended).  Response is the same.
+
+
+	RESET
+	Soft terminal reset				ESC [!p
+	(Sets terminal to power-up
+	 default states.)
+	Hard terminal reset				ESC c
+	(Replaces all set-up parameters
+	 with NVR values or power-up default
+	 values if NVR values do not exist.)
+
+	CONFIDENCE TESTS
+	Fill screen with "Es"				ESC #8
+	Invoke test(s)					ESC [2;Psy
+	Ps =	1	Power-up self test
+			(ROM checksum, RAM, NVR,
+			keyboard and AVO if installed)
+		2	Data loop back
+			(Loop back connector required)
+		4	EIA modem control test
+			(Loop back connector required)
+		8	Repeat selected test(s)
+			indefinitely (or until
+			failure or power off)
+
+
+PRINTING
+	AUTO PRINT MODE
+	on						ESC [?5i
+	off						ESC [?4i
+
+	PRINTER CONTROLLER
+	on						ESC [5i
+	off						ESC [4i
+
+	PRINT CURSOR LINE				ESC [?1i
+
+	PRINT SCREEN					ESC [i or ESC [0i
+
+VT52 COMPATIBLE MODE
+	Cursor up					ESC A
+	Cursor down					ESC B
+	Cursor right					ESC C
+	Cursor left					ESC D
+	Select special graphics character set		ESC F
+	Select ASCII character set			ESC G
+	Cursor to home					ESC H
+	Reverse line feed				ESC I
+	Erase to end of screen				ESC J
+	Erase to end of line				ESC K
+	Direct cursor address				ESC PlPc   (see note 1)
+	Identify					ESC Z      (see note 2)
+	Enter alternate keypad mode			ESC =
+	Exit alternate keypad mode			ESC >
+	Enter ANSI mode					ESC <
+
+	NOTE 1:	Line and column numbers for direct cursor address are single
+		character codes whose values are the disired number plus
+		37(base 8 or Octal)
+	NOTE 2:	Response to ESC Z is ESC /Z
+
+
+AUXILIARY KEYPAD CODES
+
+	VT52		VT52		ANSI		ANSI
+	NUMERIC		APPLICATION	NUMERIC		APPLICATION
+KEY	MODE		MODE		MODE		MODE
+0	0		ESC ?p		0		ESC Op
+1	1		ESC ?q		1		ESC Oq
+2	2		ESC ?r		2		ESC Or
+3	3		ESC ?s		3		ESC Os
+4	4		ESC ?t		4		ESC Ot
+5	5		ESC ?u		5		ESC Ou
+6	6		ESC ?v		6		ESC Ov
+7	7		ESC ?w		7		ESC Ow
+8	8		ESC ?x		8		ESC Ox
+9	9		ESC ?y		9		ESC Oy
+-	-(minus)	ESC ?m		-		ESC Om
+,	,(comma)	ESC ?l		,		ESC Ol
+.	.(period)	ESC ?n		.		ESC On
+ENTER	Same as		ESC ?M		Same as		ESC OM
+	RETURN				RETURN
+PF1	ESC P		ESC P		ESC OP		ESC OP
+PF2	ESC Q		ESC Q		ESC OQ		ESC OQ
+PF3	ESC R		ESC R		ESC OR		ESC OR
+PF4	ESC S		ESC S		ESC OS		ESC OS

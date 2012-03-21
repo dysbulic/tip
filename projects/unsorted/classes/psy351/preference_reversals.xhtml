@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>Preference Reversals</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <base href="http://odin.himinbi.org/classes/psy351/" />
+    <style type="text/css">
+      body { max-width: 800px; margin: 3em auto; }
+      object { height: 350px; width: 100%; }
+      .double_graphs object { width: 48%; float: left; }
+      .double_graphs:after { clear: both; content: ''; display: block; }
+      .double_graphs + math[mode~=display] { margin-top: 2em; }
+      th, td { border: 1px solid; padding: .25em; }
+      h2 { margin-top: 4em; border-bottom: 1px solid; padding: .1em; margin-left: -2em; clear: both; }
+      #header h2 { border: none; }
+      a.graph { border: none; content: '&nbsp;'; }
+      a.graph:hover { border-bottom: 1px dashed; background-color: #75c19c; }
+      iframe { height: 400px; }
+      @media print {
+        h2 { margin-left: 0; }
+      }
+    </style>
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-2592249-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY-351: Computational Methods</h1>
+      <h2>Preference Reversals</h2>
+      <h2><a href="http://hoenir.himinbi.org">Will Holcomb</a></h2>
+    </div>
+
+    <p>I'm working on my computational modeling project. The particular model I'm using is based on <a href="http://php.indiana.edu/~jbusemey/">Busemeyer</a>'s decision field theory as described in his <a href="http://www.cogs.indiana.edu/Publications/techreps2003/252/252.pdf">2003 paper</a>. One of the interesting parts of the presentation are quirks of our decision making mechanism where people aren't quite as consistent as one would expect.</p>
+
+    <p>If you'd like to see the math in action, I wrote a <a href="dft_example.xhtml"><acronym title="decision field theory">dft</acronym> simulator</a>.</p>
+
+    <!--more-->
+
+    <h2 id="similarity">Similarity Effect</h2>
+    
+    <p>The independence of irrelevant alternatives is an axiom from decision theory. It states simply that if <em>A</em> is preferred to <em>B</em> then the addition of a new option <em>X</em> should not make <em>B</em> preferable to <em>A</em>.</p>
+
+    <p>Monte Carlo simulations run using diffusion models generate probabilities for choices. In terms of probabilities for a single choice, the <acronym title="Independence of Irrelevant Alternatives">IIA</acronym> would be expressed as:</p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><mo>if</mo></mtd>
+          <mtd><mo>P</mo><mfenced separators="|"><mi>A</mi><mfenced open="{" close="}"><mi>A</mi><mi>B</mi></mfenced></mfenced></mtd>
+          <mtd><mo>&gt;</mo></mtd>
+          <mtd><mo>P</mo><mfenced separators="|"><mi>B</mi><mfenced open="{" close="}"><mi>A</mi><mi>B</mi></mfenced></mfenced></mtd>
+        </mtr>
+        <mtr>
+          <mtd><mo>then</mo></mtd>
+          <mtd><mo>P</mo><mfenced separators="|"><mi>A</mi><mfenced open="{" close="}"><mi>A</mi><mi>B</mi><mi>X</mi></mfenced></mfenced></mtd>
+          <mtd><mo>&gt;</mo></mtd>
+          <mtd><mo>P</mo><mfenced separators="|"><mi>B</mi><mfenced open="{" close="}"><mi>A</mi><mi>B</mi><mi>X</mi></mfenced></mfenced></mtd>
+        </mtr>
+      </mtable>
+    </math>
+
+    <p>Luce's (1959) ratio of strength model would support this axiom. The probability of a particular choice is a function of the ratio of its utility relative to the utility of the other choices.</p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><mo>P</mo><mfenced separators="|"><mi>x</mi><mi>A</mi></mfenced></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd><mfrac>
+            <mrow><mo>u</mo><mfenced><mi>x</mi></mfenced></mrow>
+            <mrow><munder><mo>&Sum;</mo><mrow><mi>y</mi><mo>&Element;</mo><mi>A</mi></mrow></munder><mo>u</mo><mfenced><mi>y</mi></mfenced></mrow>
+          </mfrac></mtd>
+        </mtr>
+      </mtable>
+    </math>
+
+    <p>Consider a counter-example from Debreu (1960) adapted to American Presidential politics. Imagine a voter only cares about two issues: abortion and the death penalty and opposes both. Their opinions on the candidates for the 2000 election might have looked like:</p>
+    
+    <a class="graph" href="similarity.svg"><object type="image/svg+xml" data="similarity.svg"></object></a>
+
+    <p>The utility of these candidates is roughly equal as a combination of these two issues, and by Luce's calculations the probability for each should be roughly 1/3. In reality, however, the large grained conservative/liberal decision is roughly 50/50 and within that, Gore and Nader split the liberal half and get 25% apiece.</p>
+
+    <p>This violation of <acronym title="Independence of Irrelevant Alternatives">IIA</acronym> shows up at the macro-level as well.</p>
+
+    <div class="double_graphs">
+      <a class="graph" href="similarity_orig.svg"><object type="image/svg+xml" data="similarity_orig.svg"></object></a>
+      <a class="graph" href="similarity_after.svg"><object type="image/svg+xml" data="similarity_after.svg"></object></a>
+    </div>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><mo>P</mo><mfenced separators="|"><mi>Gore</mi><mfenced open="{" close="}"><mi>Gore</mi><mi>Bush</mi></mfenced></mfenced></mtd>
+          <mtd><mo>&gt;</mo></mtd>
+          <mtd><mo>P</mo><mfenced separators="|"><mi>Bush</mi><mfenced open="{" close="}"><mi>Gore</mi><mi>Bush</mi></mfenced></mfenced></mtd>
+        </mtr>
+        <mtr>
+          <mtd><mo>P</mo><mfenced separators="|"><mi>Bush</mi><mfenced open="{" close="}"><mi>Gore</mi><mi>Bush</mi><mi>Nader</mi></mfenced></mfenced></mtd>
+          <mtd><mo>&gt;</mo></mtd>
+          <mtd><mo>P</mo><mfenced separators="|"><mi>Gore</mi><mfenced open="{" close="}"><mi>Gore</mi><mi>Bush</mi><mi>Nader</mi></mfenced></mfenced></mtd>
+        </mtr>
+      </mtable>
+    </math>
+
+    <h2 id="attraction">Attraction Effect</h2>
+
+    <p>A similarity effect is an obvious statistical effect that can be explained by simply assuming that there was an existing nuance to the decision-makers opinions that was unexpressed. Attraction effects are more interesting in that they show an actual change in cognition. With attraction effects, adding an option <em>increases</em> the attractiveness of a nearby option.</p>
+
+    <p>Consider an <a href="#exp_1">experiment</a> involving three anti-depressants:</p>
+
+    <table>
+      <thead>
+        <tr><th>Drug Name</th><th>Brand Name</th><th>Effectiveness</th><th>Side Effect Frequency</th><th>Side Effects</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Nefazodone</td><td>Serzone</td><td>Superior to placebo on 3/4 depression measures</td>
+          <td>25% of patients</td><td>Dry mouth, nausea, somnolence</td>
+        </tr>
+        <tr>
+          <td>Paroxetine</td><td>Paxil</td><td>Superior to placebo on 2/4 depression measures</td>
+          <td>5% of patients</td><td>Dry mouth, nausea, somnolence</td>
+        </tr>
+        <tr>
+          <td>Imipramine</td><td>Tofranil</td><td>Superior to placebo on 3/4 depression measures</td>
+          <td>35% of patients</td><td>Dry mouth, nausea, somnolence; also, reports of abnormal ECG, hallucinations, and delusions</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>24 doctors were presented with identical patient descriptions and then asked for a treatment recommendation, half of them choosing between only Paxil and Serzone, and half choosing between all three:</p>
+
+    <div class="double_graphs">
+      <object type="image/svg+xml" data="attraction_orig.svg"></object>
+      <object type="image/svg+xml" data="attraction_after.svg"></object>
+    </div>
+
+    <hr />
+
+    <h2 id="eoa">Elimination of Aspects</h2>
+
+    <p>Tversky (1972) suggested a model based on the elimination of aspects. Consider, the purchase of a car as an example. For the sake of simplicity, imagine that I am considering three alternatives &mdash; a Smart Car, a Honda Civic, and a Ford Mustang &mdash; and basing my decision solely on two attributes &mdash; cost and comfort.</p>
+
+    <object type="image/svg+xml" data="alternatives_orig.svg"></object>
+
+    <p>An aspect is chosen at random with a likelihood proportional to my concern. I'm cheap and I care about cost 75% and comfort 25%. Cost is picked as the active attribute and the aspect I want is "affordable." The Mustang is not affordable, so it is eliminated from consideration.</p>
+
+    <object type="image/svg+xml" data="alternatives_elim_1.svg"></object>
+
+    <p>The next round a remaining attribute is comfort and I consider both the Smart Car and the Civic "comfortable," things fall back to utilities though they are computed on a per-aspect basis.</p>
+
+    <object type="image/svg+xml" data="alternatives_elim_2.svg"></object>
+
+    <p>Elimination of Aspects as a theory can't explain an attraction effect because an option like Tofranil doesn't affect the utility of other aspects and so can't shift the probabilities as needed.</p>
+
+    <h2 id="compromise">Compromise Effect</h2>
+
+    <p>An attraction effect is considered when one option is said to "dominate" another. With two drugs of equal effectiveness, why would you choose the one that will potentially drive the patient insane?</p>
+
+    <p>Compromise effects are when options are in conflict. Consider the marketing tactic used by Williams-Sonoma when they were having difficulty selling their $130 bread maker.</p>
+
+    <div class="double_graphs">
+      <object type="image/svg+xml" data="compromise_orig.svg"></object>
+      <object type="image/svg+xml" data="compromise_after.svg"></object>
+    </div>
+
+    <p>Traditional market reasoning is that there is no demand for a $130 bread maker, so they shouldn't be produced. What Williams-Sonoma did instead was introduce a $175 bread maker so the high-end bread maker is now a mid-range bread maker and sales of the $130 model increased markedly.</p>
+
+    <p>Tversky and Simonson (1993) came up with a model of decision making where the options define a context which can explain attraction and compromise affects, but it doesn't deal with similarity effects.</p>
+
+    <h2 id="diffusion">Diffusion Field Theory</h2>
+
+    <p>Busemeyer's Diffusion Field Theory is a model in which sets of weights are accumulated until a threshold is crossed.</p>
+
+    <a class="graph" href="dft_election.svg"><object type="image/svg+xml" data="dft_election.svg"></object></a>
+
+    <p>The diffusion field is driven by attention. At each instantaneous moment, there's a fixed amount of attention that is divided between various "events." This is represented in the stochastic variable <em>W</em>:</p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><mo>&Sum;</mo><msub><mi>W</mi><mi>i</mi></msub></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd><mn>1</mn></mtd>
+        </mtr>
+      </mtable>
+    </math>
+
+    <p>
+      An event is an evaluation of the options relative to each other. Consider, the previous example of a two issue voter. This person has two events: opposition to abortion and opposition to the death penalty. These can be represented with two vectors:
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mover><msub><mi>e</mi><mi>a</mi></msub><mo>&rharu;</mo></mover>
+        <mo>=</mo>
+        <mfenced open="&lt;" close="&gt;">
+          <msub><mi>e</mi><mfenced open="" close=""><mi>a</mi><mi>Bush</mi></mfenced></msub>
+          <msub><mi>e</mi><mfenced open="" close=""><mi>a</mi><mi>Gore</mi></mfenced></msub>
+          <msub><mi>e</mi><mfenced open="" close=""><mi>a</mi><mi>Nader</mi></mfenced></msub>
+        </mfenced>
+        <mo>=</mo>
+        <mfenced open="&lt;" close="&gt;">
+          <msub><mi>e</mi><mfenced open="" close=""><mi>a</mi><mi>B</mi></mfenced></msub>
+          <msub><mi>e</mi><mfenced open="" close=""><mi>a</mi><mi>G</mi></mfenced></msub>
+          <msub><mi>e</mi><mfenced open="" close=""><mi>a</mi><mi>N</mi></mfenced></msub>
+        </mfenced>
+      </math>
+      representing the relative weights in the context of abortion and
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mover><msub><mi>e</mi><mi>d</mi></msub><mo>&rharu;</mo></mover>
+      </math>
+      representing the relative weights in the context of the death penalty.
+    </p>
+
+    <a href="dft_attention.svg"><object type="image/svg+xml" data="dft_attention.svg"></object></a>
+
+    <p>
+      Note that Bush has a positive evaluation in the abortion context
+      (<math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>a</mi><mi>B</mi></msub></math>)
+      and a negative evaluation in the death penalty context
+      (<math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>d</mi><mi>B</mi></msub></math>).
+      There are no bounds placed on the magnitudes of the event vectors or the proportions of their components.
+    </p>
+
+    <p>In general, this set of vectors is <em>E</em> where the number of events is equal to the number of divisions of <em>W</em>. At each moment, each event is evaluated in proportion to its attention to derive the utility:</p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><msub><mo>U</mo><mi>i</mi></msub></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <munder><mo>&Sum;</mo><mrow><mover><msub><mi>e</mi><mi>j</mi></msub><mo>&rharu;</mo></mover><mo>&Element;</mo><mi>E</mi></mrow></munder>
+            <mfenced><msub><mi>W</mi><mi>j</mi></msub></mfenced>
+            <mfenced><msub><mi>e</mi><mfenced open="" close=""><mi>j</mi><mi>i</mi></mfenced></msub></mfenced>
+            <mo>+</mo>
+            <msub><mi>&epsilon;</mi><mi>i</mi></msub>
+          </mtd>
+        </mtr>
+      </mtable>
+    </math>
+
+    <p>
+      There is an error term for each event, 
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>&epsilon;</mi><mi>i</mi></msub></math>,
+      that represents the influence of unknown factors.
+    </p>
+
+    <p>So, for this example:</p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><msub><mi>U</mi><mi>B</mi></msub></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mfenced><msub><mi>W</mi><mi>a</mi></msub></mfenced>
+            <mfenced><msub><mi>e</mi><mfenced open="" close=""><mi>a</mi><mi>B</mi></mfenced></msub></mfenced>
+            <mo>+</mo>
+            <mfenced><msub><mi>W</mi><mi>d</mi></msub></mfenced>
+            <mfenced><msub><mi>e</mi><mfenced open="" close=""><mi>d</mi><mi>B</mi></mfenced></msub></mfenced>
+            <mo>+</mo>
+            <msub><mi>&epsilon;</mi><mi>a</mi></msub>
+          </mtd>
+        </mtr>
+      </mtable>
+    </math>
+    
+    <p>The utility values are then combined into valences. The valence is the utility of the given option minus the average of the remaining options:</p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><msub><mi>V</mi><mi>i</mi></msub></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <msub><mo>U</mo><mi>i</mi></msub>
+            <mo>-</mo>
+            <mfrac>
+              <mrow><mo>&Sum;</mo><msub><mo>U</mo><mi>j</mi></msub><mo>-</mo><msub><mo>U</mo><mi>i</mi></msub></mrow>
+              <mrow><mi>n</mi><mi>-</mi><mn>1</mn></mrow>
+            </mfrac>
+          </mtd>
+        </mtr>
+      </mtable>
+    </math>
+    
+    <p>
+      Valences are then accumulated as preferences. Diffusion field theory is an accumulation model meaning that preference is accumulated until some threshold is passed. Preference then can only be specified relative to the previous preference state. The initial state,
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msub><mi>P</mi><mn>0</mn></msub>
+      </math>,
+      represents a memory state which can be used to explain effects such as maintenance of the status quo.
+    </p>
+
+    <p>One of the important characteristics of diffusion field theory is the interaction between preference nodes. Nodes are self-reinforcing and laterally inhibiting. These relationships are represented with a set of vectors <em>S</em> &SuchThat;</p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><mover><msub><mi>s</mi><mi>i</mi></msub><mo>&rharu;</mo></mover></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mfenced open="&lt;" close="&gt;">
+              <msub><mi>s</mi><mfenced open="" close=""><mn>1</mn><mi>i</mi></mfenced></msub>
+              <mo>&hellip;</mo>
+              <msub><mi>s</mi><mfenced open="" close=""><mi>n</mi><mi>i</mi></mfenced></msub>
+            </mfenced>
+          </mtd>
+        </mtr>
+      </mtable>
+    </math>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><msub><mi>s</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd><msub><mi>s</mi><mfenced open="" close=""><mi>j</mi><mi>i</mi></mfenced></msub></mtd>
+        </mtr>
+      </mtable>
+    </math>
+    
+    <p>The calculation of the preference states then is the combination of the valence with the weighted sum of the previous preference state:</p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><msub><mi>P</mi><mi>i</mi></msub><mfenced><msub><mi>t</mi><mi>k</mi></msub></mfenced></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <msub><mi>V</mi><mi>i</mi></msub><mfenced><msub><mi>t</mi><mi>k</mi></msub></mfenced>
+            <mo>+</mo>
+            <munder><mo>&Sum;</mo><mi>j</mi></munder>
+            <mfenced><msub><mi>s</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub></mfenced>
+            <mfenced><mrow><msub><mi>P</mi><mi>i</mi></msub><mfenced><msub><mi>t</mi><mrow><mi>k</mi><mo>-</mo><mn>1</mn></mrow></msub></mfenced></mrow></mfenced>
+          </mtd>
+        </mtr>
+      </mtable>
+    </math>
+
+    <p>Preference accumulates until one option passes a threshold, <em>&Theta;</em>, and that option is the one that is chosen.</p>
+
+    <p>The concept can be most easily understood using examples:</p>
+    
+    <ul>
+      <li><a href="dft_example.xhtml?w_a=.6&amp;w_d=.4&amp;a_b=5&amp;a_g=-3&amp;a_n=-4&amp;d_b=-6&amp;d_g=3&amp;d_n=4&amp;i_bg=-3&amp;i_bn=-2&amp;i_gn=-5&amp;i_bb=3&amp;i_gg=3&amp;i_nn=3&amp;p_b=.5&amp;p_g=.5&amp;p_n=.5&amp;t=1&amp;count=200&amp;autorun">Similarity Effect</a></li>
+      <li><a href="dft_example.xhtml?w_a=.6&amp;w_d=.4&amp;a_b=5&amp;a_g=-3&amp;a_n=-4&amp;d_b=-6&amp;d_g=3&amp;d_n=4&amp;i_bg=-3&amp;i_bn=0&amp;i_gn=-3&amp;i_bb=3&amp;i_gg=3&amp;i_nn=3&amp;p_b=.5&amp;p_g=.5&amp;p_n=.5&amp;t=1&amp;count=200&amp;autorun">Compromise Effect</a></li>
+      <li><a href="dft_example.xhtml?w_a=.5&amp;w_d=.5&amp;a_b=5&amp;a_g=-3&amp;a_n=-4&amp;d_b=-6&amp;d_g=3&amp;d_n=4&amp;i_bg=-3&amp;i_bn=-2&amp;i_gn=-5&amp;i_bb=3&amp;i_gg=3&amp;i_nn=3&amp;p_b=.5&amp;p_g=.5&amp;p_n=.5&amp;t=1&amp;count=200&amp;autorun">Attraction Effect</a></li>
+    </ul>
+
+    <h2 id="dft_anomalies"><acronym title="Diffusion Field Theory">DFT</acronym> Anomalies</h2>
+
+    <p>Lateral inhibition makes intuitive sense for explaining the similarity effect. This would reduce the strength of the similar options Gore and Nader.</p>
+
+    <a class="graph" href="dft_similarity.svg"><object type="image/svg+xml" data="dft_similarity.svg"></object></a>
+
+    <p>Disadvantageous preference states may be driven to a negative value, and the negation through lateral inhibition then becomes a bolstering effect. This causes an undesirable option like Tofranil to make other options seem more attractive in proportion to their similarity.</p>
+
+    <a class="graph" href="dft_attraction.svg"><object type="image/svg+xml" data="dft_attraction.svg"></object></a>
+
+    <p>The explanation for compromise effects is less intuitive:</p>
+
+    <blockquote>
+      <p>[I]t is the interaction between [attention switching and lateral inhibition] that is essential for producing the compromise effect. In this case, if attention happens to focus on some irrelevant features favoring the compromise option, B, then this sends lateral inhibition to the neighboring extreme options A and C, decreasing their strength, which then builds up an advantage for the compromise option.</p>
+    </blockquote>
+
+    <h2>Loss Aversion</h2>
+
+    <p>Consider an experiment by Dan Ariely (2005). Users were given a fixed amount of money and allowed to spend it in a game opening doors. Money could either be spend to switch doors or receive money from a door:</p>
+
+    <a class="graph" href="loss_aversion_doors.svg"><object type="image/svg+xml" data="loss_aversion_doors.svg"></object></a>
+
+    <p>The same basic experiment was conducted again except this time as a door was selected it caused other doors to shrink. If a door was not "saved" by selecting it, eventually it would disappear:</p>
+
+    <a class="graph" href="loss_aversion_shrinking_doors.svg"><object type="image/svg+xml" data="loss_aversion_shrinking_doors.svg"></object></a>
+
+    <p>Subjects in the experiment showed a 15% decrease in effectiveness when in the second experiment. This is attributed to a natural inclination to favor avoiding losses over seeking gains.</p>
+
+    <p>In diffusion field theory, this phenomena can be exhibited by the self-reinforcement in the preference stage. Options have a mechanism for keeping themselves alive.</p>
+
+    <a class="graph" href="dft_loss_aversion.svg"><object type="image/svg+xml" data="dft_loss_aversion.svg"></object></a>
+
+    <hr />
+
+    <ul>
+      <li id="exp_1"><a href="http://mdm.sagepub.com/cgi/content/abstract/19/3/315">Are More Options Always Better? &mdash; The Attraction Effect in Physicians' Decisions about Medications</a></li>
+      <li id="exp_ariley">Dan Ariely, Joel Huber, and Klaus Wertenbroch. (2005) "<a href="http://www.predictablyirrational.com/pdfs/LA_comment.pdf">When Do Losses Loom Larger Than Gains?</a>". Journal of of Marketing Research. 42 (2) 134-138.</li>
+    </ul>
+  </body>
+</html>

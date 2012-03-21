@@ -1,0 +1,27 @@
+TARGET = usbirboy.s19
+OBJ = start08.o intvect.o filter.o ir.o usbcore.o main.o 
+PRM = usbirboy.prm
+
+CC = wine c:\\Program\ Files\\Metrowerks\\CodeWarrior\ CW08_V3.0\\prog\\chc08.exe
+LINK = wine c:\\Program\ Files\\Metrowerks\\CodeWarrior\ CW08_V3.0\\prog\\Linker.exe
+#CFLAGS = -Ic:\\Program\ Files\\Metrowerks\\CodeWarrior\ CW08_V3.0\\lib\\HC08c\\include
+
+.PHONY: default
+default: $(TARGET)
+
+CFLAGS = -Cc -Os -I. -Icw_include
+LFLAGS = -Lcw_lib -B
+
+.SUFFIXES: .c .o
+
+.c.o:
+	$(CC) $(CFLAGS) $^
+
+# the linker names the S record file usbirboy.sx 
+$(TARGET): $(OBJ) $(PRM)
+	$(LINK) $(LFLAGS) $(PRM)
+	mv usbirboy.sx usbirboy.s19
+
+.PHONY: clean
+clean:
+	rm -f *~ $(OBJ) $(TARGET) *.map *.lst EDOUT usbirboy

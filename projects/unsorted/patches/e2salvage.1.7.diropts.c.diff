@@ -1,0 +1,17 @@
+Index: dirops.c
+===================================================================
+RCS file: /cvsroot/e2salvage/e2salvage/src/dirops.c,v
+retrieving revision 1.7
+diff -r1.7 dirops.c
+26c26
+< 		((void *)dirent) += dirent->rec_len
+---
+> 		dirent += dirent->rec_len
+32c32
+< 		((void *)dirent) += dirent->rec_len;
+---
+> 		dirent += dirent->rec_len;
+52c52
+< 		ldirent = dirent, ((void *)dirent) += dirent->rec_len
+---
+> 		ldirent = dirent, dirent += dirent->rec_len

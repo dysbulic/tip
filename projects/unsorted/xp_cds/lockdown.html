@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Locking Down a XP Box</title>
+    <link rel="stylesheet" type="text/css" href="../styles/outline.css" />
+    <style type="text/css">
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p>I have several computers going in with <a
+    href="http://www.microsoft.com/globaldev/DrIntl/faqs/MUIFaq.mspx">XP
+    MUI</a> installs and they're going into Girls' Mentoring Centers
+    around the country. Given the fact that Mauritanians have an
+    amazing propensity to break computers and that I'll be hundreds of
+    kilometers from some of them, I need to lock them down a
+    little.</p>
+    <p>Since I've got several different models I can't just <a
+    href="http://www.partimage.org">image</a> them all. So, I want to
+    make the setup as quick as possible.</p>
+    <p><a
+    href="http://support.microsoft.com/?id=814847">Slipstreaming</a>
+    <a href="http://support.microsoft.com/?id=814847">service pack
+    1</a> didn't work out too well. I managed to produce a couple of
+    coasters and decided to leave it til later. So I decided instead
+    to produce a <a href="lockdown.reg">registry</a> file with info
+    primarily from <a
+    href="http://www.winguides.com/registry/">WinGuides</a>. If you
+    download the file the first bit shows how to load external user
+    hives from an admin account and apply to restrictions to it, so
+    you can lock down all the accounts without mucking about changing
+    accounts.</p>
+    <iframe style="width: 100%; height: 10em;" src="lockdown.reg">
+    </iframe>
+    <p>One big problem though is that the MUI isn't complete. In this
+    case though, <a
+    href="http://www.microsoft.com/globaldev/DrIntl/faqs/muifaq.mspx">Microsoft</a>
+    is well ahead of <a href="http://www.openi18n.org">Linux</a>. So,
+    I needed to figure out just how the MUI knows what text to put on
+    the screen in order to change some of the screens.</p>
+    <p>The first part is reasonably simple. There is a file called
+    <code>disktop.ini</code> in each directory of the start menu
+    (<code>%SystemDrive%\Documents and Settings\([username]|All
+    Users)\Start Menu</code>). It has the read-only, system and hidden
+    bits set, so you can't see it unless you've turned on viewing
+    those files. Each one has two primary entries, for example:</p>
+<pre>[.ShellClassInfo]
+LocalizedResourceName=@shell32.dll,-21782
+[LocalizedFileNames]
+Internet Explorer.lnk=@xpsp1res.dll,-11001
+Windows Explorer.lnk=@%SystemRoot%\system32\shell32.dll,-22067</pre>
+    <p>The first bit, <code>[.ShellClassInfo]</code> tells where to
+    find the name of the folder containing it, and the second bit,
+    <code>[LocalizedFileNames]</code> are files present in the
+    directory with the location of where to find the name.</p>
+    <p>How to decipher <code>@shell32.dll,-21782</code> is a little
+    tricky. The string is a reference to a dll as a <a
+    href="http://www.wilsonc.demon.co.uk/d7resourceexplorer.htm">resource
+    file</a>. The trick is that in addition to loading the actual
+    library, it also loads a MUI extension that overrides some parts.
+    So instead of <code>%SystemRoot%\System32\Shell32.dll</code>, you
+    have to look to <code>%SystemRoot%\mui\[mui
+    id]\Shell32.dll.mui</code> where <code>[mui id]</code> is:</p>
+    <div>
+      <div style="float: left; width: 48%">
+        <ul>
+          <li><code>0401</code> Arabic</li>
+          <li><code>0405</code> Czech</li>
+          <li><code>0406</code> Danish</li>
+          <li><code>0413</code> Dutch (Standard)</li>
+          <li><code>0409</code> English (United States)</li>
+          <li><code>040b</code> Finnish</li>
+          <li><code>040c</code> French (Standard)</li>
+          <li><code>0407</code> German</li>
+          <li><code>0408</code> Greek</li>
+          <li><code>040d</code> Hebrew</li>
+          <li><code>040e</code> Hungarian</li>
+          <li><code>0410</code> Italian</li>
+          <li><code>0411</code> Japanese</li>
+        </ul>
+      </div>
+      <div style="float: right; width: 48%">
+        <ul>
+          <li><code>0412</code> Korean</li>
+          <li><code>0414</code> Norwegian</li>
+          <li><code>0415</code> Polish</li>
+          <li><code>0416</code> Portuguese (Brazil)</li>
+          <li><code>0816</code> Portuguese (Standard)</li>
+          <li><code>0419</code> Russian</li>
+          <li><code>0804</code> Simplified Chinese</li>
+          <li><code>0c0a</code> Spanish (Modern Sort)</li>
+          <li><code>041b</code> Slovak</li>
+          <li><code>0424</code> Slovenian </li>
+          <li><code>041d</code> Swedish</li>
+          <li><code>0404</code> Traditional Chinese</li>
+          <li><code>041f</code> Turkish</li>
+        </ul>
+      </div>
+      <div style="clear: both"></div>
+    </div>
+    <p>Unfortunately adding new MUI folders is not as simple as adding
+    new folders with <code>desktop.ini</code>s in them.</p>
+  </body>
+</html>

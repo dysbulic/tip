@@ -1,0 +1,1237 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Statistical Inference &mdash; Practice Exam #3</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <style type="text/css">
+      table td { padding: .25em .75em; text-align: center; }
+      th, td { border-right: thin solid; padding: .25em .5em; }
+      tr:nth-child(3n) td { border-bottom: 1px solid; }
+      .row3 td { border-bottom: 1px solid; }
+      th:last-child, td:last-child { border-right: none; }
+      th { border-bottom: 3px double; }
+      .bordered { border: 1px solid; }
+      body > ol > li { border-left: 2px solid #444; padding-left: .5em; }
+      body > ol > li.wrong { border-left: dashed; }
+      body > ol > li.done { border: none; }
+      table.answers { counter-reset: answercounter; }
+      table.answers tr td:first-child { counter-increment: answercounter; width: 2.5em; padding: 0; }
+      table.answers tr td:first-child:before { display: marker; content: counter(answercounter, upper-alpha) '.'; }
+      math + math { margin-top: .5em; padding-top: .5em; }
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY 310: Statistical Inference</h1>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Practice Exam #3</h2>
+      <h2>Due: Wed., 10 December 2007</h2>
+    </div>
+
+    <ol>
+      <li class="done">
+        <div class="question">
+          <p>
+            Suppose you are performing a 2-sample, independent sample t-test, and you use the 2-sided rejection points with &alpha; = 0.05. For which of the following situations would the <em>actual</em> &alpha; be highest when
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><msubsup><mi>&sigma;</mi><mn>1</mn><mn>2</mn></msubsup><mo>=</mo><mn>10</mn></math>,
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><msubsup><mi>&sigma;</mi><mn>2</mn><mn>2</mn></msubsup><mo>=</mo><mn>20</mn></math>?
+          </p>
+          <ol>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <msub><mi>N</mi><mn>1</mn></msub><mo>=</mo><mn>20</mn><mo>,</mo><msub><mi>N</mi><mn>2</mn></msub><mo>=</mo><mn>10</mn>
+              </math>
+              &check;
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <msub><mi>N</mi><mn>1</mn></msub><mo>=</mo><mn>20</mn><mo>,</mo><msub><mi>N</mi><mn>2</mn></msub><mo>=</mo><mn>20</mn>
+              </math>
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <msub><mi>N</mi><mn>1</mn></msub><mo>=</mo><mn>30</mn><mo>,</mo><msub><mi>N</mi><mn>2</mn></msub><mo>=</mo><mn>30</mn>
+              </math>
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <msub><mi>N</mi><mn>1</mn></msub><mo>=</mo><mn>10</mn><mo>,</mo><msub><mi>N</mi><mn>2</mn></msub><mo>=</mo><mn>20</mn>
+              </math>
+            </li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The error on a linear combination of means is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub>
+                  <mi>E</mi>
+                  <mrow><mo>&Sum;</mo><msub><mi>c</mi><mi>i</mi></msub><msub><mover><mi>x</mi><mo>_</mo></mover><mi>i</mi></msub></mrow>
+                </msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <msqrt>
+                    <mo>&Sum;</mo>
+                    <mfrac>
+                      <mrow><msubsup><mi>c</mi><mi>i</mi><mn>2</mn></msubsup><msubsup><mi>&sigma;</mi><mi>i</mi><mn>2</mn></msubsup></mrow>
+                      <mi>n</mi>
+                    </mfrac>
+                  </msqrt>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Error decreases with a increase in <em>N</em>, so the only real options are <em>A</em> and <em>D</em>, and for this example:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msqrt><mrow>
+                  <mfrac>
+                    <msub><mi>N</mi><mrow><mi>A</mi><mn>1</mn></mrow></msub>
+                    <msubsup><mi>&sigma;</mi><mrow><mi>A</mi><mn>1</mn></mrow><mn>2</mn></msubsup>
+                  </mfrac>
+                  <mo>+</mo>
+                  <mfrac>
+                    <msub><mi>N</mi><mrow><mi>A</mi><mn>2</mn></mrow></msub>
+                    <msubsup><mi>&sigma;</mi><mrow><mi>A</mi><mn>2</mn></mrow><mn>2</mn></msubsup>
+                  </mfrac>
+                </mrow></msqrt></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msqrt><mrow><mfrac><mn>20</mn><mn>10</mn></mfrac><mo>+</mo><mfrac><mn>10</mn><mn>20</mn></mfrac></mrow></msqrt></mtd>
+                <mtd><mo>&gt;</mo></mtd>
+                <mtd><msqrt><mrow><mfrac><mn>10</mn><mn>10</mn></mfrac><mo>+</mo><mfrac><mn>20</mn><mn>20</mn></mfrac></mrow></msqrt></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msqrt><mrow>
+                  <mfrac>
+                    <msub><mi>N</mi><mrow><mi>D</mi><mn>1</mn></mrow></msub>
+                    <msubsup><mi>&sigma;</mi><mrow><mi>D</mi><mn>1</mn></mrow><mn>2</mn></msubsup>
+                  </mfrac>
+                  <mo>+</mo>
+                  <mfrac>
+                    <msub><mi>N</mi><mrow><mi>D</mi><mn>2</mn></mrow></msub>
+                    <msubsup><mi>&sigma;</mi><mrow><mi>D</mi><mn>2</mn></mrow><mn>2</mn></msubsup>
+                  </mfrac>
+                </mrow></msqrt></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>The 2-sample independent sample t-test makes several statistical assumptions. Which of the following assumptions is most likely to cause severe problems if it is substantially violated?</p>
+          <ol>
+            <li>Independence of observations within group &check;</li>
+            <li>Normally distributed populations</li>
+            <li>Homogeneity of variances when sample sizes are equal</li>
+          </ol>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>
+            Suppose you somehow knew that the population standard deviations are 10 in two populations, and that the population distributions are normal. You wish to test the null hypothesis that
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo><msub><mi>&mu;</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn>
+            </math>,
+            using the 2-Sample Z-Test of the form:
+          </p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>Z</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow>
+                      <msub><mover><mi>X</mi><mo>_</mo></mover><mrow><mo>&bull;</mo><mn>1</mn></mrow></msub><mo>-</mo>
+                      <msub><mover><mi>X</mi><mo>_</mo></mover><mrow><mo>&bull;</mo><mn>2</mn></mrow></msub>
+                    </mrow>
+                    <msqrt>
+                      <mfenced><mrow>
+                        <mfrac><mn>1</mn><mi>N</mi></mfrac><mo>+</mo><mfrac><mn>1</mn><mi>N</mi></mfrac>
+                      </mrow></mfenced>
+                      <msup><mi>&sigma;</mi><mn>2</mn></msup>
+                    </msqrt>
+                  </mfrac>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced><msqrt><mfrac><mi>N</mi><mn>2</mn></mfrac></msqrt></mfenced>
+                  <mfrac>
+                    <mrow>
+                      <msub><mover><mi>X</mi><mo>_</mo></mover><mrow><mo>&bull;</mo><mn>1</mn></mrow></msub><mo>-</mo>
+                      <msub><mover><mi>X</mi><mo>_</mo></mover><mrow><mo>&bull;</mo><mn>2</mn></mrow></msub>
+                    </mrow>
+                    <mi>&sigma;</mi>
+                  </mfrac>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>
+            What minimum sample size <em>N</em> do you need for each group to insure that power is at least 0.95 if &alpha; = 0.05 and
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo><msub><mi>&mu;</mi><mn>2</mn></msub><mo>=</mo><mn>5.0</mn>
+            </math>?
+          </p>
+          <ol>
+            <li>104 &check;</li>
+            <li>121</li>
+            <li>115</li>
+            <li>101</li>
+            <li>116</li>
+            <li>106</li>
+            <li>112</li>
+            <li>100</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>Power, in general is a function of several factors:</p>
+          <ul>
+            <li>
+              &Phi;(<em>x</em>) &mdash; which gives the percentage of a normal curve <em>x&sigma;</em> standard deviations above &mu;.
+              <ul>
+                <li>&Phi;(1.645) = 0.95</li>
+                <li>&Phi;(1.96) = 0.975</li>
+                <li>&Phi;(2.34) = 0.99</li>
+                <li>&Phi;(2.58) = 0.995</li>
+                <li>&Phi;(<em>z</em>) = 1 - &Phi;(-<em>z</em>)</li>
+                <li>&Phi;<sup>-1</sup>(<em>&alpha;</em>) = &Phi;<sup>-1</sup>(1 - <em>&alpha;</em>)</li>
+              </ul>
+            </li>
+            <li>
+              <em>E<sub>s</sub></em> &mdash; the standardized error:
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>E</mi><mi>s</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><mrow><mo>&Delta;</mo><mi>&mu;</mi></mrow><mi>&sigma;</mi></mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </li>
+            <li><em>R</em> &mdash; the rejection point, which is, in general: &Phi;<sup>-1</sup>(97.5%)</li>
+          </ul>
+          <p>The two sample z-test is of the form:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>Z</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow>
+                      <msub><mover><mi>X</mi><mo>_</mo></mover><mrow><mo>&bull;</mo><mn>1</mn></mrow></msub><mo>-</mo>
+                      <msub><mover><mi>X</mi><mo>_</mo></mover><mrow><mo>&bull;</mo><mn>2</mn></mrow></msub>
+                    </mrow>
+                    <msqrt>
+                      <mfenced><mrow>
+                        <mfrac><mn>1</mn><mi>N</mi></mfrac><mo>+</mo><mfrac><mn>1</mn><mi>N</mi></mfrac>
+                      </mrow></mfenced>
+                      <msup><mi>&sigma;</mi><mn>2</mn></msup>
+                    </msqrt>
+                  </mfrac>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced><msqrt><mfrac><mn>2</mn><mi>N</mi></mfrac></msqrt></mfenced>
+                  <msub><mi>E</mi><mi>s</mi></msub>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The null hypothesis is accepted when:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mfenced open="|" close="|"><mi>Z</mi></mfenced></mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd><mi>R</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>&Phi;</mo><mfenced><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Power then is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mn>1</mn><mo>-</mo><mi>&beta;</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <msup><mo>&Phi;</mo><mn>-1</mn></msup>
+                  <mfenced>
+                    <mrow><msqrt><mfrac><mi>n</mi><mn>2</mn></mfrac></msqrt><msub><mi>E</mi><mi>s</mi></msub><mo>-</mo><mi>R</mi></mrow>
+                  </mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The minimum sample size then is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>n</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced open="&lceil;" close="&rceil;"><mrow>
+                    <mn>2</mn>
+                    <msup>
+                      <mfenced><mfrac>
+                      <mrow>
+                        <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mrow><mn>1</mn><mo>-</mo><mi>&beta;</mi></mrow></mfenced>
+                        <mo>+</mo><mi>R</mi>
+                      </mrow>
+                      <msub><mi>E</mi><mi>s</mi></msub>
+                    </mfrac></mfenced>
+                    <mn>2</mn>
+                    </msup>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced open="&lceil;" close="&rceil;"><mrow>
+                    <mn>2</mn>
+                    <msup>
+                      <mfenced><mfrac>
+                        <mrow>
+                          <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mrow><mn>1</mn><mo>-</mo><mi>&beta;</mi></mrow></mfenced>
+                          <mo>+</mo><msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac></mfenced>
+                        </mrow>
+                        <mrow><mfrac><mrow><mi>&mu;</mi><mo>-</mo><msub><mi>&mu;</mi><mn>0</mn></msub></mrow><mi>&sigma;</mi></mfrac></mrow>
+                      </mfrac></mfenced>
+                      <mn>2</mn>
+                    </msup>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced open="&lceil;" close="&rceil;"><mrow>
+                    <mn>2</mn>
+                    <msup>
+                      <mfenced><mfrac>
+                        <mrow>
+                          <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mn>0.95</mn></mfenced>
+                          <mo>+</mo><msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mn>0.025</mn></mfenced>
+                        </mrow>
+                        <mrow><mfrac><mn>5.0</mn><mn>10</mn></mfrac></mrow>
+                      </mfrac></mfenced>
+                      <mn>2</mn>
+                    </msup>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced open="&lceil;" close="&rceil;"><mrow>
+                    <mn>2</mn>
+                    <msup>
+                      <mfenced><mfrac>
+                        <mrow><mn>1.645</mn><mo>+</mo><mn>1.96</mn></mrow>
+                        <mrow><mn>0.5</mn></mrow>
+                      </mfrac></mfenced>
+                      <mn>2</mn>
+                    </msup>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfenced open="&lceil;" close="&rceil;"><mn>103.968</mn></mfenced></mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>104</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>
+            You wish to test the null hypothesis that the population proportion p is less than or equal to .50, using the version of the Z-statistic that incorporates the null hypothesis in the denominator. You obtain a sample proportion of
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mover><mi>p</mi><mo>&Hat;</mo></mover><mo>=</mo><mn>0.65</mn></math>,
+            based on a sample size of 100. In this case:
+          </p>
+          <table class="answers">
+            <tr><th></th><th>Obtained Value of the Z-statistic</th><th>the null hypothesis is rejected</th></tr>
+            <tr><td></td><td>2.7</td><td>true</td></tr>
+            <tr><td></td><td>2.4</td><td>true</td></tr>
+            <tr class="row3"><td></td><td>3.14485</td><td>false</td></tr>
+            <tr><td></td><td>3.3</td><td>true</td></tr>
+            <tr><td>&check;</td><td>3.0</td><td>true</td></tr>
+            <tr class="row3"><td></td><td>2.4</td><td>false</td></tr>
+            <tr><td></td><td>3.0</td><td>false</td></tr>
+            <tr><td></td><td>3.14485</td><td>true</td></tr>
+          </table>
+        </div>
+        <div class="question">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>Z</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow><mover><mi>p</mi><mo>&Hat;</mo></mover><mo>-</mo><mi>a</mi></mrow>
+                    <msqrt>
+                      <mfrac>
+                        <mrow><mi>a</mi><mfenced><mrow><mn>1</mn><mo>-</mo><mi>a</mi></mrow></mfenced></mrow>
+                        <mi>n</mi>
+                      </mfrac>
+                    </msqrt>
+                  </mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow><mn>0.65</mn><mo>-</mo><mn>0.5</mn></mrow>
+                    <msqrt>
+                      <mfrac>
+                        <mrow><mn>0.5</mn><mfenced><mrow><mn>1</mn><mo>-</mo><mn>0.5</mn></mrow></mfenced></mrow>
+                        <mn>100</mn>
+                      </mfrac>
+                    </msqrt>
+                  </mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow><mn>0.15</mn></mrow>
+                    <mfrac><msqrt><mn>0.25</mn></msqrt><mn>10</mn></mfrac>
+                  </mfrac>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>3</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>So, unless the rejection point was greater than 3 (&Phi;(3) &ape; 99.87%), the hypothesis would be rejected. Another verification of this is to construct the 95% confidence interval:</p>
+          <p>Assuming the distribution is reasonably normal, i.e.:</p>
+          <ul>
+            <li><em>np</em> &gt; .5</li>
+            <li><em>n</em>(1 - <em>p</em>) &gt; .5</li>
+          </ul>
+          <p>Then the confidence interval is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>p</mi></mtd>
+                <mtd><mo>&PlusMinus;</mo></mtd>
+                <mtd>
+                  <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac></mfenced>
+                  <msqrt>
+                    <mfrac>
+                      <mrow><mi>p</mi><mfenced><mrow><mn>1</mn><mo>-</mo><mi>p</mi></mrow></mfenced></mrow>
+                      <mi>n</mi>
+                    </mfrac>
+                  </msqrt>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd><mn>0.5</mn></mtd>
+                <mtd><mo>&PlusMinus;</mo></mtd>
+                <mtd>
+                  <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mi>0.025</mi></mfenced>
+                  <msqrt>
+                    <mfrac>
+                      <mrow><mn>0.65</mn><mfenced><mrow><mn>1</mn><mo>-</mo><mn>0.65</mn></mrow></mfenced></mrow>
+                      <mi>100</mi>
+                    </mfrac>
+                  </msqrt>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd><mn>0.5</mn></mtd>
+                <mtd><mo>&PlusMinus;</mo></mtd>
+                <mtd>
+                  <mn>1.96</mn><mfrac><msqrt><mn>0.2275</mn></msqrt><mi>10</mi></mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd><mn>0.5</mn></mtd>
+                <mtd><mo>&PlusMinus;</mo></mtd>
+                <mtd><mn>0.09349</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+<!-- Don't know if this is true.
+          <p>For a test on proportions, the confidence interval is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>&Sum;</mo><msub><mi>c</mi><mi>i</mi></msub><msub><mi>P</mi><mi>i</mi></msub></mtd>
+                <mtd><mo>&PlusMinus;</mo></mtd>
+                <mtd>
+                  <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mi>&alpha;</mi></mfenced>
+                  <msqrt>
+                    <mo>&Sum;</mo>
+                    <mfrac>
+                      <mrow>
+                        <mrow><msubsup><mi>c</mi><mi>i</mi><mn>2</mn></msubsup><msub><mi>&Pi;</mi><mi>i</mi></msub></mrow>
+                        <mfenced><mrow><mn>1</mn><mo>-</mo><msub><mi>&Pi;</mi><mi>i</mi></msub></mrow></mfenced>
+                      </mrow>
+                      <mi>n</mi>
+                    </mfrac>
+                  </msqrt>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Which can be estimated with?</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>&Sum;</mo><msub><mi>c</mi><mi>i</mi></msub><msub><mi>p</mi><mi>i</mi></msub></mtd>
+                <mtd><mo>&PlusMinus;</mo></mtd>
+                <mtd>
+                  <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mi>&alpha;</mi></mfenced>
+                  <msqrt>
+                    <mo>&Sum;</mo>
+                    <mfrac>
+                      <mrow>
+                        <mrow><msubsup><mi>c</mi><mi>i</mi><mn>2</mn></msubsup><msub><mi>p</mi><mi>i</mi></msub></mrow>
+                        <mfenced><mrow><mn>1</mn><mo>-</mo><msub><mi>p</mi><mi>i</mi></msub></mrow></mfenced>
+                      </mrow>
+                      <mi>n</mi>
+                    </mfrac>
+                  </msqrt>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+-->
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>
+            You wish to perform a 2-sample matched sample t-test of equality of means on a group of <em>N</em> = 91 people who were all measured on 2 occasions. Unfortunately, you do not have the raw data, i.e., two columns of scores representing the repeated measurements. However, you do have the mean difference,
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <msub><mover><mi>X</mi><mo>_</mo></mover><mrow><mo>&bull;</mo><mn>1</mn></mrow></msub><mo>-</mo>
+              <msub><mover><mi>X</mi><mo>_</mo></mover><mrow><mo>&bull;</mo><mn>2</mn></mrow></msub><mo>=</mo><mn>10.0</mn>
+            </math>.
+            You also have the variances at time 1 and time 2, and the covariance between the two columns of numbers. These are
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <msubsup><mi>s</mi><mn>1</mn><mn>2</mn></msubsup><mo>=</mo><mn>100</mn>
+            </math>,
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <msubsup><mi>s</mi><mn>2</mn><mn>2</mn></msubsup><mo>=</mo><mn>144</mn>
+            </math>
+            and
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <msub><mi>s</mi><mfenced open="" close=""><mn>1</mn><mn>2</mn></mfenced></msub><mo>=</mo><mn>29.0</mn>
+            </math>.
+            Using your knowledge of linear combinations, use this information to compute the variance of the difference scores,
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <msubsup><mi>s</mi><mi>D</mi><mn>2</mn></msubsup>
+            </math>,
+            and then compute the matched sample t statistic. In this case, you obtain:
+          </p>
+          <table class="answers">
+            <tr><th></th><th>T-Statistic Value</th><th>Degrees of Freedom</th><th>Critical Value of the t Distribution with &alpha; = 0.05</th></tr>
+            <tr><td></td><td>7.69408</td><td>90</td><td>1.98667</td></tr>
+            <tr><td></td><td>6.99462</td><td>90</td><td>1.66196</td></tr>
+            <tr class="row3"><td></td><td>0.512871</td><td>90</td><td>1.98667</td></tr>
+            <tr><td>&check;</td><td>6.99462</td><td>90</td><td>1.98667</td></tr>
+            <tr><td></td><td>6.50581</td><td>90</td><td>1.98667</td></tr>
+            <tr class="row3"><td></td><td>5.4893</td><td>90</td><td>1.98667</td></tr>
+            <tr><td></td><td>6.99462</td><td>91</td><td>1.98638</td></tr>
+            <tr><td></td><td>6.29516</td><td>90</td><td>1.98667</td></tr>
+          </table>
+        </div>
+        <div class="answer">
+          <p>In general:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msubsup><mi>&sigma;</mi><mrow><mi>a</mi><mi>x</mi><mo>+</mo><mi>b</mi><mi>y</mi></mrow><mn>2</mn></msubsup></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <msup><mi>a</mi><mn>2</mn></msup><msubsup><mi>&sigma;</mi><mi>x</mi><mn>2</mn></msubsup>
+                  <mo>+</mo>
+                  <msup><mi>b</mi><mn>2</mn></msup><msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup>
+                  <mo>+</mo>
+                  <mn>2</mn><mi>a</mi><mi>b</mi><msub><mi>&sigma;</mi><mfenced open="" close=""><mi>x</mi><mi>y</mi></mfenced></msub>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>So:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msubsup><mi>S</mi><mi>D</mi><mn>2</mn></msubsup></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <msubsup><mi>S</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo>
+                  <msubsup><mi>S</mi><mn>2</mn><mn>2</mn></msubsup><mo>-</mo>
+                  <mfenced><mn>2</mn></mfenced><msub><mi>S</mi><mfenced open="" close=""><mi>x</mi><mi>y</mi></mfenced></msub>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>100</mn><mo>+</mo><mn>144</mn><mo>-</mo><mn>2</mn><mfenced><mn>29</mn></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>186</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The appropriate t-statistic then is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>t</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow>
+                    <mover><msub><mi>x</mi><mn>1</mn></msub><mo>_</mo></mover><mo>-</mo>
+                    <mover><msub><mi>x</mi><mn>2</mn></msub><mo>_</mo></mover>
+                  </mrow>
+                  <msqrt><mfrac><msubsup><mi>S</mi><mi>D</mi><mn>2</mn></msubsup><mi>n</mi></mfrac></msqrt>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>&Delta;</mo><mover><mi>x</mi><mo>_</mo></mover></mrow>
+                  <msqrt><mfrac><msubsup><mi>S</mi><mi>D</mi><mn>2</mn></msubsup><mi>n</mi></mfrac></msqrt>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mn>10</mn><msqrt><mfrac><mn>186</mn><mn>91</mn></mfrac></msqrt></mfrac></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>6.99462</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <p>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <msub><mi>t</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></msub>
+              <mo>=</mo><msub><mi>t</mi><mn>90</mn></msub>
+            </math>
+            has 90 degrees of freedom and a value that is looked up in a t-test table.
+          </p>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>You perform an experiment design to test whether a persuasive message can effectively change opinion on a political issue. You measure a group of people on two occasions, and use McNemar’s Z-test to assess the null hypothesis that p<sub>1</sub> = p<sub>2</sub>, where p<sub>1</sub> and p<sub>2</sub> are the proportions of people who said "yes" to the pollster on the two occasions. The data are summarized in a 2 &times; 2 table, where n<sub>10</sub> is the number of people who said "yes" at time 1 but "no" at time 2, n<sub>01</sub> is the number of people who said "no" at time 1 and "yes" at time 2. Suppose we have n<sub>01</sub> = 70 and n<sub>10</sub> = 44. The absolute value of the Z-statistic is:</p>
+          <ol>
+            <li>2.11271</li>
+            <li>22.3572</li>
+            <li>44.7145</li>
+            <li>2.19161</li>
+            <li>2.73002</li>
+            <li>2.67864</li>
+            <li>0.22807</li>
+            <li>2.43512 &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>Z</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow>
+                    <msub><mi>n</mi><mrow><mn>1</mn><mn>0</mn></mrow></msub><mo>-</mo>
+                    <msub><mi>n</mi><mrow><mn>0</mn><mn>1</mn></mrow></msub>
+                  </mrow>
+                  <msqrt>
+                    <mrow>
+                      <msub><mi>n</mi><mrow><mn>1</mn><mn>0</mn></mrow></msub><mo>+</mo>
+                      <msub><mi>n</mi><mrow><mn>0</mn><mn>1</mn></mrow></msub>
+                    </mrow>
+                  </msqrt>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mn>44</mn><mo>-</mo><mn>70</mn></mrow>
+                  <msqrt><mn>44</mn><mo>+</mo><mn>70</mn></msqrt>
+                </mfrac></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>-2.4351</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mfenced open="|" close="|"><mi>Z</mi></mfenced></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>2.4351</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>You observe a sample correlation of 0.46 based on a sample of N = 60.0 independent observations from a bivariate normal distribution. You test the hypothesis that &rho; = 0 using the t-statistic. You calculate:</p>
+          <table class="answers">
+            <tr><th></th><th>Value of t</th><th>Degrees of Freedom</th></tr>
+            <tr><td></td><td>3.94547</td><td>59</td></tr>
+            <tr><td></td><td>4.34001</td><td>59</td></tr>
+            <tr class="row3"><td></td><td>3.55092</td><td>58</td></tr>
+            <tr><td></td><td>4.67932</td><td>58</td></tr>
+            <tr><td></td><td>4.34001</td><td>58</td></tr>
+            <tr class="row3"><td>&check;</td><td>3.94547</td><td>58</td></tr>
+            <tr><td></td><td>3.59432</td><td>58</td></tr>
+            <tr><td></td><td>3.94547</td><td>60</td></tr>
+          </table>
+        </div>
+        <div class="answer">
+          <p>For H<sub>0</sub>: &rho; = 0 there is a special form of the test:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>t</mi><mrow><mi>n</mi><mo>-</mo><mn>2</mn></mrow></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msub><mi>t</mi><mn>58</mn></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mi>r</mi>
+                  <msqrt><mfrac>
+                    <mrow><mn>1</mn><mo>-</mo><msup><mi>r</mi><mn>2</mn></msup></mrow>
+                    <mrow><mi>n</mi><mo>-</mo><mn>2</mn></mrow>
+                  </mfrac></msqrt>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mn>0.46</mn>
+                  <msqrt><mfrac>
+                    <mrow><mn>1</mn><mo>-</mo><msup><mn>.46</mn><mn>2</mn></msup></mrow>
+                    <mrow><mn>60</mn><mo>-</mo><mn>2</mn></mrow>
+                  </mfrac></msqrt>
+                </mfrac></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>3.94547</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>You test the hypothesis that &rho; = 0.5 using the Fisher transform. The sample correlation you observe is r = 0.53. The sample size is N = 56. The Z-statistic value is:</p>
+          <ol>
+            <li>0.31417</li>
+            <li>0.228247</li>
+            <li>0.561921</li>
+            <li>0.165573</li>
+            <li>0.297313 &check;</li>
+            <li>0.281050</li>
+            <li>0.442996</li>
+            <li>0.359748</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The Fisher transform is simply:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>&phi;</mo><mfenced><mi>x</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msup><mo>tanh</mo><mn>-1</mn></msup><mfenced><mi>x</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac><mn>1</mn><mn>2</mn></mfrac>
+                  <mo>ln</mo><mfenced><mfrac><mrow><mn>1</mn><mo>+</mo><mi>x</mi></mrow><mrow><mn>1</mn><mo>-</mo><mi>x</mi></mrow></mfrac></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The z-statistic for H<sub>0</sub>: &rho; = a can be computed using:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>Z</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>&phi;</mo><mfenced><mi>r</mi></mfenced><mo>-</mo><mo>&phi;</mo><mfenced><mi>a</mi></mfenced></mrow>
+                  <msqrt><mfrac><mn>1</mn><mrow><mi>n</mi><mo>-</mo><mn>3</mn></mrow></mfrac></msqrt>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>&phi;</mo><mfenced><mn>0.53</mn></mfenced><mo>-</mo><mo>&phi;</mo><mfenced><mn>0.5</mn></mfenced></mrow>
+                  <msqrt><mfrac><mn>1</mn><mrow><mn>56</mn><mo>-</mo><mn>3</mn></mrow></mfrac></msqrt>
+                </mfrac></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>0.29731</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Suppose you have two independent groups of size N = 200. These groups represent random samples from two populations. If 62 people in group 1 and 149 people in group 2 can perform a behavior, construct a 95% confidence interval on p<sub>2</sub> - p<sub>1</sub>, the population difference in the proportions of people who can perform the behavior. The endpoints of the interval are:</p>
+          <ol>
+            <li>0.327913 ; 0.546562</li>
+            <li>0.279343 ; 0.593168</li>
+            <li>0.314036 ; 0.5667</li>
+            <li>0.324614 ; 0.545386</li>
+            <li>0.338117 ; 0.531883</li>
+            <li>0.334851 ; 0.551008</li>
+            <li>0.346924 ; 0.523076 &check;</li>
+            <li>0.346924 ; 0.537076</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The relevant proportions are:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>p</mi><mn>1</mn></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mn>62</mn><mn>200</mn></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>0.31</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>p</mi><mn>2</mn></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mn>149</mn><mn>200</mn></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>0.745</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The confidence interval then is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>p</mi><mn>2</mn></msub><mo>-</mo><msub><mi>p</mi><mn>1</mn></msub></mtd>
+                <mtd><mo>&PlusMinus;</mo></mtd>
+                <mtd>
+                  <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac></mfenced>
+                  <msqrt>
+                    <mfrac>
+                      <mrow><msub><mi>p</mi><mn>1</mn></msub><mfenced><mrow><mn>1</mn><mo>-</mo><msub><mi>p</mi><mn>1</mn></msub></mrow></mfenced></mrow>
+                      <mi>n</mi>
+                    </mfrac>
+                    <mo>+</mo>
+                    <mfrac>
+                      <mrow><msub><mi>p</mi><mn>2</mn></msub><mfenced><mrow><mn>1</mn><mo>-</mo><msub><mi>p</mi><mn>2</mn></msub></mrow></mfenced></mrow>
+                      <mi>n</mi>
+                    </mfrac>
+                  </msqrt>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mn>.745</mn><mo>-</mo><mn>0.31</mn></mtd>
+                <mtd><mo>&PlusMinus;</mo></mtd>
+                <mtd>
+                  <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mfrac><mn>0.05</mn><mn>2</mn></mfrac></mfenced>
+                  <msqrt>
+                    <mfrac><mrow><mn>0.31</mn><mfenced><mrow><mn>1</mn><mo>-</mo><mn>0.31</mn></mrow></mfenced></mrow><mn>200</mn></mfrac>
+                    <mo>+</mo>
+                    <mfrac><mrow><mn>0.745</mn><mfenced><mrow><mn>1</mn><mo>-</mo><mn>0.745</mn></mrow></mfenced></mrow><mn>200</mn></mfrac>
+                  </msqrt>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mn>.435</mn></mtd>
+                <mtd><mo>&PlusMinus;</mo></mtd>
+                <mtd>
+                  <mn>1.96</mn><msqrt><mfrac><mn>0.2139</mn><mn>200</mn></mfrac><mo>+</mo><mfrac><mn>0.189975</mn><mn>200</mn></mfrac></msqrt>
+                </mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>0.088077</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Suppose you obtain random samples of N<sub>1</sub> = 70 males and N<sub>2</sub> = 51 females, and obtain a correlation r<sub>1</sub> = 0.54 between two variables of for the male participants, and r<sub>2</sub> = .40 for the famale participants. If you test the null hypothesis with the standard Z-statistic, what value should you obtain?</p>
+          <ol>
+            <li>1.80411</li>
+            <li>0.902344</li>
+            <li>1.15502</li>
+            <li>1.42229</li>
+            <li>0.732814</li>
+            <li>1.00868</li>
+            <li>0.531593</li>
+            <li>0.954558 &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>Z</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow>
+                    <mo>&phi;</mo><mfenced><msub><mi>r</mi><mn>1</mn></msub></mfenced><mo>-</mo>
+                    <mo>&phi;</mo><mfenced><msub><mi>r</mi><mn>2</mn></msub></mfenced>
+                  </mrow>
+                  <msqrt>
+                    <mfrac><mn>1</mn><mrow><msub><mi>n</mi><mn>1</mn></msub><mo>-</mo><mn>3</mn></mrow></mfrac><mo>+</mo>
+                    <mfrac><mn>1</mn><mrow><msub><mi>n</mi><mn>2</mn></msub><mo>-</mo><mn>3</mn></mrow></mfrac>
+                  </msqrt>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>&phi;</mo><mfenced><mn>0.54</mn></mfenced><mo>-</mo><mo>&phi;</mo><mfenced><mn>0.4</mn></mfenced></mrow>
+                  <msqrt>
+                    <mfrac><mn>1</mn><mrow><mn>70</mn><mo>-</mo><mn>3</mn></mrow></mfrac><mo>+</mo>
+                    <mfrac><mn>1</mn><mrow><mn>51</mn><mo>-</mo><mn>3</mn></mrow></mfrac>
+                  </msqrt>
+                </mfrac></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>0.954558</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Suppose you obtain a random samples of N = 74 individuals, and obtain a correlation r = 0.53 between two variables. Suppose you construct a 90% confidence interval for the population correlation. What are the endpoints of the confidence interval?</p>
+          <ol>
+            <li>0.340001 ; 0.710460</li>
+            <li>0.362537 ; 0.690787</li>
+            <li>0.375609 ; 0.655769 &check;</li>
+            <li>0.300487 ; 0.918076</li>
+            <li>0.195316 ; 0.685213</li>
+            <li>0.357579 ; 0.685213</li>
+            <li>0.302440 ; 0.743642</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The confidence interval on &phi;(<em>r</em>) is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>&phi;</mo><mfenced><mi>r</mi></mfenced></mtd>
+                <mtd><mo>&PlusMinus;</mo></mtd>
+                <mtd>
+                  <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac></mfenced>
+                  <msqrt><mfrac><mn>1</mn><mrow><mi>n</mi><mo>-</mo><mn>3</mn></mrow></mfrac></msqrt>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The confidince interval on <em>r</em> then is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <msup><mo>&phi;</mo><mn>-1</mn></msup>
+                  <mfenced><mrow>
+                    <mo>&phi;</mo><mfenced><mi>r</mi></mfenced><mo>-</mo>
+                    <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac></mfenced>
+                    <msqrt><mfrac><mn>1</mn><mrow><mi>n</mi><mo>-</mo><mn>3</mn></mrow></mfrac></msqrt>
+                  </mrow></mfenced>
+                </mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd><mi>r</mi></mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd>
+                  <msup><mo>&phi;</mo><mn>-1</mn></msup>
+                  <mfenced><mrow>
+                    <mo>&phi;</mo><mfenced><mi>r</mi></mfenced><mo>+</mo>
+                    <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac></mfenced>
+                    <msqrt><mfrac><mn>1</mn><mrow><mi>n</mi><mo>-</mo><mn>3</mn></mrow></mfrac></msqrt>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mn>0.375594</mn></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <msup><mo>&phi;</mo><mn>-1</mn></msup>
+                  <mfenced><mrow>
+                    <mo>&phi;</mo><mfenced><mn>0.53</mn></mfenced><mo>-</mo>
+                    <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mfrac><mn>0.1</mn><mn>2</mn></mfrac></mfenced>
+                    <msqrt><mfrac><mn>1</mn><mrow><mn>74</mn><mo>-</mo><mn>3</mn></mrow></mfrac></msqrt>
+                  </mrow></mfenced>
+                </mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd><mn>0.53</mn></mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd>
+                  <msup><mo>&phi;</mo><mn>-1</mn></msup>
+                  <mfenced><mrow>
+                    <mo>&phi;</mo><mfenced><mn>0.53</mn></mfenced><mo>+</mo>
+                    <msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mfrac><mn>0.1</mn><mn>2</mn></mfrac></mfenced>
+                    <msqrt><mfrac><mn>1</mn><mrow><mn>74</mn><mo>-</mo><mn>3</mn></mrow></mfrac></msqrt>
+                  </mrow></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>0.655779</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>The standard F-test for comparing two variances for equality:</p>
+          <ol>
+            <li>is robust to non-normality</li>
+            <li>is a one-tailed test</li>
+            <li>has high power</li>
+            <li>None of the above is correct &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Suppose X has a
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <msubsup><mi>&chi;</mi><mn>8</mn><mn>2</mn></msubsup>
+          </math>
+          distribution. What is the variance of X?</p>
+          <ol>
+            <li>4</li>
+            <li>16 &check;</li>
+            <li>13</li>
+            <li>9</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>
+            For a chi-square distribution,
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><msubsup><mi>&chi;</mi><mi>&nu;</mi><mn>2</mn></msubsup></math>,
+            with &nu; degrees of freedom:
+          </p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd><mo>E</mo><mfenced><msubsup><mi>&chi;</mi><mi>&nu;</mi><mn>2</mn></msubsup></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mi>&nu;</mi></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd><mo>Var</mo><mfenced><msubsup><mi>&chi;</mi><mi>&nu;</mi><mn>2</mn></msubsup></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>2</mn><mi>&nu;</mi></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Suppose you take a sample of size 48, and observe a sample variance of 60. The endpoints for the 95% confidence interval on &sigma;<sup>2</sup> are:</p>
+          <ol>
+            <li>41.5803 ; 94.1375 &check;</li>
+            <li>50.0 ; 70.0</li>
+            <li>42.4649 ; 96.1404</li>
+            <li>44.1916 ; 87.0141</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd><mfrac>
+                  <mrow><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced><msup><mi>S</mi><mn>2</mn></msup></mrow>
+                  <mmultiscripts>
+                    <mi>&chi;</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow><mn>2</mn>
+                    <mprescripts/><mrow><mn>1</mn><mo>-</mo><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac></mrow><none/>
+                  </mmultiscripts>
+                </mfrac></mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd><msup><mi>&sigma;</mi><mn>2</mn></msup></mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced><msup><mi>S</mi><mn>2</mn></msup></mrow>
+                  <mmultiscripts>
+                    <mi>&chi;</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow><mn>2</mn>
+                    <mprescripts/><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac><none/>
+                  </mmultiscripts>
+                </mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The values for &chi;<sup>2</sup> are looked up in a <a href="chi_square_table.html">table</a>.</p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>
+            You obtain samples of size N<sub>1</sub> = 30 and N<sub>2</sub> = 40, and observe sample variances of 127 and 29. Test the null hypothesis H<sub>0</sub>:
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <msubsup><mi>&sigma;</mi><mn>1</mn><mn>2</mn></msubsup><mo>=</mo><msubsup><mi>&sigma;</mi><mn>1</mn><mn>2</mn></msubsup>
+            </math>
+            using the standard F statistic. The results are:
+          </p>
+          <table class="answers">
+            <tr><th></th><th>Test Statistic Value</th><th>Degrees of Freedom - 1</th><th>Degrees of Freedom - 2</th><th>Null Hypothesis</th></tr>
+            <tr><td></td><td>4.37931</td><td>29</td><td>39</td><td>not rejected</td></tr>
+            <tr><td></td><td>4.37931</td><td>30</td><td>40</td><td>not rejected</td></tr>
+            <tr class="row3"><td></td><td>5.37931</td><td>30</td><td>40</td><td>not rejected</td></tr>
+            <tr><td>&check;</td><td>4.37931</td><td>29</td><td>39</td><td>rejected</td></tr>
+            <tr><td></td><td>4.37931</td><td>30</td><td>40</td><td>rejected</td></tr>
+            <tr><td></td><td>3.37931</td><td>29</td><td>39</td><td>rejected</td></tr>
+          </table>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>When N = 12, and the sample is independent and random from a normal distribution with standard deviation 41.0, the sample standard deviation S has an expected value of 40.0889. We know that the expected value of S<sup>2</sup> is &sigma;<sup>2</sup> , i.e., 1681.0. Using this information, and a well known formula for the variance of a random variable, the sampling variance of S is:</p>
+          <ol>
+            <li>82.9683</li>
+            <li>59.1048</li>
+            <li>56.8884</li>
+            <li>73.8810 &check;</li>
+            <li>104.320</li>
+          </ol>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Suppose you know the population variance, and it is &sigma;<sup>2</sup> = 182. You take 3 samples from the (normally distributed) populations, and all of them are of size N = 11. The sample means are 18.63, 21.82, and 33.27. Compute a chi-square statistic for testing the null hypothesis that all 3 populations have the same mean. The value of the statistic is:</p>
+          <table class="answers">
+            <tr><th></th><th>&chi;<sup>2</sup></th><th>Degrees of Freedom</th></tr>
+            <tr><td>&check;</td><td>7.16427</td><td>2</td></tr>
+            <tr><td></td><td>35.8213</td><td>3</td></tr>
+            <tr class="row3"><td></td><td>35.8213</td><td>2</td></tr>
+            <tr><td></td><td>7.16427</td><td>3</td></tr>
+            <tr><td></td><td>7.16427</td><td>30</td></tr>
+          </table>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Suppose you sample N = 43 independent observations from a normal distribution, and observe a sample variance of S<sup>2</sup> = 220.2. You test the null hypothesis that &sigma;<sup>2</sup> = 100 with &alpha; =. 05.</p>
+          <table class="answers">
+            <tr><th></th><th>Observed Value of the &chi;<sup>2</sup> Statistic</th><th>Degrees of Freedom</th><th>Critical Value of the Test Statistic</th></tr>
+            <tr><td></td><td>94.686</td><td>42.0</td><td>58.124</td></tr>
+            <tr><td>&check;</td><td>92.484</td><td>42.0</td><td>61.7768</td></tr>
+            <tr class="row3"><td></td><td>101.732</td><td>42.0</td><td>61.7768</td></tr>
+            <tr><td></td><td>92.484</td><td>42.0</td><td>59.3035</td></tr>
+            <tr><td></td><td>92.484</td><td>43.0</td><td>61.7768</td></tr>
+            <tr><td></td><td>184.968</td><td>42.0</td><td>61.7768</td></tr>
+          </table>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>You have the following data from 3 groups:</p>
+          <table>
+            <tr><th></th><th>Group 1</th><th>Group 2</th><th>Group 3</th></tr>
+            <tr><th>Mean</th><td>11</td><td>37</td><td>48</td></tr>
+            <tr><th>Variance</th><td>257</td><td>287</td><td>299</td></tr>
+            <tr><th>Sample Size (N)</th><td>18</td><td>18</td><td>18</td></tr>
+          </table>
+          <p>You perform a 1-Way Analysis of variance. You obtain the following results:</p>
+          <table class="answers">
+            <tr>
+              <th></th><th>F-statistic</th><th>Degrees of Freedom (numerator)</th>
+              <th>Degrees of Freedom (denominator)</th><th>Critical Value from the F distribution with &alpha; =. 05</th>
+            </tr>
+            <tr><td>&check;</td><td>23.1246</td><td>2</td><td>51</td><td>3.17880</td></tr>
+            <tr><td></td><td>23.1246</td><td>2</td><td>51</td><td>2.78623</td></tr>
+            <tr class="row3"><td></td><td>23.1246</td><td>3</td><td>51</td><td>3.17880</td></tr>
+            <tr><td></td><td>27.9807</td><td>2</td><td>51</td><td>3.17880</td></tr>
+            <tr><td></td><td>34.6868</td><td>2</td><td>51</td><td>3.17880</td></tr>
+            <tr class="row3"><td></td><td>20.8121</td><td>3</td><td>51</td><td>3.17880</td></tr>
+            <tr><td></td><td>34.6868</td><td>3</td><td>51</td><td>3.17880</td></tr>
+            <tr><td></td><td>25.437</td><td>2</td><td>51</td><td>3.17880</td></tr>
+          </table>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>You observe the following results for 3 independent groups. You compute the 1-Way ANOVA for unequal N. The test is performed with &alpha; = .05.</p>
+          <table>
+            <tr><th>Group 1</th><th>Group 2</th><th>Group 3</th></tr>
+            <tr><td>4</td><td>1</td><td>5</td></tr>
+            <tr><td>11</td><td>7</td><td>12</td></tr>
+            <tr><td>7</td><td>3</td><td>15</td></tr>
+            <tr><td></td><td>3</td><td>9</td></tr>
+            <tr><td></td><td></td><td>16</td></tr>
+          </table>
+          <table class="answers">
+            <tr>
+              <th></th><th>SS<sub>between</sub></th><th>SS<sub>within</sub></th>
+              <th>df<sub>between</sub></th><th>df<sub>within</sub></th>
+              <th>SS<sub>between</sub></th><th>SS<sub>within</sub></th>
+              <th>F<sub>observed</sub></th><th>F<sub>critical</sub></th>
+            </tr>
+            <tr><td>&check;</td><td>139.383</td><td>124.867</td><td>2</td><td>9</td><td>69.6917</td><td>13.8741</td><td>5.02316</td><td>4.25649</td></tr>
+            <tr><td></td><td>139.383</td><td>129.867</td><td>2</td><td>9</td><td>69.6917</td><td>13.8741</td><td>5.52547</td><td>4.25649</td></tr>
+            <tr class="row3"><td></td><td>135.383</td><td>124.867</td><td>2</td><td>9</td><td>69.6917</td><td>13.8741</td><td>5.02316</td><td>4.25649</td></tr>
+            <tr><td></td><td>139.383</td><td>124.867</td><td>2</td><td>9</td><td>69.6917</td><td>13.8741</td><td>5.02316</td><td>5.71471</td></tr>
+            <tr><td></td><td>139.383</td><td>124.867</td><td>2</td><td>9</td><td>69.6917</td><td>8.91905</td><td>5.02316</td><td>4.25649</td></tr>
+            <tr class="row3"><td></td><td>139.383</td><td>124.867</td><td>2</td><td>9</td><td>69.6917</td><td>13.8741</td><td>5.02316</td><td>8.02152</td></tr>
+            <tr><td></td><td>139.383</td><td>124.867</td><td>2</td><td>9</td><td>46.4611</td><td>13.8741</td><td>5.02316</td><td>4.25649</td></tr>
+            <tr><td></td><td>139.383</td><td>124.867</td><td>2</td><td>9</td><td>69.6917</td><td>13.8741</td><td>1.11626</td><td>4.25649</td></tr>
+          </table>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Suppose statistic A has a &chi;<sup>2</sup> distribution with 90 degrees of freedom, and statistic B has a &chi;<sup>2</sup> distribution with 93 degrees of freedom. If A and B are independent, then what is the distribution of A/B?</p>
+          <ol>
+            <li>A &chi;<sup>2</sup> with 183 degrees of freedom</li>
+            <li>8370 times an F<sub>90,93</sub> distribution</li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>30</mn><mn>31</mn></mfrac></math>
+              times an F<sub>93,90</sub> distribution
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>30</mn><mn>31</mn></mfrac></math>
+              times an F<sub>90,93</sub> distribution
+              &check;
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>31</mn><mn>30</mn></mfrac></math>
+              times an F<sub>90,93</sub> distribution
+            </li>
+          </ol>
+      </div>
+      </li>
+    </ol>
+  </body>
+</html>

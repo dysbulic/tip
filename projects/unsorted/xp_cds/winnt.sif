@@ -1,0 +1,372 @@
+; This file is used for performing an unattended install of Windows XP
+; This reference came from: http://unattended.msfn.org/global/reference.htm
+
+[Data]
+
+; If you have the selection on 1 then Windows Setup will install the
+; OS on any free partition that is available. If you remove this line
+; or if you put AutoPartition=0 then setup will ask you on which
+; partition you wish to install Windows onto and advises you what to
+; do if your partition already contains an OS.
+
+; AutoPartition = 1
+
+; If this setting is on "0" it will inform Setup that you are
+; installing from CD, put a value of 1 if you use only diskettes to
+; boot.
+
+MsDosInitiated = 0
+
+; If "Yes" is input, this will tell Setup you are running an
+; installation of the Unattended type.
+
+UnattendedInstall = yes
+
+; This entry tells Setup to skip the Help Protect Your PC page that
+; appears when setup is finished. (New in SP2).
+
+AutomaticUpdates = yes
+
+[Unattended]
+
+; Setting this option to FullUnattended will perform a fully
+; unattended install, which uses the winnt.sif answer file to answer
+; all the Setup questions, you will have no option to change these
+; answers during setup. Other values can be found in the Ref.chm file
+; that was mentioned on the Creating an Answer File page.
+
+UnattendMode = FullUnattended
+
+; Setting this option to Yes will skip the EULA screen which you
+; already read when you used Setup Manager. Setting this option to No
+; will mean you have to press F8 on the keyboard to accept the license
+; during text-mode Setup.
+
+OemSkipEula = yes
+
+; This option is default to No but if you are using the $OEM$
+; Distribution folders then it needs to be set to Yes, so that Setup
+; regards this installation as a distribution and copies these files
+; over to the system drive. This occurs at the end of Text-mode Setup.
+
+OemPreinstall = yes
+
+; This option tells Setup the directory path that Windows should
+; install to.
+
+TargetPath = \windows
+
+; Specifies whether to delete all partitions on the first drive of the
+; client computer and to reformat the drive with the NTFS file system
+; automatically.
+
+; Repartition = yes
+
+; If you prefer to manually choose a partition during text-mode setup
+; with full control on choice of filesystem, add this entry to your
+; winnt.sif file.
+
+; FileSystem=*
+
+; Specifies whether Setup skips Windows Welcome or Mini-Setup when
+; preinstalling Windows XP Home Edition or Windows XP Professional
+; using the CD Boot method. Set this to yes to skip the "Setting Up
+; Internet Connection" and "Create User Accounts" screens.
+
+UnattendSwitch = yes
+
+; Specifies whether the computer waits 15 seconds after GUI-mode Setup
+; finishes. Choosing No will disable the 15 second wait.
+
+WaitForReboot = no
+
+; This is where you can tell Setup to search your updated drivers
+; directories to find a better match than what's in the existing
+; drivers.cab on the XP CD. If it finds a better match it will install
+; those instead. More is explained on the Drivers page.
+
+; OemPnPDriversPath = "Drivers\Catalyst3_6\2KXP_INF;Drivers\asus\sound\"
+
+; This will force Setup to install drivers that may not be WHQL
+; certified. This is used in conjunction with OemPnPDriversPath.
+
+DriverSigningPolicy = Ignore
+
+; This will auto-activate your copy of Windows XP. To automatically
+; activate Windows XP, you must first establish an Internet
+; connection. Please make sure your ProductKey is valid under
+; [UserData]
+
+; AutoActivate = Yes
+
+; You can change the default location of Program Files using this
+; entry. Replace the drive letter and folder name as appropriate.
+
+; ProgramFilesDir = "C:\Program Files"
+
+; You can change the default location of Common Files in Program Files
+; using this entry. Replace the drive letter and folder names as
+; appropriate.
+
+; CommonProgramFilesDir = "C:\Program Files\Common Files"
+
+; By setting your Keyboard Layout, this prevents the Language icon
+; appearing on the taskbar when you've logged on. A full list of
+; values can be found here.
+
+; KeyboardLayout = "French"
+
+[GuiUnattended]
+
+; This option sets the Administrator password for the Admin account in
+; Windows XP. Setting this option to * means a blank password will be
+; set.
+
+AdminPassword = "pc"
+
+; This option tells Setup if your password is Encrypted or Not, Yes
+; will tell setup it is encrypted and No will tell setup it is not. If
+; you have no Admin password this option should be set to No. Setup
+; Manager will also encrypt the password for you in your winnt.sif
+; answer file if you chose to.
+
+EncryptedAdminPassword = no
+
+; This option when set to 0 will show the regional screen, if set to 1
+; then it will skip the screen.
+
+OEMSkipRegional=1
+
+; This option is tells Setup what timezone to choose, eg. GMT Meantime
+; is 85. Each timezone has a different value - a full listing of these
+; timezone values can be found in ref.chm in the Deployment Tools.
+
+TimeZone = 85
+
+; This option should be set to 0 if you have OemPreinstall from above
+; on No, If OemPreinstall is on Yes then this option should be set to
+; 1, not doing so will halt the OEM process! When set to 0 this tells
+; Setup not to display the welcome screen during the GUI-mode of
+; Windows Setup (Note: This is not the same as "Windows Welcome" where
+; you set a username for your new account when Setup finishes)
+
+OemSkipWelcome = 1
+
+; You can change the default location of Documents and Settings using
+; this entry.
+
+; ProfilesDir = "C:\Documents and Settings\"
+
+; Using this entry will launch this SINGLE line at T-39 before Drivers
+; have begun to install. Many users use this to extract a driver
+; package to save space on their CD.
+
+; DetachedProgram = "%systemdrive%\install\batch.cmd"
+
+; This line accompanies DetachedProgram to pass the command in it
+; parameters, such a a silent switch or similar.
+
+; Arguments = "/s"
+
+[Display]
+
+; This option sets the color quality in bits. Available values are:
+; 32, 24, 16, and 8 (that's 256 colors!)
+
+; BitsPerPel=32
+
+; This options sets the screen resolution that windows will start up
+; in by default. This setting is the X size.
+
+Xresolution=1024
+
+; This options sets the screen resolution that windows will start up
+; in by default. This setting is the Y size.
+
+Yresolution = 768
+
+; This options sets the display's refresh rate. Make sure you do not
+; exceed a number considered unsafe beyond your monitor's
+; specification, doing so may result in damaging your monitor.
+
+; Vrefresh = 85
+
+; This will disable the really annoying box the appears upon first
+; logon if the resolution wasn't properly set. It's the popup that
+; says your current resolution isn't correct for Windows XP.
+
+AutoConfirm = 1
+
+[UserData]
+
+; This option is where you enter your cd-key for Setup to use.
+
+ProductKey = YDYQ7-M37FK-JFFPV-QBPBB-44FDM
+
+; This option is where you can specify your own name, this is
+; displayed under "Registered to:" in Windows XP's System Properties.
+
+FullName = "Mohammed Lemine"
+
+; This option is where you can specify your organisation name, this is
+; also displayed under "Registered to:" in Windows XP's System
+; Properties.
+
+OrgName = "Mauritel Mobiles"
+
+; This option is where you can specify a name for your Computer, which
+; is used system and network-wide. This is displayed in the Computer
+; Name tab in Windows XP's System Properties.
+
+ComputerName = "Ordinateur"
+
+[TapiLocation]
+
+; This is the option where you can specify your country code. For the
+; UK its 44. Please refer to the ref.chm file in the Deployment Tools
+; to get the correct values for other countries.
+
+CountryCode = 222
+
+; This option sets the type of phone line you have. Available values
+; are Tone, and Pulse
+
+; Dialing = Tone
+
+[RegionalSettings]
+
+; This option sets the language group of your installation. Please
+; refer to the ref.chm file in the Deployment Tools for more
+; information.
+;   1: Western Europe and United States
+;   13: Arabic
+
+LanguageGroup = 1, 13
+
+; This option sets the language of your installation. Please refer to
+; the ref.chm file in the Deployment Tools for more information.
+;   040c: French Standard
+;   1801: Arabic Morocco
+;   0409: English United States
+
+Language = 040c
+
+[Identification]
+
+; This option is specifies what workgroup you wish to join. If you
+; don't use a network, then you can leave this part alone.
+
+JoinWorkgroup = WINDOWS
+
+[Networking]
+
+; This option tells Setup if you want to install the default
+; components for networking. If you select Yes then the default will
+; be installed, If you select No then you can specify what protocols,
+; services and clients to install and what not to. The best way to
+; configure this is via Setup Manager (setupmgr.exe)
+
+InstallDefaultComponents = yes
+
+[Components]
+
+; This option tells Setup not to install Windows Messenger 4.6
+
+msmsgs = off
+
+; This option tells Setup not to install MSN Explorer 7.
+
+msnexplr = off
+
+; This option tells Setup not to install the games.
+
+; freecell = off
+; hearts = off
+; minesweeper = off
+; pinball = off
+; solitaire = off
+; spider = off
+
+; This option tells Setup not to install the MSN Zone Games.
+
+zonegames = off
+
+; For a full list of components, you can view them at:
+; http://unattended.msfn.org/global/components_list.txt
+
+[Shell]
+
+; This option sets the default theme that windows will use, this can
+; be a custom theme or another default theme included with Windows XP.
+; This will mean that XP will not boot up using the default Luna
+; theme, but with a theme you set in this option.
+
+; CustomDefaultThemeFile = "%WinDir%\Resources\Themes\MyTheme.theme"
+
+; This tells Windows XP to use the Classic Start Menu, and displays
+; the My Computer, My Documents icons as well as others on the Windows
+; Desktop. If set to No, then the default Windows XP Start Menu is
+; used.
+
+DefaultStartPanelOff = yes
+
+; This tells Windows XP to use the Classic Theme. Note: This option
+; overrides CustomDefaultThemeFile option when set to Yes.
+
+DefaultThemesOff = yes
+
+[GuiRunOnce]
+
+; The GuiRunOnce section is where you set the paths to batch files
+; that run when Windows XP Setup has finished. These batch files run
+; when the Admin account (or your own user account) is logged in.
+
+"%ProgramFiles%\GMC Postinstall\gmc postinstall.exe"
+
+[IEPopupBlocker]
+
+; This adds sites to the IE Popup Blocker's allowed sites list. Any
+; number of web addresses can be added to AllowedSites, as long as
+; they are seperated with a semi-colon.
+
+AllowedSites = www.msfn.org;www.amazon.com
+
+; The Pop-up Blocker is enabled by default.
+
+BlockPopups = yes
+
+; FilterLevel accepts either of the three options, those are High,
+; Medium and Low:
+;    * High - Blocks all pop-ups
+;    * Medium - Blocks most automatic pop-ups (Default Setting)
+;    * Low - Allows pop-ups from secure sites
+
+FilterLevel = medium
+
+; ShowInformationBar accepts either Yes or No. The Information Bar
+; appears under the Address Bar whenever a pop-up or an attempted
+; Active-X Control installation is blocked. This is enabled by
+; default.
+
+ShowInformationBar = yes
+
+[WindowsFirewall]
+
+; Profiles = WindowsFirewall.TurnOffFirewall
+
+[WindowsFirewall.TurnOffFirewall]
+
+; The above entries disables the Windows Firewall completely. If you
+; want to leave the Windows Firewall enabled but also want to preset
+; the settings, check ref.chm under Unattended.txt > [WindowsFirewall]
+; for more information as it is too large to cover here.
+
+; Mode = 0
+
+[SetupParams]
+
+; The above will execute the quotes command at T-9 during setup. This
+; maybe useful for a cleanup process or anything else you may have to
+; accomplish later.
+
+' UserExecute = ""

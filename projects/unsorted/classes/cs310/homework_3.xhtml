@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-310 Homework #3</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math { margin-top: .75em; }
+      .title { font-variant: small-caps; }
+      object { width: 100%; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 310: Design and Analysis of Algorithms</h1>
+      <h2>Homework #3</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 13:10 Mon., 11 February 2008</h2>
+    </div>
+    <blockquote><p>All work should be done on your own. If you discuss this assignment in any way with anyone else, or find help for getting the answer from any source, you must state so clearly at the top of your submission. There should be no working together except to understand the question.</p></blockquote>
+    <ol>
+      <li id="1">
+        <div class="question">
+          <p>A completely different measurement for <span class="title">union-find</span> algorithms is to measure the maximum number of collapsing <span class="title">find</span>s (i.e. <span class="title">find</span> operations that change the parent of a node) on a universe of <em>n</em> elements can occur before the tree is of height 1. Note that this allows the interspersing of <span class="title">union</span> and <span class="title">find</span> operations.</p>
+        </div>
+        <div class="answer">
+          <p><span class="title">Union-Find</span> is an algorithm for managing disjoint subsets of information. For the set of sets, there are two possible operations:</p>
+          <ul>
+            <li><span class="title">Find</span>: Determine the largest set that an element is a member of</li>
+            <li><span class="title">Union</span>: Join two sets together</li>
+          </ul>
+          <p>A reasonably efficient data structure to use for these operations is a set of trees whose leaves are indexed. The root of each tree is the containing set. <span class="title">Find</span> climbs the tree to the root. <span class="title">Union</span> makes one tree a child of another.</p>
+          <p>When <span class="title">Union</span>ing two trees together there is a choice as to which tree to be the parent. Since minimizing overall depth is desirable, the "smaller" tree is chosen. There are two common options for evaluating the size: the number of nodes in the tree and the maximum depth of the tree.</p>
+          <p>A common optimization of tree-based <span class="title">Union-Find</span> is "path compression" wherein while climbing the tree during a <span class="title">find</span>, all intermediate nodes are eliminated by making all the nodes traversed direct children of the root. Because the function of the algorithm is to find the largest containing set, no pertinent information is lost.</p>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Show that if height-based <span class="title">union</span> is used, there is a set of operations which gives &Omega;(<em>n</em><sup>2</sup>) collapsing <span class="title">find</span>s before the tree is of height 1.</p>
+            </div>
+            <div class="answer">
+              <p><em>Note: The first attempt at answering this failed and after discussion with Jeff Green on the fact there are series of <span class="title">union</span>s and <span class="title">find</span>s such that elements must be searched multiple times to have a tree of height 1, I came up with the following solution.</em></p>
+              <p>Consider the following progression:</p>
+              <object style="height:250px" id="tree_progression" type="image/svg+xml" data="tree_progression.svg"></object>
+              <p>
+                Each iteration, the collapsed tree (which has a height of one) is made a child of a two node tree (also of height one). The size of the collapsed tree grows by two nodes each time meaning that the iteration will continue
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>n</mi><mn>2</mn></mfrac></math>
+                times. The number of <span class="title">find</span>s accumulated will be:
+              </p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mn>2</mn>
+                      <msubsup>
+                        <mo>&Sum;</mo>
+                        <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                        <mfrac><mrow><mi>n</mi><mo>-</mo><mn>2</mn></mrow><mn>2</mn></mfrac>
+                      </msubsup>
+                      <mrow><mn>2</mn><mi>i</mi><mo>-</mo><mn>3</mn></mrow>
+                    </mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mn>2</mn>
+                      <msubsup>
+                        <mo>&Sum;</mo>
+                        <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                        <mfrac><mi>n</mi><mn>2</mn></mfrac>
+                      </msubsup>
+                      <mrow><mn>2</mn><mi>i</mi></mrow>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>4</mn>
+                      <mfrac>
+                        <mrow>
+                          <mfenced><mrow><mfrac><mi>n</mi><mn>2</mn></mfrac><mo>+</mo><mn>1</mn></mrow></mfenced>
+                          <mfrac><mi>n</mi><mn>2</mn></mfrac>
+                        </mrow>
+                        <mn>2</mn>
+                      </mfrac>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mn>2</mn>
+                      <msup>
+                        <mfenced><mfrac><mi>n</mi><mn>2</mn></mfrac></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><msup><mi>n</mi><mn>2</mn></msup><mn>2</mn></mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mo>&Omega;</mo><mfenced><msup><mi>n</mi><mn>2</mn></msup></mfenced></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li id="2">
+            <div class="question">
+              <p>Show that if size-based <span class="title">union</span> is used, the maximum number of <span class="title">find</span>s before the tree is of height 1 is O(<em>n</em> log <em>n</em>)</p>
+            </div>
+            <div class="answer">
+              <p>For the purpose of this proof, consider a family of iteratively constructed trees of maximum height for a given number of nodes constructed with a size-based <span class="title">union</span>. New trees are only formed as the combination of other trees, so a tree with the minimum number of nodes for given depth must have been formed from two other trees of a minimum number of nodes. Otherwise, there would be another tree with fewer nodes for that depth and the given tree wouldn't be minimal.</p>
+              <p>The simplest class of tree is a single node, t<sub>0</sub>. Two of these trees can be combined into a tree t<sub>1</sub>.</p>
+              <object style="height:60px" id="tree_t1" type="image/svg+xml" data="tree_t1.svg"></object>
+              <p>Two t<sub>1</sub> trees can be joined into a new class of tree, t<sub>2</sub>:</p>
+              <object style="height:100px" id="tree_t2" type="image/svg+xml" data="tree_t2.svg"></object>
+              <p>The same process can then be used to join two t<sub>2</sub> into the class t<sub>3</sub>:</p>
+              <object style="height:150px" id="tree_t3" type="image/svg+xml" data="tree_t3.svg"></object>
+              <p>And so on for t<sub>4</sub>, then t<sub>5</sub>:</p>
+              <object style="height:200px" id="tree_t4" type="image/svg+xml" data="tree_t4.svg"></object>
+              <object style="height:250px" id="tree_t5" type="image/svg+xml" data="tree_t5.svg"></object>
+              <p>Each tree is composed of two of the previous level. Each iteration adds another level to the tree, so the number of nodes in tree t<sub><em>i</em></sub> is 2<sup><em>i</em></sup> and the height of that tree is <em>i</em>. For a given number of nodes <em>n</em>, the largest class of tree that can be constructed is log<sub>2</sub><em>n</em>.</p>
+              <p>Consider then the effect of path compression on a search on the deepest node in a tree of class t<sub>4</sub>:</p>
+              <object style="height:250px" id="tree_t5" type="image/svg+xml" data="tree_t5_compressed.svg"></object>
+              <p>The compressed tree then will be:</p>
+              <object style="height:250px" id="tree_t5" type="image/svg+xml" data="tree_t5_compressed_redraw.svg"></object>
+              <p>Consider the same transition, but with the edges adjacent to the root numbered by the maximum depth that the branch goes to:</p>
+              <object style="height:250px" id="tree_t5" type="image/svg+xml" data="tree_t5_marked.svg"></object>
+              <p>The compressed tree then will be:</p>
+              <object style="height:250px" id="tree_t5" type="image/svg+xml" data="tree_t5_compressed_redraw_marked.svg"></object>
+              <p>Every tree belonging to a class t<sub><em>i</em></sub> will have a single deepest node and will decompose under path compression from that node into a set of trees {t<sub>0</sub>, t<sub>0</sub>, t<sub>1</sub>, &hellip;, t<sub><em>i</em> - 1</sub>} at a find cost of <em>i</em> (since the tree was of height <em>i</em>). So the decomposition cost for a tree is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <msubsup>
+                  <mo>&Sum;</mo>
+                  <mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow>
+                  <mrow><msub><mo>log</mo><mn>2</mn></msub><mi>n</mi></mrow>
+                </msubsup>
+                <msup><mn>2</mn><mi>i</mi></msup>
+                <mfenced><mrow>
+                  <msub><mo>log</mo><mn>2</mn></msub><mfenced><mrow><mi>n</mi><mo>-</mo><mi>i</mi></mrow></mfenced>
+                </mrow></mfenced>
+                <mo>=</mo>
+                <mo>O</mo><mfenced><mrow><msup><mi>log</mi><mn>2</mn></msup><mi>n</mi></mrow></mfenced>
+              </math>
+              <p>
+                When using size-based find each <span class="title">union</span> of size <em>k</em> will join two trees of at worst O(log<sup>2</sup><em>n</em>). There can be at most
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>n</mi><mn>2</mn></mfrac></math>
+                joins.
+              </p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mfrac><mi>n</mi><mn>2</mn></mfrac><msup><mo>log</mo><mn>2</mn></msup><mi>n</mi>
+                <mo>=</mo><mo>O</mo><mfenced><mrow><mi>n</mi><mi>log</mi><mi>n</mi></mrow></mfenced>
+              </math>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li id="3">
+        <div class="question">
+          <p>
+            Consider an alternative approach to the <span class="title">union-find</span> problem. Keep trees of uniform height 2. Each root has between 1 and
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>n</mi><mrow><mo>log</mo><mi>n</mi></mrow></mfrac></math>
+            children. Each child of the root has between 1 and
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>2</mn><mo>log</mo><mi>n</mi></math>
+            children. A child of the root is called "full" if it has &ge;
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>log</mo><mi>n</mi></math>
+            children. Every tree has at most 1 non-full child.
+          </p>
+          <p>To perform <span class="title">union</span>, take the tree with the fewest full children and move its full children to the other tree. Then for the non-full children of each tree, move the children of the non-full child with the lowest degree to the other non-full child. Then move that non-full child to the tree the full nodes were moved to.</p>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Show that the total number of moves of children in non-full nodes is O(<em>n</em> log log <em>n</em>).</p>
+            </div>
+            <div class="answer">
+              <p>
+                For a node with degree <em>k</em>, the maximum number of nodes that could have been moved to form that node is
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>k</mi><mn>2</mn></mfrac></math>.
+                The maximum size at which a node will qualify as non-full and be combined with another node is
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>log</mo><mi>n</mi><mo>-</mo><mn>1</mn></math>.
+                The combination of two of these sets will produce a tree of size
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>2</mn><mo>log</mo><mi>n</mi><mo>-</mo><mn>2</mn></math>.
+                The number of equal size joins to produce a set of size 
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>2</mn><mo>log</mo><mi>n</mi><mo>-</mo><mn>2</mn></math>
+                is
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msub><mo>log</mo><mn>2</mn></msub><mfenced><mrow><mn>2</mn><mo>log</mo><mi>n</mi><mo>-</mo><mn>2</mn></mrow></mfenced>
+                </math>.
+                The number of moves in combining these maximal sets is:
+              </p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mfrac><mi>n</mi><mrow><mn>2</mn><mo>log</mo><mi>n</mi><mo>-</mo><mn>2</mn></mrow></mfrac>
+                      <msubsup>
+                        <mo>&Sum;</mo>
+                        <mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow>
+                        <mrow>
+                          <msub><mo>log</mo><mn>2</mn></msub>
+                          <mfenced><mrow><mn>2</mn><mo>log</mo><mi>n</mi><mo>-</mo><mn>2</mn></mrow></mfenced>
+                        </mrow>
+                      </msubsup>
+                      <msup><mn>2</mn><mi>i</mi></msup>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mo>O</mo><mfenced><mrow><mi>n</mi><mo>log</mo><mo>log</mo><mi>n</mi></mrow></mfenced></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <hr />
+              <p>That is certainly a complicated and kinda questionable method. A better one is to ask, what is the maximum number of times an element can be moved?</p>
+              <p>Each time an element is moved it has to be into a tree of at least as large as the tree it was coming from, so the number of moves is log<em>n</em>. There are <em>n</em> elements, so the number of moves is O(<em>n</em> log <em>n</em>).</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Show that the time taken moving full children is O(<em>n</em>).</p>
+            </div>
+            <div class="answer">
+              <p>This is similar to the previous question except the sets being combined are full sets. Posit there is a scenario for combining full sets when dealing with a maximal number of full sets which has &ge; the cost for any other number of full sets. <em>[ToDo: Prove that.]</em></p>
+              <p>The maximum number of full sets is when each full set has the minimum number of nodes to qualify as full (log<em>n</em>). Elements in a set beyond its fullness could be used in creating other full sets.</p>
+              <p>The maximum number of moves of full sets will occur when the sets being joined are of equal size. This will produce a minimum sized set for a given number of moves. If minimum sized sets are created at each iteration, this will maximize the number of iterations.</p>
+              <p>
+                Non-full sets will have no effect if when combined they result is still non-full. If the result is full then they will produce a less than minimal set for a given number of nodes. For this reason, the worst case will involve combining
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mfrac><mi>n</mi><mrow><mo>log</mo><mi>n</mi></mrow></mfrac>
+                </math>
+                full sets.
+              </p>
+              <p>The total number of moves for combining these sets will be:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mfrac><mi>n</mi><mrow><mo>log</mo><mi>n</mi></mrow></mfrac>
+                      <msubsup>
+                        <mo>&Sum;</mo>
+                        <mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow>
+                        <mrow><msub><mo>log</mo><mn>2</mn></msub><mi>n</mi></mrow>
+                      </msubsup>
+                      <msup><mn>2</mn><mi>i</mi></msup>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mo>O</mo><mfenced><mi>n</mi></mfenced></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </body>
+</html>

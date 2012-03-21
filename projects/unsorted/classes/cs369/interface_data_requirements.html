@@ -1,0 +1,1025 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>HMT Lab Interface Data Requirements</title>
+</head>
+<body>
+
+<h2>Go to X Location where X may be any location, a victim, a bomb, a sampling location (chemical, biological, radiological, etc.), etc.</h2>
+
+<ol>
+ <li>Select Division (may be done when first open program or defaults to last selected division if operator is at a multi-divisional level). &mdash; Results in the list of possible tasks defaulting to a list of division specific tasks and an option to access other non-division specific tasks.</li>
+ <li>Select Task type &mdash; results in automatically filling in the following fields with defaults
+ <ol>
+  <li>Task name</li>
+  <li>Start time &mdash; Now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Leader name &mdash; defaults to last leader name in a single division situation. Defaults to the appropriate leader based upon the selected division when there are multiple divisions for this particular user.</li>
+  <li>(Possible) Robot type &mdash; may be predefined if the particular unit the interface is associated with only has one type of robot (e.g. ground or aerial).</li>
+ </ol>
+ </li>
+ <li>(Optional) Specify the task name</li>
+ <li>(Optional) Specify the task start time</li>
+ <li>(Optional) Specify the interrupt ability.</li>
+ <li>(Optional) Specify the task priority level.</li>
+ <li>(Optional) Specify the leader name.</li>
+ <li>Specify what type of location the robot is to go to where the location type may be: Victim, bomb, Chemical sample, Biological sample, Radiological Sample, Nuclear Sample, rendezvous point, surveillance point, egress/ingress point, any (meaning just go to this point). &mdash; may result in automatically filling in the robot type field
+ <ol>
+  <li>Robot type &mdash; Default may be assigned based upon the location type since some locations will clearly be ground while others will be aerial.</li>
+ </ol>
+ </li>
+ <li>Specify robot type &mdash; aerial, ground, mixed, or any</li>
+ <li>Specify the point on the map:
+ <ol>
+  <li>Select the map interaction button in the task specific area to enable specifying a point.</li>
+  <li>Select the point on the map for the robot to go to and display an appropriate icon, waypoint.</li>
+ </ol>
+ </li>
+ <li>Submit task.</li>
+</ol>
+
+<p>Alternative: Specify task type first</p>
+
+<ol>
+  <li>Select Task type &mdash; results in automatically filling in the following fields with defaults
+  <ol>
+  <li>Task name</li>
+  <li>Start time &mdash; Now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Division &mdash; defaults to last leader name’s division.</li>
+  <li>Leader name &mdash; defaults to last leader name in a single division situation. Defaults to the appropriate leader based upon the selected division when there are multiple divisions for this particular user.</li>
+  <li>(Possible) Robot type &mdash; may be predefined if the particular unit the interface is associated with only has one type of robot (e.g. ground or aerial).</li>
+  </ol>
+  </li>
+ <li>(Optional) Specify the task name</li>
+ <li>(Optional) Specify the Division</li>
+</ol>
+
+<h2>surveillance/search of an assigned area &mdash; either aerial or ground</h2>
+
+<ol>
+ <li>Select Division (may be done when first open program or
+     defaults to last selected division if operator is at a multi-divisional
+     level). &mdash; Results in the list of possible tasks defaulting to a list of
+     division specific tasks and an option to access other non-division
+     specific tasks.</li>
+ <li>Select Task type (aerial surveillance) &mdash; results in
+     automatically filling in the following fields with defaults</li>
+ <ol>
+  <li>Task name </li>
+  <li>Start time &mdash; now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task
+      type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Leader name &mdash; defaults to last leader name in a single
+      division situation. Defaults to the appropriate leader based upon the
+      selected division when there are multiple divisions for this particular
+      user. </li>
+  <li>(Possible) Robot type &mdash; may be predefined if the
+      particular unit the interface is associated with only has one type of
+      robot (e.g. ground or aerial).</li>
+ </ol>
+ <li>(Optional) Specify the task name</li>
+ <li>(Optional) Specify the task start time</li>
+ <li>(Optional) Specify the interrupt ability.</li>
+ <li>(Optional) Specify the task priority level.</li>
+ <li>(Optional) Specify the leader name. </li>
+ <li>Specify surveillance vs. search task. </li>
+ <li>Specify Robot type &mdash; aerial, ground, both, or any</li>
+ <li>Specify area to be covered on map.</li>
+ <ol>
+  <li>Select the map interaction button in the task specific
+      area to enable specifying the area to be searched. </li>
+  <li>Select the required waypoints on the map to define the
+      area. </li>
+ </ol>
+ <li>Specify execution pattern &mdash; random, follow path, etc.</li>
+ <li>Specify Level of Detail (similar to NIIRS) &mdash; General level
+     is a default.</li>
+ <li>(Optional) if the task is a search task, specify the item
+     searching for, e.g. bomb, victims, suspicious items, etc.</li>
+</ol>
+
+<p>&nbsp;</p>
+
+<p>If specify a point to survey and that will default the algorithms for a single point. Similarly the specification of area may also limit the available execution pattern algorithms. May need to also watch a point for things approaching a point.</p>
+
+<p>Alternative: Specify task type first</p>
+
+<p>See Go to Location X</p>
+
+<p>Alternative: Specify coverage area first (Curtis)</p>
+
+<ol>
+ <li>Specify area to be covered on map.</li>
+</ol>
+
+<ol>
+ <ol>
+  <li>Select the map interaction button in the task specific
+      area to enable specifying the area to be searched. </li>
+  <li>Select the required waypoints on the map to define the
+      area. </li>
+ </ol>
+</ol>
+
+<ol>
+ <li>Start at step 1 and continue from above.</li>
+</ol>
+
+<p>&nbsp;</p>
+
+<p>Option: The execution pattern may be chosen from a
+context menu once the user specifies the search area on the map. This could be
+confusing if all the other aspects are chosen in the task specification area.</p>
+
+<p>&nbsp;</p>
+
+<h2>Designation of the ingress/egress points</h2>
+
+<p>&nbsp;</p>
+
+<p>This is not truly a task since if the information has been
+entered by a division chief or someone higher, the information should just
+appear on the interface. However, this information will be communicated
+verbally initially and someone has to enter this information. </p>
+
+<p>&nbsp;</p>
+
+<p>Option 1 (Curtis)</p>
+
+<ol>
+<li>Select from information item à Set ingress/egress</li>
+<li>Select ingress/egress points</li>
+</ol>
+
+<p>Alternative: Simply reverses the steps. </p>
+
+<p>Option 2</p>
+
+<ol>
+ <li>Specify &mdash; Set Ingress/Egress Point
+ <ol>
+  <li>This automatically enables the ability to click on the map and specify the points.</li>
+ </ol>
+ </li>
+ <li>Specify point as Ingress or Egress.</li>
+ <li>Select point on the map.</li>
+</ol>
+
+<h2>Initial Detailed Victim Assessment &mdash; Ground Robots</h2>
+
+<ol>
+ <li>Select Division (may be done when first open program or
+     defaults to last selected division if operator is at a multi-divisional
+     level). &mdash; Results in the list of possible tasks defaulting to a list of
+     division specific tasks and an option to access other non-division
+     specific tasks.</li>
+ <li>Select Task type &mdash; results in automatically filling in the
+     following fields with defaults</li>
+</ol>
+
+<ol>
+  <li>Task name </li>
+  <li>Start time &mdash; Now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task
+      type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Leader name &mdash; defaults to last leader name in a single
+      division situation. Defaults to the appropriate leader based upon the
+      selected division when there are multiple divisions for this particular
+      user. </li>
+ </ol>
+
+<ol>
+ <li>(Optional) Specify the task name</li>
+ <li>(Optional) Specify the task start time</li>
+ <li>(Optional) Specify the interrupt ability.</li>
+ <li>(Optional) Specify the task priority level.</li>
+ <li>(Optional) Specify the leader name. </li>
+ <li>(Optional) Specify victim location &mdash; If the victim has
+     been discovered via the robot’s exploratory tasks, then this information
+     is the robot’s current position, otherwise the user can specify the
+     location on the map. </li>
+ <li>Assign a Victim ID (default value if the robot is at a
+     victim) or assign an area in which to assess all victim that have not been
+     assessed.</li>
+ <li>Level or type assessment </li>
+ <li>Physical contact allowed &mdash; yes or no</li>
+</ol>
+
+
+<p>This task may require the robot to gather
+imagery and use voice to interact with the victim. If the operator is a
+paramedic, then the operator may speak directly with the victim via the robot’s
+speakers. This task is intended to be a close interaction with the victim. </p>
+
+<h2>Bomb Surveillance &mdash; Aerial Robots</h2>
+
+<ol>
+ <li>Select Division (may be done when first open program or
+     defaults to last selected division if operator is at a multi-divisional
+     level). &mdash; Results in the list of possible tasks defaulting to a list of
+     division specific tasks and an option to access other non-division
+     specific tasks.</li>
+ <li>Select Task type &mdash; results in automatically filling in the
+     following fields with defaults</li>
+</ol>
+
+<ol>
+ <ol>
+  <li>Task name </li>
+  <li>Start time &mdash; Now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task
+      type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Leader name &mdash; defaults to last leader name in a single
+      division situation. Defaults to the appropriate leader based upon the
+      selected division when there are multiple divisions for this particular
+      user. </li>
+ </ol>
+</ol>
+
+<ol>
+ <li> (Optional) Specify the task name</li>
+ <li>(Optional) Specify the task start time</li>
+ <li>(Optional) Specify the interrupt ability.</li>
+ <li>(Optional) Specify the task priority level.</li>
+ <li>(Optional) Specify the leader name. </li>
+ <li>(Optional) Specify bomb location &mdash; If the bomb has been
+     discovered via the robot’s exploratory tasks, then this information is the
+     robot’s current position, otherwise the user can specify the location on
+     the map. </li>
+ <li>Specify height-above ground range &mdash; The UAV may have to
+     reduce its height-above ground in order to obtain imagery and other sensor
+     information. Includes Minimum and maximum values. </li>
+ <li>Specify sensor information to be provided &mdash; Default is any
+     but may be imagery, laser scan, etc. </li>
+ <li>Specify viewing angle &mdash; top-down, 360 angled pattern,
+     horizontal angle of attack 35-80, etc.</li>
+ <li>Persistence &mdash; yes or no</li>
+ <li>Bomb ID &mdash; could default if UAV is at the location because
+     of discovery.</li>
+ <li>Level and type of assessment. (How does this differ from
+     HAG, sensor, angle etc?) May be type of bomb (pipe, etc.). </li>
+</ol>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>If specify point to survey, then specify the viewing angle
+pattern to be attained, which may be specified by algorithm type or not.  </p>
+
+<h2>Bomb Surveillance &mdash; Ground Robots</h2>
+
+<ol>
+ <li>Select Division (may be done when first open program or
+     defaults to last selected division if operator is at a multi-divisional
+     level). &mdash; Results in the list of possible tasks defaulting to a list of
+     division specific tasks and an option to access other non-division
+     specific tasks.</li>
+ <li>Select Task type &mdash; results in automatically filling in the
+     following fields with defaults</li>
+</ol>
+
+<ol>
+  <li>Task name </li>
+  <li>Start time &mdash; Now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task
+      type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Leader name &mdash; defaults to last leader name in a single
+      division situation. Defaults to the appropriate leader based upon the
+      selected division when there are multiple divisions for this particular
+      user. </li>
+</ol>
+
+<ol>
+ <li>(Optional) Specify the task name</li>
+ <li>(Optional) Specify the task start time</li>
+ <li>(Optional) Specify the interrupt ability.</li>
+ <li>(Optional) Specify the task priority level.</li>
+ <li>(Optional) Specify the leader name. </li>
+ <li>(Optional) Specify bomb location &mdash; If the bomb has been
+     discovered via the robot’s exploratory tasks, then this information is the
+     robot’s current position, otherwise the user can specify the location on
+     the map. </li>
+ <li>Specify minimum/maximum distance to bomb </li>
+ <li>Specify sensor information to be provided &mdash; Default is any
+     but may be imagery, laser scan, etc. </li>
+ <li>Specify the robots’ position (correct word?) &mdash; Stationary
+     vs. moving (circling) the bomb.</li>
+ <li>Specify viewing angle &mdash; top-down (assuming robots exist
+     with this capability), side view, 360 degrees, etc. </li>
+ <li>Persistence &mdash; yes or no</li>
+ <li>Bomb ID &mdash; could default if UAV is at the location because
+     of discovery.</li>
+ <li>Level and type of assessment. (How does this differ from
+     HAG, sensor, angle etc?) May be type of bomb (pipe, etc.).</li>
+</ol>
+
+<h2>Hazard Sampling &mdash; Aerial Robots</h2>
+
+<ol>
+ <li>Select Division (may be done when first open program or
+     defaults to last selected division if operator is at a multi-divisional
+     level). &mdash; Results in the list of possible tasks defaulting to a list of
+     division specific tasks and an option to access other non-division
+     specific tasks.</li>
+ <li>Select Task type &mdash; results in automatically filling in the
+     following fields with defaults</li>
+</ol>
+
+<ol>
+ <ol>
+  <li>Task name </li>
+  <li>Start time &mdash; Now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task
+      type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Leader name &mdash; defaults to last leader name in a single
+      division situation. Defaults to the appropriate leader based upon the
+      selected division when there are multiple divisions for this particular
+      user. </li>
+ </ol>
+</ol>
+
+<ol>
+ <li>(Optional) Specify the task name</li>
+ <li>(Optional) Specify the task start time</li>
+ <li>(Optional) Specify the interrupt ability.</li>
+ <li>(Optional) Specify the task priority level.</li>
+ <li>(Optional) Specify the leader name. </li>
+ <li>Specify area to be covered by sampling on the map.</li>
+ <ol>
+  <li>Select the map interaction button in the task specific
+      area to enable specifying the area to be searched. </li>
+  <li>Select the required waypoints on the map to define the
+      area. </li>
+ </ol>
+ <li>Specify sampling sensors &mdash; Chemical, Biological, General
+     Air, Radiation, etc. &mdash; The following items are updated with default values
+     based upon the type of sampling required. </li>
+ <ol>
+  <li>Sampling pattern &mdash; random, follow path, etc.</li>
+  <li>Sampling rate/density -  </li>
+  <li>Sampling duration &mdash; probably time or number of data
+      points recorded (?)</li>
+ </ol>
+ <li>(Optional) Specify sampling pattern &mdash; random, follow path,
+     etc.</li>
+ <li>(Optional) Specify sampling rate/density</li>
+ <li>(Optional) Specify sampling duration &mdash; probably time or
+     number of data points recorded (?)</li>
+ <li>(Optional) Specify decontamination to be done - checkbox</li>
+</ol>
+
+<p>How do we specify multiple sensors or sample types?</p>
+
+<h2>Hazard Sampling &mdash; Ground Robots</h2>
+
+<ol>
+ <li>Select Division (may be done when first open program or
+     defaults to last selected division if operator is at a multi-divisional
+     level). &mdash; Results in the list of possible tasks defaulting to a list of
+     division specific tasks and an option to access other non-division
+     specific tasks.</li>
+ <li>Select Task type &mdash; results in automatically filling in the
+     following fields with defaults</li>
+</ol>
+
+<ol>
+ <ol>
+  <li>Task name </li>
+  <li>Start time &mdash; Now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task
+      type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Leader name &mdash; defaults to last leader name in a single
+      division situation. Defaults to the appropriate leader based upon the
+      selected division when there are multiple divisions for this particular
+      user. </li>
+ </ol>
+</ol>
+
+<ol>
+ <li>(Optional) Specify the task name</li>
+ <li>(Optional) Specify the task start time</li>
+ <li>(Optional) Specify the interrupt ability.</li>
+ <li>(Optional) Specify the task priority level.</li>
+ <li>(Optional) Specify the leader name. </li>
+ <li>Specify area to be covered by sampling on the map.</li>
+ <ol>
+  <li>Select the map interaction button in the task specific
+      area to enable specifying the area to be searched. </li>
+  <li>Select the required waypoints on the map to define the
+      area. </li>
+ </ol>
+ <li>Specify sampling sensors &mdash; Chemical, Biological, General
+     Air, Radiation, etc. &mdash; The following items are updated with default values
+     based upon the type of sampling required. </li>
+ <ol>
+  <li>Sampling pattern &mdash; random, follow path, etc.</li>
+  <li>Sampling rate/density -  </li>
+  <li>Sampling duration &mdash; probably time or number of data
+      points recorded (?)</li>
+ </ol>
+ <li>(Optional) Specify sampling pattern &mdash; random, follow path,
+     etc.</li>
+ <li>(Optional) Specify sampling rate/density</li>
+ <li>(Optional) Specify sampling duration &mdash; probably time or
+     number of data points recorded (?)</li>
+</ol>
+
+<p>&nbsp;</p>
+
+<p>How do we specify multiple sensors or sample types? </p>
+
+<p>&nbsp;</p>
+
+<h2>Gather Samples</h2>
+
+<ol>
+ <li>Select Division (may be done when first open program or
+     defaults to last selected division if operator is at a multi-divisional
+     level). &mdash; Results in the list of possible tasks defaulting to a list of
+     division specific tasks and an option to access other non-division
+     specific tasks.</li>
+ <li>Select Task type &mdash; results in automatically filling in the
+     following fields with defaults</li>
+</ol>
+
+<ol>
+ <ol>
+  <li>Task name </li>
+  <li>Start time &mdash; Now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task
+      type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Leader name &mdash; defaults to last leader name in a single
+      division situation. Defaults to the appropriate leader based upon the
+      selected division when there are multiple divisions for this particular
+      user. </li>
+ </ol>
+</ol>
+
+<p>Task Specific</p>
+
+<p>f.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+“Sample for Chemical”
+= Simple (default) or Advance</p>
+
+<p>g.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; “Collect samples” = Yes or No (default)</p>
+
+<p>h.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  “Sample for Biological” = Simple
+(default) or Advance</p>
+
+<p>i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+“Collect samples” =
+Yes or No (default)</p>
+
+<p>j.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+“Sample for
+Radiological” = Simple (default) or Advance</p>
+
+<p>k.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; “Collect samples” = Yes or No (default)</p>
+
+<p>l.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+“Sample pattern” =
+Evenly sampled</p>
+
+<p>m.&nbsp;&nbsp;&nbsp;&nbsp; “Sample
+density” = sparse (faster)</p>
+
+<ol>
+ <li>(Optional) Specify the task name</li>
+ <li>(Optional) Specify the task start time</li>
+ <li>(Optional) Specify the interrupt ability.</li>
+ <li>(Optional) Specify the task priority level.</li>
+ <li>(Optional) Specify the leader name. </li>
+ <li>(Optional) Modify Task specific items</li>
+ <li>Select area geometry &mdash; may be a point or a region. If it
+     is region, you need to select a pattern. How do we select regions?
+     Polygonal regions or a list of points? </li>
+</ol>
+
+<p>&nbsp;</p>
+
+<p>Questions:</p>
+
+<p>Do we need to have the pattern and
+density specified by sample type? </p>
+
+<p>Number of samples: either density or specify a number such as collect four samples.</p>
+
+<h2>Guide Ambulatory Victims to Safety</h2>
+
+<ol>
+ <li>Select Division (may be done when first open program or
+     defaults to last selected division if operator is at a multi-divisional
+     level). &mdash; Results in the list of possible tasks defaulting to a list of
+     division specific tasks and an option to access other non-division
+     specific tasks.</li>
+ <li>Select Task type &mdash; results in automatically filling in the
+     following fields with defaults</li>
+ <ol>
+  <li>Task name </li>
+  <li>Start time &mdash; Now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task
+      type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Leader name &mdash; defaults to last leader name in a single
+      division situation. Defaults to the appropriate leader based upon the
+      selected division when there are multiple divisions for this particular
+      user. </li>
+ </ol>
+</ol>
+
+<p>Task Specific</p>
+
+<p>f.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+“Enforcement”
+= None, Minimal (default), Most, All</p>
+
+<ol>
+ <li>(Optional) Specify the task name</li>
+ <li>(Optional) Specify the task start time</li>
+ <li>(Optional) Specify the interrupt ability.</li>
+ <li>(Optional) Specify the task priority level.</li>
+ <li>(Optional) Specify the leader name. </li>
+ <li>(Optional) Modify enforcement</li>
+</ol>
+
+<p>9.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Select
+coverage area geometry </p>
+
+<p>10.&nbsp; Select
+destination point (Egress point, shelter in place, etc.) &mdash; possibly multiple
+destinations</p>
+
+<p>11.&nbsp; Duration
+in minutes &mdash; Within this area (or point), continue to patrol for victims until
+time is up.</p>
+
+<p>12.&nbsp; If
+region select search pattern, if at point select radius.</p>
+
+<p>13.&nbsp; Select
+points or polygonal regions.</p>
+
+<p>14.&nbsp; Select
+a message type (?) &mdash; tenacity, vigilance (i.e. persistence in delivering
+message or being more forceful). </p>
+
+<p>&nbsp;</p>
+
+<p>Questions:</p>
+
+<p>A
+dangerous area &mdash; make sure that there is nothing in this area, humans or
+non-essential robots. Can we auto generate this task, i.e. before defusing a
+bomb?</p>
+
+<p>&nbsp;</p>
+
+<p>Do we
+need a task that is to guide a particular individual to a particular point or
+any safe place? May be a victim to safety or a responder to some other place.
+This case cares about a particular person.  Escort/Chaperon task &mdash; Chaperon
+knows proper behavior for the person. </p>
+
+<p>&nbsp;</p>
+
+<p>Do we
+need the ability to request reinforcements?</p>
+
+<h2>Gathering imagery </h2>
+
+<ol>
+ <li>Select Division (may be done when first open program or
+     defaults to last selected division if operator is at a multi-divisional
+     level). &mdash; Results in the list of possible tasks defaulting to a list of
+     division specific tasks and an option to access other non-division
+     specific tasks.</li>
+ <li>Select Task type &mdash; results in automatically filling in the
+     following fields with defaults</li>
+ <ol>
+  <li>Task name </li>
+  <li>Start time &mdash; Now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task
+      type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Leader name &mdash; defaults to last leader name in a single
+      division situation. Defaults to the appropriate leader based upon the
+      selected division when there are multiple divisions for this particular
+      user. </li>
+ </ol>
+ <li>(Optional) Specify the task name</li>
+ <li>(Optional) Specify the task start time</li>
+ <li>(Optional) Specify the interrupt ability.</li>
+ <li>(Optional) Specify the task priority level.</li>
+ <li>(Optional) Specify the leader name. </li>
+ <li>(Optional) Modify enforcement</li>
+</ol>
+
+<p>9.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Select
+Geometry &mdash; Either a Single point and viewing arch geometry or a polygon</p>
+
+<p>a.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+If
+single point, Persistence?</p>
+
+<p>b.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+If
+polygon, Coverage = Follow path or Cover area</p>
+
+<p>10.&nbsp; Task
+Specific</p>
+
+<p>a.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Vertical
+viewing angles (default 35 degrees to 80 degrees)</p>
+
+<p>b.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+“Level
+of Detail” (similar to NIIRS) = General Level</p>
+
+<p>c.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Active
+hazard (e.g. chemical leak) or potential hazard (e.g. bomb)</p>
+
+<p>2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Make
+any changes to above pre-filled fields</p>
+
+<p>Notes: </p>
+
+<p>This task could be broken into two tasks Aerial Surveillance and Hazard Surveillance</p>
+
+<p>Curtis’ assumption is that viewing angle will specify the ground vs aerial vehicle. </p>
+
+<p>This is a catch-all task: gather imagery of bombs, objects, victims, the previous surveillance tasks, a simple persistent surveillance. Do we want a catch-all task or separate tasks?</p>
+
+<h2>Gross Victim Assessment</h2>
+
+<p>This task provides a broad, quick classification of the
+victims into two classes ambulatory and non-ambulatory. This is not technical
+triage of an individual victim.</p>
+
+<p>&nbsp;</p>
+
+<ol>
+ <li>Select Division (may be done when first open program or
+     defaults to last selected division if operator is at a multi-divisional
+     level). &mdash; Results in the list of possible tasks defaulting to a list of
+     division specific tasks and an option to access other non-division
+     specific tasks.</li>
+ <li>Select Task type &mdash; results in automatically filling in the
+     following fields with defaults</li>
+</ol>
+
+<ol>
+ <ol>
+  <li>Task name </li>
+  <li>Start time &mdash; Now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task
+      type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Leader name &mdash; defaults to last leader name in a single
+      division situation. Defaults to the appropriate leader based upon the
+      selected division when there are multiple divisions for this particular
+      user. </li>
+ </ol>
+</ol>
+
+<p>Task Specific</p>
+
+<p>f.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Coverage = Quick, Efficient, Through, Exhaustive</p>
+
+<ol>
+ <li>(Optional) Specify the task name</li>
+ <li>(Optional) Specify the task start time</li>
+ <li>(Optional) Specify the interrupt ability.</li>
+ <li>(Optional) Specify the task priority level.</li>
+ <li>(Optional) Specify the leader name. </li>
+ <li>(Optional) Modify enforcement</li>
+</ol>
+
+<p>9.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Select
+area geometry</p>
+
+<p>&nbsp;</p>
+
+<p>Note: Sandy suggested adding an additional field to the
+victim search task that represents a level of detail. It could be gross or
+technical or it could be a continuous scale, for example 1 (very gross) to 5
+(very specific).</p>
+
+<h2>Scene Mapping</h2>
+
+<p>&nbsp;</p>
+
+<ol>
+ <li>Select Division (may be done when first open program or
+     defaults to last selected division if operator is at a multi-divisional
+     level). &mdash; Results in the list of possible tasks defaulting to a list of
+     division specific tasks and an option to access other non-division
+     specific tasks.</li>
+ <li>Select Task type &mdash; results in automatically filling in the
+     following fields with defaults</li>
+ <ol>
+  <li>Task name </li>
+  <li>Start time &mdash; Now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task
+      type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Leader name &mdash; defaults to last leader name in a single
+      division situation. Defaults to the appropriate leader based upon the selected
+      division when there are multiple divisions for this particular user. </li>
+ </ol>
+</ol>
+
+<p>Task Specific</p>
+
+<p>f.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Focus</p>
+
+<p>1.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Perimeter
+- - what is the perimeter of the area</p>
+
+<p>2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Interior
+(Obstacles) &mdash; All things inside the area</p>
+
+<p>3.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+3D</p>
+
+<p>4.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Find
+safe passage &mdash; What is the safest route between points</p>
+
+<ol>
+ <li>(Optional) Specify the task name</li>
+ <li>(Optional) Specify the task start time</li>
+ <li>(Optional) Specify the interrupt ability.</li>
+ <li>(Optional) Specify the task priority level.</li>
+ <li>(Optional) Specify the leader name. </li>
+ <li>(Optional) Modify enforcement</li>
+</ol>
+
+<p>9.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Select
+area geometry</p>
+
+<p>&nbsp;</p>
+
+<p>Notes:</p>
+
+<p>Sandy: Select points and regions. If you have points can
+specify a radius, so the point becomes a circle within which the task should be
+done. This point plus X meters radius.  Behind this building and ten meters
+around it.</p>
+
+<h2>Improved Communication</h2>
+
+<ol>
+ <li>Select Division (may be done when first open program or
+     defaults to last selected division if operator is at a multi-divisional
+     level). &mdash; Results in the list of possible tasks defaulting to a list of
+     division specific tasks and an option to access other non-division
+     specific tasks.</li>
+ <li>Select Task type &mdash; results in automatically filling in the
+     following fields with defaults</li>
+</ol>
+
+<ol>
+ <ol>
+  <li>Task name </li>
+  <li>Start time &mdash; Now + 2 min</li>
+  <li>Interrupt ability &mdash; predefined default based upon task
+      type</li>
+  <li>Priority level &mdash; predefined default based upon task type</li>
+  <li>Leader name &mdash; defaults to last leader name in a single
+      division situation. Defaults to the appropriate leader based upon the
+      selected division when there are multiple divisions for this particular
+      user. </li>
+ </ol>
+</ol>
+
+<p>Task Specific</p>
+
+<p>f.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Focus</p>
+
+<p>1.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Point
+to point</p>
+
+<p>2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Full
+area coverage</p>
+
+<ol>
+ <li>(Optional) Specify the task name</li>
+ <li>(Optional) Specify the task start time</li>
+ <li>(Optional) Specify the interrupt ability.</li>
+ <li>(Optional) Specify the task priority level.</li>
+ <li>(Optional) Specify the leader name. </li>
+ <li>(Optional) Modify enforcement</li>
+</ol>
+
+<p>9.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Select
+area geometry</p>
+
+<p>10.&nbsp; (Sandy) Select monitoring pattern - if there are different groups, determine who needs help.
+How do you decide to move between the groups?</p>
+
+<p>11.&nbsp; (Sandy) Assistance prioritization &mdash; Defines which different groups receive priority when
+multiple competing groups require assistance. For example, Turn robots into
+communication robots to assist groups with priority 6 or 7 but not those below
+5.</p>
+
+<p>&nbsp;</p>
+
+<p>Notes:</p>
+
+<p>Will: This could conflict with the
+continuous behaviors. </p>
+
+<p>Want an area of high
+communications, so if robots dealing with a bomb, want to ensure that the
+communications do not go out. May specify an area that in the future will
+require good communication covered. Would specify a time period during which
+the improved communication is required so that the robots can begin to move
+into position to provide the communication.</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<h2>Place Robots in Safe Mode</h2>
+
+
+<p>Note: This is probably not a task but is something that
+needs to be available elsewhere, but where?</p>
+
+<p>&nbsp;</p>
+
+<p>This requires selecting a place for the robots to remain
+stationary, perhaps a holding area were robots wait to be deployed from within
+the hot zone. It may be that we need to specify a zone that robots can go to or
+a specific item (a building, wall or car) for robots to go behind. UAVs may be
+able to simply move up to a higher altitude.</p>
+
+<p>&nbsp;</p>
+
+<h2>Decontaminate self</h2>
+
+<p>Solution: Should this task be
+auto-generated when the robot requires leaving the hot zone?</p>
+
+<p>&nbsp;</p>
+
+<p>Curtis is thinking that all the
+fields are fixed because you do not want a priority or allowing the task to be
+interruptible.  Could specify areas that the robots have entered that then sets
+a flag requiring the robot to decontaminate. </p>
+
+<p>&nbsp;</p>
+
+<p>Sandy: If we have multiple tasks
+don’t want to decontaminate after each task. May need a field to indicate where
+to decontaminate if there are multiple decontamination sites. </p>
+
+<p>&nbsp;</p>
+
+<p>Should we somehow mark the robots
+that require decontamination? So if we specify an area that robots enter and
+then require decon, may want to display something on the robot to indicate
+required decon.</p>
+
+<p>&nbsp;</p>
+
+<p>Will: If the task can be done automatically,
+then should do it to reduce cognitive workload.  This is specifying a specific
+task for a specific robot, which is not currently supported by the robot. </p>
+
+<p>&nbsp;</p>
+
+<p>Sandy: May want to do
+decontamination prior to starting a new task, so that you are not
+decontaminating after a task and then starting a new task that requires the
+robot to decontaminated again.</p>
+
+<p>&nbsp;</p>
+
+<p>Decon items on map can indicated
+which type of decon and if the decon site is out of supplies and cannot decon,
+or is overloaded with individuals to decon. This information can be used to
+determine where to take the robot (and victims) for decon automatically. Then
+if the robot cannot figure out where to go, then human can make the decision. </p>
+
+<p>&nbsp;</p>
+
+<p>Depending upon the number of
+robots, you may need to force a robot to go to an area prior to
+decontamination. </p>
+
+<p>&nbsp;</p>
+
+<p>Continuous Tasks</p>
+
+
+<h2>Searching for victims, bombs and suspicious items</h2>
+
+<p>&nbsp;</p>
+
+<p>These are continuous tasks that the
+robots do all the time while doing another primary task.</p>
+
+<p>Solution: Set in the by robot tab?
+Should this be part of a default or active behavior section?</p>
+
+<p>&nbsp;</p>
+
+<p>Sandy: We can keep a count of items
+found on either the by task or by robot panels. </p>
+
+<p>Curtis: Objects should
+automatically appear on the screen.</p>
+
+<p>The Continuous tasks will not have
+a completion time, but we do need to be able to degrade their priority. </p>
+
+<p>&nbsp;</p>
+
+<p>Specifying this task may be a
+general search task and then choose to search for victims, bombs, and/or
+suspicious tasks. Also need to specify priorities for each of these options. </p>
+
+<p>Do we need to also have a
+continuous task of searching for contaminants? </p>
+
+<p>&nbsp;</p>
+
+<p>What the robot should do if it
+finds something. Stop for victims but not for objects. Or notify human if see a
+bomb to see what it should do. </p>
+
+<p>&nbsp;</p>
+
+<p>Sandy considered this a modified
+version of the specific search tasks, but add an additional field for the task
+being continuous.  May only process the sensor information based on what is
+available and the speed at which the robot needs to move. </p>
+
+<h2>Questions:</h2>
+
+<ol>
+ <li>How do we indicate that a task should be specified and the
+     task panel appears? </li>
+ <li>How do we indicate that information (mouse clicks) on the
+     map without a tie to a particular task specification are to feed a task?
+     Perhaps use the context menu to select “create task”, which marks the
+     location of the click on the map and the point information appears in the
+     task specification area. </li>
+</ol>
+
+<h2>Notes:</h2>
+
+<ol>
+<li>We may want a very basic Go to X Location in addition to specific tasks
+that incorporate the Go to X Location task. As an example, see the Hazard
+Sample task below. We need to revisit this issue.</li>
+
+<li>The following items may be used to specify areas on the map in relation
+to a task: a point, a series of points, rectangles, triangles, and circles or
+ellipses.</li>
+
+<li>We may want some shortcut buttons for specifying tasks on the interface.</li>
+
+<li>We may want to treat spatial information as a data item and specify via
+the context menu.</li>
+
+<li>If a task is known to require map interaction, it could be that when the
+task is selected that the mouse flips to the task specification task and only
+permits task edits. This could be bad or good. The benefit of the button to
+enable map specification information to be entered is that it is a conscious
+move by the operator.</li>
+</ol>
+
+
+<h2>Below use cases need to be revisited later in the process.</h2>
+
+<p>Task: Specify that a task should be entered.</p>
+
+<p><b>Resource hauling task</b></p>
+
+<p><b>Transport food or fluids to vicitms</b></p>
+
+
+</body>
+
+</html>

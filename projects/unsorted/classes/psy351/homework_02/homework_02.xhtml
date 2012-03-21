@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>PSY-351: Computational Methods</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math, table + math, math + table, table + table { margin-top: .75em; }
+      .data td, .data th { text-align: center; padding: .25em; border: 1px solid; }
+      td, th { padding: .25em .5em; border: 1px solid; }
+      .ellip td { text-align: center; }
+      table { margin: auto; }
+      .hl { background-color: #BBB; }
+      ol { margin-left: 0em; }
+      .answer { margin: 0em; }
+      object { height: 400px; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY-351: Computational Methods</h1>
+      <h2>Homework #2</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 14:10 Wed., 10 September 2008</h2>
+    </div>
+    <ol>
+      <li id="p1">
+        <div class="question">
+          <p>Implement a function that calculates the probability of identifying object <em>i</em> with the label for object <em>j</em> as predicted by the Similarity Choice Model (SCM). Inputs to the function should be:</p>
+          <ol>
+            <li>a vector of responses biases for all stimulus labels 1 through <em>R</em></li>
+            <li>an <em>R</em>&times;<em>R</em> matrix of similarities between object <em>i</em> and object <em>j</em></li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The similarity choice model is an object categorization model. The important components are:</p>
+
+          <ul>
+            <li>A set of items to be identified, <em>X</em> = {<em>x</em><sub>1</sub>, &hellip;, <em>x<sub>n</sub></em>}</li>
+            <li>A set of (unique?) labels for the items, <em>R</em> = {<em>R</em><sub>1</sub>, &hellip;, <em>R<sub>n</sub></em>}</li>
+            <li>
+              A set of similarities between items, <em>S</em> = {<em>s</em><sub>1,1</sub>, &hellip;, <em>s</em><sub>1,<em>n</em></sub>, &hellip;, <em>s<sub>n,n</sub></em>} &SuchThat;
+              <ul>
+                <li>0 &le; <em>s<sub>i,j</sub></em> &le; 1</li>
+                <li><em>s<sub>i,i</sub></em> = 1</li>
+                <li><em>s<sub>i,j</sub></em> = <em>s<sub>j,i</sub></em></li>
+              </ul>
+            </li>
+            <li>A set of response biases to account for user preferences for particular labels, <em>&Beta;</em> = {<em>&Beta;</em><sub>1</sub>, &hellip;, <em>&Beta;<sub>n</sub></em>}</li>
+          </ul>
+
+          <p>The similarity choice model deals with identification after an extended period of learning where it is assumed that the individual's performance has stabalized. It describes the probability that a label <em>R<sub>j</sub></em> will be applied to an item <em>x<sub>i</sub></em>:</p>
+
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mo>P</mo>
+                  <mfenced separators="|">
+                    <msub><mi>R</mi><mi>j</mi></msub><msub><mi>x</mi><mi>i</mi></msub>
+                  </mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow><msub><mi>&Beta;</mi><mi>j</mi></msub><msub><mi>s</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub></mrow>
+                    <mrow>
+                      <munder><mo>&Sum;</mo><mrow><mi>k</mi><mo>&Element;</mo><mi>R</mi></mrow></munder>
+                      <mrow><msub><mi>&Beta;</mi><mi>k</mi></msub><msub><mi>s</mi><mfenced open="" close=""><mi>i</mi><mi>k</mi></mfenced></msub></mrow>
+                    </mrow>
+                  </mfrac>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <p>In Matlab, this is simply:</p>
+
+          <pre>scm = ((biases(label_index) * similarities(object_index, label_index)) ...
+       / sum(biases .* similarities(object_index,:)));</pre>
+        </div>
+      </li>
+      <li>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Implement a function that calculates the similarity between object <em>i</em> and object <em>j</em> in an <em>m</em>-dimensional psychological space. Inputs to the function should be:</p>
+              <ol>
+                <li><em>m</em>-dimensional vector representations for objects <em>i</em> and <em>j</em></li>
+                <li>an <em>m</em>-dimensional vector of attention weights for dimensions 1 through <em>m</em></li>
+                <li>a sensitivity parameter <em>c</em> that scales the similarity-distance relationship</li>
+                <li>the distance metric <em>r</em></li>
+              </ol>
+            </div>
+            <div class="answer">
+              <p>The particular concept of similarity in an <em>m</em>-dimensional space discussed here is based off the following metric for the distance between to <em>m</em>-dimensional points:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <msub><mi>d</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munderover><mo>&Sum;</mo><mrow><mo>k</mo><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover>
+                      <msup>
+                        <mfenced><mrow>
+                          <msub><mi>w</mi><mi>k</mi></msub>
+                          <msup>
+                            <mfenced><mrow>
+                              <msub><mi>i</mi><mi>k</mi></msub><mo>-</mo><msub><mi>j</mi><mi>k</mi></msub>
+                            </mrow></mfenced>
+                            <mi>r</mi>
+                          </msup>
+                        </mrow></mfenced>
+                        <mfrac><mn>1</mn><mi>r</mi></mfrac>
+                      </msup>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>The similarity then is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <msub>
+                        <mi>s</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced>
+                      </msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msup>
+                        <mn>e</mn>
+                        <mrow>
+                          <mo>-</mo><mi>c</mi>
+                          <msubsup>
+                            <mi>d</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced><mi>p</mi>
+                          </msubsup>
+                        </mrow>
+                      </msup>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              
+              <p>In matlab, this is:</p>
+<pre>p = 2;
+mse = (object_1 - object_2) .^ distance_metric;
+distance = sum((attentions .* mse) .^ (1 / distance_metric));
+dim_sim = exp(-sensitivity * distance ^ p);</pre>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Test your function with:</p>
+              <ul>
+                <li>object <em>i</em> equal to [2 4]</li>
+                <li>object <em>j</em> equal to [4 3]</li>
+                <li>attention weights equal to [.4 .6]</li>
+                <li>c equal to 1</li>
+              </ul>
+            </div>
+            <div class="answer">
+              <p>My <a href="homework_02.m">matlab program</a> returns 0.156 for <em>p</em> = 2 and 0.1301 for <em>p</em> = 1.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>Explore the effects of different values of sensitivity c on the shape of the similarity x distance function by making creative use of the function you created above. Create a plot of similarity as a function of distance between objects <em>i</em> and <em>j</em> for different values of <em>c</em>. In particular, create a plot of similarity as a function of distance where distance ranges from 0 to 5 for <em>c</em> equal to 1, 2, and 5.</p>
+        </div>
+        <div class="answer">
+          <p>There are two possible values for p, for two sets of lines:</p>
+
+          <object type="image/svg+xml" data="homework_02.3-1.svg"></object>
+
+          <object type="image/svg+xml" data="homework_02.3-1.svg"></object>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Implement a function that calculates the probability of classifying object <em>i</em> as a member of category <em>J</em> &mdash; this is the guts of the <acronym title="Generalized Context Model">GCM</acronym>. Inputs to the function should be:</p>
+          <ul>
+            <li>a vector of response biases for all categories 1 through <em>R</em></li>
+            <li>the <em>m</em>-dimensional vector representation for object <em>i</em></li>
+            <li>an array of <em>m</em>-dimensional vectors for the exemplars of all categories 1 through <em>R</em></li>
+            <li>an <em>m</em>-dimensional vector of attention weights for dimensions 1 through <em>m</em></li>
+            <li>the sensitivity parameter <em>c</em></li>
+          </ul>
+        </div>
+        <div class="answer">
+          <p><acronym title="Generalized Context Model">GCM</acronym>:</p>
+
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mo>P</mo>
+                  <mfenced separators="|">
+                    <mi>A</mi><msub><mi>x</mi><mi>i</mi></msub>
+                  </mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow>
+                      <msub><mi>&Beta;</mi><mi>A</mi></msub>
+                      <munderover><mo>&Sum;</mo><mrow><mi>j</mi><mi>=</mi><mi>1</mi></mrow><msub><mi>n</mi><mi>A</mi></msub></munderover>
+                      <msub><mi>s</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+                    </mrow>
+                    <mrow>
+                      <munder>
+                        <mo>&Sum;</mo><msub><mi>R</mi><mi>i</mi></msub>
+                      </munder>
+                      <msub><mi>&Beta;</mi><msub><mi>R</mi><mi>i</mi></msub></msub>
+                      <munderover>
+                        <mo>&Sum;</mo><mrow><mi>j</mi><mi>=</mi><mi>1</mi></mrow><msub><mi>n</mi><msub><mi>R</mi><mi>i</mi></msub></msub>
+                      </munderover>
+                      <msub><mi>s</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+                    </mrow>
+                  </mfrac>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>We will explore predictions of the GCM for a very simple category structure. There are two categories, A and B, each category has three objects, and objects are represented in a two-dimensional psychological space. The members of category A are [0 0], [2 0], and [2 2], and the members of category B are [3 3], [3 5], and [5 5]. You will use the function you just created to calculate the accuracy of categorizing each of the objects as member of their respective category (i.e., P(A|i) for category A objects and P(B|i) for category B objects). In addition, you will evaluate the P(A|i) for the category A prototype [1 1] and for a new category A item [0 2]. And you will evaluate the P(B|i) for the category B prototype [4 4] and for a new category B item [5 3]. Assume equal biases, equal attention weights, a Euclidean distance metric, and c=1.</p>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

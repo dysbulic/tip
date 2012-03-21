@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<tmpl:template xmlns="http://www.w3.org/1999/xhtml"
+               xmlns:tmpl="http://odin.himinbi.org/templ/0.1/">
+  <tmpl:var name="title">Michigan Coalition for Compassionate Care</tmpl:var>
+  <tmpl:var name="header">
+     <link rel="stylesheet" type="text/css" href="form.css" />
+  </tmpl:var>
+  <tmpl:var name="content">
+    <h2>Tell a Friend</h2>
+
+    <p>Please note that this message will be e-mailed directly to your friend(s), and their e-mail addresses will not be saved or otherwise reused.</p>
+    
+    <form id="tellafriend" action="tellafriend.php" method="post">
+      <ul class="form">
+        <li class="required">
+          <label>Your Name:</label>
+          <input type="text" name="name" />
+        </li>
+        <li class="required">
+          <label>Your E-Mail:</label>
+          <input type="text" name="sender" />
+        </li>
+        <li class="required">
+          <label>Recipients:</label>
+          <textarea name="recipients"> </textarea>
+        </li>
+        <li id="message">
+          <p>Text of message to friend:</p>
+          <blockquote>
+            <p>The Michigan Coalition for Compassionate Care (MCCC) is working to get an initiative on the 2008 Michigan ballot that will protect medical marijuana patients from arrest and prosecution. There are countless seriously ill people in Michigan who face the threat of arrest and jail just for taking their doctor-recommended medicine.</p>
+            <p>MCCC's signature-gathering operation in Michigan must collect 304,101 valid signatures by the beginning of November 2007 in order to get on the 2008 ballot. Because validity rates for signature-gathering hover around 55%, this means we actually need to collect nearly 550,000 raw signatures to qualify. And because it costs us a dollar a signature, we need the help of both generous donors and committed volunteers to make this happen.</p>
+            <p>If only 450 supporters commit to either donating or raising $1,000 and only 100 supporters commit to collecting 1,000 signatures as volunteers, the drive will fund itself &#x2014; and the money saved can be devoted to the actual campaign to pass the initiative in 2008. You can get involved to help today!</p>
+            <p>To receive occasional updates on this campaign, please visit http://StopArrestingPatients.org/subscribe.html to receive the latest news about the initiative campaign.</p>
+            <p>Please see http://StopArrestingPatients.org for more information. Thank you for considering this, and I hope you can help them out!</p>
+            <textarea name="message" id="message"> </textarea>
+          </blockquote>
+        </li>
+        <li class="submit"><input type="submit" value="Send E-Mail" /></li>
+      </ul>
+    </form>
+    <script type="text/javascript">
+      var message = "Add your own custom message";
+      $(document.forms['tellafriend']['message']).one("focus", function() { $(this).val(""); });
+      $(document.forms['tellafriend']).submit(function() { var mess = $(this).find("#message textarea"); if(mess.val() == message) mess.val(""); });
+      $(document.forms['tellafriend']['message']).val(message);
+    </script>
+  </tmpl:var>
+</tmpl:template>

@@ -1,0 +1,23 @@
+<!-- This is a behavior for IE to enable hovering of arbitrary elements
+   - li { behavior: url("ie_element_hover.htc"); }
+  -->
+<public:component>
+  <public:attach event="onmouseover" onevent="mouseOver()" />
+  <public:attach event="onmouseout" onevent="mouseOut()" />
+  <script>
+     /* A common behavior for this type of behavior is to go through all the stylesheets,
+      * find the :hover pseudo-elements, replace the :hover with a class declaration and
+      * then do what this behavior does which is to add a class to the element.
+      *
+      * Those behaviors aren't working, so I'll go back and make this better when I've
+      * got more time.
+      */
+     var hoveredClass = "hovered";
+     function mouseOver() {
+       element.className += " " + hoveredClass;
+     }
+     function mouseOut() {
+       element.className = element.className.replace(new RegExp('\\s+' + hoveredClass), '');
+     }
+  </script>
+</public:component>

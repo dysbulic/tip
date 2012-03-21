@@ -1,0 +1,35 @@
+BLEN = 20
+
+.entry int_to_string, ^m<R2, R3, R4, R5, R6, R7>
+    clrl  R3             ; ediv's divisor is a quad word
+    movl  4(AP), R2      ; incoming number
+    movl  8(AP), R4
+    addl3 R4, #BLEN,  R5 ; end of output string
+    incl R4              ; beginning of outgoing string
+    clrl R6              ; count of string length
+    clrb @8(AP)
+
+    tstl R2
+    bgeq next_digit
+    movb #^A/-/, (R4)+
+    mnegl R2, R2
+    movb #1, @8(AP)
+
+  next_digit:
+    ediv #10, R2, R2, R7
+    movl R7, R7
+    addb3 #^A/0/, R7, -(R5)
+    incl R6
+    tstl R2
+    bleq number_finished
+    brb next_digit
+
+  number_finished:
+    addb R6, @8(AP)
+
+  shift:
+    movb (R5)+, (R4)+
+    sobgtr R6, shift
+    movb #0, (R4)+
+    ret
+.end

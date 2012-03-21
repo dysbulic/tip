@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Generating Probability Distributions</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+      object { width: 100%; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Generating Altered Probabilities</h1>
+    <p>Everyone knows the regular probability functions that you get from <code>rand()</code> or <code>Math.random()</code> or whatever your language happens to use. These are continuous distributions, meaning that they return all values between 0 and the maximum with equal probability:</p>
+    <object style="height:180px" id="uni_dist" type="image/svg+xml" data="uniform_distribution.svg"></object>
+    <p>Since the probabilities must sum to 1, the probability of any particular number then is max<sup>-1</sup>.</p>
+    <p>Well, I want the header for my blog. This site is vaguely Viking themed, so I thought I would go with a ship sailing at night. Since I can't draw, I went to <a href="http://openclipart.org">Open Clip Art</a> and found something. Since it's a vector graphic, I thought I'd use <a href="http://www.inkscape.org">Inkscape</a> to put everything together.</p>
+    <p>The tricky part turned out to be the night sky in the background. I started off using a pattern, but there were problems:</p>
+    <ul>
+      <li>Firefox doesn't support patterns</li>
+      <li>The repetitions in the pattern was visible</li>
+      <li>A big enough pattern to not show repetition took up alot of space</li>
+    </ul>
+    <p>So, I decided that I would just generate the stars using javascript. Firefox would then show them and when generating the images for other browsers, Batik would generate them as well. I figured as long as I was going to dynamically generate them, I wanted fewer stars at the horizon than in the rest of the sky. Essentially what I wanted was a probability distribution like this:</p>
+    <object style="height:180px" id="uni_dist" type="image/svg+xml" data="increasing_distribution.svg"></object>
+    <p>This is how it came out:</p>
+    <object style="height:180px" id="uni_dist" type="image/svg+xml" data="starfield.svg"></object>
+    <p>The <a href="http://www.fizyka.umk.pl/nrbook/c7-1.pdf">Transformation Methods</a> chapter from <a href="http://www.fizyka.umk.pl/nrbook/bookcpdf.html"><cite>Numerical Recipes</cite></a> was quite helpful.</p>
+    <p>My final blog header is:</p>
+    <a href="http://hoenir.himinbi.org">
+      <object style="height:180px" id="uni_dist" type="image/svg+xml" data="honir_header.svg"></object>
+    </a>
+  </body>
+</html>

@@ -1,0 +1,1 @@
+../../himinbi.org/odin/inkscape_washout/group_inline_styles.xslt

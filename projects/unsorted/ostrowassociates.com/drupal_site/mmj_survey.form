@@ -1,0 +1,153 @@
+<?php
+$mmj_survey = array();
+
+$mmj_survey['age_set'] =
+    array('#type' => 'fieldset', '#attributes' => array('class' => 'short'));
+$mmj_survey['age_set']['age'] =
+    array('#type' => 'textfield',
+          '#title' => t('Age'),
+          '#default_value' => '',
+          '#size' => 30,
+          '#maxlength' => 3,
+          '#required' => FALSE);
+
+$mmj_survey['gender_set'] =
+    array('#type' => 'fieldset', '#attributes' => array('class' => 'short'));
+$mmj_survey['gender_set']['gender'] =
+  array('#type' => 'radios',
+        '#title' => t('Gender'),
+        '#default_value' => '',
+        '#options' => array('male' => t('Male'), 'female' => t('Female')),
+        '#required' => FALSE);
+
+$mmj_survey['job_set'] =
+    array('#type' => 'fieldset', '#attributes' => array('class' => 'short'));
+$mmj_survey['job_set']['job'] =
+  array('#type' => 'checkboxes',
+        '#title' => t('Profession'),
+        '#default_value' => variable_get('profession',''),
+        '#options' =>
+          array('md' => t('M.D.'),
+                'research' => t('Ph.D. Researcher'),
+                'clinitian' => t('Ph.D. Clinician'),
+                'other' => t('Other')));
+
+$mmj_survey['speciality_set'] =
+    array('#type' => 'fieldset', '#attributes' => array('class' => 'short'));
+$mmj_survey['speciality_set']['speciality'] =
+  array('#type' => 'textfield',
+        '#title' => t('Speciality'),
+        '#default_value' => variable_get('speciality',''),
+        '#size' => 30,
+        '#maxlength' => 128,
+        '#required' => FALSE);
+
+$mmj_survey['ama_set'] =
+    array('#type' => 'fieldset', '#attributes' => array('class' => 'short'));
+$mmj_survey['ama_set']['ama'] =
+  array('#type' => 'radios',
+        '#title' => t('AMA Member'),
+        '#default_value' => 'yes',
+        '#options' => array('yes' => t('Yes'), 'no' => t('No')),
+        '#required' => FALSE);
+
+$mmj_survey['mmj_state_set'] = array('#type' => 'fieldset');
+$mmj_survey['mmj_state_set']['mmj_state'] =
+  array('#type' => 'select',
+        '#title' => t('Do you practice in a state where medical marijuana use is permitted under state law'),
+        '#default_value' => variable_get('mmj_state',''),
+        '#options' =>
+          array('ak' => t('Alaska'),
+                'ca' => t('California'),
+                'co' => t('Colorado'),
+                'hi' => t('Hawaii'),
+                'me' => t('Maine'),
+                'mt' => t('Montana'),
+                'nv' => t('Nevada'),
+                'or' => t('Oregon'),
+                'ri' => t('Rhode Island'),
+                'vt' => t('Vermont'),
+                'wa' => t('Washington'),
+                '' => t('No'),
+                'n/a' => t('Not Applicable')));
+
+$mmj_survey['mmj_rec_set'] =
+  array('#type' => 'fieldset', '#attributes' => array());
+$mmj_survey['mmj_rec_set']['mmj_rec'] =
+  array('#type' => 'select',
+        '#title' => t('Have you ever recommended marijuana to any of your patients'),
+        '#default_value' => variable_get('mmj_rec','no'),
+        '#options' =>
+          array('yes' => t('Yes'),
+                'no' => t('No'),
+                'n/a' => t('Not Applicable')));
+
+$mmj_survey['medical_issues_set'] = array('#type' => 'fieldset');
+$mmj_survey['medical_issues_set']['medical_issues'] =
+  array('#type' => 'checkboxes',
+        '#title' => t('What kinds of problems have you recommended medical marijuana for'),
+        '#default_value' => variable_get('medical_issues',''),
+        '#options' =>
+          array('cancer' => t('Cancer-related pain'),
+                'chemo' => t('Chemotherapy-related nausea or anorexia'),
+                'hiv-pain' => t('HIV-related pain'),
+                'hiv-wasting' => t('HIV-related anorexia or wasting syndrome'),
+                'glaucoma' => t('Glaucoma'),
+                'chronic-pain' => t('Other forms of chronic pain'),
+                'other' => t('Other:')));
+
+$mmj_survey['resolution_set'] = array('#type' => 'fieldset');
+$mmj_survey['resolution_set']['resolution'] =
+  array('#type' => 'radios',
+        '#title' => t('Would you support a resolution by your state medical society, specialty society, or the AMA to protect from federal prosecution patients who are using medical marijuana under a physician\'s supervision in a medical marijuana state'),
+        '#default_value' => 'yes',
+        '#options' => array('yes' => t('Yes'), 'no' => t('No'), 'n/a' => t('Not Applicable')),
+        '#required' => FALSE);
+
+$mmj_survey['research_set'] = array('#type' => 'fieldset');
+$mmj_survey['research_set']['research'] =
+  array('#type' => 'radios',
+        '#title' => t('Would you support a resolution by your state medical society, specialty society, or the AMA urging the appropriate federal agencies (FDA, NIDA, DEA, etc.) to fund and supply legal marijuana for scientific research to determine the safety and efficacy of medical marijuana for specific medical conditions'),
+        '#default_value' => 'yes',
+        '#options' => array('yes' => t('Yes'), 'no' => t('No'), 'n/a' => t('Not Applicable')),
+        '#required' => FALSE);
+
+$mmj_survey['only_drug_set'] = array('#type' => 'fieldset');
+$mmj_survey['only_drug_set']['only_drug'] =
+  array('#type' => 'radios',
+        '#title' => t('Do you believe that marijuana is a highly addictive narcotic with no legitimate medical uses'),
+        '#default_value' => 'no',
+        '#options' => array('yes' => t('Yes'), 'no' => t('No'), 'undecided' => t('Undecided')),
+        '#required' => FALSE);
+
+$mmj_survey['submit'] = array('#type' => 'submit', '#value' => t('Submit'));
+
+function mmj_survey_validate($form_id, $form_values) {
+  if($form_values['age'] != "" && !is_numeric($form_values['age'])) {
+    form_set_error('age', t('The age is not valid.'));
+  }
+}
+
+function mmj_survey_submit($form_id, $form_values) {
+  $file = fopen("sites/default/surveys/mmj." . date("d.m.Y.G.i.s.") . rand() . ".txt", "w");
+  fwrite($file, '<survey date="' . date("d/m/Y G:i:s") . '" ip="' . $_SERVER['REMOTE_ADDR'] . "\">\n");
+  foreach(array_keys($form_values) as $prop) {
+    fwrite($file, "  <$prop>");
+    if(is_array($form_values[$prop])) {
+      $count = 0;
+      foreach(array_keys($form_values[$prop]) as $item) {
+        if($item != "") {
+          $count++;
+          fwrite($file, "\n    <$item>" . ($form_values[$prop][$item] == "0" ? "no" : "yes") . "</$item>");
+        }
+      }
+      if($count > 0) fwrite($file, "\n  ");
+    } else {
+      fwrite($file, $form_values[$prop]);
+    }
+    fwrite($file, "</$prop>\n");
+  }
+  fwrite($file, "</survey>\n");
+  fclose($file);
+}
+?>

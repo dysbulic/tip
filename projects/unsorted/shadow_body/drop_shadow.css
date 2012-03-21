@@ -1,0 +1,26 @@
+.layout, .content { display: table; }
+.layout { width: 80%; height: 100%; margin: auto; }
+.content { width: 100%; }
+.shadow.top, .shadowed, .shadow.bottom { display: table-row; }
+.left, .center, .right, .leftcol, .rightcol, .centercol
+  { display: table-cell; vertical-align: top; }
+
+/* In IE, the order of class elements matters, .left.shadow will override other .shadow
+ * elements, but .shadow.left will not.
+ */
+.shadow.left { background: transparent url('shadow_left.png') repeat-y left top; }
+.shadow.right { background: transparent url('shadow_right.png') repeat-y right top; }
+.shadow.top .left { background: transparent url('shadow_blur_ball.png') no-repeat left top; }
+.shadow.top .center { background: transparent url('shadow_top.png') repeat-x left top; }
+.shadow.top .right { background: transparent url('shadow_blur_ball.png') no-repeat right top; }
+.shadow.bottom .left { background: transparent url('shadow_blur_ball.png') no-repeat left -35px; } /* bottom is off in IE */
+.shadow.bottom .center { background: transparent url('shadow_bottom.png') repeat-x left top;  }
+.shadow.bottom .right { background: transparent url('shadow_blur_ball.png') no-repeat right -35px; }
+
+.top { height: 10px; }
+.bottom, .bottom .center /* .bottom by itself doesn't work in Safari */
+  { height: 15px; }
+.right { width: 15px; }
+.left { width: 10px; }
+.leftcol, .rightcol { width: 25%; }
+.centercol { width: 50%; }

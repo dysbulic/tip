@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-310 Homework #2</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math { margin-top: .75em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 310: Design and Analysis of Algorithms</h1>
+      <h2>Homework #2</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 13:10 Wed., 1 February 2008</h2>
+    </div>
+    <blockquote><p>All work should be done on your own. If you discuss this assignment in any way with anyone else, or find help for getting the answer from any source, you must state so clearly at the top of your submission. There should be no working together except to understand the question.</p></blockquote>
+    <ol>
+      <li>
+        <div class="question" id="1">
+          <p>Consider the problem of finding the maximum number of floors that a student may be dropped from and survive. Assume that all students are equally resilient and will die from the same height. Given three students and that students are relatively heavy, what is an algorithm to minimize the number of trials in the experimental process?</p>
+        </div>
+        <div class="answer">
+          <p>This problem is potentially addressed through a process called balancing. Balancing divides the problem into among subsolutions that deal with particular elements of the problem effectively. These subsolutions are then balanced in running time to find an efficient solution. For the student dropping problem with two students an effective division is:</p>
+          <ul>
+            <li>
+              With the first student, divide the building into
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi></math>
+              divisions and drop the student from each 
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>n</mi><mi>k</mi></mfrac></math><sup>th</sup>
+              floor until a trial is unsuccessful. The maximum number of trials is 
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>n</mi><mi>k</mi></mfrac></math>.
+            </li>
+            <li>
+              With the second student, start at the 
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac>
+                <mrow><mfenced><mrow><msub><mi>k</mi><mi>f</mi></msub><mo>-</mo><mn>1</mn></mrow></mfenced><mi>n</mi></mrow><mi>k</mi>
+              </mfrac></math><sup>th</sup>
+              floor and drop the student at each successive floor until there is a second failure. This will identify the correct floor. The maximum number of trials is
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi></math>.
+            </li>
+          </ul>
+          <p>The value of <em>k</em> to balance these factors is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mfrac><mi>n</mi><mi>k</mi></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mi>k</mi></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><mi>n</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msup><mi>k</mi><mn>2</mn></msup></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><mi>k</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msqrt><mi>n</mi></msqrt></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>When adding an additional student the algorithm simply repeats. The first student is used to find a grand division, the second divides the grand division and the third is sequential within those bounds. The balancing of these three factors is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mfrac><mi>n</mi><msub><mi>k</mi><mn>1</mn></msub></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mfrac><mi>n</mi><msub><mi>k</mi><mn>1</mn></msub></mfrac><msub><mi>k</mi><mn>2</mn></msub></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mi>n</mi><mrow><msub><mi>k</mi><mn>1</mn></msub><msub><mi>k</mi><mn>2</mn></msub></mrow></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msub><mi>k</mi><mn>2</mn></msub></mtd>
+                <mtd><mo>&rArr;</mo></mtd>
+                <mtd><mfrac><mi>n</mi><msup><mi>k</mi><mn>2</mn></msup></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mi>k</mi></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><mi>k</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mroot><mi>n</mi><mn>3</mn></mroot></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Suppose a graph is known to be four-colorable. Design an algorithm that colors a graph with a minimum number of colors in the worst case. The algorithm should use the following properties:</p>
+          <ul>
+            <li>the neighborhood of a vertex in a <em>k</em>-colorable graph is (<em>k</em> - 1)-colorable</li>
+            <li>if the neighborhood is small, the nodes can be colored with <em>k</em> colors</li>
+          </ul>
+        </div>
+        <div class="answer">
+          <p>Consider first the problem of coloring a graph that is known to be three-colorable. One method is to balance two strategies:</p>
+          <ul>
+            <li>when degree(<em>x</em>) &ge; some factor <em>k</em>, two-color all the neighbors of <em>x</em>. this will use two colors.</li>
+            <li>when degree(<em>x</em>) &lt; <em>k</em>, assign a distinct color to <em>x</em> and each of the neighbors of <em>x</em></li>
+          </ul>
+          <p>
+            The algorithm operates by only considering uncolored vertices and using the first method until there are no vertices with a degree &ge; <em>k</em> remaining. This will use, in the worst case,
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>2</mn><mfrac><mi>n</mi><mi>k</mi></mfrac></math>
+            colors. The remaining vertices are then colored with the second method. This will use
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi></math>
+            colors in the worst case.
+          </p>
+          <p>Balancing these two factors is simply:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mn>2</mn><mfrac><mi>n</mi><mi>k</mi></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mi>k</mi></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><mn>2</mn><mi>n</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msup><mi>k</mi><mn>2</mn></msup></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><mi>k</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msqrt><mrow><mn>2</mn><mi>n</mi></mrow></msqrt></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The basic method used in the algorithm can be extended to handle four-colorable graphs through simple recognition that the neighborhood of a vertex in a four-colorable graph is a three-colorable graph.</p>
+          <p>
+            In the worst case, the number of colors used in the three-coloring algorihm when 
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi><mo>=</mo><msqrt><mrow><mn>2</mn><mi>n</mi></mrow></msqrt></math>
+            (recalling the sides are balanced at <em>k</em>) is:
+          </p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mn>2</mn><mi>k</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>2</mn><msqrt><mrow><mn>2</mn><mi>n</mi></mrow></msqrt></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>So, consider an algorithm where while there is a vertex with degree &ge; <em>j</em>, then three color the neighborhood of <em>x</em>. When there are no uncolored vertices remaining with degree &ge; <em>j</em> color the remainder with distinct colors. The balancing of these two stategies then is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mn>2</mn><msqrt><mn>2</mn><mi>k</mi></msqrt><mfrac><mi>n</mi><mi>k</mi></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mi>k</mi></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><mn>2</mn><msqrt><mn>2</mn></msqrt><mi>n</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><msup><mi>k</mi><mn>2</mn></msup><msqrt><mi>k</mi></msqrt></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msup><mi>k</mi><mfrac><mn>3</mn><mn>2</mn></mfrac></msup></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><mi>k</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msup>
+                  <mfenced><mrow><mn>2</mn><msqrt><mn>2</mn></msqrt><mi>n</mi></mrow></mfenced>
+                  <mfrac><mn>2</mn><mn>3</mn></mfrac>
+                </msup></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mroot>
+                  <mrow><mn>8</mn><msup><mi>n</mi><mn>2</mn></msup></mrow><mn>3</mn>
+                </mroot></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>
+            Consider a three-colorable graph with
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>O</mo><mfenced><msqrt><mi>n</mi></msqrt></mfenced></math>
+            edges. Design a polynomial time algorithm to color the edges with
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>o</mo><mfenced><msqrt><mi>n</mi></msqrt></mfenced></math>
+            colors.
+          </p>
+        </div>
+        <div class="answer">
+          <p>
+            To say that a graph has
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>O</mo><mfenced><msqrt><mi>n</mi></msqrt></mfenced></math>
+            edges means that the number edges is &le;
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>c</mi><msqrt><mi>n</mi></msqrt></math>.
+          </p>
+          <p>Consider the previously presented balancing solution for coloring a graph that is known to be three-colorable, with an additional step added </p>
+          <ul>
+            <li>&ForAll; <em>x</em> &SuchThat; degree(<em>x</em>) &ge; <em>k</em>, two-color neighbors(<em>x</em>) and remove them from consideration</li>
+            <li>&ForAll; <em>x</em> &SuchThat; 0 &gt; degree(<em>x</em>) &lt; <em>k</em>, assign a distinct color to each of neighbors(<em>x</em>) and remove them from consideration</li>
+            <li>&ForAll; <em>x</em> remaining (degree(<em>x</em>) = 0), color with a single color</li>
+          </ul>
+          <p>The previous analysis looked at computational complexity in terms of the number of vertices eliminated. It is also possible to conceptualize the complexity in terms of edges eliminated. Because each iteration of the algorithm draws from a new set of colors, if a vertex at one end of an edge is colored during one iteration the other vertex can only be colored with the same colors during that particular step. Future iterations will draw from a different set of colors. So, once one end of an edge has been colored the edge can no longer be a source of conflict in the coloring problem.</p>
+          <p>The maximum number of vertices connected with <em>m</em> edges is if each edge connects two vertices with degree 1. In this situation there are 2<em>m</em> nodes with degree &gt; 0. In a graph with <em>m</em> vertices, there must be &ge; <em>n</em> - 2<em>m</em> initially disconnected vertices (degree(<em>x</em>) = 0). Additionally, each iteration of the other two coloring schemes will each leave a disconnected vertex.</p>
+          <p>The addition of a consideration for those disconnected vertices in a graph with a low number of edges allows the number of colors to be bounded by the number of edges rather than the number of vertices. Omitting the one color used at the end to color all the degree 0 vertices, the balancing peoblem is now:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mfrac><mrow><mn>2</mn><mi>m</mi></mrow><mi>k</mi></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mrow><mi>c</mi><msqrt><mi>n</mi></msqrt></mrow><mi>k</mi></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mi>k</mi></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><mi>c</mi><msqrt><mi>n</mi></msqrt></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msup><mi>k</mi><mn>2</mn></msup></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><mi>k</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msqrt><mrow><mi>c</mi><msqrt><mi>n</mi></msqrt></mrow></msqrt></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The number of colors used with this value of <em>k</em> is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mfrac><mrow><mi>c</mi><msqrt><mi>n</mi></msqrt></mrow><mi>k</mi></mfrac><mo>+</mo><mi>k</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow><mi>c</mi><msqrt><mi>n</mi></msqrt></mrow>
+                    <msqrt><mrow><mi>c</mi><msqrt><mi>n</mi></msqrt></mrow></msqrt>
+                  </mfrac>
+                  <mo>+</mo><msqrt><mrow><mi>c</mi><msqrt><mi>n</mi></msqrt></mrow></msqrt>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>2</mn><msqrt><mrow><mi>c</mi><msqrt><mi>n</mi></msqrt></mrow></msqrt></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>O</mo><mfenced><mroot><mi>n</mi><mn>4</mn></mroot></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>o</mn><mfenced><msqrt><mi>n</mi></msqrt></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+        </div>
+      </li>
+      <li id="4">
+        <div class="question">
+          <p>
+            A clique within a graph is a fully connected subgraph. Suppose that a graph has a clique of size 
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>n</mi><mn>2</mn></mfrac></math>.
+            Show that there is a polynomial time algorithm to find a clique of size
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <mo>&Omega;</mo><mfenced><mrow><mo>log</mo><mfenced><mi>n</mi></mfenced></mrow></mfenced>
+            </math>.
+          </p>
+        </div>
+        <div class="answer">
+<!--
+          <p>
+            Since there is a clique of size
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>n</mi><mn>2</mn></mfrac></math>
+          </p>
+-->
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Boxy Sig</title>
+    <link rel="stylesheet" href="../styles/main.css" type="text/css" />
+    <script type="text/javascript" src="javascript_compatability/compatability.js"></script>
+    <script type="text/javascript" src="../colortable/colortable.js"></script>
+    <script type="text/javascript" src="draw_bezier.js"></script>
+    <script type="text/javascript">//<![CDATA[
+      var w_curve = make_lines(parseSVGPath("M 2.5 5.95 C 5.75,1.55 4.4,14.1 4.65,14.35 C 4.9,14.6 6.9,11.95 6.95,11.95 C 7,11.95 8.75,14.5 9.05,14.5 C 9.35,14.5 9.75,6.25 11.55,5"));
+      var ill_curve = make_lines(parseSVGPath("M 10.05 14.5 C 10.85,14.8 11.45,12.8 11.6,12.75 C 11.75,12.7 11.6,14.65 12.6,14.6 C 13.6,14.55 18.6,4.25 15.5,6.55 C 12.4,8.85 14.05,14.9 15.95,14.85 C 17.85,14.8 22.25,4.5 19.3,6.65 C 16.35,8.8 17.4,16 21.25,14.95"));
+      scale_curve(w_curve, {x:5});
+      function draw_name() {
+        var body = document.getElementsByTagName("body").item(0);
+        var dots;
+        draw_lines(body, make_lines(w_curve, 5), dots);
+        draw_lines(body, make_lines(ill_curve, 5), dots);
+      }
+    //]]></script>
+    <style type="text/css">
+      html {
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body onload="draw_name()">
+  </body>
+</html>

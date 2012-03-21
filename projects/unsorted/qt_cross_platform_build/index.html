@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Cross Platform QT Build</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-939849-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+  </head>
+  <body>
+    <h1>Cross Platform QT Build</h1>
+
+    <p>I'm doing a QT application for <a href="http://eecs.vanderbilt.edu/research/hmtl/">work</a>. I'm a long time linux user and though <a href="http://sanfordfreedman.com">the application's designer</a> has made the program pretty much impossible to build off of Windows (and a bit of a challenge on Windows), I'm not quite ready to give up on my beloved command line.</p>
+
+    <p>I tried for a while to get things to build using GNU Make on Windows and that didn't go very well. Visual Studio 9 is installed (it's what I am supposed to be using), so I switched and used it's compiler.</p>
+    
+    <p>It takes four changes:</p>
+
+    <ul>
+      <li><a href="Makefile">Makefile</a> &mdash; In the <a href="Makefile">Makefile</a> use nmake if under cygwin.</li>
+      <li><a href="cl.bat">cl</a> &mdash; Even if Visual Studio is on the path, the compiler, <a href="cl.bat">cl</a>, doesn't run correctly. A batch file setting up the environment will fix it.</li>
+      <li><a href="link.bat">link</a> &mdash; The same problem with the <a href="cl.bat">compiler</a> exists for the <a href="link.bat">linker</a>.</li>
+      <li>
+        <a href="../config/bashrc"><code>PATH</code></a>: The Windows SDK needs to be on the <code>PATH</code>. I do this with the following snippet in my <a href="../config/bashrc">bashrc</a>:
+        <pre><![CDATA[if [ "${BASH_VERSINFO[5]/cygwin/}" != "${BASH_VERSINFO[5]}" ]; then
+  KEY=CurrentInstallFolder
+  WINDOWSSDK=$(reg query "HKLM\SOFTWARE\Microsoft\Microsoft SDKs\Windows" /v $KEY \
+               | grep $KEY | sed -e 's/.*REG_SZ[[:space:]]*//')
+  WINDOWSSDK=$(cygpath -p "$WINDOWSSDK\bin")
+  [ -e "$WINDOWSSDK" ] && PATH="$PATH:$WINDOWSSDK"
+fi]]></pre>
+      </li>
+    </ul>
+  </body>
+</html>

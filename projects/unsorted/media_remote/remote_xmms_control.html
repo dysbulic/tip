@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Remote XMMS Control</title>
+    <link rel="stylesheet" type="text/css" href="../styles/outline.css" />
+    <style type="text/css">
+      table {
+        margins: auto;
+      }
+      td {
+        text-align: center;
+        border: solid black;
+      }
+      td div:first-child {
+        font-size: 15pt;
+      }
+    </style>
+  </head>
+  <body>
+    <p>I was bored today and the internet was broken so rather than
+     going outside or exercising or something like that I tried to
+     figure out how to remotely control <a
+     href="http://www.xmms.org">XMMS</a>. It was an interesting
+     project that touched on a couple different areas of system
+     configuration useful otherwise, so I figured I'd record the
+     process.</p>
+    <p>I've got a Madrake box that has speakers, but which sits across
+     the lab from the RedHat 9 server where I do my work. I want to be
+     able to change songs and pause it when someone comes in without
+     getting up.</p>
+    <p>There is a useful program under Mandrake called
+     <code>xmms-shell</code> that lets me do the normal forward and
+     back that I can do using the xmms program directly, but also
+     select specific entries in the playlist and load playlists and
+     different things.</p>
+    <p>It is a neat program and I wondered how it worked, so I ran
+     <code>strace xmms-shell</code> to see. When I do a <code>jump
+     10</code> I see a trace like this:</p>
+<pre>
+brk(0x807e000)                          = 0x807e000
+socket(PF_UNIX, SOCK_STREAM, 0)         = 3
+getuid32()                              = 503
+geteuid32()                             = 503
+setuid32(0x1f7)                         = 0
+setreuid32(0x1f7, 0x1f7)                = 0
+connect(3, {sin_family=AF_UNIX, path="/tmp/xmms_will.0"}, 110) = 0
+write(3, "\1\0\t\0\0\0\0\0", 8)         = 8
+read(3, "\1\0\0\0\4\0\0\0", 8)          = 8
+read(3, "c\0\0\0", 4)                   = 4
+read(3, "\1\0\0\0\0\0\0\0", 8)          = 8
+close(3)                                = 0
+socket(PF_UNIX, SOCK_STREAM, 0)         = 3
+getuid32()                              = 503
+geteuid32()                             = 503
+setuid32(0x1f7)                         = 0
+setreuid32(0x1f7, 0x1f7)                = 0
+connect(3, {sin_family=AF_UNIX, path="/tmp/xmms_will.0"}, 110) = 0
+write(3, "\1\0\10\0\4\0\0\0", 8)        = 8
+write(3, "\t\0\0\0", 4)                 = 4
+read(3, "\1\0\0\0\0\0\0\0", 8)          = 8
+close(3)                                = 0
+write(1, "Jumped to position 10 in the pla"..., 39Jumped to position 10 in the playlist.) = 39
+</pre>
+    <p>It turns out that the important lines are these two:</p>
+<pre>
+write(3, "\1\0\10\0\4\0\0\0", 8)        = 8
+write(3, "\t\0\0\0", 4)                 = 4
+</pre>
+    <p>The following perl code will cause xmms to jump to a song:</p>
+<pre>
+#!/usr/bin/perl
+use strict;
+use Socket;
+
+my $path = "/tmp/xmms_will.0";
+
+my $num = shift || die "enter num";
+
+socket(XMMS, PF_UNIX, SOCK_STREAM, 0) or die "socket: $!";
+connect(XMMS, sockaddr_un($path)) or die "open: $path: $!";
+syswrite(XMMS, "\1\0\10\0\4");
+syswrite(XMMS, pack("C4", $num - 1));
+close(XMMS);
+</pre>
+    <p>I could go through and reverse engineer the codes for each
+     command and write little scripts like the one above. This would
+     be time consuming though and if the program changed versions the
+     codes could well change.</p>
+    <p>Another option is to use the xmms-shell program which can take
+     scripts on the command line like <code>xmms-shell -e "jump
+     23"</code>. I like this idea more since it is more likely to last
+     over time. The one drawback is xmms-shell isn't widley
+     distributed and so it wouldn't work on other systems.</p>
+    <p>I think the idea I like the best is doing it programatically.
+     XMMS includes functions that can be seen with <code>nm
+     /usr/lib/libxmms.a | grep remote</code>. Calling those functions
+     without writing a C program is a bit of a pain though. I think I
+     want to do the interface through a scripting language...</p>
+    <p>Unfortunately the computer I am working on has no development
+     tools at all installed, so even though I there is a <a
+     href="http://search.cpan.org/~dougm/Xmms-Perl-0.12/">XMMS
+     interface</a> module for perl, when I do <code>perl -MCPAN -e
+     'install xmms'</code> it fails because there is no C compiler and
+     none of the header files for perl.</p>
+    <p>Because my goal was to do as few modifications as possible to
+     the box I will stich with xmms-shell.</p>
+    <p>The setup that I want is to have my numeric keypad work in bash
+     like it does for winamp. That is:</p>
+    <table>
+      <tr>
+        <td><div>7</div><div>seek backward 5 seconds</div><div>not
+         possible with xmms-shell</div></td>
+        <td><div>8</div><div>increase volume
+         5%</div><div>upvoulme</div></td>
+        <td><div>9</div><div>seek forward 5 seconds</div><div>not
+         possible with xmms-shell</div></td>
+      </tr>
+      <tr>
+        <td><div>4</div><div>next song</div><div>next (only possible
+         to do next song in order; no shuffle)</div></td>
+        <td><div>5</div><div>play</div><div>play</div></td>
+        <td><div>6</div><div>previous song</div><div>next (only
+         possible to do previous song in order; no shuffle)</div></td>
+      </tr>
+      <tr>
+        <td><div>1</div><div></div></td>
+        <td><div>2</div><div>decrease volume
+         5%</div><div>downvolume</div></td>
+        <td><div>3</div><div></div></td>
+      </tr>
+    </table>
+  </body>
+</html>

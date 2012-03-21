@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC
+ "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>MPP's Site Builder Database</title>
+    <style type="text/css">
+      body {
+        padding: 2em 5em 0 5em;
+        font-size: 13pt;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      th, td {
+        padding-left: .5em;
+        padding-right: .5em;
+        border: 1px solid;
+      }
+      .xmltags table {
+        float: left;
+        margin-left: 1em;
+      }
+      .xmltags td { text-align: right; }
+      .xmltags td:first-child:after { content: ':'; }
+      .xmltags:after {
+        content: ""; 
+        height: 0; 
+        clear: both;
+        display: block;
+      }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>MPP's Site Builder Database</h1>
+    <p>Ok, I want to take the existing database developed by <a href="http://danielbeck.net">Daniel Beck</a>, pull the articles out of it and stick them in <a href="http://www.kintera.org">Kintera</a>. To do this, I need to understand the layout of the db and thence the purpose for this page&hellip;</p>
+    <h2>Setup</h2>
+    <p>First off I need to get a copy of the db to work with. This is done by going onto the server and running:</p>
+    <p><code>mysqldump mpp > mpp_$(date '+%y_%m_%d').mysql</code></p>
+    <p>Then I <code>rsync</code> that over to my workstation and load it into my load db with:</p>
+    <p><code>echo "create database mpp" | /usr/local/mysql/bin/mysql -u root</code></p>
+    <p><code>mysql -u root mpp &lt; <i>file</i>.mysql</code></p>
+    <p>This is having started the server locally with the command:</p>
+    <p><code>sudo /usr/local/mysql/bin/safe_mysqld --user=mysql</code></p>
+    <h2>The Tables</h2>
+    <p>So, what tables are in this db?</p>
+    <p><code>show tables;</code></p>
+    <p><code>select count(*) from <i>table</i>;</code></p>
+    <table>
+      <tr><th>Tables_in_mpp</th><th>count(*)</th></tr>
+      <tr><td>browser</td><td>14</td></tr>
+      <tr><td>comment</td><td>0</td></tr>
+      <tr><td>page</td><td>1141</td></tr>
+      <tr><td>page_unpublished</td><td>1</td></tr>
+      <tr><td>pool</td><td>11113</td></tr>
+      <tr><td>pool_unpublished</td><td>51</td></tr>
+      <tr><td>poolcategory</td><td>72177</td></tr>
+      <tr><td>poolcategory_unpublished</td><td>769</td></tr>
+      <tr><td>user</td><td>15</td></tr>
+      <tr><td>usergroup</td><td>15</td></tr>
+    </table>
+    <p>So, there are several tables, but the important ones seem to be <code>page</code>, <code>pool</code> and <code>poolcategory</code>. Each of those also has a <code>%name%_unpublished</code> version, which I would assume is to allow review before publication.</p>
+
+    <hr />
+    <h2>The <code>Page</code> Table</h2>
+    <p>The first noticable table is the <code>page</code> table. It's makeup is:</p>
+    <p><code>show columns from page;</code></p>
+    <table>
+      <tr><th colspan="6">Page</th></tr>
+      <tr><th>Field</th><th>Type</th><th>Null</th><th>Key</th><th>Default</th><th>Extra</th></tr>
+      <tr><td>id</td><td>int(10) unsigned</td><td>NO</td><td>PRI</td><td>NULL</td><td>auto_increment</td></tr>
+      <tr><td>author_id</td><td>int(10) unsigned</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>status</td><td>int(3) unsigned</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>timestamp</td><td>timestamp</td><td>YES</td><td></td><td>CURRENT_TIMESTAMP</td><td></td></tr>
+      <tr><td>parent_id</td><td>int(10) unsigned</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>domain</td><td>varchar(120)</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>wrapper</td><td>varchar(60)</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>path</td><td>varchar(120)</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>hide_nav</td><td>int(3) unsigned</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>pools</td><td>varchar(120)</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>title</td><td>text</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>link_name</td><td>text</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>text</td><td>mediumtext</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>readprivelege</td><td>varchar(60)</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>writeprivelege</td><td>varchar(60)</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+    </table>
+    <p>From poking at the table a bit, it doesn't contain much real content. All but 54 of the entries are repetitions of:</p>
+    <p><code>select id, parent_id, text from page where length(text) &lt; 140 limit 19;</code></p>
+    <table>
+      <tr><th>id</th><th>parent_id</th><th>text</th></tr>
+      <tr><td>1</td><td>NULL</td><td>Leave this page unpublished, unless you want to manage the site homepage using this system.</td></tr>
+      <tr><td>3</td><td>2</td><td>[%INCLUDE content/donate.tmpl%]</td></tr>
+      <tr><td>4</td><td>2</td><td>[%INCLUDE content/faq.tmpl%]</td></tr>
+      <tr><td>5</td><td>2</td><td>[%INCLUDE content/feedback.tmpl%]</td></tr>
+      <tr><td>6</td><td>2</td><td>[%INCLUDE content/subscribe.tmpl%]</td></tr>
+      <tr><td>7</td><td>2</td><td>[% pool_list(type="action" category="AK" start="1" count="150" sort="date desc") %]</td></tr>
+      <tr><td>8</td><td>7</td><td>[% pool_list(type="action" category="AK" start="151" count="999999" sort="date desc") %]</td></tr>
+      <tr><td>9</td><td>2</td><td>[% pool_list(type="alert" category="AK" start="1" count="150" sort="date desc") %]</td></tr>
+      <tr><td>10</td><td>9</td><td>[% pool_list(type="alert" category="AK" start="151" count="999999" sort="date desc") %]</td></tr>
+      <tr><td>11</td><td>2</td><td>[% pool_list(type="bill" category="AK" start="1" count="150" sort="date desc") %]</td></tr>
+      <tr><td>12</td><td>11</td><td>[% pool_list(type="bill" category="AK" start="151" count="999999" sort="date desc") %]</td></tr>
+      <tr><td>13</td><td>2</td><td>[% pool_list(type="letter" category="AK" start="1" count="150" sort="date desc") %]</td></tr>
+      <tr><td>14</td><td>13</td><td>[% pool_list(type="letter" category="AK" start="151" count="999999" sort="date desc") %]</td></tr>
+      <tr><td>15</td><td>2</td><td>[% pool_list(type="news" category="AK" start="1" count="150" sort="date desc") %]</td></tr>
+      <tr><td>16</td><td>15</td><td>[% pool_list(type="news" category="AK" start="151" count="999999" sort="date desc") %]</td></tr>
+      <tr><td>17</td><td>2</td><td>[% pool_list(type="pr" category="AK" start="1" count="150" sort="date desc") %]</td></tr>
+      <tr><td>18</td><td>17</td><td>[% pool_list(type="pr" category="AK" start="151" count="999999" sort="date desc") %]</td></tr>
+      <tr><td>19</td><td>2</td><td>[% pool_list(type="tellafriend" category="AK" start="1" count="150" sort="date desc") %]</td></tr>
+      <tr><td>20</td><td>19</td><td>[% pool_list(type="tellafriend" category="AK" start="151" count="999999" sort="date desc") %]</td></tr>
+    </table>
+    <p>The 54 that aren't like this are the frontpages for each of the state sites. I need to verify if the content on the fontpage is duplicated in an internal page&hellip;</p>
+
+    <hr />
+    <h2>The Pool Table</h2>
+    <p><code>show columns from pool;</code></p>
+    <table>
+      <tr><td>Field</td><td>Type</td><td>Null</td><td>Key</td><td>Default</td><td>Extra</td></tr>
+      <tr><td>id</td><td>int(10) unsigned</td><td>NO</td><td>PRI</td><td>NULL</td><td>auto_increment</td></tr>
+      <tr><td>author_id</td><td>int(10) unsigned</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>status</td><td>int(3) unsigned</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>timestamp</td><td>timestamp</td><td>YES</td><td></td><td>CURRENT_TIMESTAMP</td><td></td></tr>
+      <tr><td>type</td><td>tinytext</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>date</td><td>date</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>title</td><td>text</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>xml</td><td>mediumtext</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>readprivelege</td><td>varchar(60)</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+      <tr><td>writeprivelege</td><td>varchar(60)</td><td>YES</td><td></td><td>NULL</td><td></td></tr>
+    </table>
+    <p>This seems to be the meat of the program:</p>
+    <ul>
+      <li><code>id</code>: primary key</li>
+      <li>
+        <code>author_id</code>:
+        <p><code>select username, count(*) from user, pool where user.id = pool.author_id group by author_id;</code></p>
+        <table>
+          <tr><th>username</th><th>count(*)</th></tr>
+          <tr><td>admin</td><td>9511</td></tr>
+          <tr><td>dodonnell</td><td>30</td></tr>
+          <tr><td>koechslin</td><td>69</td></tr>
+          <tr><td>jeveleth</td><td>1</td></tr>
+          <tr><td>kokeefe</td><td>290</td></tr>
+          <tr><td>mmckey</td><td>151</td></tr>
+          <tr><td>ahorowitz</td><td>371</td></tr>
+          <tr><td>awagenseil</td><td>447</td></tr>
+        </table>
+        <p>By and large this doesn't seem terribly important. Most of it isn't even attributed to a specific user.</p>
+      </li>
+      <li>
+        <code>status</code>:
+          <p><code>select status, count(*) from pool group by status;</code></p>
+        <table>
+          <tr><th>status</th><th>count(*)</th></tr>
+          <tr><td>1</td><td>9</td></tr>
+          <tr><td>2</td><td>11104</td></tr>
+        </table>
+      </li>
+      <li><code>timestamp</code>: I'm assuming this is the time of the last modification</li>
+      <li>
+        <code>type</code>:
+        <p><code>select type, count(*) from pool group by type;</code></p>
+        <table>
+          <tr><th>type</th><th>count(*)</th></tr>
+          <tr><td>action</td><td>103</td></tr>
+          <tr><td>alert</td><td>898</td></tr>
+          <tr><td>bill</td><td>305</td></tr>
+          <tr><td>letter</td><td>63</td></tr>
+          <tr><td>news</td><td>9636</td></tr>
+          <tr><td>pr</td><td>54</td></tr>
+          <tr><td>tellafriend</td><td>54</td></tr>
+        </table>
+        <p>So, for each of these:</p>
+        <ul>
+          <li><code>action</code>: goes in the <code>Take Action</code> section of the state site</li>
+          <li><code>alert</code>: goes in the <code>Alerts</code> section of the state site</li>
+          <li><code>bill</code>: goes in the <code>Pending Bills</code> section of the state site (which, despite its name, contains all bills)</li>
+          <li><code>letter</code>: looks like it should be the <code>Letters to the Editor</code> section of the state site, but there are 63 pages of that type and only 51 states (50 + DC), so I need to figure out what those others are</li>
+          <li><code>news</code>: goes in the <code>In the News</code> section of the state site</li>
+          <li><code>pr</code>: goes in the <code>Press Releases</code> section of the state site (which will not exist for some sites)</li>
+          <li><code>tellafriend</code>: already covered in another page</li>
+        </ul>
+      </li>
+      <li><code>date</code>: the date for the content</li>
+      <li><code>title</code>: title of the content (contains html and unescaped entities)</li>
+      <li>
+        <code>xml</code>: in a fun combination of a <acronym title="Relational Database Management System">RDBMS</acronym> and <acronym title="eXtensible Markup Language">XML</acronym>, this filed contains what is almost certainly the XML documents that an earlier system was based on, but the designer didn't reimplement properly. Tags that I see:
+        <pre><code>  echo "select xml from pool;" | \
+  /usr/local/mysql/bin/mysql -u root mpp | \
+  perl -ne 'chomp; s/[^&lt;]*&lt;\/?([^ >]+)[^>]*\/?>/$1:/g;
+            foreach $var (split(/:/, $_)) { $vars{$var}++; }
+            END { foreach $tagname (sort(keys(%vars))) {
+                    printf("%13s: %d\n", $tagname, $vars{$tagname}); } };'</code></pre>
+        <div class="xmltags">
+          <table>
+            <tr><td>author</td><td>1850</td></tr>
+            <tr><td>billhist</td><td>198</td></tr>
+            <tr><td>billstatus</td><td>558</td></tr>
+            <tr><td>byline</td><td>16618</td></tr>
+            <tr><td>dead</td><td>322</td></tr>
+            <tr><td>finimpact</td><td>4</td></tr>
+            <tr><td>letter</td><td>108</td></tr>
+            <tr><td>lettercode</td><td>256</td></tr>
+            <tr><td>letternoedit</td><td>108</td></tr>
+          </table>
+          <table>
+            <tr><td>location</td><td>34</td></tr>
+            <tr><td>misctext1</td><td>400</td></tr>
+            <tr><td>misctext2</td><td>8</td></tr>
+            <tr><td>misctext3</td><td>18</td></tr>
+            <tr><td>misctitle1</td><td>402</td></tr>
+            <tr><td>misctitle2</td><td>8</td></tr>
+            <tr><td>misctitle3</td><td>18</td></tr>
+          </table>
+          <table>
+            <tr><td>mppinthenews</td><td>2608</td></tr>
+            <tr><td>number</td><td>604</td></tr>
+            <tr><td>recipient</td><td>4</td></tr>
+            <tr><td>source</td><td>19204</td></tr>
+            <tr><td>sponsors</td><td>588</td></tr>
+            <tr><td>subtitle</td><td>1838</td></tr>
+            <tr><td>summary</td><td>602</td></tr>
+            <tr><td>text</td><td>22200</td></tr>
+            <tr><td>urgent</td><td>52</td></tr>
+            <tr><td>xml</td><td>22227</td></tr>
+          </table>
+        </div>
+        <p>Since both open and close tags are counted, the <code>xml</code> count is a little interesting since the odd-numbered count either represents an unmatched or empty tag, neither of which should be there.</p>
+        <p>None of these produce any results though:</p>
+        <ul>
+          <li><code>select xml from pool where xml like "%/>%";</code></li>
+          <li><code>select xml from pool where xml like "%&lt;/x%&lt;/x%";</code></li>
+          <li><code>select xml from pool where xml like "%&lt;x%&lt;x%";</code></li>
+        </ul>
+        <p>The content of the <code>xml</code> tag is entity escaped <acronym title="Hypertext Markup Language">HTML</acronym> that seems to have been passes through a modified version of <a href="http://daringfireball.net/projects/markdown/">markdown</a>.</p>
+      </li>
+    </ul>
+    <h2>The Poolcategory Table</h2>
+    <p><code>show columns from poolcategory;</code></p>
+    <table>
+      <tr><td>Field</td><td>Type</td><td>Null</td><td>Key</td><td>Default</td><td>Extra</td></tr>
+      <tr><td>id</td><td>int(10) unsigned</td><td>NO</td><td></td><td>0</td><td></td></tr>
+      <tr><td>category</td><td>varchar(60)</td><td>YES</td><td></td><td></td><td></td></tr>
+    </table>
+    <p>A quick query reveals the function of this not too terribly well named table:</p>
+    <p><code>select id, category, count(*) from poolcategory group by category limit 10;</code></p>
+    <table>
+      <tr><th>id</th><th>category</th><th>count(*)</th></tr>
+      <tr><td>11007</td><td>AK</td><td>2195</td></tr>
+      <tr><td>21</td><td>AL</td><td>1062</td></tr>
+      <tr><td>91</td><td>AR</td><td>872</td></tr>
+      <tr><td>146</td><td>AZ</td><td>679</td></tr>
+      <tr><td>11224</td><td>CA</td><td>4540</td></tr>
+      <tr><td>11244</td><td>CO</td><td>1106</td></tr>
+      <tr><td>217</td><td>CT</td><td>2799</td></tr>
+      <tr><td>305</td><td>DC</td><td>825</td></tr>
+      <tr><td>8638</td><td>DCI</td><td>182</td></tr>
+      <tr><td>6396</td><td>DCTR</td><td>3</td></tr>
+    </table>
+    <p>So, this marks which state each item belongs to. There are 22,000+ entries and far fewer stories. There may be some dupicates, but I wouldn't think there would be that many&hellip;</p>
+    <p><code>select id, category, count(*) from poolcategory group by id, category having count(*) > 1;</code></p>
+    <table>
+      <tr><th>id</th><th>category</th><th>count(*)</th></tr>
+      <tr><td>8638</td><td>DCI</td><td>60</td></tr>
+      <tr><td>8639</td><td>AK</td><td>60</td></tr>
+      <tr><td>8640</td><td>CA</td><td>60</td></tr>
+      <tr><td>8641</td><td>GA</td><td>60</td></tr>
+      <tr><td>8642</td><td>KY</td><td>60</td></tr>
+      <tr><td>8643</td><td>MO</td><td>60</td></tr>
+      <tr><td>8644</td><td>MS</td><td>60</td></tr>
+      <tr><td>8645</td><td>NJ</td><td>60</td></tr>
+      <tr><td>8646</td><td>NV</td><td>60</td></tr>
+      <tr><td>8647</td><td>TX</td><td>60</td></tr>
+      <tr><td>8648</td><td>WA</td><td>60</td></tr>
+      <tr><td>8649</td><td>WI</td><td>60</td></tr>
+      <tr><td>8650</td><td>WY</td><td>60</td></tr>
+      <tr><td>8651</td><td>CO</td><td>60</td></tr>
+      <tr><td colspan="3">&hellip; (1041 rows)</td></tr>
+    </table>
+    <p>Probably about 6000 of those entries are duplicates.</p>
+
+    <h2>Conversion</h2>
+
+    <p>The process of going from the site builder database to Kintera will looks something like:</p>
+
+    <ol>
+      <li>Query the sitebuilder database for an entry</li>
+      <li>Discect the entries XML to get the necessary information</li>
+      <li>Post the information into Kintera</li>
+    </ol>
+    
+    <p>What I think I want to do is perform the first two steps first and write the results into a better structured database. With that db I could massage the data a bit more and hopefully make the upload process simpler. Part of this is chopping up the XML document and putting it in the database so I can manage it. From looking at the tags, I suspect each tag only appears once, but to verify:</p>
+
+    <pre><code>for tag in $(echo "select xml from pool;" | \
+  /usr/local/mysql/bin/mysql -u root mpp | \
+  perl -ne 'chomp; s/[^&lt;]*&lt;\/?([^ >]+)[^>]*\/?>/$1:/g;
+  foreach $var (split(/:/, $_)) { $vars{$var}++; }
+    END { foreach $tagname (sort(keys(%vars))) {
+    printf("%s ", $tagname, $vars{$tagname}); } };'); do
+  echo "select '$tag//$tag', count(*) from pool where xml like '%&lt;$tag%&lt;$tag%'" | \
+        /usr/local/mysql/bin/mysql -u root mpp | tail -n1
+done</code></pre>
+
+    <table>
+      <tr><td>author//author</td><td>0</td></tr>
+      <tr><td>billhist//billhist</td><td>0</td></tr>
+      <tr><td>billstatus//billstatus</td><td>0</td></tr>
+      <tr><td>byline//byline</td><td>0</td></tr>
+      <tr><td>dead//dead</td><td>0</td></tr>
+      <tr><td>finimpact//finimpact</td><td>0</td></tr>
+      <tr><td>letter//letter</td><td>54</td></tr>
+      <tr><td>lettercode//lettercode</td><td>0</td></tr>
+      <tr><td>letternoedit//letternoedit</td><td>0</td></tr>
+      <tr><td>location//location</td><td>0</td></tr>
+      <tr><td>misctext1//misctext1</td><td>0</td></tr>
+      <tr><td>misctext2//misctext2</td><td>0</td></tr>
+      <tr><td>misctext3//misctext3</td><td>0</td></tr>
+      <tr><td>misctitle1//misctitle1</td><td>0</td></tr>
+      <tr><td>misctitle2//misctitle2</td><td>0</td></tr>
+      <tr><td>misctitle3//misctitle3</td><td>0</td></tr>
+      <tr><td>mppinthenews//mppinthenews</td><td>0</td></tr>
+      <tr><td>number//number</td><td>0</td></tr>
+      <tr><td>recipient//recipient</td><td>0</td></tr>
+      <tr><td>source//source</td><td>0</td></tr>
+      <tr><td>sponsors//sponsors</td><td>0</td></tr>
+      <tr><td>subtitle//subtitle</td><td>0</td></tr>
+      <tr><td>summary//summary</td><td>0</td></tr>
+      <tr><td>text//text</td><td>0</td></tr>
+      <tr><td>urgent//urgent</td><td>0</td></tr>
+      <tr><td>xml//xml</td><td>0</td></tr>
+    </table>
+
+    <p>So each is only used once. The apparent discrepancy with &lt;letter is just it matching both &lt;letter and &lt;letternoedit.</p>
+
+    <p>This intermediary database would look like:</p>
+
+    <h3>The News Table</h3>
+    <table>
+      <tr><th colspan="5">Article</th></tr>
+      <tr><th>Field</th><th>Type</th><th>Null</th><th>Default</th><th>Extra</th></tr>
+      <tr><td>id</td><td>int</td><td>no</td><td>NULL</td><td>auto_increment</td></tr>
+      <tr><td>author_id</td><td>int</td><td>yes</td><td>NULL</td><td>foreign key references author.id</td></tr>
+      <tr><td>source_id</td><td>int</td><td>yes</td><td>NULL</td><td>foreign key references source.id</td></tr>
+      <tr><td>type_id</td><td>int</td><td>yes</td><td>NULL</td><td>foreign key references type.id</td></tr>
+      <tr><td>title</td><td>text</td><td>no</td><td>NULL</td><td></td></tr>
+      <tr><td>subtitle</td><td>text</td><td>yes</td><td>NULL</td><td></td></tr>
+      <tr><td>text</td><td>text</td><td>yes</td><td>NULL</td><td></td></tr>
+      <tr><td>publication_date</td><td>timestamp</td><td>no</td><td>current_time</td><td></td></tr>
+      <tr><td>modification_time</td><td>timestamp</td><td>no</td><td>current_time</td><td></td></tr>
+    </table>
+
+    <pre><code>create table article (
+  id int auto_increment primary key,
+  author_id int references author(id),
+  source_id int references source(id),
+  type_id int references type(id),
+  title text not null,
+  subtitle text,
+  text text,
+  publication_date date default null,
+  modification_time timestamp default current_timestamp) TYPE=MyISAM;</code></pre>
+
+    <p>MySQL won't let you use anything other than constants for defaults on any columns other than <code>timestamp</code>. That means, to set the default on the table will take a trigger:</p>
+
+    <pre><code>delimiter |
+create trigger pubdate before insert on news
+  for each row begin
+    if new.publication_date is null then set new.publication_date = now(); end if;
+  end;|
+delimiter ;</code></pre>
+
+    <p>Though maybe I should just leave it null since putting the time that this program runs as the publication date is clearly false. That sounds better&hellip;</p>
+
+    <p>Other tables that are needed to go along with <code>news</code>:</p>
+
+    <table>
+      <tr><th colspan="5">Author</th></tr>
+      <tr><th>Field</th><th>Type</th><th>Null</th><th>Default</th><th>Extra</th></tr>
+      <tr><td>id</td><td>int</td><td>no</td><td>NULL</td><td>auto_increment</td></tr>
+      <tr><td>name</td><td>text</td><td>no</td><td>NULL</td><td></td></tr>
+    </table>
+    
+    <pre><code>create table author (
+  id int auto_increment primary key,
+  name text not null) TYPE=MyISAM;</code></pre>
+
+    <p>The <code>author</code> will either be the <code>byline</code> or the <code>author</code> from the XML. <code>Author</code> was used for news stories and <code>byline</code> for MPP authored pieces and neither has both. If I were designing the db from scratch they'd be completely independant allowing multiple authors on a single piece, but that is not the case with this data and so I won't.</p>
+
+    <table>
+      <tr><th colspan="5">Type</th></tr>
+      <tr><th>Field</th><th>Type</th><th>Null</th><th>Default</th><th>Extra</th></tr>
+      <tr><td>id</td><td>int</td><td>no</td><td>NULL</td><td>auto_increment</td></tr>
+      <tr><td>name</td><td>text</td><td>no</td><td>NULL</td><td></td></tr>
+    </table>
+    
+    <pre><code>create table type (
+  id int auto_increment primary key,
+  name text not null) TYPE=MyISAM;</code></pre>
+    
+    <table>
+      <tr><th colspan="5">Source</th></tr>
+      <tr><th>Field</th><th>Type</th><th>Null</th><th>Default</th><th>Extra</th></tr>
+      <tr><td>id</td><td>int</td><td>no</td><td>NULL</td><td>auto_increment</td></tr>
+      <tr><td>name</td><td>text</td><td>no</td><td>NULL</td><td></td></tr>
+    </table>
+    
+    <pre><code>create table source (
+  id int auto_increment primary key,
+  name text not null) TYPE=MyISAM;</code></pre>
+    
+    <h3>The Location Table</h3>
+
+    <p>The <code>poolcategory</code> table is not very well named, nor is it normalized, so I am going to replace it with two tables:</p>
+
+    <table>
+      <tr><th colspan="5">Location</th></tr>
+      <tr><th>Field</th><th>Type</th><th>Null</th><th>Default</th><th>Extra</th></tr>
+      <tr><td>id</td><td>int</td><td>no</td><td>NULL</td><td>auto_increment</td></tr>
+      <tr><td>name</td><td>text</td><td>no</td><td>NULL</td><td></td></tr>
+      <tr><td>abbreviation</td><td>text</td><td>no</td><td>NULL</td><td></td></tr>
+    </table>
+    
+    <pre><code>create table location (
+  id int auto_increment primary key,
+  name text not null,
+  abbreviation text not null) TYPE=MyISAM;</code></pre>
+
+    <table>
+      <tr><th colspan="5">ItemLocation</th></tr>
+      <tr><th>Field</th><th>Type</th><th>Null</th><th>Default</th><th>Extra</th></tr>
+      <tr><td>item_id</td><td>int</td><td>no</td><td>NULL</td><td></td></tr>
+      <tr><td>location_id</td><td>int</td><td>no</td><td>NULL</td><td>foreign key references location(id)</td></tr>
+    </table>
+
+    <pre><code>create table itemlocation (
+  item_id int not null,
+  location_id int not null references location(id),
+  primary key(item_id, location_id)) TYPE=MyISAM;</code></pre>
+
+    <h2>Migration</h2>
+    
+    <p>With these tables created, the next step in <a href="site_migration.py">the program</a> is putting them into Kintera. The thing about Kintera is that it is poorly designed. There are two different tools to generate content listings, one if it is the entire content of the page and another if the content is inline. The tool for a standalone page lets you show most any information. The tool for inline content will let you show the title, subtitle and summary and that's it. Specifically it won't let you show the byline which means, since I want the byline in the listing I have to put that in the summary.</p>
+
+    <h2>Alerts</h2>
+
+    <p>Alerts are much like news stories, but they're authored by MPP staff and they include a specific call to action. I need to track the type of articles. I'll just go back to the beginning and add a type column to the <code>article</code> table and a <code>type</code> table. This also handles Press Releases and Action Items.</p>
+
+    <a name="bills"></a>
+    <h2>Bills</h2>
+
+    <p>Bills are more complex. There are several pieces of information associated with a bill:</p>
+
+    <pre><code>create table bill (
+  id int auto_increment primary key,
+  title text not null,
+  number text default null,
+  summary text default null,
+  sponsors text default null,
+  history text default null,
+  text text default null,
+  status_id int references status(id)
+  publication_date date default null) TYPE=MyISAM;</code></pre>
+
+    <pre><code>create table status (
+  id int auto_increment primary key,
+  text text not null) TYPE=MyISAM;</code></pre>
+
+    <pre><code>create table notes (
+  id int auto_increment primary key,
+  bill_id int references bill(id),
+  title text not null,
+  text text default null) TYPE=MyISAM;</code></pre>
+
+  </body>
+</html>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Robot Control Interface Requirements</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <style type="text/css">
+      .time { font-weight: bold; margin-left: -35px; }
+      p, h2, ul { margin-left: 50px; }
+      #requirements > li > ul { margin-left: 0; list-style: none; }
+      #requirements ul { margin-left: 0; padding-left: 0; }
+      #requirements > li > ul > li { margin-bottom: 1em; }
+      #requirements ul ul { margin-left: 1em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS-352 &mdash; Robot Control Interface Requirements</h1>
+      <h2>Sanford Freeman and Will Holcomb</h2>
+      <h2>21 September 2007</h2>
+    </div>
+
+    <h2>Audience Definition</h2>
+
+    <ul>
+      <li>Primary Users: The operators responsible for coordinating the activities of unmanned vehicles in a response to a chemical or explosives disaster event. The program will generally be working from the Emergency Operations Center (EOC) which will be stationed at the perimeter established around the event. The operator will not necessarily have any knowledge of the terrain the robots are navigating over. The operators will be trained emergency response personnel with a specific training using the interface.</li>
+      <li>Stakeholders: The Human-Machine Teaming Lab directing the development of this project. This project will be the basis of research into effective methods for heterogeneous ground and aerial multirobot control.</li>
+    </ul>
+
+    <h2>Requirement Types</h2>
+
+    <ul>
+      <li>Robotic Interface &mdash; Hardware requirement</li>
+      <li>Control &mdash; Operator control requirement</li>
+      <li>Scenario &mdash; Requirement pertaining to the task being tested</li>
+      <li>Data &mdash; Requirements for data from the environment to be presented to the operator</li>
+      <li>Backend &mdash; Specific technology implementation requirements</li>
+    </ul>
+
+    <h2>Requirements</h2>
+
+    <ul id="requirements">
+      <li>Client specified requirements:
+      <ul>
+        <li>
+        <ul>
+          <li>Requirement ID: 1</li>
+          <li>Requirement Type: Robotic Interface</li>
+          <li>Description: Support at least 10 vehicles</li>
+          <li>Rationale: Pushes the maximum number of vehicles controlled in current interfaces which maintaining plausibility of implementation.</li>
+          <li>Validation Measurement: Ten robots being present in the interface when the program is started.</li>
+        </ul>
+        </li>
+        <li>
+        <ul>
+          <li>Requirement ID: 2</li>
+          <li>Requirement Type: Robotic Interface</li>
+          <li>Description: Support mixed aerial and ground vehicles</li>
+          <li>Rationale: Modern response teams potentially to include mixed vehicle types.</li>
+          <li>Validation Measurement: Different icons in the interface will allow the user to distinguish between types of robots.</li>
+        </ul>
+        </li>
+        <li>
+        <ul>
+          <li>Requirement ID: 3</li>
+          <li>Requirement Type: Robotic Interface</li>
+          <li>Description: Support two types of ground vehicles</li>
+          <li>Rationale: Robots with different capabilities are used in disaster response.</li>
+          <li>Validation Measurement: Different icons in the interface will allow the user to distinguish between types of robots.</li>
+        </ul>
+        </li>
+        <li>
+        <ul>
+          <li>Requirement ID: 4</li>
+          <li>Requirement Type: Control</li>
+          <li>Description: Support ground vehicles providing victim assessment and chemical sensing</li>
+          <li>Rationale: Victim assessment and chemical sensing are two common response needs.</li>
+          <li>Validation Measurement: Different icons in the interface will allow the user to distinguish between types of robots.</li>
+        </ul>
+        </li>
+        <li>
+        <ul>
+          <li>Requirement ID: 5</li>
+          <li>Requirement Type: Control</li>
+          <li>Description: Support teleoperation of robots</li>
+          <li>Rationale: The state of the art sometimes requires detailed human intervention to perform certain tasks with a robot.</li>
+          <li>Validation Measurement: The interface will show the video feed from a particular robot. The operator can then command the robot to perform a set of rudimentary actions.</li>
+        </ul>
+        </li>
+        <li>
+        <ul>
+          <li>Requirement ID: 6</li>
+          <li>Requirement Type: Data</li>
+          <li>Description: Provide video from UV</li>
+          <li>Rationale: One useful method for gaining an awareness of the state of a robot is to see its environment.</li>
+          <li>Validation Measurement: The operator can select a robot and view its video feed.</li>
+        </ul>
+        </li>
+        <li>
+        <ul>
+          <li>Requirement ID: 7</li>
+          <li>Requirement Type: Control</li>
+          <li>Description: Require only one operator</li>
+          <li>Rationale: Trained individuals present at a response may be limited.</li>
+          <li>Validation Measurement: All tasks required can be performed by a single person.</li>
+        </ul>
+        </li>
+        <li>
+        <ul>
+          <li>Requirement ID: 8</li>
+          <li>Requirement Type: Scenario</li>
+          <li>Description: Focus on chemical and explosives disaster response</li>
+          <li>Rationale: Chemical and explosives disaster response are a situation where robots can effectively augment the response capabilities of a human team.</li>
+          <li>Validation Measurement: The interface will integrate sensor readings to provide an overview of known areas of contamination.</li>
+        </ul>
+        </li>
+        <li>
+        <ul>
+          <li>Requirement ID: 9</li>
+          <li>Requirement Type: Scenario</li>
+          <li>Description: Support victim analysis</li>
+          <li>Rationale: There will frequently be victims within to perimeter who potentially need medical treatment.</li>
+          <li>Validation Measurement: The interface should support existing victim analysis guidelines for human teams.</li>
+        </ul>
+        </li>
+        <li>
+        <ul>
+          <li>Requirement ID: 10</li>
+          <li>Requirement Type: Backend</li>
+          <li>Description: Must be capable of using simulation data from <a href="http://usarsim.sourceforge.net">USARSim</a></li>
+          <li>Rationale: Client specified simulator.</li>
+          <li>Validation Measurement: Confirm interface can connect and work with USARSim.</li>
+        </ul>
+        </li>
+        <li>
+        <ul>
+          <li>Requirement ID: 11</li>
+          <li>Requirement Type: Robotic Interface</li>
+          <li>Description: Simulation robots move up to 30mph</li>
+          <li>Rationale: Predicted maximum speed of ground robots.</li>
+          <li>Validation Measurement: Set speed of several ground robots to 30mph and confirm that the interface can maintain data rates.</li>
+        </ul>
+        </li>
+        <li>
+        <ul>
+          <li>Requirement ID: 12</li>
+          <li>Requirement Type: Control</li>
+          <li>Description: Support at least 5 concurrent tasks</li>
+          <li>Rationale: Client specified the interface must support at least 5 concurrent tasks.</li>
+          <li>Validation Measurement: Add 5 tasks to a newly instantiated interface and confirm that the interface is still operational and the operator can change between all tasks.</li>
+        </ul>
+        </li>
+      </ul>
+      </li>
+      <li>Developer Specified Requirements:
+      <ul>
+        <li>
+        <ul>
+          <li>Requirement ID: 13</li>
+          <li>Requirement Type: Data</li>
+          <li>Description: Operator is able to quickly assess the status of an individual robot</li>
+          <li>Rationale: In order to effectively control large groups of mobile robots, the operator must be able to tightly monitor their operation.</li>
+          <li>Validation Measurement: Add 10 robots to the interface and confirm that the operator can toggle between robots with minimal delay and effort.</li>
+        </ul>
+        </li>
+        <li>
+        <ul>
+          <li>Requirement ID: 14</li>
+          <li>Requirement Type: Data</li>
+          <li>Description: Interface must assist the operator in maintaining appropriate situational awareness</li>
+          <li>Rationale: High levels of situational awareness are required to perform this task.</li>
+          <li>Validation Measurement: Due to design time constraints, a SAGAT test will not be performed, but testable responses will be used.  Additionally, a subjective measures test will also be conducted, possibly a SART test.</li>
+        </ul>
+        </li>
+        <li>
+        <ul>
+          <li>Requirement ID: 15</li>
+          <li>Requirement Type: Data</li>
+          <li>Description: Alert the operator of unexpected events that require attention</li>
+          <li>Rationale: Controlling large groups of mobile robots is a challenging task because they are frequently situated in complex and highly dynamic environments.  Additionally, mobile robots can themselves be complex and dynamic.  This dynamic nature can cause frequent unexpected error conditions to occur which require immediate attention.</li>
+          <li>Validation Measurement: Simulate several error conditions and confirm that the interface provides messaging of some form to the operator.</li>
+        </ul>
+        </li>
+      </ul>
+      </li>
+    </ul>
+
+    <h2>Non-Required Possible Program Characteristics</h2>
+    
+    <ul>
+      <li>
+        <ul>
+          <li>Requirement ID: 16</li>
+          <li>Requirement Type: Control</li>
+          <li>Description: Provide an indicator to the operator as to how long he has been teleoperating a particular robot</li>
+          <li>Rationale: The state of the art requires frequent monitoring of robots</li>
+          <li>Validation Measurement: Set the interface to work with one robot and confirm that after some time period, the interface notifies the operator that it may be beneficial to look over the other robots in the system.</li>
+        </ul>
+      </li>
+    </ul>
+  </body>
+</html>

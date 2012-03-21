@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<tmpl:template xmlns="http://www.w3.org/1999/xhtml"
+               xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+               xmlns:tmpl="http://odin.himinbi.org/templ/0.1/">
+  <tmpl:hook class="org.himinbi.templ.XSLTHook">
+    <xsl:template match="html:form[@name='links']//html:option">
+      <xsl:copy>
+        <xsl:copy-of select="@*[not(name() = 'value')]" />
+        <xsl:apply-templates select="@value" mode="relative"/>
+        <xsl:apply-templates />
+      </xsl:copy>
+    </xsl:template>
+    <xsl:template match="@*" mode="relative">
+      <xsl:attribute name="{name()}">
+        <xsl:choose>
+          <xsl:when test="substring(., 4, 3) = '://' or substring(., 5, 3) = '://'">
+            <!-- already an absolute url: do nothing -->
+            <xsl:value-of select="."/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>../</xsl:text>
+            <xsl:if test=". != '.'">
+              <xsl:value-of select="."/>
+            </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+    </xsl:template>
+  </tmpl:hook>
+  <tmpl:var name="title">Granite Staters for Medical Marijuana - News</tmpl:var>
+  <tmpl:var name="header" additive="true">
+    <link type="text/css" rel="stylesheet" href="indexlist.css" />
+  </tmpl:var>
+  <tmpl:var name="content">
+    <h1><span class="marker">&#x25BC;</span> Alerts</h1>
+    <img src="../graphics/blue_linefade395.jpg" width="395" alt="" />
+    
+    <div id="news" class="indexlist">
+      <a href="20070524.html">
+        <h1><cite>GSMM Weekly Newsletter</cite></h1>
+        <h2 class="date">May 24, 2007</h2>
+        <h2 class="author">Stuart Cooper</h2>
+      </a>
+      <a href="20070517.html">
+        <h1><cite>GSMM Weekly Newsletter</cite></h1>
+        <h2 class="date">May 17, 2007</h2>
+        <h2 class="author">Stuart Cooper</h2>
+      </a>
+      <a href="20070510.html">
+        <h1><cite>GSMM Weekly Newsletter</cite></h1>
+        <h2 class="date">May 10, 2007</h2>
+        <h2 class="author">Stuart Cooper</h2>
+      </a>
+      <a href="20070503.html">
+        <h1><cite>GSMM Weekly Newsletter</cite></h1>
+        <h2 class="date">May 3, 2007</h2>
+        <h2 class="author">Stuart Cooper</h2>
+      </a>
+      <!--
+      <lst:listing src="allnews" />
+      -->
+    </div>
+  </tmpl:var>
+</tmpl:template>

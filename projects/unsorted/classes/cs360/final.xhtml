@@ -1,0 +1,2157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-360 Final</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <style type="text/css">
+      #alpine td { text-align: right; border-right: 1px solid; border-bottom: 1px solid; padding: .25em; }
+      #alpine .pred { text-align: left; border-right: 3px double; }
+      #strips p { margin-top: 0; margin-bottom: 0; }
+      img { text-align: center; margin: auto; display: block; }
+      table { border: 2px solid; }
+      table { margin-bottom: 1em; }
+      th, td { text-align: center; border: 1px solid; padding: .2em .4em; }
+      object { width: 100%; height: 250px; }
+      .dist { font-weight: bold; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 360: Introduction to Artificial Intelligence</h1>
+      <h2>Final Examination</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 12:00 Mon., 17 December 2007</h2>
+    </div>
+    <blockquote>
+      <table>
+        <tr>
+          <th>Question/Max Score</th>
+          <td>I (20)</td>
+          <td>II (25)</td>
+          <td>III (25)</td>
+          <td>IV (20)</td>
+          <td>V (20)</td>
+          <td>Total</td>
+        </tr>
+        <tr>
+          <th>Actual Score</th>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+      <p>Take Home Examination. This is an open book, open notes examination. The examination is due at 12 noon on Monday, December 17, 2007. Submit your exam to the instructor by email or submit to the digital drop box on Oak. In either case, please send a separate email to your instructor as soon as you have submitted your exam.</p>
+      <p>Late submissions will be penalized at the rate of 5 points off for every minute the submission is late. No excuses will be entertained.</p>
+      <p>Be sure to answer questions clearly. Explicitly state all your assumptions, make sure you have clearly outlined the problem you are solving, and be sure to explain and justify all of the steps in your solution process. We reserve the right to not grade answers that do not address the question asked in the exam. On the other hand, don't get carried away. A long drawn out answer is often not the best one. Avoid showing a lot of repetitive steps. I am more interested in your approach to solving the problem, your justification for the steps you choose, and a good explanation for what the result is.</p>
+      <p>Your answers to the exam questions must be your own work. You cannot discuss the exam with other students, colleagues, or faculty at the university or elsewhere. You may only consult the instructor or the TA for clarifications and help on the exam. If you use other sources, such as papers and material on the web to derive your answer, please be sure to acknowledge them in a proper way. Do not attempt to download answers to questions directly from the web. It is very important that the work you submit be based entirely on your own efforts.</p>
+      <p>The honor pledge below must accompany all examination submissions. Otherwise the examination will not be graded.</p>
+      <p>I pledge my honor that I have neither given nor received aid on this work.</p>
+    </blockquote>
+    <hr />
+    <ol>
+      <li>
+        <h2>[20 points] FOL and Predicate Calculus.</h2>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Convert the following sentences for FOL expressions.</p>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>If a program cannot be told a fact, then it cannot learn that fact.</p>
+                </div>
+                <div class="answer">
+                  <p>
+                    &ForAll; <em>p</em>, <em>f</em> &not;&Exists; <em>x</em>
+                    <code>program</code>(<em>p</em>) &and; <code>fact</code>(<em>f</em>) &and;
+                    <code>tells</code>(<em>x</em>, <em>p</em>, <em>f</em>) &Implies;
+                    &not;<code>learns</code>(<em>p</em>, <em>f</em>)
+                  </p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>All blocks on top of blocks that have been moved or that are attached to blocks that have been moved have also been moved.</p>
+                </div>
+                <div class="answer">
+                  <p>
+                    &ForAll; <em>x</em>, <em>y</em> <code>block</code>(<em>x</em>) &and; <code>block</code>(<em>y</em>) &and;
+                    (<code>on</code>(<em>x</em>, <em>y</em>) &or; <code>attached</code>(<em>x</em>, <em>y</em>)) &and;
+                    <code>moved</code>(<em>y</em>) &Implies; <code>moved</code>(<em>x</em>)
+                  </p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Every dog who loves one of its brothers is happy.</p>
+                </div>
+                <div class="answer">
+                  <p>
+                    &ForAll; <em>x</em> &Exists; <em>y</em> <code>dog</code>(<em>x</em>) &and; <code>brother</code>(<em>y</em>, <em>x</em>) &and;
+                    <code>loves</code>(<em>x</em>, <em>y</em>) &Implies; <code>happy</code>(<em>x</em>)
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <div class="question">
+              <p>Consider the following story:</p>
+              <blockquote>
+                <p>Tony, Mike, and John belong to the Alpine Club. Every member of the Alpine Club is either a skier or a mountain climber or both. No mountain climber likes rain, and all skiers like snow. Mike dislikes whatever Tony likes, and likes whatever Tony dislikes. Tony likes rain and snow. Is there a member of the Alpine Club who is a mountain climber but not a skier? Who is it?</p>
+              </blockquote>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>Formulate as predicate calculus expressions the facts given.</p>
+                </div>
+                <div class="answer">
+                  <ul>
+                    <li>
+                      <p>Tony, Mike, and John belong to the Alpine Club.</p>
+                      <p>
+                        <code>member</code>('Tony', 'Alpine Club') &and;
+                        <code>member</code>('Mike', 'Alpine Club') &and;
+                        <code>member</code>('John', 'Alpine Club')
+                      </p>
+                    </li>
+                    <li>
+                      <p>Every member of the Alpine Club is either a skier or a mountain climber or both.</p>
+                      <p>
+                        &ForAll; <em>x</em> <code>member</code>(<em>x</em>, 'Alpine Club') &Implies;
+                        <code>skier</code>(<em>x</em>) &or; <code>climber</code>(<em>x</em>)
+                      </p>
+                    </li>
+                    <li>
+                      <p>No mountain climber likes rain.</p>
+                      <p>&ForAll; <em>x</em> <code>climber</code>(<em>x</em>) &Implies; &not;<code>likes</code>(<em>x</em>, 'rain')</p>
+                    </li>
+                    <li>
+                      <p>All skiers like snow</p>
+                      <p>&ForAll; <em>x</em> <code>skier</code>(<em>x</em>) &Implies; <code>likes</code>(<em>x</em>, 'snow')</p>
+                    </li>
+                    <li>
+                      <p>Mike dislikes whatever Tony likes.</p>
+                      <p>&ForAll; <em>x</em> <code>likes</code>('Tony', <em>x</em>) &Implies; &not;<code>likes</code>('Mike', <em>x</em>)</p>
+                    </li>
+                    <li>
+                      <p>Mike likes whatever Tony dislikes.</p>
+                      <p>&ForAll; <em>x</em> &not;<code>likes</code>('Tony', <em>x</em>) &Implies; <code>likes</code>('Mike', <em>x</em>)</p>
+                    </li>
+                    <li>
+                      <p>Tony likes rain and snow.</p>
+                      <p><code>likes</code>('Tony', 'rain') &and; <code>likes</code>('Tony', 'snow')</p>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Use resolution refutation with answer-extraction to find the answer. <em>Be sure to show all of the steps in the derivation process, starting from converting the English sentences to FOL expressions, generating clauses, and so on till you have the complete proof tree.</em></p>
+                </div>
+                <div class="answer">
+                  <p>First, the previous statements need to be transformed into conjunctive normal form:</p>
+                  <ul>
+                    <li>
+                      <p>
+                        <code>member</code>('Tony', 'Alpine Club') &and;
+                        <code>member</code>('Mike', 'Alpine Club') &and;
+                        <code>member</code>('John', 'Alpine Club')
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        &ForAll; <em>x</em> <code>member</code>(<em>x</em>, 'Alpine Club') &Implies;
+                        <code>skier</code>(<em>x</em>) &or; <code>climber</code>(<em>x</em>)
+                      </p>
+                      <ul>
+                        <li>
+                          &not;<code>member</code>(<em>x</em>, 'Alpine Club') &or;
+                          <code>skier</code>(<em>x</em>) &or; <code>climber</code>(<em>x</em>)
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <p>&ForAll; <em>x</em> <code>climber</code>(<em>x</em>) &Implies; &not;<code>likes</code>(<em>x</em>, 'rain')</p>
+                      <ul>
+                        <li>&not;<code>climber</code>(<em>x</em>) &or; &not;<code>likes</code>(<em>x</em>, 'rain')</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <p>&ForAll; <em>x</em> <code>skier</code>(<em>x</em>) &Implies; <code>likes</code>(<em>x</em>, 'snow')</p>
+                      <ul>
+                        <li>&not;<code>skier</code>(<em>x</em>) &or; <code>likes</code>(<em>x</em>, 'snow')</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <p>&ForAll; <em>x</em> <code>likes</code>('Tony', <em>x</em>) &Implies; &not;<code>likes</code>('Mike', <em>x</em>)</p>
+                      <ul>
+                        <li>&not;<code>likes</code>('Mike', <em>x</em>) &or; &not;<code>likes</code>('Tony', <em>x</em>)</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <p>&ForAll; <em>x</em> &not;<code>likes</code>('Tony', <em>x</em>) &Implies; <code>likes</code>('Mike', <em>x</em>)</p>
+                      <ul>
+                        <li>&not;&not;<code>likes</code>('Tony', <em>x</em>) &or; <code>likes</code>('Mike', <em>x</em>)</li>
+                        <li><code>likes</code>('Tony', <em>x</em>) &or; <code>likes</code>('Mike', <em>x</em>)</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <p><code>likes</code>('Tony', 'rain') &and; <code>likes</code>('Tony', 'snow')</p>
+                    </li>
+                  </ul>
+
+                  <p>To answer the question: "Is there a member of the Alpine Club who is a mountain climber but not a skier?", first convert the statement to predicate calculus.</p>
+                  <ul>
+                    <li>
+                      <p>There is a member of the Alpine Club who is a mountain climber but not a skier.</p>
+                      <p>
+                        <code>member</code>(<em>x</em>, 'Alpine Club') &and;
+                        <code>climber</code>(<em>x</em>) &and; &not;<code>skier</code>(<em>x</em>)
+                      </p>
+                    </li>
+                  </ul>
+                  <p>Using resolution refutation then, that statement is negated and combined with existing predicates to attempt to reduce to a null set which shows a contradiction (and a verification of the statement). This particular resolution is done in a narrow tree where one predicate is added per level.</p>
+                  <table id="alpine">
+                    <tr>
+                      <td class="pred">
+                        &not;(<code>member</code>(<em>p</em>, 'Alpine Club') &and;
+                        <code>climber</code>(<em>p</em>) &and; &not;<code>skier</code>(<em>p</em>))
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="pred">
+                        &not;<code>member</code>(<em>p</em>, 'Alpine Club') &or;
+                        &not;<code>climber</code>(<em>p</em>) &or; <code>skier</code>(<em>p</em>)
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        &not;<code>member</code>(<em>x</em>, 'Alpine Club') &or;
+                        <code>skier</code>(<em>x</em>) &or; <code>climber</code>(<em>x</em>) &rArr;
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="pred">
+                        &not;<code>member</code>(<em>p</em>, 'Alpine Club') &or;
+                        <code>skier</code>(<em>p</em>)
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code>member</code>('Mike', 'Alpine Club') {<em>p</em>&rArr;'Mike'} &rArr;
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="pred">
+                        <code>skier</code>('Mike')
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        &not;<code>skier</code>(<em>x</em>) &or; <code>likes</code>(<em>x</em>, 'snow') &rArr;
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="pred">
+                        <code>likes</code>('Mike', 'snow')
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        &not;<code>likes</code>('Mike', <em>x</em>) &or; &not;<code>likes</code>('Tony', <em>x</em>) &rArr;
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="pred">
+                        &not;<code>likes</code>('Tony', 'snow')
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <code>likes</code>('Tony', 'snow') &rArr;
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="pred">&empty;</td>
+                    </tr>
+                  </table>
+                </div>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <div class="question">
+              <p>Consider the following FOL expressions:</p>
+              <ul>
+                <li><em>P</em>(<em>F</em>(<em>x</em>)) &Implies; <em>P</em>(<em>x</em>)</li>
+                <li><em>Q</em>(<em>x</em>) &Implies; <em>P</em>(<em>F</em>(<em>x</em>))</li>
+                <li><em>P</em>(<em>a</em>)</li>
+                <li><em>Q</em>(<em>b</em>)</li>
+              </ul>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>Can a forward chaining algorithm infer <em>Q</em>(<em>a</em>)? If so, show how, if not why not?</p>
+                </div>
+                <div class="answer">
+                  <p>In forward chaining, all fully known implications are expanded. The only fully known implication is <em>Q</em>(<em>x</em>) &Implies; <em>P</em>(<em>F</em>(<em>x</em>)) for which {<em>x</em> &rArr; <em>a</em>}. That expansion is:</p>
+                  <p><em>Q</em>(<em>b</em>) &Implies; <em>P</em>(<em>F</em>(<em>b</em>)) &Implies; <em>P</em>(<em>b</em>)</p>
+                  <p>No implications involving <em>a</em> are fully known, so forward chaining will never generate the query, <em>Q</em>(<em>a</em>), and find a solution.</p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Backward chaining will return true if we ask query <em>P</em>(<em>b</em>)? Explain why or why not.</p>
+                </div>
+                <div class="answer">
+                  <p>In backward chaining, implications that could generate a predicate are generated until they are a set of known predicates. This example only has one implication that will generate <em>P</em>(<em>F</em>(<em>x</em>)) &Implies; <em>P</em>(<em>x</em>). The only expansion possible is:</p>
+                  <p><em>P</em>(<em>b</em>) &lArr; <em>P</em>(<em>F</em>(<em>b</em>)) &lArr; <em>Q</em>(<em>b</em>)</p>
+                  <p><em>Q</em>(<em>b</em>) is in the knowledge base, so the algorithm succeeds.</p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Is this true or false &mdash; "If forward chaining has failed to infer a given literal, then it is not entailed by the KB." Explain.</p>
+                </div>
+                <div class="answer">
+                  <p>Forward chaining will eventually generate all possible predicates. If it fails then it is not possible to arrive at the query from the given facts.</p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Is this true or false &mdash; "If backward chaining does not return a true given a query literal, then it is not entailed by the KB." Explain.</p>
+                </div>
+                <div class="answer">
+                  <p>Backward chaining will examine all inferences related to a given set of facts. Eventually it will explore all possible inference paths and if there is a path, it will find it.</p>
+                </div>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <div class="question">
+              <p>Represent the following sentences by using and extending the (knowledge) representation schemes defined in Chapter 10 of Russell and Norvig.</p>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>Water is a liquid between 0 and 100 degrees Celsius.</p>
+                </div>
+                <div class="answer">
+                  <p>
+                    <em>w</em> &Element; <code>Water</code> &and; <em>t</em> &Element; <code>Temperature</code> &and;
+                    <code>Centigrade</code>(<em>t</em>) &and; <code>TemperatureOf</code>(<em>t</em>, <em>w</em>) &Implies;
+                    (<code>Liquid</code>(<em>w</em>) &iff; <code>&gt;</code>(<em>t</em>, <code>Centigrade</code>(0)) &and;
+                    <code>&lt;</code>(<em>t</em>, <code>Centigrade</code>(100)))
+                  </p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>The water in John's bottle is frozen.</p>
+                </div>
+                <div class="answer">
+                  <p>
+                    <em>w</em> &Element; <code>Water</code> &and; <em>b</em> &Element; <code>Bottle</code> &and;
+                    <code>Owns</code>('John', <em>b</em>) &and; <code>In</code>(<em>w</em>, <em>b</em>) &Implies;
+                    <code>Frozen</code>(<em>w</em>) 
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <h2>[25 points] Planning.</h2>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Suppose you have a STRIPS representation for operators <em>a<sub>1</sub></em> and <em>a<sub>2</sub></em>, and you want to define the STRIPS representation for the composite action <em>a<sub>1</sub></em>:<em>a<sub>2</sub></em>, which means you first do <em>a<sub>1</sub></em> and then do <em>a<sub>2</sub></em>.</p>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>What is the add list for the composite action?</p>
+                </div>
+                <div class="answer">
+                  <p>If <em>a<sub>1</sub></em> and <em>a<sub>s</sub></em> are execute sequentially, the operations would be:</p>
+                  <p>
+                    <code>MeetPre</code>(<em>a<sub>1</sub></em>),
+                    <code>Del</code>(<em>a<sub>1</sub></em>), <code>Add</code>(<em>a<sub>1</sub></em>),
+                    <code>MeetPre</code>(<em>a<sub>2</sub></em>),
+                    <code>Del</code>(<em>a<sub>2</sub></em>), <code>Add</code>(<em>a<sub>2</sub></em>)
+                  </p>
+                  <p>The elements added by this process will be:</p>
+                  <p>
+                    <code>Add</code>(<em>a<sub>1</sub></em>:<em>a<sub>2</sub></em>) =
+                    (<code>Add</code>(<em>a<sub>1</sub></em>) - <code>Del</code>(<em>a<sub>2</sub></em>)) +
+                    <code>Add</code>(<em>a<sub>2</sub></em>)
+                  </p>
+                  <p>In set notation, this would be expressed as:</p>
+                  <p>
+                    <code>Add</code>(<em>a<sub>1</sub></em>:<em>a<sub>2</sub></em>) =
+                    (<code>Add</code>(<em>a<sub>1</sub></em>) &Intersection; &not;<code>Del</code>(<em>a<sub>2</sub></em>)) &Union;
+                    <code>Add</code>(<em>a<sub>2</sub></em>)
+                  </p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>What is the delete list?</p>
+                </div>
+                <div class="answer">
+                  <p>
+                    <code>Del</code>(<em>a<sub>1</sub></em>:<em>a<sub>2</sub></em>) =
+                    <code>Del</code>(<em>a<sub>1</sub></em>) + <code>Del</code>(<em>a<sub>2</sub></em>) =
+                    <code>Del</code>(<em>a<sub>1</sub></em>) &Union; <code>Del</code>(<em>a<sub>2</sub></em>)
+                  </p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>What are the preconditions for the composite action?</p>
+                </div>
+                <div class="answer">
+                  <p>The composite of the two actions is only possible if a precondition for <em>a<sub>2</sub></em> is not removed by <em>a<sub>1</sub></em>:</p>
+                  <p>
+                    <code>Pre</code>(<em>a<sub>2</sub></em>) &Intersection;
+                    (<code>Del</code>(<em>a<sub>1</sub></em>) &Intersection; &not;<code>Add</code>(<em>a<sub>1</sub></em>)) = &empty;
+                  </p>
+                  <p><em>This specification permits an element to be in both the <code>Add</code> and <code>Del</code> lists for <em>a<sub>1</sub></em>. This shouldn't generally happen, but could.</em></p>
+                  <p>Assuming that the above precondition is met:</p>
+                  <p>
+                    <code>Pre</code>(<em>a<sub>1</sub></em>:<em>a<sub>2</sub></em>) =
+                    <code>Pre</code>(<em>a<sub>1</sub></em>) + (<code>Pre</code>(<em>a<sub>2</sub></em>) - <code>Add</code>(<em>a<sub>1</sub></em>)) =
+                    <code>Pre</code>(<em>a<sub>1</sub></em>) &Union;
+                    (<code>Pre</code>(<em>a<sub>2</sub></em>) &Intersection; &not;<code>Add</code>(<em>a<sub>1</sub></em>))
+                  </p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Consider the delivery robot domain.</p>
+                  <p>The relations that are true of situations or states are as follows:</p>
+                  <ul>
+                    <li><code>at</code>(<em>Obj</em>,<em>Loc</em>): Object <i>Obj</i> is at location <i>Loc</i></li>
+                    <li><code>carrying</code>(<em>Ag</em>,<em>Obj</em>): Agent <i>Ag</i> is carrying <i>Obj</i></li>
+                    <li><code>unlocked</code>(<em>Door</em>): if <i>Door</i> is unlocked</li>
+                    <li><code>locked</code>(<em>Door</em>): if <i>Door</i> is locked</li>
+                    <li><code>opens</code>(<em>Key</em>,<em>Door</em>): if <i>Key</i> can open <i>Door</i></li>
+                    <li><code>adjacent</code>(<em>Pos1</em>,<em>Pos2</em>): position <i>Pos1</i> is adjacent to position <i>Pos2</i> and the robot can move to it in one step</li>
+                    <li><code>between</code>(<em>Door</em>,<em>Pos1</em>,<em>Pos2</em>): if Door is between position <i>Pos1 </i> and position <i>Pos2</i>. If Door is unlocked, the two positions are adjacent. <i>between</i> is assumed to be static, i.e., you cannot create new doors.</li>
+                  </ul>
+                  <p>Define the following actions as STRIPS operators (precondition, add, and delete lists) in this domain.</p>
+                  <ul>
+                    <li>move(Ag,From,To): this represents the action of Agent <i>Ag</i> moving from an initial location <i>From</i> to a destination location <i>To</i>. This can only happen if the agent is at location <i>From</i>, and location <i>To</i> is adjacent to location <i>From</i></li>
+                    <li>pickup(Ag,Obj): represents the action of agent <i>Ag</i> picking up object <i>Obj</i>. The agent can only carry out this action if it is at the same location as Obj.</li>
+                    <li>putdown(Ag,Obj): is the action of agent <i>Ag</i> putting down object <i>Obj</i>. It can only carry out this action if it is carrying the Object.</li>
+                    <li>unlock(Ag,Door): is the action of the agent <i>Ag</i> unlocking door <i>Door</i>. It can only carry out this action if it is at the door, and it is carrying the key to the door.</li>
+                    <li>lock(Ag,Door): is the action of the agent <i>Ag</i> locking door <i>Door</i>. It can only carry out this action if it is at the door, and it is carrying the key to the door.</li>
+                  </ul>
+                </div>
+                <div class="answer">
+                  <ul>
+                    <li>
+                      Action(<code>move</code>(<em>Ag</em>,<em>From</em>,<em>To</em>):
+                      <ul>
+                        <li><code>Precon</code>(<code>at</code>(<em>Ag</em>,<em>From</em>), <code>adjacent</code>(<em>From</em>,<em>To</em>))</li>
+                        <li><code>Del</code>(<code>at</code>(<em>Ag</em>,<em>From</em>))</li>
+                        <li><code>Add</code>(<code>at</code>(<em>Ag</em>,<em>To</em>)))</li>
+                      </ul>
+                    </li>
+                    <li>
+                      Action(<code>pickup</code>(<em>Ag</em>,<em>Obj</em>):
+                      <ul>
+                        <li><code>Precon</code>(<code>at</code>(<em>Ag</em>,<em>x</em>), <code>at</code>(<em>Obj</em>,<em>x</em>))</li>
+                        <li><code>Del</code>(<code>at</code>(<em>Obj</em>,<em>x</em>))</li>
+                        <li><code>Add</code>(<code>carrying</code>(<em>Ag</em>,<em>Obj</em>)))</li>
+                      </ul>
+                    </li>
+                    <li>
+                      Action(<code>putdown</code>(<em>Ag</em>,<em>Obj</em>):
+                      <ul>
+                        <li><code>Precon</code>(<code>at</code>(<em>Ag</em>,<em>x</em>), <code>carrying</code>(<em>Ag</em>,<em>Obj</em>))</li>
+                        <li><code>Del</code>(<code>carrying</code>(<em>Ag</em>,<em>Obj</em>))</li>
+                        <li><code>Add</code>(<code>at</code>(<em>Obj</em>,<em>x</em>)))</li>
+                      </ul>
+                    </li>
+                    <li>
+                      Action(<code>unlock</code>(<em>Ag</em>,<em>Door</em>):
+                      <ul>
+                        <li>
+                          <code>Precon</code>(<code>at</code>(<em>Ag</em>,<em>x</em>), <code>at</code>(<em>Door</em>,<em>x</em>),
+                          <code>opens</code>(<em>k</em>,<em>Door</em>), <code>carrying</code>(<em>Ag</em>,<em>k</em>),
+                          <code>locked</code>(<em>Door</em>), <code>between</code>(<em>Door</em>,<em>Pos1</em>,<em>Pos2</em>))
+                        </li>
+                        <li><code>Del</code>(<code>locked</code>(<em>Door</em>))</li>
+                        <li>
+                          <code>Add</code>(<code>adjacent</code>(<em>Pos1</em>,<em>Pos2</em>), <code>adjacent</code>(<em>Pos2</em>,<em>Pos1</em>),
+                          <code>unlocked</code>(<em>Door</em>)))
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      Action(<code>lock</code>(<em>Ag</em>,<em>Door</em>):
+                      <ul>
+                        <li>
+                          <code>Precon</code>(<code>at</code>(<em>Ag</em>,<em>x</em>), <code>at</code>(<em>Door</em>,<em>x</em>),
+                          <code>opens</code>(<em>k</em>,<em>Door</em>), <code>carrying</code>(<em>Ag</em>,<em>k</em>),
+                          <code>unlocked</code>(<em>Door</em>), <code>between</code>(<em>Door</em>,<em>Pos1</em>,<em>Pos2</em>))
+                        </li>
+                        <li>
+                          <code>Del</code>(<code>unlocked</code>(<em>Door</em>),
+                          <code>adjacent</code>(<em>Pos1</em>,<em>Pos2</em>), <code>adjacent</code>(<em>Pos2</em>,<em>Pos1</em>))
+                        </li>
+                        <li><code>Add</code>(<code>locked</code>(<em>Door</em>)))</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Give the STRIPS representation for the composite action <code>fetch</code> made up of the three primitive actions:</p>
+                  <ul>
+                    <li><code>move</code>(<em>Ag</em>,<em>Pos1</em>,<em>Pos2</em>)</li>
+                    <li><code>pickup</code>(<em>Ag</em>,<em>Obj</em>)</li>
+                    <li><code>move</code>(<em>Ag</em>,<em>Pos2</em>,<em>Pos1</em>)</li>
+                  </ul>
+                </div>
+                <div class="answer">
+                  <ul>
+                    <li>
+                      Action(<code>fetch</code>(<em>Obj</em>,<em>ObjPos</em>):
+                      <ul>
+                        <li>
+                          <code>Precon</code>(<code>at</code>(<em>Ag</em>,<em>Pos</em>), <code>at</code>(<em>Obj</em>,<em>ObjPos</em>),
+                          <code>adjacent</code>(<em>Pos</em>,<em>ObjPos</em>)
+                        </li>
+                        <li><code>Del</code>(<code>at</code>(<em>Obj</em>,<em>ObjPos</em>))</li>
+                        <li><code>Add</code>(<code>carrying</code>(<em>Ag</em>,<em>Obj</em>)))</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Consider the initial state of the system depicted in the figure below.</p>
+                  <img src="robot_map.png" alt="robot map" />
+                  <p>This can be described by: <em>(though from the figure it appears that the door isn't locked)</em></p>
+                  <ul>
+                    <li><code>at</code>(rob, o109)</li>
+                    <li><code>at</code>(parcel, storage)</li>
+                    <li><code>at</code>(k1, mail)</li>
+                    <li><code>locked</code>(door1)</li>
+                  </ul>
+                  <p>We also know the following static facts about the domain:</p>
+                  <ul>
+                    <li><code>between</code>(door1, o103, lab2)</li>
+                    <li><code>opens</code>(k1, door1)</li>
+                  </ul>
+                  <p>We also know rob is an agent, and parcel and mail are objects. In addition, the figure gives us a number of relations, such as:</p>
+                  <ul>
+                    <li><code>adjacent</code>(lab2, o109)</li>
+                    <li><code>adjacent</code>(r101, r103)</li>
+                    <li>
+                      <code>between</code>(<em>Door</em>, <em>P1</em>, <em>P2</em>) &and; <code>unlocked</code>(<em>Door</em>) &Implies;
+                      <code>adjacent</code>(<em>P1</em>, <em>P2</em>)
+                    </li>
+                    <li><code>adjacent</code>(mail, o103)</li>
+                    <li><code>adjacent</code>(mail, stairs)</li>
+                    <li><code>adjacent</code>(mail, r131)</li>
+                  </ul>
+                  <p>Given the goal condition: <code>at</code>(rob, lab2), <code>carrying</code>(rob, parcel); apply regression planning using the STRIPS operators to generate a complete plan. You don't need to show me all of the gory details of each step of the plan (because it is going to be very repetitive), but highlight the important steps and the major issues in generating the plan and the plan that is generated.</p>
+                </div>
+                <div class="answer">
+                  <p>The diagram is somewhat confusing because it is not clear of all positions are present or not. There are positions outside of rooms 103, 109 and 111 ('o109' and 'o111'), but there's no position outside the rest of the rooms. The closest position outside of room 115 is 'o109', however it doesn't really make sense to say that 'o109' is adjacent to 'r115'. The closest place to room 115 is room 113 and from the problem specification, it seems there should be a predicate <code>adjacent</code>(r113,r115). This would not allow both the two doors that separate those two spaces to be locked. Unlocking one door or the other adds predicates saying the two spaces are <code>adjacent</code>. Two adjacent spaces can be <code>move</code>d between, and that isn't true if there's still a locked door in the way. A more reasonable representation would be to define a 'o<em>xyz</em>' which is the area immediately outside the door to room <em>xyz</em>.</p>
+                  <p>That being said, increasing the number of states will significantly increase the depth to which a planner will have to search since each position can be reached from several directions (representing a branch in the search tree). For this reason, the only positions will be those on the map and doors without labels are not considered and assumed to be open.</p>
+                  <object id="car_net" type="image/svg+xml" data="regression.svg"></object>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p><b>[Extra Credit]</b> If you wanted to avoid this very repetitive one-step <code>move</code> operator, and define a more composite <code>MOVE</code> operator, i.e., <code>MOVE</code>(<em>Ag</em>, <em>From</em>, <em>To</em>), can you come up with a recursive definition for this composite operator using the primitive <code>move</code> operator? Discuss.</p>
+                </div>
+                <div class="answer">
+                  <p>This question requires something of an alteration of the basic STRIPS operator. Normally the precondition, add and delete lists are a set of facts that are present in the knowledge base. There is no concept of performing an action from within another. STRIPS would easily allow the specification of a multiple step move, for example the composite action:</p>
+                  <ul>
+                    <li>
+                      Action(<code>move_2</code>(<em>Ag</em>, <em>From</em>, <em>To</em>):
+                      <ul>
+                        <li>
+                          <code>Precon</code>(<code>at</code>(<em>Ag</em>,<em>From</em>), <code>adjacent</code>(<em>From</em>,<em>x</em>)
+                          <code>adjacent</code>(<em>x</em>,<em>To</em>))</li>
+                        <li><code>Del</code>(<code>at</code>(<em>Ag</em>,<em>From</em>))</li>
+                        <li><code>Add</code>(<code>at</code>(<em>Ag</em>,<em>To</em>)))</li>
+                      </ul>
+                    </li>
+                  </ul>
+                  <p>To allow a recursive <code>MOVE</code>, there are two questions to be answered:</p>
+                  <ul>
+                    <li>Where to recurse?</li>
+                    <li>How to stop the recursion?</li>
+                  </ul>
+                  <p>The recursion has to happen in the preconditions. If this was not the case then <code>MOVE</code> could be called with nonexistent positions and it would execute.</p>
+                  <p>The second issue is more difficult. STRIPS only allows conjunctions or operators. This means that the <code>MOVE</code> operator would always be recursively executed and the recursion would be infinite. There are a couple options that would permit ending recursion, but one of the more useful additions would be short-circuit disjunctions. This concept exists in many programming languages, and it is simply that in an &or;ed expression, the first element to evaluate to true stops evaluation of the expression. If these existed for STRIPS, <code>MOVE</code> would be:</p>
+                  <ul>
+                    <li>
+                      Action(<code>MOVE</code>(<em>Ag</em>, <em>From</em>, <em>To</em>):
+                      <ul>
+                        <li>
+                          <code>Precon</code>(<code>at</code>(<em>Ag</em>,<em>From</em>) &and;
+                          (<code>adjacent</code>(<em>From</em>,<em>To</em>) &or;
+                          (<code>adjacent</code>(<em>From</em>,<em>x</em>) &and; <code>MOVE</code>(<em>Ag</em>, <em>x</em>,<em>To</em>)))
+                        </li>
+                        <li><code>Del</code>(<code>at</code>(<em>Ag</em>,<em>From</em>))</li>
+                        <li><code>Add</code>(<code>at</code>(<em>Ag</em>,<em>To</em>)))</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <div class="question">
+              <p>Consider the game of <em>peg solitaire</em>, as shown in the figure below (see <a href="http://en.wikipedia.org/wiki/Peg_solitaire">en.wikipedia.org/wiki/Peg_solitaire</a>) . The goal is to remove all of the pieces but one, which must be left in the center hole C. A piece is removed by hopping over an adjacent piece into an empty adjacent hole. For example, piece A can hop over piece B into hole C, removing piece B from the board.</p>
+              <img src="peg_solitaire.png" alt="robot map" />
+              <p>You have to formulate peg solitaire as a partial-order planning problem using STRIPS operators.</p>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>Describe the start and finish steps for this problem (there is no need to list EVERY literal one by one, but just say what literals are needed.) You will need to choose a vocabulary. You may assume that the predicate <code>Line</code>(<em>u</em>,<em>v</em>,<em>w</em>) (<em>u</em>,<em>v</em>, and <em>w</em> are consecutive locations along a line) is available and that the constant C refers to the center location.</p>
+                </div>
+                <div class="answer">
+                  <p>It is assumed all jumps are either horizontal or vertical. There are no diagonal jumps (or lines). The peg positions are assigned identifiers based on their position if they were embedded in a 7&times;7 grid:</p>
+                  <img src="peg_solitaire_marked.png" alt="robot map" />
+                  <p>The knowledge base then contains line predicates:</p>
+                  <ul>
+                    <li><code>Line</code>(13, 14, 15)</li>
+                    <li><code>Line</code>(23, 24, 25)</li>
+                    <li><code>Line</code>(13, 23, 33)</li>
+                    <li><code>Line</code>(31, 32, 33)</li>
+                    <li><code>Line</code>(32, 33, 34)</li>
+                    <li><code>Line</code>(33, 34, 35)</li>
+                    <li>&hellip;</li>
+                  </ul>
+                  <p>Lines are defined left to right. Either an inverted predicate could be defined for each predicate or an additional action that permits reversing could be defined:</p>
+                  <ul>
+                    <li>
+                      Action(<code>reverse_order</code>(<em>x</em>,<em>z</em>):
+                      <ul>
+                        <li>
+                          <code>Precon</code>(<code>Line</code>(<em>x</em>,<em>y</em>,<em>z</em>))
+                        </li>
+                        <li>
+                          <code>Del</code>()
+                        </li>
+                        <li>
+                          <code>Add</code>(<code>Line</code>(<em>z</em>,<em>y</em>,<em>x</em>)))
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                  <p>There are also predicates about the presence of pegs:</p>
+                  <ul>
+                    <li><code>Peg</code>(13)</li>
+                    <li><code>Peg</code>(14)</li>
+                    <li>&hellip;</li>
+                  </ul>
+                  <p>There is one empty space at <code>C</code> which is <code>44</code> in the numbering scheme defined above.</p>
+                  <ul>
+                    <li><code>Empty</code>(44)</li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Now write the STRIPS operator for making a move. Be sure to strictly observe the syntactic restrictions on STRIPS operators.</p>
+                </div>
+                <div class="answer">
+                  <ul>
+                    <li>
+                      Action(<code>jump</code>(<em>x</em>,<em>z</em>):
+                      <ul>
+                        <li>
+                          <code>Precon</code>(<code>Peg</code>(<em>x</em>), <code>Empty</code>(<em>z</em>),
+                          <code>Line</code>(<em>x</em>,<em>y</em>,<em>z</em>), <code>Peg</code>(<em>y</em>))
+                        </li>
+                        <li>
+                          <code>Del</code>(<code>Peg</code>(<em>x</em>), <code>Peg</code>(<em>y</em>),
+                          <code>Empty</code>(<em>z</em>))
+                        </li>
+                        <li>
+                          <code>Add</code>(<code>Empty</code>(<em>x</em>), <code>Empty</code>(<em>y</em>),
+                          <code>Peg</code>(<em>z</em>)))
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Describe how a clobbering conflict can occur in the course of partial-order planning with this particular formulation or explain why one cannot occur.</p>
+                </div>
+                <div class="answer">
+                  <p>A clobbering conflict can occur. There are multiple ways to remove a particular peg. One plan might plan to remove it horizontally and the other vertically. Once a peg is removed it prevents the jump in the other plan. Similarly, any series of jumps begins with a single peg. If that peg is removed then the series is impossible. Finally, a series of jumps relies on positions being empty if another plan places a peg in a position a plan was going to jump into then that plan is no longer possible.</p>
+                </div>
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <h2>[25 points] Bayesian Networks</h2>
+        <div class="question">
+          <p>Consider the Bayesian network for car diagnosis as shown below. </p>
+          <object id="car_net" type="image/svg+xml" data="car_bayes_net.svg"></object>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Whether the engine starts doesn't just depend on the spark plug and petrol; it also depends on the starter motor is working. The starter motor can get frozen in icy weather, and icy weather can also increase the likelihood of the battery dying. Extend the network with the boolean variables <em>IcyWeather</em> and <em>StarterMotorFrozen</em>.</p>
+            </div>
+            <div class="answer">
+              <object id="car_weather_net" type="image/svg+xml" data="car_bayes_net_weather.svg"></object>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Give reasonable conditional probability tables for all the nodes. [Here are some values to help you along:</p>
+              <ul>
+                <li>P(<i>IcyWeather</i> = 0.05)</li>
+                <li>P(<i>Battery</i>) = 0.95</li>
+                <li>P(<i>Petrol</i>) = 0.995</li>
+                <li>P(<i>Radio</i> | <i>Battery</i>) = 0.995</li>
+                <li>P(<i>Radio</i> | &not;<i>Battery</i>) = 0.05</li>
+              </ul>
+            </div>
+            <div class="answer">
+              <table>
+                <caption>Icy Weather</caption>
+                <tr><th>P(Icy Weather)</th></tr>
+                <tr><td>0.05</td></tr>
+              </table>
+              <table>
+                <caption>Petrol</caption>
+                <tr><th>P(Petrol)</th></tr>
+                <tr><td>0.995</td></tr>
+              </table>
+              <table>
+                <caption>Battery</caption>
+                <tr><th>Icy Weather</th><th>P(Battery | Icy Weather)</th></tr>
+                <tr><td>T</td><td>0.8</td></tr>
+                <tr><td>F</td><td>0.95</td></tr>
+              </table>
+              <table>
+                <caption>Radio</caption>
+                <tr><th>Battery</th><th>P(Radio | Battery)</th></tr>
+                <tr><td>T</td><td>0.995</td></tr>
+                <tr><td>F</td><td>0.05</td></tr>
+              </table>
+              <table>
+                <caption>Spark Plug</caption>
+                <tr><th>Battery</th><th>P(Spark Plug | Battery)</th></tr>
+                <tr><td>T</td><td>0.9</td></tr>
+                <tr><td>F</td><td>0.001</td></tr>
+              </table>
+              <table>
+                <caption>Starter Frozen</caption>
+                <tr><th>Icy Weather</th><th>P(Starter Frozen | Icy Weather)</th></tr>
+                <tr><td>T</td><td>0.5</td></tr>
+                <tr><td>F</td><td>0.001</td></tr>
+              </table>
+
+              <p><em>Note that unlike the other properties, the starter being frozen reduces the chances of the engine starting.</em></p>
+              <table>
+                <caption>Engine Starts</caption>
+                <tr>
+                  <th>Spark Plug</th><th>Petrol</th><th>Starter Frozen</th>
+                  <th>P(Engine Starts | Spark Plug, Petrol, Starter Frozen)</th>
+                </tr>
+                <tr><td>T</td><td>T</td><td>T</td><td>0.08</td></tr>
+                <tr><td>T</td><td>T</td><td>F</td><td>0.995</td></tr>
+                <tr><td>T</td><td>F</td><td>T</td><td>10<sup>-7</sup></td></tr>
+                <tr><td>T</td><td>F</td><td>F</td><td>10<sup>-5</sup></td></tr>
+                <tr><td>F</td><td>T</td><td>T</td><td>10<sup>-6</sup></td></tr>
+                <tr><td>F</td><td>T</td><td>F</td><td>10<sup>-4</sup></td></tr>
+                <tr><td>F</td><td>F</td><td>T</td><td>10<sup>-12</sup></td></tr>
+                <tr><td>F</td><td>F</td><td>F</td><td>10<sup>-10</sup></td></tr>
+              </table>
+              <table>
+                <caption>Car Moves</caption>
+                <tr><th>Engine Starts</th><th>P(Car Moves | Engine Starts)</th></tr>
+                <tr><td>T</td><td>0.999</td></tr>
+                <tr><td>F</td><td>0.005</td></tr>
+              </table>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>How many independent values are contained in the joint probability distribution for eight boolean nodes, assuming that no conditional independence relations are known to hold among them?</p>
+            </div>
+            <div class="answer">
+              <p>For independent probabilities:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo>P</mo>
+                      <mfenced>
+                        <msub><mi>X</mi><mn>1</mn></msub><msub><mi>X</mi><mn>2</mn></msub><mo>&hellip;</mo>
+                        <msub><mi>X</mi><mi>n</mi></msub>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>&Pi;</mo><mo>P</mo><mfenced><msub><mi>X</mi><mi>i</mi></msub></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>Each <em>X<sub>i</sub></em> requires a table of two values to capture its information. There are eight values, so the number of independent values considered in the joint probability is 2<em>n</em> = 16.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>How many independent probability values do your network tables contain?</p>
+            </div>
+            <div class="answer">
+              <p>For describing the probability as an equation, the following abbreviations are used:</p>
+              <ul>
+                <li><em>W</em> &rArr; Icy Weather</li>
+                <li><em>G</em> &rArr; Petrol</li>
+                <li><em>B</em> &rArr; Battery</li>
+                <li><em>R</em> &rArr; Radio</li>
+                <li><em>P</em> &rArr; Spark Plug</li>
+                <li><em>S</em> &rArr; Starter Frozen</li>
+                <li><em>E</em> &rArr; Engine Starts</li>
+                <li><em>M</em> &rArr; Car Moves</li>
+              </ul>
+              <p>Given the Bayes net above:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo>P</mo>
+                      <mfenced>
+                        <mi>W</mi><mi>G</mi><mi>B</mi><mi>R</mi>
+                        <mi>P</mi><mi>S</mi><mi>E</mi><mi>M</mi>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>P</mo><mfenced><mi>G</mi></mfenced>
+                      <mo>P</mo><mfenced><mi>W</mi></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>S</mi><mfenced open="" close=""><mi>W</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>B</mi><mfenced open="" close=""><mi>W</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>R</mi><mfenced open="" close=""><mi>B</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>P</mi><mfenced open="" close=""><mi>B</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>E</mi><mfenced open="" close=""><mi>P</mi><mi>G</mi><mi>S</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>M</mi><mfenced open="" close=""><mi>E</mi></mfenced></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The number of values required for each of these distributions is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><msup><mn>2</mn><mn>1</mn></msup></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><msup><mn>2</mn><mn>1</mn></msup></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><msup><mn>2</mn><mn>2</mn></msup></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><msup><mn>2</mn><mn>2</mn></msup></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><msup><mn>2</mn><mn>2</mn></msup></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><msup><mn>2</mn><mn>2</mn></msup></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><msup><mn>2</mn><mn>4</mn></msup></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><msup><mn>2</mn><mn>2</mn></msup></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>2</mn></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><mn>2</mn></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><mn>4</mn></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><mn>4</mn></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><mn>4</mn></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><mn>4</mn></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><mn>16</mn></mtd>
+                    <mtd><mo>+</mo></mtd>
+                    <mtd><mn>4</mn></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>40</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Write out the marginal distribution for P(<em>Car Moves</em>, <em>Radio</em>, <em>Battery</em>)</p>
+            </div>
+            <div class="answer">
+              <p>The notation used is capitol variables (<em>W</em>) represent distributions and lower case variables (<em>w</em>) represent the members of the distribution:</p>
+              
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>P</mo><mfenced><mi>X</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mtable>
+                        <mtr><mtd><mo>P</mo><mfenced><mi>x</mi></mfenced></mtd></mtr>
+                        <mtr><mtd><mo>P</mo><mfenced><mrow><mo>&not;</mo><mi>x</mi></mrow></mfenced></mtd></mtr>
+                      </mtable></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The concept of summation then is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><munder><mo>&Sum;</mo><mi>x</mi></munder><mo>P</mo><mfenced><mi>X</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>P</mo><mfenced><mi>x</mi></mfenced><mo>+</mo><mo>P</mo><mfenced><mrow><mo>&not;</mo><mi>x</mi></mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>Given the Bayes net above:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>P</mo><mfenced><mi>M</mi><mi>R</mi><mi>B</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>g</mi><mi>w</mi><mi>s</mi><mi>p</mi><mi>e</mi></mfenced></munder>
+                      <mo>P</mo><mfenced><mi>G</mi></mfenced>
+                      <mo>P</mo><mfenced><mi>W</mi></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>S</mi><mfenced open="" close=""><mi>W</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>B</mi><mfenced open="" close=""><mi>W</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>R</mi><mfenced open="" close=""><mi>B</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>P</mi><mfenced open="" close=""><mi>B</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>E</mi><mfenced open="" close=""><mi>P</mi><mi>G</mi><mi>S</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>M</mi><mfenced open="" close=""><mi>E</mi></mfenced></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <munder><mo>&Sum;</mo><mi>g</mi></munder>
+                      <mo>P</mo><mfenced><mi>G</mi></mfenced>
+                      <munder><mo>&Sum;</mo><mi>w</mi></munder>
+                      <mo>P</mo><mfenced><mi>W</mi></mfenced>
+                      <munder><mo>&Sum;</mo><mi>s</mi></munder>
+                      <mo>P</mo><mfenced separators="|"><mi>S</mi><mfenced open="" close=""><mi>W</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>B</mi><mfenced open="" close=""><mi>W</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>R</mi><mfenced open="" close=""><mi>B</mi></mfenced></mfenced>
+                      <munder><mo>&Sum;</mo><mi>p</mi></munder>
+                      <mo>P</mo><mfenced separators="|"><mi>P</mi><mfenced open="" close=""><mi>B</mi></mfenced></mfenced>
+                      <munder><mo>&Sum;</mo><mi>e</mi></munder>
+                      <mo>P</mo><mfenced separators="|"><mi>E</mi><mfenced open="" close=""><mi>P</mi><mi>G</mi><mi>S</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>M</mi><mfenced open="" close=""><mi>E</mi></mfenced></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li>
+           <div class="question">
+             <p>Apply the variable elimination algorithm to the query P(<em>Car Moves</em> | <em>Icy Weather</em>, <em>Radio</em>). Show the entire computation process, though you do not have to do the actual arithmetic calculations.</p>
+           </div>
+            <div class="answer">
+              <p>Given the Bayes net above:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>P</mo><mfenced separators="|"><mi>M</mi><mfenced open="" close=""><mi>w</mi><mi>r</mi></mfenced></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>g</mi><mi>s</mi><mi>b</mi><mi>p</mi><mi>e</mi></mfenced></munder>
+                      <mo>P</mo><mfenced><mi>G</mi></mfenced>
+                      <mo>P</mo><mfenced><mi>w</mi></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>S</mi><mfenced open="" close=""><mi>w</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>B</mi><mfenced open="" close=""><mi>w</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>r</mi><mfenced open="" close=""><mi>B</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>P</mi><mfenced open="" close=""><mi>B</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>E</mi><mfenced open="" close=""><mi>P</mi><mi>G</mi><mi>S</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>M</mi><mfenced open="" close=""><mi>E</mi></mfenced></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <munder><mo>&Sum;</mo><mi>g</mi></munder>
+                      <mo>P</mo><mfenced><mi>G</mi></mfenced>
+                      <mo>P</mo><mfenced><mi>w</mi></mfenced>
+                      <munder><mo>&Sum;</mo><mi>s</mi></munder>
+                      <mo>P</mo><mfenced separators="|"><mi>S</mi><mfenced open="" close=""><mi>w</mi></mfenced></mfenced>
+                      <munder><mo>&Sum;</mo><mi>b</mi></munder>
+                      <mo>P</mo><mfenced separators="|"><mi>B</mi><mfenced open="" close=""><mi>w</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>r</mi><mfenced open="" close=""><mi>B</mi></mfenced></mfenced>
+                      <munder><mo>&Sum;</mo><mi>p</mi></munder>
+                      <mo>P</mo><mfenced separators="|"><mi>P</mi><mfenced open="" close=""><mi>B</mi></mfenced></mfenced>
+                      <munder><mo>&Sum;</mo><mi>e</mi></munder>
+                      <mo>P</mo><mfenced separators="|"><mi>E</mi><mfenced open="" close=""><mi>P</mi><mi>G</mi><mi>S</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>M</mi><mfenced open="" close=""><mi>E</mi></mfenced></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>The reductions are made using a concept called factors. Factors are generated starting from the left of the equation and generating going right. The first factor is: (<em>note that the syntax used here for factors differs slightly from (and is less ambiguous than) Russel and Norvig</em>)</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>f</mi><mi>M</mi></msub><mfenced><mi>E</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mtable>
+                        <mtr>
+                          <mtd><mo>P</mo><mfenced separators="|"><mi>m</mi><mi>e</mi></mfenced></mtd>
+                          <mtd><mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mi>e</mi></mfenced></mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd><mo>P</mo><mfenced separators="|"><mi>m</mi><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced></mtd>
+                          <mtd><mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced></mtd>
+                        </mtr>
+                      </mtable></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The next factor is more complex. For each axis along which a conditional probability varies, a new dimension is added to the matrix. So, the next factor 2&times;2&times;2&times;2 rather than 2&times;2:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>f</mi><mi>E</mi></msub><mfenced><mi>P</mi><mi>G</mi><mi>S</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mtable>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|"><mi>e</mi><mfenced open="" close=""><mi>p</mi><mi>g</mi><mi>s</mi></mfenced></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi><mfenced open="" close=""><mi>p</mi><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow></mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi><mfenced open="" close=""><mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi></mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi><mfenced open="" close=""><mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mi>s</mi></mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow><mfenced open="" close=""><mi>p</mi><mi>g</mi><mi>s</mi></mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close=""><mi>p</mi><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow></mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close=""><mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi></mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close=""><mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mi>s</mi></mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                      </mtable>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>The factors then are combined into factors using a process called pointwise multiplication. In pointwise multiplication, factor elements are joined by variables they have in common. The number of dimensions in the result are the number of unique factors. (<em>note that elements have been written lenghtwise to get them to fit</em>)</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <msub><mi>f</mi><mi>M</mi></msub><mfenced><mi>E</mi></mfenced><mo>&times;</mo>
+                      <msub><mi>f</mi><mi>E</mi></msub><mfenced><mi>P</mi><mi>G</mi><mi>S</mi></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mtable>
+                        <mtr>
+                          <mtd><mo>P</mo><mfenced separators="|"><mi>m</mi><mi>e</mi></mfenced></mtd>
+                          <mtd><mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mi>e</mi></mfenced></mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd><mo>P</mo><mfenced separators="|"><mi>m</mi><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced></mtd>
+                          <mtd><mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced></mtd>
+                        </mtr>
+                      </mtable></mfenced>
+                      <mo>&times;</mo>
+                      <mtable>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|"><mi>e</mi><mfenced open="" close=""><mi>p</mi><mi>g</mi><mi>s</mi></mfenced></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi><mfenced open="" close=""><mi>p</mi><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow></mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi><mfenced open="" close=""><mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi></mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi><mfenced open="" close=""><mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mi>s</mi></mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow><mfenced open="" close=""><mi>p</mi><mi>g</mi><mi>s</mi></mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close=""><mi>p</mi><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow></mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close=""><mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi></mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close=""><mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mi>s</mi></mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                      </mtable>
+                    </mtd>
+                  </mtr>
+                  <!-- New Row -->
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mtable>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|"><mi>e</mi><mfenced open="" close=""><mi>p</mi><mi>g</mi><mi>s</mi></mfenced></mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mi>e</mi></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi><mfenced open="" close=""><mi>p</mi><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow></mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mi>e</mi></mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi><mfenced open="" close=""><mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi></mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mi>e</mi></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mi>e</mi></mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi><mfenced open="" close=""><mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mi>s</mi></mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mi>e</mi></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mi>e</mi></mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mi>e</mi></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mi>e</mi></mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow><mfenced open="" close=""><mi>p</mi><mi>g</mi><mi>s</mi></mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close=""><mi>p</mi><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow></mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close=""><mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi></mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close=""><mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mi>s</mi></mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|"><mi>e</mi><mfenced open="" close=""><mi>p</mi><mi>g</mi><mi>s</mi></mfenced></mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mi>e</mi></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi><mfenced open="" close=""><mi>p</mi><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow></mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mi>e</mi></mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi><mfenced open="" close=""><mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi></mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mi>e</mi></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mi>e</mi></mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi><mfenced open="" close=""><mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mi>s</mi></mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mi>e</mi></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mi>e</mi></mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mi>e</mi></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mi>e</mi>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mi>e</mi></mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow><mfenced open="" close=""><mi>p</mi><mi>g</mi><mi>s</mi></mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close=""><mi>p</mi><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow></mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close=""><mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi></mfenced>
+                                  </mfenced>
+                                        <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mi>p</mi><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mfenced><mtable>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close=""><mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mi>s</mi></mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mi>g</mi><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                              </mtr>
+                              <mtr>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mi>s</mi>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                                <mtd>
+                                  <mo>P</mo>
+                                  <mfenced separators="|">
+                                    <mrow><mo>&not;</mo><mi>e</mi></mrow>
+                                    <mfenced open="" close="">
+                                      <mrow><mo>&not;</mo><mi>p</mi></mrow><mrow><mo>&not;</mo><mi>g</mi></mrow><mrow><mo>&not;</mo><mi>s</mi></mrow>
+                                    </mfenced>
+                                  </mfenced>
+                                  <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><mi>m</mi></mrow><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mtd>
+                              </mtr>
+                            </mtable></mfenced>
+                          </mtd>
+                        </mtr>
+                      </mtable>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>This rapidly growing factor is then reduced in size using summation. In this case, it is a summation over <em>E</em>. (<em>Which is really long and I ran out of time.</em>)</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <h2>[20 points] Dynamic Bayes Nets</h2>
+        <div class="question">
+          <p>An agent lives in a 3&times;3 grid world surrounded by walls. (1,1) is the bottom left and (3,1) is the bottom right. The agent's action <i>A</i> can be <i>left</i>, <i>up</i>, <i>right</i>, and <i>down</i>. The precept is an integer <i>N</i> indicating the number of adjacent walls. The agent's state is just its (<i>X</i>, <i>Y</i>) position and the prior over <i>X</i> and <i>Y</i> is uniform. At each step the agent receives a precept, and chooses its action.</p>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Below are the first three time slices of a dynamic Bayes net. Add links to make the best possible representations of the problem. (You need not add parents for <i>A</i> because the agent chooses its value.)</p>
+            </div>
+            <div class="answer">
+              <object id="dynamic_net" type="image/svg+xml" data="dynamic_bayes_net.svg"></object>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Suppose the wall sensor is accurate and the agent's movement is deterministic. Given <em>N<sub>1</sub></em> = 1, <em>A<sub>1</sub></em> = right, <em>N<sub>2</sub></em> = 2, where could the agent be at time 2?</p>
+            </div>
+            <div class="answer">
+              <p>Something unspecified in the problem is the effect of a robot attempting to drive through a wall. For example if a robot is at (1,1) and decides to move up. An interesting effect would be if it would rotate 90&deg; to either side with some probability (and change the meanings of <em>up</em>, <em>right</em>, etc.). That would be significantly harder to model though, so it is assumed if the robot attempts to drive through a wall it simply doesn't move.</p>
+              <p>Since the robot is in a 3&times;3 grid, there are three possibilities for <em>N</em>:</p>
+              <ul>
+                <li><em>N</em> = 0 &mdash; the robot is at the center of the grid: (2,2). This is the only position not adjacent to a wall</li>
+                <li><em>N</em> = 1 &mdash; the robot is in the center of a wall: (2,{1,3}) or ({1,3},2)</li>
+                <li><em>N</em> = 2 &mdash; the robot is in a corner: ({1,3},{1,3})</li>
+              </ul>
+              <p>Moving right means going from (<em>x</em>,<em>y</em>) to (<em>x</em> + 1,<em>y</em>).</p>
+              <ul>
+                <li>Since <em>N<sub>1</sub></em> = 1
+                <ul>
+                  <li>the robot was at (2,{1,3}) or ({1,3},2)</li>
+                </ul>
+                </li>
+                <li>Since <em>N<sub>2</sub></em> = 2
+                <ul>
+                  <li>(1,2) is eliminated since the robot would have moved to the center where <em>N<sub>2</sub></em> = 0</li>
+                  <li>(3,2) is eliminated since attempting to drive through the wall leaves it at (3,2) where <em>N<sub>2</sub></em> = 1</li>
+                </ul>
+                </li>
+              </ul>
+              <p>This leaves the robot at either (2,1) or (2,3).</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Suppose the wall sensor detects each wall with independent probability <i>p</i> &lt; 1, but detects the absence of a wall correctly. Given <em>N<sub>1</sub></em> = 1, <em>A<sub>1</sub></em> = right, <em>N<sub>2</sub></em> = 1, where could the agent not have been at time 1?</p>
+            </div>
+            <div class="answer">
+              <p>That the sensor correctly determines the absence of a wall perfectly but may have an error detecting a wall means a wall may be missed, but there are no phantom walls. The effect is the detected value of <em>N</em> is a lower bound.</p>
+              <p>So, <em>N<sub>1</sub></em> and <em>N<sub>2</sub></em> were at least 1.</p>
+              <ul>
+                <li>If the actual <em>N<sub>1</sub></em> = 1 and <em>N<sub>2</sub></em> = 1
+                <ul>
+                  <li>There is only one space where a move to the right leaves <em>N<sub>1</sub></em> = 1 and <em>N<sub>2</sub></em> = 1 &mdash; being at (3,2) and attempting to drive through the wall</li>
+                </ul>
+                </li>
+                <li>If the actual <em>N<sub>1</sub></em> = 2 and <em>N<sub>2</sub></em> = 1
+                <ul>
+                  <li>Either of the corners (1,1) or (3,1) will satisfy these criteria</li>
+                </ul>
+                </li>
+                <li>If the actual <em>N<sub>1</sub></em> = 1 and <em>N<sub>2</sub></em> = 2
+                <ul>
+                  <li>From the previous question, (2,1) and (2,3) meet this criteria</li>
+                </ul>
+                </li>
+                <li>If the actual <em>N<sub>1</sub></em> = 2 and <em>N<sub>2</sub></em> = 2
+                <ul>
+                  <li>This would mean the robot was in a corner and attempted to drive through a wall, which means (1,3) or (3,3)</li>
+                </ul>
+                </li>
+              </ul>
+              <p>Ultimately, the only positions that can be eliminated are:</p>
+              <ul>
+                <li>(2,1) since it is known <em>N<sub>2</sub></em> &gt; 0</li>
+                <li>(2,2) since it is known <em>N<sub>1</sub></em> &gt; 0</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Is it true that given the motion model for part (b) and the sensor model for part (c), it is impossible for the agent ever to know <i>exactly</i> where it is with certainty. Explain your answer.</p>
+            <div class="answer">
+              <p>Since there is no mention of a robot not moving as it intended or getting turned, if a robot goes right twice and down twice it will know definitively it is in the lower right corner. It can get to any corner by a similar method. After it knows which corner it is in, since navigation is perfect, it can reliably move to any position without relying on its sensors at all.</p>
+            </div>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <h2>[20 points] Machine Learning</h2>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Can a purely unsupervised learning agent learn? How do an unsupervised learning agent and a reinforcement learning agent differ? Be specific.</p>
+            </div>
+            <div class="answer">
+              <p>An unsupervised agent generally starts off with a dataset it is attempting to identify patterns within. The process begins by extracting some random elements from the dataset and setting them aside as a test set. It then uses the remaining learning set to formulate concepts about the patterns in the whole set. Next, it makes predictions about the elements it set aside in the test set and from the accuracy of these tests the learning agent can estimate how well it learned.</p>
+              <p>Reinforcement learning differs from unsupervised learning in that in unsupervised learning generally deals with finding patterns in a set of data. Reinforcement learning deals with the actions an agent should take to maximize the amount of some reward. Unsupervised agents know the entire state of the world and are attempting to find patterns whereas reinforcement learners have incomplete knowledge and are only able to discover the effects of a action by performing the action and observing.</p>
+              <p>Reinforcement agents are attempting to learn the set of actions to maximize reward and unsupervised agents are attempting to identify a pattern to maximize prediction efficiency. The difference between an unsupervised agent and a reinforcement agent whose reward is correct prediction is the completeness of the information the agent has at its disposal.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Why is Occam's razor important to learning by observation?</p>
+            </div>
+            <div class="answer">
+              <p>For any given set of points there are an infinite number of curves that could be fitted to pass through them. Occam's razor, by specifying that the simplest complete solution is the best, defines a criteria for choosing a specific solution.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Can all boolean functions be represented by small decision trees? Why or why not?</p>
+            </div>
+            <div class="answer">
+              <p>A boolean function simply means there are two outcomes. Imagine the boolean function <code>gender</code>. It has two outputs, 'male' or 'female.' Now, imagine that the system does not have access to chromosomal information, or that the system uses a modern interpretation of gender which divorces it from sex (a drag queen would be referred to using female pronouns and called a woman despite being genetically male). This system would rely on behavioral characteristics (wears a dress, wears makeup, etc.) and physical characteristics (hair length, height, waist to hip ratio, etc.). There are hundreds of thousands of potential characteristics that provide some level of separation, but particularly if sampling was done across cultures the correlation between any one characteristic and definitively knowing gender is small. With a cross-culture sample size of a couple hundred thousand people, this tree could potentially require hundreds of characteristics and levels to predict the boolean characteristic of gender.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Draw a decision tree for the following problem, where we have a table of data that describes eight pieces of fruit.  Use the features, Taste, Size, and Color in this order to generate the decision tree.</p>
+              <table> 
+                <tr><th>Number</th><th>Taste</th><th>Size</th><th>Color</th><th>Result</th></tr>
+                <tr><td>1</td><td>Sweet</td><td>Medium</td><td>Red</td><td>Apple</td></tr>
+                <tr><td>2</td><td>Sour</td><td>Medium</td><td>Green</td><td>Apple</td></tr>
+                <tr><td>3</td><td>Sour</td><td>Medium</td><td>Red</td><td>Apple</td></tr>
+                <tr><td>4</td><td>Sweet</td><td>Medium</td><td>Yellow</td><td>Apple</td></tr>
+                <tr><td>5</td><td>Sweet</td><td>Small</td><td>Red</td><td>Grape</td></tr>
+                <tr><td>6</td><td>Sour</td><td>Small</td><td>Green</td><td>Grape</td></tr>
+                <tr><td>7</td><td>Sour</td><td>Large</td><td>Yellow</td><td>Grapefruit</td></tr>
+                <tr><td>8</td><td>Sour</td><td>Small</td><td>Yellow</td><td>Lemon</td></tr>
+              </table>
+            </div>
+            <div class="answer">
+              <object id="ordered_tree" type="image/svg+xml" data="ordered_decision_tree.svg"></object>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Compute the information gain for each attribute of the three features: taste, size, and color.</p>
+              <p>Use this information to choose the root node for a more compact decision tree.  Continue this process and complete the tree. Compare against the tree that you generated in part (d).</p>
+            </div>
+            <div class="answer">
+              <p>Information content of a set <em>X</em> in bit-based information entropy information is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>I</mo><mfenced><mi>X</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>-</mo><munder><mo>&Sum;</mo><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&Element;</mo><mi>X</mi></mrow></munder>
+                      <mo>p</mo><mfenced><msub><mi>x</mi><mi>i</mi></msub></mfenced>
+                      <msub><mo>log</mo><mn>2</mn></msub><mo>p</mo><mfenced><msub><mi>x</mi><mi>i</mi></msub></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The entropy of a partition, <em>C</em>, of the set <em>X</em> is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>E</mo><mfenced><mi>C</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munder><mo>&Sum;</mo><mrow><msub><mi>c</mi><mi>i</mi></msub><mo>&Element;</mo><mi>C</mi></mrow></munder>
+                      <mfrac>
+                        <mfenced open="|" close="|"><msub><mi>c</mi><mi>i</mi></msub></mfenced>
+                        <mfenced open="|" close="|"><mi>C</mi></mfenced>
+                      </mfrac>
+                      <mo>I</mo><mfenced><msub><mi>c</mi><mi>i</mi></msub></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>It is also useful to recall that:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mo>log</mo><mi>b</mi></msub><mfenced><mi>x</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfrac>
+                        <mrow><msub><mo>log</mo><mi>k</mi></msub><mfenced><mi>x</mi></mfenced></mrow>
+                        <mrow><msub><mo>log</mo><mi>k</mi></msub><mfenced><mi>b</mi></mfenced></mrow>
+                      </mfrac>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              
+              <p>The information gain isn't really needed. The gain is the information content of the whole set minus the entropy of a partition. Since the information total is constant, one can simply pick the partition with minimum entropy. Since it is requested though, the information content of the entire set is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>I</mo><mfenced><mi>X</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>-</mo>
+                      <mfenced><mrow>
+                        <mo>I</mo><mfenced><mi>Apple</mi></mfenced><mo>+</mo>
+                        <mo>I</mo><mfenced><mi>Grape</mi></mfenced><mo>+</mo>
+                        <mo>I</mo><mfenced><mi>Lemon</mi></mfenced><mo>+</mo>
+                        <mo>I</mo><mfenced><mi>Grapefruit</mi></mfenced>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>-</mo>
+                      <mfenced><mrow>
+                        <mfrac><mn>4</mn><mn>8</mn></mfrac>
+                        <msub><mo>log</mo><mn>2</mn></msub><mfrac><mn>4</mn><mn>8</mn></mfrac><mo>+</mo>
+                        <mfrac><mn>2</mn><mn>8</mn></mfrac>
+                        <msub><mo>log</mo><mn>2</mn></msub><mfrac><mn>2</mn><mn>8</mn></mfrac><mo>+</mo>
+                        <mfrac><mn>1</mn><mn>8</mn></mfrac>
+                        <msub><mo>log</mo><mn>2</mn></msub><mfrac><mn>1</mn><mn>8</mn></mfrac><mo>+</mo>
+                        <mfrac><mn>1</mn><mn>8</mn></mfrac>
+                        <msub><mo>log</mo><mn>2</mn></msub><mfrac><mn>1</mn><mn>8</mn></mfrac>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>-</mo>
+                      <mfenced><mrow>
+                        <mfrac><mn>1</mn><mn>2</mn></mfrac>
+                        <msub><mo>log</mo><mn>2</mn></msub><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>+</mo>
+                        <mfrac><mn>1</mn><mn>4</mn></mfrac>
+                        <msub><mo>log</mo><mn>2</mn></msub><mfrac><mn>1</mn><mn>4</mn></mfrac><mo>+</mo>
+                        <mfrac><mn>1</mn><mn>4</mn></mfrac>
+                        <msub><mo>log</mo><mn>2</mn></msub><mfrac><mn>1</mn><mn>8</mn></mfrac>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>1.75</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              
+              <p>For the top of the decision tree (where the entire dataset is considered), the values for I(<em>x</em>) would be:</p>
+              <table>
+                <tr>
+                  <th>Chr.</th><th>Value</th><th>Apple</th><th>Grape</th><th>G.fruit</th><th>Lemon</th>
+                  <th>I(<em>c</em>)</th><th>E(<em>C</em>)</th><th>G(<em>C</em>) = I(<em>X</em>) - E(<em>C</em>)</th>
+                </tr>
+                <tr>
+                  <td rowspan="2">Taste</td><td>Sweet</td><td>2</td><td>1</td><td>0</td><td>0</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mtable>
+                        <mtr>
+                          <mtd>
+                            <mo>-</mo><mo>(</mo>
+                            <mfrac><mn>2</mn><mn>3</mn></mfrac>
+                            <msub><mo>log</mo><mn>2</mn></msub><mfrac><mn>2</mn><mn>3</mn></mfrac>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mo>+</mo><mfrac><mn>1</mn><mn>3</mn></mfrac>
+                            <msub><mo>log</mo><mn>2</mn></msub><mfrac><mn>1</mn><mn>3</mn></mfrac>
+                            <mo>)</mo>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd><mo>&ape;</mo><mn>0.918296</mn></mtd>
+                        </mtr>
+                      </mtable>
+                    </math>
+                  </td>
+                  <td rowspan="2">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mtable>
+                        <mtr><mtd><mfrac><mn>3</mn><mn>8</mn></mfrac><mn>0.918296</mn></mtd></mtr>
+                        <mtr><mtd><mo>+</mo><mfrac><mn>5</mn><mn>8</mn></mfrac><mn>1.921928</mn></mtd></mtr>
+                        <mtr><mtd><mo>=</mo><mn>1.545566</mn></mtd></mtr>
+                      </mtable>
+                    </math>
+                  </td>
+                  <td rowspan="2">0.204434</td>
+                </tr>
+                <tr>
+                  <td>Sour</td><td>2</td><td>1</td><td>1</td><td>1</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mtable>
+                        <mtr>
+                          <mtd>
+                            <mo>-</mo><mo>(</mo>
+                            <mfrac><mn>2</mn><mn>5</mn></mfrac>
+                            <msub><mo>log</mo><mn>2</mn></msub><mfrac><mn>2</mn><mn>5</mn></mfrac>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mo>+</mo><mfenced><mn>3</mn></mfenced><mfrac><mn>1</mn><mn>5</mn></mfrac>
+                            <msub><mo>log</mo><mn>2</mn></msub><mfrac><mn>1</mn><mn>5</mn></mfrac><mo>)</mo>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd><mo>&ape;</mo><mn>1.921928</mn></mtd>
+                        </mtr>
+                      </mtable>
+                    </math>
+                  </td>
+                </tr>
+                <tr>
+                  <td rowspan="3">Size</td><td>Large</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td>
+                  <td rowspan="3">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mtable>
+                        <mtr><mtd><mfrac><mn>3</mn><mn>8</mn></mfrac><mn>0.918296</mn></mtd></mtr>
+                        <mtr><mtd><mo>=</mo><mn>0.344361</mn></mtd></mtr>
+                      </mtable>
+                    </math>
+                  </td>
+                  <td rowspan="3">1.405639</td>
+                </tr>
+                <tr><td>Medium</td><td>4</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                <tr><td>Small</td><td>0</td><td>2</td><td>0</td><td>1</td><td>0.918296</td></tr>
+                <tr>
+                  <td rowspan="3">Color</td><td>Red</td><td>2</td><td>1</td><td>0</td><td>0</td><td>0.918296</td>
+                  <td rowspan="3">1.156861</td><td rowspan="3">0.593139</td>
+                </tr>
+                <tr><td>Green</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+                <tr><td>Yellow</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1.5</td></tr>
+              </table>
+
+              <p>A lower entropy is better (since the gain is the total information minus the subdivision entropy), so size is chosen as the characteristic to separate on. Two of the three sizes (large and medium) are perfect predictors for a fruit and don't need to be subdivided. For the third another calculation needs to be performed on the remaining characteristic. For this table, only small fruits are being considered.</p>
+              <table>
+                <tr>
+                  <th>Chr.</th><th>Value</th><th>Apple</th><th>Grape</th><th>G.fruit</th><th>Lemon</th>
+                  <th>I(<em>c</em>)</th><th>E(<em>C</em>)</th>
+                </tr>
+                <tr>
+                  <td rowspan="2">Taste</td><td>Sweet</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td>
+                  <td rowspan="2">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>2</mn><mn>3</mn></mfrac></math>
+                  </td>
+                </tr>
+                <tr><td>Sour</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+                <tr>
+                  <td rowspan="3">Color</td><td>Red</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td rowspan="3">0</td>
+                </tr>
+                <tr><td>Green</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                <tr><td>Yellow</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+              </table>
+              <p>Color comes out with the best entropy and it is a perfect predictor (0 entropy) so there are no ambiguities left. The resultant tree is:</p>
+              <object id="entropy_tree" type="image/svg+xml" data="entropy_decision_tree.svg"></object>
+              <p>This tree is less bushy than the previous tree and shallower. For apples and grapefruits only a single computation is needed. For everything else there are two. There is no classification that can't be done more quickly on this tree than the previous one.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </body>
+</html>

@@ -1,0 +1,126 @@
+<?php
+  /**
+   * Author: Will Holcomb <wholcomb@gmail.com>
+   * Date: 16 August 2006
+   */
+function excerpt_help($section = '') {
+  switch ($section) {
+  case 'admin/help#excerpt':
+    $output = '<p>'. t('Adds an excerpt option to provide a user hook for a page. Also provides a new block to display the excerpt associated with a page.') .'</p>';
+    return $output;
+  case 'admin/modules#description':
+    return t('Associates a hook excerpt with a page.');
+  case 'admin/path':
+    return '<p>' . t("Blah blah") . '</p>';
+  }
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function excerpt_form_alter($form_id, &$form) {
+  if(isset($form['type']) && $form['type']['#value'] .'_node_form' == $form_id) {
+    $excerpt = $form['#node']->excerpt;
+    $form['excerpt'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Excerpt'),
+      '#collapsible' => TRUE,
+      '#collapsed' => empty($excerpt),
+      '#weight' => 30,
+    );
+    $form['excerpt']['excerpt'] = array(
+      '#type' => 'textarea',
+      '#default_value' => $excerpt,
+      '#rows' => 10,
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#description' => t('A short excerpt that could be used to entice people to read more.'),
+    );
+  }
+}
+
+function excerpt_nodeapi(&$node, $op, $arg) {
+  switch ($op) {
+  case 'validate':
+    $node->excerpt = trim($node->excerpt);
+    if($node->excerpt) {
+      //form_set_error('path', t('The path is already in use.'));
+    }
+    break;
+
+  case 'load':
+    $result = db_query('SELECT text as excerpt FROM {excerpt} WHERE vid = %d', $node->vid);
+    if(db_num_rows($result) > 0) {
+      return array('excerpt' => db_result($result));
+    }
+    break;
+
+  case 'insert':
+    db_query("INSERT INTO {excerpt} (nid, vid, text) VALUES (%d, %d, '%s')",
+             $node->nid, $node->vid, $node->excerpt); 
+    break;
+
+  case 'update':
+    // this avoids issues where a node doesn't have an excerpt to be updated
+    db_query('DELETE FROM {excerpt} WHERE vid = %d', $node->vid);
+    excerpt_nodeapi($node, 'insert', $arg);
+    break;
+
+  case 'delete':
+    db_query('DELETE FROM {excerpt} WHERE nid = %d', $node->nid);
+    break;
+  }
+}
+
+function excerpt_block($op = 'list', $delta = 0) {
+  switch($op) {
+  case 'list':
+    $blocks[0]['info'] = t('Excerpt');
+    return $blocks;
+
+  case 'view':
+    if(arg(0) == "node" && is_numeric(arg(1))) {
+      $node = node_load(arg(1));
+      $block['content'] = $node->excerpt;
+    }
+    break;
+  }
+  return $block;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function excerpt_install() {
+  drupal_set_message('Installing excerpt');
+  switch($GLOBALS['db_type']) {
+  case 'mysql':
+  case 'mysqli':
+    db_query("CREATE TABLE {excerpt} (
+        nid int(10) unsigned NOT NULL default '0',
+        vid int(10) unsigned NOT NULL default '0',
+        text text NOT NULL default '',
+        PRIMARY KEY (nid, vid),
+        FOREIGN KEY (nid) REFERENCES node(nid),
+        FOREIGN KEY (vid) REFERENCES node(vid)
+      ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
+    $success = TRUE;
+    break;
+
+  case 'pgsql':
+    // untested
+    db_query("CREATE TABLE {excerpt_field} (
+        nid int primary key references node(nid),
+        vid int primary key references node(vid),
+        text varchar() NOT NULL default ''
+      );");
+    $success = TRUE;
+    break;
+  } // End case
+
+  if($success) {
+    drupal_set_message(t('Excerpt module installed tables successfully.'));
+  } else {
+    drupal_set_message(t('The installation of the excerpt module failed.'), 'error');
+  }
+}

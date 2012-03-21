@@ -1,0 +1,43 @@
+OBJ = hci
+OBJS := $(OBJ)
+
+ifdef CYGWIN
+	PWD = $(shell pwd | sed -e 's|/cygdrive/c/||' -e 's|[^/]\+|..|g')
+	QTDOS = $(shell cygpath --dos --mixed "$$QTDIR")
+	ifneq "$(QTDOS)" ""
+		MOCPATH = $(QTDOS)/bin/
+	endif
+	OBJS += ${patsubst ../lib.win32/%,debug/%,${wildcard ../lib.win32/*}}
+endif
+
+all: $(OBJS)
+
+ifndef CYGWIN
+%_Makefile: %.pro
+else
+%_Makefile: %.pro.win32
+endif
+	qmake -nomoc -unix -o $@ $<
+ifdef CYGWIN
+	sed -e 's|c:|$(PWD)|gi' $@ > $@.tmp
+	mv "$@.tmp" "$@"
+	sed -e 's|c:.*moc.exe|$(MOCPATH)moc.exe|gi' \
+	    -e 's|c:|$(PWD)|gi' \
+	    -e 's|/cygdrive/c|$(PWD)|gi' \
+	    -e 's|$$(QTDIR)|"$$(QTDIR)"|g' $@.Release > $@.Release.tmp
+	mv "$@.Release.tmp" "$@.Release"
+	sed -e 's|c:.*moc.exe|$(MOCPATH)moc.exe|gi' \
+	    -e 's|c:|$(PWD)|gi' \
+	    -e 's|/cygdrive/c|$(PWD)|gi' \
+	    -e 's|$$(QTDIR)|"$$(QTDIR)"|g' $@.Debug > $@.Debug.tmp
+	mv "$@.Debug.tmp" "$@.Debug"
+endif
+
+$(OBJ): $(OBJ)_Makefile $(wildcard *.cpp) $(wildcard *.h)
+	$(MAKE) --file=$<
+
+debug/%.dll: ../lib.win32/%.dll
+	cp $< $@
+
+clean:
+	$(RM) -r $(OBJ) $(OBJ)_Makefile* object_script* *.o *~ debug/ release/

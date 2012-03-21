@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Effective Control of Multiple Unmanned Robotic Vehicles &mdash; Final Report</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <style type="text/css">
+      ul { list-style: none; }
+      ul ul { list-style: disc; }
+      ul ul ul { list-style: circle; }
+      th, td { border: 1px solid; padding: .25em .5em; }
+      table { caption-side: bottom; }
+      .mark { display: block; float: left; width: .95em; text-align: center; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>Effective Control of Multiple Unmanned Robotic Vehicles &mdash; Final Report</h1>
+      <h2>Sanford Freedman and Will Holcomb</h2>
+      <h2>6 December 2007</h2>
+    </div>
+    <p><em>This is not a full report, only pre-typeset sections.</em></p>
+    <ul>
+      <li>
+        <h2>Abstract</h2>
+        <p><strong>Objective:</strong> Evaluate whether an interface based on combining a traditional robot teleoperation interface with mapping and informational overlays would alloy multiple robots to increase operator efficiency. <strong>Background:</strong> There is a drive within the field of robotic control to design interfaces that allow a single operator to operate multiple vehicles. <strong>Method:</strong> Seventeen people took part in a two task repeated measures design. The dependent variables assessed were time to complete the task, number of tasks completed and the mental workload required. <strong>Results:</strong> Testing showed, with an increase in the number of robots, there was a statistically significant increase in user satisfaction, a decrease in the time required to complete the trial, but a decrease in the completion of some tasks. <strong>Conclusion:</strong> This paper demonstrates an innovative approach to controlling the activities of a group of robots while providing tele-operation access to individual robots through the simultaneous display of traditional tele-operation data overlaid with map data.</p>
+      </li>
+      <li>
+        <h2>Introduction</h2>
+        <p>In the wake of a major chemical, biological, radiological or nuclear event, a quick response is critical for both damage mitigation and further threat assessment. First response teams require time to establish their base of operations and set up the protective equipment necessary for ensuring responder safety. The field of robotics holds some promise for addressing these issues. Well before the logistical support necessary for supporting human responders is in place, robots could be on the scene assessing the damage, helping victims, and searching for additional threats.</p>
+        <p>For reasons of both operator availability and streamlining the logistical process, there is a strong interest in a single operator coordinating the activities of a group of robots. Achieving this requires advances on a variety of fronts, and an important one is the design of the control interface. An operator needs to be able to effectively focus on a single robot while simultaneously maintaining an overarching awareness of the situation and organizing the activities of a group of robots.</p>
+        <p>Existing work in this area (Humphrey et. al., 2007; Pitman at at., 2007) focuses on placing information about the positions of different vehicles at the periphery of the view from the camera mounted on the robot being teleoperated. The HCI application makes two significant changes on this paradigm: a two dimensional map is added where the user may direct robots' activities, and a set of overlays are added which permit the user to optionally display additional information. The application also divides the view into two areas, one of which changes depending on whether the user is teleoperating a specific robot (the manipulation interface) or assigning tasks to robots (the orchestration interface). One of the available overlays includes a semi-transparent view of the two-dimensional map overlaying the three-dimensional view from the robot's camera.</p>
+      </li>
+      <li>
+        <h2>System Description</h2>
+        <p><em>Sandy</em></p>
+      </li>
+      <li>
+        <h2>Methods</h2>
+        <p>To test the effectiveness of the interface, three simulated disaster scenarios were generated and seventeen users played the part of a first responder to a disaster event. In designing information to present in the overlays for these scenarios the goal was to incorporate information that would both be useful to the user and that might reasonably be generated during the course of a disaster response. The two overlays available during the trial scenarios represented theoretical data from on-site experts. One was a set of areas where the user was told chemical analysts wanted additional samples. The other was an area where the user was told that an expert on the site had identified a high likelihood for an additional explosive device.</p>
+        <p>The first stage of the testing was a tutorial on the operation of the interface. After brief introduction to the goals of the experiment and a background questionnaire, the user was stepped through a tutorial by the tester. The user was given a series of incremental tasks maneuvering a single robot and using it to collect two chemical samples and find a bomb. The ordering and instructions associated with the tasks were organized to incorporate the skills necessary for completing the trial scenarios: using the robots automatic behaviors, accessing various overlays and teleoperating the robot. During the course of the training, the user was encouraged to ask questions. The user was told that questions during the trial scenarios were discouraged to emphasize the importance of a thorough understanding.</p>
+        <p>After the training, which took on average 12 minutes, the user was given the first trial scenario. The user had no interaction from the tester and all knowledge about the tasks to be performed was learned from the available overlays. There were two trial scenarios both of which required the user to find two bombs and take three chemical samples. The number of robots was either two or four. Which quantity came first was randomized across participants. The tester had no interaction other than taking notes about situations where the user was confused and enforcing a ten minute time limit.</p>
+        <p>After the first trial, three surveys were completed. These were: a situational awareness survey about the users perceived awareness of the scenario, a usage survey about the users satisfaction with different elements of the interface, and the NASA-TLX mental workload survey.</p>
+        <p>Next, the user did the second trial scenario whichever number of robots (two or four) that they hadn't used in the previous trial. After this trial they completed the same three surveys they did following the first trial as well as an additional open-ended survey listing aspects that they enjoyed and disliked.</p>
+      </li>
+      <li>
+        <h2>Results</h2>
+        <p><em>Sandy</em></p>
+        <p>There were a variety of common criticisms of the interface from users. Criticisms were collected both from comments by users during testing and from an open-ended survey completed at the end of all the trials. There was a large overlap between the two sources, and the two are combined in the following table with separate markers for the tester's notes (&#x2318;) and exit surveys (&#x2316;). If an element was present in both, it was only counted once as a tester's note.</p>
+        <table id="criticisms">
+          <caption>Reported user interface issues<br/>&#x2318; &mdash; from tester's notes; &#x2316; &mdash; from exit surveys</caption>
+          <tr><th>Criticism</th><th>Number of Reporters</th><th>Percentage Reporting</th></tr>
+          <tr>
+            <td>difficult to tell when automatic behaviors are stopped</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+            </td>
+            <td>76%</td>
+          </tr>
+          <tr>
+            <td>can't add tasks from orchestration overlay</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2316;</span>
+            </td>
+            <td>59%</td>
+          </tr>
+          <tr>
+            <td>impossible to know if a task has been completed</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2316;</span>
+              <span class="mark">&#x2316;</span>
+            </td>
+            <td>47%</td>
+          </tr>
+          <tr>
+            <td>stall indicator not terribly accurate</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2316;</span>
+              <span class="mark">&#x2316;</span>
+              <span class="mark">&#x2316;</span>
+              <span class="mark">&#x2316;</span>
+              <span class="mark">&#x2316;</span>
+              <span class="mark">&#x2316;</span>
+            </td>
+            <td>41%</td>
+          </tr>
+          <tr>
+            <td>difficult to identify active robot</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2316;</span>
+            </td>
+            <td>41%</td>
+          </tr>
+          <tr>
+            <td>can't turn camera without turning robot</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2316;</span>
+            </td>
+            <td>29%</td>
+          </tr>
+          <tr>
+            <td>robot is too large in simulation</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+            </td>
+            <td>24%</td>
+          </tr>
+          <tr>
+            <td><em>bug:</em> robot stuck going forward</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+            </td>
+            <td>24%</td>
+          </tr>
+          <tr>
+            <td>can't alter overlay opacity</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2316;</span>
+            </td>
+            <td>24%</td>
+          </tr>
+          <tr>
+            <td>want manual control from orchestration interface</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+            </td>
+            <td>18%</td>
+          </tr>
+          <tr>
+            <td>not possible to sample at robot's current location</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+            </td>
+            <td>12%</td>
+          </tr>
+          <tr>
+            <td>bomb detection is difficult</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+            </td>
+            <td>12%</td>
+          </tr>
+          <tr>
+            <td><em>bug:</em> possible to drive off map</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+            </td>
+            <td>12%</td>
+          </tr>
+          <tr>
+            <td>robot turns too slowly</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2316;</span>
+            </td>
+            <td>12%</td>
+          </tr>
+          <tr>
+            <td>lack of avoidance behaviors confusing</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+            </td>
+            <td>12%</td>
+          </tr>
+          <tr>
+            <td>wanted <code>Cancel</code>/<code>Add Task</code> buttons reversed</td>
+            <td>
+              <span class="mark">&#x2318;</span>
+              <span class="mark">&#x2318;</span>
+            </td>
+            <td>12%</td>
+          </tr>
+          <tr>
+            <td>needed breakdown of completion of subtasks</td>
+            <td><span class="mark">&#x2316;</span></td>
+            <td>6%</td>
+          </tr>
+          <tr>
+            <td>need keyboard map toggle</td>
+            <td><span class="mark">&#x2318;</span></td>
+            <td>6%</td>
+          </tr>
+          <tr>
+            <td>want auditory feedback</td>
+            <td><span class="mark">&#x2316;</span></td>
+            <td>6%</td>
+          </tr>
+          <tr>
+            <td>difficult to read map in orchestration interface</td>
+            <td><span class="mark">&#x2316;</span></td>
+            <td>6%</td>
+          </tr>
+          <tr>
+            <td>orchestration toggle button moves</td>
+            <td><span class="mark">&#x2318;</span></td>
+            <td>6%</td>
+          </tr>
+          <tr>
+            <td>can't reposition waypoints</td>
+            <td><span class="mark">&#x2318;</span></td>
+            <td>6%</td>
+          </tr>
+        </table>
+        <p><em>The distribution of percentages supports <a href="http://www.useit.com/jakob/">Nielsen</a>'s controversial statement that <a href="http://www.useit.com/alertbox/20000319.html">user tests should only be conducted with five subjects</a>. From a software engineering perspective, far too many users were tested. As a scientific study needing to show significance, calculations of power would be needed.</em></p>
+        <p><em>A theoretic point that Sandy and I disagree on is the extent to which generally applicable scientific hypotheses can be addressed while there are addressable significant usability issues present. I believe that our test is valid for our interface, i.e. the basic test design was valid. I do not believe however that, regardless of the results, that they are of general interest to the research community.</em></p>
+        <p><em>A metaphor is, say a test designed to answer the question, "can people paint equally well using their right and left hands?" I define a set of criteria for judging the relative quality of paintings, then I give my subjects a brick and a bucket of paint. My criticism is, regardless of my results, the test does not say anything about the question in general. The fact that the tools I used to perform the test consistently and significantly deviated from the tools that the subjects ideally wanted has a significant result on how generalizable my result is. I've certainly got valid data on painting with bricks, but the goal in science is generally to come up with results that are more universally applicable.</em></p>
+        <p><em>So long as there are interface issues that more than say 50% of users had a problem with, then there are issues with the general applicability of the research. Specifically with our interface, the most common issue was users not understanding that the robot's automatic behaviors had been suspended. Several users ended up spending large amounts of time focused on a single robot either teleoperating it or repeatedly adding and removing waypoints. The focus on a single robot because of that interface design issue certainly affected the hypothesis surrounding the efficiency controlling multiple robots.</em></p>
+        <p><em>As it happens, we found significance regardless. If we had not found significance, or even in that we did, the extent to which a majority of users agree that our interface differs from the ideal tool for completing the task significantly limits how meaningful our results are.</em></p>
+        <p><em>One potential situation where the consensus approach to tool design falls apart is the concept of paradigm shifting. I, for example, can't type. Typing slows me down and if I had never heard of typing before and was forced to interact with an interface by typing, I would likely dislike it and say it slows me down. So, there may be interface elements which a majority of users have an issue with, but that represent, unknown to the user, an actual closer representation of the ideal tool. In that situation however, testing needs to be done to verify that the posited improvement through a paradigm shift actually exists. In any case, our issues with over a 50% reporting rate do not fall into that category.</em></p>
+      </li>
+      <li>
+        <p>The statistical analysis of the information collected during testing reveals both positive and negative aspects to increasing the number of robots. When using four robots as opposed to two, there is a statistically significant increase in the overall user satisfaction (4.706 to 5.118) as well as a decrease in the time required to complete the scenario (661.71s to 563.313s). However, these results are somewhat misleading. Completion of the scenario was user reported, and the time to complete the scenario may have dropped in part because users were also more likely to forget to complete a task as evidenced by a drop in the number of chemical tasks completed (2.588 to 2.176). The number of bombs found increased slightly (1.294 to 1.353), but not to the point of significance.</p>
+        <p>Several of the reported statistics support the expected usage pattern of the interface. Users created both more waypoints (7.059 to 9.765) and tasks (both waypoints and samples) (10.647 to 13.294) when working with four robots, and changed the active robot more frequently (10.882 times to 16.941 times). This supports the concept that the interface makes it possible to do several tasks in parallel by assigning tasks and then switching between robots to monitor and guide them.</p>
+        <p>In this same vein, users also reported finding the automatic behaviors more convenient when operating with more robots though the overall impression was lukewarm (4.118 to 4.882). The indifferent response was in part based on the reported frustrations detecting that behaviors were suspended, and issues with the stall indicator.</p>
+        <p>In general the workload on the users was moderate. The NASA-TLX total mental workload was, on average, 53/100 on a linear scale. Similarly the situational demands, as reported on the SART survey, were 4.74/7. Surprisingly, there was not a significant increase in either the reported mental workload or the demands on attentional resources when the number of robots was increased.</p>
+        <h2>Discussion</h2>
+        <p>Table <em>x</em> shows the design issues collected via tester observations and users comments. Many of these issues were reported only by one or two users and are arguably attributable to personal preference. Certain issues, however, were frequently repeated. Five design issues were reported by more than 40% of users:</p>
+        <ol>
+          <li>"Difficult to tell when automatic behaviors are stopped" (76%) &mdash; It was possible for a user to suspend a robot's performance of any assigned tasks (drive to waypoints or take samples). This would not remove the tasks, simply stop the robot from performing them until instructed to resume. There were two methods by which a robot could enter the suspended mode: clicking on the stop button in the information frame or by detecting a bomb. The suspension upon detecting a bomb was added to make it simpler to know where a bomb was detected. The issue is that users would not recognize that a robot was suspended and would become confused as to why the robot wouldn't perform the assigned tasks. Users would then either spend time creating and deleting waypoints in an attempt to get it to respond or they would simply abandon the automatic behaviors altogether and operate the robots manually.</li>
+          <li>"Can't add tasks from orchestration overlay" (59%) &mdash; The only method for creating a new task was to be in the orchestration interface and right click on the map. Users who grew comfortable with the overlay display of the orchestration interface would frequently attempt to right click on it to create a new task.</li>
+          <li>"Impossible to know if a task has been completed" (47%) &mdash; Once a task was completed it was removed from the interface and there was no mechanism for knowing which tasks had been completed. Users would forget if a sample had been taken in a particular area or in which area a bomb had been found.</li>
+          <li>"Stall indicator not terribly accurate" (41%) &mdash; In the robot status panel the stop indicator illuminated to indicate that the given robot had encountered and obstacle and was no longer making forward progress. The basic robot movement algorithm was to turn until oriented toward the goal point and then drive in a straight line there. Certain obstacles however would only arrest the robot's progress on one side and the torque from the other side would then turn the robot. In a situation where an obstacle was causing the robot to oscillate between a forced turn and a course correction the stall indicator would not recognize the robot was stuck. Users would frequently not notice that the robot was stuck for an extended period, particularly if they were involved in the manual manipulation of another robot.</li>
+          <li>"Difficult to identify active robot" (41%) &mdash; The colors for the robots were purple and red. Particularly when the orchestration interface was overlaid with the manipulation (and the orchestration was displayed at 20% opacity), it was difficult to distinguish between these two colors.</li>
+        </ol>
+      </li>
+      <li>
+        <h2>Conclusions</h2>
+        <p>Overall, the user testing suggests that users were comfortable with the increased number of robots, as evidinced by the reported increase in overall satisfaction, but that they were not aware of the detriment that the increase in the number of robots had on their situational awareness. The increase in the number of missing samples, when coupled with the lowered trial time, indicates an increased number of forgotten samples. This is a reasonable consequence of the increase in complexity when dealing with more robots, but the lack of awareness of a change in perceived situational awareness is troubling. Ideally the operator should be aware of their decreased awareness so that they can take measures to compensate.</p>
+        <p>Incorporating measures to address several of the issues identified by the users in future work has the potential of helping to address the problem of decreased awareness when dealing with larger numbers of robots.</p>
+      </li>
+      <li>
+        <h2>References</h2>
+        <p></p>
+      </li>
+    </ul>
+  </body>
+</html>
+
+
+<!-- LocalWords:  tele evidinced
+-->

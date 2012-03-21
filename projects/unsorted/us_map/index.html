@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Clickable US Map</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+      object { display: block; margin: 0 auto 0 auto; }
+      body { max-width: 790px; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Clickable US Map</h1>
+
+    <p>This is a set of scripts to generate a clickable image map from the following image:</p>
+
+    <object data="labeled_USA_map.svg" type="image/svg+xml" width="500" height="350">
+    </object>
+
+    <p>If you want to look at it more closely, use <a href="http://xmlgraphics.apache.org/batik/">Batik</a> via <a href="../svg_web_start/?svg=../us_map/labeled_USA_map.svg">webstart</a>. The scripts used in generating are:</p>
+
+    <ul>
+      <li><a href="hide_elements.js">hide_elements.js</a> &mdash; A javascript for the SVG which hides everything <a href="labeled_USA_map.svg?show=TN&amp;showlabels">except a selected state</a></li>
+      <li><a href="trim_image.py">trim_image.py</a> &mdash; The images generated from the hidden elements are mostly transparent. This uses the <a href="http://www.pythonware.com/library/pil/">python image library</a> to crop the transparent edges out</li>
+      <li><a href="process_map.py">process_map.py</a> &mdash; Generates a <a href="http://en.wikipedia.org/wiki/Convex_hull">convex hull</a> for each image using <a href="http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/117225">Graham's scan</a> to produce the <a href="labeled_USA_map.html">HTML</a></li>
+    </ul>
+
+    <iframe src="labeled_USA_map.html" style="width: 100%; height: 620px; border: none;"></iframe>
+
+    <p>All of this work is lisenced under the <a href="http://www.gnu.org/licenses/lgpl.html"><acronym title="GNU Lesser General Public Lisence">LGPL</acronym> v3</a>.</p>
+  </body>
+</html>

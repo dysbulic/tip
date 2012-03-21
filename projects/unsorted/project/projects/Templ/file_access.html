@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Template File Access</title>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <style type="text/css">
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>File Access in Templ</h1>
+    <p>The <a href=".">Templ</a> CMS uses a two-stage document generation process. The first bit is a modular java-based hooks system. This generates the actual web content, be it php, html, svg or whatever. When doing the preprocessing, the system needs to regenerate smallest subset of files possible or the system won't scale.</p>
+    <p>Content for template combination comes from metadata. Metadata is a set of named lists of <acronym title="Document Object Model">DOM</acronym> nodes. Take this example:</p>
+    <p>File: <code>default.html.tmpl</code></p>
+    <pre>&lt;html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tmpl="http://odin.himinbi.org/templ/0.1/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+  &lt;head>&lt;title>&lt;tmpl:var name="title"/>&lt;/title>&lt;/head>
+  &lt;body>
+    &lt;tmpl:var name="title"/>
+    &lt;div id="sidebar">
+      &lt;lst:listing src="../news"/>
+    &lt;/div>
+  &lt;/body>
+&lt;/html></pre>
+
+    <p>This file is loaded according to the <a href="default_settings.html">default load order</a>.</p>
+  </body>
+</html>

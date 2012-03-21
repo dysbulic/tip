@@ -1,0 +1,104 @@
+-- MAX+plus II Compiler Fit File      
+-- Version 9.23 3/19/99               
+-- Compiled: 11/11/2002 13:35:52      
+
+-- Copyright (C) 1988-1999 Altera Corporation
+-- Any megafunction design, and related net list (encrypted or decrypted),
+-- support information, device programming or simulation file, and any other
+-- associated documentation or information provided by Altera or a partner
+-- under Altera's Megafunction Partnership Program may be used only to
+-- program PLD devices (but not masked PLD devices) from Altera.  Any other
+-- use of such megafunction design, net list, support information, device
+-- programming or simulation file, or any other related documentation or
+-- information is prohibited for any other purpose, including, but not
+-- limited to modification, reverse engineering, de-compiling, or use with
+-- any other silicon devices, unless such use is explicitly licensed under
+-- a separate agreement with Altera or a megafunction partner.  Title to
+-- the intellectual property, including patents, copyrights, trademarks,
+-- trade secrets, or maskworks, embodied in any such megafunction design,
+-- net list, support information, device programming or simulation file, or
+-- any other related documentation or information provided by Altera or a
+-- megafunction partner, remains with Altera, the megafunction partner, or
+-- their respective licensors.  No other licenses, including any licenses
+-- needed under any third party's intellectual property, are provided herein.
+
+CHIP "hat"
+BEGIN
+
+    DEVICE = "EPM7064LC44-7";
+
+    "clock"                        : INPUT_PIN  = 12     ; -- LC1
+    "hundreds_a"                   : OUTPUT_PIN = 39     ; -- LC57
+    "hundreds_b"                   : OUTPUT_PIN = 36     ; -- LC52
+    "hundreds_c"                   : OUTPUT_PIN = 34     ; -- LC51
+    "hundreds_d"                   : OUTPUT_PIN = 33     ; -- LC49
+    "hundreds_e"                   : OUTPUT_PIN = 41     ; -- LC64
+    "hundreds_f"                   : OUTPUT_PIN = 40     ; -- LC62
+    "hundreds_g"                   : OUTPUT_PIN = 38     ; -- LC56
+    "ones_a"                       : OUTPUT_PIN = 28     ; -- LC40
+    "ones_b"                       : OUTPUT_PIN = 31     ; -- LC46
+    "ones_c"                       : OUTPUT_PIN = 32     ; -- LC48
+    "ones_d"                       : OUTPUT_PIN = 24     ; -- LC33
+    "ones_e"                       : OUTPUT_PIN = 27     ; -- LC37
+    "ones_f"                       : OUTPUT_PIN = 26     ; -- LC36
+    "ones_g"                       : OUTPUT_PIN = 25     ; -- LC35
+    "tens_a"                       : OUTPUT_PIN = 21     ; -- LC17
+    "tens_b"                       : OUTPUT_PIN = 20     ; -- LC19
+    "tens_c"                       : OUTPUT_PIN = 19     ; -- LC20
+    "tens_d"                       : OUTPUT_PIN = 37     ; -- LC53
+    "tens_e"                       : OUTPUT_PIN = 18     ; -- LC21
+    "tens_f"                       : OUTPUT_PIN = 17     ; -- LC24
+    "tens_g"                       : OUTPUT_PIN = 16     ; -- LC25
+    "|74192:1|:23"                 : LOCATION   = LC38   ;  -- |74192:1|QD
+    "|74192:1|:24"                 : LOCATION   = LC41   ; -- PIN 29  -- |74192:1|QC
+    "|74192:1|:25"                 : LOCATION   = LC42   ;  -- |74192:1|QB
+    "|74192:1|:26"                 : LOCATION   = LC34   ;  -- |74192:1|QA
+    "|74192:4|:23"                 : LOCATION   = LC54   ;  -- |74192:4|QD
+    "|74192:4|:24"                 : LOCATION   = LC50   ;  -- |74192:4|QC
+    "|74192:4|:25"                 : LOCATION   = LC55   ;  -- |74192:4|QB
+    "|74192:4|:26"                 : LOCATION   = LC61   ;  -- |74192:4|QA
+    "|74192:6|:23"                 : LOCATION   = LC63   ;  -- |74192:6|QD
+    "|74192:6|:24"                 : LOCATION   = LC58   ;  -- |74192:6|QC
+    "|74192:6|:25"                 : LOCATION   = LC59   ;  -- |74192:6|QB
+    "|74192:6|:26"                 : LOCATION   = LC60   ;  -- |74192:6|QA
+
+END;
+
+INTERNAL_INFO "hat"
+BEGIN
+	DEVICE = EPM7064LC44-7;
+	LC35    : LORAX = "G60R0";
+	LC57    : LORAX = "G78R0";
+	LC52    : LORAX = "G32R0";
+	LC51    : LORAX = "G31R0";
+	LC49    : LORAX = "G29R0";
+	LC64    : LORAX = "G114R0";
+	LC62    : LORAX = "G112R0";
+	LC56    : LORAX = "G65R0";
+	LC36    : LORAX = "G61R0";
+	LC37    : LORAX = "G25R0";
+	LC33    : LORAX = "G58R0";
+	LC48    : LORAX = "G77R0";
+	LC46    : LORAX = "G75R0";
+	LC40    : LORAX = "G28R0";
+	LC25    : LORAX = "G103R0";
+	LC24    : LORAX = "G24R0";
+	LC21    : LORAX = "G21R0";
+	LC53    : LORAX = "G62R0";
+	LC20    : LORAX = "G57R0";
+	LC19    : LORAX = "G56R0";
+	LC17    : LORAX = "G54R0";
+	LC34    : LORAX = "G59R0,PA10R0C2,PA10R0C3";
+	OH0R0P12 : LORAX = "G83R0,PA18R0C2,PA18R0C3";
+	LC42    : LORAX = "G108R0,PA29R0C2";
+	LC38    : LORAX = "G26R0,PA1R0C2,PA1R0C3";
+	LC41    : LORAX = "G107R0,PA35R0C2";
+	LC63    : LORAX = "G113R0,PA34R0C3";
+	LC54    : LORAX = "G63R0,PA15R0C1,PA15R0C3";
+	LC61    : LORAX = "G111R0,PA33R0C1,PA33R0C3";
+	LC55    : LORAX = "G64R0,PA12R0C1,PA12R0C3";
+	LC50    : LORAX = "G30R0,PA5R0C1,PA5R0C3";
+	LC60    : LORAX = "G81R0,PA22R0C3";
+	LC59    : LORAX = "G80R0,PA25R0C3";
+	LC58    : LORAX = "G79R0,PA21R0C3";
+END;

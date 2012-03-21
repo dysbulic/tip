@@ -1,0 +1,135 @@
+<?xml version="1.0" ?>
+<mosinstall type="component">
+  <name>Podcast</name>
+  <creationDate>July 2007</creationDate>
+  <author>Will Holcomb</author>
+  <copyright>This component in released under the GNU/GPL License</copyright>
+  <authorEmail>wholcomb@gmail.com</authorEmail>
+  <authorUrl>himinbi.org</authorUrl>
+  <version>1.0</version>
+  <files>
+    <filename>podcast.php</filename>
+    <filename>podcast.html.php</filename>
+    <filename>podcast.class.php</filename>
+    <filename>podcast.archive.php</filename>
+    <filename>audio-player/player.swf</filename>
+    <filename>show_podcast.js</filename>
+    <filename>make_sortable.js</filename>
+    <filename>add_rating.js</filename>
+  </files>
+  <install>
+    <queries>
+      <query>
+-- The site serves to list various Podcasts
+CREATE TABLE IF NOT EXISTS #__podcasts
+   (id INT AUTO_INCREMENT PRIMARY KEY,
+    title TEXT NOT NULL,
+    graphic TEXT,
+    album TEXT,
+    show_url TEXT NOT NULL,
+    artist_id INT NOT NULL REFERENCES #__artists(id),
+    label_id INT NOT NULL REFERENCES #__labels(id),
+    air_date TIMESTAMP,
+    description TEXT);
+      </query>
+      <query>
+-- Music Stores provide an online marketplace where music is purchased
+CREATE TABLE IF NOT EXISTS #__music_store
+   (id INT AUTO_INCREMENT PRIMARY KEY,
+    name TEXT NOT NULL,
+    url TEXT NOT NULL,
+    icon TEXT);
+      </query>
+      <query>
+-- Buy Links tell where to purchase a particular song
+CREATE TABLE IF NOT EXISTS #__buy_links
+   (id INT AUTO_INCREMENT PRIMARY KEY,
+    podcast_id INT NOT NULL REFERENCES #__podcasts(id),
+    store_id INT NOT NULL REFERENCES #__music_store(id),
+    url TEXT NOT NULL);
+      </query>
+      <query>
+-- Artists perform the title tracks of Podcasts
+CREATE TABLE IF NOT EXISTS #__artists
+   (id INT AUTO_INCREMENT PRIMARY KEY,
+    name TEXT NOT NULL,
+    url TEXT);
+      </query>
+      <query>
+-- Channels group genres of Podcasts
+CREATE TABLE IF NOT EXISTS #__channels
+   (abbreviation VARCHAR(20) NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT,
+    sort_order INT);
+      </query>
+      <query>
+-- A Podcast may belong to multiple channels
+CREATE TABLE IF NOT EXISTS #__podcast_channel
+   (id INT AUTO_INCREMENT PRIMARY KEY,
+    podcast_id INT NOT NULL REFERENCES #__podcasts(id),
+    channel_abbr VARCHAR(20) NOT NULL REFERENCES channels(abbreviation));
+      </query>
+      <query>
+-- Record Labels publish songs
+CREATE TABLE IF NOT EXISTS #__labels
+   (id INT AUTO_INCREMENT PRIMARY KEY,
+    name TEXT NOT NULL,
+    url TEXT);
+      </query>
+      <query>
+-- Comments are posted about podcasts
+CREATE TABLE IF NOT EXISTS #__comments
+   (id INT AUTO_INCREMENT PRIMARY KEY,
+    podcast_id INT NOT NULL REFERENCES #__podcasts(id),
+    user_id INT NOT NULL REFERENCES #__users(id),
+    date TIMESTAMP NOT NULL,
+    subject TEXT,
+    orig_body TEXT NOT NULL,
+    body text NOT NULL,
+    priority INT DEFAULT 0);
+      </query>
+      <query>
+-- Podcasts are rated
+CREATE TABLE IF NOT EXISTS #__ratings
+   (id INT AUTO_INCREMENT PRIMARY KEY,
+    podcast_id INT NOT NULL REFERENCES #__podcasts(id),
+    user_id INT REFERENCES #__users(id),
+    date TIMESTAMP NOT NULL,
+    rating INT NOT NULL);
+      </query>
+    </queries>
+  </install>
+  <uninstall>
+    <queries>
+      <query>DROP TABLE IF EXISTS #__podcasts</query>
+      <query>DROP TABLE IF EXISTS #__music_store</query>
+      <query>DROP TABLE IF EXISTS #__buy_links</query>
+      <query>DROP TABLE IF EXISTS #__artists</query>
+      <query>DROP TABLE IF EXISTS #__channels</query>
+      <query>DROP TABLE IF EXISTS #__podcast_channel</query>
+      <query>DROP TABLE IF EXISTS #__labels</query>
+      <query>DROP TABLE IF EXISTS #__comments</query>
+      <query>DROP TABLE IF EXISTS #__ratings</query>
+    </queries>
+  </uninstall>
+  <installfile>
+    <!-- <filename>install.dailymessage.php</filename> -->
+  </installfile>
+  <uninstallfile>
+    <!-- <filename>uninstall.dailymessage.php</filename> -->
+  </uninstallfile>
+  <administration>
+    <menu>Podcast</menu>
+    <submenu>
+      <menu act="all">Edit Messages</menu>
+      <menu act="configure">Configure</menu>
+    </submenu>
+    <files>
+      <filename>admin.podcast.php</filename>
+      <filename>admin.podcast.html.php</filename>
+      <filename>podcast.class.php</filename>
+      <filename>podcast.html.php</filename>
+    </files>
+  </administration>
+</mosinstall>

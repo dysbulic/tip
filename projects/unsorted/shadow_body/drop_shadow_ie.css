@@ -1,0 +1,19 @@
+/* transparent pngs are used which have a white background in IE */
+#layoutsample { background-color: white; }
+ 
+.header { margin-top: -1px; } /* mystery 1px space */
+
+.shadowed { height: 0; position: relative; }
+.left { position: absolute; left: 0; }
+.right { position: absolute; top: 0; right: 0; }
+.body { padding: 0 15px 0 10px; }
+.shadow.left, .shadow.right { height: 100%; }
+
+/* background color disappears without this */
+.header { position: relative; }
+
+.top, .bottom { position: relative; overflow: hidden; padding: 0 15px 0 10px; }
+.center { height: 100%; }
+
+.content { height: 0; }
+.content .leftcol, .content .rightcol, .content .centercol { float: left; height: 100%; }

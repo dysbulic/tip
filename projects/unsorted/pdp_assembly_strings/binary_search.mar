@@ -1,0 +1,28 @@
+.entry binary_search, ^m<R3, R4, R5>
+	clrl R3          ; top index
+	movl 8(AP), R4   ; bottom index
+	movl 4(AP), R0   ; key
+	moval 12(AP), R6 ; &x[0]
+
+next_element:
+	subl3 R3, R4, R5 ; offset
+	blss not_found
+	divl #2, R5
+	tstl R5
+	addl R3, R5      ; middle index
+	cmpl (R6)[R5], R0
+	beql found
+	blss overshot
+	addl3 #1, R5, R3
+	brb next_element
+overshot:
+	subl3 #1, R5, R4
+	brb next_element
+not_found:
+	movl #-1, R0
+	brb end
+found:
+	movl R5, R0
+end:
+	ret
+.end

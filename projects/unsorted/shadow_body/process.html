@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Drop Shadow on the Body</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+      .holder { height: 15em; border: 2px solid; display: table; width: 100%; }
+      .cell { display: table-cell; vertical-align: middle; }
+      .container { margin: auto; }
+      .content { background-color: #83A7D4; padding: 5px; }
+      #fixedwidth .container { width: 650px; background-image: url('fixed_width_bg.png'); background-repeat: repeat-y; }
+      #fixedwidth .content { margin-left: 10px; width: 620px; }
+      #variable .container { width: 75%; display: table; }
+      #variable .content, #variable .leftcol, #variable .rightcol { display: table-cell; }
+      .cell:hover, .container:hover, .content:hover { border: 1px solid; margin: -1px; }
+      .cell:hover { border-color: green; }
+      .container:hover { margin-left: auto; margin-right: auto; border-color: blue; }
+      .content:hover { border-color: red; }
+      #fixedwidth .content { margin-left: 10px; }
+      #fixedwidth .content:hover { margin-left: 9px; }
+      .leftcol, .rightcol { width: 10px; }
+      .leftcol { background-image: url('drop_left_bg.png'); }
+      .rightcol { background-image: url('drop_right_bg.png'); }
+    </style>
+    <!--[if lt IE 7]>
+    <style type="text/css">
+      .holder { text-align: center; position: relative; }
+      .cell { position: absolute; top: 50%; left: 50%; }
+      .container { text-align: left; position: relative; top: -50%; left: -50%; }
+      #variable .cell { width: 100%; }
+      #variable .container { height: 0em; margin-right: 10px; }
+      #variable .leftcol, #variable .rightcol { height: 100%; }
+      #variable .leftcol { float: left; }
+      #variable .rightcol { float: right; }
+      #fixedwidth .content { width: 630px; }
+    </style>
+    <![endif]-->
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Drop Shadow on the Body</h1>
+    <p>A common problem in trying to make pretty sites is keeping the text width sufficently narrow to be easily readable. The <a href="http://www.tug.org">T<span style="vertical-align: sub">E</span>X</a> documentation is the first place I ran across issues of <a href="http://www.humanfactors.com/downloads/nov02.asp">optimal line length</a>, but the issue is oft discussed.</p>
+    <p>The problem is finding a balance between two issues:</p>
+    <ol>
+      <li><strong>Readability:</strong> As the eye is traversing content, it must return to theleft side of the paragraph every so often to find the start of the next line. If the line is too long it takes extra time to find the line and it slows reading speed. Also, huge blocks of text look more daunting and are more likely to be skipped by a browsing web-surfer</li>
+      <li><strong>Space Utilization:</strong> Using fixed width layouts can help make your site prettier, but it wastes screen space. What's the point of getting a 27`` monitor if it just means five extra inches of empty space on your favorite website?</li>
+    </ol>
+    <h2>Fixed Widths:</h2>
+    <p>Attractive layouts that scale well are difficult to do. One of the styles that I've been asked to use in a <a href="http://www.mpp.org">recent site</a> is drop shadows on the sides of a centered content area. Generally this is achieved by making a background of a fixed width and nesting another div inside of it:</p>
+    <div id="fixedwidth" class="holder">
+      <div class="cell">
+        <div class="container">
+          <div class="content">
+            <p>This content should have the drop shadow on the sides as well as being centered horizontally and vertically. There are four <code>&lt;div&gt;</code>s used to do this:</p>
+            <ul>
+              <li><code>#fixedwidth</code>: holder for the example (with a black border)</li>
+              <li><code>.cell</code>: vertical centering in <a href="http://mozilla.com">CSS browsers</a> is done by using the <code>table-cell</code> display, but table cells can't be centered horizontally, so another element is needed for that (with a green border)</li>
+              <li><code>.container</code>: a fixed width element with <a href="fixed_width_bg.png">fixed_width_bg.png</a> as a background (with a blue border)</li>
+              <li><code>.content</code>: actual content holder (with a red border)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h2>Variable Heights:</h2>
+    <p>The obvious problem with that layout is: what if there is a page where we need the content to be more than 620px? (That's the width of <code>.content</code>.) There are definitely cases where this could happen. I'm seeing it especially with tables because it keeps the text reasonably short in each column, but the entire width tends to be wide.</p>
+    <p>A simplistic solution is to simply do a new background for different layouts. What if I want the content to expand to 80% of the screen and maintain the drop shadows. Is that possible?</p>
+    <div id="variable" class="holder">
+      <div class="cell">
+        <div class="container">
+          <div class="leftcol"></div>
+          <div class="content">The same basic elements exist for centering: <code>#variable</code>, <code>.cell</code> and <code>.container</code>, but there are two additional elements along with <code>.content</code>: <code>.leftcol</code> and <code>.rightcol</code></div>
+          <!--[if lt IE 7]><div class="rightcol"></div><![endif]-->
+          <!--[if gt IE 7]>--><div class="rightcol"></div><!--<![endif]-->
+        </div>
+      </div>
+    </div>
+    <p>I like this layout because <a href="http://www.quirksmode.org/css/100percheight.html">quirksmode</a> says:</p>
+    <blockquote>
+      <p>"For instance, if you want to make an element as high as the entire page (whatever this height may be) you're out of luck. Although it might seem simple the specs (and the browsers' unthinking conformance) make this completely impossible.</p>
+      <p>The spec says: 'If the height of the containing block is not specified explicitly (i.e., it depends on content height), the value is interpreted like <code>auto</code>'."</p>
+    </blockquote>
+    <p>This is mostly true. In <acronym title="Internet Explorer">IE</acronym>, if a height is specified on an element that is too small, the height will be reassigned to the full height. So, the height on the <code>.container</code> is set to <code>0</code>. When the height on <code>.left</code> and <code>.right</code> is set to <code>100%</code> it makes them fill correctly. Unlike mant three column layouts, <code>.content</code> is a normal block element (not floated). This is because <code>.left</code> and <code>.right</code> need to have their widths specified as pixel values and since I don't know the pixel width of the containing element (<code>.container</code> has a width of <code>75%</code>), I can't specify a pixel width for <code>.content</code>.</p>
+  </body>
+</html>

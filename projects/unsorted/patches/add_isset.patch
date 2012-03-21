@@ -1,0 +1,183 @@
+? add_isset.patch
+Index: src/conf/default.properties
+===================================================================
+RCS file: /home/cvspublic/jakarta-turbine-torque/src/conf/default.properties,v
+retrieving revision 1.12
+diff -r1.12 default.properties
+117a118
+> torque.indexPostfix = _INDEX
+Index: src/java/org/apache/torque/util/BasePeer.java
+===================================================================
+RCS file: /home/cvspublic/jakarta-turbine-torque/src/java/org/apache/torque/util/BasePeer.java,v
+retrieving revision 1.52
+diff -r1.52 BasePeer.java
+459,460c459,460
+<                 String tableName2 = criteria.getTableForAlias(tableNames[i]);
+<                 if (tableName2 != null)
+---
+>                 String tableName = criteria.getTableForAlias(tableNames[i]);
+>                 if (tableName != null)
+464,465c464,465
+<                             tableNames[i].length() + tableName2.length() + 1)
+<                             .append(tableName2)
+---
+>                             tableNames[i].length() + tableName.length() + 1)
+>                             .append(tableName)
+487c487
+<                         // updateing, but that is not implemented.
+---
+>                         // updating, but that is not implemented.
+546c546,548
+<                 category.debug("BasePeer.doDelete: whereClause=" + sqlSnippet);
+---
+>                 category.debug("BasePeer.doDelete: table = " +
+>                                tables.get(i) + ": whereClause = " +
+>                                sqlSnippet);
+Index: src/templates/om/Object.vm
+===================================================================
+RCS file: /home/cvspublic/jakarta-turbine-torque/src/templates/om/Object.vm,v
+retrieving revision 1.53
+diff -r1.53 Object.vm
+69,72d68
+<     /** The Peer class */
+<     private static final ${table.JavaName}Peer peer =
+<         new ${table.JavaName}Peer();
+< 
+76c72
+<         #set ( $clo=$col.Name.toLowerCase() )
+---
+>         #set ( $clo = $col.Name.toLowerCase() )
+111a108,109
+>         
+>         private boolean[] isSet = new boolean[$table.numColumns];
+115a114
+>         #set ( $cup=$col.Name.toUpperCase() )
+124a124,127
+>             if( !isSet[${table.JavaName}Peer.$cup$indexPostfix] )
+>             {
+>                 throw new IllegalStateException("$col.name has not been set");
+>             }
+176a180
+>             isSet[${table.JavaName}Peer.$cup$indexPostfix] = true;
+179a184
+>           isSet[${table.JavaName}Peer.$cup$indexPostfix] = true;
+941a947
+>      * @throws IllegalArgumentException on an invalid index
+946c952,953
+<     #set ($i = 0)
+---
+>         switch(pos)
+>         {
+948c955,956
+<       #set ( $cfc = $col.JavaName )
+---
+>       #set ( $cfc = $col.javaName )
+>       #set ( $cup = $col.name.toUpperCase() )
+950,951c958
+<     if (pos == $i)
+<     {
+---
+>             case ${table.javaName}Peer.$cup$indexPostfix:
+971,972d977
+<     }
+<     #set ($i = $i + 1)
+974c979,981
+<         return null;
+---
+>         default:
+>           throw new IllegalArgumentException("Unrecognized index: " + pos);
+>         }
+976d982
+< 
+1488c1494,1520
+<         return peer;
+---
+>         return ${table.JavaName}Peer.getInstance();
+>     }
+> 
+>     /**
+>      * @param colIndex is a column index from ${table.JavaName}Peer
+>      * @return if the column with the given index has been set in this object
+>      */
+>     public boolean isSet (int colIndex)
+>     {
+>        return isSet[colIndex];
+>     }
+> 
+>     /**
+>      * @param colName is a column name from ${table.JavaName}Peer
+>      * @throws IllegalArgumentException if the column name is not recognized
+>      * @return if the column with the given name has been set in this object
+>      */
+>     public boolean isSet (String colName)
+>     {
+>        #foreach ($col in $table.columns)
+>            #set ( $cup = $col.name.toUpperCase() )
+>         if ( ${table.JavaName}Peer.$cup == colName )
+>         {
+>            return isSet(${table.JavaName}Peer.$cup$indexPostfix);
+>         }
+>         #end
+>         throw new IllegalArgumentException("Unrecognized column: " + colName);
+Index: src/templates/om/Peer.vm
+===================================================================
+RCS file: /home/cvspublic/jakarta-turbine-torque/src/templates/om/Peer.vm,v
+retrieving revision 1.43
+diff -r1.43 Peer.vm
+57c57,61
+< #if (!$table.isAlias())
+---
+>     /** a static singleton instance used to funnel everything through a
+>      * single object
+>      */
+>     private final static ${table.javaName}Peer instance =
+>         new ${table.javaName}Peer();
+58a63
+> #if (!$table.isAlias())
+75,77c80
+<     #set ( $tfc=$table.JavaName )
+<     #set ( $cfc=$col.JavaName )
+<     #set ( $cup=$col.Name.toUpperCase() )
+---
+>     #set ( $cup = $col.name.toUpperCase() )
+79c82
+<     public static final String $cup;
+---
+>     public static final String $cup = "${table.Name}.$cup";
+82,88c85,89
+<     static
+<     {
+< #foreach ($col in $table.Columns)
+<     #set ( $tfc=$table.JavaName )
+<     #set ( $cfc=$col.JavaName )
+<     #set ( $cup=$col.Name.toUpperCase() )
+<     $cup = "${table.Name}.$cup";
+---
+> #foreach ($col in $table.columns)
+>      #set ( $cup = $col.name.toUpperCase() )
+>      #set ( $count = $velocityCount - 1 )
+>      /** the index in the schema for the $cup field */
+>      public static final int $cup$indexPostfix = $count;
+90a92,93
+>     static
+>     {
+824,829c827,832
+<             #set ( $cfc=$col.JavaName )
+<             #set ( $cup=$col.Name.toUpperCase() )
+<             #if ($col.isPrimaryKey() && !$table.IdMethod.equals("none"))
+<         if (!obj.isNew())
+<            #end
+<             criteria.add($cup, obj.get${cfc}());
+---
+>             #set ( $cfc = $col.javaName )
+>             #set ( $cup = $col.name.toUpperCase() )
+>         if(obj.isSet( $cup$indexPostfix ))
+>         {
+>              criteria.add($cup, obj.get${cfc}());
+>         }
+1462a1466,1470
+> 
+>     public static ${table.javaName}Peer getInstance()
+>     {
+>         return instance;
+>     }

@@ -1,0 +1,18 @@
+<FilesMatch "songs_db_info.inc">
+  AuthUserFile /home/wholcomb/sites/.htpasswd
+  AuthName "Admin"
+  AuthType Basic
+  Require valid-user
+</FilesMatch>
+
+RewriteEngine on
+RewriteOptions inherit
+
+RewriteCond %{REQUEST_URI} ^(.*)/ws/?(.*)$
+RewriteRule ^ws/?$ %1/web_services.html
+
+RewriteCond %{REQUEST_URI} ^(.*)/ws/?(.*)$
+RewriteRule ^ws/compartist/((un)?identified)?$ %1/composite_artists.php?type=$1
+
+#RewriteCond %{REQUEST_URI} ^(.*)$
+#RewriteRule ^(ws)$ index.htmluri=%1

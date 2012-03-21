@@ -1,0 +1,17 @@
+444a445
+> 	char* name = r->connection->user;
+450c451
+< 		if ((pwent = getpwnam (r->connection->user)) && (grent = getgrgid (pwent->pw_gid)))
+---
+> 		if ((pwent = getpwnam (name)) && (grent = getgrgid (pwent->pw_gid)))
+461c462
+< 		if ((grent = getgrnam (word)) && grent->gr_mem)
+---
+> 		if ((grent = getgrnam (word)) && (members = grent->gr_mem) != NULL)
+463,464d463
+< 			members = grent->gr_mem;
+< 
+467c466
+< 				if (!strcmp (*members, word))
+---
+> 				if (!strcmp (*members, name))

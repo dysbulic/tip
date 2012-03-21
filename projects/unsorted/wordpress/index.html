@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Wordpress Profile Picture</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+      iframe { width: 100%; border: none; height: 20em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Wordpress Activism Tools</h1>
+    <p>Our <a href="http://action.mpp.org">advocacy folks</a> want to have an activism blog for the upcoming campaigning on the Hinchey vote. (The Hinchey Amendment would bar funding the <acronym title="Department of Justice">DoJ</acronym> to prevent the twelve states with medical marijuana laws from implementing their state laws.</p>
+    <p>One of the nice things about the internet is it can communicate over a distance a sense of unified action. People working in across the country can tell that they are part of a community working to enact change. I have a couple different ideas that I would like to try out to keep people engaged.</p>
+    <p>For the blog, I am using <a href="http://wordpress.org">Wordpress</a>. One of the first things I would like is to give people a little better sense of community by letting them add user pictures. <a href="http://geekgrl.net/2007/01/02/profile-pics-plugin-release/">Profile pics</a> by <a href="http://geekgrl.net">Hannah Gray</a> is pretty close to what I want. I'm saving a <a href="profile-picture.phps">copy</a> locally, so I can <a href="http://svn.himinbi.org/viewvc.cgi/himinbi.org/odin/wordpress/profile-picture.php">track it in subversion</a>.</p>
+    <h2>Tracking Activist Success</h2>
+    <p>The major thing that I would like to add is the ability for activists to get a sense of their success relative to other activists and also the progress of the campaign as a whole. I was thinking something simple but revealing, like a bar graph:</p>
+
+    <object data="sample_graph.svg" type="image/svg+xml" width="100%" height="400">
+      <img src="sample_graph.jpg" alt="Sample Graph" />
+    </object>
+
+    <p>Doing simple graphs like this dynamically in SVG is easy enough. Then rasterizing them with <a href="http://xmlgraphics.apache.org/batik/">Batik</a> to feed them to IE. I could do some basic graphs that are rasterized for IE and then allow more configurable graphs for people with SVG support. (Which is <a href="http://ie7.com">Firefox</a>, <a href="http://opera.com">Opera</a> and IE with a <a href="http://www.adobe.com/svg/viewer/install/main.html">plugin</a>. <a href="http://apple.com/safari/">Safari</a> supports it in the <a href="http://nightly.webkit.org/builds/">nightly builds</a>.)</p>
+
+    <p>So far each metric I want to be able to see:</p>
+    <ul>
+      <li>The top five or ten with a graph showing their status</li>
+      <li>A breakdown by state or congressional district</li>
+    </ul>
+
+    <p>For overviews, I guess I want to see totals and maybe a line graph by day or month. Perhaps a breakdown by state.</p>
+
+    <p>I need to do a little modeling. The issue is I don't know what the metrics are and I don't know exactly how one will make progress toward those metrics. I may go with a generic points system. Something like: (the <a href="activism_tracker/activism_tables.sql.phps">definition</a> is php because it needs to include the WordPress prefix)</p>
+
+    <iframe src="activism_tracker/activism_tables.sql.php"></iframe>
+
+    <p>And I'll add in my test users from the graph with some <a href="activism_tracker/default_data.sql.phps">random data</a>:</p>
+
+    <iframe src="activism_tracker/default_data.sql.php"></iframe>
+
+    <p>So a given user can get however many points according to a given metric. They could also describe, say for instance naming the paper that a letter to the editor was submitted to. Seems simple enough. Changes to wordpress would be:</p>
+
+    <ul>
+      <li><a href="activism_tracker/points_admin_test.php">Admin interface allow adding points</a> (<a href="activism_tracker/points_admin_test.phps">source</a>)
+      <ul>
+        <li><a href="metrics_edit.php">Editing metrics</a> (<a href="metrics_edit.phps">source</a>)</li>
+        <li><a href="points_edit.php">Editing points</a> (<a href="points_edit.phps">source</a>)</li>
+      </ul>
+      </li>
+      <li><a href="activism_tracker/points_earners.php">Top <em>x</em> graph for each metric</a> (<a href="activism_tracker/points_earners.phps">source</a>)</li>
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+USB-IR-BOY firmware sources
+----------------------------
+
+2005-05-02 / AT:
+
+For your convenience, the hex file is available in ../mcubin 
+(compiled with CodeWarrior).
+ 
+If you want to compile it yourself, you can use either SDCC or 
+Metrowerks CodeWarrior for HC08. However:
+- the hex file compiled with SDCC does not work at the moment
+- CodeWarrior is only available on Windows, but the stand alone 
+compiler and linker run under Wine (the IDE apparently does not).
+
+
+Building firmware (using CodeWarrior and Wine):
+-----------------------------------------------
+
+1. Install Wine, then install CodeWarrior (and its license file)
+
+2. run ./configure.cw
+
+3. run make
+
+
+Building firmware (using sdcc):
+---------------------------------
+
+1. Install SDCC (sdcc.sourceforge.net)
+ 
+2. run ./configure.sdcc
+
+3. run make
+
+
+Burning MCU flash using commercial prommer hardware:
+ - refer to prommer user manual how to use it
+
+Burning MCU flash using prommer provided by usbirboy project:
+---------------------------------------------------------------
+
+First! Get Spgmr08 ( and see that it is fully working )
+
+    1.  Start promming software :
+      $ ./spgmr -P /dev/ttySn
+      Where n is 0 for COM1 and 1 for COM2 etc.
+
+   2. Select CPU type:
+       cpu jb8
+
+   3. Power on the prommer
+
+   4. Clear secure codes: (this will fail but that's ok)
+       scodes try blank
+
+   5. Erase device:
+       erase
+
+   6. Power off the prommer
+
+   7. Power on the pormmer
+
+   8. Clear secure codes:
+       scodes try blank
+      (NOTE: for new, never programmed chip you need to repeat steps 4-8 two times)
+
+   9. Program your hex image:
+       program from /path/to/usbirboy.s19 
+
+   10. Exit spgmr08 by pressing Ctrl-D.
+
+ Thats it. Have fun.
+
+
+Author: Ilkka Urtamo
+
+

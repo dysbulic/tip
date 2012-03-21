@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Basic Trigonometric Functions</title>
+    <link type="text/css" rel="stylesheet" href="javascript_test.css" />
+    <style type="text/css">
+      table {
+        margin: auto;
+        border-collapse: collapse;
+      }
+      th, td {
+        text-align: center;
+        padding-left: .5em;
+        padding-right: .5em;
+        border: 2px solid;
+      }
+    </style>
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript">
+      function debug(text) {
+        var debugArea = document.createElement("div");
+        debugArea.appendChild(document.createTextNode(text));
+        //debugArea.innerHTML = text;
+        document.getElementsByTagName("body").item(0).appendChild(debugArea);
+      }
+      function debugBreak() {
+        document.getElementsByTagName("body").item(0)
+          .appendChild(document.createElement("hr"));
+      }
+    </script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p>I am trying to <a href="../cannon.html">rotate</a> some lines and it is not working for points less than zero. I assume it is a function of the way I'm using the trig functions, but my memory of them is a bit fuzzy, so this is a review&hellip;</p>
+    <form action="" onsubmit="eval(this['code'].value); return false">
+      <div style="height: 90%">
+        <textarea name="code" cols="" rows=""
+>var table = document.createElement("table");
+document.getElementsByTagName("body").item(0).appendChild(table);
+
+var steps = 4;
+var functions = ["Math.cos(x)", "Math.sin(x)",
+                 "Math.atan(Math.tan(x))",
+                 "Math.floor(x/(3*Math.PI/4))",
+                 "Math.atan(Math.tan(x)) + (x&gt;=3*Math.PI/4?Math.PI:0)+ (x&gt;3*Math.PI/2?Math.PI:0)"];
+var halfRootTwo = Math.sqrt(2) / 2;
+
+var row = document.createElement("tr");
+table.appendChild(row);
+var head = document.createElement("th");
+head.appendChild(document.createTextNode("x"));
+row.appendChild(head);
+for(j = 0; j &lt; functions.length; j++) {
+  var head = document.createElement("th");
+  head.innerHTML = functions[j].replace(/Math\./g, "").replace(/PI/g, "&amp;pi;");
+  row.appendChild(head);
+}
+  
+for(i = 0; i &lt; steps * 2; i++) {
+  var row = document.createElement("tr");
+  table.appendChild(row);
+  var head = document.createElement("th");
+  head.innerHTML = i + "&amp;pi; / " + steps;
+  row.appendChild(head);
+  for(j = 0; j &lt; functions.length; j++) {
+    var elm = document.createElement("td");
+    var val = eval(functions[j].replace(/x/g, "(" + i + "*Math.PI/" + steps + ")"));
+    if(Math.floor(Math.abs(val) * 10000) == Math.floor(halfRootTwo * 10000)) {
+      val = ((val &lt; 0) ? "-" : "") + "&amp;#x221A;2 / 2";
+    } else if(Math.abs(val) &lt; 0.000001) {
+      val = "0";
+    } else if(Math.abs(1 - Math.abs(val)) &lt; 0.000001) {
+      val = ((val &lt; 0) ? "-" : "") + "1";
+    } else if(Math.abs(val) &gt; 999999999999) {
+      val = ((val &lt; 0) ? "-" : "") + "&amp;#x221E;";
+    } else {
+      for(k = 0; k &lt; steps * 2; k++) {
+        if(Math.floor(Math.abs(val) * 10000) == Math.floor(k * Math.PI / steps * 10000)) {
+          val = ((val &lt; 0) ? "-" : "") + k + "&amp;pi; / " + steps;
+        }
+      }
+    }
+    if(typeof(val) == "number") {
+      val = Math.floor(val * 10000) / 10000;
+    }
+    elm.innerHTML = val;
+    row.appendChild(elm);
+  }
+}
+</textarea>
+      </div>
+      <div><input type="submit" value="Go"></input></div>
+    </form>
+  </body>
+</html>

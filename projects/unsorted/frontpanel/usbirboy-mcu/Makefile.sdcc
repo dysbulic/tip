@@ -1,0 +1,48 @@
+SDCC		= sdcc
+CP		= cp
+RM		= rm -f
+
+CFLAGS		= --code-loc 0xDC00 --data-loc 0x0000 --xram-loc 0x0040 --stack-loc 0x013f -mhc08
+LDFLAGS		= --code-loc 0xDC00 --data-loc 0x0000 --xram-loc 0x0040 --stack-loc 0x013f -mhc08 --stack-auto -o usbirboy.s19 
+
+LDFLAGS		+= -L ~/sdcc/device/lib/build/hc08/
+
+COBJECTS	= main.rel ir.rel filter.rel usbcore.rel
+CSOURCES	= $(patsubst %.rel,%.c,$(COBJECTS))
+
+.SUFFIXES:	.rel
+
+.c.rel:
+		$(SDCC) $(CFLAGS) -c $<
+
+all: usbirboy
+	$(SDCC) $(LDFLAGS) $(COBJECTS)
+
+c:		$(COBJECTS)
+
+usbirboy:	$(COBJECTS)
+
+clean:	
+	$(RM) *.rel
+	$(RM) *.lst
+	$(RM) *.asm
+	$(RM) *.bak
+	$(RM) *.rst
+	$(RM) *.sym
+	$(RM) *.hex
+	$(RM) *.map
+	$(RM) *.mem
+	$(RM) *.lnk
+	$(RM) *.S19
+	$(RM) *.s19
+	$(RM) *.elf
+
+include Makefile.dep
+
+dep:	Makefile.dep
+
+Makefile.dep:	$(CSOURCES)
+	$(RM) Makefile.dep
+	for csrc in $(CSOURCES); do \
+	  $(SDCC) -MM $$csrc >> Makefile.dep ; \
+	done

@@ -1,0 +1,67 @@
+.bingoboard {
+  font-size: 40pt;
+}
+
+table {
+  width: 40%;
+  border-collapse: collapse;
+  margin: 1em auto 0;
+  /* float: left; */
+}
+
+th, td {
+  width: 20%;
+  border: 2px solid;
+  padding-left: .5em;
+  padding-right: .5em;
+  text-align: center;
+}
+
+th {
+  border-bottom: 3px double;
+}
+
+.freesquare {
+  font-size: 20pt;
+  font-variant: small-caps;
+}
+
+#links {
+    position: absolute;
+    border: 1px solid;
+    padding: .5em;
+}
+
+#links label {
+    display: block;
+    float: left;
+    width: 7em;
+    text-align: right;
+    padding-right: .5em;
+}
+
+#links label:after {
+    content: ':';
+}
+
+#links input[type~=text] {
+    width: 5em;
+    padding: .1em .5em;
+}
+
+#links input[type~=submit] {
+    margin-left: 8em;
+    margin-top: .5em;
+}
+
+#links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+@media print {
+    html, body { margin: 0 auto; }
+    #links { display: none; }
+    .odd { margin-top: 2px; }
+}

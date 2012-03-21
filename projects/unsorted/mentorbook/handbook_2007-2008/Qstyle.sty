@@ -1,0 +1,75 @@
+
+\addtolength{\hoffset}{-1.0cm}
+\addtolength{\textwidth}{2.0cm}
+\addtolength{\voffset}{-1.0cm}
+\addtolength{\textheight}{2.0cm}
+
+\usepackage{setspace}		% so I can change between double, single spacing, etc.
+\usepackage{outlines}		% so I can make an outline
+%\usepackage{amsthm}			% for all the theorem-type environments
+\usepackage{syntonly}		% processes the document without typesetting it if \syntonly is uncommented below
+%\usepackage{amsfonts}		% contains math fonts such as frakture and mathbb
+\usepackage{epsf}				% to include encapsulated postscript (eps) graphics files
+%\usepackage{mathrsfs}		% for using calligraphic fonts
+%\usepackage{latexsym}		% a lot of math symbols provided by the AMS
+%\usepackage{bbm}				% to get "blackboard" style set symbols, e.g. the reals, complex numbers
+\usepackage{bm}					% to get bold math symbols of almost and kind with the command \bm{}
+\usepackage{amsmath}		% many new commands and math symbols
+%\usepackage{amssymb}		% some extra symbols
+\usepackage{makeidx}		% to generate an index, automatically
+%\usepackage{glossaries}	% makes a glossary, replaces the obsolete 'glossary' package
+\usepackage{graphicx}		% to include postscript graphics
+%\usepackage{cite}				% for bibtex
+\usepackage{mla}
+\usepackage[TS1]{fontenc} % for the use of the font Utopia Regular with Math Design
+\usepackage[adobe-utopia,fraktur,mbboard]{mathdesign} % for the use of the font Utopia Regular with Math Design
+\usepackage{textcomp}
+%\usepackage{astron}			% enables citation style (Author, year)
+%\usepackage{gensymb}		% has lots of scienctific symbols, the degree symbol for example
+\usepackage[sectionbib]{chapterbib} % bibtex; bibliography for each included file; include this before babel
+\usepackage[german,english]{babel} % so that bibtex can handle umlauts
+\usepackage{hyperref}		% for links within the document
+\usepackage{color}
+\usepackage{rotating}
+%\input{diagxy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Useful new commands/environments %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\renewenvironment{proof}{\vspace{0.5cm} \centering\begin{minipage}[t]{420pt}\textbf{Proof.}\hspace{2mm}}{\hspace{\stretch{1}}$\square$\end{minipage} \\[0.7cm]}
+\newcommand{\bigwerd}[1]{\textbf{#1}\index{#1}}
+\newcommand{\bigword}[1]{\emph{#1}\index{#1}}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newenvironment{authors}{\begin{minipage}[c]{0.8\textwidth}by }{\end{minipage}}
+
+% Changes the margins for a particular part of the document. Takes 2 arguments:
+	% 1. the left margin indent (negative values decrease the left margin)
+	% 2. the right margin indent (negative values decrease the right margin)
+\newenvironment{changemargin}[2]{
+	\begin{list}{}{
+		\setlength{\topsep}{0pt}
+		\setlength{\leftmargin}{#1}
+		\setlength{\rightmargin}{#2}
+		\setlength{\listparindent}{\parindent}
+		\setlength{\itemindent}{\parindent}
+		\setlength{\parsep}{\parskip}
+	}
+\item[]}{\end{list}}
+
+%\newenvironment{journal}[2]
+%	{
+%		\vspace{0.5cm}
+%		\begin{center}
+%		\setlength{\fboxrule}{1.5pt}
+%		\fcolorbox{blue}{yellow}{
+%		\noindent\rule[2mm]{0.25\linewidth}{1pt}
+%		\textsf{JOURNAL}\rule[2mm]{0.25\linewidth}{1pt}
+%		} \\[0.3cm]
+%		\begin{changemargin}{0.5cm}{0.5cm}
+%	}
+%	{	
+%			\begin{flushright}
+%				#1 (#2)
+%			\end{flushright}
+%		\end{changemargin}
+%		\end{center}
+%	}

@@ -1,0 +1,75 @@
+From will@himinbi.org Thu Sep 25 17:31:29 2003
+Received: from localhost.localdomain (localhost [127.0.0.1])
+	by honors.tntech.edu (8.12.8/8.12.8) with ESMTP id h8PMUiCa003873
+	for <jsfromtherim@himinbi.org>; Thu, 25 Sep 2003 17:31:23 -0500
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by localhost.localdomain (8.12.8/8.12.8) with ESMTP id h8PMISX3003997
+	for <jsfromtherim@himinbi.org>; Thu, 25 Sep 2003 22:18:28 GMT
+Received: (from will@localhost)
+	by localhost.localdomain (8.12.8/8.12.8/Submit) id h8PMISxL003995
+	for jsfromtherim@himinbi.org; Thu, 25 Sep 2003 22:18:28 GMT
+X-Authentication-Warning: localhost.localdomain: will set sender to will@himinbi.org using -f
+Date: Thu, 25 Sep 2003 22:18:28 +0000
+From: Will Holcomb <will@himinbi.org>
+To: Journals from Mauritania <jsfromtherim@himinbi.org>
+Subject: Re: [rim] 2003/09/25 - day ninety three a
+Message-ID: <20030925221827.GA3958@trogdor.mr>
+References: <Pine.PMDF.4.21L.0309251550520.40389-100000@tntech.edu> <Pine.LNX.4.58.0309251553570.14942@illuminati.stderr.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.58.0309251553570.14942@illuminati.stderr.org>
+User-Agent: Mutt/1.4i
+X-honors.tntech.edu-MailScanner-Information: Please contact the ISP for more information
+X-honors.tntech.edu-MailScanner: Found to be clean
+Sender: jsfromtherim-admin@holcomb.info
+Errors-To: jsfromtherim-admin@holcomb.info
+X-BeenThere: jsfromtherim@holcomb.info
+X-Mailman-Version: 2.0.13
+Precedence: bulk
+List-Unsubscribe: <http://holcomb.info/mailman/listinfo/jsfromtherim>,
+	<mailto:jsfromtherim-request@holcomb.info?subject=unsubscribe>
+List-Id: Will's journals from Mauritania <jsfromtherim.holcomb.info>
+List-Post: <mailto:jsfromtherim@holcomb.info>
+List-Help: <mailto:jsfromtherim-request@holcomb.info?subject=help>
+List-Subscribe: <http://holcomb.info/mailman/listinfo/jsfromtherim>,
+	<mailto:jsfromtherim-request@holcomb.info?subject=subscribe>
+List-Archive: <http://holcomb.info/pipermail/jsfromtherim/>
+
+On Thu, Sep 25, 2003 at 03:54:26PM -0500, elijah wright wrote:
+
+> > That link you had in there is to http://10.0.0.37 -- that is an
+> > address on a reserved class A (thus not internet accessible). I
+> > think you meant:
+> >
+> > http://himinbi.org/odin/mauritanians/will/2003-07-25_05:54:14.mov
+> 
+> will, are you doing VPN-ish stuff from mauritania?
+
+Oops, yeah. I am sitting at a XP box port ssh'd into my laptop. There
+is another ssh session to the honors server port forwarding smtp and
+ssh. I've got a iptables nat which reroutes all traffic to the honors
+server to the machine I am sitting on. So, I type my message in mutt
+which passes it to sendmail which tries to deliver it to the honors
+server as a smart host. The packets get rerouted to the XP box and go
+over the port forward.
+
+It is very convoluted, but my connection is really slow here so it was
+quicker to come up with a convoluted setup that used existing software
+at both ends.
+
+(The proxy between the laptop and the outside is a winsock proxy (not
+normal socks compliant) and there is no client software for linux.)
+
+I have a copy of all my web stuff that I rsync every so often. So alot
+of the time when checking web stuff I just start apache on my laptop.
+I was searching for the video and forgot to change the address once I
+found it.
+
+Thanks for pointing it out. I'm running mod_vhost on the webserver,
+so the link will work as written, but would normally be:
+
+  http://odin.himinbi.org/mauritanians/will/2003-07-25_05:54:14.mov
+
+Will
+

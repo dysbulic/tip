@@ -1,0 +1,1856 @@
+
+
+SPACETIME
+
+(HIGHWAY and SPACETIME DIAGRAM programs) 
+
+User's Manual
+
+for the IBM PC/XT/AT
+
+Edwin F. Taylor
+
+Department of Physics
+Massachusetts Institute of Technology
+
+NOTE:  Introductory computer activity begins on page 3.
+
+Send questions, comments, suggestions, inquiries to:
+
+Spacetime Software
+20 Davis ROAD
+Belmont, MA 02178 USA
+
+Draft of 3/18/88
+
+Acknowledgments:  Glen Myers programmed the SPACETIME display for the 
+IBM PC.  Eric Berman worked on early versions and programmed the Apple 
+Macintosh version.  Significant portions of this User's Manual were 
+adapted from the Macintosh User's Manual written by Eric Berman.
+
+Copyright (c) 1988 by Edwin F. Taylor
+
+Contents
+
+1.  About SPACETIME, 1
+
+2.  The HIGHWAY, 2
+        Getting Started, 2
+        The HIGHWAY Display, 2
+        A Test Drive on the Highway, 3
+        A Trip to Alpha Centauri, 3
+        HIGHWAY Command Basics, 6
+
+3.  The SPACETIME DIAGRAM, 8
+        The Cursor, 9
+        The F1:CONSTRUCT Menu, 9
+
+4.  The SPLIT WINDOW, 10
+
+5.  The Event and Object Tables, 11 
+
+6.  Some Relativistic Effects, 11
+        Lorentz contraction, 12
+        Time stretching (time dilation), 12
+        Twin paradox, 12
+        Relative synchronization of clocks, 12
+        Invariance of the speed of light, 13
+        Addition of velocities, 13
+        Doppler shift, 13
+
+7.  Shortcuts and Power Uses, 14
+
+Appendix A:  How to . . . , 15 
+        (Commands listed by their actions)
+
+Appendix B:  All the Commands, by Menu, 21
+        Help (question mark key [?]), 21
+        Keypad Commands:  HIGHWAY display, 21
+        Keypad Commands:  SPACETIME DIAGRAM display, 22
+        Command menus at the top of the screen, 23
+        Menu F1: OBJECTS (HIGHWAY display), 23
+        Preview:  F6: SELECT, 26
+        Menu F1: CONSTRUCT (SPACETIME DIAGRAM display), 27
+        Menu F2: WINDOWS, 29
+        Menu F3: SETTINGS, 30
+        Menu F4: TRANSFORM, 31
+        Menu F5: FILES, 33
+        Menu F6: SELECT, 34
+        1.  About SPACETIME
+
+SPACETIME is a collection of computer graphics utility programs designed 
+to help students understand and develop an intuition for the laws of 
+special relativity as the students analyze and solve exercises and take-
+home projects and explore on their own. 
+
+SPACETIME is made up of two separate but related displays:  the HIGHWAY 
+display and the SPACETIME DIAGRAM display.  HIGHWAY shows a snapshot of 
+a "cosmic superhighway" on which different objects move.  Objects in 
+different lanes of the highway move at different speeds.  SPACETIME 
+DIAGRAM shows a plot of position vs. time on which are displayed the 
+locations of events as well as the trajectories of particles in 
+spacetime.  The two displays are integrated so that they share data.  
+This allows you to work with whichever mode is more convenient.  Both 
+displays can be viewed at once using a split-screen feature.
+
+The displays assume an initial acquaintance with relativity but are 
+designed to be mostly self-explaining in operation.  A few minutes of 
+personal demonstration should be enough to get a student started using 
+the displays, with occasional consultation thereafter.  Sections 2 and 3 
+below are intended to be a brief introduction to the HIGHWAY display.  
+Section 6 introduces some relativistic effects.  The instructor may wish 
+to photocopy these sections for student use.  Help screens in the 
+program (available at any time by pressing the question mark key) give 
+headlines of the operation of different commands.
+
+Later sections of this user's manual are intended as a comprehensive 
+description and reference for the instructor and experienced user.
+
+SPACETIME was developed at the Massachusetts Institute of Technology 
+(MIT) and funded through MIT Project Athena.  The programming was done 
+under the supervision of Edwin F. Taylor, Senior Research Scientist in 
+the Department of Physics, by MIT undergraduates working in the MIT 
+Undergraduate Research Opportunities Program.  SPACETIME was originally 
+developed on the IBM PC/XT/AT for use in an MIT physics course in 
+special relativity.  Apple Computer, Inc.  provided funds to rewrite the 
+program for the Apple Macintosht computer.  The Macintosh version is 
+used in a continuing education class at Harvard University Extension 
+School.  Both versions have been used in other schools. 
+
+ A second program called COLLISION -- not described here -- helps the 
+student analyze relativistic collisions, creations, transformations, 
+decays, and annihilations.  
+
+The IBM versions of these programs require an IBM PC or XT or AT with 
+EGA or CGA color graphics, an 8087 or 80287 math co-processor, and more 
+than 256k of memory.  There is a (slower!) version of SPACETIME that 
+does not require a math co-processor.  At this writing, we are modifying 
+the IBM version to run on the IBM PS/2 series of personal computers.  
+The Macintosh version runs on any Macintosh computer with at least 512K 
+of memory.  
+
+2.  The HIGHWAY
+
+Getting Started
+
+The SPACETIME disk is self-booting.  Insert the SPACETIME disk in drive 
+A.  If the computer is off, turn it on.  If the computer is already on, 
+press at the same time the three keys Ctrl, Alt, and Del, then release 
+them.   You will be instructed what to do next. 
+
+The HIGHWAY Display
+
+The first display is HIGHWAY.  The large blank area in the middle of the 
+window can be thought of as a "cosmic superhighway" running from left to 
+right across the screen.  Different lanes on the highway are for objects 
+moving at different speeds.  Objects lying on the dashed horizontal line 
+through the middle of the screen are on the "center strip" of the 
+highway and do not move.  Objects above the center move to the right;  
+the farther above the center, the faster they move.  Objects in the very 
+top lane move to the right with the speed of light, and only light 
+flashes (and neutrinos) can occupy this lane.
+
+Objects below the center of the screen move to the left;  the farther 
+below the center, the faster they move.  Objects in the very bottom lane 
+move to the left with the speed of light, and only light flashes (and 
+neutrinos) can occupy this lane.
+
+The highway convention is sort of British:  vehicles drive on the left 
+side.  But unlike the British convention slow lanes are near the center 
+strip, fast lanes near the edge of the road.
+
+A useful analogy for understanding what appears on the highway is to 
+think of a movie of all the objects traveling along the highway.  At any 
+given instant, you are looking at a single "still" of the movie.  As you 
+change the time, you change movie stills.  You are going to learn how to 
+make such movies and how to step time forward and backward through the 
+stills of the movie.
+
+
+A vertical ruler at the left of the screen shows b  (Greek "beta"), the 
+velocity as a fraction of the speed of light:   b  = v/c.   b  goes from 
++1 at the top (light moving to the right) through 0 at the center to -1 
+at the bottom (light moving to the left).  Notice that this is not a 
+linear scale;  equal vertical lane separations do not correspond to 
+equal changes in b .  This is done so that more of the "interesting" 
+velocities near b = v/c =1 can fit on the screen.
+
+(On the screen there is another scale labeled g next to the b scale.  
+Ignore this second scale for now.)
+
+A Test Drive on the Highway
+
+Before learning about the details of the highway display, take a quick 
+spin to get the feel of it.  Here are some suggestions.
+
+Press the letter C to create a clock on the highway.  A cursor in the 
+shape of a cross appears superimposed on the "reference clock" in the 
+center of the screen.  Find the up and down arrow keys at the right of 
+the keyboard.   Strike the up-arrow key ten to twenty times to move the 
+cursor into a rightward-moving velocity lane.  Press the ENTER key.  
+This creates the clock at the position of the cursor.  The number in the 
+clock rectangle is the time reading of the clock.  
+
+Place a rod along the center strip:   Press R, then strike the right or 
+left arrow key five to ten times to move the cursor along the center 
+strip.  Press the ENTER key.
+
+Now create another rod in one of the moving lanes by pressing R and 
+moving the cursor, this time using both the up-down arrows and the 
+right-left arrows.  The whole screen is available.  Press ENTER.  Notice 
+that the rod in a moving lane is shown to be shorter than the rod at 
+rest in the center lane.  This is called Lorentz contraction.
+
+Place a flash of light by pressing F.  For a flash the up and down arrow 
+keys move the cursor only between the two outer fastest lanes.  Light 
+can move only with the speed of light!  But it can move either to the 
+right (top lane) or to the left (bottom lane).  Position the cursor 
+wherever you want in one of these two lanes and press ENTER.
+
+The present display is a snapshot of the highway at zero time (t = 
+0.00).  Now step time forward:  strike and release the up-arrow.  Strike 
+it many times.  Watch the objects move, each according to the speed of 
+its lane.   Read the time in the upper right corner of the screen.  Try 
+stepping time backward using the down arrow.
+
+This is the basic operation of the HIGHWAY display. 
+ 
+
+A Trip to Alpha Centauri
+
+Now take a longer trip and learn some more about the HIGHWAY display.
+
+The star nearest to our sun is Alpha Centauri, about  4 light-years 
+distant from us.  Assume that the distance units on the display are 
+light-years and the time units on the clocks are years.
+
+You need to clear the screen.  If there are objects already on the 
+screen, clear the screen as follows:  Press function key F5.  A menu 
+will drop down from the top of the screen.  Press the down-arrow until 
+the highlight is over the command New.  Press the ENTER key.  A box will 
+ask if you want to "Save changes before clearing?"  Press N for no.  
+This will give a clear screen.
+
+1.  Create Alpha Centauri.  The startup screen shows the "reference 
+clock" in the center.  This clock represents the Earth.  Place a second 
+clock -- representing Alpha Centauri -- on the center strip (b = 0) at a 
+distance of 4 light-years to the right of the Earth.  [Press C, move 
+cross hair cursor to right with right-arrow key to the position x=4, 
+press ENTER.]  
+
+2.  Create Shuttle.  Now prepare the shuttle for the trip to Alpha 
+Centauri.  Press S (for Shuttle) and use the up-arrow to move the cursor 
+straight up onto the highway.  This time watch the information at the 
+bottom of the screen;  it shows the position and lane-speed at the 
+location of the cursor.  Continue pressing the up-arrow to place the 
+cursor at the position of the earth (x = 0) and in a lane moving to the 
+right with 0.9 the speed of light (b =  v/c = 0.9) as shown at the 
+bottom of the screen.  Press ENTER to create the shuttle. 
+
+3.  Start toward Alpha Centauri.  Step time forward by striking the up-
+arrow a few times.  Watch the shuttle move toward Alpha Centauri.  (You 
+are standing on the center strip;  you do not move across the screen.)  
+
+4.  Shuttle details.  We want details of the shuttle's position in order 
+to line it up with Alpha Centauri.  Get shuttle details this way:  Press 
+function key F6.  Labels will appear on the objects.  Press S to select 
+the shuttle.  A box will be drawn around the shuttle to show it is 
+selected.  Then press the letter i for "information."   Across the 
+bottom of the screen will appear details of the shuttle position, speed, 
+and the reading on its clock.  Leave this information line in place as 
+you move the shuttle toward Alpha Centauri.
+
+5.  Time steps.  You can take big time steps forward and backward using 
+the PgUp and PgDn keys at the right of the up-down arrow keys.  (See 
+diagram below.)  You can take little time steps forward and backward 
+using the Home and End keys at the left of the up-down arrow keys.  Or 
+you can continue to take regular steps with the up-arrow and down-arrow 
+keys themselves.   (The right and left arrow keys move the screen right 
+or left but do not change the time.)
+ 
+
+6.  Arrive at Alpha Centauri.  Keep changing time until the shuttle is 
+approximately lined up with Alpha Centauri (when its position is x=4 as 
+shown at the bottom of the screen).   If the lineup with Alpha Centauri 
+is not perfect, never mind.
+
+7.  Turn the Shuttle around.  Now change the lane of the shuttle to a 
+lane moving to the left, so it can head home.  Program the shuttle by 
+pressing the letter P.  A cross-hair cursor will appear at the position 
+of the shuttle.  Move the cursor down with the down-arrow key until it 
+is in a lane below the center strip with b = v/c = -0.9 (note minus 
+sign).  When you get to the correct lane, press ENTER. 
+
+8.  Arrive back at earth.  Step time forward again with the up-arrow key 
+or PgUp key to bring the shuttle back to Earth (x=0).
+
+Welcome the shuttle home.  You were standing on the center strip and did 
+not move!
+
+9.  Who is younger?  Read the number on the Earth clock and the number 
+on the shuttle clock.  These are the number of years that have passed 
+for each clock.  Who is younger:  the shuttle pilot or the stay-at-home 
+twin?  This is called the Twin Paradox.  For a further analysis of the 
+Twin Paradox, see Section 6 below.
+
+If you have time:
+10.  Start over again.  Reset time to zero (t = 0) by pressing the zero 
+key (0) at the top of the keyboard.
+
+11.  Climb onto the shuttle.  Be sure the shuttle is selected -- has a 
+box around it.  [If not, press F6, then S.]  Then jump to the shuttle by 
+pressing the letter J. 
+ 
+You are now riding on the shuttle.  With respect to you the shuttle is 
+at rest, so the shuttle is in the center of the screen.  The Earth is 
+lined up with you but below you, in a leftward-moving lane.  Alpha 
+Centauri is in the same lane as the Earth, but farther to the right.  
+Earth and Alpha Centauri are moving in your rest frame;  therefore the 
+distance between them is contracted, just like the length of a moving 
+rod is contracted.
+
+12.  Ride the shuttle out and back.  Now strike the up-arrow to "replay 
+the movie" of the earlier trip to Alpha Centauri and back to Earth, this 
+time while riding on the shuttle.  Keep striking the up-arrow;  the 
+shuttle will turn around automatically.  Yahoo!
+
+Physics notes:  
+
+1.  The units used to measure time and space may be arbitrarily chosen 
+by the user.  The only constraint is that light moves 1 unit of distance 
+in 1 unit of time.  Hence, consistent units might be years of time and 
+light-years of distance, or minutes of time and light-minutes of 
+distance (one light-minute = the distance that a flash of light moves in 
+one minute), or meters of distance and meters of light-travel time (one 
+meter of light-travel time = the time it takes for a light flash to move 
+one meter), etc.  In this way, the scale of events (space travel or 
+particle collisions) is controlled by the operator.
+
+2.  Immediately to the right of the velocity scale is a second scale 
+that gives the value g  (Greek "gamma").  This is the factor by which 
+moving clocks appear to run slow and by which moving rods appear to be 
+contracted along their direction of motion. 
+
+ 
+g  goes from the value infinity at the top of the screen, through the 
+value 1 at the center, to the value infinity again at the bottom of the 
+screen.  (g is always positive.)  
+
+3.  While riding on the shuttle, you may have noticed that the Earth 
+clock has a different reading than the clock on Alpha Centauri.  When 
+these clocks are both at rest on the center strip, they do have the same 
+reading -- they are synchronized with one another.  [Jump to the Earth 
+clock to verify this -- press F6, then A, then J.]  The fact that 
+separated clocks at rest read the same time but the identical clocks in 
+a moving lane do not read the same time is called the relative 
+synchronization of clocks.  For most people this is the relativistic 
+effect hardest to understand.  For more on relative synchronization of 
+clocks, see Section 6 below.  
+
+4.  We cannot run time backward in real life.  This is a reminder that 
+HIGHWAY does not show events as they occur, even in principle.  Rather 
+it replays data gathered from remote locations, transported to a central 
+information processing facility, and assembled into a picture-by-picture 
+animation, which can be run backward or forward in time at our pleasure. 
+
+HIGHWAY Command Basics
+
+If you have taken the two trips described above, you have used many of 
+the most important commands in HIGHWAY.  In this section you will learn 
+some more general features of HIGHWAY commands.  Appendix B contains a 
+complete description of all commands.  Appendix A gives quick 
+instructions on how to carry out various procedures.  
+
+First you need to know about help screens.
+
+Help (question mark key [?])
+
+At almost any time you can obtain on-screen help about the commands by 
+pressing the question mark key [?] on the keyboard.  When no menu is 
+down, you will obtain a general help screen.  When a menu is down, you 
+will see a summary of the commands on that menu. 
+
+Keypad Commands:  HIGHWAY
+
+Most of the time the bottom line of the HIGHWAY screen reads, in part: 
+
+
+This refers to commands entered using the keypad at the right of the 
+screen.  The keypad at the right of the keyboard is NEVER used to enter 
+numbers in these programs.  Enter numbers using the keys across the TOP 
+of the keyboard.  If the right-hand keypad does not work as described 
+here, strike the Num Lock key above the keypad;  it may have been 
+pressed by mistake. 
+
+Change time using the up arrow and down arrow keys:  up-arrow for a step 
+forward in time, down-arrow for a step backward in time.  (See diagram 
+below.)  The time step for the up-down arrows is 0.1 unit in the current 
+frame of reference.  Use the PgUp and PgDn keys to step forward or 
+backward by one full unit of time respectively.  Use the Home and End 
+keys to step forward or backward by the smaller 0.01 unit of time 
+respectively.  These eight keys allow you to go to any given time with 
+two-decimal-place accuracy.   (You can set time to an accuracy of 0.0001 
+unit using the Change (T)ime command in the F3:SETTINGS menu.) 
+
+Right arrow and left arrow keys are used to move the screen display to 
+the right or left, respectively.  These commands do not change the 
+relative positions of objects or the time, they simply allow you to look 
+at a different portion of the highway. 
+
+As you change time, objects may move off of the visible portion of the 
+screen.  When this happens a little arrow is placed at the edge of the 
+screen pointing to the off-screen object, with a label:  CL for clock, 
+RD for rod, FL for flash, SH for shuttle.  (If more than one off-screen 
+object is in the same lane, these labels may overlap.)  To bring an 
+object back on-screen, either change the time or move the screen in the 
+correct direction to bring the object back into sight. 
+
+Command menus at the top of the screen
+
+Across the top of the screen are titles for the pull-down menus.  These 
+menus contain most of the commands used to manipulate the display.  
+Commands are grouped by function, so filing operations can be found in 
+the menu titled F5:FILES, etc.  Pull down a menu by pressing the 
+corresponding function key (labeled F with a digit).  Commands printed 
+in solid color in the menu are executable at the current point in the 
+program, while commands printed in "gray" do not presently apply and 
+therefore cannot be chosen.  
+
+There are two ways to execute a menu command.  (1) Note that one menu 
+item is highlighted.  Use the up and down arrow keys to move this 
+highlight to the command you wish to execute.  Then press ENTER to 
+execute that command.  (2) Some of the commands have one letter in 
+parenthesis (for example Change (T)ime).  Press that letter on the 
+keyboard (for example T) to execute the corresponding command.  These 
+command letters in parenthesis will execute at any time, even when the 
+menu is not pulled down.  This means that once you have learned the most 
+common commands, you do not need to use the menus for these commands.  
+The menus then serve as reminders for the common commands, as well as 
+the only way to execute commands that do not have a letter equivalent.
+
+A reminder of the two ways to execute a command is printed at the bottom 
+of every page of this manual.  
+
+Retract the menu by pressing the Esc key or the spacebar or the function 
+key for the menu.  Pressing another function key calls up the 
+corresponding alternative menu.  You can also call up an adjacent menu 
+by pressing the right or left arrow key while a menu is displayed. 
+
+SELECT (F6):   Sometimes it is necessary to perform some operation on an 
+object, such as jumping to it or deleting it.  In order to specify which 
+object you want the operation to affect, you must first select it.  To 
+select an object, press function key F6.  All objects on the screen will 
+be labeled with letters.  Press the keyboard letter of the object you 
+wish to select.  The selected object will have a box drawn around it.  
+Then you can carry out the desired operation on that object.  There is 
+no harm in leaving an object selected while you do other things;  the 
+box around the object reminds you that it remains selected in case you 
+want to carry out an operation on it.
+
+EVENTS:  Besides objects, HIGHWAY can also display events.  An event has 
+not only a position but also a time of happening.  Examples of possible 
+events:  a collision, the emission of a flash of light, or a coincidence 
+(the place and time at which two objects have the same position).  An 
+event is shown as a line that stretches vertically from top to bottom 
+across the entire highway.  The event is displayed only at the time at 
+which the event occurs.  It will reappear whenever the same time 
+reoccurs in that frame (and at the correct time in another frame).  When 
+you are stepping the time, the clock will automatically stop at the time 
+of every event, even if the event occurs between time steps.
+
+Events are numbered E1, E2, E3, and so on.  The event E0 (event number 
+zero) is a special one:  by definition it occurs at t = 0 and at x = 0 
+in all reference frames.  Event E0 is called "the reference event" 
+because it is the "starting gun" from which clocks are synchronized in 
+every reference frame.  Event E0 is automatically entered in every 
+HIGHWAY display.
+
+You can create an event at an object by selecting that object (using 
+function key F6 and entering the letter of the object), then pressing 
+the letter E.  Erase an event by selecting it using the function key F6, 
+entering the number of the event, then pressing the Del key.  (On the 
+HIGHWAY display no box or other symbol shows that an event has been 
+selected.)
+    
+
+Physics note: The vertical separation of objects by velocity on the 
+display is actually just for analysis;  in reality all these objects are 
+moving along a single line, a single dimension in space.  We separate 
+them vertically Ä and artificially Ä on the screen in order to analyze 
+their relative motions without screen clutter.  Actual motion along a 
+common single line means that an observer can step from one object to 
+another, at the same position but moving at a different speed, without 
+crossing wide lanes of traffic.   Representing an event as a vertical 
+line across the entire highway reminds us of the unreality of the 
+vertical separation in the display.  An event does occur at the time at 
+which it is displayed, but at a single point on the common line of 
+motion.
+ 
+3.  The SPACETIME DIAGRAM
+
+The second important display in SPACETIME is the SPACETIME DIAGRAM 
+display.  
+SPACETIME DIAGRAM provides an alternative way to display events and 
+positions of objects.  It is a coordinate system whose horizontal axis 
+represents the position of an event or object and whose vertical 
+position represents the time at which the event occurs.  The big 
+advantage of SPACETIME DIAGRAM is that you can view on one screen events 
+that occur at different times as well as at different places. 
+
+To bring up this display, type D or highlight the Spacetime (D)iagram 
+command in the F2:WINDOWS  menu and press ENTER.  A window with two 
+labeled axes will appear and occupy most of the screen.  
+
+A point on the spacetime diagram specifies the position and the time 
+(where and when) of an event.  An event is shown as a numbered dot on 
+the spacetime diagram.  All distances and times are measured relative to 
+the "reference event," the event labeled "0" where the two axes cross 
+(x=0 and t=0).
+
+A worldline traces out the trajectory of an object through spacetime.  
+Each event (each point) on a worldline corresponds to the position of an 
+object at the time the object was there.  Objects in the Highway window 
+appear as worldlines in the Spacetime Diagram window.  (If you choose 
+not to have worldlines displayed, toggle the Worldlines on command in 
+the F3:SETTINGS menu.)  
+
+The dashed line across the middle of the screen represents a line of 
+simultaneity for the time t ("now") in the current reference frame.  All 
+events that occur at the current time t in this frame will lie on this 
+dashed line.  (The value of the current time in this frame is displayed 
+at the upper right of the screen.) 
+
+One way to change time in SPACETIME DIAGRAM is to press T, press the up-
+down arrows to go to the desired time, then press ENTER.  For big time 
+steps, press T and use the PgUp and PgDn keys.  For small time steps, 
+press T and use the Home and End keys.  Alternatively, after pressing T, 
+you can type in the value of the desired time and press ENTER.
+
+The Cursor
+
+A cross-hair cursor resides on the screen.  This cursor is used to 
+create event-points on the spacetime diagram.  The line across the 
+bottom of the screen tells you the current x and t coordinates of the 
+cursor.  You can move the cursor around the spacetime diagram using the 
+keypad at the right of the keyboard.  Press the arrow keys for right-
+left and up-down steps.    Diagonal steps are accomplished using the 
+"diagonal" keys:  PgUp, PgDn, Home, and End.  (See figure below.)  The 
+steps are 0.25 unit.  For smaller steps of 0.01 unit, hold down the 
+SHIFT key while pressing the arrow or diagonal keys.  For still smaller 
+steps of 0.001 unit, hold down the Caps Lock key while pressing the 
+arrow or diagonal keys.
+
+Once you position the cursor, create an event by pressing the letter E.
+
+The F1:CONSTRUCT Menu
+
+The Left-hand menu at the top of the screen is now called F1:CONSTRUCT 
+and has different commands in SPACETIME DIAGRAM than it did in HIGHWAY.  
+The first command in the menu is Draw (E)vent.  To create an event on 
+the screen, move the cursor to the desired point on the screen and press 
+E (or highlight Draw: (E)vent on the F1:CONSTRUCT menu and press ENTER).  
+
+All of the remaining commands in the F1:CONSTRUCT menu (except Help and 
+Close) require the use of the F6:SELECT command.  Press F6 and then 
+press the letter of the object or the number of the event you wish to 
+select.  When you select an event, a box appears around that event on 
+the spacetime diagram.  When you select an object, a box appears around 
+the intersection of the worldline of that object with the dashed line of 
+simultaneity.  
+
+To connect two events with a straight line, press F6:SELECT and select 
+one of the events by number, then press F6:SELECT again and select the 
+second event by number.  (The order of selection is not important.)  Now 
+use the (C)onnect command to draw a line between the two events.  
+
+A number and letter appears next to the connect line.  The number is the 
+spacetime interval that relates the two events.  The letter 'T' denotes 
+a timelike interval, 'L' denotes a lightlike interval, and 'S' denotes a 
+spacelike interval.
+
+Physics note:  The invariant interval is a number relating two events 
+which has the same value when computed using the space and time 
+coordinates of any laboratory or rocket reference frame -- hence the 
+descriptor "invariant."   If the interval is timelike (label T), then a 
+clock traveling between the two events will read an elapsed time equal 
+to the interval.  If the interval is spacelike (label S), then there 
+exists a frame in which the two events occur at the same time;  in this 
+frame the distance between the two events is equal to the interval.  If 
+the interval is lightlike (label L), then only light can travel fast 
+enough to get from one event to another and the interval has the value 
+zero.  See any introductory relativity textbook for more than this 
+reminder.
+
+To reduce screen clutter, you may want to delete the interval labels 
+from connect lines.  To do so, toggle the Interval on command in the 
+F3:SETTINGS menu .
+
+The Light(K)one command allows you to place a "lightcone" through any 
+numbered event.  (We apologize for using the letter K, but the letter C 
+is already taken by the create-Clock command.)  A lightcone consists of 
+the worldlines of light flashes converging on the event from below and 
+diverging from the event above.  First select the event using F6, then 
+press K (or highlight this command and press ENTER). 
+
+The Hyper(B)ola command allows you to place an invariant hyperbola 
+through any numbered event in the same manner as for the lightcone 
+above.   An invariant hyperbola is the locus of all points occupied by 
+the given event when viewed from all possible rocket frames.  Select the 
+event using F6, then press B (or highlight this command and press 
+ENTER).
+
+The (DEL)ete Object/Event command allows you to delete an object or 
+event by selecting it using F6, then pressing the Del key (or 
+highlighting this command and pressing ENTER).  When you delete an 
+event, all other constructions associated with the event (connect lines, 
+lightcones, hyperbolas) are deleted as well.
+
+delete Connect.  To delete a connect line, use F6 to select in sequence 
+each of the two events at the end of the line (which event you select 
+first does not matter) and then highlight this command and press ENTER.  
+(There is no single-letter key that invokes this command.)
+
+To delete a light cone or hyperbola, use F6 to select the event through 
+which the lightcone or hyperbola passes, then highlight the delete 
+Lightcone or delete Hyperbola command and press ENTER.  (There is no 
+single-letter key that invokes these commands.)
+
+4.  SPLIT WINDOW
+
+Sometimes it is desirable to view both the Highway and Spacetime Diagram 
+displays simultaneously.  SPACETIME has a command Split (W)indow in the 
+F2:WINDOWS menu which allows both windows to be displayed at the same 
+time.  The screen is redrawn with the HIGHWAY on top and SPACETIME 
+DIAGRAM below, separated by a thick line. 
+
+Now change time using the up-down arrow keys.  Objects move along the 
+highway;  the spacetime diagram scrolls so that the line of simultaneity 
+stays always in the center of the SPACETIME window.  (For larger time 
+steps, use the PgUp-PgDn keys,  for smaller time steps, use the Home-End 
+keys.   You can also set the time directly using the Change (T)ime 
+command.)
+
+You can adjust the position of the thick divider line by holding down 
+the SHIFT key, pressing the up or down arrow keys to move the  thick 
+line to the desired position, and then pressing ENTER.  The (V)iew Lanes 
+command in the F3:SETTINGS menu can be used to uncover portions of the 
+highway which may be obscured:  after pressing V, use the arrow keys to 
+move the highway up and down, then press ENTER.
+
+SPLIT WINDOW is intended as a summary replay of what has been 
+constructed in the HIGHWAY and SPACETIME DIAGRAM displays.  Many of the 
+usual commands cannot be executed in SPLIT WINDOW.  These unexecutable 
+commands are printed in gray in the menus.  To execute these gray 
+commands, you must go to the HIGHWAY window or the SPACETIME DIAGRAM 
+window.
+
+5.  Event and Object Tables
+
+The event table provides numerical values for the space and time 
+coordinates of all events in the current frame of reference.  The event 
+table also lists the times of changes in shuttle velocity and the values 
+of that velocity before and after each change as measured in its current 
+frame.
+  
+The object table shows the numerical value of position, velocity, and 
+gamma (time-stretch factor) for all objects.  In addition, the object 
+table has entries for the length of every rod and the time reading on 
+every clock and on the shuttle in the current frame. 
+
+Call up the event or object table by pressing function key F2 to call 
+the WINDOW menu.  Use the down-arrow to highlight the name of the table 
+you wish to see;  press ENTER.  (There is no one-letter command to call 
+these tables.)
+
+You can enter notes of up to 25 characters each to describe events and 
+objects appearing in the two tables.  Add a note to any entry by using 
+the arrow keys to move the cursor to the point where you want the note 
+to begin, then type the note.  The Del key erases the current letter;  
+the backspace key (the key in the top row of the keyboard showing a left 
+arrow) erases the letter to the left of the cursor.  The notes you enter 
+in the tables will be saved if you save the display.  If you delete an 
+event or an object and then create it again, any previous note about 
+that event or object will be lost.
+
+If you wish to print either table, call it up and press function key 
+F10.
+
+6.  Some Relativistic Effects
+
+In this section we show how SPACETIME illustrates several effects of 
+special relativity.  These effects are only briefly described and are 
+not proved here;  the displays merely illustrate them.  Moreover, we 
+give only one or two cases of each effect -- SPACETIME can demonstrate 
+these effects in many other ways.
+
+We assume that the user knows how to make simple constructions and 
+manipulations using SPACETIME;  no such specific directions are given in 
+this section.
+
+Users should understand that these demonstrations do not prove the 
+fundamental theory of special relativity:  the computer is programmed to 
+model this theory.  (Of course if the theory were inconsistent, that 
+might make difficulties for us in programming the displays.  Programming 
+these displays was difficult, but not because relativity is 
+inconsistent!)
+
+Lorentz contraction
+Lorentz contraction is the apparent reduction of length of a moving 
+object along its direction of motion.  In HIGHWAY, create a rod on the 
+center strip, where velocity is zero in the current frame.  Then create 
+a second rod in a moving lane.  The moving rod is shown shorter in 
+length from right to left than the rod at rest (but the same width from 
+top to bottom).  The factor by which the length is shorter is gamma (g), 
+the same factor by which moving clocks run slow (time stretching, see 
+next item).  You can read the value of gamma directly off of a scale at 
+the left of the HIGHWAY display.
+
+Another way to illustrate Lorentz contraction is to create two objects 
+(such as clocks) in the same lane.  The distance between these two 
+clocks will change as you jump between them and objects in other lanes.
+
+Caution:  When a clock string is placed in or moved to a fast lane, some 
+clocks are omitted to prevent overlap of the images.  The need for this 
+results from Lorentz contraction, but the resulting apparent distance 
+between adjacent clocks in the string does not correctly follow Lorentz 
+contraction.
+
+Time stretching (time dilation)
+"Moving clocks run slow." is the cocktail-party summary of time 
+stretching.  ("Dilation" is another word for "stretching.")  A more 
+careful way to say it is this: "Let a uniformly moving clock pass a 
+string of synchronized clocks at rest.  Set the moving clock to read the 
+same as some 'initial' clock in the string as the two pass each other.  
+Then as this moving clock passes an observer standing on a stationary 
+clock farther along the string, the reading on the moving clock will be 
+less than the reading on the stationary clock.  The farther along the 
+string, the proportionately farther behind will the moving clock read 
+compared with the stationary clock in the string."  (Whew!)
+
+Start with a new screen and create a clock string on the center strip.  
+Now create a series of clocks in different lanes but all initially lined 
+up vertically above and below the reference clock in the middle of the 
+screen.  Now press the up-arrow key and watch the different clocks move 
+and change time.  Notice that the fastest-moving clocks have the 
+smallest elapsed time reading.  (If you create a moving clock anywhere 
+but directly above or below the reference clock, the initial reading of 
+the moving clock will be different from zero.  This is due to the 
+relative synchronization of clocks -- see below.)  
+
+Twin paradox
+"One twin stays at home on earth, the other twin travels at high speed 
+to a distant star and returns.  When the twins stand side by side after 
+the return, the traveled twin will be younger than the stay-at-home 
+twin."  That is not a paradox;  it is a true statement.  Carry out the 
+Trip to Alpha Centauri in Section 3 above to experience this result. 
+ 
+The supposed paradox is often stated this way.  "Relativity says that 
+all motion is relative.  Therefore who is to say which twin stayed at 
+home and which did the traveling?  Looked at from the point of view of 
+the rocket twin, the earth twin zooms away and later returns.  Therefore 
+the earth twin should be younger than the rocket twin.  But when they 
+stand side by side, each twin cannot be younger than the other one.  
+Paradox!"
+
+The paradox can be resolved in various ways that all boil down to a 
+single realization:  only one twin turns around.  Turning around 
+requires acceleration.  There is no uncertainty about which twin is 
+slammed against the bulkhead of the spaceship as it turns around!  The 
+change of reference frames during turnaround can lead to an explanation 
+of every detail of the twin "paradox."
+
+Relative synchronization of clocks
+Create a clock string along the zero-speed medium strip of HIGHWAY.  
+Each clock has the same reading.  Now create an object in some other 
+lane and jump to it.  As observed from this other object, different 
+clocks in the moving clock string have different readings.  This effect 
+is called the relative synchronization of clocks.  The relative 
+synchronization of clocks is the single most difficult effect in special 
+relativity for most people to understand.  Einstein's famous train 
+paradox presents simply and concretely the essential features of 
+relative synchronization of clocks.  Look it up in any relativity book 
+or call up the existing display TRAINE from the Files menu. 
+
+Invariance of the speed of light
+As you jump from object to object in different lanes of HIGHWAY, the 
+outer lanes are always just as far away on either side as they were when 
+the display was first shown.  No matter how fast you are going with 
+respect to the original reference clock, the edge of the highway remains 
+the same distance from you.  A curious highway!  Yet a highway that 
+reflects one of Einstein's fundamental assumptions:   The speed of light 
+has the same value in every frame, no matter what (uniform) motion this 
+frame has with respect to other frames.  This is called the Principle of 
+the Invariance of the Speed of Light.   In HIGHWAY, the vertical 
+distance from the center represents lanes of different speeds, and the 
+fastest lanes in either direction are occupied only by light (and other 
+zero-mass particles such as neutrinos).  Hence no matter what your 
+relative velocity, these fastest lanes are represented at the same 
+velocity-separation from you.  That is why the program will allow you to 
+select a light flash but will not let you jump to it.  
+        
+Addition of velocities
+In HIGHWAY, create a clock moving to the right with half the speed of 
+light relative to you and jump to it.  Now create a second clock moving 
+to the right with half the speed of light relative to you on the first 
+clock and jump to the second clock.  Now create a third clock moving to 
+the right with half the speed of light relative to you on the second 
+clock and jump to the third clock.
+
+Will you now be moving 0.5 + 0.5 + 0.5 = 1.5 of the speed of light 
+relative to the original frame?  No!  Each velocity jump will increase 
+speed by 0.5 with respect to the current frame.  However, with respect 
+to the previous frame the increase is not so great.  This outcome is 
+required to assure that no object moves faster than the speed of light 
+with respect to any frame, as demanded by relativity.  If you use the 
+HIGHWAY display and try three jumps of b = v/c = 0.5 each, you will find 
+that you are moving at a speed of 0.929 that of light with respect to 
+the original frame.  (Figure at the lower left of the screen.)  For more 
+detail on this subject, look up the law of addition of velocities in any 
+relativity text. 
+
+A summary statement of this result is that "velocities do not add."  
+This means that they do not add in the simple way we are accustomed to.  
+But there is a straightforward "law of addition of velocities" in 
+special relativity from which the above results can be predicted.
+
+Doppler shift
+Create a beacon in a fast lane on the HIGHWAY display.  A beacon is a 
+clock that emits two light flashes, one in each direction, every unit of 
+its own time, starting at zero time.  Advance time and notice how the 
+light flashes are crowded together in the direction in which the beacon 
+is moving.  In contrast, light flashes traveling in the direction 
+opposite to the beacon's direction of motion are spread out.  Someone 
+standing at rest on the center strip of the highway will receive the 
+crowded-together flashes in rapid sequence.  Another median-strip 
+observer looking in the opposite direction will receive the stretched-
+out flashes with a greater separation in time.  (Remember, the vertical 
+separation in HIGHWAY is a convenient fiction;  in reality, all objects 
+and flashes travel along a single line in space.)  
+
+This piling-up and stretching-out of periodic light flashes in opposite 
+directions is called the Doppler shift.  Notice that the Doppler shift 
+combines two effects.  (1) The emitter is  "chasing its own flashes" in 
+its direction of motion and "running away from its own flashes" in the 
+opposite direction.  (2)  The beacon clock emits forward and backward 
+light flashes every unit of its own time.  But the beacon clock -- like 
+all other moving clocks -- runs slow compared with clocks in the current 
+rest frame.  This means that the beacon emits fewer light flashes 
+forward -- and also backward -- than would be expected from the lapse of 
+time in the current rest frame.
+
+7.  Shortcuts and Power Uses
+
+In this section we describe some ways in which you can speed up your 
+operation of the HIGHWAY and SPACETIME DIAGRAM programs.  All of these 
+procedures are described elsewhere in this manual, but are collected 
+here as a separate briefing document.
+
+Use letter commands.  Many commands can be executed by pressing a single 
+letter.  The menu that shows such a command does not have to be pulled 
+down;  just press the letter.  The menu -- and its help screen -- can be 
+used as a reminder of the meaning of the letter command.  The menu also 
+will show the command in "gray" type when it cannot be executed at the 
+current place in the program.
+
+To create an object at the same horizontal position as an existing 
+object in HIGHWAY.  Use F6 to select the existing object, press i (for 
+information), then press a letter to specify the type of new object you 
+wish to create -- (C)lock, (R)od, (F)lash, (S)huttle, (B)eacon, or 
+(K)lock string.  The cross hair will appear on the center strip at the 
+same horizontal location as the chosen existing object.
+
+To align two objects in HIGHWAY.  Select one object.  Then select the 
+other object.  (Order  of selection does not matter).  Then press A.  
+This procedure will not work for two objects in the same lane or when 
+one object is the shuttle or a light flash emitted by a beacon.  
+(Indeed, you cannot select a light flash emitted by a beacon, and beacon 
+flashes do not appear in the object table.)
+
+Appendix A:  How to . . .
+
+This appendix lists commands by the actions they carry out (erase, 
+create, etc.).  Look for action verbs, listed alphabetically.  Each 
+description is very specific and brief:  a quick reminder.  Alternative 
+ways to execute the same command are not necessarily listed.  Fuller 
+descriptions can be found in Appendix B under the menu that includes the 
+command.
+
+Align two Objects
+                1. Select one object.  (Press F6, press letter of object.)
+                2. Select the other object. (Order of selection does not 
+matter)
+                3.  Press A.
+                (will not work for Shuttle or for flashes emitted by a 
+Beacon)
+                
+Annotate . . .
+        annotate events
+        or objects:
+                1. display Event Table  or Object Table (see "Display" 
+below)
+                2. type notes
+                (move cursor with arrow keys, edit with Del or backspace 
+keys)
+                3. close table with Esc key 
+                 (notes kept if file saved)     
+
+Call . . .      see Display
+        
+Change . . .
+        change frame:   in HIGHWAY, 
+                press F6, press letter of object, press J to jump to object
+                or press G and enter numerical value of beta or gamma
+        
+                in SPACETIME DIAGRAM,
+                press + and - keys to transform "up" and "down" in relative 
+speed
+                (change size of speed jump by selecting dBeta in 
+F4:TRANSFORM menu)
+                or press G and enter numerical value of beta or gamma
+                
+        change time:    in HIGHWAY (see figure below), 
+                use up-down arrows to change time by 0.1 unit
+                use PgUp-PgDn keys to change time by 1.0 unit
+                use Home-End keys to change time by 0.01 unit
+
+                or press T, enter numerical time, press ENTER
+
+                in SPACETIME DIAGRAM, 
+                press T, enter numerical time, press ENTER
+                or press T, use up-down arrows or PgUp-PgDn or Home-End keys 
+                (same as for HIGHWAY, except right and left arrows do 
+nothing)                press ENTER 
+
+
+                
+
+        change windows:         
+                Press H for HIGHWAY
+                Press D for SPACETIME DIAGRAM
+                Press W for SPLIT WINDOW
+                Event Table and Object Table:  press F2, move highlight with 
+                   up-down arrows to desired table, press ENTER
+
+Clear screen    press F5
+                move highlight to New command using arrow keys 
+                press ENTER
+                press N if you do NOT want to save display before clearing
+
+Create . . .
+                in HIGHWAY:
+        create Clock:   1.  press C
+                Rod:    1.  press R
+                Flash:  1.  press F
+                Shuttle:        1.  press S
+                Beacon: 1.  press B
+                Klock string:   1.  press K
+
+                2. move cursor to desired lane and x-position 
+                (up-down arrow keys move through "convenient" b's and g's;
+                PgUp-PgDn keys to move large amount in b,
+                Home-End keys to move 0.01 in b;
+                right-left arrow keys to move horizontally by 0.25
+                hold SHIFT key, press right-left arrows to move by 0.01
+                hold Caps Lock key, press right-left arrows to move by 
+0.001)
+                
+                3. Press ENTER to create object.
+
+        
+
+        create connect: in SPACETIME DIAGRAM,
+                1. Press F6, press number of one event on keys at top of 
+keyboard
+                2. Press F6, press number of other event
+                3. Press C to connect the two events.
+                
+        create event:   in HIGHWAY,
+                Press F6, press letter of object, press E to create event at 
+object
+
+                in SPACETIME DIAGRAM
+                1. move cursor to desired x and t location (numbers in lower 
+left)
+                (use arrow keys plus "diagonal" PgUp, PgDn, Home, End keys 
+to              step 0.25 unit; hold SHIFT key, press same keys to step 0.01 
+unit;
+                hold CapsLock key, press same keys to step 0.001 unit.)
+                2. press letter E key to create event.
+
+        create  in SPACETIME DIAGRAM,
+        hyperbola:      Press F6, press number key of event, press B
+                                create  in SPACETIME DIAGRAM,
+        lightcone:      Press F6, press number key of event, press K
+
+        
+        create new object at position of existing object: in HIGHWAY,
+                1. press F6
+                2. press letter of desired existing object
+                3. press i
+                4. press letter of object to be created, e.g.,. C for clock 
+(menu F1)
+                 (cursor will appear on center strip at position of existing 
+object)
+                5. use up-down arrow keys to place new object in desired 
+lane
+                6. press ENTER
+                
+                
+Delete . . .
+        delete object   
+        or event:       press F6, press letter of object or number of event, 
+press Del key
+
+        delete connect: in SPACETIME DIAGRAM,
+                1. press F6, press number of either connected event
+                2. press F6, press number of other connected event (order 
+not important)
+                3. press F1  
+                4. move highlight down to delete Connect using arrow keys  
+                5. press ENTER
+
+        delete lightcone
+        or hyperbola:   in SPACETIME DIAGRAM,
+                1. press F6 
+                2. press number of event through which construction is drawn
+                3. press F1
+                4. move highlight down to given delete command using arrow 
+keys 
+                5. press ENTER
+
+Display . . .
+        display Event Table
+        or Object Table:        
+                1. press F2
+                2. move highlight to Event Table or Object Table entry using 
+arrow keys 
+                3. press ENTER  
+                4. press Esc key to return to preceding display
+        display help screen:  
+                1. press question mark key (?).  
+                If no menu is down, a general help screen will be displayed.
+                If menu is down, commands in that menu will be explained.
+                2. press SPACEBAR to exit help
+        
+        display info on object:  in HIGHWAY display, 
+                1. press F6 
+                2.  press letter key of object about which you want info
+                3. press letter i
+                information appears in bottom line of screen
+                (You can carry out other functions with object info line in 
+place.)
+                4. Restore regular bottom line display by pressing X. 
+
+Erase . . .     see Delete
+
+Get . . .       see Display
+
+Go to . . .     see Transform, Jump to
+
+Jump to object  in HIGHWAY,
+                Press F6; press letter of object; press J.
+
+Magnify Press M to get a closer view. (Press Z to Zoom out.)    
+
+Move . . .
+        move object:    To move object with time, see change time above.
+                You cannot change the HIGHWAY lane of any object except the 
+                shuttle (see Program shuttle below).  You cannot change 
+                the right-left position of any object without changing time.
+                If object has been placed wrong, delete it and create new 
+object.
+
+        move screen:    in  HIGHWAY or SPLIT WINDOW
+                move screen right and left with right-left arrow keys
+
+                in SPACETIME DIAGRAM,
+                move cursor off any edge of the screen and the screen 
+                will scroll so as to keep the cursor on the screen.
+
+        move dividing   in SPLIT WINDOW,
+        bar:    1. hold down SHIFT key and press up-down arrow keys,
+                2. press ENTER
+
+        
+
+        move highway    in SPLIT WINDOW,
+        up and down:    1. press V, use up-down arrow keys to move 
+highway display
+                (Home, left-arrow, End gives top, middle, bottom lanes 
+                respectively.)
+                2. press ENTER
+
+                        
+Program shuttle, in HIGHWAY,
+                1. step time to locate shuttle where you want it to change 
+lanes
+                2. press P (cross-hair cursor will appear on shuttle)
+                3. press up-down arrow keys to move cursor to new lane
+                (for large cursor steps, use PgUp and PgDn keys
+                for small cursor steps, use Home and End keys)
+                4. press ENTER 
+
+Print   1. press F5, 
+                2. use up-down arrows to move highlight to Print command
+                3. press ENTER
+
+Quit    1. press Q
+                You will be asked if you want to save current display
+                2. Press Y to save, N to quit without saving
+
+Read file       1. press F5
+                2. use up-down arrows to move highlight to Read command
+                3.  press ENTER  (Table shows existing files.)
+                4. Type name of file desired (you may omit extension .STS)
+                5. press ENTER 
+
+Save file       1. press F5
+                2. use up-down arrows to move highlight to Save command
+                3.  press ENTER (Table shows existing files.)
+                4. Type name for file (eight letters maximum, no spaces)
+                5. press ENTER 
+                
+Select  1. press F6 (in HIGHWAY objects will be labeled with 
+letters)
+                2. press a letter to select an object
+                     press a number to select an event (use Event Table if 
+needed 
+                      to find event number)
+
+Show    see Display
+
+Split the window     press W
+
+Synchronize clock, in HIGHWAY,   
+                1. press F6
+                2. press letter of clock to be synchronized
+                3. press U
+                4. press SPACEBAR
+
+Transform . . .
+        transform frame:        in HIGHWAY, 
+                1. press F6
+                2. press letter of object to which you wish to jump
+                3. press J to jump to object
+                
+                in SPACETIME DIAGRAM,
+                press + or - key to transform "up" or "down" in speed
+                (change speed jump by selecting dBeta in F4:TRANSFORM menu)
+                or press G and enter numerical value of beta or gamma
+
+        transform to last frame:  
+                press L  
+                This transforms to most recent frame.
+                Press L multiple times to jump back and forth between two 
+frames.
+
+        transform to original frame:
+                press O (the letter "oh")
+                This transforms to frame when current display was started.
+                
+Turn on/off . . . 
+        turn on/off interval labels:  in SPACETIME DIAGRAM,
+                1. press F3
+                2. move highlight down to Interval on command
+                3. press ENTER
+        
+        turn on/off worldlines:  in SPACETIME DIAGRAM,
+                1. press F3
+                2. move highlight down to Worldlines on command
+                3. press ENTER
+
+Unsynchronize clock, in HIGHWAY   
+                1. press F6
+                2. press letter of clock to be unsynchronized
+                3. press U
+                4. type in desired time for clock reading
+                5. press ENTER
+
+Write notes . . .
+        about events
+        or objects:     
+                1. display Event Table  or Object Table (see Display above)
+                2. type notes (move cursor with arrow keys edit with Del and 
+backspace keys)
+                3. close table with Esc key.  (Notes kept if file saved.)       
+
+Zoom out        Press Z to get a wider view.  (Press M to magnify.)
+
+Appendix B:  All the Commands, by Menu
+
+This appendix systematically lists and describes all commands in the 
+SPACETIME programs, starting with commands entered using the keypad at 
+the right of the keyboard, then menu by menu.  But first, you need to 
+know about the help screens.
+
+Help (question mark key [?])
+
+At almost any time you can obtain on-screen help about the commands by 
+pressing the question mark key [?] on the keyboard.  When no menu is 
+down, you will obtain a general help screen.  When a menu is down, you 
+will see a summary of the commands on that menu. 
+
+Keypad Commands:  HIGHWAY display
+
+Most of the time the bottom line of the HIGHWAY screen reads, in part: 
+
+This refers to commands entered using the keypad at the right of the 
+screen.  The keypad at the right of the keyboard is NEVER used to enter 
+numbers in these programs.  Enter numbers using the keys across the TOP 
+of the keyboard.  If the keypad at the right of the keyboard does not 
+work as described here, strike the Num Lock key above the keypad;  it 
+may have been pressed by mistake. 
+
+Change time using the up arrow and down arrow keys:  up-arrow for a step 
+forward in time, down-arrow for a step backward in time.  (See diagram 
+below.)  The time step for the up-down arrows is 0.1 unit in the current 
+frame of reference.  Use the PgUp and PgDn keys to step forward or 
+backward by 1.0, one full unit of time, respectively.  Use the Home and 
+End keys to step forward or backward by the smaller 0.01 unit of time, 
+respectively.  These eight keys allow you to go to any given time with 
+two-decimal-place accuracy.   (You can set time to an accuracy of 0.0001 
+unit using the Change (T)ime command in the F3:SETTINGS menu.  See 
+below.) 
+
+
+Right arrow and left arrow keys are used to move the screen display to 
+the right or left, respectively.  These commands do not change the 
+relative positions of objects or the time;  they simply allow you to 
+look at a different portion of the Highway.  
+
+As you change time, objects may move off of the visible portion of the 
+screen.  When this happens a little arrow is placed at the edge of the 
+screen pointing to the off-screen object, with a label:  CL for clock, 
+RD for rod, FL for flash, SH for shuttle.  (If two or more objects are 
+in the same lane, these labels may overlap.)  To bring an object back 
+on-screen, either change the time or move the screen in the correct 
+direction to bring the object back into sight.
+
+Keypad Commands:  SPACETIME DIAGRAM display
+
+The eight keys around the "edge" of the keypad are used to move the 
+cursor in eight directions.  (See diagram below.)
+
+
+As you move the cursor, the bottom line of the display gives the x and t 
+coordinates of the position of the cursor on the spacetime diagram.  
+Each key press moves the cursor by 0.25 units (for "diagonal" keys, 0.25 
+units in both x and t directions).  Hold down the SHIFT key while using 
+the keypad to move the cursor by 0.01 unit.  Hold down the Caps Lock key 
+while using the keypad to move the cursor by 0.001 unit.  You place an 
+event at the present position of the cursor by pressing the letter E.
+
+You change time in SPACETIME DIAGRAM by pressing the letter T and 
+entering the desired time using the number keys across the top of the 
+keyboard.  (See the F3:SETTINGS menu below.)  Another way to change time 
+is to press T and then press the keypad keys to move the dashed line of 
+simultaneity up and down.  In this case, each time step is the same as 
+in the HIGHWAY display -- see the keypad diagram in the preceding 
+section.  (The right and left arrows do nothing in the present case.)  
+When you have moved the line of simultaneity to the time you wish, press 
+ENTER.
+ 
+
+Command menus at the top of the screen
+
+
+Across the top of the screen are titles for the pull-down menus.  These 
+menus contain most of the commands used to manipulate the display.  
+Commands are grouped by function, so filing operations can be found in 
+the menu titled F5:Files, etc.  Pull down a menu by pressing the 
+corresponding function key.  Commands printed in solid color in the menu 
+are executable at the current point in the program, while commands 
+printed in "gray" do not presently apply and therefore cannot be chosen.  
+
+There are two ways to execute a menu command.  (1) One menu item is 
+highlighted.  Use the up and down arrow keys to move this highlight to 
+the command you wish to execute.  Then press ENTER to execute that 
+command.  (2) Some of the commands have one letter in parenthesis (for 
+example Change (T)ime).  Press that letter on the keyboard (for example 
+T) to execute the corresponding command.  These command letters in 
+parenthesis will execute anytime, even when the menu is not pulled down.  
+This means that once you have learned the most common commands, you do 
+not need to use the menus for these commands.  The menus then serve as 
+reminders for the common commands, as well as the only way to execute 
+commands that do not have a letter equivalent.  (If the command is shown 
+in gray in the menu, it cannot be executed at this point in the 
+program.)
+
+A reminder of the two ways to execute a command is printed at the bottom 
+of every page of this manual.  
+
+Retract the menu by pressing the Esc key or the spacebar or the function 
+key for the menu.  Pressing another function key calls up the 
+corresponding alternative menu.  You can also call up an adjacent menu 
+by pressing the right or left arrow key while a menu is displayed. 
+
+Menu F1: OBJECTS (HIGHWAY display)
+
+
+Menu F1 is different for the HIGHWAY and for SPACETIME DIAGRAM.  This 
+listing is for the HIGHWAY menu.  The SPACETIME DIAGRAM menu is 
+described below.
+
+The F1:OBJECTS menu allows you to create and manipulate the objects that 
+reside on the highway display.  
+
+Creating Objects
+
+Create an object from menu F1 either (1) by using the up-down arrow keys 
+to move the highlight to the create command for that object and then 
+pressing ENTER, or (2) simply by pressing the keyboard letter in 
+parenthesis in the name of the object.  You can use the letter to create 
+an object even if the menu is not pulled down.
+
+When you select an object to be created, a cross-hair cursor appears in 
+the center of the screen.   With the up-down arrow keys move the cursor 
+vertically into the desired speed-lane.  Using the right-left arrow 
+keys, move the cursor horizontally into the desired position along the 
+highway.  As you move the cursor, look at the numbers along the bottom 
+line of the screen.  These numbers reflect the cursor's position on the 
+highway.  The first number x is the right-left position of the cursor on 
+the highway.  The second number, b, is the speed of the lane as a 
+fraction of the speed of light.  The third number, g, is called the time 
+stretch factor gamma and is the factor by which moving clocks run slow 
+and moving rods are contracted.
+
+If you wish to move the cursor by different amounts, use the PgUp and 
+PgDn keys to move vertically across the lanes with a larger step and the 
+Home and End keys to move with a smaller step.  Hold down the SHIFT key 
+while pressing the right-left arrow keys to select x-position on the 
+highway with smaller steps (0.01 change in x).  Hold down the Caps Lock 
+key while pressing the right-left arrow keys for even smaller steps 
+(0.001 change in x). 
+
+After you have placed the cursor where you want the object, press ENTER.  
+If you decide not to create an object after all, press the Esc key.
+
+Here are fuller descriptions of the various objects.
+
+(C)lock
+
+
+A clock is represented by a small box with a number in it.  The number 
+is the time reading of the clock.  A clock is said to be synchronized if 
+it is synchronized in its frame  (that is, when on the center line of 
+the highway) with the "reference clock"  that reads t=0 at position x=0.  
+All clocks are initially synchronized in their own frames, but can be 
+set at unsynchronized values using the (U)nsynchronize clock command 
+(see below).   Times for unsynchronized clocks are displayed in reverse 
+video (black on an illuminated square background).  The horizontal lines 
+projecting out on either side of the clock shows the actual up-down lane 
+position of the clock.  The two vertical lines projecting from the top 
+and bottom of the clock show what width the clock would have if it were 
+shown Lorentz-contracted (as rods are -- see below).  We cannot contract 
+the box for clocks and still write the clock time in the box.
+(R)od
+
+
+The second object is a rod.  Rods are exactly one unit of length at rest 
+and are therefore useful for measuring distances in various reference 
+frames.  One unit of length in this program is the distance that a flash 
+of light travels in one unit of time.  It is also the distance between 
+hatch marks on the horizontal line in the middle of the screen.  Moving 
+rods are shown to be Lorentz-contracted by the factor gamma g along 
+their direction of motion.
+
+(F)lash
+
+The third object is a simple flash of light.  Flashes can move only at b 
+=ñ1.  Flashes can therefore occupy only the top and bottom lanes of the 
+superhighway.  Notice that the cursor cannot be placed at other speeds 
+when you are creating a light flash.
+
+(S)huttle
+
+The fourth object is a shuttle.  What we call a shuttle is a clock which 
+can be programmed to change frames at specified times.  (Programming the 
+shuttle will be discussed later.)  The shuttle is useful for measuring 
+the proper time of a round trip.  Only one shuttle is allowed on the 
+highway at a time.
+
+(B)eacon
+
+A beacon is a clock which emits two photons (flashes of light), one 
+forward and one backward, at every unit of time in its own reference 
+frame, starting at t=0 on its clock.  The flashes emitted by the beacon 
+do not appear in the Object Table and cannot be selected using the 
+F6:SELECT key.
+
+ (K)lock string
+
+A clock string is an infinite set of regularly-spaced, synchronized 
+clocks, all in the same reference frame.  When this string of clocks is 
+on the center strip -- that is, when it is at rest in the current 
+reference frame -- all the clocks read the same time.  In contrast, when 
+the string of clocks is moving, the clocks read times different from one 
+another.  This is called the relative synchronization of clocks.  It is 
+one of the most difficult concepts in special relativity.  See Section 6 
+above for more comments on the relative synchronization of clocks.   
+
+When the clock string is at rest (on the center strip), clocks in the 
+string are spaced one unit of distance apart.  When the string is in a 
+fast-moving lane, Lorentz contraction would bring the clocks so close 
+together that they would overlap and could not be read.  To avoid this 
+screen clutter, a sufficient number of alternative clocks are omitted so 
+that the remaining clocks do not overlap.  The fraction of clocks shown 
+is approximately equal to 1/g, where g is the Lorentz contraction factor 
+(the same as the time stretch factor).  For the g = 3 lane, every third 
+clock is shown;  for the g = 5 lane, every fifth clock is shown, and so 
+on.  The omission of clocks means that the distance between displayed 
+clocks in a clock string is not governed by the Lorentz contraction 
+factor g .
+ 
+Preview:  F6: SELECT
+
+Some of the following commands in the F1: OBJECTS menu make use of the 
+F6:SELECT command, so we explain this command here, out of order.   
+
+Sometimes it is necessary to perform some operation on an object, such 
+as jumping to it or deleting it.  In order to specify which object you 
+want the operation to affect, you must first select it.
+
+To select an object, press function key F6.  All objects on the screen 
+will be labeled with letters.  Press the keyboard letter of the object 
+you wish to select.  The selected object will have a box drawn around 
+it.  The object remains selected until F6 is used to select a different 
+object or event.  (There is no harm in letting an object remain 
+selected, but if you wish no objects to be selected press F6 and then 
+the spacebar.)  You can also select an event by pressing F6 and then the 
+number of the event.  No box or other symbol tells you which event is 
+selected in HIGHWAY. 
+
+Here are the commands in the F1:OBJECTS menu that require the select 
+key. 
+
+(E)vent@Object.  (This command shows gray in the menu until you select 
+on object on which it may operate.)  Often one wishes to place an event 
+at the present position of an object.  To do so, select the object (see 
+above) and press the letter E.  The event is shown as a vertical line 
+across the entire highway and is labeled with the letter E and a number.  
+(Event E0 is the reference event which occurs at x=0 and t=0 in all 
+reference frames.)  The time of the event is set to the current time as 
+measured in the current reference frame.  Each event will appear at the 
+object whenever the same time reoccurs.  SPACETIME has a feature to 
+prevent you from accidentally skipping over an event while incrementing 
+the time.  The display will automatically stop at the time of every 
+event, even if the event occurs between time steps.
+
+(DEL)ete Object/Event.  (This command shows gray in the menu until you 
+select on object on which it may operate.)  To delete an object or event 
+-- to remove it entirely from the screen -- select the object or event 
+and then press the Del key.
+
+(U)nsynchronize clock.  (This command shows gray in the menu until you 
+select on object on which it may operate.)  Sometimes you want a clock 
+to have a particular reading, say at a particular event.  To accomplish 
+this, select the clock (see above) and press the letter U.  An insert 
+box will appear, inviting you to type in the desired time.  After you 
+type the time and press ENTER, the clock will read the new time in 
+reverse video (black numerals on a colored background) to remind you 
+that the clock is not synchronized with other clocks in its frame.  You 
+can use the same command to synchronize a clock again, this time 
+pressing the SPACEBAR.
+
+(P)rogram Shuttle.  The shuttle is simply a clock that can change lanes;  
+it remembers any velocity changes you give it.  Create the shuttle at 
+the desired original speed and position.  Then advance the time to the 
+time at which you want it to change velocity, and press the letter P.  A 
+cursor will appear at the current position of the shuttle.  Move the 
+cursor into another lane using the keypad at the right of the keyboard.  
+Then press ENTER to select the new lane.  Two shuttles will now be drawn 
+on the screen:  one at the velocity just before the jump, and one at the 
+new velocity.  This is because at the time of the jump the shuttle's 
+velocity is undefined.  Go to times prior to the jump, however, and you 
+will find the shuttle moving at the original speed;  go to times after 
+the jump and it travels with the new speed.  A history of the shuttle's 
+velocity changes is kept in the Event Table, described later.
+
+Because the time on the shuttle is continuous, when it jumps to new 
+frames it will be out of synchronization with the new "local" time.  
+When that happens, the shuttle time is shown in reverse video (black 
+letters on an illuminated background).  Whenever you wish, you can use 
+the (U)nsynchronize clock command to re-synchronize the shuttle to the 
+time as measured at its position in its local frame, but then it will be 
+out of synchronization when it jumps to other frames (including earlier 
+frames).
+
+You cannot change the spatial (right-left) position of the shuttle while 
+programming it.  To do so would represent an instantaneous change in the 
+spatial position of the shuttle, which is physically impossible.
+
+You can program the shuttle to change lanes repeatedly.  You must make 
+lane changes in chronological order.  Normally you will add a velocity 
+change at the end of a sequence of previous velocity changes.  If you 
+try to insert a shuttle velocity change before the velocity change which 
+is chronologically last, a box appears to warn you that by doing so you 
+will delete all later shuttle changes of velocity.  
+
+Menu F1: CONSTRUCT (SPACETIME DIAGRAM display)
+
+The F1 menu is different for HIGHWAY than for SPACETIME DIAGRAM.  This 
+listing is for SPACETIME DIAGRAM.
+
+
+The (E)vent command will place an event-point at the location of the 
+cursor.  Position the cursor where you want the event and then either 
+press the letter E or highlight the command using the up and down arrow 
+keys and press ENTER.
+
+Note:  The intersection of the line of simultaneity with the worldline 
+of an object is labeled with the letter corresponding to that object.  
+The dot that marks that intersection is not a true event, because it 
+moves as you step through time;  it always lies on the line of 
+simultaneity.  This dot is there simply to aid in locating the current 
+position of an object.  To place a fixed, numbered event at the 
+intersection of the line of simultaneity with a world line, jump to the 
+HIGHWAY display, select the object, using the (E)vent@object command, 
+then jump back to SPACETIME DIAGRAM.
+
+The remainder of the commands on this menu (except Help and Close) 
+require the use of the F6:SELECT command.  
+
+(C)onnect.  To connect two events, press F6:SELECT and select one of the 
+events by number, then press F6:SELECT again and select the second event 
+by number.  (The order of selection is not important.)  Now use the 
+(C)onnect command to draw a line between the two events.  
+
+A number and letter appears next to the connect line.  The number is the 
+spacetime interval that relates the two events.  The letter 'T' denotes 
+a timelike interval, 'L' denotes a lightlike interval, and 'S' denotes a 
+spacelike interval.
+
+Physics note:  The invariant interval is a number relating two events 
+which has the same value when computed using the space and time 
+coordinates of any laboratory or rocket reference frame -- hence the 
+descriptor "invariant."   If the interval is timelike (label T), then a 
+clock traveling between the two events will read an elapsed time equal 
+to the interval.  If the interval is spacelike (label S), then there 
+exists a frame in which the two events occur at the same time;  in this 
+frame the distance between the two events is equal to the interval.  If 
+the interval is lightlike (label L), then only light can travel fast 
+enough to get from one event to another and the interval has the value 
+zero.  See any introductory relativity textbook for more than this 
+reminder.
+
+To reduce screen clutter, you may want to delete the interval labels 
+from connect lines.  To do so, toggle the Interval on command in the 
+F3:SETTINGS menu .
+
+Light(K)one. This command allows you to place a "lightcone" through any 
+numbered event.  A lightcone consists of the world lines of light 
+flashes converging on the event from below and diverging from the event 
+above.  First select the event using F6, then press K (or highlight this 
+command and press ENTER). 
+
+Hyper(B)ola.  This command box allows you to place an invariant 
+hyperbola through any numbered event in the same manner as for the 
+lightcone above.   An invariant hyperbola is the locus of all points 
+occupied by the given event when viewed from rocket frames moving with 
+all possible speeds along the x-direction in space.  Select the event 
+using F6, then press B (or highlight this command and press ENTER).
+
+(DEL)ete Object/Event.  Delete an object or event by selecting it using 
+F6, then pressing the DEL key (or highlighting this command and pressing 
+ENTER).  When you delete an event, all other constructions associated 
+with the event (connect lines, lightcone, hyperbola) are deleted as 
+well.
+
+delete Connect.  To delete a connect line, use F6 to select in sequence 
+each of the events at the end of the line (which event you select first 
+does not matter) and then highlight this command and press ENTER.  
+(There is no single letter key that invokes this command.)
+
+delete Lightcone.  To delete a lightcone, use F6 to select the event 
+through which the lightcone passes, then highlight this command and 
+press ENTER.  (There is no single letter key that invokes this command.)
+
+delete Hyperbola.   To delete an hyperbola, use F6 to select the event 
+through which the hyperbola passes, then highlight this command and 
+press ENTER.  (There is no single letter key that invokes this command.)  
+
+Menu F2: WINDOWS
+  
+
+The F2:WINDOWS menu controls which display is on the screen and some of 
+the information functions.  
+
+Spacetime (D)iagram.  SPACETIME DIAGRAM is described fully in an earlier 
+section.  You can call up Spacetime Diagram, with all the current 
+objects and events displayed, either by selecting the first entry in 
+this menu or simply by pressing D.
+
+(H)ighway.  HIGHWAY is described fully in an earlier section.  Using 
+this command returns you to the HIGHWAY display when you are in some 
+other.
+
+Split (W)indow.  This is a display that splits the screen, showing 
+HIGHWAY in the upper portion and SPACETIME DIAGRAM in the lower portion.  
+You can advance time and watch the development of the two 
+representations in parallel.  
+
+Object (I)nfo.  To get more detailed information about an object, select 
+the object with function key F6, then press the letter I (capital or 
+lower case i).  Information about the selected object's position, speed, 
+gamma factor, and time (if a clock or the shuttle) or length (if a rod) 
+is displayed across the bottom of the screen.  You can leave this 
+display in place while you carry out other commands, or you can press X 
+to return to the regular bottom-of-screen display.
+
+Sometimes you want to create an object at exactly the same horizontal 
+position as another object.  If you select Object (I)nfo, then press any 
+of the "create" letters, the creation cursor will appear on the center 
+strip at the horizontal position of the object whose information is 
+being displayed.  Move the cursor to the speed-lane desired and press 
+ENTER.
+
+Event Table.  This is a table of all events that have been placed in 
+either Highway or Spacetime Diagram displays.  To get to this table, you 
+must press function key F2, move the highlighted marker down to the 
+Event Table entry, and press ENTER.  The Event Table shows all events, 
+along with a history of the shuttle jumps.  You can annotate each event 
+with a label of up to 25 letters.  Use the arrow keys to place the 
+cursor, then type.  Use the Del and backspace keys to erase as needed.  
+These labels will be stored with this display if you file it (see 
+below).  Press the Esc key to return to the previous display. 
+
+Object Table.  This table lists all objects created in the Highway 
+program.  Call up the table from menu F2, highlight the Object Table 
+entry, and press ENTER.  The table lists type of object, current 
+position, speed b, gamma factor g,  and the reading on a clock or the 
+length of a rod in the current frame.  Here too you can add notes as 
+described in the preceding entry.   Press Esc to return to the previous 
+display.  Flashes emitted by a Beacon clock are not listed on the Object 
+Table.
+
+Menu F3: SETTINGS
+
+The F3:SETTINGS menu allows you to change various parameters in the 
+Highway and Spacetime Diagram displays.
+
+t = (0).  You can return to the original time t = 0 by highlighting the 
+first item in this menu and pressing ENTER, or you can simply press the 
+zero key at the top of the keyboard. 
+
+Change (T)ime.  You can set the time of the current frame to any value 
+by pressing the letter T,  typing the time in the box that is called up, 
+and pressing ENTER (or Esc to cancel).  This is a direct way to go to a 
+desired time and allows four decimal place accuracy.
+
+When you change time in HIGHWAY,  objects on the screen will move to 
+their positions at the indicated time. 
+
+When you change time in SPACETIME DIAGRAM, the line of simultaneity will 
+move to center of the screen at the new time.  Alternatively, starting 
+from the insert box, you may change the time using the up-down arrow 
+keys.  If you press one of these keys, the line of simultaneity moves up 
+or down in steps of 0.1 unit, while its time-position is displayed along 
+the bottom of the screen.  Use the  PgUp and PgDn keys to change time in 
+steps of 1.0 unit or the Home and End keys to change time in steps of 
+0.01 unit.  When you arrive at the desired time, press ENTER.  Then the 
+line of simultaneity will be moved to the center of the screen at the 
+new time.  If you change your mind while moving the line of 
+simultaneity, press the Esc key.
+
+(A)lign Objects.  Often it is desirable to go to the time when two 
+objects coincide in space.  HIGHWAY has a feature which automatically 
+finds and goes to the time at which two objects are aligned.  First,  
+select one of the two objects you wish to align.  Next, select the other 
+object.  (The order in which they are selected is not important.)  Then 
+press the letter A.  The display will go to the time at which the two 
+objects have the same right-left position on the screen.
+
+Note:  It is not possible to align two objects residing in the same 
+frame (the same velocity lane), because they never coincide.  Also, 
+because the shuttle may jump from frame to frame and might coincide with 
+another object multiple times or not at all, the program does not allow 
+you to align the shuttle with other objects using the method described 
+above.  Instead, you must move the shuttle to alignment by changing time 
+by hand.
+
+The align function is particularly useful when you wish to have an event 
+located at the coincidence of two objects.  To do this, simply align the 
+objects as described above and then use the (E)vent@Object command from 
+menu F1.
+
+(M)agnify.  This command allows you to "zoom in" on the display, 
+increasing the right-left scale.  It does not affect the vertical 
+distance across the highway.  In SPACETIME DIAGRAM it increases both the 
+horizontal and vertical scales.
+
+(Z)oom out.  This command allows you to "back away" from the display, 
+decreasing the right-left scale.  It does not affect the vertical 
+distance across the highway.  In SPACETIME DIAGRAM it decreases both the 
+horizontal and vertical scales.
+
+(V)iew Lanes (SPLIT WINDOW only)  Use this command to uncover portions 
+of the highway which may be obscured in the split-window setting.  After 
+pressing V, use the arrow keys to move the highway up and down, then 
+press ENTER.  The solid square that moves at the right of the screen 
+helps in the positioning.  (To move the bar that separates the two 
+windows, hold down the SHIFT key and press the up-down arrow keys to 
+position the bar, then press ENTER.)
+ 
+Interval on.  (SPACETIME DIAGRAM)  This command toggles on and off the 
+interval label on connect lines.  When the menu item is marked with a 
+triangular caret, the labels are "on."  Toggle it off (or back on again) 
+by using the arrow keys to move the highlight to this command and 
+pressing ENTER.
+
+Worldlines on.  (SPACETIME DIAGRAM) This command toggles on and off the 
+world lines of objects moving on the highway.   When the triangular 
+caret mark is present, the worldlines are "on."  Toggle it off (or back 
+on again) by using the arrow keys to move the highlight to this command 
+and pressing ENTER.
+
+Menu F4: TRANSFORM
+ 
+
+The F4:TRANSFORM menu allows you to change frames:  to look at the 
+HIGHWAY and the SPACETIME DIAGRAM displays from the point of view of any 
+one of many observers moving at uniform right-or-left velocities with 
+respect to one another.
+  
+(J)ump to Object.  (HIGHWAY only)  The positions and velocities of all 
+objects are measured with respect to the center lane of the highway.  
+You can stand on the shuttle or any clock or rod by jumping to it.  
+Notice that since you perceive the object on which you stand as 
+motionless, it always occupies the middle lane (b=0).  Since light 
+flashes move at the speed of light in all frames, you cannot jump to a 
+light flash.  
+
+Before using this command, you must select the object to which you wish 
+to jump.  Select by pressing function key F6, then pressing the letter 
+of the object you wish to select.  To jump to the selected object, move 
+the highlight to the first entry in this menu and press ENTER.  Or 
+simply press key J.
+
+You can jump to the shuttle and ride on it as it changes velocity.  
+Simply jump to it in the same manner as previously described for 
+objects.  Riding the shuttle allows you to "experience" such paradoxes 
+as the Twin Paradox.  (See Section 6 and "A Trip to Alpha Centauri in 
+Section 2.)  When you reach a velocity change point while riding the 
+shuttle, the shuttle is drawn at two velocities to indicate that it is 
+leaving one reference frame and entering another.  Relative to your 
+changing frame, other travelers on the cosmic superhighway will jump 
+from one lane to another at the moment of change.
+
+Enter (G)amma, Beta. (SPACETIME DIAGRAM) In the HIGHWAY display, you can 
+change frames only by jumping from one object to another.  In SPACETIME 
+DIAGRAM you can change frames using the Transform up (+) or Transform 
+down (-) commands (see below) or alternatively by entering numerically 
+the value of beta (= v/c) or gamma (the time-stretch factor) of the new 
+frame using the Enter (G)amma, Beta command.  When you execute this 
+command,  an insert box comes up asking you to press the letter B if you 
+wish to enter beta or the letter G if you wish to enter gamma.  If you 
+select beta, you are asked to type in the value of beta, which can be in 
+the range  -0.9999 to +0.9999.  If you try to enter a value outside of 
+this range, the program will ignore your entry.   If you select gamma, 
+you are asked to type in the value of gamma, which must be a positive 
+number greater than or equal to unity.  After entering gamma, you are 
+asked to type in a minus sign if you want the relative speed beta to be 
+negative.
+
+(L)ast frame.  This command allows you to "undo" the most recent jump or 
+transformation, going back to the frame you were in before the most 
+recent ("last") jump.  If you press the L key repeatedly, you will jump 
+back and forth between the two most recent frames.  This is useful in 
+comparing displays for two different frames.  If you have made no jumps 
+or transformations, executing this command will have no effect.
+
+(O)riginal frame.  This command takes you back to the original frame 
+with which you began the current display.  This will put clock A in the 
+center of the screen.  This command does not take you back to t=0 on 
+this clock;  that is done using the t=(0) command in the F3:SETTINGS 
+menu.
+
+Transform up     (+)
+Transform down  (-)
+(SPACETIME DIAGRAM)
+Using the plus and minus keys, you can transform "up" (that is, to a 
+frame moving with positive relative velocity) or "down" (to a frame 
+moving with negative relative velocity) by a velocity step dBeta marked 
+by the triangular caret on the menu.  Select another step size dBeta by 
+highlighting the desired value and pressing ENTER.     
+
+If you jump from one object to another in the HIGHWAY display, the 
+resulting frame change will be reflected in SPACETIME DIAGRAM.  
+Similarly, if you transform from one frame to another in SPACETIME 
+DIAGRAM, the HIGHWAY display will correspond to the new frame.
+
+SPACETIME remembers each frame change.  The speed of your current frame 
+with respect to the original frame of reference (the one you started in) 
+is displayed in the lower left corner of the screen, along with the 
+cursor coordinates.  You can get back to the original frame of reference 
+either by using the Enter (G)amma, Beta command and entering for beta 
+minus the number displayed in the lower left corner, or by using the 
+(O)riginal Frame command.  You can also jump back to the most recent 
+frame of reference by using the (L)ast Frame command.
+  
+Also notice that if you are riding the shuttle on the highway, you will 
+jump from frame to frame at the appropriate times in Spacetime Diagram.
+
+Menu F5: FILES
+
+
+The F5:FILES menu allows you to save displays you have constructed, 
+recall from the disk any files you or others have saved, delete files, 
+start a new display, print a display, or quit.  All the commands unique 
+to this menu except for (Q)uit must be executed by using the up-down 
+arrow keys to move the highlight to the command, then pressing ENTER.   
+You will be asked to verify any operation that could result in losing 
+information.
+
+Read allows you to specify a disk file on which to work.  If you already 
+have a display on the screen, the computer will ask you if you want to 
+save it before reading an existing file.  Then it will show you what 
+files are on the disk.  All these files have the "extension" .STS (the 
+three letters after the period in the name).  You do not need to type 
+the period or the extension when reading or saving files:  that is 
+assumed or added by the machine.  Press the Esc key to return to the  
+existing screen without reading in a file. 
+ 
+Save saves the current display to disk.  For a new display, you will be 
+asked to type in a name (eight characters or less, with no spaces) and 
+press ENTER.  If you have filed the current display earlier, it will 
+assume you want to use the same name.  If you do, press ENTER.  If you 
+want to file under a new name, simply type the new name and press ENTER. 
+
+Delete allows you to delete an existing stored file.  This is useful if 
+you wish to save your present display but the program tells you that the 
+disk is full. 
+ 
+New creates a new, clean document on which to work.  If a display 
+exists, you will be asked if you want to save it before starting the new 
+screen.  The New command is executed automatically when the program 
+starts.
+
+Print prints the contents of the screen.
+
+Form Feed advances the paper in the printer to the start of the next 
+page.
+
+Menu F6: SELECT
+
+You select an object if you wish to jump to it, delete it, change its 
+reading (if a clock), and so forth.
+
+The F6:SELECT "menu" has only one function:  Select.  After you press 
+function key F6, the line along the bottom of the screen asks you to 
+indicate what you want to select.  Select an object by pressing the 
+letter corresponding to that object, an event by pressing the number 
+corresponding to that event, the SPACEBAR to "unselect" so that nothing 
+is selected, or any other key to cancel the select process (leaving 
+selected whatever was selected before -- including nothing if no 
+selection has been made).  If you cannot remember the number of a given 
+event, advance the time to that event and read its number, or view the 
+Event Table (under the F3:SETTINGS menu).
+
+If you want to find the time at which two objects are aligned (HIGHWAY 
+only), you need to select the two objects in sequence (which one is 
+selected first does not matter) and then press A.
+
+If you want to connect two events (SPACETIME DIAGRAM only), select the 
+two events in sequence (which one is selected first does not matter) and 
+then press C.
+

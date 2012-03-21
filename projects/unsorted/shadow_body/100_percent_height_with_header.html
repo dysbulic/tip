@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>100% Height Navbar with Header</title>
+    <link rel="stylesheet" type="text/css" href="sunflower_colors.css" />
+    <!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="ie_sunflower_colors.css" /><![endif]-->
+    <style type="text/css">
+      html, body, #navbar { height: 100%; }
+      html, body { margin: 0; }
+      #navbar, #content { float: left; }
+    </style>
+    <!-- This style provides additional styling to the header and footer, but does
+       - not affect the height of the navigation bar -->
+    <style type="text/css">
+      #header, #footer { background-color: #3D4C5D; padding-bottom: 3px; }
+      #header h1, #footer h1 {
+        font-family: sans-serif;
+        font-size: 50pt;
+        text-align: right;
+        padding: 10px 3em 0 0;
+        background-color: #8AADD3;
+        margin: 0;
+      }
+      #header h1, #header { border-bottom: 2px solid #222; }
+      #footer h1, #footer { border-top: 2px solid #222; }
+      #header, #footer { clear: both; }
+      #content { margin-top: 10px; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header"><h1>Sunflowers</h1></div>
+    <div id="navbar">
+      <ul>
+        <li><a href=".">Sizing Height to Content</a></li>
+        <li>
+          <a href="100_percent_height.html">100% Height</a>
+          <ul>
+            <li><a href="100_percent_height_long_content.html">Long Content</a></li>
+            <li><a class="current" href="100_percent_height_with_header.html">Headed</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="./#workarounds">Workaround Methods:</a>
+          <ul>
+            <li><a href="ie_height_reflow.html"><acronym title="Internet Explorer">IE</acronym> Reflow</a></li>
+            <li><a href="css_table_cell.html"><acronym title="Cascading Style Sheets">CSS</acronym> Table-Cell</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="./#combined">Combined Workaround:</a>
+          <ul>
+            <li><a href="sizing_to_height_combined.html">Long Content</a></li>
+            <li><a href="sizing_to_height_combined_short.html">Short Content</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div id="content">
+      <p><em>This page demonstrates how a <acronym title="Cascading Style Sheets">CSS</acronym> height of 100% on the <code>html</code>, <code>body</code> and <code>#navbar</code> elements can cause unnecessary scrolling on a page with a header and footer.</em></p>
+      <hr />
+      <p>This page has lots of information about sunflowers&hellip;</p>
+      <p>Blah blah blah&hellip;</p>
+      <p>Or not. &#x263A;</p>
+    </div>
+    <div id="footer"><h1>&hellip;rock!</h1></div>
+  </body>
+</html>

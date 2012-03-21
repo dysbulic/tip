@@ -1,0 +1,28 @@
+<!-- This is a behavior for IE to enable loading alpha values on PNGs using the
+   - AlphaImageLoader filter
+   - img { behavior: url("ie_png_behavior.htc"); }
+  -->
+<public:component>
+  <public:attach event="onpropertychange" onevent="propertyChanged()" />
+  <script>
+    var supported = /MSIE (5\.5)|[6]/.test(navigator.userAgent) && navigator.platform == "Win32";
+    var blankImage = "http://www.golivetutor.com/download/spacer.gif";
+    var realSrc;
+    if(supported) fixImage();
+
+    function propertyChanged(event) {
+      if(supported && event.propertyName == "src") {
+        fixImage();
+      }
+    }
+
+    function fixImage() {
+      var src = element.src;
+      if(/\.png$/.test(src.toLowerCase())) {
+        element.src = blankImage;
+        element.runtimeStyle.filter = ("progid:DXImageTransform.Microsoft.AlphaImageLoader" +
+                                       "(src='" + src + "', sizingMethod='image')");
+      }
+    }
+  </script>
+</public:component>

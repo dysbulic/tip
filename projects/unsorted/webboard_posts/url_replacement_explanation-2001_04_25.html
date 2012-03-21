@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <title>Honors webboard post on urls</title>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+<p>This is my notice for the day and in the theme (though of lesser complexity to be certain) of Kurt's explanations I will cover what I think is going on with webboard eating part of my last message.</p>
+<p>It is a very short part to be sure, but a part none the less. =)</p>
+<p>In my last message I had the words gui's and guis used two different places in the message. Both were caught by the spell checker and I decided that I would at least be consistent, so I decided to change the first to the second (though I think the first is actually correct).</p>
+<p>So I clicked on gui's to bring it up in the spell checker.</p>
+<p>What came up in the spell checker page was the editing for gui%27s. (Instead of editing for gui's as it should have been.) The reason has to do with the fact that the word that I wanted to edit was passed to the webboard as a part of the link that I clicked to go into the spell checker.</p>
+<p>You might have noticed on certain sites that the url that you are going to includes a ? and then some extra information? Webboard is a good example; if you watch the link location at the bottom of your browser as you run your cursor over the posts you will notice all the links look like: <code>http://webboard.tntech.edu:8080/~Honors/read?12345,12</code>. What is happening when you click on one of those is a program called <code>read</code> is being called and it is passed the arguments 12345 and 12. It then generates some html (in this case be reading a database) and then sends that back to your webbrowser.</p>
+<p>A semi-obvious question that arises from this is, what happens if you have a filename with a ? in it, like say a picture from a commercial called <code>Where's the beef?.jpg</code>. If you put that file on your webserver and then try to retrieve it your webserver is going to think that you want to run a program called <code>Where's the beef</code> and pass it the argument <code>.jpg</code>. This is something of a problem, and there are other characters that have special meanings in urls like ?; specifcally: ;/?:@&amp;=+$, This means that using any of them in a url might possibly be misunderstood when the file is being requested and so they shouldn't be used.</p>
+<p>To get by this limitation and allow you to include any character you want in a url you are allowed to "escape" characters; that is to represent them in another format that is not confusing.</p>
+<p>For a bit of background, every computer file consists of bunches and bunches of 0's and 1's. There is no such thing as the letter a and q or a ! or anything like that. There are only 0's and 1's. In order to encode information standards are agreed upon. One of these is called American Standard Code for Information Interchange (<a href="http://www.asciitable.com/">ASCII</a>); what it describes is a mapping of the numbers 0-255 to the letters of the alphabet and certain punctuation marks. The reason that 0-255 was chosen is that you can represent any number from 0-255 with 8 0's and 1's (i.e. 8 bits). So to save a text file you covert it to numbers and then each of those numbers you convert to binary (base 2) and write them onto disk. When you want to get them back you read out 8 bits at a time and convert it back to letters.</p>
+<p>The main point of that is that there exists a mapping of letters and punctuation to numbers and it is an accepted standard. The encoding used in url's uses that mapping of letters into numbers; specifically the number is written in hexadecimal (base 16) and prefaced by a % to show that it is an escaped letter rather than a number.</p>
+<p>Though it is not usually done you are allowed to escape letters as well as numbers. For example if you wanted to go to my webpage you could use the mappings:</p>
+<table border="1">
+  <tr>
+    <th>Letter</th>
+    <th>ASCII Decimal</th>
+    <th>ASCII Hexadecimal</th>
+  </tr>
+  <tr>
+    <td>i</td>
+    <td>105</td>
+    <td>69</td>
+  </tr>
+  <tr>
+    <td>n</td>
+    <td>110</td>
+    <td>6E</td>
+  </tr>
+  <tr>
+    <td>d</td>
+    <td>100</td>
+    <td>64</td>
+  </tr>
+  <tr>
+    <td>e</td>
+    <td>101</td>
+    <td>65</td>
+  </tr>
+  <tr>
+    <td>x</td>
+    <td>120</td>
+    <td>78</td>
+  </tr>
+  <tr>
+    <td>.</td>
+    <td>46</td>
+    <td>2E</td>
+  </tr>
+  <tr>
+    <td>p</td>
+    <td>112</td>
+    <td>70</td>
+  </tr>
+  <tr>
+    <td>h</td>
+    <td>104</td>
+    <td>68</td>
+  </tr>
+  <tr>
+    <td>p</td>
+    <td>112</td>
+    <td>70</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>51</td>
+    <td>33</td>
+  </tr>
+</table>
+<p>And <a href="http://www.himinbi.org/index.php3">http://www.himinbi.org/index.php3</a> goes to <a href="http://www.himinbi.org/%69%6E%64%65%78%2E%70%68%70%33">http://www.himinbi.org/%69%6E%64%65%78%2E%70%68%70%33</a>. Using this encoding scheme you can include any letter in the ascii table in a requested filename including ? and whatever.</p>
+<p>This brings us back to the mangled form of gui's as gui%27s. It should now make sense that the ASCII number for ' is 39 which is 27 in hex. What is happening is that there is a program called spell that you are running whenever you click on a word to have its spelling changed. If you look at the link it looks something like: <a name="example_link"><code>http://webboard.tntech.edu:8080/spell?teest,11&b=0&a=0&f=0&h=0&t=4C18032&p=0&i=4297&e=16021&c=70&s=Poking+at+webboard</code>. This looks pretty complicated, but really it is just calling a program spell and then everything after the ? is an argument to the program. Also the &amp; seperates variables being passed in, so it is really just a bunch of variables (b,a,f,h,t,p,i,e,c, and s) all one right after another. I don't know what all the variables represent, but it turns out that only one of them is required to run the spell program and even it doesn't have to have a value: b. Try typing <a href="http://webboard.tntech.edu:8080/spell?spellin&b">http://webboard.tntech.edu:8080/spell?<i>your_misspelt_word_here</i>&amp;b</a> in your browser and you should get the familiar spell checker with suggestions for your word.</p>
+<p>What happened with gui's is that there are certain characters that are recommended to be encoded even though they don't have a special meaning in a url. These include &gt;&lt;"'{}|\^[] and others. Most of these are recommended because they are sometimes used to represent the end of a url and so they are encoded to prevent confusion that a url is ending. It so happens that when I clicked on webboard/spell?gui's my browser (Netscape 6) encoded the ' for me to %27. The spell program did not check to see if it was encoded though and just checked it with the %27 still in it. This explains the reason for the wrong word being in the spell checker.</p>
+<p>Now for the second part. I changed gui%27s to guis and then submitted my change. Interestingly it not only replaced gui's with guis, it also ate the next to characters in the line (a space and the start of the next word: "though"). The line now read guishough. Why is this happening?</p>
+<p>Well, if you look at the source of the page for the spell check you will notice a line that looks like this: &lt;input name="badword" type="hidden" value="your_misspelt_word_here"&gt;</p>
+<p>Hidden form elements let someone doing web programming to pass around information that they need without the user seeing the text. If you look back at the <a href="#example_link">line</a> you will notice that the misspelt word is followed by a comma and a number. It turns out that this number is the number of characters before that letter to the beginning of the text + 1 (also called its index). Once a replacement word has been chosen there has to be some way to know where to put this replacement and this index is it. Since the original word is also passed back you can know how many characters to replace by seeing how long the original was.</p>
+<p>Unfortunately when the encoding to %27 was uncaught it threw all this off. The replacement knew were to start, but it thought that the word being replaced was 2 letters longer than it really was (gui's vs. gui%27s) so it accidentally deleted 2 too many letters and took out the beginning of the next word.</p>
+<p>Thus is the mystery of the missing letters unraveled. I hope this made some semblance of sense. =)</p>
+<hr>
+<p>Oh yeah, it turns out that none of this would have happened if I used IE. IE doesn't encode any of the characters entered in the browser bar except for spaces. An interesting way to test this if you have an account on a linux box which has netcat installed it to run a command like: <code>nc -l -p 8088</code> and then in your browser type in <code>http://linuxhost.mydomain.org:8088/test's name</code>. The first line of what is returned should look either like <code>GET /test's%20name HTTP/1.1</code> or <code>GET /test%27s%20name HTTP/1.1</code> depending on whether or not the browser encoded the character or not.</p>
+<code>
+print substr("<a
+href="http://www.himinbi.org" target="_top" onmouseover="window.status = 'Himinbiorg'; return true;" onmouseout="window.status = ''; return true;">show ja\ne climb-</a>",hex,1)<br>foreach(split//,"F43CBbc6D456d80912bA2dE7")
+</code>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Cleaning Musicbrainz Data</title>
+    <link rel="stylesheet" type="text/css" href="mixlists.css" />
+    <style type="text/css">
+    </style>
+    <!--
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+    -->
+  </head>
+  <body>
+    <h1><a href="."><span class="firstletter">M</span>ixlists</a></h1>
+    <div id="content">
+      <h1>Cleaning Musicbrainz Data</h1>
+      <p>First, setup the system:</p>
+      <ol>
+        <li>Download <a href="http://musicbrainz.org/doc/DatabaseDownload">Musicbrainz database dump</a></li>
+        <li>Run <code><a href="load_mbdump.py">load_mbdump.py</a> mbdump.tar.bz2</code> to generate a MySQL import</li>
+        <li>Create a database: <code>echo "create database musicbrainz" | mysql -u $USER -p</code></li>
+        <li>Load data: <code>mysql -u $USER -p musicbrainz &lt; mbdump/mbdump_import.sql</code></li>
+        <li>View <a href="db_info.php">database statistics</a></li>
+      </ol>
+      <p>The data is "dirty" because it is only partially normalized. My primary interest is an interface where, when I select an artist, it will show me all songs that artist has performed. In the musicbrainz data each song has an artist string associated with it. Some of these "artists" are the simple name of the artist and some are composites of multiple artist names.</p>
+      <p>If an artist name is a composite of multiple atomic artists, this fact is represented as an "advanced relationship," but this relationship doesn't exist for many artists.</p>
+      <p>My first goal is a simple interface for creating the appropriate decomposition of unrecognized composite artists.</p>
+    </div>
+  </body>
+</html>

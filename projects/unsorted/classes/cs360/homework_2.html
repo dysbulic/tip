@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>CS-360 Homework #2</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <base href="http://odin.himinbi.org/classes/cs360/" />
+    <style type="text/css">
+      #map { border-collapse: collapse; margin: auto; }
+      #map td { width: 1.5em; height: 1.5em; border: 1px solid; text-align: center; }
+      #map .full { background-color: black; }
+      #crytarithemetic { width: 100%; height: 250px; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 360: Introduction to Artificial Intelligence</h1>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Homework Problems #2</h2>
+      <h2>Due: Tues., 9 October 2007</h2>
+    </div>
+    <blockquote>
+      <h2>Instructions:</h2>
+      <p>If anything is ambiguous or unclear:</p>
+      <ol>
+        <li>Discuss possible interpretations with other students, your TA, and instructor</li>
+        <li>Make assumptions, state them explicitly, and then use them to work out the problem</li>
+        <li>Send e-mail to your TA first, and to your instructor if an issue is not resolved to your satisfaction.</li>
+      </ol>
+      <p><em>Remember that after general discussions with others, you are required to work out the problems by yourself. All submitted work must be your own. Please refer back to the Honor code for clarifications.</em></p>
+      <h2>Important:</h2>
+      <ul>
+        <li>Write legibly, be sure to staple all your answer sheets together, and write your name, section number, and the honor pledge on the top of the first answer sheet.</li>
+        <li>Start early, and avoid last minute stress!</li>
+      </ul>
+    </blockquote>
+    <ol>
+      <li>
+        <div class="question">
+          <h3>Comparing Multiple Search Methods</h3>
+          <p>Consider the problem of finding a path in the grid shown below from starting square S to goal square G. Possible moves from a square are: move up, move left, move right, and move down exactly one square. No move may be made onto a dark square (i.e., obstacles), or off the edge of the grid.</p>
+          
+          <table id="map">
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td>G</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td class="full"></td><td class="full"></td><td class="full"></td><td class="full"></td><td class="full"></td><td></td></tr>
+            <tr><td></td><td class="full"></td><td></td><td></td><td></td><td class="full"></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td class="full"></td><td>S</td><td></td><td></td><td class="full"></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </table>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <h4>Depth-First Search</h4>
+              <p>Copy the grid and then mark the grid squares with the number(s) indicating when that square is expanded during a Depth-First search from S to G. Assume children nodes are visited in the order up, left, right, down. Assume cycle checking is done so that a node is not generated in the search tree if the grid square position associated with the node occurs somewhere on the path from this node back to the root node. Highlight the solution path found, if any, or explain why none is found.</p>
+            </div>
+            <div class="answer">
+              <p>This search is performed by a <a href="map_search.cpp">C++</a> program.</p>
+<pre>|17|18|19|20|21|22|23|24|
+|16|31|30|29|28|27|26|25|
+|15|32|GG|  |  |  |  |  |
+|14|  |XX|XX|XX|XX|XX|  |
+|13|XX|02|01|03|XX|  |  |
+|12|11|XX|SS|04|05|XX|  |
+|  |10|09|08|07|06|  |  |
+|  |  |  |  |  |  |  |  |</pre>
+              <p>The path is the cells marked &lt;01, 03-32&gt;. The cell marked 02 is a dead end and the search backtracks to 01.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <h4>Greedy Best-First Search</h4>
+              <p>Copy the grid again and then mark the grid squares with the number(s) indicating when that square is expanded during a Greedy Best-First search from <em>S</em> to <em>G</em>. Use as the heuristic function h(n) = |<em>x<sub>n</sub></em> - <em>x<sub>g</sub></em>| + |<em>y<sub>n</sub></em> - <em>y<sub>g</sub></em>| where the grid square associated with node <em>n</em> is at coordinates (<em>x<sub>n</sub></em>, <em>y<sub>n</sub></em>) in the grid and the goal node G is at coordinates (<em>x<sub>g</sub></em>, <em>y<sub>g</sub></em>). Assume you do not generate a node if that node's associated grid position has previously been generated. (That is, the third way to deal with repeated states as described on pages 81-82.) In the case of ties in evaluation function values, for siblings expand them in the precedence order up, left, right, down. In the case of ties between non-siblings, use FIFO order to expand first the node that has been in the NODES list the longest. Highlight the solution path found, if any, or explain why none is found.</p>
+            </div>
+            <div class="answer">
+              <p>This search is performed by the same <a href="map_search.cpp">C++</a> program.</p>
+<pre>|  |  |  |  |  |  |  |  |
+|  |  |  |  |  |  |  |  |
+|12|13|GG|  |  |  |  |  |
+|11|  |XX|XX|XX|XX|XX|  |
+|10|XX|02|01|03|XX|  |  |
+|09|08|XX|SS|04|  |XX|  |
+|  |07|06|05|  |  |  |  |
+|  |  |  |  |  |  |  |  |</pre>
+               <p>The path is the cells marked &lt;05-13&gt;. The cells 01-04 are attempted and abandonded for cells with a better heuristic ranking.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <h4>A* Search</h4>
+              <p>Copy the grid again and do the same as in (b) except using A* search with the same heuristic function as in (b) and the cost of each move equal to 1. Use the same tie-breaking rules as defined in (b). Highlight the solution path found, if any, or explain why none is found.</p>
+            </div>
+            <div class="answer">
+              <p>This search is supposed to be performed by the <a href="map_search.cpp">C++</a> program, but there's a lesson there about attempting to get a project done on a deadline at the same time as attempting to learn a new language. It might seem a good way to kill two birds with one stone, but can make an otherwise simple project intractable.</p>
+<pre>|  |  |  |  |  |  |  |  |
+|  |  |  |  |  |  |  |  |
+|  |18|GG|  |  |  |  |  |
+|16|17|XX|XX|XX|XX|XX|  |
+|14|XX|02|01|03|XX|  |  |
+|13|10|XX|SS|04|12|XX|  |
+|  |07|06|05|08|15|  |  |
+|  |  |11|09|  |  |  |  |</pre>
+               <p>The path is the cells marked &lt;05,06,07,10,13,14,16,17,18&gt;.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Compare the number of nodes generated in each case.</p>
+            </div>
+            <div class="answer">
+              <p>The depth first search expands the most nodes because it is wandering blindly until it happens across the node. The greedy search expands fewer than A*, but the cost of A*'s optimality is it has to verify that no shorter path exists.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <h4>An Infinite Grid</h4>
+              <p>Suppose the grid is extended infinitely in all directions but S, G and the dark squares remain as before. Which of the following methods will not be able to find a solution to this problem? Breadth-First, Depth-First, Depth-First Iterative Deepening, Greedy Best-First, and A*. Which of these would be the best method, and why? Again, in the case of ties in ordering nodes on the NODES list, use the precedence defined in (b).</p>
+            </div>
+            <div class="answer">
+              <ul>
+                <li>Breadth-First &mdash; Will find a solution. The nodes at each depth are the cells a given distance from the start position. The solution would be found when the search gets to the appropriate depth.</li>
+                <li>Depth-First &mdash; Will not find a solution. Once the search comes around the edge of the cells blocking a straight path, it will go up and continue to go up indefinitely.</li>
+                <li>Iterative Deepening Depth-First &mdash; Will find a solution. The search order is the same as breadth-first search and a path will be found for the same reason.</li>
+                <li>Greedy Best-First &mdash; Will find a solution if the heuristic is always positive. As the costs accumulate with increasing distance from the start, eventually the search will be driven to the goal.</li>
+                <li>A* &mdash; Will find a solution for the same reason as Greedy Best-First.</li>
+              </ul>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <h3>Informed search on 8-puzzle</h3>
+          <p>Consider the 8-puzzle and the following heuristics.</p>
+          <ol>
+            <li>h1 &mdash; Number of misplaced tiles</li>
+            <li>h2 &mdash; Sum of the Manhattan distances of all of the out of places tiles</li>
+            <li>h3 &mdash; h2 + 2 + number of direct tile reversals.</li>
+          </ol>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Are all three heuristics admissible? Are they consistent (monotonic)? Either prove your conclusions for the general case or give a counterexample.</p>
+            </div>
+            <div class="answer">
+              <ol>
+                <li>h1 &mdash; To get each misplaced tile into its correct position will take at least one move, so this will never be more than the minimum distance to the goal and is thus monotonic. A* when performed with a monotonic heuristic is admissible because it explores pathes in order of increasing length.</li>
+                <li>h2 &mdash; The minimum number of moves to get from some position &lt;i<sub>1</sub>,j<sub>1</sub>&gt; to some other position &lt;i<sub>2</sub>,j<sub>2</sub>&gt; is the Manhattan diistance, so this heuristic is monotonic and A* is admissible.</li>
+                <li>h3 &mdash; There are boards where only a single tile is out of place and only a single move is needed. Since h3 has a constant of 2 added and h2 cannot be negative, its minimum value is at least 2. Since it will overestimate the distance in these cases it is not monotonic and A* would not be admissible.</li>
+              </ol>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>What can you say about the informedness of each heuristic function?</p>
+            </div>
+            <div class="answer">
+              <ol>
+                <li>h1 &mdash; The maximum value of this heuristic is 8 if all 8 tiles are misplaced. This offers realtively small granularity and does not take into account the distance the tile is misplaced. This heuristic is not terrible well informed.</li>
+                <li>h2 &mdash; This heuristic has a larger range and takes into account the amount is disorder in the board. It is better informed than h2.</li>
+                <li>h3 &mdash; It is more informed than h2 because it has a greater range and takes into account tile reversals.</li>
+              </ol>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Write code to find the solution from an initial configuration to a goal using:</p>
+              <ol>
+                <li>uniform cost search</li>
+                <li>best-first search</li>
+                <li>A* search</li>
+              </ol>
+            </div>
+            <div class="answer">
+              <iframe src="AStarSearcher.java"></iframe>
+            </div>
+            <div class="question">
+              <p>Run this code for at least three initial configurations, and generate a table that includes:</p>
+              <ol>
+                <li>the number of nodes that were placed in OPEN</li>
+                <li>the number of nodes expanded</li>
+                <li>the path cost from the start to the goal node</li>
+              </ol>
+              <p>Briefly discuss your results.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Consider the weighted A* heuristic discussed in Hansen, i.e., (see page 269 of the Hansen and Zhou paper). Choose the heuristic function, h2, and implement the Anytime-WA* algorithm on page 271 of the paper. Run your code to see if this algorithm generates the optimal solution for 2 of the three configurations that you ran earlier. Collect statistics (i)-(iii) for each iteration of the anytime algorithm. Discuss your results, and compare them with the results generated for the A* algorithm in part III.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Prove A* is admissible. Your proof should show that:</p>
+              <ol>
+                <li>A* will terminate</li>
+                <li>During execution, there is always a node on OPEN that lies on an optimal path to the goal</li>
+                <li>If there is a path to a goal, A* will terminate by finding the optimal path</li>
+              </ol>
+            </div>
+            <div class="answer">
+              <p>A* is constantly expanding the shortest projected path to the goal. It is admissible if the heuristic function always underestimates the distance to the goal because a path <em>p</em> is only completed when the goal node is at the head of the open queue. <em>P</em> can only be at the head of the queue if it has a cost + heuristic less than or equal to any other node. If there were another goal cheaper than <em>p</em>, it would come up first.</p>
+              <p>There has to always be an item from <em>p</em> on the open list because the open list has the heads of the lowest cost paths from the start. One of those has to be a subpath of the lowest cost path to the goal.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <h3>Constraint Satisfaction</h3>
+              <ol>
+                <li>
+                  <div class="question">
+                    <p>Explain why it is a good heuristic to choose the variable that is most constrained, but the value that is least constrained in a constraint satisfaction problem (CSP).</p>
+                  </div>
+                  <div class="answer">
+                    <p>The most constrained variable is the variable that is most likely to get constrained to no possibiltiies and force backtracking. The least constrained value is the value that leaves open the maximum number of possibilities in the subtrees (and so the least chance of backtracking).</p>
+                  </div>
+                </li>
+                <li>
+                  <div class="question">
+                    <p>Consider the problem of constructing (not solving) crossword puzzles: fitting words into a rectangular grid. The grid, which is given as a part of the problem, specifies which squares are blank and which are shaded. Assume that a list of words is provided and the task is to fill in the blank squares using any subset of the list. Formulate the problem in two ways:</p>
+                  </div>
+                  <ol>
+                    <li>
+                      <div class="question">
+                        <p>As a general search problem. Choose an appropriate search algorithm and specify a heuristic function, if you think one is needed. Is it better to fill in blanks one letter at a time or one word at a time?</p>
+                      </div>
+                      <div class="answer">
+                        <p>It would depend on the length of the word list. If there are more than 26 * the number of letters words of each length then the branching factor would be lower trying by letters. In particular if certain combinations of letters could be eliminated as impossible. A heuristic might be based on letter frequencies in the given language and also combination frequencies.</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="question">
+                        <p>As a constraint satisfaction problem. Should the variables be words or letters?</p>
+                      </div>
+                      <div class="answer">
+                        <p>It seems like words would make more sense because a letter in a particular space doesn't particularly constrain the rest of the word in a very specific manner. Words however would do that to a higher degree.</p>
+                      </div>
+                    </li>
+                  </ol>
+                </li>
+                <li>
+                  <div class="question">
+                    <p>Solve the following cryptarythmetic problem by hand using:</p>
+                    <object id="crytarithemetic" type="image/svg+xml" data="crytarithemetic_graph.svg"></object>
+                    <ol>
+                      <li>
+                        <div class="question">
+                          <p>backtracking</p>
+                        </div>
+                        <div class="answer">
+                          <p></p>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="question">
+                          <p>forward checking</p>
+                        </div>
+                        <div class="answer">
+                          <p></p>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="question">
+                          <p>the MRV and least-constraining-value heuristics</p>
+                        </div>
+                        <div class="answer">
+                          <p></p>
+                        </div>
+                      </li>
+                    </ol>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </body>
+</html>

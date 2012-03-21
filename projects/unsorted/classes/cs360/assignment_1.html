@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>CS-360 Assignment #1 &mdash; Lisp Programming</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <style type="text/css">
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 360: Introduction to Artificial Intelligence</h1>
+      <h2>Lisp Problems (<a href="assignment_1.lisp">Lisp Code</a>)</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: Tues., 18 September 2007</h2>
+    </div>
+    <ol>
+      <li>
+        <p>Find the sequence of cars and cdrs that return x when applied to the following expressions:</p>
+        <ol>
+          <li>
+            <p>(a b x d)</p>
+            <p><code>(car (cdr (cdr '(a b x d))))</code></p>
+          </li>
+          <li>
+            <p>(a (b (x d)))</p>
+            <p><code>(car (car (cdr (car (cdr '(a (b (x d))))))))</code></p>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <p>What is the difference between the following s-expressions:</p>
+        <ol>
+          <li>
+            <p>(car (setq '(a b c)))</p>
+            <p>Attempts to use <code>'(a b c)</code> as the name of a value to assign to and fails.</p>
+          </li>
+          <li>
+            <p>(car '(setq '(a b c)))</p>
+            <p>Returns <code>setq</code> as the front of a list consisting of the string <code>setq</code> and the quoted list <code>'(a b c)</code>.</p>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <p>Suppose you executed the following set of commands:</p>
+        <pre>(car (setq x '(a b c)))
+x <i>(1)</i>
+(setq x nil)
+(car '(setq x '(a b c)))
+x <i>(2)</i></pre>
+        <p>What value of x would appear on the screen after:</p>
+        <ol>
+          <li>
+            <p><i>(1)</i>?</p>
+            <p><code>(a b c)</code></p>
+          </li>
+          <li>
+            <p><i>(2)</i>?</p>
+            <p><code>nil</code></p>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <p>Assign to the symbol x the list '(a b c). Use this to create the list '(a b c a b c).</p>
+        <p><code>(setq x '(a b c)) (append x x)</code></p>
+      </li>
+      <li>
+        <p>Write a function that replaces the first element of a list, i.e., (replace-first x y), replaces the first element of list y with the value of x.</p>
+        <p><code>(defun replace-first (x y) (append (list x) (cdr y)))</code></p>
+      </li>
+      <li>
+        <p>Write a recursive function power-of-two that computes the nth power of 2; e.g. (power-of-two 8) returns 256.</p>
+        <pre>(defun power-of-two (n)
+ (cond ((= n 0) 1)
+       ((> n 0) (* 2 (power-of-two (1- n))))
+       ((&lt; n 0) (/ 1.0 (power-of-two (- n))))))</pre>
+      </li>
+      <li>
+        <p>Write a non-recursive form of the same function, i.e., one that uses iterative constructs instead of recursion.</p>
+        <pre>(defun power-of-two (n)
+ (do ((x 1 (+ x 1)) (sum 1))
+     ((> x (abs n)) (cond ((&lt; n 0) (/ 1.0 sum))
+                           (t sum)))
+     (setq sum (* 2 sum))))</pre>
+      </li>
+      <li>
+        <p>Write a recursive function count-atoms that counts the number of atoms that appear at all levels of an s-expression. For example:</p>
+        <ul>
+          <li>(count-atoms '(a (b c) (d (e) f))) = 6</li>
+          <li>(count-atoms 1) = 1</li>
+          <li>(count-atoms nil) = (count-atoms ()) = (count-atoms '(())) = 0</li>
+          <li>(count-atoms '(1 2 (3 nil) () 4 5 ((nil 9) 10 a) r)) = 9</li>
+        </ul>
+        <pre>(defun count-atoms (list)
+ (let ((count 0))
+      (cond ((listp list) (dolist (x list) (setq count (+ count (count-atoms x)))))
+            (t (setq count 1)))
+      count))</pre>
+      </li>
+      <li>
+        <p>Given a <a href="map-bfs-dfs.lisp">map represented as a property list</a>, write functions that, given a start-node and a goal-node, implement:</p>
+        <ul>
+          <li>
+            <p>depth-first search</p>
+            <pre>(defun depth-first-search (start-node goal-node)
+  (let ((searched-nodes ()))
+    (defun dfs-impl (current-node)
+      ;(print (format "searching for ~S~ from ~S~ (~D~)" goal-node current-node (length searched-nodes)))
+      (cond ((eq current-node goal-node) (list current-node))
+            (t (setq searched-nodes (cons current-node searched-nodes))
+               (let ((path nil))
+                 (dolist (node (get current-node 'adjdst))
+                   (cond ((not (member node searched-nodes))
+                          (block recurse
+                                 (setq path (dfs-impl node))
+                                 (if (not (eq path nil)) (return (cons current-node path)))))))))))
+    (dfs-impl start-node)))</pre>
+          </li>
+          <li>
+            <p>breadth-first search</p>
+            <pre>(defun breadth-first-search (start-node goal-node)
+  (let ((searched-nodes ())
+        (node-queue (list start-node)))
+    (loop (when (or (endp node-queue) (eq goal-node (car node-queue))) (return))
+          (let ((current-node (car node-queue))
+                (children (get (car node-queue) 'adjdst)))
+            (let ((new-children (set-difference children (append searched-nodes node-queue))))
+              (dolist (node new-children) (setf (get node 'parent) current-node))
+              (setq searched-nodes (append searched-nodes (list current-node)))
+              (setq node-queue (append (cdr node-queue) new-children))
+              ;(format t "  Searching for ~S from ~S (~D) ~S~%" goal-node current-node (length searched-nodes) node-queue)
+              )))
+    (defun getpath (node)
+      (cond ((null node) nil)
+            (t (append (getpath (get node 'parent)) (list node)))))
+    (cond ((endp node-queue) nil)
+          (t (getpath (car node-queue))))))</pre>
+          </li>
+        </ul>
+      </li>
+    </ol>
+  </body>
+</html>

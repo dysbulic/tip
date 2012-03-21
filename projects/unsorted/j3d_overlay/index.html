@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Java3D Overlay Library</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-939849-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+  </head>
+  <body>
+    <h1>Java3D Overlay Library</h1>
+    <hr />
+    <p><em>This code has not been maintained by me since 2001. I gave the bulk of it to <a href="http://j3d.org">j3d.org</a> and ceased using it. If you are interested in it (it worked pretty well), it is best to get the most recent version from them.</em></p>
+    <hr />
+    <p>This is a library for <a href="http://java.sun.com/products/java-media/3D/">Java3D</a> to place "overlays" on the screen. An overlay is text or an image that appears to be drawn on the canvas that the scene is rendered on rather than being a part of the scene. It is useful for presenting information about the scene that does not have a spatial relationship to the scene; player information in a video game is a good example.</p>
+
+    <p>This library was originally written by <a href="mailto:djyazel@wellington.com">David Yazel</a> and was posted to the <a href="mailto:java3d-interest@java.sun.com">Java3D listserv</a>, I believe as a part of the game <a href="http://www.cosm-game.com">Cosm</a>. I, <a href="mailto:will@himinbi.org">Will Holcomb</a>, have done some enhancements for use in my work. In addition to the packages posted here, any of the latest revisions are via <a href="http://www.himinbi.org:88/viewcvs/viewcvs.cgi/Utilities/">cvs</a>. <em>(Anonymous cvs will be running soon.)</em></p>
+
+    <p>All of the examples on this page are placed using HTML conformant to the <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/objects.html">HTML 4.0 object tag specification</a>. If you want to hear a minor tirade ask me sometime about what I think about having to deal with web browsers that do not render the standards correctly. The browser that has the best standards conformance that I have seen is <a href="http://www.mozilla.org">Mozilla</a>. These examples will work there assuming you have the <a href="http://java.sun.com/products/plugin/">Java Plug-in</a> installed and the <a href="http://java.sun.com/products/java-media/3D/download.html">Java3D Libraries</a>.</p>
+
+    <p>All of these files are <strong><em>alpha</em></strong> code. Any usage in production environments should be tested thoroughly. The latest version of these files are available in the <a href="http://www.himinbi.org:88/j3d-utilities/">nightly builds</a> and until there is a release those are the recommended sources.</p>
+
+    <ul>
+      <li>
+        <a href="riginal-overlay.jar">Original Overlay</a>: This is the code originally sent to the Java3D listserv. It includes a windows dll that has to be on the path in order for the examples to work, so to see this example:
+        <ul>
+          <li><code>jar xvf original-overlay.jar</code></li>
+          <li><code>cd overlay</code></li>
+          <li><code>javac com/xith/java3d/overlay/*</code></li>
+          <li><code>java com.xith.java3d.testbed.OverlayTester</code></li>
+        </ul>
+      </li>
+      <li>
+        <p><a href="../j3d_utilities/Overlays.jar">Overlay Demo</a>: This is the adapted set of classes that I worked on. It is a pretty drastic set of changes and I will not try to get into all that changed. This is a simple test that resembles the original overlay demo except it is more interactive. Also the original kept the scene constantly updating (using a WakeupOnElapsedFrame) and this one only updates when there is a change, so the frames per second counter will only work in the new architecture if there is something that keeps the canvas repainting. <em>(Well, it will work, but the only frames rendered will be the update on the counter so it will read 1 or 2.)</em></p>
+        <p>This demo focuses more on being interactive too. Typing should appear in the little scrolling chatbox at the bottom of the screen. Additionally there are the special keys:</p>
+        <ul>
+          <li><code>F1</code>: Will change the color of the background on the chatbox. This causes a pause in the cube's rotation and it should not. This is a known bug.</li>
+          <li><code>F2</code>: Will slowly type out a message in the chatbox and suspends user typing in the interim. This is intended for something like characters speaking in a video game.</li>
+          <li><code>Numeric Keypad</code>: The elements can be positioned relative to any corner of the screen and the numeric keypad will move the chatbox accordingly. Hitting <code>F1</code> and changing the chatbox color makes this more visible.</li>
+        </ul>
+        <p>Also there is a little picture of a man in the lower right corner. This should change colors when the mouse passes over. Also it will react when clicked and clicking will toggle it between two colors. You have to move off the image to see the toggling of colors.</p>
+        <div style="text-align: center;">
+        <object classid="java:com.xith.java3d.testbed.OverlayTester.class"
+                codetype="application/java"
+                archive="../j3d_utilities/Overlays.jar"
+                width="100%" height="550">
+          <p>You can download <a href="../j3d_utilities/Overlays.jar">Overlays.jar</a> and run it from the command line; <code>java -jar Overlays.jar</code>.</p>
+        </object>
+        </div>
+      </li>
+      <li><a href="../j3d_utilities/xith-overlay.jar">Overlay Library</a>: This is just the code for running an overlay. It does not include the classes necessary to run the demo.</li>
+      <li><a href="../j3d_utilities/overlay-doc.tgz">Overlay Documentation</a>: Javadoc documentation for the overlay classes. <em>(This is available online in the <a href="http://www.himinbi.org:88/j3d-utilities/overlay-doc/">nightly build</a>)</em></li>
+      <li><a href="../j3d_utilities/SceneViewer.jar">C3D Demo</a>: Additionally I am working to bridge the <a href="http://java.sun.com/products/java-media/jmf/">Java Media Framework</a> (JMF) and the Java3D api. This is a sample of an alpha version of that code. This is an executable jar that requires the JMF classes to be installed; <code>java -jar SceneViewer.jar</code></li>
+      <li><a href="../j3d_utilities/c3d.jar">C3D Library</a>: This is just the code for running the recording. It does not include the classes necessary to run the demo.</li>
+      <li><a href="../j3d_utilities/c3d-doc.tgz">C3D Documentation</a>: Javadoc documentation for the c3d classes. <em>(This is available online in the <a href="http://www.himinbi.org:88/j3d-utilities/c3d-doc/">nightly build</a>)</em></li>
+      <li><a href="../j3d_utilities/himinbi-utilities.jar">Utilities Library</a>: This is all the classes and source files for both the Recording Canvas and the Overlays.</li>
+    </ul>
+    <hr />
+    <p><a name="view-platform-test" />I have done another test program that illustrates how to move the camera's mounted position while maintaining the transform associated with the ViewPlatform. It is using the NavigationHandlers from the <a href="http://www.j3d.org">j3d</a> cvs. Because the OrbitBehavior can only be used with the ViewingPlatform class it is not possible to change the point that the camera is mounted because when you call ViewingPlatform.setViewPlatform() it does change the ViewPlatform but the ViewTransform stays at the initial position and the OrbitBehavior stays with it so it is no longer possible to move the camera.</p>
+    <p>This program does not change the camera's mounted position be changing the ViewPlatform, rather it detaches and reattaches a BranchGroup below both the ViewPlatform and the ViewTransform. The NavigationHandler behaviors and the Overlays are both attached to the ViewTransform so they stay with the camera when it moves.</p>
+    <p>The program itself is a set of spheres spiraling around in a sphere with the brightness going from 1 to 0. Different properties of how the scene is created can be altered in the intial setup dialog.</p>
+    <div style="text-align: center;">
+      <object classid="java:ViewPlatformTest.class"
+              codetype="application/java"
+              archive="../j3d_utilities/ViewPlatformTest.jar"
+              width="700" height="550">
+        <p>You can download <a href="../j3d_utilities/ViewPlatformTest.jar">ViewPlatformTest.jar</a> and run it from the command line; <code>java -jar ViewPlatformTest.jar</code>.</p>
+      </object>
+    </div>
+  </body>
+</html>

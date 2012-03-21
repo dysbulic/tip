@@ -1,0 +1,29 @@
+NAMES 
+    Start08.o
+    filter.o
+    intvect.o
+    ir.o
+    main.o
+    usbcore.o
+    ansi.lib
+END
+
+LINK usbirboy
+
+SECTIONS
+    RAM   = READ_WRITE  0x0040 TO 0x013F;
+    ROM    = READ_ONLY  0xDC00 TO 0xFBFF;
+END
+
+PLACEMENT
+    DEFAULT_ROM, ROM_VAR, STRINGS INTO  ROM;
+    DEFAULT_RAM                   INTO  RAM;
+    _DATA_ZEROPAGE, MY_ZEROPAGE   INTO  RAM;
+END
+
+ENTRIES
+END
+
+STACKSIZE 0x40
+
+//VECTOR 0 _Startup

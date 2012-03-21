@@ -1,0 +1,62 @@
+Index: src/templates/om/Object.vm
+===================================================================
+RCS file: /home/cvspublic/jakarta-turbine-torque/src/templates/om/Object.vm,v
+retrieving revision 1.55
+diff -r1.55 Object.vm
+246c246
+<  #foreach ($fk in $table.ForeignKeys)
+---
+>  #foreach ($fk in $table.foreignKeys)
+248,249c248,249
+<    #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
+<    #set ( $className = $tblFK.JavaName )
+---
+>    #set ( $fkTbl = $table.database.getTable($fk.foreignTableName) )
+>    #set ( $className = $fkTbl.javaName )
+252c252
+<    #foreach ($columnName in $fk.LocalColumns)
+---
+>    #foreach ($columnName in $fk.localColumns)
+254,255c254,255
+<     #if ($column.isMultipleFK() || $fk.ForeignTableName.equals($table.Name))
+<         #set ( $relCol = "$relCol$column.JavaName" )
+---
+>     #if ($column.isMultipleFK() || $fk.ForeignTableName.equals($table.name))
+>         #set ( $relCol = "$relCol$column.javaName" )
+277,280c277,280
+<    #foreach ($columnName in $fk.LocalColumns)
+<     #set ( $column = $table.getColumn($columnName) )
+<     #set ( $colFKName = $fk.LocalForeignMapping.get($columnName) )
+<     #set ( $colFK = $tblFK.getColumn($colFKName) )
+---
+>    #foreach ($localColName in $fk.localColumns)
+>     #set ( $localCol = $table.getColumn($localColName) )
+>     #set ( $fkColName = $fk.localForeignMapping.get($localColName) )
+>     #set ( $fkCol = $fkTbl.getColumn($fkColName) )
+283,286c283,287
+<             #if($colFK.Primitive)
+<               #set ($coldefval = "0")
+<               #set ($coldefval = $column.DefaultValue)
+<             set${column.JavaName}($coldefval);
+---
+>             #if($localCol.primitive)
+>              #set( $defaultValue = 0 )
+>              ## Velocity will not assign when the returned value is null
+>              #set( $defaultValue = $column.defaultValue )
+>              set${column.javaName}($defaultValue);
+288c289
+<              set${column.JavaName}(($column.JavaNative)null);
+---
+>              set${column.javaName}(($column.javaNative)null);
+293c294
+<             set${column.JavaName}(v.get${colFK.JavaName}());
+---
+>             set${column.javaName}(v.get${fkCol.javaName}());
+330c331
+<   #if ($tblFK.isAlias())
+---
+>   #if ($fkTbl.isAlias())
+365c366
+<      * $table.Name and ${tblFK.Name}.
+---
+>      * $table.name and ${fkTbl.name}.

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20001102//EN"
+ "http://www.w3.org/TR/2000/CR-SVG-20001102/DTD/svg-20001102.dtd">
+<svg viewBox="0 0 140 94" width="100%" height="100%"
+ a:scriptImplementation="Adobe"
+ xmlns="http://www.w3.org/2000/svg"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+ onload="showMarks()">
+  <title>Organazational Chart</title>
+  <desc>Tree to Demonstrate Nested Sets</desc>
+  <defs>
+    <style type="text/css">
+      svg {
+        overflow: visible;
+      }
+      ellipse, rect, line {
+        fill: none;
+        stroke: black;
+        stroke-width: 1;
+      }
+      text {
+        text-anchor: middle;
+      }
+      .count rect {
+        stroke-width: .5;
+        fill: black;
+        fill-opacity: .1;
+      }
+      .count text {
+        font-family: "Arial Narrow", Utopia, serif;
+        font-size: 5px;
+      }
+      .count {
+        display: none;
+      }
+    </style>
+    <script type="text/javascript" a:scriptImplementation="Adobe"><![CDATA[
+      function showMarks() {
+        var url;
+        if(document.getURL) { url = document.getURL(); }
+        else if(window.location) { url = window.location.href; }
+        if(url.match(/\?traversed/)) {
+          // document.styleSheets not implemented in Batik
+          var root = document.getElementsByTagName("svg").item(0);
+          var nodes = new Array(root);
+          while(nodes.length > 0) {
+            var node = nodes.pop();
+            for(i = node.childNodes.length - 1; i >= 0; i--) {
+              var currentNode = node.childNodes.item(i);
+              if(currentNode.nodeType && currentNode.nodeType == Node.ELEMENT_NODE) {
+                var className = currentNode.getAttribute("class");
+                if(currentNode.nodeName == "g" &&
+                   className && className != null &&
+                   className.match(/count/)) {
+                  currentNode.style.setProperty("display", "inherit", null);
+                } else {
+                  nodes.push(currentNode);
+                }
+              }
+            }
+          }
+        }
+      }
+    ]]></script>
+  </defs>
+  <g transform="translate(0, 2)">
+    <g transform="translate(50, 0)">
+      <rect x="0" y="0" width="40" height="15" rx="3"/>
+      <text x="20" y="11">Amy</text>
+      <g class="count">
+        <rect x="1" y="3" width="5" height="9" rx="1"/>
+        <text x="3" y="9">1</text>
+        <rect x="34" y="3" width="5" height="9" rx="1"/>
+        <text><tspan x="36.5" y="7.25">1</tspan><tspan x="36.5" y="11.25">4</tspan></text>
+      </g>
+      <line x1="20" y1="15" x2="-25" y2="25" />
+      <line x1="20" y1="15" x2="20" y2="25" />
+      <line x1="20" y1="15" x2="65" y2="25" />
+    </g>
+    <g transform="translate(5, 25)">
+      <g transform="translate(0, 0)">
+        <rect x="0" y="0" width="40" height="15" rx="3"/>
+        <text x="20" y="12">Ben</text>
+        <g class="count">
+          <rect x="1" y="3" width="5" height="9" rx="1"/>
+          <text x="3.25" y="9">2</text>
+          <rect x="34" y="3" width="5" height="9" rx="1"/>
+          <text x="36.5" y="9">3</text>
+        </g>
+      </g>
+      <g transform="translate(45, 0)">
+        <rect x="0" y="0" width="40" height="15" rx="3"/>
+        <text x="20" y="12">Bob</text>
+        <g class="count">
+          <rect x="1" y="3" width="5" height="9" rx="1"/>
+          <text x="3.5" y="9">4</text>
+          <rect x="34" y="3" width="5" height="9" rx="1"/>
+          <text><tspan x="36.25" y="7.25">1</tspan><tspan x="36.25" y="11.25">1</tspan></text>
+        </g>
+        <line x1="20" y1="15" x2="-5" y2="25" />
+        <line x1="20" y1="15" x2="45" y2="25" />
+      </g>
+      <g transform="translate(90, 0)">
+        <rect x="0" y="0" width="40" height="15" rx="3"/>
+        <text x="20" y="12">Barb</text>
+        <g class="count">
+          <rect x="1" y="3" width="5" height="9" rx="1"/>
+          <text><tspan x="3.5" y="7.25">1</tspan><tspan x="3.5" y="11.25">2</tspan></text>
+          <rect x="34" y="3" width="5" height="9" rx="1"/>
+          <text><tspan x="36.5" y="7.25">1</tspan><tspan x="36.5" y="11.25">3</tspan></text>
+        </g>
+      </g>
+      <g transform="translate(22.5, 25)">
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="40" height="15" rx="3"/>
+          <text x="20" y="12">Carl</text>
+          <g class="count">
+            <rect x="1" y="3" width="5" height="9" rx="1"/>
+            <text x="3.5" y="9">5</text>
+            <rect x="34" y="3" width="5" height="9" rx="1"/>
+            <text x="36.5" y="9">6</text>
+          </g>
+        </g>
+        <g transform="translate(45, 0)">
+          <rect x="0" y="0" width="40" height="15" rx="3"/>
+          <text transform="scale(.9, 1),translate(1.5, 0)" x="20" y="12">Carol</text>
+          <g class="count">
+            <rect x="1" y="3" width="5" height="9" rx="1"/>
+            <text x="3.25" y="9">7</text>
+            <rect x="34" y="3" width="5" height="9" rx="1"/>
+            <text><tspan x="36.25" y="7.25">1</tspan><tspan x="36.5" y="11.25">0</tspan></text>
+          </g>
+          <line x1="20" y1="15" x2="20" y2="25" />
+        </g>
+        <g transform="translate(45, 25)">
+          <g transform="translate(0, 0)">
+            <rect x="0" y="0" width="40" height="14" rx="3"/>
+            <text x="20" y="12">Dan</text>
+            <g class="count">
+              <rect x="1" y="3" width="5" height="9" rx="1"/>
+              <text x="3.25" y="9">8</text>
+              <rect x="34" y="3" width="5" height="9" rx="1"/>
+              <text x="36.5" y="9">9</text>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

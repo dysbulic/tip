@@ -1,0 +1,243 @@
+\documentclass[12pt,a4paper,twoside]{article}  % Comments after  % are ignored
+\usepackage{amsmath,amssymb,amsfonts}          % Typical maths resource packages
+\usepackage{hyperref}                          % For creating hyperlinks in cross references
+
+\pagestyle{headings}         % Option to put page headers
+                             % Needed \documentclass[a4paper,twoside]{article}
+
+% Changes the numbering format to a, b, c...
+\renewcommand{\theenumi}{\alph{enumi}}
+\renewcommand{\labelenumi}{\theenumi.}
+
+\author{Will Holcomb \small{CSC445 - Homework \#5}}
+\title{Homework \#5}
+\date{November 5, 2002}
+
+\begin{document}
+\maketitle
+
+\section{Number 1: Exercise 7.7.2}
+
+How does the context-free pumping lemma fail for each of the following languages?
+
+\begin{enumerate}
+
+\item $L = \{00, 11\}$
+\\\\
+It is not possible to pick an arbitrary n because
+  $\{w | |w| \not = 2; w \in L\} = \emptyset$
+
+\item $L = \{0^n1^n | n \geq 1\}$
+\\\\
+With:
+\begin{eqnarray}
+w &=& uvxyz \\
+|w| &\geq& 2 \\
+u &=& 0^{n_u} \ni n_u = {|w|\over2} - 1 \\
+v &=& 0 \\
+x &=& \epsilon \\
+y &=& 1 \\
+z &=& 1^{n_z} \ni n_z = {|w|\over2} - 1 \\
+w_i &=& uv^ixy^iz \in L
+\end{eqnarray}
+
+The pumping lemma for context free languages is satisfied $\therefore$
+L is context-free.
+
+\item The set of all palindromes where $\Sigma = \{0, 1\}$. That is:
+\begin{equation}
+L = \{waw^R | w \in \Sigma^*; a \in \Sigma \cup \{\epsilon\}\}
+\end{equation}
+\\\\
+With:
+\begin{eqnarray}
+w &=& uvxyz \\
+|w| &\geq& 3 \\
+u &=& \epsilon \\
+v &=& a \ni a \in \Sigma \\
+x &\in& L \\
+y &=& a \\
+z &=& \epsilon \\
+w_i &=& uv^ixy^iz \in L
+\end{eqnarray}
+
+The pumping lemma for context free languages is satisfied $\therefore$
+L is context-free.
+
+\end{enumerate}
+
+\section{Number 2: Exercise 7.3.1}
+
+Show the context free languages are closed under $init \ni$
+\begin{equation}
+init(L) = \{w | \exists x \ni wx \in L\}
+\end{equation}
+
+\section{Number 3: Exercise 7.3.2}
+
+Consider the languages:
+\begin{eqnarray}
+L_1 &=& \{a^nb^{2n}c^m | n,m \in \mathbb{N}\} \\
+L_2 &=& \{a^nb^mc^{2m} | n,m \in \mathbb{N}\}
+\end{eqnarray}
+
+\begin{enumerate}
+
+\item Show that $L_1$ and $L_2$ are context-free using grammars:
+\begin{eqnarray}
+S_1 &\rightarrow& AC \nonumber\\
+A   &\rightarrow& aAbb | \epsilon \nonumber\\
+C   &\rightarrow& cC | \epsilon \nonumber
+\end{eqnarray}
+\begin{eqnarray}
+S_2 &\rightarrow& AB \nonumber\\
+A   &\rightarrow& aA | \epsilon \nonumber\\
+C   &\rightarrow& bBcc | \epsilon \nonumber
+\end{eqnarray}
+
+\item Is $L_1 \cap L_2$ context-free? Why?
+\\\\
+$L_1 \cap L_2 = \{a^ib^jc^k | 2i = j; 2j = k; i,j,k \in \mathbb{N}\} =
+  \{a^nb^{2n}c^{4n} | n  \in \mathbb{N}\}$
+
+\end{enumerate}
+
+\section{Number 4: Exercise 7.4.2}
+
+Give linear time algorithms answeing the following questions:
+
+\begin{enumerate}
+
+\item Which symbols in a context-free grammar appear in some
+  sentential form?
+\\\\
+\item Which symbols in a context-free grammar are nullable?
+\\\\
+\end{enumerate}
+
+\section{Number 5: Exercise 8.2.1}
+
+For the turing machine in Table~\ref{8.2.1}:
+\begin{table}
+\label{8.2.1}
+\begin{tabular}{c | c c c c c}
+State  &0          &1            &X           &Y           &B \\
+\hline\hline
+$>q_0$ &($q_1$,X,R) &-           &-           &($q_3$,Y,R) &- \\
+$q_1$  &($q_1$,0,R) &($q_2$,Y,L) &-           &($q_1$,Y,R) &- \\
+$q_2$  &($q_2$,0,L) &-           &($q_0$,X,R) &($q_2$,Y,L) &- \\
+$q_3$  &-           &-           &-           &($q_3$,Y,R) &($q_4$,B,R) \\
+$q_4$* &-           &-           &-           &-           &-
+\end{tabular}
+\caption{Turing machine to accept $\{0^n1^n | n \geq 1\}$}
+\end{table}
+
+Give the instantaneous descriptions of the following strings:
+
+\begin{enumerate}
+
+\item 00
+\begin{eqnarray}
+q_0 {\dagger\over{0}}0 &\vdash& q_1 X{\dagger\over{0}} \nonumber\\
+      &\vdash& q_2 X0{\dagger\over{ }} \nonumber
+\end{eqnarray}
+
+\item 00011
+\begin{eqnarray}
+q_0 {\dagger\over{0}}0011 &\vdash& q_1 X{\dagger\over{0}}011 \nonumber\\
+         &\vdash& q_1 X0{\dagger\over{0}}11 \nonumber\\
+         &\vdash& q_1 X00{\dagger\over{1}}1 \nonumber\\
+         &\vdash& q_2 X0{\dagger\over{0}}Y1 \nonumber\\
+         &\vdash& q_2 X{\dagger\over{0}}0Y1 \nonumber\\
+         &\vdash& q_2 {\dagger\over{X}}00Y1 \nonumber\\
+         &\vdash& q_0 X{\dagger\over{0}}0Y1 \nonumber\\
+         &\vdash& q_1 XX{\dagger\over{0}}Y1 \nonumber\\
+         &\vdash& q_1 XX0{\dagger\over{Y}}1 \nonumber\\
+         &\vdash& q_1 XX0Y{\dagger\over{1}} \nonumber\\
+         &\vdash& q_2 XX0{\dagger\over{Y}}Y \nonumber\\
+         &\vdash& q_2 XX{\dagger\over{0}}YY \nonumber\\
+         &\vdash& q_2 X{\dagger\over{X}}0YY \nonumber\\
+         &\vdash& q_0 XX{\dagger\over{0}}YY \nonumber\\
+         &\vdash& q_1 XXX{\dagger\over{Y}}Y \nonumber\\
+         &\vdash& q_1 XXXY{\dagger\over{Y}} \nonumber\\
+         &\vdash& q_1 XXXYY{\dagger\over{ }}\nonumber
+\end{eqnarray}
+
+\item 00111
+\begin{eqnarray}
+q_0 {\dagger\over{0}}0111 &\vdash& q_1 X{\dagger\over{0}}111 \nonumber\\
+                        &\vdash& q_1 X0{\dagger\over{1}}11 \nonumber\\
+                        &\vdash& q_2 X{\dagger\over{0}}Y11 \nonumber\\
+                        &\vdash& q_2 {\dagger\over{X}}0Y11 \nonumber\\
+                        &\vdash& q_0 X{\dagger\over{0}}Y11 \nonumber\\
+                        &\vdash& q_1 XX{\dagger\over{Y}}11 \nonumber\\
+                        &\vdash& q_1 XXY{\dagger\over{1}}1 \nonumber\\
+                        &\vdash& q_2 XX{\dagger\over{Y}}Y1 \nonumber\\
+                        &\vdash& q_2 X{\dagger\over{X}}YY1 \nonumber\\
+                        &\vdash& q_0 XX{\dagger\over{Y}}Y1 \nonumber\\
+                        &\vdash& q_3 XXY{\dagger\over{Y}}1 \nonumber\\
+                        &\vdash& q_3 XXYY{\dagger\over{1}} \nonumber
+\end{eqnarray}
+
+\end{enumerate}
+
+\section{Number 6: Exercise 8.2.2}
+
+Design Turing machines for the following languages:
+
+\begin{enumerate}
+
+\item $\{w | \textrm{count}_0(w) =\textrm{count}_1(w)\}$
+
+The JFlap file for this Turing machine is available at: \\
+\htmladdnormallink{http://odin.himinbi.org/classes/csc445/8.2.2.a.TM}
+ {http://odin.himinbi.org/classes/csc445/8.2.2.a.TM}
+
+\item $\{a^nb^nc^n | n \in \mathbb{N}\}$
+
+The JFlap file for this Turing machine is available at: \\
+\htmladdnormallink{http://odin.himinbi.org/classes/csc445/8.2.2.a.TM}
+ {http://odin.himinbi.org/classes/csc445/8.2.2.a.TM}
+
+\item $\{ww^R | w \in \Sigma^*; \Sigma = \{0,1\}\}$
+
+The JFlap file for this Turing machine is available at: \\
+\htmladdnormallink{http://odin.himinbi.org/classes/csc445/8.2.2.a.TM}
+ {http://odin.himinbi.org/classes/csc445/8.2.2.a.TM}
+
+\end{enumerate}
+
+\section{Number 7: Exercise 8.2.3}
+
+Design a Turing machine which adds one to a given number in binary.
+
+\begin{enumerate}
+
+\item What are the transitions in this machine and the purpose of
+  each?
+
+The JFlap file for this Turing machine is available at: \\
+\htmladdnormallink{http://odin.himinbi.org/classes/csc445/8.2.3.TM}
+ {http://odin.himinbi.org/classes/csc445/8.2.3.TM}
+
+$q_0$ $\rightarrow$ Start and move to the left side of the string \\
+$q_1$  $\rightarrow$ Move back to the left over 1's changing them to 0's \\
+$q_2^*$ $\rightarrow$ On a 0 on B, that digit is the end of the ripple
+         and will become a 1, leaving the rest of the string unaltered
+
+\item Show the sequence of instantaneous descriptions for the string
+  111:
+\begin{eqnarray}
+q_0 {\dagger\over{1}}11 &\vdash& q_0 1{\dagger\over{1}}1 \nonumber\\
+      &\vdash& q_0 11{\dagger\over{1}} \nonumber\\
+      &\vdash& q_0 111{\dagger\over{ }} \nonumber\\
+      &\vdash& q_1 11{\dagger\over{1}} \nonumber\\
+      &\vdash& q_1 1{\dagger\over{1}}0 \nonumber\\
+      &\vdash& q_1 {\dagger\over{1}}00 \nonumber\\
+      &\vdash& q_1 {\dagger\over{ }}000 \nonumber\\
+      &\vdash& q_2 1{\dagger\over{0}}00 \nonumber
+\end{eqnarray}
+
+\end{enumerate}
+
+\end{document}

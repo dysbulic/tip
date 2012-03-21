@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:lj="http://www.livejournal.com">
+  <head>
+    <title>Fedora Core 3 Firewall Setup</title>
+    <link rel="stylesheet" href="../styles/main.css" type="text/css" />
+    <style type="text/css">
+      table {
+        margin: auto;
+        border-collapse: collapse;
+      }
+      th, td {
+        border: thin solid gray;
+        padding-left: 1em;
+        padding-right: 1em;
+      }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Fedora Core 3 Firewall Setup</h1>
+    <h2>June 2005</h2>
+
+    <p>My project du jour is getting updating the <a href="http://en.wikipedia.org/wiki/Firewall#Firewalls_in_computer_networking">firewall</a> for the lab from <a href="http://www.redhat.com">RedHat 8</a> to <a href="http://fedora.redhat.com">Fedora Core 3</a>. We are doing a <a href="http://www.linux.org">Linux</a> install for the lab so we can have a training toward the end of the month.</p>
+
+    <p>The firewall will actually be serving several important functions for the lab:</p>
+
+    <ul>
+      <li><a href="#nat">NAT</a></li>
+      <li><a href="#dns">DNS Server</a></li>
+      <li><a href="#dhcp">DHCP Server</a></li>
+      <li><a href="#ldap">LDAP Server</a></li>
+      <li><a href="#smb">Domain Controller</a></li>
+    </ul>
+
+    <h1>Install</h1>
+
+    <p>Actually installing the system was something of a challenge.
+    I've got the ISO images, but no blank CDs. I used a <a
+    href="../cdless_fedora_install/">funky HTTP install</a> for the
+    machines in the lab, but the firewall only has 32mb of RAM and the
+    FC3 installer refuses to run. So, I had to actually pull the drive
+    and run the install in another box and then move it back.
+    Disappointingly, the support for the ISA network cards which were
+    auto-detected in RedHat 8, did not work in FC3. I had to go in and
+    edit <code>/etc/modprobe.conf</code> by hand.</p>
+      
+    <p>After some mucking about thought I managed to get it up and
+    running. It was not horrible, but the number of problems I had
+    definitely would have thwarted almost any novice:</p>
+    <ol>
+      <li>I had to move the drive once because the installer wouldn't
+      run</li>
+      <li>I had to move it back again because the first startup runs a
+      graphical setup program that wasn't starting correctly. (And
+      worse, was failing silently, so all I knew was that it wasn't
+      starting.)</li>
+      <li>Then I had to configure the ISA network cards by hand.</li>
+    </ol>
+      
+    <p>Finally though it was up and running with all the hardware
+    working.</p>
+      
+    <a name="nat"></a>
+    <h1>NAT</h1>
+      
+    <p>My little lab is <a
+    href="http://en.wikipedia.org/wiki/Nat">NAT</a>ed away from the
+    rest of the university. We didn't used to be this way, but
+    students here are frequently changing the IP addresses as a part
+    of <a href="http://www.cisco-academy.mr">the course</a> and though
+    I emphasized the importance of being careful, they weren't. The
+    university admins got frustrated with it and eventually stuck us
+    off on our own. I prefer this solution to the previous one, which
+    was simply to unplug our lab from the main switch.</p>
+      
+    <p>The NAT was quick and simple: (we are
+    <code>192.169.99.0/24</code> and the uni is
+    <code>192.168.2.0/24</code>)</p>
+
+    <pre><em>iptables</em> -t nat -A POSTROUTING -s 192.168.99.0/255.255.255.0 -j SNAT --to-source 192.168.2.176
+<em>service</em> iptables save</pre>
+
+    <p>There is also a server for the <a
+    href="http://cisco.netacad.net">Cisco curriculum</a> and a <a
+    href="http://www.samba.org">SMB fileserver</a> at
+    <code>192.168.99.250</code>. I wanted that traffic to pass
+    through, so I also did:</p>
+
+    <pre><em>iptables</em> -t nat -A PREROUTING -d 192.168.2.176 -p tcp -j DNAT \
+    --dport 80 --to-destination 192.168.99.250
+<em>iptables</em> -t nat -A PREROUTING -d 192.168.2.176 -p tcp -j DNAT \
+    --dport 138:139 --to-destination 192.168.99.250
+<em>iptables</em> -t nat -A PREROUTING -d 192.168.2.176 -p udp -j DNAT \
+    --dport 138:139 --to-destination 192.168.99.250
+<em>service</em> iptables save</pre>
+
+    <a name="dns"></a>
+    <h1>DNS Server</h1>
+
+    <p>The <a href="http://en.wikipedia.org/wiki/Dns">DNS</a> servers
+    provided <a href="http://www.mauritel.mr">Mauritel</a> are fairly
+    unreliable. For this reason and to provide <a
+    href="http://en.wikipedia.org/wiki/Dynamic_DNS">dynamic DNS</a> in
+    conjunction with the <a href="#dhcp">DHCP</a>, I wanted to run a
+    <a href="http://www.bind9.net">DNS</a> server.</p>
+
+    <p>The setup is simple enough. I added a couple zones (<a
+    href="../config/firewall/cisco.zone">forward</a> and <a
+    href="../config/firewall/192.168.99.reverse">reverse</a>) to the
+    <a href="http://en.wikipedia.org/wiki/Chroot_jail">chroot jail</a>
+    at <code>/var/named/chroot/var/named/</code> for the local
+    addresses in the lab and then added the shared dyndns stuff to
+    <code>/etc/<a
+    href="../config/firewall/named.conf">named.conf</a></code>.</p>
+
+    <p>This was the first place I hit a snag. Something new in FC3 was
+    the <a
+    href="http://fedora.redhat.com/docs/selinux-faq/">integration</a>
+    of Security Enhanched Linux (<a
+    href="http://www.nsa.gov/selinux/">SELinux</a>). I've never used
+    it before and it was denying access to the new zones that I'd
+    created.</p>
+
+    <p>The problem with traditional Linux security is granularity.
+    There are normal users and there is root and the layering of
+    protections between them is pretty slim. For instance, to run a
+    program like <a href="http://httpd.apache.org">Apache</a>, I have
+    to be able to bind port 80. To do so, the process has to be
+    running as root. Another term for root is the "superuser" and
+    while running as root I embody that term in a Nietzscheian <a
+    href="http://www.stanford.edu/~pj97/Nietzsche.htm">übermensch</a>
+    kind of way. I can look at or delete anyone's files I want to. I
+    can send out forged emails or <a
+    href="http://www.monkey.org/~dugsong/dsniff/">sniff</a> network
+    traffic. I am above the law and only bounded by my capabilities
+    and imagination.</p>
+      
+    <p>The process that is normally used is to mediate this problem is
+    that the Apache process will essentally give up its Godhood and
+    become a normal user after it has done whatever it needed to do.
+    This process though has its problems, mostly inherent in having to
+    trust Apache. A better solution would be to be able change the
+    environment so that Apache was only given limited power in the
+    first place so even if it is made to misbehave, it can't do any
+    harm. This is what SELinux begins to provide.</p>
+
+    <p>All subjects (users, programs or processes) and objects (files
+    and devices) are now assigned identities, roles and types. There
+    are security policies which are made based on those
+    attributes.</p>
+
+    <p>The error I am getting when I try and start named is:</p>
+
+    <pre>audit(911588074.103:0): avc:  denied  { read } for  pid=15535
+   exe=/usr/sbin/named name=named.conf dev=dm-0 ino=267969
+   scontext=root:system_r:named_t tcontext=root:object_r:user_home_t tclass=file</pre>
+
+    <p>If I just look at the file permissions, everything seems fine:</p>
+
+    <pre><em>ls</em> -l named.conf*
+-rw-r--r--  1 root named 1547 déc 12  2004 named.conf
+-rw-r--r--  1 root root  1329 nov 20 02:10 named.conf.orig</pre>
+
+    <p>The file is readable by the <code>named</code> user who is what
+    the bind process is running as. When we look at the SELinux
+    contexts though, we can see the problem. (The programs
+    <code>ls</code>, <code>ps</code> and <code>id</code> all now take
+    a <code>Z</code> parameter than shows SELinux contexts.)</p>
+
+    <pre><em>ls</em> -lZ named.conf*
+-rw-r--r--  root named  root:object_r:user_home_t    named.conf
+-rw-r--r--  root root   root:object_r:named_conf_t   named.conf.orig</pre>
+
+    <p>The file
+    <code>/etc/selinux/targeted/src/policy/domains/program/named.te</code>
+    contains the directive: (I had to install the
+    <code>selinux-policy-targeted-sources</code> package to have the
+    source.)</p>
+
+    <pre>r_dir_file(named_t, named_conf_t)</pre>
+
+    <p>This means that subjects of type <code>named_t</code> should be
+    given read access to objects of type <code>named_conf_t</code>.
+    Previously in the file there was the line:</p>
+
+    <pre>can_exec(named_t, named_exec_t)</pre>
+      
+    <p>Which means that subjects of type <code>named_t</code> can
+    execute objects of type <code>named_exec_t</code>.
+    (<code>/usr/sbin/named</code> is of type
+    <code>named_exec_t</code>.)</p>
+
+    <p>So, to fix my problem, I have to fix the context. The way to
+    that is:</p>
+
+    <pre><em>restorecon</em> -v /var/named/chroot/etc/named.conf</pre>
+
+    <p>The same problem exists for the new zone files, so I also have
+    to do:</p>
+
+    <pre><em>restorecon</em> -v /var/named/chroot/var/named/*</pre>
+
+    <a name="dhcp"></a>
+    <h1>DHCP Server</h1>
+
+    <p>In an attempt to reduce the number of problems that we are
+    having with misconfigured machines, I set up a <a
+    href="http://www.isc.org/index.pl?/sw/dhcp/">DHCP</a> server. The
+    setup is pretty straight forward. I got the <a
+    href="http://en.wikipedia.org/wiki/MAC_address">mac address</a>
+    off of each machine set up some blocks:</p>
+      
+    <ul>
+      <li>Recognized Machines: <code>192.168.99.0/26</code>
+      (<code>192.168.99.0</code> - <code>192.168.99.63</code>)</li>
+      <li>Unrecognized Machines: <code>192.168.99.64/26</code>
+      (<code>192.168.99.64</code> - <code>192.168.99.127</code>)</li>
+      <li>
+        Servers: <code>192.168.99.192/26</code>
+        (<code>192.168.99.192</code> - <code>192.168.99.254</code>)
+        <ul>
+          <li>Firewall: <code>192.168.99.254</code></li>
+          <li>Fileserver: <code>192.168.99.250</code></li>
+          <li>My Laptop: <code>192.168.99.251</code></li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>The basic file came from
+    <code>/usr/share/doc/dhcp-3.0.1/dhcpd.conf.sample</code> and I
+    edited it and put it at <code>/etc/<a
+    href="../config/firewall/dhcpd.conf">dhcpd.conf</a></code>.</p>
+
+    <p>There is a SELinux problem here as well. There is a ownership
+    problem like with named, but additionally, for the dnydns there is
+    a shared file, <code>/etc/rndc.key</code>, with the authentication
+    key used to update the server.</p>
+      
+    <p>When I initially tried to run the program, I got an access
+    denied error and in the logs it said:</p>
+
+    <pre>audit(911596073.741:0): avc:  denied  { search } for pid=16624
+   exe=/usr/sbin/dhcpd name=named dev=dm-0 ino=426311
+   scontext=root:system_r:dhcpd_t tcontext=system_u:object_r:named_zone_t tclass=dir</pre>
+
+    <p><code>/etc/rndc.key</code> is just a symlink to
+    <code>/var/named/chroot/etc/rndc.key</code>. The directory is of
+    type <code>named_conf_t</code> which by the default policy dhcpd
+    can't access. There is probably a more graceful way to deal with
+    this problem, but all I did was to grant it premission to the
+    whole context: (as well as giving permission to read
+    <code>rndc.key</code> of the same type)</p>
+
+    <pre><em>cat</em> >> /etc/selinux/targeted/src/policy/domains/program/dhcpd.te &lt;&lt; EOF
+
+# Added to allow shared key config with bind:
+allow dhcpd_t named_conf_t:dir { search };
+allow dhcpd_t named_zone_t:dir { search };
+allow dhcpd_t named_conf_t:file { read getattr };
+EOF
+<em>make</em> -C /etc/selinux/targeted/src/policy/ load</pre>
+
+    <a name="ldap"></a>
+    <h1>LDAP Server</h1>
+
+    <p>I've done the <a href="#dns">DNS</a> and <a
+    href="#dhcp">DHCP</a> servers before. I've even done a <a
+    href="#smb">domain controller</a> and some <a
+    href="http://java.sun.com/products/jndi/">LDAP programming</a>.
+    I've never had a Linux lab to run before, so this was my first
+    time setting up a shared authentication source for Linux boxen.
+    The majority of the information on <a
+    href="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/">the
+    setup</a> came from the <a href="http://www.tldp.org">Linux
+    Documention Project</a>.</p>
+
+    <p>The first issue was to get the server up and running. This took
+    an edit of <code>/etc/openldap/<a
+    href="../config/firewall/slapd.conf">slapd.conf</a></code> to set
+    the <code>suffix</code>, <code>rootdn</code> and
+    <code>rootpw</code>. Also I tighetened the default security policy
+    which is nonexistent and enabled <a
+    href="http://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a>.</p>
+
+    <p>The default security policy gives everyone read access to
+    everything, which is something of a problem. It also restricts
+    write access only to the server administrator which means no users
+    can change their passwords. So the security changes in <code><a
+    href="../config/firewall/slapd.conf">slapd.conf</a></code> have to
+    be put into place before the setup will work.</p>
+
+    <p>Also, the migration will put the entries into an organizational
+    unit, <code>People</code> under the base dn and groups under
+    <code>Group</code>. Once the server is started you have to create
+    those <a href="../config/firewall/base.ldif">base entries</a>. If
+    necessary, you can clear the directory first using
+    <code>ldapdelete</code> or just removing all the data files in
+    <code>/var/lib/ldap/</code>.</p>
+
+    <pre><em>service</em> ldap stop
+<em>rm</em> -rfv /var/lib/ldap/*
+<em>service</em> ldap start
+admin=$(grep -e ^rootdn /etc/openldap/slapd.conf | \
+        sed -e "s/^rootdn[[:space:]]\+\"\([^\"]\+\)\"/\\1/")
+<em>ldapadd</em> -H ldaps://localhost -D "$admin" -xW -f base.ldif</pre>
+
+    <p>To migrate the existing information over to LDAP uses some <a
+    href="http://www.perlmonks.org">perl</a> scripts incuded in the
+    distribution. Some setup is required by setting the environment
+    variable <code>LDAP_BASEDN</code> before running:</p>
+
+    <pre>export LDAP_BASEDN="o=Académie Cisco,o=Université de Nouakchott,c=MR"
+<em>/usr/share/openldap/migration/migrate_passwd.pl</em> /etc/passwd > passwd.ldif
+<em>ldapadd</em> -H ldap://localhost -D "$admin" -xW -f passwd.ldif
+<em>/usr/share/openldap/migration/migrate_group.pl</em> /etc/group > group.ldif
+<em>ldapadd</em> -H ldap://localhost -D "$admin" -xW -f group.ldif</pre>
+
+    <p>This firewall will not actually be authenticating against the
+    LDAP server, so the other changes are to the clients. I needed to
+    update the configuration of the name service switch at
+    <code>/etc/<a
+    href="../config/firewall/nsswitch.conf">nsswitch.conf</a></code>,
+    the <a href="">PAM</a> config at <code>/etc/pam.d/<a
+    href="../config/firewall/system-auth">system-auth</a></code> and
+    the default LDAP config at <code>/etc/<a
+    href="../config/firewall/ldap.conf">ldap.conf</a></code>.
+    (<code><a
+    href="../config/firewall/system-auth">system-auth</a></code> and
+    <code><a href="../config/firewall/ldap.conf">ldap.conf</a></code>
+    were primarily updated by <code>authconfig</code>.) Also, to unify
+    things a bit, I removed <code>/etc/openldap/ldap.conf</code> and
+    made that a symlink to <code>/etc/<a
+    href="../config/firewall/ldap.conf">ldap.conf</a></code>. Nsswitch
+    uses the file in <code>etc</code> and <code>ldapsearch</code> uses
+    the one in <code>openldap</code>, but the format is the same.</p>
+
+    <p>The one important thing to note with using the same file for
+    both <code>/etc/<a
+    href="../config/firewall/ldap.conf">ldap.conf</a></code> and
+    <code>/etc/openldap/<a
+    href="../config/firewall/ldap.conf">ldap.conf</a></code> is that
+    PAM does not respect the <code>uri</code> directive, and so if you
+    used that it is also necessary to include a <code>host</code>
+    entry.</p>
+
+    <p>The debugging of this step proved a little troublesome, some
+    commands that I found useful:</p>
+
+    <p>To verify that the ldap server was running and that I could
+    connect from the client:</p>
+
+    <pre>ldapsearch -x -H ldaps://firewall "(uid=will)"</pre>
+
+    <p>On the server, in order to know which connections were being
+    made and how, I did:</p>
+
+    <pre>slapd -u ldap -d 1 -h "ldap:/// ldaps:///"</pre>
+
+    <p>The debug levels is a bitmask (so you add the values to combine
+    them):</p>
+
+    <div style="text-align: center">
+      <table>
+        <tr><th>Level</th><th>Effect</th></tr>
+        <tr><td>-1</td><td>enable all debugging</td></tr>
+        <tr><td>0</td><td>no debugging</td></tr>
+        <tr><td>1</td><td>trace function calls</td></tr>
+        <tr><td>2</td><td>debug packet handling</td></tr>
+        <tr><td>4</td><td>heavy trace debugging</td></tr>
+        <tr><td>8</td><td>connection management</td></tr>
+        <tr><td>16</td><td>print out packets sent and received</td></tr>
+        <tr><td>32</td><td>search filter processing</td></tr>
+        <tr><td>64</td><td>configuration file processing</td></tr>
+        <tr><td>128</td><td>access control list processing</td></tr>
+        <tr><td>256</td><td>stats log connections/operations/results</td></tr>
+        <tr><td>512</td><td>stats log entries sent</td></tr>
+        <tr><td>1024</td><td>print communication with shell backends</td></tr>
+        <tr><td>2048</td><td>print entry parsing debugging</td></tr>
+      </table>
+    </div>
+    
+    <p>In the end I turned on all debugging and found that my problem
+    was I had used both a <code>ldaps://</code> uri and the <code>ssl
+    start_tls</code> command in <code>/etc/<a
+    href="../config/firewall/ldap.conf">ldap.conf</a></code>. It was
+    trying to start TLS twice and was failing. After this was fixed I
+    could do:</p>
+
+    <pre>getent passwd</pre>
+
+    <p>And it would return results both from <code>/etc/passwd</code>
+    on the machine and from the LDAP server.</p>
+
+    <p>Also the <code>passwd</code> command now works correctly to
+    change passwords. The one potential issue is I can't change a
+    user's password without knowing their old password. The system has
+    to bind the LDAP server with an account with the permission to
+    change the password and only the user and <code>rootdn</code> have
+    that right. What I would like is to have it use the
+    <code>rootdn</code> to bind when I'm running as root. I can have
+    it do that, but only if I store the password in
+    <code>/etc/ldap.secret</code> and I don't want to do that on all
+    the workstations. I'll have to deal with this later.</p>
+
+    <a name="smb"></a>
+    <h1>Domain Controller</h1>
+    
+    <p>Though my lab is a salle of logiciel libre, the primary
+    operating system currently installed is <a
+    href="http://www.microsoft.com">XP Pro</a> with French and Arabic
+    <a
+    href="http://www.microsoft.com/globaldev/DrIntl/faqs/Muifaq.mspx">MUI</a>.
+    A nice setup even if it does come from the <a
+    href="http://www.ratrobot.com/writing/ms/">evil empire</a>.
+    Hopefully with this new <a
+    href="http://fedora.redhat.com">Fedora</a> setup I can get some
+    people weaned.</p>
+
+    <p>The machines all have really <a
+    href="../lockdown/">restricted</a> local user accounts that only
+    let the students read and run a few <a
+    href="http://will.mr.pcvs.org/gmc_setup.html">basic programs</a>.
+    For the other teachers and myself though I want for them to be
+    able to log in with a <a
+    href="http://groups.haas.berkeley.edu/HCS/howdoi/profiles/roamingpf.htm">roaming
+    profiles</a>. Given that I hardly want to have to touch each
+    computer to add accounts, I need a <a
+    href="http://www.samba.org">domain controller</a>.</p>
+
+    <p>It just took making a few changes to the default
+    <code>/etc/samba/<a
+    href="../config/firewall/smb.conf">smb.conf</a></code>.</p>
+
+    <p>Before I could use the tools included for managing the LDAP
+    server, I had to install a perl LDAP module:</p>
+
+    <pre>perl -MCPAN -e 'install ldap'</pre>
+
+    <p>Or, actually for the server I was setting up I was having a
+    problem with the OOM killer kicking in and killing off both the
+    CPAN update and my ssh session, so I had to do the install by
+    hand:</p>
+
+    
+
+    <p>After the modules were installed, I updated the config file for
+    the included <a href="http://www.idealx.org/prj/samba/">ldap
+    tools</a> at /usr/share/doc/samba-3.0.8/LDAP/smbldap-tools/<a
+    href="../config/firewall/smbldap_conf.pm">smbldap_conf.pm</a>.
+    Then I ran the script to create all the needed base entries:</p>
+
+    <pre>perl /usr/share/doc/samba-3.0.8/LDAP/smbldap-tools/smbldap-populate.pl</pre>
+
+    <p>Then I added a couple NT accounts just to try out that it was
+    working:</p>
+
+    <pre>smbpasswd -a root</pre>
+
+    <p>To see if I could connect then I did:</p>
+
+    <pre>smbclient //localhost/root -U root</pre>
+
+    <p>Now I wanted to take hosts and join them to the domain
+    controller. Each machine has to be added to the database to join
+    the domain. To do this automatically, the domain controller needs
+    access to some scripts. Rather than putting the actual paths in
+    the config file, I made some symbolic links:</p>
+
+    <pre></pre>
+    
+
+    <pre><em>groupadd</em> smbdomain
+<em>mkdir</em> -p /home/samba/netlogon</pre>
+
+  </body>
+</html>

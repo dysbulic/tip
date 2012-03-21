@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Podcast Joomla Component</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+      iframe { border: 1px solid; width: 100%; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Podcast Joomla Component</h1>
+
+    <p>I have looked at a couple different CMSes for the new <a href="http://indiefeed.com">Indiefeed</a> site. I am finding <a href="http://drupal.org">Drupal</a> a bit cumbersome to deal with. Joomla is generally respected as a cleaner product, so I am going to attempt to develop the site as a custom component.</p>
+
+    <h2>Information Architecture</h2>
+
+    <p>The first step is to describe the information that needs to be presented:</p>
+
+    <p>The <code>site</code> is for displaying <code>podcasts</code>. Each podcast has:</p>
+
+    <ul>
+      <li>Artist</li>
+      <li>Track Title</li>
+      <li>Artist Graphic</li>
+      <li>Show URL</li>
+      <li>List of Buy Links</li>
+      <li>Show Description</li>
+      <li>Ranking</li>
+      <li>Comments</li>
+    </ul>
+
+    <iframe src="000_podcast_install.xml"></iframe>
+
+    <p>There are several data files and a <a href="sources/load_data.phps">program</a> to <a href="load_data.php">load the data</a>.</p>
+
+    <ul>
+      <li><a href="indiefeed_altrock.xml">indiefeed_altrock.xml</a></li>
+      <li><a href="indiefeed_blues.xml">indiefeed_blues.xml</a></li>
+      <li><a href="indiefeed_blues.xml">indiefeed_electronica.xml</a></li>
+      <li><a href="indiefeed_blues.xml">indiefeed_indie.xml</a></li>
+      <li><a href="indiefeed_blues.xml">indiefeed_bigshed.xml</a></li>
+      <li><a href="indiefeed_blues.xml">indiefeed_poetry.xml</a></li>
+      <li><a href="indiefeed_blues.xml">indiefeed_hiphop.xml</a></li>
+    </ul>
+
+    <ul>
+      <li><a href="current_listing_mockup.html">Frontpage</a></li>
+      <li><a href="archive_mockup.html">Archives</a></li>
+    </ul>
+
+    <p><a href="install.html">Installation instructions</a> including <a href="http://www.howtojoomla.net/content/view/19/2/">setting the podcast component to the default.</a></p>
+
+    <p>The component is decomposed into several files:</p>
+    <ul>
+      <li><a href="sources/podcast.phps">podcast.php</a> &bull; main redirector that routes incoming task requests</li>
+      <li><a href="sources/podcast.class.phps">podcast.class.php</a> &bull; php class encapsulating the database access logic</li>
+      <li><a href="sources/podcast.html.phps">podcast.html.php</a> &bull; handles the actual rendering of podcasts, primarily redirects to functions defined in:
+      <ul>
+        <li><a href="sources/podcast.listing.phps">podcast.listing.php</a> &bull; generates the frontpage listing</li>
+        <li><a href="sources/podcast.archive.phps">podcast.archive.php</a> &bull; generates the channel archive</li>
+        <li><a href="sources/podcast.detail.phps">podcast.detail.php</a> &bull; displays information about a specific podcast</li>
+      </ul>
+      </li>
+      <li><a href="sources/podcast.edit.phps">podcast.edit.php</a></li>
+    </ul>
+  </body>
+</html>

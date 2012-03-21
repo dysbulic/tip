@@ -1,0 +1,707 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-360 Midterm</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <style type="text/css">
+      .sig { margin-top: 3em; border-top: 1px solid; }
+      th, td { padding: .5em .75em; border: 1px solid; text-align: center; }
+      mtable { border-collapse: collapse; }
+      img { margin: auto; display: block; }
+      .note { background-color: #33ACE8; }
+      .puzzle, .puzzle caption { caption-side: bottom; margin-left: 1.5em; }
+      .puzzle td { border: 2px solid; padding: .25em .75em; }
+      .question .puzzle { float: left; }
+      #puzzles .puzzle td { border: 2px solid; padding: 0 .2em; }
+      #puzzles .puzzle, #puzzles .puzzle caption { margin: 0 auto; }
+      #puzzles .puzzle caption { height: 2em; }
+      #puzzles > tbody > tr > td { padding: 0 .25em; }
+      #puzzles { font-size: 9pt; }
+      @media print {
+        #puzzles { margin-left: -5em; }
+      }
+      .nodeedge { border-right: 2px solid; }
+      #dfs-graph { height: 300px; width: 100%; }
+      object { width: 100%; }
+      #searchspace { height: 450px; }
+      .noborder th, .noborder td { border: none; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 360: Introduction to Artificial Intelligence</h1>
+      <h2>Midterm Examination</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 10:00 Mon., 22 October 2007</h2>
+    </div>
+    <blockquote>
+      <table>
+        <tr>
+          <th>Question/Max Score</th>
+          <td>I (20)</td>
+          <td>II (20)</td>
+          <td>III (15)</td>
+          <td>IV (25)</td>
+          <td>V (20)</td>
+          <td>Total</td>
+        </tr>
+        <tr>
+          <th>Actual Score</th>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+      <p>Take Home Examination. This is an open book, open notes examination. The examination is due at 10 am on Monday, October 22, 2007. Submit your exam to the instructor by email or submit to the digital drop box on Oak. In either case, please send a separate email to your instructor as soon as you have submitted your exam.</p>
+      <p>Late submissions will be penalized at the rate of 5 points off for every minute the submission is late. No excuses will be entertained.</p>
+      <p>Be sure to answer questions clearly. Explicitly state all your assumptions, make sure you have clearly outlined the problem you are solving, and be sure to explain and justify all of the steps in your solution process. We reserve the right to not grade answers that do not address the question asked in the exam.</p>
+      <p>Your answers to the exam questions must be your own work. You cannot discuss the exam with other students, colleagues, or faculty at the university or elsewhere. You may only consult the instructor or the TA for clarifications and help on the exam. If you use other sources, such as papers and material on the web to derive your answer, please be sure to acknowledge them in a proper way. Do not attempt to download answers to questions directly from the web. It is very important that the work you submit be based entirely on your own efforts.</p>
+      <p>The honor pledge below must accompany all examination submissions. Otherwise the examination will not be graded.</p>
+      <p class="sig">I pledge my honor that I have neither given nor received aid on this work.</p>
+      <p>Do not sign until after you have completed your test.</p>
+    </blockquote>
+    <ol>
+      <li>
+        <div class="question">
+          <h2>[20 points] Search Algorithms</h2>
+          <p>A language L has a four character vocabulary V = {&epsilon; , A, B, C}, where &epsilon; is the empty symbol. The probability that character v<sub>i</sub> will be followed by character v<sub>j</sub> is given by the following matrix:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable rowalign="center">
+              <mtr>
+                <mtd>
+                  <mo>P</mo>
+                  <mfenced separators="|"><msub><mi>v</mi><mi>j</mi></msub><msub><mi>v</mi><mi>i</mi></msub></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <html:table>
+                    <html:tr>
+                      <html:td></html:td>
+                      <html:td></html:td>
+                      <html:td colspan="4"><msub><mi>v</mi><mi>j</mi></msub></html:td>
+                    </html:tr>
+                    <html:tr>
+                      <html:td></html:td>
+                      <html:td></html:td>
+                      <html:td><mi>&epsilon;</mi></html:td>
+                      <html:td><mi>A</mi></html:td>
+                      <html:td><mi>B</mi></html:td>
+                      <html:td><mi>C</mi></html:td>
+                    </html:tr>
+                    <html:tr>
+                      <html:td rowspan="4"><msub><mi>v</mi><mi>i</mi></msub></html:td>
+                      <html:td><mi>&epsilon;</mi></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>4</mn></mfrac></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>4</mn></mfrac></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>4</mn></mfrac></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>4</mn></mfrac></html:td>
+                    </html:tr>
+                    <html:tr>
+                      <html:td><mi>A</mi></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>2</mn></mfrac></html:td>
+                      <html:td><mn>0</mn></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>4</mn></mfrac></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>4</mn></mfrac></html:td>
+                    </html:tr>
+                    <html:tr>
+                      <html:td><mi>B</mi></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>8</mn></mfrac></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>2</mn></mfrac></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>8</mn></mfrac></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>4</mn></mfrac></html:td>
+                    </html:tr>
+                    <html:tr>
+                      <html:td><mi>C</mi></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>4</mn></mfrac></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>8</mn></mfrac></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>2</mn></mfrac></html:td>
+                      <html:td><mfrac><mn>1</mn><mn>8</mn></mfrac></html:td>
+                    </html:tr>
+                  </html:table>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <p>Do parts (a), (b), and (c) using the uniform cost algorithm. Please draw the search tree to justify your solution.</p>
+        </div>
+        
+        <ol>
+            <li>
+              <div class="question">
+                <p>Find the most likely five-symbol string that starts with &epsilon;.</p>
+              </div>
+              <div class="answer">
+                <p>The definition of this question can be misleading because of the definition of &epsilon; as the "empty symbol." For a grammar, &epsilon; is used to represent the "empty string" which means that the rule does not add any characters to the generated string. So, "&epsilon;&epsilon;&epsilon;A&epsilon;BC&epsilon;&epsilon;AA&epsilon;" is a five character string because it is equivalent to "ABCAA". The "emptiness" of the empty symbol, however, is meaningful only on a higher level than this question is operating and so it <em>should</em> be counted.</p>
+                <p>The search tree for this problem space looks like:</p>
+                <object id="searchspace" type="image/svg+xml" data="string_generation_graph.svg"></object>
+                <p>Each node represents a potential string to be transmitted. The start node is an empty string. Each depth adds a new character to the string.</p>
+                <p>A general search would generate all characters at each level. Given knowledge of the goal, there are certain nodes that should never be considered because they can never be on the path to a goal node. The simplest example would be all children of the root except for the one generating &epsilon;, since it is the only one that will generate strings starting with &epsilon;. The set of possible nodes, <em>n</em>, is therefore constrained to make the search more effective (and simpler to draw). For the search for the most likely five letter string starting with &epsilon; this set, <em>m</em>, is:</p>
+                <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mtable rowalign="center">
+                    <mtr>
+                      <mtd>
+                        <mi>m</mi>
+                      </mtd>
+                      <mtd><mo>=</mo></mtd>
+                      <mtd>
+                        <mfenced open="{" close="}"><mrow>
+                          <mi>x</mi><mo>|</mo><mi>x</mi><mo>&Element;</mo><mi>n</mi><mo>&and;</mo>
+                          <mo>len</mo><mfenced><mrow><mo>str</mo><mfenced><mi>x</mi></mfenced></mrow></mfenced>
+                          <mo>&leq;</mo><mn>5</mn><mo>&and;</mo>
+                          <msub><mrow><mo>str</mo><mfenced><mi>x</mi></mfenced></mrow><mn>1</mn></msub>
+                          <mo>=</mo><mi>&epsilon;</mi>
+                        </mrow></mfenced>
+                      </mtd>
+                    </mtr>
+                  </mtable>
+                </math>
+                <p>str(<em>x</em>) is the symbol string generated starting at the start node and traveling the path to <em>x</em>. Because this is a tree and edges always generate symbols, the path to <em>x</em> will be unique.</p>
+                <p>An additional modification to the algorithm is also needed. In general, for a path, <em>P</em>, from <em>p<sub>1</sub></em> to <em>p<sub>n</sub></em> with edge costs, c(<em>n<sub>i</sub></em>, <em>n<sub>j</sub></em>):</p>
+                <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mtable rowalign="center">
+                    <mtr>
+                      <mtd>
+                        <mi>P</mi>
+                      </mtd>
+                      <mtd><mo>=</mo></mtd>
+                      <mtd>
+                        <mfenced open="{" close="}">
+                          <msub><mi>p</mi><mn>1</mn></msub><msub><mi>p</mi><mn>2</mn></msub>&hellip;<msub><mi>p</mi><mi>n</mi></msub>
+                        </mfenced>
+                      </mtd>
+                    </mtr>
+                    <mtr>
+                      <mtd><msub><mi>p</mi><mi>i</mi></msub></mtd>
+                      <mtd><mo>&Element;</mo></mtd>
+                      <mtd><mi>m</mi></mtd>
+                    </mtr>
+                    <mtr>
+                      <mtd>
+                        <mo>c</mo><mfenced><msub><mi>p</mi><mn>1</mn></msub><msub><mi>p</mi><mi>n</mi></msub></mfenced>
+                      </mtd>
+                      <mtd><mo>=</mo></mtd>
+                      <mtd>
+                        <munderover>
+                          <mo>&Sum;</mo>
+                          <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                          <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                        </munderover>
+                        <mo>c</mo><mfenced><msub><mi>p</mi><mn>i</mn></msub><msub><mi>p</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></mfenced>
+                      </mtd>
+                    </mtr>
+                  </mtable>
+                </math>
+                <p>This is not a good method for combining probabilities. A more effective method would be to make the cost of a node, <em>n</em>, be the likelihood that str(<em>n</em>) is not generated.</p>
+                <p>In general, if the probability of an event happening is <em>p</em>, the probability of the event not happening is 1 - <em>p</em>. An equation for the cost of a node then would be:</p>
+                <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mtable rowalign="center">
+                    <mtr>
+                      <mtd>
+                        <mo>c</mo><mo>'</mo><mfenced><msub><mi>p</mi><mn>1</mn></msub><msub><mi>p</mi><mi>n</mi></msub></mfenced>
+                      </mtd>
+                      <mtd><mo>=</mo></mtd>
+                      <mtd>
+                        <mn>1</mn><mo>-</mo>
+                        <munderover>
+                          <mo>&Pi;</mo>
+                          <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                          <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                        </munderover>
+                        <mo>c</mo><mfenced><msub><mi>p</mi><mn>i</mn></msub><msub><mi>p</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></mfenced>
+                      </mtd>
+                    </mtr>
+                  </mtable>
+                </math>
+                <p>Since the edges represent probabilities:</p>
+                <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mtable rowalign="center">
+                    <mtr>
+                      <mtd><mn>0</mn></mtd>
+                      <mtd><mo>&leq;</mo></mtd>
+                      <mtd><mo>c</mo><mfenced><msub><mi>p</mi><mn>i</mn></msub><msub><mi>p</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></mfenced></mtd>
+                      <mtd><mo>&leq;</mo></mtd>
+                      <mtd><mn>1</mn></mtd>
+                    </mtr>
+                  </mtable>
+                </math>
+                <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mtable rowalign="center">
+                    <mtr>
+                      <mtd>
+                        <mo>c</mo><mo>'</mo><mfenced><msub><mi>p</mi><mi>i</mi></msub><msub><mi>p</mi><mi>j</mi></msub></mfenced>
+                      </mtd>
+                      <mtd><mo>&leq;</mo></mtd>
+                        <mo>c</mo><mo>'</mo><mfenced><msub><mi>p</mi><mi>i</mi></msub>
+                        <msub><mi>p</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub></mfenced>
+                      <mtd>
+                      </mtd>
+                    </mtr>
+                  </mtable>
+                </math>
+                <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mtable rowalign="center">
+                    <mtr>
+                      <mtd>
+                        <mo>c</mo><mo>'</mo><mfenced><msub><mi>p</mi><mi>i</mi></msub>
+                        <msub><mi>p</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub></mfenced>
+                        <mo>-</mo>
+                        <mo>c</mo><mo>'</mo><mfenced><msub><mi>p</mi><mi>i</mi></msub><msub><mi>p</mi><mi>j</mi></msub></mfenced>
+                      </mtd>
+                      <mtd><mo>&geq;</mo></mtd>
+                      <mtd><mn>0</mn></mtd>
+                    </mtr>
+                  </mtable>
+                </math>
+                <p>Since there are no negative edge costs, uniform cost search should find the optimal path by constantly examining the node with the current least cost path from the root.</p>
+                <p>There are 24 nodes expanded before the goal is found. I won't attempt to draw the search tree because it would be fairly large, but one could be constructed from <a href="search_state.ecbae.out">this output</a> (<a href="search_state.ecbae.out">search_state.ecbae.out</a>). The set of closed nodes and their accompanying probabilities at the end of the search is:</p>
+                <p>[(1.0), E(0.25), EC(0.0625), EE(0.0625), EB(0.0625), EA(0.0625), EAE(0.03125), EBA(0.03125), ECB(0.03125), ECBA(0.015625), EBAE(0.015625), EBC(0.015625), EAC(0.015625), ECE(0.015625), EAB(0.015625), EEE(0.015625), EEC(0.015625), EEA(0.015625), EEB(0.015625), EEBA(0.0078125), EEAE(0.0078125), EECB(0.0078125), EBCB(0.0078125), EABA(0.0078125)]</p>
+                <p>This list is ordered by the point that the node was searched and each entry is the produced string at that point and the accompanying probability of that string. The actual goal node that is found is "&epsilon;CBA&epsilon;" with a probability of 0.0078125. (Assuming the initial &epsilon; has a probability of 0.25.)</p>
+                <p>The program to find the solution is contained in a couple different files:</p>
+                <ul>
+                  <li><a href="SymbolSearch.java">SymbolSearch.java</a> &mdash; Defines the goal test and the node pruning function.</li>
+                  <li><a href="SymbolSearchState.java">SymbolSearchState.java</a> &mdash; Defines common properties about the relationships between nodes in the search space.</li>
+                  <li><a href="AStarSearcher.java">AStarSearcher.java</a> &mdash; Does an A* search on a set of nodes. For this search, the heuristic used was always 0, so A* degrades to uniform cost. (It has nothing to evaluate but the length of the known path.)</li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <div class="question">
+                <p>Find the most likely five-symbol string that starts and ends with with &epsilon;.</p>
+              </div>
+              <div class="answer">
+                <p>The most likely five-symbol string in general starting with &epsilon; ends with &epsilon;, so the answer is the same as the previous question, "&epsilon;CBA&epsilon;."</p>
+              </div>
+            </li>
+          </ol>
+          <div class="question">
+            <p>In transmitting messages from L, some characters may be corrupted by noise and be confused with others. The probability that a transmitted character v<sub>j</sub> will be interpreted as character v<sub>k</sub> is given by the confusion matrix:</p>
+
+            <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+              <mtable rowalign="center">
+                <mtr>
+                  <mtd>
+                    <mo>P</mo>
+                    <mfenced separators="|"><msub><mi>v</mi><mi>k</mi></msub><msub><mi>v</mi><mi>j</mi></msub></mfenced>
+                  </mtd>
+                  <mtd><mo>=</mo></mtd>
+                  <mtd>
+                    <html:table>
+                      <html:tr>
+                        <html:td></html:td>
+                        <html:td></html:td>
+                        <html:td colspan="4"><msub><mi>v</mi><mi>j</mi></msub></html:td>
+                      </html:tr>
+                      <html:tr>
+                        <html:td></html:td>
+                        <html:td></html:td>
+                        <html:td><mi>&epsilon;</mi></html:td>
+                        <html:td><mi>A</mi></html:td>
+                        <html:td><mi>B</mi></html:td>
+                        <html:td><mi>C</mi></html:td>
+                      </html:tr>
+                      <html:tr>
+                        <html:td rowspan="4"><msub><mi>v</mi><mi>i</mi></msub></html:td>
+                        <html:td><mi>&epsilon;</mi></html:td>
+                        <html:td><mn>0.9</mn></html:td>
+                        <html:td><mn>0.1</mn></html:td>
+                        <html:td><mn>0</mn></html:td>
+                        <html:td><mn>0</mn></html:td>
+                      </html:tr>
+                      <html:tr>
+                        <html:td><mi>A</mi></html:td>
+                        <html:td><mn>0.1</mn></html:td>
+                        <html:td><mn>0.8</mn></html:td>
+                        <html:td><mn>0.1</mn></html:td>
+                        <html:td><mn>0</mn></html:td>
+                      </html:tr>
+                      <html:tr>
+                        <html:td><mi>B</mi></html:td>
+                        <html:td><mn>0</mn></html:td>
+                        <html:td><mn>0.1</mn></html:td>
+                        <html:td><mn>0.8</mn></html:td>
+                        <html:td><mn>0.1</mn></html:td>
+                      </html:tr>
+                      <html:tr>
+                        <html:td><mi>C</mi></html:td>
+                        <html:td><mn>0</mn></html:td>
+                        <html:td><mn>0.1</mn></html:td>
+                        <html:td><mn>0.1</mn></html:td>
+                        <html:td><mn>0.8</mn></html:td>
+                      </html:tr>
+                    </html:table>
+                  </mtd>
+                </mtr>
+              </mtable>
+            </math>
+          </div>
+          <ol start="3">
+              <li>
+                <div class="question">
+                  <p>Find the message that most likely to have been transmitted given that the string &epsilon;&epsilon;BCAA&epsilon;&epsilon; is received, and knowing that all messages begin and end with &epsilon;.</p>
+                </div>
+                <div class="answer">
+                  <p>To do this the probability that a given character will be generated needs to be modified. I'm pretty sure a proper application such that would give correct values for the probability would involve an application of Bayes rule, but a workable method is to simply multiply the value. This is the method in <a href="SymbolErrorSearch.java">SymbolErrorSearch.java</a> which comes up with the solution <a href="search_state.eebcaaee.out">EEBCBAEE</a>.</p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Repeat parts (a), (b), and (c) using backtracking search. Does backtracking search generate the same results as uniform cost search? Compare the number of nodes generated and the storage requirement for the two algorithms.</p>
+                </div>
+                <div class="answer">
+                  <p>I am assuming that "backtracking search" is simply depth-first search. Since depth-first search has no guarantee of optimality, it would be necessary for it to search nearly the entire constrained search space (using the node constraining criteria mentioned in part a) to know that it had found the optimal goal.</p>
+                  <p>A best goal cost could be kept and be used to cull paths with a cost greater then that cost.</p>
+                  <p><em>ToDo: write depth-first search.</em></p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Can you think of a reasonable admissible heuristic function h that can be used to generate an A* search to solve the problem in part (c)? State the heuristic, use it to generate the search tree and the solution, and compare results with backtracking and uniform cost search.</p>
+                </div>
+                <div class="answer">
+                  <p>A possible heuristic to estimate the cost to a goal is to assume that no errors were made. Find the cost for the substring remainder of the received string.</p>
+                  <p><em>ToDo: write heuristic.</em></p>
+                </div>
+              </li>
+          </ol>
+      </li>
+      <li>
+        <h2>[20 points] Properties of Heuristic Search.</h2>
+        <ol>
+          <li>
+            <div class="question">
+              <p>
+                Prove that an A* algorithm guided by a monotone (consistent) heuristic finds optimal paths to all expanded nodes, i.e.,
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mo>g</mo><mfenced>n</mfenced><mo>=</mo><msup><mo>g</mo><mo>*</mo></msup><mfenced>n</mfenced><mo>&forall;</mo><mi>n</mi><mo>&in;</mo><mi>CLOSED</mi></math>.
+              </p>
+            </div>
+            <div class="answer">
+              <p>A* defines the following metrics:</p>
+              <ul>
+                <li><em>g</em>(<em>n</em>) &mdash; the best known cost to a node <em>n</em> from the start node <em>s</em></li>
+                <li><em>h</em>(<em>n</em>) &mdash; an estimate of the cost from a node <em>n</em> to a goal node</li>
+                <li><em>f</em>(<em>n</em>) &mdash; the estimate of the cost from <em>s</em> to a goal node on a path which passes through <em>n</em></li>
+                <li><em>f</em>(<em>n</em>) = <em>g</em>(<em>n</em>) + <em>h</em>(<em>n</em>)</li>
+                <li><em>g*</em>(<em>n</em>) &mdash; the minimum cost to a node <em>n</em> from the start node <em>s</em></li>
+                <li><em>c</em>(<em>n<sub>i</sub></em>, <em>n<sub>j</sub></em>) &mdash; the edge cost to a node <em>n<sub>i</sub></em> to a connected node <em>n<sub>j</sub></em></li>
+              </ul>
+              <p>The basic algorithm is an queue of nodes, OPEN, is maintained. The nodes in OPEN are ordered according to their value for <em>f</em>(<em>n</em>) such that each iteration the node with the minimum <em>f</em>-value is:</p>
+              <ol>
+                <li>removed from OPEN</li>
+                <li>placed on a list, CLOSED</li>
+                <li>
+                  its children, <em>n'</em> are expanded (placed onto OPEN) if either:
+                  <ul>
+                    <li><em>n'<sub>i</sub></em> &NotElement; CLOSED</li>
+                    <li><em>g</em>(<em>n'</em>) &gt; <em>g</em>(<em>n</em>) + c(<em>n</em>,<em>n'</em>)</li>
+                  </ul>
+                </li>
+              </ol>
+              <p>The optimality of A* in reaching a goal node was the subject of a previous homework assignment. That proof by induction is:</p>
+              <blockquote>
+                <p>At every step before A* terminates &Exists; <em>n</em> &SuchThat;:</p>
+                <ol>
+                  <li><em>n</em> is on the optimal path to a goal</li>
+                  <li>A* has found the optimal path to <em>n</em></li>
+                  <li><em>f</em>(<em>n</em>) &geq; <em>f</em>(<em>s</em>)</li>
+                </ol>
+                <ol>
+                  <li>
+                    <p>At the beginning of the search, OPEN is initialized to {<em>s</em>}. For each of the assertions:</p>
+                    <ol>
+                      <li>The start node must be on every path, including the optimum one</li>
+                      <li>The optimum path to <em>s</em> is itself which is what A* examines</li>
+                      <li><em>f</em>(<em>s</em>) &leq; <em>f</em>(<em>s</em>)</li>
+                    </ol>
+                  </li>
+                  <li>
+                    <p>Assume after the <em>m</em><sup>th</sup> expansion step the three properties hold for a node, <em>n</em> &in; OPEN that is on the optimal path to the goal.</p>
+                    <p>At the (<em>m</em>+1)st expansion step, one of two things must happen:</p>
+                    <ol>
+                      <li><em>n</em> is picked for expansion</li>
+                      <li>some other node from OPEN is picked for expansion because it currently has a lower <em>f</em>-value.</li>
+                    </ol>
+                    <p>In case (i), <em>n</em> moves from OPEN to CLOSED, but its new successors will be added to OPEN if they haven't been seen previously or have a better cost than previously seen. At least one of these nodes, <em>n'</em> will be on the optimal path to the goal, since the optimal path goes through <em>n</em>, and must continue.</p>
+                    <p>If (ii) holds, <em>n</em> remains &Element; OPEN, and continues to satisfy all three properties.</p>
+                    <p>If we assume there is not an optimal path to <em>n'</em>, then another path to the goal from s through <em>n'</em> does not include <em>n</em> which contradicts our assumption that <em>n</em> is on the optimal path. Therefore, it is clear that the optimal path to the goal through n** must also include <em>n</em>. So from the (<em>m</em>+1)st step <em>n'</em> takes on the role of <em>n</em>.</p>
+                  </li>
+                </ol>
+                <p>To prove that <em>f</em>(<em>n'</em>) &leq; <em>f</em>(<em>s</em>):</p>
+                <ol>
+                  <li><em>f</em>(<em>n'</em>) = <em>g</em>(<em>n'</em>) + <em>h</em>(<em>n'</em>) by definition</li>
+                  <li>
+                    <em>g</em>(<em>n'</em>) + <em>h</em>(<em>n'</em>) &leq; <em>g*</em>(<em>n'</em>) + <em>h*</em>(<em>n'</em>) because:
+                    <ol>
+                      <li><em>h</em>(<em>n'</em>) is admissible and &leq; <em>h*</em>(<em>n'</em>)</li>
+                      <li><em>g</em>(<em>n'</em>) = <em>g*</em>(<em>n'</em>), because <em>n'</em> is on the optimal path</li>
+                    </ol>
+                  </li>
+                  <li><em>g*</em>(<em>n'</em>) + <em>h*</em>(<em>n'</em>) = <em>f*</em>(<em>n'</em>) by definition</li>
+                </ol>
+              </blockquote>
+              <p>Assume that a node that is expanded from OPEN is not the end of an optimum path. If that node is a goal then that contradicts the previously proven optimality of A*,</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>
+                Let
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><mfenced open="" close="">
+                  <msub><mi>n</mi><mn>1</mn></msub>
+                  <msub><mi>n</mi><mn>2</mn></msub>
+                  &hellip;
+                  <msub><mi>n</mi><mi>k</mi></msub>
+                </mfenced></math>
+                be the sequence of nodes expanded by A*. Prove that if <em>h</em> is consistent, then
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mo>f</mo><mfenced><msub><mi>n</mi><mi>i</mi></msub></mfenced><mo>&leq;</mo>
+                  <mo>f</mo><mfenced><msub><mi>n</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></mfenced>
+                </math>
+                for any
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mn>1</mn><mo>&leq;</mo><mi>i</mi><mo>&leq;</mo><mi>k</mi><mo>-</mo><mn>1</mn>
+                </math>.
+              </p>
+            </div>
+            <div class="answer">
+              <p>The A* algorithm in general will always expand the node with the minimum <em>f</em>. To have an element <em>n<sub>k</sub></em> &in; CLOSED &SuchThat; <em>f</em>(<em>n<sub>i</sub></em>) > <em>f</em>(<em>n<sub>i+1</sub></em>) would have required one of two things:</p>
+              <ol>
+                <li><em>g</em>(<em>n<sub>i</sub></em>) or <em>g</em>(<em>n<sub>i+1</sub></em>) would have had to have been updated. To do so would require that <em>g*</em>(<em>n</em>) was not equal to <em>g</em>(<em>n</em>) when the node was originally expanded which contradicts the previous proof or the optimality of expanded nodes.</li>
+                <li>The node <em>g</em>(<em>n<sub>i</sub></em>) was on the OPEN list when <em>g</em>(<em>n<sub>i+1</sub></em>) wasn't and was expanded. In this situation there is a potentially shorter path to <em>n<sub>i</sub></em> through <em>n<sub>i+1</sub></em> which also contradicts the optimality.</li>
+              </ol>
+            </div>
+          </li>
+          <li>If the heuristic function, <em>h</em> is &epsilon;-admissible, then the corresponding A* algorithm is &epsilon;-admissible, that is, the algorithm always finds a solution whose cost does not exceed the optimal cost by more than a factor 1 + &epsilon;.</li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <h2>[20 points] Game Tree Search</h2>
+          <p>Consider the game called Connect Four, which is a vertical game of tic-tac-toe played by two. The players alternately drop red and black pieces onto the vertical board. The board is a 7 x 6, and there are 21 red and 21 black pieces.</p>
+          <p>The first player to get four of his pieces lined up in a row in any direction &mdash; horizontal, vertical, or diagonal &mdash; wins the game.</p>
+          <img alt="Connect Four" style="height: 400px;" src="http://ec1.images-amazon.com/images/P/B00000IWI1.01._SS500_SCLZZZZZZZ_V62971246_.jpg" />
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Discuss representational issues, and analyze the complexity of the state space. Provide a step by step justification for the results that you derive.</p>
+            </div>
+            <div class="answer">
+              <p>A simple representation would be a 6x7 integer array. Use constants to represent red and black. A more space efficient representation night be two bit field. Number the space starting at the top left and go across the rows numbering the cells. One field would have bits flipped for if a spot is occupied and the other would be flipped if the spot was a black piece. The spaces that are occupied could also be represented as seven numbers, one through six representing the height.</p>
+              <p>That representation gives a reasonably good feel for the size of the space because other than winning configurations that stop the came, the pieces can be put in an almost arbitrary configuration. The number of states is 2<sup>6</sup> * 7 - unreachable states because a goal is reached.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Propose a heuristic evaluation function for playing this game. Explain your heuristic function.</p>
+            </div>
+            <div class="answer">
+              <p>The number of pieces in a row. Rows have to be built one element at a time and the more there are, the more chances to win.</p>
+            </div>
+          </li>
+          <li>Assume the player who has black pieces goes first. Generate the game tree to a depth of two (i.e., max at root, min at level 1, and max at level 2). Take into account symmetry so you can keep the branching factor small. Apply your evaluation function to the tip nodes, and perform a minimax search to generate the best move.</li>
+          <li>Repeat the search using alpha-beta cut offs, and comment on the savings, if any.</li>
+          <li>Our goal is to define a two-step search for the best move at any point in the game. For the first step we perform an alpha-beta search up to a fixed pre-defined depth k. Suggest a method for performing the step 2 search that is more focused than the step 1 search. Justify your choice.</li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <h2>[20 points] Constraint Satisfaction Search.</h2>
+          <p>Consider the following logic puzzle: In five houses, each with a different color, live five persons of different nationalities, each of whom prefer a different brand of cigarette, a different drink, and a different pet. Given the following facts, the question to answer is: "Where does the zebra live, and in which house do they drink water?"</p>
+          <ul>
+            <li>The Englishman lives in the red house.</li>
+            <li>The Spaniard owns the dog.</li>
+            <li>The Norwegan lives in the first house on the left.</li>
+            <li>Kools are smoked in the yellow house.</li>
+            <li>The man who smokes Chesterfields lives next to the man with the fox.</li>
+            <li>The Norwegan lives next to the blue house.</li>
+            <li>The Winston smoker owns snails.</li>
+            <li>The Lucky Strike smoker drinks orange juice.</li>
+            <li>The Ukranian drinks tea.</li>
+            <li>The Japanese smokes Parlaiments.</li>
+            <li>Kools are smoked in the house next to the house where the horse is kept.</li>
+            <li>Coffee is drunk in the green house.</li>
+            <li>The green house is immediately to the right of the ivory blue house.</li>
+            <li>Milk is drunk in the middle house.</li>
+          </ul>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Discuss different representations of the problem as a CSP. Why would one prefer one representation over another?</p>
+              <p>The variables would be:</p>
+              <ul>
+                <li>Nationality:</li>
+                <li>Cigarette:</li>
+                <li>Drink:</li>
+                <li>Pet:</li>
+              </ul>
+              <p>The needed representational facets would be:</p>
+              <ul>
+                <li>Arithmetic Functions (the houses are numbered left to right). For example, "The green house is immediately to the right of the ivory blue house." &rArr; position(color(Green)) = position(color(blue)) + 1</li>
+                <li>Conditional Combinations. "The man who smokes Chesterfields lives next to the man with the fox." &rArr; position(smokes(Chesterfields)) = position(pet(Fox)) + 1 or position(pet(Fox)) - 1,</li>
+              </ul>
+              <p>Ideally the constraints would be expressible in a language designed for the task. <a href="pets_and_drinks.prolog">Prolog for example.</a></p>
+            </div>
+          </li>
+          <li>Show part of the constraint graph for this problem, clearly indicating the nodes, and the constraints defined on the arcs.</li>
+          <li>Show the solution to the problems using backtracking, forward checking, at the MRV and least-constraining heuristic. Be sure to indicate which heuristic you are applying to every step of the solution generation process. [ Note: you may also advanced constraint propagation and backjumping techniques. If you do, please mention them, and indicate how you are applying them to the individual steps of your solution.]</li>
+        </ol>
+      </li>
+      <li>
+        <h2>[20 points] Propositional Calculus</h2>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Is the following well-formed formula (WFF) valid? Justify your answer using a truth table.</p>
+              <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mfenced><mrow><mi>P</mi><mo>&or;</mo><mi>Q</mi></mrow></mfenced>
+                <mo>&and;</mo>
+                <mfenced><mrow><mi>Q</mi><mo>&or;</mo><mi>R</mi></mrow></mfenced>
+                <mo>&Implies;</mo>
+                <mfenced><mrow><mi>P</mi><mo>&or;</mo><mi>R</mi></mrow></mfenced>
+              </math>.
+            </div>
+            <div class="answer">
+              <table>
+                <tr>
+                  <th>P</th><th>Q</th><th>R</th>
+                  <th>P&or;Q</th><th>Q&or;R</th><th>(P&or;Q)&and;(Q&or;R)</th>
+                  <th>P&or;R</th><th>(P&or;Q)&and;(Q&or;R)&Implies;P&or;R</th>
+                </tr>
+                <tr><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>T</td></tr>
+                <tr><td>T</td><td>F</td><td>F</td><td>T</td><td>F</td><td>T</td><td>T</td><td>T</td></tr>
+                <tr class="note"><td>F</td><td>T</td><td>F</td><td>T</td><td>T</td><td>T</td><td>F</td><td>F</td></tr>
+                <tr><td>T</td><td>T</td><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+                <tr><td>F</td><td>F</td><td>T</td><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+                <tr><td>T</td><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+                <tr><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+                <tr><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+              </table>
+              <p>From the truth table, we see that when P is false, Q is true and R is false:</p>
+              <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mfenced><mrow><mi>P</mi><mo>&or;</mo><mi>Q</mi></mrow></mfenced>
+                      <mo>&and;</mo>
+                      <mfenced><mrow><mi>Q</mi><mo>&or;</mo><mi>R</mi></mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>&Implies;</mo></mtd>
+                    <mtd><mfenced><mrow><mi>P</mi><mo>&or;</mo><mi>R</mi></mrow></mfenced></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd>
+                      <mfenced><mrow><mn>F</mn><mo>&or;</mo><mn>T</mn></mrow></mfenced>
+                      <mo>&and;</mo>
+                      <mfenced><mrow><mn>T</mn><mo>&or;</mo><mn>F</mn></mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>&Implies;</mo></mtd>
+                    <mtd><mfenced><mrow><mn>F</mn><mo>&or;</mo><mn>F</mn></mrow></mfenced></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd>
+                      <mfenced><mn>T</mn></mfenced><mo>&and;</mo><mfenced><mn>T</mn></mfenced>
+                    </mtd>
+                    <mtd><mo>&Implies;</mo></mtd>
+                    <mtd><mfenced><mn>F</mn></mfenced></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd><mn>T</mn></mtd>
+                    <mtd><mo>&Implies;</mo></mtd>
+                    <mtd><mn>F</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>T &nrArr; F, so the proposition is incorrect.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Use propositional logic to represent the following sentence: "When Fido is hungry, Fido barks, but Fido barking does not necessarily mean that Fido is hungry.</p>
+            </div>
+            <div class="answer">
+              <ul>
+                <li><em>hungry</em> &Implies; <em>barking</em></li>
+                <li><em>barking</em> &nrArr; <em>hungry</em></li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="question"><p>
+              Prove that
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mi>P</mi><mo>&iff;</mo><mi>Q</mi>
+              </math>
+              is logically equivalent to
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mfenced><mrow><mi>P</mi><mo>&or;</mo><mi>Q</mi></mrow></mfenced>
+                <mo>&Implies;</mo>
+                <mfenced><mrow><mi>P</mi><mo>&and;</mo><mi>Q</mi></mrow></mfenced>
+              </math>.
+            </p></div>
+            <div class="answer">
+              <ul>
+                <li>P &iff; Q</li>
+                <li>(P &Implies; Q) &and; (Q &Implies; P) by biconditional elimination</li>
+                <li>(&not;P &or; Q) &and; (&not;Q &or; P) by implication elimination</li>
+                <li>(&not;P &and; (&not;Q &or; P)) &or; (Q &and; (&not;Q &or; P)) by distribution</li>
+                <li>(&not;P &and; &not;Q) &or; (&not;P &or; P) &or; (Q &and; &not;Q) &or; (Q &and; P) by distribution</li>
+                <li>(&not;P &and; &not;Q) &or; (Q &and; P) by definition</li>
+                <li>&not;(P &or; Q) &or; (Q &and; P) by de Morgan's Law</li>
+                <li>(P &or; Q) &Implies; (Q &and; P) by implication elimination</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>In minesweeper, a well-known computer game, the world is a rectangular grid of <em>N</em> squares with <em>M</em> invisible mines scattered among them. Any square may be probed by the agent; instant death follows if a mine is probed. Minesweeper indicates the presence of mines by revealing, in each probed square, the number of mines that are directly or diagonally adjacent. The goal is to have probed every unmined square.</p>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>Let <em>X<sub>i,j</sub></em> be true iff the square [<em>i</em>, <em>j</em>] contains a mine. Write down the assertion that there are exactly two mines adjacent to [1, 1] as a sentence involving some logical combination of <em>X<sub>i,j</sub></em> properties.</p>
+                </div>
+                <div class="answer">
+                  <table class="noborder">
+                    <tr>
+                      <td>two-mines(<em>X<sub>1,1</sub></em>)</td>
+                      <td>=</td>
+                      <td>
+                        (<em>X<sub>1,2</sub></em> &and; <em>X<sub>2,2</sub></em> &and; &not;<em>X<sub>2,1</sub></em>) &or;<br />
+                        (<em>X<sub>1,2</sub></em> &and; &not;<em>X<sub>2,2</sub></em> &and; ;<em>X<sub>2,1</sub></em>) &or;<br />
+                        (&not;<em>X<sub>1,2</sub></em> &and; <em>X<sub>2,2</sub></em> &and; <em>X<sub>2,1</sub></em>)
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>Generalize the assertion from (a) by explaining how to construct a conjunctive normal form (CNF) sentence asserting <em>k</em> of <em>n</em> neighbors contain mines.</p>
+                </div>
+                <div class="answer">
+                  <p>Make a <em>(n - k)!</em>x<em>n</em> matrix where each of the <em>n</em> neighbors of the cell are listed in each of the <em>(n - k)!</em> rows. Make one statement out of the matrix by &and;ing all the elements within the rows and &or;ing the rows together. The rows should them be all the possible permutations of &not; and &not;&not;. The resultant statement will be the proper conjunctive normal form.</p>
+                </div>
+              </li>
+              <li>Explain precisely how an agent can use the Davis-Putnam algorithm (DPLL) or Resolution-Refutation to prove a given square does or does not contain a mine, ignoring the global constraint there are <em>M</em> mines in all.</li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20000629//EN"
+ "http://www.w3.org/TR/2000/CR-SVG-20001102/DTD/svg-20001102.dtd">
+<svg viewBox="0 0 150 100" style="enable-background: new;"
+ xmlns="http://www.w3.org/2000/svg"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+  <desc>Text with drop shadow</desc>
+  <defs>
+    <filter id="dropShadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1"/>
+      <feOffset dx="1" dy="1"/>
+    </filter>
+    <filter id="emboss">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur"/>
+      <feSpecularLighting in="blur" surfaceScale="30" specularConstant="1"
+       specularExponent="1" style="lighting-color:white" lightColor="white"
+       result="specOut">
+        <fePointLight x="-500" y="-1000" z="2000"/>
+      </feSpecularLighting>
+      <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut"/>
+      <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic"
+       k1="0" k2="1" k3="1" k4="0" result="litPaint"/>
+    </filter>
+    <filter id="raise">
+      <feGaussianBlur in="SourceAlpha" stdDeviation=".5"/>
+      <feSpecularLighting surfaceScale="1" specularConstant="1"
+       specularExponent=".5" result="spec">
+        <fePointLight x="-100" y="100" z="0"/>
+      </feSpecularLighting>
+      <feOffset dx="1" dy="1"/>
+      <feGaussianBlur stdDeviation=".5" result="shadow"/>
+    </filter>
+    <text id="text"
+     style="font-size:15; font-weight:bold; text-anchor:middle;">
+      Drop Shadow Test
+    </text>
+  </defs>
+  <use xlink:href="#text" x="75" y="50" style="filter: url(#dropShadow)"/>
+  <use xlink:href="#text" x="75" y="50" style="fill: black; filter: url(#emboss)"/>
+  <use xlink:href="#text" x="75" y="75" style="fill: black; filter: url(#raise)"/>
+  <use xlink:href="#text" x="75" y="75" style="fill: black;"/>
+<!-- -->
+</svg>
+

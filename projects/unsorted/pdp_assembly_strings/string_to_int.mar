@@ -1,0 +1,97 @@
+ERRORC = ^XFFFFFFFF
+SPACE  = ^X20
+TAB    = ^X9
+SPACE  = ^X20
+
+.macro skip_whitespace buffer, ?next, ?incriment, ?end
+  next:
+    bwhitespace buffer, incriment
+    brb end
+  incriment:
+    incl buffer
+    brb next
+  end:
+.endm
+
+.macro bwhitespace char, branch, ?found, ?end
+    bequal (char), #SPACE, found
+    bequal (char), #TAB, found
+    brb end
+  found:
+    jmp branch
+  end:
+.endm
+  
+.macro bequal one, two, branch, ?end
+    cmpb one, two
+    bneq end
+    jmp branch
+  end:
+.endm
+
+.macro bdigit char, branch, ?end
+    cmpb (char), #^A/0/
+    blss end
+    cmpb (char), #^A/9/
+    bgtr end
+    jmp branch
+  end:
+.endm
+
+.macro toggle_sign sign, ?negative, ?end
+    cmpb sign, #^A/-/
+    beql negative
+    movb #^A/-/, sign
+    brb end
+  negative:
+    movb #^A/+/, sign
+  end:
+.endm
+
+sign:  .byte ^A/+/
+
+.entry string_to_int, ^m<R2, R3, R4>
+.show meb
+    movb #^A/+/, sign
+    movl 8(AP), R2
+    incl R2        ; beginning of the string
+    clrl R0        ; for accumulating the int
+
+  begin_number:
+    skip_whitespace R2
+    bdigit R2, begin_digits
+    bequal (R2), #^A/+/, plus
+    bequal (R2), #^A/-/, minus
+    brw error
+
+  minus:
+    toggle_sign sign
+  plus:
+    incl R2
+    brw begin_number
+
+  begin_digits:
+  next_digit:
+    bdigit R2, get_digit
+    brb error
+
+  get_digit:
+    clrl R3
+    subb3 #^A/0/, (R2)+, R3
+    addl  R3, R0
+    skip_whitespace R2
+    bequal (R2), #0, number_ended
+    mull #10, R0
+    brb next_digit
+
+  number_ended:
+    bequal #^A/+/, sign, end
+    mnegl R0, R0
+    brb   end
+
+  error:
+    movl #ERRORC, R0
+  end:
+    movl R0, 4(AP)
+    ret
+.end

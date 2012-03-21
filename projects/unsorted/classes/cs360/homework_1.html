@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>CS-360 Homework #1</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <base href="http://odin.himinbi.org/classes/cs360/" />
+    <style type="text/css">
+      .puzzle, .puzzle caption { caption-side: bottom; margin-left: 1.5em; }
+      .puzzle td { border: 2px solid; padding: .25em .75em; }
+      .question .puzzle { float: left; }
+      #puzzles .puzzle td { border: 2px solid; padding: 0 .2em; }
+      #puzzles .puzzle, #puzzles .puzzle caption { margin: 0 auto; }
+      #puzzles .puzzle caption { height: 2em; }
+      #puzzles > tbody > tr > td { padding: 0 .25em; }
+      #puzzles { font-size: 9pt; }
+      @media print {
+        #puzzles { margin-left: -5em; }
+      }
+      .nodeedge { border-right: 2px solid; }
+      #dfs-graph { height: 300px; width: 100%; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 360: Introduction to Artificial Intelligence</h1>
+      <h2>Homework Problems #1</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>25 September 2007</h2>
+    </div>
+    <blockquote>
+      <h2>Instructions:</h2>
+      <p>If anything is ambiguous or unclear:</p>
+      <ol>
+        <li>Discuss possible interpretations with other students, your TA, and instructor</li>
+        <li>Make assumptions, state them explicitly, and then use them to work out the problem</li>
+        <li>Send e-mail to your TA first, and to your instructor if an issue is not resolved to your satisfaction.</li>
+      </ol>
+      <p><em>Remember that after general discussions with others, you are required to work out the problems by yourself. All submitted work must be your own. Please refer back to the Honor code for clarifications.</em></p>
+      <h2>Important:</h2>
+      <ul>
+        <li>Write legibly, be sure to staple all your answer sheets together, and write your name, section number, and the honor pledge on the top of the first answer sheet.</li>
+        <li>Start early, and avoid last minute stress!</li>
+      </ul>
+    </blockquote>
+    
+    <ol>
+      <li>
+        <div class="question">
+          <p>The female solitary wasp, <i>Sphex</i>, lays her eggs in a cricket that she has paralyzed and brought to her burrow nest. The wasp grubs hatch and then feed on this cricket. According to [Wooldridge 1968, p. 70]<sup><a class="footnoteref" href="#wooldridge68">1</a></sup> the wasp exhibits the following interesting behavior:</p>
+          <blockquote>
+            <p>The wasp’s routine is to bring the paralyzed cricket to the burrow, leave it on the threshold, go inside to see if all is well, emerge, and then drag the cricket in. If the cricket is moved a few inches away when the wasp is inside making her preliminary inspection, the wasp, on emerging from the burrow, will bring the cricket back to the threshold, but not inside, and will repeat the preparatory procedure of entering the burrow to see that everything is all right. If again the cricket is moved a few inches when the wasp is inside, once again she will move the cricket up to the threshold, and reenter the burrow for her final check &hellip; On one occasion this procedure was repeated 40 times all with the same result.</p>
+          </blockquote>
+          <p>Come up with a set of features, actions, and a production system that models this behavior of the wasp.</p>
+        </div>
+        <div class="answer">
+          <p>The state representation can be represented with the form: <code>c:&lt;<em>n</em>|<em>f</em>|<em>b</em>&gt;|b:&lt;<em>u</em>|<em>e</em>&gt;</code> where:</p>
+          <ul>
+            <li>
+              <strong>c</strong> represents the location of the cricket and it is either:
+              <ul>
+                <li><strong>n</strong>: "near" to the entrance to the burrow</li>
+                <li><strong>f</strong>: "far" from the entrance to the burrow</li>
+                <li><strong>b</strong>: within the "burrow"</li>
+              </ul>
+            </li>
+            <li>
+              <strong>b</strong> represents the state of the burrow and it is either:
+              <ul>
+                <li><strong>u</strong>: "unexamined"</li>
+                <li><strong>e</strong>: "examined"</li>
+              </ul>
+            </li>
+          </ul>
+          <p>The legal transitions then would be: (&gt; marks the start node and * marks goal nodes)</p>
+          <table class="bordered">
+            <tr>
+              <th>Origin State</th>
+              <th>Action</th>
+              <th>Destination State</th>
+            </tr>
+            <tr>
+              <td rowspan="2">&gt;c:n|b:u</td>
+              <td rowspan="2">Examine Burrow</td>
+              <td>c:f|b:e</td>
+            </tr>
+            <tr>
+              <td>c:n|b:e</td>
+            </tr>
+            <tr>
+              <td>c:f|b:e</td>
+              <td>Bring Cricket Back</td>
+              <td>c:n|b:u</td>
+            </tr>
+            <tr>
+              <td>c:n|b:e</td>
+              <td>Bring Cricket Inside</td>
+              <td>*c:b|b:e</td>
+            </tr>
+          </table>
+        </div>
+      </li>
+      <li>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Select the state space representation, operators/actions, goal test, and path cost for the eight queens problem: Place 8 queens on a standard chessboard, such that each row, column, and diagonal contains no more than one queen. Make sure that the formulation is precise enough to be implemented. Generate the sequence of actions that leads to the solution.</p>
+            </div>
+            <div class="answer">
+              <p>Russel and Norvig in <u>Artificial Intelligence</u> mention than a useful constraint on the problem is to keep in mind each queen must be limited to one of the eight rows. So a state representation could be &lt;r<sub>1</sub>,r<sub>2</sub>,&hellip;,r<sub>8</sub>&gt; where each 1 &le; <em>r<sub>i</sub></em> &le; 8 is the column the piece in row <em>i</em>.</p>
+              <p>The goal state will need for each queen to be unique on three axes. For a given <em>r<sub>i</sub></em> with value <em>x</em> and <em>r<sub>j</sub></em> with value <em>y</em> such that <em>i</em> &ne; <em>j</em>:</p>
+              <ul>
+                <li>The uniqueness of columns is handled by the state representation.</li>
+                <li>The uniqueness of rows means that there does not exist <em>r<sub>j</sub></em> such that <em>r<sub>i</sub></em> = <em>r<sub>j</sub></em>.</li>
+                <li>The diagonal being unique means there does not exist a <em>r<sub>j</sub></em> such that <em>i</em> - <em>j</em> = <em>x</em> - <em>y</em></li>
+              </ul>
+              <p>One workable algorithm is based on incrementally building the goal state. It adds to the state a factor <em>n</em> which represents the current column under consideration. The start state is 1:&lt;1,&#x2205;,&#x2205;,&#x2205;,&#x2205;,&#x2205;,&#x2205;,&#x2205;&gt;. There are then two options for state transitions:</p>
+              <ul>
+                <li>If <em>r<sub>n + 1</sub></em> is &#x2205; and there exists an <em>r<sub>n + 1</sub></em> that meets the criteria for a goal state, set <em>r<sub>n + 1</sub></em> to the minimum valid value and set <em>n</em> to <em>n</em> + 1. If <em>n</em> + 1 is 8, the current state is a valid goal.</li>
+                <li>If <em>r<sub>n + 1</sub></em> is not &#x2205; and there exists a valid value <em>r<sub>n + 1</sub></em> greater than the current value set <em>r<sub>n + 1</sub></em> to that value.</li>
+                <li>If <em>r<sub>n + 1</sub></em> is not &#x2205; and there does not exist a valid value <em>r<sub>n + 1</sub></em> greater than the current value then set <em>r<sub>n + 1</sub></em> = &#x2205; and <em>n</em> = <em>n</em> - 1. If <em>n</em> - 1 = 0 then there is no valid solution.</li>
+              </ul>
+              <p>This algorithm is a depth-first search of the state space using backtracking rather than saving the state. An optimization if there was sufficient memory might be to save a 8x8 boolean matrix and simply mark the invalid positions on the board.</p>
+              <p><a href="place_queens.py">This program</a> implements that algorithm (though it currently doesn't quite work).</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>You have to color a planar map using only four colors, in such a way as no two adjacent regions have the same color. Give the initial state, goal test, successor function and cost function in a precise enough specification it could be implemented.</p>
+            </div>
+            <div class="answer">
+              <p>The graph coloring can be represented as a tuple with <em>n</em> elements where each <em>c<sub>i</sub></em> is a number 1-4. The borders are represented in a <em>n</em>x<em>n</em> adjacency matrix where if there is a 1 at element <em>x</em>,<em>y</em> it means there is a border between <em>c<sub>x</sub></em> and <em>c<sub>y</sub></em>.</p>
+              <p>The initial state could be to set all the colors to the same. All permutations of the tuple could then be identified and tested against the adjacency matrix as a solution. This is likely the least efficient solution possible, but it will work. There could certainly be greater efficiency found in constraining the state space further, but time is pressing.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Three missionaries and three cannibals come to a river. There is a boat on their side of the river that can take either one or two persons across the river at one time. How should they use the boat to cross the river in such a way that the cannibals never outnumber missionaries on either side of the river? Apply breadth-first search to this problem to find the shortest solution.</p>
+            </div>
+            <div class="answer">
+              <p>To help in defining the graph, two things are needed:</p>
+              <ol>
+                <li>
+                  <p><strong>State Representation</strong>: <code><em>shore</em>:<em>near count</em>:<em>far count</em></code> where:</p>
+                  <ol>
+                    <li><strong>shore</strong> is either <code>n</code> for "near" or <code>f</code> for "far"</li>
+                    <li><strong>count</strong> has the structure <code><em>x</em>m<em>y</em>c</code> where <em>x</em> is the number of missionaries and <em>y</em> is the number of cannibals</li>
+                  </ol>
+                  <p>So, for example, the initial state is <code>n:3m3c:0m0c</code> meaning the boat is on the near bank, there are 3 missionaries and 3 cannibals on the near bank, and there are 0 on the far bank.</p>
+                  <p>From the problem definition, illegal states are those where, for <code><em>x</em>m<em>y</em>c</code>, <em>x</em> &lt; <em>y</em>.</p>
+                </li>
+                <li>
+                  <p><strong>Edge Representation</strong>: <code><em>x</em>m<em>y</em>c</code> where <em>x</em> is the number of missionaries in the boat and <em>y</em> is the number of cannibals.</p>
+                </li>
+              </ol>
+              <p>Rather than do the search by hand, I wrote a <a href="cannibals.py">short script</a> to do the search. The breadth-first solution had the following output:</p>
+              <iframe src="cannibals.out"></iframe>
+              <p>So, the solution is:</p>
+              <ol>
+                <li><code>n:3m3c:0m0c + 0m2c</code></li>
+                <li><code>f:3m1c:0m2c + 0m1c</code></li>
+                <li><code>n:3m2c:0m1c + 0m2c</code></li>
+                <li><code>f:3m0c:0m3c + 0m1c</code></li>
+                <li><code>n:3m1c:0m2c + 2m0c</code></li>
+                <li><code>f:1m1c:2m2c + 1m1c</code></li>
+                <li><code>n:2m2c:1m1c + 2m0c</code></li>
+                <li><code>f:0m2c:3m1c + 0m1c</code></li>
+                <li><code>n:0m3c:3m0c + 0m2c</code></li>
+                <li><code>f:0m1c:3m2c + 0m1c</code></li>
+                <li><code>n:0m2c:3m1c + 0m2c</code></li>
+                <li><code>f:0m0c:3m3c</code></li>
+              </ol>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Is it a good idea to check for repeated states? Draw a diagram of the state space to help you decide.</p>
+            </div>
+            <div class="answer">
+              <p>Yes, repeated states should be avoided. They will significantly increase the size of the tree since the states are reversible by simply sending the people that just came across back. Because the search is breadth first or iterative deepening depth first, the shallowest solution will always be found.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Repeat the solution for Iterative Deepening DFS, and compare the results.</p>
+            </div>
+            <div class="answer"> 
+              <p>Iterative deepening is implemented in the <a href="cannibals.py">same script</a>. From <a href="cannibals.out">the output</a> one can see that there were significantly more nodes visited in the deepening search. This is because the branching factor is relatively small and the solution fairly deep. The solution that is found is identical however.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Show that iterative lengthening search is optimal for general path costs</p>
+            </div>
+            <div class="answer">
+              <p>Uniform-cost simply iteratively examines the unexplored node closest to the start node. Iterative lengthening is uniform-cost search which is run multiple times with an increasing bound on the maximum cost from the start to reach before quitting.</p>
+              <p>Iterative lengthening search doesn't have advantages in the same way iterative deepening depth-first search does. Iterative lengthening will simply search the same nodes each time adding more at the end since the first closest node, second closest node, etc. is invariant. All that iterative lengthening does is require the algorithm to restart repeatedly before finding a solution.</p>
+              <p>The optimality of iterative lengthening is straightforward from the concept that a solution is found when the set of explored nodes includes an element from the set of goal nodes. By the definition, the explored nodes are the closest nodes to the start node so the first goal encountered must be at least as close as any other goal node.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Consider a uniform tree with branching factor <em>b</em>, solution depth <em>d</em>, and unit step costs. How many iterations will iterative deepening require?</p>
+            </div>
+            <div class="answer">
+              <p>With uniform costs, uniform-cost search runs through nodes in the same order as breadth-first search. So the progression would go:</p>
+              <ul>
+                <li>First Iteration: <em>b</em> nodes</li>
+                <li>Second Iteration: <em>b</em> + <em>b</em><sup>2</sup></li>
+                <li>Goal Iteration: <em>b</em> + <em>b</em><sup>2</sup> + &hellip; + <em>b</em><sup>d</sup> / 2. (Assuming that a goal node is found, on average, halfway through the search of that depth.)</li>
+              </ul>
+              <p>All of those runs must then be added together for the <em>d</em> times it runs, so the final node count is:</p>
+              <p><em>db</em> + (<em>d</em> - 1)(<em>b</em><sup>2</sup>) + &hellip; + <em>b</em><sup>d</sup> / 2</p>
+              <p>This is O(<em>b<sup>d</sup></em>)</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Consider step costs drawn from the continuous range [0,1] with a minimum positive cost &epsilon;. How many iterations are required in the worst case?</p>
+            </div>
+            <div class="answer">
+              <p>The worst cast is the limit starts at the minimum, 0, and increments by the minimum, &epsilon;, until it is <em>d</em>. The number of iterations required to do this is (<em>d</em> - 0) / &epsilon;.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Consider an implementation of iterative lengthening length search. How does the algorithm's performance compare to uniform-cost search?</p>
+            </div>
+            <div class="answer">
+              <p>As mentioned at the outset, the algorithm simply requires <em>k</em> uniform-cost searches where each iteration simply expands the boundary for closest nodes examined. It does not change the search ordering of the nodes. The <em>n</em><sup>th</sup> closest node will always be the <em>n</em><sup>th</sup> closest node regardless of the cost limit.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Prove that uniform-cost search and breadth-first search with constant step costs are optimal when used with the <code>graph-search</code> algorithm.</p>
+            </div>
+            <div class="answer">
+              <p>Uniform-cost search with constant step costs is identical to breadth-first search. (Since all nodes at a given depth are the same cost from the start node, so they will all have to be explored before moving to the next depth.)</p>
+              <p>The way that switching from tree-search to graph-search could make the search non-optimal would be if a node that is a part of the optimal path ended up on the closed list. (And so the optimal path that included that node would not be considered.) This is not possible because for each node <em>n</em>, <em>n</em> will only be explored if the path to its parent that is, by definition the shortest route to <em>n</em> possible. If there was a shorter route to <em>n</em> that would already have been taken and <em>n</em> would already be on the closed list.</p>
+              <p>Since the path to each node on the path to the goal node is a minimum and the goal is the closest goal found then the solution mush to optimum.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Show a state space with constant step costs in which <code>graph-search</code> using iterative deepening finds a suboptimal solution.</p>
+            </div>
+            <div class="answer">
+              <p>Consider the following state diagram (which represents a graph, it is drawn as a tree to simplify understanding the depth-first search):</p>
+              <object id="dfs-graph" type="image/svg+xml" data="graph_based_dfs_error.svg"></object>
+              <p>The iteration of depth-first searches and the "closed" list of searched nodes will progress like this:</p>
+              <table class="bordered">
+                <tr><th>Iteration</th><th>Node Search Order</th><th>Closed List</th></tr>
+                <tr><td>1</td><td>Start, N1, N2</td><td>Start</td></tr>
+                <tr><td>2</td><td>Start, N1, N2, N2</td><td>Start, N1</td></tr>
+                <tr><td>3</td><td>Start, N1, N2, N3, N2</td><td>Start, N1, N2</td></tr>
+                <tr><td>4</td><td>Start, N1, N2, N3, *N4</td><td>Start, N1, N2, N3</td></tr>
+              </table>
+              <p>Because N2 goes on the closed list while searching the left-hand subtree, a shallower solution is missed in the right-hand subtree.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Suppose actions can have arbitrarily large negative costs; explain why this possibility would force and optimal algorithm to explore the entire state space.</p>
+            </div>
+            <div class="answer">
+              <p>Because you never know if an unexplored node will have a negative path to the goal that, when combined with the cost of getting to that node, will make the total cost less than any possible best cost. So, every node must be explored.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Does it help if we insist that step costs must be greater than or equal to some negative constant <em>c</em>? Consider both trees and graphs.</p>
+            </div>
+            <div class="answer">
+              <p>For a tree, if the number of nodes is known then the number of nodes remaining to be searched can be known. For <em>n</em> remaining nodes, there are <em>n</em> remaining transitions, if each transition had a cost of -<em>k</em> then the total negative cost will be -<em>nk</em>. If the current cost is <em>nk</em> greater than the best cost to a goal then further exploration can't produce a better path.</p>
+              <p>With an arbitrary graph, any set of nodes, even a single node can contain a cycle that is negative and that could be traversed however often is necessary to lower the cost below the current best.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Suppose there is a set of operators that form a loop, so that executing the set in some order results in no net change to the state. If all these operators have negative cost, what does this imply about the optimal behavior for an agent in such an environment?</p>
+            </div>
+            <div class="answer">
+              <p>The agent seeking to find a minimal cost path will simply loop forever.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>One can easily imagine multiple operators with high negative cost, even in domains such as route finding. For example, some stretches of road might have such beautiful scenery as to outweigh the normal costs in terms of time and fuel. Explain, in precise terms, within the context of state-space search, why humans do not drive around scenic routes indefinitely, and explain how to define the state space and operators for route finding so that artificial agents can also avoid looping.</p>
+            </div>
+            <div class="answer">
+              <p>One possible option is to define the state space such that once a scenic route has a negative cost, but once you've taken it you end up in a new state with all the same connections as the previous state save the scenic route. It is also possible that the state space could contain other factors such as available time or available gas. The weighting on various factors could be non-linear such that when I've got lots of free time it is about equal with gas and scenery, but as it approached zero it begins to dominate the combination.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Can you think of a real domain in which step costs are such as to cause looping?</p>
+            </div>
+            <div class="answer">
+              <p>Tooth brushing. Each transition I take by eating a meal takes me a little toward the state of all my teeth falling out. There is a negative cost (where the path is total tooth decay) associated with brushing my teeth. On a daily basis this means plays out as regular brushing.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>Apply a depth-limited search algorithm (depth limit <i>l=3</i>) to find the solution to the following 8-puzzle problem. When generating the successors for a particular state assume the operators are always applied in the following order: left, down, right, and up.</p>
+          <table class="puzzle">
+            <caption>Unsolved 8-puzzle</caption>
+            <tr><td>3</td><td>1</td><td>2</td></tr>
+            <tr><td>4</td><td>7</td><td>5</td></tr>
+            <tr><td>6</td><td></td> <td>8</td></tr>
+          </table>
+          <table class="puzzle">
+            <caption>Solved 8-puzzle</caption>
+            <tr><td></td> <td>1</td><td>2</td></tr>
+            <tr><td>3</td><td>4</td><td>5</td></tr>
+            <tr><td>6</td><td>7</td><td>8</td></tr>
+          </table>
+        </div>
+        <div class="answer">
+          <table id="puzzles">
+            <tr>
+              <td colspan="12" class="nodeedge">
+                <table class="puzzle">
+                  <caption>Unsolved</caption>
+                  <tr><td>3</td><td>1</td><td>2</td></tr>
+                  <tr><td>4</td><td>7</td><td>5</td></tr>
+                  <tr><td>6</td><td></td> <td>8</td></tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="nodeedge">
+                <table class="puzzle">
+                  <caption>8 &larr;</caption>
+                  <tr><td>3</td><td>1</td><td>2</td></tr>
+                  <tr><td>4</td><td>7</td><td>5</td></tr>
+                  <tr><td>6</td><td>8</td><td></td></tr>
+                </table>
+              </td>
+              <td colspan="8" class="nodeedge">
+                <table class="puzzle">
+                  <caption>7 &darr;</caption>
+                  <tr><td>3</td><td>1</td><td>2</td></tr>
+                  <tr><td>4</td><td></td> <td>5</td></tr>
+                  <tr><td>6</td><td>7</td><td>8</td></tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" class="nodeedge">
+                <table class="puzzle">
+                  <caption>5 &darr;</caption>
+                  <tr><td>3</td><td>1</td><td>2</td></tr>
+                  <tr><td>4</td><td>7</td><td></td></tr>
+                  <tr><td>6</td><td>8</td><td>5</td></tr>
+                </table>
+              </td>
+              <td class="nodeedge">
+                <table class="puzzle">
+                  <caption>8 &rarr; (repeat)</caption>
+                  <tr><td>3</td><td>1</td><td>2</td></tr>
+                  <tr><td>4</td><td>7</td><td>5</td></tr>
+                  <tr><td>6</td><td></td> <td>8</td></tr>
+                </table>
+              </td>
+              <td colspan="3" class="nodeedge">
+                <table class="puzzle">
+                  <caption>5 &larr;</caption>
+                  <tr><td>3</td><td>1</td><td>2</td></tr>
+                  <tr><td>4</td><td>5</td><td></td></tr>
+                  <tr><td>6</td><td>7</td><td>8</td></tr>
+                </table>
+              </td>
+              <td colspan="3" class="nodeedge">
+                <table class="puzzle">
+                  <caption>1 &darr;</caption>
+                  <tr><td>3</td><td></td> <td>2</td></tr>
+                  <tr><td>4</td><td>1</td><td>5</td></tr>
+                  <tr><td>6</td><td>7</td><td>8</td></tr>
+                </table>
+              </td>
+              <td colspan="3" class="nodeedge">
+                <table class="puzzle">
+                  <caption>4 &rarr;</caption>
+                  <tr><td>3</td><td>1</td><td>2</td></tr>
+                  <tr><td></td> <td>4</td><td>5</td></tr>
+                  <tr><td>6</td><td>7</td><td>8</td></tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table class="puzzle">
+                  <caption>2 &darr;</caption>
+                  <tr><td>3</td><td>1</td><td></td></tr>
+                  <tr><td>4</td><td>7</td><td>2</td></tr>
+                  <tr><td>6</td><td>8</td><td>5</td></tr>
+                </table>
+              </td>
+              <td>
+                <table class="puzzle">
+                  <caption>7 &rarr;</caption>
+                  <tr><td>3</td><td>1</td><td>2</td></tr>
+                  <tr><td>4</td><td></td> <td>7</td></tr>
+                  <tr><td>6</td><td>8</td><td>5</td></tr>
+                </table>
+              </td>
+              <td class="nodeedge">
+                <table class="puzzle">
+                  <caption>5 &uarr; (repeat)</caption>
+                  <tr><td>3</td><td>1</td><td>2</td></tr>
+                  <tr><td>4</td><td>7</td><td>5</td></tr>
+                  <tr><td>6</td><td>8</td><td></td></tr>
+                </table>
+              </td>
+              <td class="nodeedge"></td>
+              <td>
+                <table class="puzzle">
+                  <caption>2 &darr;</caption>
+                  <tr><td>3</td><td>1</td><td></td></tr>
+                  <tr><td>4</td><td>5</td><td>2</td></tr>
+                  <tr><td>6</td><td>7</td><td>8</td></tr>
+                </table>
+              </td>
+              <td>
+                <table class="puzzle">
+                  <caption>5 &rarr; (repeat)</caption>
+                  <tr><td>3</td><td>1</td><td>2</td></tr>
+                  <tr><td>4</td><td></td> <td>5</td></tr>
+                  <tr><td>6</td><td>7</td><td>8</td></tr>
+                </table>
+              </td>
+              <td class="nodeedge">
+                <table class="puzzle">
+                  <caption>8 &uarr;</caption>
+                  <tr><td>3</td><td>1</td><td>2</td></tr>
+                  <tr><td>4</td><td>5</td><td>8</td></tr>
+                  <tr><td>6</td><td>7</td><td></td></tr>
+                </table>
+              </td>
+              <td>
+                <table class="puzzle">
+                  <caption>2 &larr;</caption>
+                  <tr><td>3</td><td>2</td><td></td></tr>
+                  <tr><td>4</td><td>1</td><td>5</td></tr>
+                  <tr><td>6</td><td>7</td><td>8</td></tr>
+                </table>
+              </td>
+              <td>
+                <table class="puzzle">
+                  <caption>3 &rarr;</caption>
+                  <tr><td></td> <td>3</td><td>2</td></tr>
+                  <tr><td>4</td><td>1</td><td>5</td></tr>
+                  <tr><td>6</td><td>7</td><td>8</td></tr>
+                </table>
+              </td>
+              <td class="nodeedge">
+                <table class="puzzle">
+                  <caption>1 &uarr; (repeat)</caption>
+                  <tr><td>3</td><td>1</td><td>2</td></tr>
+                  <tr><td>4</td><td></td><td>5</td></tr>
+                  <tr><td>6</td><td>7</td><td>8</td></tr>
+                </table>
+              </td>
+              <td>
+                <table class="puzzle">
+                  <caption>4 &larr; (repeat)</caption>
+                  <tr><td>3</td><td>1</td><td>2</td></tr>
+                  <tr><td>4</td><td></td> <td>5</td></tr>
+                  <tr><td>6</td><td>7</td><td>8</td></tr>
+                </table>
+              </td>
+              <td class="nodeedge">
+                <table class="puzzle">
+                  <caption>3 &darr; (goal)</caption>
+                  <tr><td></td> <td>1</td><td>2</td></tr>
+                  <tr><td>3</td><td>4</td><td>5</td></tr>
+                  <tr><td>6</td><td>7</td><td>8</td></tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </li>
+    </ol>
+    <hr />
+    <p class="footnote" id="wooldridge68"><sup>1</sup>D. Wooldridge, <cite>Mechanical Man: The Physical Basis of Intelligent Life</cite>. Mc-Graw Hill, New York, NY, 1968.</p>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+RewriteEngine on
+RewriteOptions inherit
+
+RewriteCond %{REQUEST_URI} ^/gallery
+RewriteRule ^(.*)$ http://odin.himinbi.org%{REQUEST_URI} [R,L]
+
+RewriteCond %{REMOTE_ADDR} !^10\.
+RewriteCond %{REMOTE_ADDR} !^192\.168\.
+RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.
+RewriteCond %{SERVER_NAME} !^ebene
+RewriteCond %{REMOTE_ADDR} !^::1
+RewriteCond %{SERVER_NAME} !^www\.holcomb\.info$ [NC]
+
+RewriteRule ^(.*)$ http://www.holcomb.info%{REQUEST_URI} [R,L]

@@ -1,0 +1,53 @@
+div#dynamic-menu div#menu-dragbar a {
+  color: maroon;
+  background-color: gold;
+}
+
+div#dynamic-menu div#menu-dragbar a:hover {
+  color: gold;
+  background-color: maroon;
+}
+
+div#dynamic-menu div a {
+  color: purple;
+  background-color: gold;
+}
+
+div#dynamic-menu div a:hover {
+  color: gold;
+  background-color: purple;
+}
+
+div#dynamic-menu {
+  /* Fallback on absolute if fixed is not supported */
+  position: absolute;
+  position: fixed;
+  top: 10%;
+  left: 0px;
+}
+
+div#dynamic-menu a {
+  border: solid;
+  border-width: 1px;
+  text-decoration: none;
+  display: block;
+  padding: 3px 5px;
+  /* top, right, bottom, left */
+  margin: 2px 5px 2px 1px;
+}
+
+div#dynamic-menu div#menu-dragbar a {
+  position: absolute;
+  left: 100%;
+  top: 25%;
+  text-align: center;
+  cursor: help;
+  /* Mozilla .9.4 bug doesn't get width right */
+  width: 18px;
+}
+        
+div#dynamic-menu div.sub a {
+  /* The original margin-left was 1px */
+  margin-left: 21px;
+  margin-top: 0px;
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Types of Menus</title>
+    <link rel="stylesheet" href="../styles/main.css" type="text/css" />
+    <link rel="stylesheet" href="meyermenu_appearance.css" type="text/css" />
+    <link rel="stylesheet" href="dynamic_menu.css" type="text/css" />
+<!--
+    <link rel="stylesheet" title="Centered Menu" href="menu_center.css" type="text/css" />
+    <link rel="alternate stylesheet" title="Top Aligned Menu" href="menu_top.css" type="text/css" />
+    <link rel="alternate stylesheet" title="Flat Menu" href="menu_flat.css" type="text/css" />
+-->
+
+    <!--[if lt IE 7]>
+    <style type="text/css">
+      #dynamicmenu { position: absolute; top: 10%; }
+      #dynamicmenu li { margin: 0; padding: 0;
+        border: 1px solid #FEF; /* without this border there is 1em space under each element */
+      }
+    </style>
+    <![endif]-->
+
+    <style type="text/css">
+      #menudisplay { height: 16em; overflow: hidden; border: 2px solid; }
+      html { margin-left: 2em; }
+      li { }
+    </style>
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript" src="menu.js"></script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body onload="controller = new MenuController('dynamicmenu')">
+    <h1>Types of Menus</h1>
+    <h2>Pure <acronym title="Cascading Style Sheets">CSS</acronym> Menus</h2>
+    <div id="meyermenu">
+      <p>The most famous pure CSS menus come from <a href="http://www.meyerweb.com/eric/">Eric Meyer</a>. The menu is in an unordered list (&lt;ul&gt;) and there are two CSS selectors at the heart of their operation:</p>
+      <pre>li ul {display: none;}
+li:hover > ul {display: block;}</pre>
+      <p>Submenu items are hidden until their parents are hovered. The &gt; selector means, "direct parent". The major problem with Meyer's menus are <a href="http://www.microsoft.com"><acronym title="Internet Explorer">IE</acronym></a> doesn't support either the &gt; selector or hovering arbitrary elements, so the children are never displayed.</p>
+      <ul class="meyermenu vertical left">
+        <li class="parent">Jay / Lyne<ul>
+          <li class="parent">Jim / Sonja<ul>
+            <li><a href="http://www.himinbi.org">Will</a></li>
+            <li>Matt</li>
+            <li><a href="http://www.doomfire.net">Brett</a></li>
+          </ul></li>
+          <li class="parent">Ted / Nancy<ul>
+            <li>Bradley / Jamie</li><li>Ashley / Todd</li>
+          </ul></li>
+          <li class="parent">John / Libbie<ul><li>Jay</li><li>Ted</li></ul></li>
+        </ul></li>
+      </ul>
+      <ul class="meyermenu vertical right">
+        <li class="parent">Charles / Nelle<ul>
+          <li class="parent">Charles / Marsha<ul><li>Missy</li><li>Niele</li></ul></li>
+          <li class="parent">Jim / Sonja<ul>
+            <li><a href="http://www.himinbi.org">Will</a></li><li>Matt</li>
+            <li><a href="http://www.doomfire.net">Brett</a></li>
+          </ul></li>
+          <li>Sharon</li><li>Sandy</li>
+        </ul></li>
+      </ul>
+      <div style="clear: both"></div>
+      <p>The other issue that is something of a pain is if you only want elements with children to expand, you need to mark which elements should be allowed to expand in the &lt;li&gt; with class attributes. It is a pretty menu though that degrades fairly well. (Browsers without CSS get an &lt;ul&gt;. Browsers which can't hover arbitrary items get only the top level.)</p>
+      <p>Horizontal menus are also possible or mixtures between the two. In the following examples the javascript is only used to change the class of the list. All of the <a href="../styles/meyermenu.css">positioning is CSS</a> with additional <a href="meyermenu_appearance.css">CSS for coloring</a>.</p>
+      <form action="" onsubmit="return false">
+        <div>Type of menu: 
+          <select name="classname"
+                  onchange="document.getElementById('testmenu').className =
+                            document.forms[0].classname.value">
+            <option value="">No Special Styling</option>
+            <option value="meyermenu">Default</option>
+            <option value="meyermenu vertical">Default Vertical</option>
+            <option value="meyermenu vertical left">Vertical Left</option>
+            <option value="meyermenu vertical right">Vertical Right</option>
+            <option value="meyermenu tab">Default Tab</option>
+            <option value="meyermenu tab left">Tab Left</option>
+            <option value="meyermenu tab right">Tab Right</option>
+          </select>
+        </div>
+      </form>
+
+      <div id="menudisplay">
+        <ul id="testmenu" class="meyermenu tab right">
+          <li class="parent">Philosophical<ul>
+            <li class="parent">Plato<ul>
+              <li>sophia</li><li>phronesis</li><li>episteme</li>
+            </ul></li>
+            <li class="parent">Aristotle<ul>
+              <li>choices</li><li>passions</li><li>dispositions</li>
+            </ul></li>
+            <li class="parent">Epicurius<ul>
+              <li>serenity</li><li>reconciliation</li>
+            </ul></li>
+            <li class="parent">Romanticism<ul class="vertical left">
+              <li class="parent">divine gift<ul>
+                <li>chastity</li><li>activity</li><li>humility</li><li>temperance</li>
+              </ul></li>
+              <li>discovered</li><li>manifested</li>
+            </ul></li>
+            <li><a href="http://www.bible.com">Christian</a></li>
+          </ul></li>
+          <li class="parent">Ontogenesis<ul>
+            <li>factual knowledge</li><li>procedural knowledge</li><li>contextualization</li>
+            <li>relativism</li><li>uncertainty</li>
+          </ul></li>
+          <li class="parent" title="Wisdom and its relationship to intelligence and creativity">Intelligence<ul>
+            <li title="developed ability to look at a problem and solve it">reasoning</li>
+            <li title="high interpersonal intelligence and a concern for others">sagacity</li>
+            <li title="attaches importance to ideas">learning</li>
+            <li title="acts within reasonable physical and intellectual limitations">judgment</li>
+            <li title="seeks out information, especially details">information</li>
+            <li title="uses intuition to offer effective solutions">perspicacity</li>
+            <li title="welcomes ambiguity and tries to understand phenomena in depth">uncertain</li>
+          </ul></li>
+          <li class="parent">Affect-Cognition<ul class="vertical right">
+            <li class="parent">Functions<ul>
+              <li>resolve dilemmas</li>
+              <li>advise others</li>
+              <li>guide society</li>
+              <li>life review</li>
+              <li>question meaning</li>
+            </ul></li>
+            <li class="parent">Precursors<ul>
+              <li>individuality</li>
+              <li>context</li>
+              <li>empathy</li>
+              <li>dynamism</li>
+              <li>integration</li>
+            </ul></li>
+          </ul></li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Javascript Menus</h2>
+    <p>The other major class of dynamic menus are controlled by javascript. These have the ability to be more tolerant to browsers implementations and can also include animation effects. There should be a box to the right that you can click to produce a menu.</p>
+    <div id="dynamicmenu">
+      <h2><a href="javascript:controller.toggleMenu()">M E N U</a></h2>
+      <ul>
+        <li><a href="menu.js">Javascript</a></li>
+        <li><a href="menu_top.css">Top Aligned CSS</a></li>
+        <li><a href="menu_center.css">Centered CSS</a></li>
+        <li><a href="menu_flat.css">Flat CSS</a></li>
+        <li><span class="nolink">Move On</span><ul>
+          <li><a href="http://www.himinbi.org/">Himinbiorg</a></li>
+          <li><a href="../">Odin</a></li>
+        </ul></li>
+        <li><a href=".">Reload</a></li>
+        <li><a href="mailto:wholcomb@gmail.com">Send Mail</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

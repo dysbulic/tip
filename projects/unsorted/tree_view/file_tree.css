@@ -1,0 +1,39 @@
+@import url("treemenu.css");
+.leaf {
+  list-style-image: url("file.small.png")
+}
+a.tree-control .link-text {
+  display: none;
+}
+a.tree-control, form.tree-control input {
+  width: 15px;
+  height: 15px;
+  margin-top: 0em;
+}
+a.tree-control, a.tree-control:hover {
+  border: none;
+}
+.group {
+  margin-left: -1.4em;
+  line-height: 19px;
+}
+a.tree-control, form.tree-control input {
+  background-image: url("folder_open.small.png")
+}
+.closed a.tree-control, .closed form.tree-control input {
+  background-image: url("folder_closed.small.png");
+}
+
+form.tree-control { display: inline; }
+form.tree-control div { float: left; }
+form.tree-control input {
+  border: none;
+  background-color: transparent;
+  margin-right: .6em;
+  cursor: pointer;
+}
+li { clear: both; }
+
+.loading form.tree-control input {
+  background-image: url("loading.small.png");
+}

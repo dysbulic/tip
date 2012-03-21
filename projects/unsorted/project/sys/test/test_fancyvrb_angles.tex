@@ -1,0 +1,60 @@
+\documentclass{article}
+\usepackage{fancyvrb}
+\usepackage[T1]{fontenc}
+
+\begin{document}
+
+\begin{abstract}
+I am getting strange results when using fancyvrb. When I change from
+the default ({\texttt{tt}}) font \textless{} and \textgreater{} are
+getting changed to < and > like they do in a normal document. This is
+simple some verbatim blocks with different options.
+
+I sent mail to the author and they recommended using the TI font
+encoding like so: \verb+\usepackage[T1]{fontenc}+. By default though
+it makes cmr ugly (non-antialiased) in pdfs.
+\end{abstract}
+
+\section{Plain}
+
+\verb+[]+
+
+\begin{Verbatim}
+<testing>
+\end{Verbatim}
+
+\section{Helvetica}
+
+\verb+[fontfamily=helvetica]+
+
+\begin{Verbatim}[fontfamily=helvetica]
+<testing>
+\end{Verbatim}
+
+\section{Computer Modern Roman}
+
+\verb+[fontfamily=cmr]+
+
+\begin{Verbatim}[fontfamily=cmr]
+<testing>
+\end{Verbatim}
+
+\section{Helvetica with defineactive}
+
+\verb+\catcode`<=\active [fontfamily=helvetica,defineactive=\def<{\textless}]+
+
+\catcode`<=\active
+\begin{Verbatim}[fontfamily=helvetica,defineactive=\def<{\textless}]
+<testing>
+\end{Verbatim}
+
+\section{Helvetica using textless}
+
+\verb+[fontfamily=helvetica,commandchars=\\\{\}]+
+
+\begin{Verbatim}[fontfamily=helvetica,commandchars=\\\{\}]
+\textbackslash{}textless\{\}testing\textbackslash{}textgreater
+\textless{}testing\textgreater
+\end{Verbatim}
+
+\end{document}

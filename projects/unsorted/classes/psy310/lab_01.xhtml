@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Statistical Inference &mdash; Lab #1</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <style type="text/css">
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY 310: Statistical Inference</h1>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Lab Questions #1</h2>
+      <h2>Due: Fri., 28 September 2007</h2>
+    </div>
+
+    <ol>
+      <li>
+        <div class="question">
+          <p>Derive a theoretical heuristic for the variance of LC.</p>
+        </div>
+        <div class="answer">
+          <p>LC is the final grade which is 1/3 scaled midterm and 2/3 the scaled final.</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd><mi>l</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac><msub><mi>m</mi><mi>s</mi></msub><mn>3</mn></mfrac><mo>+</mo>
+                  <mfrac><mrow><mn>2</mn><msub><mi>m</mi><mi>s</mi></msub></mrow><mn>3</mn></mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd><msub><mi>m</mi><mi>s</mi></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mi>m</mi><mo>-</mo><mover><mi>m</mi><mo>_</mo></mover></mrow>
+                  <msub><mi>&sigma;</mi><mi>m</mi></msub>
+                </mfrac></mtd>
+              </mtr>
+              <mtr>
+                <mtd><msub><mi>f</mi><mi>s</mi></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mi>f</mi><mo>-</mo><mover><mi>f</mi><mo>_</mo></mover></mrow>
+                  <msub><mi>&sigma;</mi><mi>f</mi></msub>
+                </mfrac></mtd>
+              </mtr>
+              <mtr>
+                <mtd><msubsup><mi>&sigma;</mi><mi>l</mi><mn>2</mn></msubsup></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <msub>
+                    <mi>l</mi>
+                    <mrow>
+                      <mfrac><msub><mi>m</mi><mi>s</mi></msub><mn>3</mn></mfrac><mo>+</mo>
+                      <mfrac><mrow><mn>2</mn><msub><mi>f</mi><mi>s</mi></msub></mrow><mn>3</mn></mfrac>
+                    </mrow>
+                  </msub>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>varh</mo>
+                  <mfenced><mrow>
+                    <mfrac><msub><mi>m</mi><mi>s</mi></msub><mn>3</mn></mfrac><mo>+</mo>
+                    <mfrac><mrow><mn>2</mn><msub><mi>f</mi><mi>s</mi></msub></mrow><mn>3</mn></mfrac>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac><msub><mi>&sigma;</mi><msub><mi>m</mi><mi>s</mi></msub></msub><mn>3</mn></mfrac><mo>+</mo>
+                  <mfrac><mrow><mn>2</mn><msub><mi>&sigma;</mi><msub><mi>m</mi><mi>s</mi></msub></msub></mrow><mn>3</mn></mfrac>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Calculate the correlation between scalmid and scalfin.</p>
+        </div>
+        <div class="answer">
+          <p>That is in the output file.</p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Calculate the covariance between the first two (scaled) exams.</p>
+        </div>
+        <div class="answer">
+          <p>I would do this using:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>&rho;</mi><mfenced open="" close=""><mi>x</mi><mi>y</mi></mfenced></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <msub><mi>&sigma;</mi><mfenced open="" close=""><mi>x</mi><mi>y</mi></mfenced></msub>
+                  <mrow><msub><mi>&sigma;</mi><mi>x</mi></msub><msub><mi>&sigma;</mi><mi>y</mi></msub></mrow>
+                </mfrac></mtd>
+              </mtr>
+              <mtr>
+                <mtd><msub><mi>&sigma;</mi><mfenced open="" close=""><mi>x</mi><mi>y</mi></mfenced></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <msub><mi>&rho;</mi><mfenced open="" close=""><mi>x</mi><mi>y</mi></mfenced></msub>
+                  <mrow><msub><mi>&sigma;</mi><mi>x</mi></msub><msub><mi>&sigma;</mi><mi>y</mi></msub></mrow>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Since the correlation and the deviations are in my output. I was mistaken however about having SPSS in my lab and I can't currently see the numbers in my output. Could I get partial credit for knowing what I needed to do?</p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Show using the variance and covariance calculations that the variance of LC precisely agrees with theory.</p>
+        </div>
+        <div class="answer">
+          <p>I would think this is simply that the computed value of the covariance from the equation from part (a) agrees with the computed variance from part (c). I can't really do this since I can't see the output.</p>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

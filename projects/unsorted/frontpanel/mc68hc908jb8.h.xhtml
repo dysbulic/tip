@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Freescale MC68HC908JB8 Constants</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <link rel="stylesheet" type="text/css" href="code.css" />
+    <style type="text/css">
+      #SCIvars { opacity: .5; }
+    </style>
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript" src="trim_code.js"></script>
+    <script type="text/javascript">//<![CDATA[
+    //]]></script>
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-939849-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+  </head>
+  <body>
+    <h1>Freescale MC68HC908JB8 Constants</h1>
+    <p></p>
+    <hr />
+
+<div class="program">
+<div class="code">
+#ifndef MC68HC908JB_H
+#define MC68HC908JB_H
+</div>
+<div class="explanation">Inclusion guard</div>
+</div>
+
+<div class="program">
+<div class="code">#include "types.h"</div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code">
+#ifdef SDCC
+#define location(addr) volatile xdata at addr uint8
+#define asm(asm) _asm asm _endasm;
+#else
+#define location(addr) unsigned char
+#endif
+</div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x0038) UADDR;
+#define USBEN      (1<<7)
+#define UADD_MASK  0x7F
+]]></div>
+<div class="explanation">
+  USB Interrupt Register 1:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0018</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="USB Module Enable">USBEN</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 6">UADD6</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 5">UADD5</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 4">UADD4</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 3">UADD3</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 2">UADD2</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 1">UADD1</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 0">UADD0</acronym></td>
+    </tr>
+    <tr><th>Write:</th></tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x0039) UIR0;
+#define EOPIE   (1<<7)
+#define SUSPND  (1<<6)
+#define TXD2IE  (1<<5)
+#define RXD2IE  (1<<4)
+#define TXD1IE  (1<<3)
+#define TXD0IE  (1<<1)
+#define RXD0IE  (1<<0)
+]]></div>
+<div class="explanation">
+  USB Interrupt Register 0:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0039</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="End-of-Packet Detect Interrupt Enable">EOPIE</acronym></td>
+      <td rowspan="2"><acronym title="USB Suspend">SUSPND</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Interrupt Enable">TXD2IE</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Recieve Interrupt Enable">RXD2IE</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Interrupt Enable">TXD1IE</acronym></td>
+      <td>0</td>
+      <td rowspan="2"><acronym title="Endpoint 0 Transmit Interrupt Enable">TXD0IE</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 0 Recieve Interrupt Enable">RXD0IE</acronym></td>
+    </tr>
+    <tr><th>Write:</th><td class="gray"></td></tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x003A) UIR1;
+#define EOPF    (1<<7)
+#define RSTF    (1<<6)
+#define TXD2F   (1<<5)
+#define RXD2F   (1<<4)
+#define TXD1F   (1<<3)
+#define RESUMF  (1<<2)
+#define TXD0F   (1<<1)
+#define RXD0F   (1<<0)
+]]></div>
+<div class="explanation">
+  USB Interrupt Register 1:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$003A</code></th><th>Read:</th>
+      <td><acronym title="End-of-Packet Detect Flag">EOPF</acronym></td>
+      <td><acronym title="USB Reset Flag">RSTF</acronym></td>
+      <td><acronym title="Endpoint 2 Data Transmit Flag">TXD2F</acronym></td>
+      <td><acronym title="Endpoint 2 Data Recieve Flag">RXD2F</acronym></td>
+      <td><acronym title="Endpoint 1 Data Transmit Flag">TXD1F</acronym></td>
+      <td><acronym title="Resume Flag">RESUMF</acronym></td>
+      <td><acronym title="Endpoint 0 Data Transmit Flag">TXD0F</acronym></td>
+      <td><acronym title="Endpoint 0 Data Recieve Flag">RXD0F</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+      <td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+    </tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x0018) UIR2;
+#define EOPFR    (1<<7)
+#define RSTFR    (1<<6)
+#define TXD2FR   (1<<5)
+#define RXD2FR   (1<<4)
+#define TXD1FR   (1<<3)
+#define RESUMFR  (1<<2)
+#define TXD0FR   (1<<1)
+#define RXD0FR   (1<<0)
+]]></div>
+<div class="explanation">
+  USB Interrupt Register 2:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0018</code></th><th>Read:</th>
+      <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td><acronym title="End-of-Packet Flag Reset">EOPFR</acronym></td>
+      <td><acronym title="Clear Reset Indicator">RSTFR</acronym></td>
+      <td><acronym title="Endpoint 2 Transmit Flag Reset">TXD2FR</acronym></td>
+      <td><acronym title="Endpoint 2 Recieve Flag Reset">RXD2FR</acronym></td>
+      <td><acronym title="Endpoint 1 Transmit Flag Reset">TDX1FR</acronym></td>
+      <td><acronym title="Resume Flag Reset">RESUMFR</acronym></td>
+      <td><acronym title="Endpoint 0 Transmit Flag Reset">TXD0FR</acronym></td>
+      <td><acronym title="Endpoint 0 Recieve Flag Reset">RXD0FR</acronym></td>
+   </tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x003B) UCR0;
+#define T0SEQ		(1<<7)
+#define TX0E		(1<<5)
+#define RX0E		(1<<4)
+#define TP0SIZ_MASK	0x0F
+]]></div>
+<div class="explanation">
+  USB Control Register 0:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$003B</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="Endpoint 0 Transmit Sequence (DATA:X Token Active for Next Endpoint 0 Transmit)">T0SEQ</acronym></td>
+      <td>0</td>
+      <td rowspan="2"><acronym title="Endpoint 0 Transmit Enable">TX0E</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 0 Recieve Enable">RX0E</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 0 Transmit Data Packet Size Bit 3">TP0SIZ3</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 0 Transmit Data Packet Size Bit 2">TP0SIZ2</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 0 Transmit Data Packet Size Bit 1">TP0SIZ1</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 0 Transmit Data Packet Size Bit 0">TP0SIZ0</acronym></td>
+    </tr>
+    <tr><th>Write:</th><td class="gray"></td></tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x003C) UCR1;
+#define T1SEQ         (1<<7)
+#define STALL1        (1<<6)
+#define TX1E          (1<<5)
+#define FRESUM        (1<<4)
+#define TP1SIZ_MASK   0x0F
+]]></div>
+<div class="explanation">
+  USB Control Register 1:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$003C</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Sequence (DATA:X Token Active for Next Endpoint 1 Transmit)">T1SEQ</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Force Stall">STALL1</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Enable">TX1E</acronym></td>
+      <td rowspan="2"><acronym title="Force Resume">FRESUM</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Data Packet Size Bit 3">TP1SIZ3</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Data Packet Size Bit 2">TP1SIZ2</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Data Packet Size Bit 1">TP1SIZ1</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Data Packet Size Bit 0">TP1SIZ0</acronym></td>
+    </tr>
+    <tr><th>Write:</th></tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x0019) UCR2;
+#define T2SEQ         (1<<7)
+#define STALL2        (1<<6)
+#define TX2E          (1<<5)
+#define RX2E          (1<<4)
+#define TP2SIZ_MASK   0x0F
+]]></div>
+<div class="explanation">
+  USB Control Register 2:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0019</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Sequence (DATA:X Token Active for Next Endpoint 2 Transmit)">T2SEQ</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Force Stall">STALL2</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Enable">TX2E</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Recieve Enable">RX2E</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Data Packet Size Bit 3">TP2SIZ3</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Data Packet Size Bit 2">TP2SIZ2</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Data Packet Size Bit 1">TP2SIZ1</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Data Packet Size Bit 0">TP2SIZ0</acronym></td>
+    </tr>
+    <tr><th>Write:</th></tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x001A) UCR3;
+#define TX1ST     (1<<7)
+#define TX1STR    (1<<6)
+#define OSTALL0   (1<<5)
+#define ISTALL0   (1<<4)
+#define PULLEN    (1<<2)
+#define ENABLE2   (1<<1)
+#define ENABLE1   (1<<0)
+]]></div>
+<div class="explanation">
+  USB Control Register 3:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$001A</code></th><th>Read:</th>
+      <td><acronym title="Endpoint 0 Transmit First Flag">TX1ST</acronym></td>
+      <td>0</td>
+      <td rowspan="2"><acronym title="Endpoint 0 Force STALL Bit for OUT Token">OSTALL0</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 0 Force STALL Bit for IN Token">ISTALL1</acronym></td>
+      <td>0</td>
+      <td rowspan="2"><acronym title="Pull-up Enable">PULLEN</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Enable">ENABLE2</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Enable">ENABLE1</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th><td class="gray"></td>
+      <td><acronym title="Clear Endpoint 0 Transmit First Flag (1: Reset Flag)">TX1STR</acronym></td>
+      <td class="gray"></td>
+    </tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x001B) UCR4;
+#define FUSB0     (1<<2)
+#define FDP       (1<<1)
+#define FDM       (1<<0)
+]]></div>
+<div class="explanation">
+  USB Control Register 4:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$001B</code></th><th>Read:</th>
+      <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+      <td rowspan="2"><acronym title="Force USB Output">FUSBO</acronym></td>
+      <td rowspan="2"><acronym title="Force D+">FDP</acronym></td>
+      <td rowspan="2"><acronym title="Force D-">FDM</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th><td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+    </tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x003D) USR0;
+#define RSEQ	     (1<<7)
+#define SETUP	     (1<<6)
+#define RP0SIZ_MASK  0x0F
+]]></div>
+<div class="explanation">
+  USB Status Register 0:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$003D</code></th><th>Read:</th>
+      <td><acronym title="Endpoint 0 Receive Sequence (Last Recieve was DATA:X)">R0SEQ</acronym></td>
+      <td><acronym title="SETUP Token Detect">SETUP</acronym></td>
+      <td>0</td>
+      <td>0</td>
+      <td><acronym title="Endpoint 0 Receive Data Packet Size Bit 3">RP0SIZ3</acronym></td>
+      <td><acronym title="Endpoint 0 Receive Data Packet Size Bit 2">RP0SIZ2</acronym></td>
+      <td><acronym title="Endpoint 0 Receive Data Packet Size Bit 1">RP0SIZ1</acronym></td>
+      <td><acronym title="Endpoint 0 Receive Data Packet Size Bit 0">RP0SIZ0</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+      <td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+    </tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x003E) USR1;
+#define R2SEQ        (1<<7)
+#define TXACK        (1<<6)
+#define TXNAK        (1<<5)
+#define TXSTL        (1<<4)
+#define RP2SIZ_MASK  0x0F
+]]></div>
+<div class="explanation">
+  USB Status Register 1:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$003E</code></th><th>Read:</th>
+      <td><acronym title="Endpoint 2 Receive Sequence (Last Recieve was DATA:X)">R2SEQ</acronym></td>
+      <td><acronym title="ACK Token Transmit">TXACK</acronym></td>
+      <td><acronym title="NAK Token Transmit">TXNAK</acronym></td>
+      <td><acronym title="STALL Token Transmit">TXSTL</acronym></td>
+      <td><acronym title="Endpoint 2 Receive Data Packet Size Bit 3">RP2SIZ3</acronym></td>
+      <td><acronym title="Endpoint 2 Receive Data Packet Size Bit 2">RP2SIZ2</acronym></td>
+      <td><acronym title="Endpoint 2 Receive Data Packet Size Bit 1">RP2SIZ1</acronym></td>
+      <td><acronym title="Endpoint 2 Receive Data Packet Size Bit 0">RP2SIZ0</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+      <td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+    </tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define UE0D0 ((uint8*)0x20)
+#define UE1D0 ((uint8*)0x28)
+#define UE2D0 ((uint8*)0x30)
+]]></div>
+<div class="explanation">USB endpoint start addresses</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define MAX_PACKET_SIZE 8
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x0013) SCC1;
+#define LOOPS        (1<<7)
+#define ENSCI        (1<<6)
+#define TXINV        (1<<5)
+#define M            (1<<4)
+#define WAKE         (1<<3)
+#define ILTY         (1<<2)
+#define PEN          (1<<1)
+#define PTY          (1<<0)
+]]></div>
+<div class="explanation">
+  Serial Communication Interface (SCI) Control Register #1:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0013</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="Loop Mode">LOOPS</acronym></td>
+      <td rowspan="2"><acronym title="Enable SCI">ENSCI</acronym></td>
+      <td rowspan="2"><acronym title="Transmit Inversion">TXINV</acronym></td>
+      <td rowspan="2"><acronym title="Mode Character Length (0: 8-bit / 1: 9-bit)">M</acronym></td>
+      <td rowspan="2"><acronym title="Wakeup Condition (0: Idle Line / 1: Address Mark)">WAKE</acronym></td>
+      <td rowspan="2"><acronym title="Idle Line Type">ILTY</acronym></td>
+      <td rowspan="2"><acronym title="Parity Enable">PEN</acronym></td>
+      <td rowspan="2"><acronym title="Parity (0: Even / 1: Odd)">PTY</acronym></td>
+    </tr>
+    <tr><th>Write:</th></tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x0014) SCC2;
+#define SCTIE        (1<<7)
+#define TCIE         (1<<6)
+#define SCRIE        (1<<5)
+#define ILIE         (1<<4)
+#define TE           (1<<3)
+#define RE           (1<<2)
+#define RWU          (1<<1)
+#define SBK          (1<<0)
+]]></div>
+<div class="explanation">
+  SCI Control Register #2:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0014</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="SCI Transmittter Interrupt Enable">SCTIE</acronym></td>
+      <td rowspan="2"><acronym title="Transmission Complete Interrupt Enable">TCIE</acronym></td>
+      <td rowspan="2"><acronym title="SCI Receive Interrupt Enable">SCRIE</acronym></td>
+      <td rowspan="2"><acronym title="Idle Line Interrupt Enable">ILIE</acronym></td>
+      <td rowspan="2"><acronym title="Transmitter Enable">TE</acronym></td>
+      <td rowspan="2"><acronym title="Receiver Enabled">RE</acronym></td>
+      <td rowspan="2"><acronym title="Receiver Wakeup (0: Normal Operation / 1: Disable Interrupts)">RWU</acronym></td>
+      <td rowspan="2"><acronym title="Send Break">SBK</acronym></td>
+    </tr>
+    <tr><th>Write:</th></tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x0015) SCC3;
+#define R8           (1<<7)
+#define T8           (1<<6)
+#define ORIE         (1<<3)
+#define NEIE         (1<<2)
+#define FEIE         (1<<1)
+#define PEIE         (1<<0)
+]]></div>
+<div class="explanation">
+  SCI Control Register #3:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0015</code></th><th>Read:</th>
+      <td><acronym title="Possible Ninth Recieve Bit (if M is set)">R8</acronym></td>
+      <td rowspan="2"><acronym title="Possible Ninth Transmit Bit (if M is set)">T8</acronym></td>
+      <td rowspan="2" class="gray"><acronym title="Reserved">R</acronym></td>
+      <td rowspan="2" class="gray"><acronym title="Reserved">R</acronym></td>
+      <td rowspan="2"><acronym title="Overrun Interrupt Enable">ORIE</acronym></td>
+      <td rowspan="2"><acronym title="Noise Error Interrupt Enable">NEIE</acronym></td>
+      <td rowspan="2"><acronym title="Framing Error Interrupt Enable">FEIE</acronym></td>
+      <td rowspan="2"><acronym title="Parity Error Interrupt Enable">PEIE</acronym></td>
+    </tr>
+    <tr><th>Write:</th><td class="gray"></td></tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x0016) SCS1;
+#define SCTE         (1<<7)
+#define TC           (1<<6)
+#define SCRF         (1<<5)
+#define IDLE         (1<<4)
+#define OR           (1<<3)
+#define NF           (1<<2)
+#define FE           (1<<1)
+#define PE           (1<<0)
+]]></div>
+<div class="explanation">
+  SCI Status Register #1:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0016</code></th><th>Read:</th>
+      <td><acronym title="SCI Transfer Empty">SCTE</acronym></td>
+      <td><acronym title="Transmission Complete">TC</acronym></td>
+      <td><acronym title="SCI Reciever Full">SCRF</acronym></td>
+      <td>IDLE</td>
+      <td><acronym title="Overrun">OR</acronym></td>
+      <td><acronym title="Noise Flag">NF</acronym></td>
+      <td><acronym title="Framing Error">FE</acronym></td>
+      <td><acronym title="Parity Error">PE</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+    </tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+location(0x0017) SCS2;
+#define BKF          (1<<1)
+#define RPF          (1<<0)
+]]></div>
+<div class="explanation">
+  SCI Status Register #2:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0017</code></th><th>Read:</th>
+      <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+      <td><acronym title="Break Flag">BKF</acronym></td>
+      <td><acronym title="Reception in Progress Flag">RPF</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+    </tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code">
+#define SCIDR    0x0018
+</div>
+<div class="explanation">SCI Data Register: Read and write data from the SCI</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define SCBR	           0x0019
+#define SBBR_PRESCALE_MASK  (3 << 4)
+#define SCBR_SELECT_MASK    0x07
+]]></div>
+<div class="explanation">
+  SCI Baud Rate Register:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0019</code></th><th>Read:</th><td>0</td><td>0</td>
+      <td rowspan="2"><acronym title="SCI Baud Rate Prescaler Bit 1">SCP1</acronym></td>
+      <td rowspan="2"><acronym title="SCI Baud Rate Prescaler Bit 0">SCP0</acronym></td>
+      <td rowspan="2" class="gray"></td>
+      <td rowspan="2"><acronym title="SCI Baud Rate Select Bit 2">SCR2</acronym></td>
+      <td rowspan="2"><acronym title="SCI Baud Rate Select Bit 1">SCR1</acronym></td>
+      <td rowspan="2"><acronym title="SCI Baud Rate Select Bit 0">SCR0</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th><td class="gray"></td><td class="gray"></td>
+    </tr>
+  </table>
+</div>
+</div>
+
+<hr />
+
+<div class="program">
+<div class="code"><![CDATA[
+#define PPG                 0x001E
+#define PPG_MULTIPLIER_MASK (0x0F << 3)
+#define PPG_VCO_RANGE_MASK  0x0F
+]]></div>
+<div class="explanation">
+  PLL Programming Register (PPG):
+  <table>
+    <tr>
+      <th rowspan="2"><code>$001E</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="Multiplier Select Bit 7">MUL7</acronym></td>
+      <td rowspan="2"><acronym title="Multiplier Select Bit 6">MUL6</acronym></td>
+      <td rowspan="2"><acronym title="Multiplier Select Bit 5">MUL5</acronym></td>
+      <td rowspan="2"><acronym title="Multiplier Select Bit 4">MUL4</acronym></td>
+      <td rowspan="2"><acronym title="Voltage-Controlled Oscillator (VCO) Range Select Bit 7">VRS7</acronym></td>
+      <td rowspan="2"><acronym title="Voltage-Controlled Oscillator (VCO) Range Select Bit 6">VRS6</acronym></td>
+      <td rowspan="2"><acronym title="Voltage-Controlled Oscillator (VCO) Range Select Bit 5">VRS5</acronym></td>
+      <td rowspan="2"><acronym title="Voltage-Controlled Oscillator (VCO) Range Select Bit 4">VRS4</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+    </tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define MOR       0x001F
+#define ROMSEC    (1 << 6)
+#define LVIRSTD   (1 << 5)
+#define LVIPWRD   (1 << 4)
+#define SSREC     (1 << 3)
+#define COPL      (1 << 2)
+#define STOP      (1 << 1)
+#define COPD      (1 << 0)
+]]></div>
+<div class="explanation">
+  Mask Option Register (MOR):
+  <table>
+    <tr>
+      <th rowspan="2"><code>$001F</code></th><th>Read:</th><td rowspan="2" class="gray">0</td>
+      <td><acronym title="ROM Security">ROMSEC</acronym></td>
+      <td><acronym title="Low-Voltage Inhibit (LVI) Reset Disable">LVIRSTD</acronym></td>
+      <td><acronym title="Low-Voltage Inhibit (LVI) Power Disable">LVIPWRD</acronym></td>
+      <td><acronym title="Short Stop Recovery">SSREC</acronym></td>
+      <td><acronym title="COP Long Timeout">COPL</acronym></td>
+      <td><acronym title="STOP Instruction Enable">STOP</acronym></td>
+      <td><acronym title="Computer Operating Properly (COP) Disable">COPD</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+    </tr>
+  </table>
+</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#endif
+]]></div>
+<div class="explanation">Close inclusion guard</div>
+</div>
+  </body>
+</html>

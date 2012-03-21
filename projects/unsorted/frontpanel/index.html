@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>IR Receiver</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+      table { border-collapse: collapse; margin: auto; }
+      th, td { border: 1px solid; padding: 0 .5em; }
+      td { text-align: left; }
+      .leftcol, .rightcol { width: 50%; }
+      .leftcol { float: left; }
+      .rightcol { float: right; }
+      .columns:after { content: ''; display: block; clear: both; }
+    </style>
+    <script type="text/javascript">//<![CDATA[
+    //]]></script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>USB IR Receiver</h1>
+    <!--
+    <p>It has long been a goal of mine to build something electronical. A friend of mine gave me a media controller frontpanel off of an old Toshiba monitor with an <acronym title="infrared">IR</acronym> sensor and buttons and whatnot. I piddled with a kernel module to try and interface with it:</p>
+    <ul>
+      <li><a href="frontpanel.c">frontpanel.c</a></li>
+      <li><a href="frontpanel.h">frontpanel.h</a></li>
+    </ul>
+    <p>That was back in college on a 2.4 kernel which will no longer compile. I tried <a href="usb-skeleton.test.c">upgrading to 2.6</a>, but the device isn't showing up in <code>/proc/bus/usb/devices</code>. I get these errors when I plug it in:</p>
+    <pre><code>Jul 17 23:44:58 ebene kernel: usb 1-4: new full speed USB device using ohci_hcd and address 12
+Jul 17 23:45:03 ebene kernel: usb 1-4: unable to read config index 0 descriptor/start
+Jul 17 23:45:03 ebene kernel: usb 1-4: can't read configurations, error -110</code></pre>
+    <p>Honestly, I'm mostly playing with it to do something like the <a href="http://usbirboy.sourceforge.net">USB-IR-Boy</a>. I might be able to figure out a way to deal with it not registering correctly, but I think I'll just skip it and move on.</p>
+    <hr />
+    -->
+    <p>It has long been a goal of mine to create something electronical. The <a href="http://usbirboy.sourceforge.net">USB-IR-Boy</a> project is interesting. It is an infrared sensor which would allow you to control your computer with a TV remote, but unlike the bulk of other projects, it interfaces via USB. The one problem with the program is it is not really aimed at a complete noob like myself. Fortunately, I'm a reasonably bright noob and I'm writing down what I'm doing as I go along.</p>
+
+    <h3><acronym title="Dual Inline Package">DIP</acronym> <acronym title="Integrated Circuit">IC</acronym> Pin Numbering</h3>
+
+    <p>A lesson that I learned completely by accident after I had been wondering at why my designs wouldn't work for a while:</p>
+
+    <object data="dip_pin_numbering.svg" type="image/svg+xml" style="width: 100%; height: 10em"></object>
+    
+    <p>Many schematics group the pins on the IC by function and not by their actual position. Sometimes it is noted, but if you are paying attention to the labels, you can overlook it. So, pins 1 and n are next to each other, not pins 1 and n/2 + 1.</p>
+
+    <h3>Programming the MC68HC908</h3>
+
+    <p>The heart of the device is a <a href="http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=68HC908JB8">Freescale MC68HC908</a> which translates the impulses from a <a href="http://www.vishay.com/ir-receiver-modules/">Vishay TSOP 1738</a> IR receiver into the signalling for USB. The firmware for the microcontroller is produced by <a href="http://sdcc.sourceforge.net"><acronym title="Small Device C Compiler">SDCC</acronym></a>. I couldn't find a package for it, so I built it out from source:</p>
+    <pre><code>svn co https://svn.sourceforge.net/svnroot/sdcc/trunk/sdcc sdcc
+cd sdcc
+./configure
+make</code></pre>
+    <p>Then to get the USB-IR-Boy project to build without installing everything, I just had to add <code>sdcc/bin</code> to the path and add <code>-L&nbsp;../../sdcc/device/lib/build/hc08/</code> to the linker options in the <a href="Makefile">Makefile</a>.</p>
+
+    <hr />
+
+    <h3>Testing the MAX232 Serial Driver</h3>
+
+    <p>The programmer for the microcontroller will receive its instructions from the serial port on the programming computer. After attempting to build the entire thing at once and failing, I decided on an incremental development process. The simpest first step was simply to take the <a href="http://en.wikibooks.org/wiki/Serial_Programming:MAX232_Driver_Receiver">MAX232 serial driver</a> and verify that it works. The serial cable has -25V for logial 0 and +25V for logical 1. This chip converts between those voltages and +5V for 1 and 0V for 0 which is used in the rest of the circuit.</p>
+
+    <div class="columns">
+      <div class="leftcol">
+        <object data="max232_dip.svg" type="image/svg+xml" style="width: 100%; height: 10em"></object>
+        <table>
+          <caption>Capacitance (&micro;F)</caption>
+          <tr><th>Device</th><th>C1</th><th>C2</th><th>C3</th><th>C4</th><th>C5</th></tr>
+          <tr><th>MAX220</th><td>4.7</td><td>4.7</td><td>10</td><td>10</td><td>4.7</td></tr>
+          <tr><th>MAX232</th><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td></tr>
+          <tr><th>MAX232A</th><td>0.1</td><td>0.1</td><td>0.1</td><td>0.1</td><td>0.1</td></tr>
+        </table>
+      </div>
+      <div class="rightcol">
+        <object data="max232_layout.svg" type="image/svg+xml" style="width: 100%; height: 20em"></object>
+      </div>
+    </div>
+
+    <p>The current produced by the serial port should be sufficient to light a <acronym title="Light Emitting Diode">LED</acronym>. This simple circuit was used in testing:</p>
+
+    <p><em>ToDo: MAX232 test circuit and program</em></p>
+
+    <h3>Monitor Mode</h3>
+
+    <p>The HC908 line of microcontrollers includes a "monitor mode" that allows writing the flash memory via routines stored in the ROM. The entirety of the flash may be written, including the IO/ports, making it possible to alter the output pins on the &micro; directly from the programmer. This test circuit does that:</p>
+
+    <p><em>ToDo: HC908 monitor test circuit and program</em></p>
+
+    <hr />
+
+    <p>The USB specification defines a variety of states that a device can be in:</p>
+    <a href="usb_state_diagram.svg">
+      <object data="usb_state_diagram.svg" type="image/svg+xml" width="100%" height="700px"></object>
+    </a>
+
+    <h3>Hello World</h3>
+
+    <p>For my first program, I wanted the simplest functional program possible. For USB, this is a program that registers itself with the host controler and goes into the addressed and then configured states. USB has a few different types of connections between the host and device. The simplest of these is a "control pipe" where messages and responses with a predefined structure are exchanged. Each USB device is required to set up a control pipe on endpoint 0. A device may have multiple additional endpoints which specify different data sources or different types of connections. The standard limits low-speed devices to two endpoints beyond endpoint 0 and the HC908JB8 supports an additional out pipe on endpoint one and either an in or an out on endpoint two.</p>
+    <hr />
+    <p>The way that the <a href="hello_world.hc908jb8.c">hello world program</a> works is this:<!--(<em>I tried wading through documentation to write the program in  <a href="hello_world.hc908jb8.asm.html">assembly</a>, but that quickly became unwieldy, so I changed to C compiled with SDCC.</em>)--></p>
+    <ol>
+      <li>The user plugs in the device</li>
+      <li>The device raises the pull up voltage on the data pair</li>
+      <li>The host issues a reset on the default configuration</li>
+      <li>In the code there is a function <code>void usb_interrupt_handler(void) interrupt 2</code>. The <code>interrupt 2</code> tells SDCC to invoke that function when a packet arrives, triggering an interrupt</li>
+      <li><code>usb_interrupt_handler</code> checks the USB Interrupt Register (<code>UIR1</code>) and sees the Receive Data flag for Endpoint 0 (<code>RXD0F</code>) is set</li>
+      <li>The USB Control Register (<code>UCR0</code>) bits <code>RX0E</code> and <code>TX0E</code> are unset to disable send and receive on endpoint 0 for the duration of the exchange</li>
+      <li>The receive flag is reset (<code>RXD0FR</code>)</li>
+      <li>The USB Status Register (<code>USR0</code>) is checked and the packet is recognized as a setup packet (SETUP)</li>
+      <li>The input data buffer (<code>UE0D0</code>) contains a <code>USB_REQUEST</code> packet</li>
+      <li>The <code>bmRequestType</code> field of that packet is examined and the packet is a <code>REQ_TYPE_STANDARD</code> with a <code>REQ_RECIP_DEVICE</code> recipient</li>
+      <li>The <code>bRequest</code> field of the packet is examined and it is a <code>REQ_SET_ADDRESS</code> packet</li>
+      <li>The <code>wValue</code>of the packet is the assigned device address which is stored in the <code>UADDR</code> register</li>
+      <li>An OUT packet with a length of 0 is sent to the host as an ACK</li>
+      <li>A new interrupt is processed with another <code>REQ_TYPE_STANDARD</code> <code>REQ_RECIP_DEVICE</code> packet</li>
+      <li>The <code>bRequest</code> on this packet is <code>REQ_GET_DESCRIPTOR</code></li>
+      <li>The high byte of <code>wValue</code> is <code>DESCR_TYPE_DEVICE</code> signaling the device descriptor should be sent</li>
+      <li>An OUT packet with a length of 0 is sent to the host as an ACK</li>
+      <li>An IN packet is received and specifies the number of bytes of the device descriptor to send</li>
+      <li>After the device descriptor is sent, further requests for the manufacturer and product string descriptors referenced in the device descriptor are sent</li>
+    </ol>
+
+    <p></p>
+    <ul>
+      <li><a href="hello_world.hc908jb8.c">hello_world.mc68hc908jb8.c</a>: main source file</li>
+      <li><a href="usb.h.xhtml">usb.h</a>: USB constants and data structures</li>
+      <li><a href="types.h.xhtml">types.h</a>: typedefs to make the code more readable</li>
+      <li><a href="mc68hc908jb8.h.xhtml">mc68hc908jb8.h</a>: microcontroller constants</li>
+    </ul>
+    
+    <hr />
+
+    <p>Now I need to build the programmer. The problem is the <a href="http://usbirboy.sourceforge.net/prommer.png">original schematic</a> is done in a lovely neon green on black background. When printed it is just about impossible to see the traces. So, I learned that schematic drawing under Linux is pretty crappy, but <a href="http://www.lis.inpg.fr/realise_au_lis/kicad/">Kicad</a> does a passable job. I made a <a href="HC08_20pin_prommer.sch">schematic</a> and then exported it to SVG. I collected the styles into a stylesheet, moved some elements around and <a href="compress_pathes.py">compressed the pathes</a> to produce a <a href="prommer.svg">passable image</a>:</p>
+    <div>
+    <a href="prommer.svg">
+      <object data="prommer.svg" type="image/svg+xml" width="100%" height="700px"></object>
+    </a>
+    </div>
+    <p>So far as printing the image or viewing it in something other than <a href="http://www.spreadfirefox.com">Firefox</a>, use <a href="../svg_web_start/?svg=../frontpanel/prommer.cleaned.svg">Batik web start</a>.</p>
+
+    <hr />
+
+    <p>The parts that I bought for the project were mostly from <a href="http://jameco.com">Jameco</a>:</p>
+    <table> 
+      <thead>
+        <tr><th>Jameco Part #</th><th>Item</th><th>Quantity</th><th>Unit Price</th><th>Total</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>14681</td><td>Crystal, 6MHz, 50ppm, 18pF</td><td>3</td><td>$0.28</td><td>$0.84</td></tr>
+        <tr><td>15341</td><td>Ceramic Disc Capacitor, 100pF, 50V, 20%</td><td>10</td><td>$0.05</td><td>$0.50</td></tr>
+        <tr><td>15405</td><td>Ceramic Disc Capacitor, 22pF, 50V, 20%</td> <td>10</td><td>$0.07</td><td>$0.70</td></tr>
+        <tr><td>17961</td><td>Grab Bag Diodes, 200pcs</td><td>1</td><td>$5.95</td><td>$5.95</td></tr>
+        <tr><td>18139</td><td>Grab Bag Resistors, 1/2W, 200pcs</td><td>1</td><td>$5.95</td><td>$5.95</td></tr>
+        <tr><td>20773</td><td>Breadboard, 6.5"x 4.25", 1660pnts</td><td>1</td><td>$19.95</td><td>$19.95</td></tr>
+        <tr><td>33488</td><td>Tantalum Capacitor, .1uF, 35V, 10%</td><td>10</td><td>$0.25</td><td>$2.50</td></tr>
+        <tr><td>106155</td><td>MAX232EPE IC, DRV/REC, 5V</td><td>1</td><td>$3.19</td><td>$3.19</td></tr>
+        <tr><td>107609</td><td>2.2K OHM Resistor, 1/2W, 5%</td><td>1</td><td>$0.99</td><td>$0.99</td></tr>
+        <tr><td>223052CK</td><td>D-Sub Connector, Receptacle</td><td>1</td><td>$2.35</td><td>$2.35</td></tr>
+        <tr><td>223280</td><td>D-Sub Contact Crimp Pin, Female</td><td>10</td><td>$0.43</td><td>$4.30</td></tr>
+        <tr><td>230957</td><td>USB Connector, USB B PCB</td><td>1</td><td>$0.99</td><td>$0.99</td></tr>
+        <tr><td>248401</td><td>MC68HC908JB8JP IC, MCU, 8-BIT</td><td>2</td><td>$4.95</td><td>$9.90</td></tr>
+        <tr><th colspan="4">Shipping:</th><td>$6.49</td></tr>
+        <tr><th colspan="4">Total:</th><td>$64.60</td></tr>
+      </tbody>
+    </table>
+
+    <p>This seems a little pricey for an IR sensor, and it is. There are few reasons it is expensive:</p>
+
+    <ol>
+      <li>I had pretty much no parts to work with. I bought literally hundreds of capacitors and diodes that I will not use in this project</li>
+      <li>I bought a breadboard to test with that I will reuse in future projects</li>
+      <li>I have to build a programmer for the Motorola microcontroller. This will also be reusable in the future</li>
+    </ol>
+
+    <p>The one part that I couldn't find from Jameco was the <a href="http://www.vishay.com">Vishay</a> tsop1738. Those I ordered for 99&#xA2; apiece from <a href="http://ebay.com">eBay</a>.</p>
+    <hr />
+
+    <p>For actually getting the firmware on the chip, I used <a href="http://sourceforge.net/projects/spgmr08/">Spgmr08</a> and followed the steps from the <a href="http://usbirboy.sourceforge.net/docs.html#Programming_the_board_MCU">USB-IR-Boy documentation</a>:</p>
+
+    <ol>
+      <li><code>su -c "./spgmr -P /dev/<acronym title="COM1">ttyS0</acronym>"</code></li>
+      <li><code>cpu jb8</code></li>
+      <li>Power on the prommer</li>
+      <li><code><acronym title="Security Codes">scodes</acronym> try blank</code></li>
+      <li><code>erase</code></li>
+      <li>Power off the prommer</li>
+      <li>Power on the pormmer</li>
+      <li><code><acronym title="Security Codes">scodes</acronym> try blank</code></li>
+      <li>for new, never programmed chip, repeat steps 4-8 two times</li>
+      <li><code>program from ~/hello_world.hc908jb8.s19</code></li>
+    </ol>
+
+    <!--
+    <p>Understanding the code required a basic understanding of USB. There are several different <a href="http://www.beyondlogic.org/usbnutshell/usb4.htm">logical classes of USB devices</a> all of which can <em>only</em> respond to packets from the host.</p>
+    <ul>
+      <li><strong>Control Pipes</strong> &bull; Connections where the host sends predefined packet types with predefined responses. Each exchange is broken into three parts:
+      <ol>
+        <li><strong>Setup Stage</strong> where the server sends a request and the client responds with an <acronym title="acknowledgment">ACK</acronym></li>
+        <li><strong>Data State</strong> where the host may request data (IN packets) or send data (OUT packets) and, if appropriate, the client responds with DATA packets</li>
+        <li><strong>Status Stage</strong> where the host sends a zero-length IN or OUT packet and the client responds with an ACK to signal success</li>
+      </ol>
+      </li>
+      <li><strong>Interrupt Pipes</strong> &bull; Connections that are polled regularly and which respond with a fixed amount of data</li>
+      <li><strong>Isosynchronous Pipes</strong> &bull; Polled connections of varying size without retry on failed delivery</li>
+      <li><strong>Bulk Pipes</strong> &bull; Variable size connections with variable latency and guaranteed delivery</li>
+    </ul>
+-->
+
+  </body>
+</html>

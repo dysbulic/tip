@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>PSY-304B Homework #7</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math, table + math, math + table, table + table, object + math { margin-top: .75em; }
+      .data td, .data th { text-align: center; padding: .25em; border: 1px solid; }
+      td, th { padding: .25em .5em; border: 1px solid; }
+      .ellip td { text-align: center; }
+      table { margin: auto; }
+      .hl { background-color: #BBB; }
+      ol { margin-left: 0em; }
+      .answer { margin: 0em; }
+      object { width: 100%; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY-304B: Quantitative Methods &amp; Experimental Design</h1>
+      <h2>Homework #7</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 10:00 Thrs., 1 May 2008</h2>
+    </div>
+    <blockquote>
+      <p>For all problems, unless otherwise indicated, assume a Type 1 error rate = .05.</p>
+    </blockquote>
+    <ol>
+      <li>
+        <div class="question">
+          <p>Consider an experiment that you anticipate conducting or that you think somebody should conduct &mdash; an experiment that strikes you as a good idea in your primary area of research or an area of research that you are familiar with. Try to come up with an experiment in which at least one factor is experimentally manipulated (i.e., under the experimenter’s control). Now consider this experimentally manipulated factor or factors.</p>
+        </div>
+        <div class="answer">
+          <p>One of my research interests is recommender systems which attempt to make predictions about human preferences. In general these types of experiments tend to only involve random factors because the research interest is to identify general trends about types of people however it is possible to imagine experiments that could involve fixed factors.</p>
+          <p>Imagine that I'm the marketer producing a website to sample tracks off an artists unreleased CD to drive up hype for the release. It is my belief that particular tracks will be more appealing at different times of day. (Perhaps people will like a melodic track earlier in the morning and a more energetic one in the evening.) I decide to run an experiment to test my hypothesis by randomly giving users a different tracks at different times of day and recording the length of time that they listen as a measurement of their interest.</p>
+          <p>My null hypotheses will be:</p>
+          <ul>
+            <li>Main Effect for Time &mdash; The time of day does not affect how much users like tracks from this CD.</li>
+            <li>Main Effect for Track &mdash; Users like all tracks from this CD equally.</li>
+            <li>Interaction Effect for Time and Track &mdash; No particular track is more or less interesting at a particular time of day.</li>
+          </ul>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Should these factors optimally be manipulated on a between-subjects or within-subjects basis? Discuss the reasons for your choice.</p>
+            </div>
+            <div class="answer">
+              <p>Steps should be taken to assure that the users being considered are all viewing the site for the first time. It is important experimentally that these tracks come from an unreleased album which listeners will have no previous experience with. Hearing a song for the second time will have an undetermined effect on the users preferences.</p>
+              <p>Similarly a listener hearing a different song from an album where a song was previously liked or disliked will have an effect on preference.</p>
+              <p>A different but also interesting experiment would be a within subjects experiment that looks at if a particular ordering of tracks could drive up overall satisfaction with the album.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Should these factors be considered fixed or random? Discuss the reasons for your choice.</p>
+            </div>
+            <div class="answer">
+              <p>The experiment was structured to look at only a specific album rather than something more general such as genre versus time of day so that the tracks would be a fixed effect.</p>
+              <p>The time of day is a somewhat more difficult question. The experimental goal was to divide the samples into socially defined periods: morning, afternoon, evening, etc. The boundaries of these periods are ill defined in part because the sets are fuzzy rather than discrete. People might disagree on whether 11:30am is morning or afternoon, but there will be much less disagreement about 8am.</p>
+              <p>For this experiment though the boundaries are chosen at random within a bound chosen based on survey data, so the factor is random.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>The table below shows cerebrospinal fluid (CSF) measurements of a neurotransmitter metabolite (LZ34) taken from 12 volunteer subjects at 4-hour intervals (5 measurements in all). The researcher is interested in the pattern of changes in LZ34 over time.</p>
+          <table class="data">
+            <caption>Time of Measurement</caption>
+            <thead>
+              <tr><th>Subject ID</th><th>12am</th><th>4am</th><th>8am</th><th>12pm</th><th>4pm</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>01</td><td>13.3</td><td>23.9</td><td>26.7</td><td>24.7</td><td>22.0</td></tr>
+              <tr><td>02</td><td>12.6</td><td>22.6</td><td>28.3</td><td>21.9</td><td>23.0</td></tr>
+              <tr><td>03</td><td>23.9</td><td>24.1</td><td>24.0</td><td>22.3</td><td>14.0</td></tr>
+              <tr><td>04</td><td>33.3</td><td>43.0</td><td>46.2</td><td>42.8</td><td>33.9</td></tr>
+              <tr><td>05</td><td>24.0</td><td>23.8</td><td>35.9</td><td>32.9</td><td>23.4</td></tr>
+              <tr><td>06</td><td>13.2</td><td>10.2</td><td>14.6</td><td>12.6</td><td>10.5</td></tr>
+              <tr><td>07</td><td>23.0</td><td>33.0</td><td>36.9</td><td>32.5</td><td>31.9</td></tr>
+              <tr><td>08</td><td>24.1</td><td>26.9</td><td>28.4</td><td>27.4</td><td>23.6</td></tr>
+              <tr><td>09</td><td>34.1</td><td>37.2</td><td>48.0</td><td>43.4</td><td>42.0</td></tr>
+              <tr><td>10</td><td>43.7</td><td>57.1</td><td>60.1</td><td>75.2</td><td>41.9</td></tr>
+              <tr><td>11</td><td>53.7</td><td>53.6</td><td>60.5</td><td>52.3</td><td>48.0</td></tr>
+              <tr><td>12</td><td>23.2</td><td>33.2</td><td>44.9</td><td>39.6</td><td>28.3</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Using SAS or hand calculations, test the null hypothesis that the population means across each of the 5 times of measurement are equal. Conduct and report both univariate (i.e., mixed model) and multivariate repeated measures tests of this hypothesis. Report the test statistics that you deem most appropriate (i.e., the most appropriate test statistic for the univariate test). In each case, indicate the observed F’s, the critical values (interpolate if you need to), and your decision concerning rejection of the null hypothesis.</p>
+            </div>
+            <div class="answer">
+              <p>The univariate analysis from SAS produces:</p>
+              <p>The multivariate analysis from SAS produces:</p>
+              <pre>Statistic                        Value    F Value    Num DF    Den DF    Pr > F
+Wilks' Lambda               0.13267694      13.07         4         8    0.0014
+Pillai's Trace              0.86732306      13.07         4         8    0.0014
+Hotelling-Lawley Trace      6.53710458      13.07         4         8    0.0014
+Roy's Greatest Root         6.53710458      13.07         4         8    0.0014</pre>
+              <p>There is a very small probability that the five means are the same. This means there is statistically significant support to reject the null hypothesis and support the experimenter's belief that there is a change in the levels of LZ34 over time.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Regarding the univariate approach, what is the expected value of:</p>
+            </div>
+            <div class="question">
+              <p>The following equations are intentionally only symbolic. The expected value cannot be calculated, only the actual value for the mean squares for this data.</p>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>The Mean Square Time in the above design?</p>
+                </div>
+                <div class="answer">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mo>E</mo><mfenced><msub><mi>MS</mi><mi>time</mi></msub></mfenced>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                          <mo>+</mo>
+                          <msubsup><mi>&sigma;</mi><mrow><mi>time</mi><mo>&times;</mo><mi>subject</mi></mrow><mn>2</mn></msubsup>
+                          <mo>+</mo>
+                          <mi>n</mi><msubsup><mi>&theta;</mi><mi>time</mi><mn>2</mn></msubsup>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <p>So the expected value is a combination of the sampling error, the interaction effect and the actual effect main effect of time.</p>
+                  <p>
+                    Note that under the null hypothesis,
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <msubsup><mi>&sigma;</mi><mi>time</mi><mn>2</mn></msubsup>
+                      <mo>=</mo><mn>0</mn>
+                    </math>,
+                    the expected value is:
+                  </p>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mo>E</mo>
+                          <mfenced separators="|">
+                            <msub><mi>MS</mi><mi>time</mi></msub><msub><mi>H</mi><mn>0</mn></msub>
+                          </mfenced>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                          <mo>+</mo>
+                          <msubsup><mi>&sigma;</mi><mrow><mi>time</mi><mo>&times;</mo><mi>subject</mi></mrow><mn>2</mn></msubsup>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>The Mean Square Time &times; Subjects in the above design?</p>
+                </div>
+                <div class="answer">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mo>E</mo><mfenced><msub><mi>MS</mi><mrow><mi>time</mi><mo>&times;</mo><mi>subject</mi></mrow></msub></mfenced>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                          <mo>+</mo>
+                          <msubsup><mi>&sigma;</mi><mrow><mi>time</mi><mo>&times;</mo><mi>subject</mi></mrow><mn>2</mn></msubsup>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <p>
+                    Note that for repeated measures designs using an additive model there is no test for the interaction effect because there is no expected value that only estimates
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                    </math>.
+                    The mean square within which was used in between subjects designs no longer exists because each cell is only one measurement.
+                  </p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>The Mean Square Subjects in the above design?</p>
+                </div>
+                <div class="answer">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mo>E</mo><mfenced><msub><mi>MS</mi><mi>subject</mi></msub></mfenced>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                          <mo>+</mo>
+                          <mfenced open="|" close="|"><mi>subject</mi></mfenced>
+                          <msubsup><mi>&sigma;</mi><mi>subject</mi><mn>2</mn></msubsup>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <p>Note that for repeated measures designs using an additive model there is no test for the main effect of subjects. This is largely unimportant because the researcher is rarely asking a question only of these specific subjects.</p>
+                </div>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <div class="question">
+              <p>Why does SAS not include a statistical test of the Mean Square Subjects in the output?</p>
+            </div>
+            <div class="answer">
+              <p>
+                Because there is no quantity whose expected value is
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                </math>,
+                it is not possible to form an F-ratio to test the statistical likelihood that there was a meaningful difference between subjects.
+              </p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>What would be the minimum and maximum possible values of epsilon for a repeated measures study assessing changes across these 5 time points?</p>
+            </div>
+            <div class="answer">
+              <p>An assumption in the univariate analysis of repeated measures data is the uniformity of variances for the differences between all pairs of levels &mdash; a quantity known as sphericity. &epsilon; is measure of the degree to which sphericity is violated for a particular dataset. In general:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mn>0</mn></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mi>&epsilon;</mi></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mn>1</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>With 1 being no violation of sphericity and 0 being a complete violation. For a repeated factor with <em>J</em> levels, however, the bounds are more narrow:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac><mn>1</mn><mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow></mfrac></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mi>&epsilon;</mi></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mn>1</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>So, for this data those bounds are:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac><mn>1</mn><mrow><mn>5</mn><mo>-</mo><mn>1</mn></mrow></mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>.25</mn></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mi>&epsilon;</mi></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mn>1</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Using SAS (and any supplementary calculations you might need), conduct 4 pairwise comparisons for these data that compare the means for each of the last 4 time points to the 12 AM mean. Assume that these contrasts are planned and two-tailed and that you want to preserve the familywise error rate at &alpha; =.05 by using the Bonferroni procedure. Indicate the observed values of your test statistics (t’s or F’s), the critical values, and your conclusions.</p>
+            </div>
+            <div class="answer">
+              <p>For this data, SAS produces:</p>
+              <pre>Contrast Variable: time_2
+  Source                     DF    Type III SS    Mean Square   F Value   Pr > F
+  Mean                        1    368.5208333    368.5208333     11.78   0.0056
+  Error                      11    344.0291667     31.2753788
+
+Contrast Variable: time_3
+  Source                     DF    Type III SS    Mean Square   F Value   Pr > F
+  Mean                        1    1460.813333    1460.813333     34.47   0.0001
+  Error                      11     466.226667      42.384242
+
+Contrast Variable: time_4
+  Source                     DF    Type III SS    Mean Square   F Value   Pr > F
+  Mean                        1    927.5208333    927.5208333     11.19   0.0065
+  Error                      11    912.1091667     82.9190152
+
+Contrast Variable: time_5
+  Source                     DF    Type III SS    Mean Square   F Value   Pr > F
+  Mean                        1     34.6800000     34.6800000      0.83   0.3814
+  Error                      11    458.8000000     41.7090909</pre>
+              <p>
+                Using Bonferroni to correct for the familywise error rate would simply use a per-comparison error rate
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msub><mi>&alpha;</mi><mi>pc</mi></msub><mo>=</mo>
+                  <mfrac><msub><mi>&alpha;</mi><mi>fw</mi></msub><mi>k</mi></mfrac><mo>=</mo>
+                  <mfrac><mn>.05</mn><mn>4</mn></mfrac><mo>=</mo>
+                  <mn>0.0125</mn>
+                </math>.
+                For this data, the correction does not change which tests are statistically significant.
+              </p>
+              <p>There is a significant difference between the measurements at 4am, 8am and 12pm and the measurement at 12am. There is not a significant difference between the measurement at 4pm and the measurement at 12am.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Let’s say that the researcher hypothesizes that the pattern of LZ34 over time is an inverted U. Specifically, he predicts that the values will rise from 12 AM to 8 AM, peak at 8 AM, and then begin falling progressively across the 8 AM to 4 PM time interval. What would be an appropriate set of contrast coefficients for testing this specific hypothesis?</p>
+            </div>
+            <div class="answer">
+              <p>There are an infinite number of second degree polynomial curves that could be fit to three points. The steepness of the curve will affect the placement of the intermediate (4am and 12pm) points. Assume that the researcher wants the curve with the minimum rate of change over time (minimum second derivative).</p>
+              <p>Another alternative is that the researcher could want to model the change as a simple linear increase and simple linear decrease. These numbers are easier to calculate:</p>
+              <object style="height:250px" id="tree_t1" type="image/svg+xml" data="quadratic_coefficients.svg"></object>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>x</mi><mn>1</mn></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mi>x</mi><mn>5</mn></msub></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>x</mi><mn>2</mn></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mi>x</mi><mn>4</mn></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow><msub><mi>x</mi><mn>3</mn></msub><mo>+</mo><msub><mi>x</mi><mn>1</mn></msub></mrow>
+                      <mn>2</mn>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <msub><mi>x</mi><mn>1</mn></msub><mo>+</mo>
+                      <msub><mi>x</mi><mn>2</mn></msub><mo>+</mo>
+                      <msub><mi>x</mi><mn>3</mn></msub><mo>+</mo>
+                      <msub><mi>x</mi><mn>4</mn></msub><mo>+</mo>
+                      <msub><mi>x</mi><mn>5</mn></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd>
+                      <mn>2</mn><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo>
+                      <mn>2</mn><msub><mi>x</mi><mn>2</mn></msub><mo>+</mo>
+                      <msub><mi>x</mi><mn>3</mn></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd>
+                      <mn>2</mn><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo>
+                      <mn>2</mn>
+                      <mfenced><mfrac>
+                        <mrow><msub><mi>x</mi><mn>3</mn></msub><mo>+</mo><msub><mi>x</mi><mn>1</mn></msub></mrow>
+                        <mn>2</mn>
+                      </mfrac></mfenced>
+                      <mo>+</mo>
+                      <msub><mi>x</mi><mn>3</mn></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd>
+                      <mn>2</mn><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo>
+                      <msub><mi>x</mi><mn>3</mn></msub><mo>+</mo><msub><mi>x</mi><mn>1</mn></msub>
+                      <mo>+</mo>
+                      <msub><mi>x</mi><mn>3</mn></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd>
+                      <mn>3</mn><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo>
+                      <mn>2</mn><msub><mi>x</mi><mn>3</mn></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd><msub><mi>x</mi><mn>3</mn></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><mrow><mo>-</mo><mn>3</mn><msub><mi>x</mi><mn>1</mn></msub></mrow><mn>2</mn></mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>
+                A set of coefficients meeting this ratio is:
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mfenced>
+                    <mn>-1</mn><mfrac><mn>1</mn><mn>4</mn></mfrac><mfrac><mn>3</mn><mn>2</mn></mfrac><mfrac><mn>1</mn><mn>4</mn></mfrac><mn>-1</mn>
+                  </mfenced>
+                </math>.
+                Note that these coefficients represent neurochemically unlikely possibility that there is an immediate and sharp change at 8am.
+              </p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Using SAS or hand calculations, conduct a trend analysis testing whether:</p>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>the hypothesized pattern of change occurs;</p>
+                </div>
+                <div class="answer">
+                  <p>For a second-degree polynomial, SAS produces the following output:</p>
+                  <pre>Contrast Variable: time_2
+  Source                     DF    Type III SS    Mean Square   F Value   Pr > F
+  Mean                        1    933.4285714    933.4285714     30.85   0.0002
+  Error                      11    332.8157143     30.2559740</pre>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>other patterns of change that could be captured by trend analyses also occur. Consistent with tradition (admittedly not great justification), let’s assume there is no need to Bonferroni correct here (each trend can be evaluated at a per comparison alpha rate  = .05).  For each trend, indicate the observed values of your test statistics (t’s or F’s), the critical values, and your conclusions.</p>
+                </div>
+                <div class="answer">
+                  <p>The SAS output for other degree polynomials is:</p>
+                  <pre>Contrast Variable: time_1
+  Source                     DF    Type III SS    Mean Square   F Value   Pr > F
+  Mean                        1     53.0670000     53.0670000      2.68   0.1296
+  Error                      11    217.4190000     19.7653636
+
+Contrast Variable: time_3
+  Source                     DF    Type III SS    Mean Square   F Value   Pr > F
+  Mean                        1     27.6480000     27.6480000      1.52   0.2429
+  Error                      11    199.6960000     18.1541818
+
+Contrast Variable: time_4
+  Source                     DF    Type III SS    Mean Square   F Value   Pr > F
+  Mean                        1     19.1407619     19.1407619      1.18   0.3014
+  Error                      11    179.0249524     16.2749957</pre>
+                  <p>The second degree polynomial is the most likely and the only statistically significant fit. This supports the researchers model of how the levels change.</p>
+                </div>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <div class="question">
+              <p>For the comparisons that you conducted in steps e and g, did you use pooled or contrast-specific error terms? Why?</p>
+            </div>
+            <div class="answer">
+              <p>SAS uses contrast specific error term. Violations in sphericity will affect the reliability of the pooled error term. Using a contrast specific term reduces the size of the data determining the error term, but it also reduces the effects of sphericity violations.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Let’s say that a research assistant analyzed the data above. The R.A. mistakenly believed that a between-groups design was used (i.e., not realizing that each subject contributed 5 data points). That is, the R.A. believed 60 subjects were used, with each subject contributing one and only one data point. Thus, the R.A. performed a one-way between-groups ANOVA. In general, what would be the consequences for Type 1 and Type 2 errors of analyzing the data this way instead of the correct way?</p>
+            </div>
+            <div class="answer">
+              <p>The primary effect is to violate the assumtion of independence between groups nearly as completely as possible. This violation should have a significant effect on type I error rates. There will be trends across the time periods coming from the same subjects being sampled that will be incorrectly interpreted as trends within the population.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </body>
+</html>
+                  
+ 

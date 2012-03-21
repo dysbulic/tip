@@ -1,0 +1,245 @@
+\documentclass[12pt,a4paper,twoside]{article}  % Comments after  % are ignored
+\usepackage{amsmath,amssymb,amsfonts}          % Typical maths resource packages
+\usepackage{hyperref}                          % For creating hyperlinks in cross references
+\usepackage{pstricks}
+
+\pagestyle{headings}         % Option to put page headers
+                             % Needed \documentclass[a4paper,twoside]{article}
+
+%\textwidth 17.5cm
+%\rightmargin 1in
+
+%\topmargin -1cm
+%\parindent 0cm
+%\textheight 24cm
+%\parskip 1mm
+
+%\newtheorem{definition}[theorem]{Definition}
+
+\author{Will Holcomb \small{CSC445 - Homework \#1}}
+\title{Homework \#1}
+\date{August 25, 2002}
+
+\begin{document}
+\maketitle
+
+\section{Number 1}
+
+Prove that $\overline{(A \cap B)} = \bar A \cup \bar B$
+
+$\overline{(A \cap B)} = \bar A \cup \bar B$ iff
+$\overline{(A \cap B)} \subseteq \bar A \cup \bar B$ and
+$\overline{(A \cap B)} \supseteq \bar A \cup \bar B$
+
+Let $x \in \overline{(A \cap B)}$, show that $x \in \bar A \cup \bar B$. \\
+ Since $x \in \overline{(A \cap B)}$, $x \not \in (A \cap B)$
+ by definition of not. \\
+ By definition of intersection, $x \not \in A$ or $x \not \in B$. \\
+ By definition of union, $x \in \bar A \cup \bar B$. \\
+ Since x is arbitrary, by definition of subset,
+ $\overline{(A \cap B)} \subseteq \bar A \cup \bar B$.
+
+Let $x \in \bar A \cup \bar B$, show that $x \in \overline{(A \cap B)}$. \\
+ Since $x \in \bar A \cup \bar B$, $x \in \bar A$ or $x \in \bar B$
+ by definition of union. \\
+ By definition of not, $x \not \in A$ or $x \not \in B$  \\
+ By definition of intersection, $x \not \in A \cap B$ \\
+ By definition of not, $x \in \overline{(A \cap B)}$ \\
+ Since x is arbitrary, by definition of subset,
+ $\bar A \cup \bar B \subseteq \overline{(A \cap B)}$.
+
+Since $\overline{(A \cap B)} \subseteq \bar A \cup \bar B$ and 
+ $\bar A \cup \bar B \subseteq \overline{(A \cap B)}$, 
+ $\overline{(A \cap B)} = \bar A \cup \bar B$ by definition of set equality.
+
+\section{Number 2 : Exercise 2.2.1}
+\begin{enumerate}
+
+\item The automata can be defined as follows: \\
+ $M = (Q, \Sigma, \delta, q_0, F) \ni \\
+  Q = \{(x_1, x_2, x_3, a) | x_i \in \{l,r\}; a \in \{A,B\}\} \cup \{q_0\} \\
+  \Sigma = \{A,B\}$ \\
+ $\delta$ is described by Table~\ref{2.2.1.a} \\
+ $F = \hat \delta((r,r,x_3,a), A) \cup \hat \delta((x_1,x_2,r,a), B) \cup
+  \hat \delta((x_1,r,l,a), B) \\
+  \ni x_i \in \{l,r\}; a \in \{A,B\}$
+
+\begin{table}
+\begin{tabular}{c || c | c }
+State                             &A           &B         \\
+\hline\hline
+$>q_0$                            &(r,l,l,A)   &(l,r,r,B) \\
+$(l,l,l,x) | x \in \{A,B\}\}$     &(r,l,l,A)   &(l,r,r,B) \\
+$(l,l,r,x) | x \in \{A,B\}\}$     &(r,l,r,A)   &(l,r,l,B) \\
+$(l,r,l,x) | x \in \{A,B\}\}$     &(r,l,l,A)   &(l,l,r,B) \\
+$(l,r,r,x) | x \in \{A,B\}\}$     &(r,r,r,A)   &(l,r,l,B) \\
+$(r,l,l,x) | x \in \{A,B\}\}$     &(l,l,l,A)   &(r,r,r,B) \\
+$(r,l,r,x) | x \in \{A,B\}\}$     &(l,l,r,A)   &(r,r,l,B) \\
+$(r,r,l,x) | x \in \{A,B\}\}$     &(l,r,l,A)   &(r,l,r,B) \\
+$(r,r,r,x) | x \in \{A,B\}\}$     &(l,r,r,A)   &(r,r,l,B)
+\end{tabular}
+\caption{Transitions for $\delta$}\label{2.2.1.a}
+\end{table}
+\end{enumerate}
+
+\section{Number 3 : Exercise 2.2.4}
+\begin{enumerate}
+
+\item The automata can be represented as Figure~\ref{2.2.4.a}
+\begin{figure}
+\input{2.2.4.a.tex}
+\caption{An automata for all strings ending in 00}\label{2.2.4.a}
+\end{figure}
+
+\item The automata can be represented as Figure~\ref{2.2.4.b}
+\begin{figure}
+\input{2.2.4.b.tex}
+\caption{An automata for all strings with 000 as a substring}\label{2.2.4.b}
+\end{figure}
+
+\item The automama can be represented as  Figure~\ref{2.2.4.c}
+\begin{figure}
+\input{2.2.4.c.tex}
+\caption{An automata for all strings with 011 as a substring}\label{2.2.4.c}
+\end{figure}
+\end{enumerate}
+
+\section{Number 4 : Exercise 2.2.5}
+\begin{enumerate}
+\item The automata can be defined as follows: [This is for each block
+ of 5 containing at least two zeroes. $(|w| \% 5 = 0)$] \\
+ $M = (Q, \Sigma, \delta, q_0, F) \ni \\
+  Q = \{(z, c) | z,c \in \mathbb{N}; z,c < 5\} \\
+  \Sigma = \{0, 1\} \\
+  \delta((z, c), 0) = (z + 1, c + 1) \ni c \leq 3 \\
+  \delta((z, c), 1) = (z, c + 1) \ni c \leq 3 \\
+  \delta((z, 4), 0) = (0, 0) \ni z \geq 1 \\
+  \delta((z, 4), 1) = (0, 0) \ni z \geq 2 \\
+  q_0 = (0, 0) \\
+  F = \{(0, 0)\}$
+
+%[For any block of five containing two zeroes:] \\
+% $\delta((z, c), 0) = (z + 1, c + 1) \ni z = 0; c \leq 3 \\
+%  \delta((z, c), 1) = (z, c + 1) \ni c \leq 3 \\
+%  \delta((z, c), 0) = (0, 0) \ni z = 1; c \leq 4$ \\
+
+\item The automata can be represented as Figure~\ref{2.2.5.b}
+\begin{figure}
+\input{2.2.5.b.tex}
+\caption{An automata for strings with 1 as the 10th character to the right}\label{2.2.5.b}
+\end{figure}
+
+\item The automata can be represented as Figure~\ref{2.2.5.c}
+\begin{figure}
+\input{2.2.5.c.tex}
+\caption{An automata for strings that begin and/or end with 01}\label{2.2.5.c}
+\end{figure}
+
+\item The automata can be defined as follows: \\
+ $M = (Q, \Sigma, \delta, q_0, F) \ni \\
+  Q = \{(z, n) | z,n \in \mathbb{N}; z < 5; n < 3\} \\
+  \Sigma = \{0,1\} \\
+  \delta((z,n), 0) = ((z + 1) \% 5, n) \\
+  \delta((z,n), 1) = (z, (n + 1) \% 3) \\
+  q_0 = (0,0) \\
+  F = \{(0,0)\}$
+
+\end{enumerate}
+
+\section{Number 5 : Exercise 2.3.5}
+
+Prove that assuming if $\delta_D(q, a) = p$ then $\delta_N(q, a) =
+ \{p\}$, it follows that if $\hat \delta_D(q_0, w) = p$ then $\hat
+ \delta_N(q_0,w) = \{p\}$. \\
+ Start with $w = \epsilon$. By definition, $\hat \delta_D(q_0,
+ \epsilon) = q_0$ and $\hat \delta_N(q_0, \epsilon) = \{q_0\}$.  \\
+ Consider then $|w| \geq 1$; let $x$ be a string and $a$ a letter such
+ that $w = xa$. \\
+ By the inductive hypothesis and the definition of $\hat \delta_D$,
+ $\hat \delta_D(q_0, w) = \hat \delta_D(q_0, xa) = \delta_D(\hat
+ \delta(q_0, x), a)$. \\
+ By the inductive hypothesis and the definition of $\hat \delta_N$,
+ $\hat \delta_N(\{q_0\}, w) = \hat \delta_N(\{q_0\}, xa) =
+ \delta_N(\hat \delta_N(q_0, x), a)$. \\
+ \ldots
+
+\section{Number 6 : Exercise 2.4.1}
+\begin{enumerate}
+
+\item The automata can be represented as Figure~\ref{2.4.1.a}
+\begin{figure}
+\input{2.4.1.a.tex}
+\caption{An automata for the strings abc, abd, and aacd}\label{2.4.1.a}
+\end{figure}
+
+\item The automata can be represented as Figure~\ref{2.4.1.b}
+\begin{figure}
+\input{2.4.1.b.tex}
+\caption{An automata for the strings 0101, 011, and 101}\label{2.4.1.b}
+\end{figure}
+
+\item The automata can be represented as Figure~\ref{2.4.1.c}
+\begin{figure}
+\input{2.4.1.c.tex}
+\caption{An automata for the strings ab, bc, ca}\label{2.4.1.c}
+\end{figure}
+
+\end{enumerate}
+
+\section{Number 7 : Exercise 2.5.1}
+\begin{enumerate}
+\item The $\epsilon$-closures are: \\
+ $\epsilon_c(p) = \{p\}$ \\
+ $\epsilon_c(q) = \{p, q\}$ \\
+ $\epsilon_c(r) = \{p, q, r\}$
+
+\item All strings of length 3 or less $= \{w | |w| \leq 3; (count_b(w)
+  \geq 2$ and/or $count_c(w) \geq 1)\}$
+
+\item As a DFA:
+\begin{table}
+\begin{tabular}{c || c | c | c}
+State                   &a              &b         &c \\
+\hline\hline
+$\rightarrow \{p\}$     & $\{p\}$       & $\{p, q\}$    & $\{p, q, r\}$ \\
+$\{p, q\}$              & $\{p, q\}$    & $\{p, q, r\}$ & $\{p, q, r\}$ \\
+$\{p, q, r\}$           & $\{p, q, r\}$ & $\{p, q, r\}$ & $\{p, q, r\}$
+\end{tabular}
+\caption{Transitions for $\delta_D$}\label{2.5.1.c}
+\end{table}
+
+$F = \{\{p, q, r\}\}$
+
+\end{enumerate}
+  
+\section{Number 8 : Exercise 2.5.2}
+\begin{enumerate}
+\item The $\epsilon$-closures are: \\
+ $\epsilon_c(p) = \{p, q, r\}$ \\
+ $\epsilon_c(q) = \{q\}$ \\
+ $\epsilon_c(p) = \{r\}$ \\
+
+\item All strings of length 3 or less $= \{x_1x_2x_3 | x_1 \in
+  \{a,b,c\}; x_2 \in \{a,c\}; x_3 \in \{a,b,c,\epsilon\}\} \cup
+  \{abb, abc, bb, a, b, c, \epsilon\}$
+
+\item As a DFA:
+\begin{table}
+\begin{tabular}{c || c | c | c}
+State                        &a              &b            &c \\
+\hline\hline
+$\rightarrow \{p, q, r\}$    & $\{p\}$       & $\{q, r\}$  & $\{p, q, r\}$ \\
+$\{p\}$                      & $\emptyset$   & $\{q\}$     & $\{r\}$       \\
+$\{q, r\}$                   & $\{p, q, r\}$ & $\{r\}$     & $\{p, q, r\}$ \\
+$\{q\}$                      & $\{p, q, r\}$ & $\{r\}$     & $\{p, q, r\}$ \\
+$\{r\}$                      & $\emptyset$   & $\emptyset$ & $\emptyset$
+\end{tabular}
+\caption{Transitions for $\delta_D$}\label{2.5.2.c}
+\end{table}
+
+$F = \{\{p, q, r\}, \{q, r\}, \{r\}\}$
+
+
+\end{enumerate}
+
+\end{document}

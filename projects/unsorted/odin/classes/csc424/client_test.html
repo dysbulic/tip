@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Othello Client Test</title>
+    <link rel="stylesheet" href="/styles/main.css" type="text/css" />
+  </head>
+  <body>
+    <p>This is a test of a client program for the <a
+     href="othello_protocol.html">Othello Protocol</a>. This page
+     should contain an applet suitable for being run with the <a
+     href="http://java.sun.com">java plugin</a>. It is embedded using
+     the XHTML &lt;object&gt; tag, so it may not work in older
+     browsers.</p>
+<!--
+    <p>Also this client was written using the 1.4 version of the jdk
+     and it will not work using the 1.3 plugin unless the XML parsing
+     API's are installed.</p>
+    <p>This program uses the <a
+     href="http://java.sun.com/products/java-media/jai/">Java Advanced
+     Imaging API</a> to do some image manipulations. If you do not
+     have the JAI installed please <a
+     href="http://java.sun.com/products/java-media/jai/downloads/download.html">download
+     it</a>.</p>
+-->
+    <div style="text-align: center; width: 100%; height: 600px; border: thin solid gray">
+      <!-- application/java-archive -->
+      <object
+       codetype="application/java"
+       classid="java:org.himinbi.othello.client.gui.AppletClient"
+       archive="othello_server.jar,xercesImpl.jar,xmlParserAPIs.jar,play.jar,log4j.jar"
+       width="75%" height="100%">
+        <param name="server hostname" value="odin.himinbi.org" />
+        <param name="server port" value="3399" />
+        <param name="xml reader" value="org.apache.xerces.parsers.SAXParser" />
+
+        <!-- For bloody stupid ie; how hard is it to read a standard? -->
+        <object
+         classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93"
+         archive="othello_server.jar,xercesImpl.jar,xmlParserAPIs.jar,play.jar,log4j.jar"
+         width="75%" height="100%"
+         codebase="http://java.sun.com/products/plugin/1.4/jinstall-14-win32.cab#Version=1,4,0,mn">
+          <param name="code" value="org.himinbi.othello.client.gui.AppletClient.class" />
+          <param name="codebase" value="http://odin.himinbi.org/classes/csc424/" />
+          <param name="type" value="application/java" />
+          <param name="server hostname" value="odin.himinbi.org" />
+          <param name="server port" value="3399" />
+          <param name="xml reader" value="org.apache.xerces.parsers.SAXParser" />
+
+          Your browser does not support the &lt;object&gt; tag or does
+          not have a handler for applets (the java plugin is not
+          installed). Might I suggest <a
+          href="http://www.mozilla.org">Mozilla</a>?
+
+        </object>
+      </object>
+    </div>
+  </body>
+</html>

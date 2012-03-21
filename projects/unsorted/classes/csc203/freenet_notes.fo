@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns="http://www.w3.org/1999/XSL/Format">
+  <layout-master-set>
+    <!-- layout information -->
+    <simple-page-master master-name="simple"
+     page-height="11in"
+     page-width="8.5in"
+     margin-top=".5in"
+     margin-bottom=".5in"
+     margin-left="1in"
+     margin-right="1in">
+      <region-body margin-top="0in"/>
+      <region-before extent="1in"/>
+      <region-after extent="1.5cm"/>
+    </simple-page-master>
+  </layout-master-set>
+
+  <page-sequence master-reference="simple">
+
+    <flow flow-name="xsl-region-body">
+      <block 
+       font-family="sans-serif"
+       line-height="24pt"
+       space-after.optimum="15pt"
+       background-color="rgb(89, 109, 164)"
+       color="white"
+       text-align="center"
+       padding-top="3pt">
+        <block font-size="18pt">Freenet</block>
+        <block font-size="14pt">Will Holcomb</block>
+        <block font-size="14pt">CSC 203 - November 4, 2002</block>
+      </block>
+      <block font-size="12pt"
+       font-family="sans-serif"
+       line-height="15pt"
+       space-after.optimum="8pt"
+       text-align="justify">
+        Freenet is a piece of software designed to provide "totally
+        free" communications across the Internet. It is a large scale
+        peer-to-peer network that pools member computers so as to
+        create a virtual information store open to anyone to publish
+        any information of any kind. It is designed to be impossible to
+        monitor or control aside from simply disallowing its usage.
+      </block>
+      <block font-size="12pt"
+       font-family="sans-serif"
+       line-height="15pt"
+       space-after.optimum="8pt"
+       text-align="justify">
+        Freenet is different from other peer-to-peer systems like say
+        <basic-link
+         external-destination="http://www.gnutella.com/"
+         text-decoration="underline" color="blue">
+         gnutella</basic-link>, in that you are not sharing
+        your files with other people, rather you are providing some
+        resources to the global freenet and how those resources are
+        used is dependent on the behavior of people on the net.
+      </block>
+      <block font-size="12pt"
+       font-family="sans-serif"
+       line-height="15pt"
+       space-after.optimum="8pt"
+       text-align="justify">
+        The backbone of freenet is a set of "persistent" nodes that
+        are always connected. Anyone can start up a persistent node
+        and tell it to join into the global freenet based on a list of
+        nodes that can be retrieved off on the net. Once a node joins
+        it takes whatever space it was allowed and creates an encrypted
+        cache where it will store all of it's information. The cache
+        is not available to the person running the node (at least not
+        easily). Information may be inserted into the network at a
+        given node, but as the information is requested at different
+        places it will be copied to other nodes.
+      </block>
+      <block font-size="12pt"
+       font-family="sans-serif"
+       line-height="15pt"
+       space-after.optimum="8pt"
+       text-align="justify">
+        Freenet nodes know very little about the world. When searching
+        with a traditional p2p client the search goes out and what
+        comes back is the IP address of the computer that has the
+        information that you are looking for. A transfer is then set
+        up between those two endpoints and you get your file. With
+        freenet anonymity is very important, so there is no
+        traceability either to who made the request of who provided the
+        information. When a request goes through the freenet, each
+        node only knows to ask the nodes around it and when the file
+        is coming back each node copies the file to its cache and then
+        sends it to the node that requested it.
+      </block>
+      <block font-size="12pt"
+       font-family="sans-serif"
+       line-height="15pt"
+       space-after.optimum="8pt"
+       text-align="justify">
+        This means that as a request comes in a node doesn't know if
+        the request originated with the asking node or if it has been
+        floating around the freenet for a hundred queries. There is a
+        time to live (TTL) value, which is decremented with each hop,
+        but it is randomly set initially and may be randomly changed
+        by any node, so it cannot be used in any useful way.
+      </block>
+      <block font-size="12pt"
+       font-family="sans-serif"
+       line-height="15pt"
+       space-after.optimum="8pt"
+       text-align="justify">
+        There is an advantage to the way that freenet works beyond
+        providing anonymity. Nodes know what is in their cache at a
+        given time and as information is requested it gets better
+        spread through more caches and so the popularity of a piece of
+        information is directly proportional to its availability (as
+        opposed to normal networks with a centralized host where the
+        inverse is true).
+      </block>
+      <block font-size="12pt"
+       font-family="sans-serif"
+       line-height="15pt"
+       space-after.optimum="8pt"
+       text-align="justify">
+        There is also several disadvantages as well. A big one is
+        there is a size constraint on the amount of information that
+        may be stored in a node. That means that if enough stuff comes
+        through then some things will have to get pushed out. If you
+        have your website published on your persistent node then there
+        is no way to keep it from being pushed out if it is not
+        requested enough. The accepted solution is to write a bot to
+        regularly reinsert information to make sure it stays present,
+        but this is quite a pain compared to keeping a regular website
+        up.
+      </block>
+      <block font-size="12pt"
+       font-family="sans-serif"
+       line-height="15pt"
+       space-after.optimum="8pt"
+       text-align="justify">
+        Another issue goes at the basic philosophy on which freenet is
+        founded. Most people would agree that anonymous publishing is
+        important in say, a country where an oppressive government will
+        come hunt down and jail anyone publishing dissenting
+        views. Very few people would say though that anonymous
+        publishing is valuable to protect child pornographers from
+        being apprehended. Freenet protects them both equally however,
+        and it is pretty much impossible to create a system that could
+        effectively protect one and not the other. How does the value
+        weigh against the cost?
+      </block>
+      <block font-size="12pt"
+       font-family="sans-serif"
+       line-height="15pt"
+       space-after.optimum="8pt"
+       text-align="justify">
+        Resources:
+        <list-block>
+          <list-item>
+            <list-item-label><block>&#x2022;</block></list-item-label>
+            <list-item-body start-indent="body-start()"><block>
+              The Freenet Project -
+              <basic-link
+               external-destination="http://freenetproject.org/"
+               text-decoration="underline" color="blue">
+                http://freenetproject.org/
+              </basic-link>
+            </block></list-item-body>
+          </list-item>
+          <list-item>
+            <list-item-label><block>&#x2022;</block></list-item-label>
+            <list-item-body start-indent="body-start()"><block>
+              <inline text-decoration="underline">A Distributed
+              Decentralised Information Storage and Retrieval
+              System</inline> by Ian Clarke -
+              <basic-link
+               external-destination="http://freenetproject.org/freenet.pdf"
+               text-decoration="underline" color="blue">
+                http://freenetproject.org/freenet.pdf
+              </basic-link>
+            </block></list-item-body>
+          </list-item>
+        </list-block>
+      </block>
+    </flow>
+  </page-sequence>
+</root>
+
+ 

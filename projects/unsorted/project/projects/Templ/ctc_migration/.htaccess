@@ -1,0 +1,34 @@
+RewriteEngine on
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} ^(.*)/([^/]+)$
+RewriteCond %1/.templ.cache/%2 -f
+RewriteRule ^(.*)$ %1/.templ.cache/%2
+
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_FILENAME} ^(.*)/$
+RewriteCond %1/.templ.cache/index.php -f
+RewriteRule ^(.*)$ %1/.templ.cache/index.php
+
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_FILENAME} ^(.*)/$
+RewriteCond %1/.templ.cache/index.html -f
+RewriteRule ^(.*)$ %1/.templ.cache/index.html
+
+RewriteCond %1/.templ.cache/index.php -f
+
+#RewriteRule ^(.*)$ http://odin.himinbi.org/?file=%1/.templ.cache/%2 [R]
+
+#RewriteRule ^(.*)$ http://odin.himinbi.org/?file=%1/.templ.cache/%2 [R]
+#RewriteRule ^(.*)$ http://odin.himinbi.org/?file=%{REQUEST_FILENAME} [R]
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule $ http://odin.himinbi.org/ [R,L]
+
+#RewriteCond %{REQUEST_FILENAME} !.htaccess$
+#RewriteCond %{REQUEST_FILENAME} !index.phps?$
+#RewriteCond %{REQUEST_URI} ^(.*)/([^/]*)$
+
+# RewriteLog logs/rewrite_test.log
+# RewriteLogLevel 3
+
+#RewriteRule ^.*$ %1/index.html.tmpl

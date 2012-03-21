@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                      "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd">
+<book id="website-via-cvs">
+  <bookinfo>
+    <title>Website Maintenance Via CVS HOW-TO</title>
+    <pubdate>2001/06/22</pubdate>
+    <author>
+      <firstname>Will</firstname>
+      <surname>Holcomb</surname>
+      <affiliation>
+        <orgname>Tennessee Tech University</orgname>
+        <address><email>will@himinbi.org</email></address>
+      </affiliation>
+    </author>
+    <abstract>
+      <para>Basics of how to set up servers and clients to maintain a website using CVS.</para>
+    </abstract>
+  </bookinfo>
+
+  <chapter id="intro">
+    <title>Introduction</title>
+    <section id="concepts">
+      <title>Basic Concepts</title>
+      <para>The World Wide Web is becoming a cornerstone of having a presence on the Internet. Sites are increasingly complex and very often are maintained by a variety of people in a variety of places. The rise in popularity of the Internet has also attracted a number of unsavory characters as well; l33t haX0rs, script kiddies, industrial spies, foreign political groups and all sorts of other people who would like to alter your website for fun, profit or political expression. It is an increasing challenge for system administrators to provide the environment to their website maintainers to create a quality site and at the same time protect themselves from attackers. This document describes a system for setting up a webserver that should allow both flexibility for the maintainers and security for the administrator.</para>
+    </section>
+    <section id="history">
+      <title>History</title>
+      <para>This project is developing as the setup for the webserver for the Honors Program at Tennessee Technological University. The primary webpage is maintained by the secretary using Frontpage on the campus' main IIS server. The computer committee would like to expand the presence of Honors online; particularly by doing volunteer web development for different departments on campus and for professors. Access to the IIS server is restricted to departments and faculty, so a Linux based Apache webserver is being set up to allow students to do some web development.</para>
+    </section>
+    <section id="goals">
+      <title>Goals</title>
+      <para>This server has a couple special considerations that make it a little bit different than many traditional webservers. Primarily it has to do with the maintenance patterns. Several people might be working on a page over the course of a semester and because most of the users are students, there will inevitably be several changes in maintainer over the life of a page. Also, the people collaborating on a site could have very little interaction with each other outside of their work on the pages.</para>
+      <para>There are a number of priorities that need to be balanced and they are ranked as follows:</para>
+      <itemizedlist>
+        <listitem><simpara>Security: The server that is hosting these pages should be as resistant as possible to attack. We live in an age where websites are defaced for many reasons and it is naive to assume that our pages will be unimportant enough to warrant the attentions of a vandal. Other computers at Tech have already been attacked and defaced so there is little reason to assume that we are any safer.</simpara></listitem>
+        <listitem><simpara>Accessibility: This is the most difficult issue to balance against security. Because these pages are being maintained by people who are volunteering their valuable free time it is important that it is as easy as possible for them to access the information that they need and publish their pages.</simpara></listitem>
+        <listitem><simpara>Accountability: With a distributed system like this with a variety of maintainers it is important to be able to track who did what, where and when. This is important not only for the laying of blame in base of a problem, but also identifying weak points in the system.</simpara></listitem>
+        <listitem><simpara>Appropriate Communication: Many of the people working on this project will never see their coworkers in the course of their daily lives. It is important for them to be able to communicate whatever information is necessary for them to work productively. It is also important though not to provide them with too much information; if the energy required to be involved is too great then it will cause people to drop out. The goal is to give them enough to keep them interested and productive but not so much as to over exert them.</simpara></listitem>
+      </itemizedlist>
+    </section>
+    <section id="overview">
+      <title>Overview</title>
+      <para>The system is going to be running both a CVS repository and a webserver. The users will not update their pages directly, rather the webserver will be serving pages from a checked out copy of a CVS repository. Users will also have a home directory where they can get the kinks worked out of the site before going live. This system has several advantages:</para>
+      <itemizedlist>
+        <listitem><simpara>Security:</simpara>
+          <itemizedlist>
+            <listitem><simpara>Chroot: The webserver will be running inside chroot jail. This will prevent users from accessing files in the regular filesystem and will limit the exploits possible from a compromised account.</simpara></listitem>
+            <listitem><simpara>Limited Login: Users will have a restricted shell and will only be allowed to perform a few basic operations like changing their passwords and running cvs.</simpara></listitem>
+            <listitem><simpara>Apache: Several security constrictions will be placed on Apache to control the ways that it may be accessed and how it serves pages.</simpara></listitem>
+            <listitem><simpara>SSH: Access to the repository will be via SSH. This will allow access from anywhere on the Internet with a relatively high degree of security.</simpara></listitem>
+            <listitem><simpara>CVS: File permissions will be structured in such a way that users are only able to alter certain pages and they will not be able to permanently remove files from the repository. An attack could temporarily alter the pages that a user has permission to alter, but without exploiting the CVS server it is not possible to permanently alter the site.</simpara></listitem>
+            <listitem><simpara>Quotas: Users will have limits on the amount of information that they can store. Disk space is not an issue and the limits will not be such that it should ever affect the ability to create a site, but it will prevent certain denial of service attacks.</simpara></listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem><simpara>Accessibility:</simpara>
+          <itemizedlist>
+            <listitem><simpara>Users will be able to access their files from any platform that supports CVS. This includes nearly every operating system. <ulink url="http://www.wincvs.org">WinCVS</ulink> can be used for Windows users and it provides a simple GUI interface.</simpara></listitem>
+            <listitem><simpara>Users will be able to edit their files in whatever editor they prefer and then upload the changed files.</simpara></listitem>
+            <listitem><simpara><ulink url="http://viewcvs.sourceforge.net">ViewCVS</ulink> will be installed allowing users and administrators to see what changes have been made to the pages, when and by whom.</simpara></listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem><simpara>Accountability:</simpara>
+          <itemizedlist>
+            <listitem><simpara>CVS will handle this in spades. The exact time, nature and owner of all changes will be recorded and reversible.</simpara></listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem><simpara>Appropriate Communication:</simpara>
+          <itemizedlist>
+            <listitem><simpara><ulink url="http://www.list.org">Mailman</ulink> will be running on the server. There will be a variety of lists devoted to different aspects of the development. Users can subscribe or unsubscribe to lists as their needs dictate.</simpara></listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+      <para>Drawbacks:
+        <itemizedlist>
+          <listitem><simpara>Having the whole site in CVS requires a minimum of twice the disk space of a non-CVS setup. Given the prices of hard drives however this is not a serious concern.</simpara></listitem>
+        </itemizedlist>
+      </para>
+    </section>
+  </chapter>
+
+  <chapter id="server">
+    <title>Server Setup</title>
+    <section id="server-overview">
+      <title>Overview</title>
+      <para>I am going to make these instructions as general as possible, but for reference the software that I am setting this system up on is:</para>
+      <itemizedlist>
+        <listitem><simpara>Redhat Linux 7.1 (<ulink url="http://www.redhat.com">www.redhat.com</ulink>) with the latest updates as of 2001/08/07</simpara></listitem>
+        <listitem><simpara>OpenSSH 2.9p1 (<ulink url="http://www.openssh.org">www.openssh.org</ulink>)</simpara></listitem>
+        <listitem><simpara>CVS 1.11 (<ulink url="http://www.cvshome.org">www.cvshome.org</ulink>)</simpara></listitem>
+        <listitem><simpara>Apache 1.3.19 (<ulink url="http://httpd.apache.org">httpd.apache.org</ulink>)</simpara></listitem>
+        <listitem><simpara>Mailman 2.0.5 (<ulink url="http:/www.list.org">www.list.org</ulink>)</simpara></listitem>
+      </itemizedlist>
+      <para>There have been bugfixes that affect this setup. I know that I had to upgrade to this version of OpenSSH to allow a users ssh configuration files to be owned by root rather than the user. In general it is a good idea to upgrade to the latest versions of programs especially since much of the time things that are fixed are security vulnerabilities.</para>
+    </section>
+    <section id="system-configuration">
+      <title>System Configuration</title>
+      <para>There are certain things that you can do to your system to make it more efficient as a webserver and also to make it more secure and resistant to attack if one of your user accounts is compromised. I will not discuss <ulink url="http://www.linuxdoc.org/HOWTO/Security-HOWTO.html">security</ulink> in general which is an important part of any setup but just those that pertain to this setup.</para>
+      <para>Perhaps the greatest risk in this setup is that one of your user accounts will be compromised. We will try to make it so that the worst that they can do is temporarily deface the webpage controlled by the account that was compromised. One sort of attack that you want to prevent is filling the filesystem. Running out of room can cause programs to act strangely and might allow permanent damage to files if the filesystem were filled and then files were accessed and not allowed to write completely. The simplest way to prevent these sorts of attacks is to prevent the amount of space a potential attacker is allowed to use using disk partitions and quotas.</para>
+      <section id="disk-partitions">
+        <title>Disk Partitions</title>
+        <para>Set up separate partitions. Files cannot spill over from one partition to another. So, it is a good idea to have /, /var, /home, /home/www and /tmp in different disk partitions. This will help isolate an attack on any particular area.</para>
+        <para>Ext2 partitions you can specify mount options like <command>noexec</command> and <command>nodev</command> that will prevent programs from being executed and device files from being created respectively. If you are not deploying any cgi programs in your webpages then I highly recommend that you mount the partition <command>noexec</command>. You will not lose the ability to run server processed languages like php, but you will eliminate a whole realm of possible exploits on your system. Also you should consider mounting /home <command>nosuid</command> though for reasons I will get into later this is not possible for /home/www.</para>
+        <para>Any partitions that you would like to use quotas on will also have to have the <command>usrquota</command> and/or <command>grpquota</command> mount options. These are not actually used by the mount program but other programs involved in the quota process expect for them to be present on filesystems using quotas.</para>
+        <para>Partitioning will have possible additional benefits so far as disk i/o is concerned. When accessing multiple files on a single partition there are certain limits placed on how the operating system can access things because the writing of one file affects how another on the same partition can be written. If this machine is operating primarily as a webserver then this should not matter as much but it certainly shouldn't hurt anything.</para>
+        <para>The setup I am using is this:</para>
+        <table>
+          <title>Disk Partitions</title>
+          <tgroup cols="4">
+            <thead>
+              <row>
+                <entry>Name</entry>
+                <entry>Mount Point</entry>
+                <entry>Minimum Size</entry>
+                <entry>Mount Options</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>Root</entry>
+                <entry>/</entry>
+                <entry>5000mb</entry>
+                <entry>defaults</entry>
+              </row>
+              <row>
+                <entry>Home Directories</entry>
+                <entry>/home</entry>
+                <entry>4000mb</entry>
+                <entry>rw,nosuid,nodev</entry>
+              </row>
+              <row>
+                <entry>HTTPD Chroot Jail</entry>
+                <entry>/home/www</entry>
+                <entry>300mb</entry>
+                <entry>rw,nosuid</entry>
+              </row>
+              <row>
+                <entry>Web Files (Document Root and CVS Root)</entry>
+                <entry>/home/www/files</entry>
+                <entry>11000mb</entry>
+                <entry>rw,nodev,noexec,usrquota</entry>
+              </row>
+              <row>
+                <entry>Temporary Space</entry>
+                <entry>/tmp</entry>
+                <entry>2000mb</entry>
+                <entry>rw,noexec,nodev,nosuid</entry>
+              </row>
+              <row>
+                <entry>Temporary Program Information</entry>
+                <entry>/var</entry>
+                <entry>600mb</entry>
+                <entry>rw,noexec,nodev,nosuid</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+      <section id="quotas">
+        <title>Quotas</title>
+        <para><ulink url="http://www.linuxdoc.org/HOWTO/mini/Quota.html">Set up quotas</ulink>. This will set limits on how much different users and groups can write. Again, this is not to impose restrictions on your users so much as it is to prevent the damage that an attacker can do to the system at large from a compromised account.</para>
+        <para>In order to use quotas on a particular filesystem it must have the <command>usrquota</command> and/or <command>grpquota</command> mount option. According to the mount(8) manpage these options are ignored for ext2 filesystems, but the quota management programs check for them in /etc/mtab before they will run.</para>
+        <para>Before quotas can be used on a particular filesystem the accounting files have to be created using:</para>
+        <programlisting>
+          quotacheck -c /dev/hdc2
+        </programlisting>
+        <para>Where /dev/hdc2 is the filesystem you want quotas on. This will create a file aquota.user at the base of the filesystem. To then edit the quota information for particular users you use:</para>
+        <programlisting>
+          edquota username
+        </programlisting>
+        <para>Quotas can control the amount of disk space that a user can have or the number of inodes. Both properties have both a soft and hard limit. A user is denied access if they try to write more than their hard limit, but they can write more than their soft limit. A grace period exists (edited with <command>edquota -t</command>) that will allow them to be over their soft limit for a certain number of days before their files are cut. Users on this system will have very limited shell access, so setting the hard limit to the same as the soft limit is will prevent any confusion.</para>
+      </section>
+    </section>
+    <section id="apache">
+      <title>Apache Setup</title>
+      <para>The Apache webserver (<ulink url="http://httpd.apache.org">httpd.apache.org</ulink>) is by far the largest and most sophisticated program involved in out project (apart from the operating system itself.) It is fortunately also one of the most mature and it has been hardened significantly over its lifetime. There are still several things that can be done to reduce the possibility of an attacker exploiting Apache or accomplishing anything if they were to.</para>
+      <section id="chroot-apache">
+        <title>Chroot Apache</title>
+        <para>Chrooting. This is probably the most intensive hardening step that you can take. You will create a special directory structure to house Apache and its modules and then when it runs it will not be able to access files outside of that structure. Even if the server were somehow compromised it will not be able to access anything outside of the structure that you have created. I am not going to cover chrooting in this document because it has already been covered extensively in <ulink url="http://www.linuxdoc.org/LDP/solrhe/Securing-Optimizing-Linux-RH-Edition-v1.3/chap29sec254.html">Securing Linux</ulink>.</para>
+        <para>I will briefly list the commands I issued to setup the chroot jail on my system. (Which is creating a slightly different structure than the one in Securing Linux.)</para>
+        <programlisting><![CDATA[
+          cd /home/www
+          mkdir lib sbin tmp etc cgi dev bin var var/lock var/log var/run share files/home
+          ln -s . usr
+          for file in $(rpm -ql apache | grep sbin); do cp -v $file sbin; chmod -v a-x $file; done
+          cp -av /usr/lib/apache modules
+          chmod -v a-x /usr/lib/apache/*
+          cp -av /usr/lib/php4 lib
+          cp -av /usr/share/php share
+          for file in bash ls more pwd strace cvs grep; do cp -v $(which --skip-alias --skip-dot --skip-tilde $file) bin; done
+          for lib in $(ldd modules/* sbin/* bin/* lib/php4/* | perl -e 'while(<>) { print "$_\n" if ($_, $_) = (/(=>) (\S+).*/); }' | sort | uniq); do cp -v $lib lib/; done
+          cp -v /lib/libnss_dns.so.2 /lib/libnss_files.so.2 lib/
+          for file in localtime php.ini httpd/conf/* mime.types resolv.conf hosts; do cp -av /etc/$file etc; done
+          for file in passwd group; do egrep ^\(apache\|root\|www\) /etc/$file > etc/$file; done
+          mknod dev/null c 1 3
+          mknod dev/random c 1 8
+          chmod u=rwx,go=x etc dev lib modules cgi bin sbin
+          chmod u=rwx,go= etc/ssl* var var/lock var/log var/run
+        ]]></programlisting>
+        <para>Something that confused me very much is that I set everything up like I thought it was supposed to be but it didn't work. Apache would die when it was starting, complaining that the "user apache didn't exist." I used ldd to get all the libraries necessary to run everything but unbeknownst to me there were other libraries being loaded. To find them I first started a chrooted shell in the environment that Apache would be running in:</para>
+        <programlisting>
+          /usr/sbin/chroot /home/www /bin/bash
+        </programlisting>
+        <para>Then I watched the system calls that Apache would be making using:</para>
+        <programlisting>
+          strace /sbin/httpd
+        </programlisting>
+	<para>Specifically I was interested in seeing files that it attempted to open that failed:</para>
+        <programlisting><![CDATA[
+          strace /sbin/httpd 2>&1 | grep "No such file"
+        ]]></programlisting>
+        <para>And from that I found that libnss_files is needed for uid to username mapping and libnss_dns is needed for host lookups. This same basic process though could be used to diagnose other problems.</para>
+        <para>Once you have done any diagnostics that require a shell within the chrooted environment you can safely remove bash and the associated symlinks. This will make it more difficult for someone to start a shell in an exploit of the chrooted apache:</para>
+        <para>Having created the basic file structure necessary it takes now changing the configuration files to reflect the changes. So far as Apache is concerned when it is running the root of the filesystem, /, is /home/www and everything has to be relative to that.</para>
+        <itemizedlist>
+          <listitem>
+            <para>Changes in etc/httpd.conf
+              <itemizedlist>
+                <listitem><simpara>Changed ServerRoot to /</simpara></listitem>
+                <listitem><simpara>Changed occurrences of /old.document.root/ to /files/html</simpara></listitem>
+                <listitem><simpara>Changed occurrences of /var/log/httpd/ to /var/log</simpara></listitem>
+              </itemizedlist>
+            </para>
+            <para>Items that access other parts of the filesystem like "Alias /doc /usr/share/doc" cannot work in this setup. We are going to put the cvs repository inside the chroot specifically so that it can be accessed by web-based cvs browsers like cvsweb and viewcvs.</para>
+          </listitem>
+          <listitem>
+            <para>Changes in /etc/sysconfig/apache (which is sourced into /etc/rc.d/init.d/httpd)
+              <itemizedlist>
+                <listitem><simpara>Added OPTIONS="-f /etc/httpd.conf" (<command>echo "OPTIONS=\"-f /etc/httpd.conf\"" > /etc/sysconfig/apache</command>)</simpara></listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>Changes in /etc/rc.d/init.d/httpd
+              <itemizedlist>
+                <listitem><simpara>Changed httpd=/usr/sbin/httpd to httpd="/usr/sbin/chroot /home/www /sbin/httpd"</simpara></listitem>
+                <listitem><simpara>Changed moduledir=/usr/lib/apache to moduledir=/home/www/modules</simpara></listitem>
+                <listitem><simpara>Added lock=/home/www/var/lock/httpd and replaced /var/lock/subsys/httpd with $lock</simpara></listitem>
+                <listitem><simpara>Added pid=/home/www/var/run/httpd.pid and replaced /var/run/httpd.pid with $pid</simpara></listitem>
+                <listitem><simpara>Changed killproc $httpd to killproc $prog (otherwise it tries to kill chroot)</simpara></listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+          <listitem>
+            <para>Changes in /etc/sysconfig/syslog (in the chroot jail Apache can no longer see /dev/log to write to syslog)
+              <itemizedlist>
+                <listitem><simpara>Changed SYSLOGD_OPTIONS="-m 0" to SYSLOGD_OPTIONS="-m 0 -a /home/www/dev/log"</simpara></listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>Having done these things it should be possible to restart syslog with:</para>
+        <programlisting>
+          /sbin/service syslog restart
+        </programlisting>
+	<para>And then restart Apache using:</para>
+        <programlisting>
+          /sbin/service httpd restart
+        </programlisting>
+        <para>And then if it restarts properly you can test your setup with:</para>
+        <programlisting>
+          for pid in $(/sbin/pidof httpd); do dir /proc/$pid/root; done;
+        </programlisting>
+        <para>And instead of seeing the normal root of your filesystem you should see the chroot environment you created.</para>
+      </section>
+      <section id="script-setup">
+        <title>Script Configuration</title>
+        <para>Dynamic and interactive content is the way of the future and allowing users to produce it is a good way to allow them to create more interesting and creative work. Also however it allows for a variety of security exploits since your webpages are in essence becoming programs and since your maintenance is remote it is letting people from all over run programs on your computer. There are ways to prevent the affects that these programs can have on your computer however. Chrooting is a major one, even if someone manages to get a malicious script onto your computer it will be restricted to /home/www. The main Apache process is running as root (in order to be able to bind port 80) but it does not serve content or run scripts itself, rather subprocesses are created that run as the apache user, so though root can possibly break out of a chroot jail the apache user (and thus scripts) cannot.</para>
+        <para>There are two primary ways that content is generated that I am going to deal with. One is a cgi program (often written in perl, python, or C) that runs and generates content. The other is preprocessed files (like php) where the code is often intermixed with html and the file is interpreted by a server module to generate the content.</para>
+        <section id="cgi-setup">
+          <title>CGI Setup</title>
+          <para>CGI programs are the most dangerous programs that you can run. They are usually written in languages that were designed to be powerful but not to be controlled. It is difficult to control the actions of cgi programs and it is a very good idea to restrict access to where they can be run from and people who can alter them as much as possible. In this setup the web root (/home/www/files/html) is on a partition that is mounted <command>noexec</command> so it is not possible to run cgi programs in the web root. It is a good idea to go ahead and set up Apache as though it were possible though since the mount options might change later and you would not want to be vulnerable.</para>
+          <para>There are a couple of apache directives to control how cgi is run. You should place these in the primary Directory directive in etc/httpd.conf:</para>
+          <programlisting><![CDATA[
+            <Directory />
+              Options SymLinksIfOwnerMatch IncludesNOEXEC
+              AllowOverride None
+              Order deny,allow
+              Deny from all
+            </Directory>
+          ]]></programlisting>
+          <para>Then in the entry for your web root you can allow slightly more liberal access but still disallow cgi.</para>
+          <programlisting><![CDATA[
+            <Directory "/files/html">
+              Options +Indexes
+              AllowOverride AuthConfig
+              <Limit GET POST OPTIONS PROPFIND>
+                Order allow,deny
+                Allow from all
+              </Limit>
+            </Directory>
+          ]]></programlisting>
+          <para>If you are going to run specific cgi programs like cvsweb, mailman, or awstats, I recommend creating a directory for them that is only accessible through an alias. For example, installing cvsweb: put the files in /home/www/cgi/cvsweb then add a directive to etc/httpd.conf like:</para>
+          <programlisting><![CDATA[
+            ScriptAlias /cvsweb/ "/cgi/cvsweb/"
+            <Directory "/cgi/cvsweb">
+              AllowOverride None
+              Options ExecCGI
+              <Limit GET POST OPTIONS PROPFIND>
+                Order allow,deny
+                Allow from all
+              </Limit>
+            </Directory>
+          ]]></programlisting>
+        </section>
+        <section id="php-setup">
+          <title>PHP Setup</title>
+          <para>Another method of generating content is server parsed files. These are languages that are written knowing that they will be executed on webservers and so many times considerations were made to allow tightened security. The most popular server parsed language for Apache is php and there are certain changes that you can make to etc/php.ini to restrict what php can do.</para>
+          <itemizedlist>
+            <listitem><simpara>Set "open_basedir = /files/html" or "open_basedir = .". Files may not be opened from outside of the specified directory structure. For instance an attacker couldn't open("/etc/passwd") and print the entries in a webpage. The special value of . will limit access to within or below the directory housing the script.</simpara></listitem>
+            <listitem><simpara>Set "memory_limit = 204800". This will limit a script to 200K (1024 * 200) of memory. This could prevent a denial of service if someone put a script on the server that used lots of memory and then accessed it very quickly.</simpara></listitem>
+            <listitem><simpara>Set "max_execution_time = 30". This is the default value for this entry and it is a reasonable value. Used in conjunction with memory_limit this controls the detriment that malicious (or poorly written) scripts can have on the server.</simpara></listitem>
+            <listitem><simpara>Set "safe_mode = on". This enables several security restrictions. When opening files the owner of the script must be the same as the owner of the file. (Using the CVS setup that we are doing all files will be owned by apache so this is mute.) Connections to a MySQL database must be made using the same username as the owner of the file. The user id is prepended to the HTTP authentication realm (this "prevents someone from writing a password.")</simpara></listitem>
+            <listitem><simpara>Set "doc_root = /files/html". Enabled by "safe_mode = on", this will prevent php from serving any files from outside of that directory structure.</simpara></listitem>
+            <listitem><simpara>Set "safe_mode_exec_dir = /bin". Enabled by "safe_mode = on", this restricts programs that can be called to the specified directory. Since Apache is running in a chroot jail with limited programs in /bin, this is a safe place to allow programs from.</simpara></listitem>
+          </itemizedlist>
+        </section>
+      </section>
+      <section id="vhost">
+        <title>mod_vhost Configuration</title>
+        <para>The next bit of setup is not security related exactly, but it is a very convenient way to maintain the site. The server will be serving out a variety of dns aliases to the same ip. There will be one for each committee as well as a primary one for the site as a whole. Using the Apache vhost_alias you can just create a simple directory structure and then Apache will work out finding the proper directory.</para>
+        <para>The directory structure will have a primary directory for the honors program and then separate directories for each committee:</para>
+        <programlisting>
+          /home/www/files/html/honors.tntech.edu/
+          /home/www/files/html/honors.tntech.edu/computer
+          /home/www/files/html/honors.tntech.edu/ecology
+          /home/www/files/html/honors.tntech.edu/service
+          /home/www/files/html/honors.tntech.edu/leadership
+        </programlisting>
+        <para>Apache then will contain a vhost directive:</para>
+        <programlisting><![CDATA[
+          <VirtualHost 149.149.47.115>
+            UseCanonicalName Off
+            VirtualDocumentRoot /files/html/%3+/%1
+          </VirtualHost>
+        ]]></programlisting>
+        <para>When a request comes in (ecology.honors.tntech.edu) Apache tries to match a directory in DocumentRoot with the last 3 parts of the name (honors.tntech.edu) and then a subdirectory under that with the first part (ecology). In /home/www/files/html/honors.tntech.edu/ there is a symlink to . called www. This means that requests for www.honors.tntech.edu and honors.tntech.edu map to the same place. This also means that www.honors.tntech.edu/ecology, honors.tntech.edu/ecology and ecology.honors.tntech.edu all map to the same place.</para>
+        <para>This setup will not work correctly for honors.tntech.edu because the search for the first part fails. It is therefore necessary to have a single normal NameVirtualHost to catch that special case.</para>
+        <programlisting><![CDATA[
+          NameVirtualHost 149.149.47.115
+          <VirtualHost honors.tntech.edu>
+            DocumentRoot /files/html/honors.tntech.edu
+            ServerName www.honors.tntech.edu
+          </VirtualHost>
+        ]]></programlisting>
+      </section>
+    </section>
+    <section id="cvs-server">
+      <title>CVS Setup</title>
+      <para>CVS is going to be used to hold the authoritative version of all the files in the site. A checked out copy of the repository is then going to be kept up to date with the repository and this is what files will be served from. Groups will be structured so that each committee will only be able to change their own pages and not be able to affect the site at large. Also the repository will be set up so that changes can only be appended; files cannot be deleted by regular users so an attacker could change the website but the last version will always be preserved.</para>
+      <section id="cvs-groups">
+        <title>Groups</title>
+        <para>This setup is going to require a variety of groups to be created both for the webserver and for the cvs server. There is a primary group that everyone who is doing web work will be a member of called www. Each committee will have its own group and for convenience sake these groups are prefaced with www- (www-ecology, www-social, www-computer, etc.) Also there are certain shared resources that are not associated with a particular committee but that they will all have access to (stylesheets, backgrounds, images) and there are groups for these as well also prefaced with www- (www-styles, www-images, etc.)</para>
+        <para>CVS also has a special set of groups to control access. CVS looks for a special group called <command>cvsadmin</command> when changes are requested to the configuration files. If that group exists then the current user must be a member of that group in order to edit the configuration. Also whenever a file is checked out from the repository a lock is created to prevent another process writing to the file while it is being accessed. Usually these locks are created in the same directory structure as the repository but to do this anyone you want to read from the repository will also need write access to those directories. This is a problem since we want apache to read from those directories but not to be able to write to them. The solution is to create a separate directory structure for the locks and then allow everyone you want to read access to that structure including apache. The group that will own that directory structure will be called <command>cvsread</command>.</para>
+      </section>
+      <section id="cvs-initialization">
+        <title>CVS Initialization</title>
+        <para>Now that the basic groups have been created with <command>addgroup</command> the repository can be created. The first step is to create a directory to hold it. This directory is later going to be accessed via a web-based CVS browser so it needs to be inside of the apache chroot jail.</para>
+        <programlisting>
+          mkdir /home/www/files/cvs
+        </programlisting>
+        <para>Now that it is created it needs to have the control files created with:</para>
+        <programlisting>
+          cvs -d /home/www/files/cvs init
+        </programlisting>
+        <para>There is now a working repository at /home/www/files/cvs.</para>
+        <para>To allow people read only access to the repository without having to give them write access to the directory structure we will change the locks directory directive in the configuration. It is tempting to just edit /home/www/files/cvs/CVSROOT/config. This will in fact change the behavior of CVS but it is not the proper way to change the configuration. All of CVS's configuration files are version controlled so to edit then you check them out and make your changes on a checked out copy.</para>
+        <para>Any user can check out the control files but if the <command>cvsadmin</command> group has been created only users in that group will be allowed to commit (and root cannot commit under any circumstances.) If you have been doing your setup as root you will have to allow the user you plan to make the changes as to create a lock in order to change the setup. You do this by creating the cvsadmin group and adding them to it:</para>
+        <programlisting>
+          groupadd cvsadmin
+          USER_TO_CHANGE=username
+          usermod -G $(id -G $USER_TO_CHANGE | sed -e "s/ /,/g"),cvsadmin $USER_TO_CHANGE
+        </programlisting>
+        <para>(If the user has any other supplemental groups usermod requires them to be listed in a comma separated list or they will be removed.) Then give cvsadmin group ownership of the configuration directory:</para>
+        <programlisting>
+          chown :cvsadmin /home/www/files/cvs/CVSROOT
+        </programlisting>
+        <para>Finally, from that user account checkout the control files:</para>
+        <programlisting>
+          su - username
+          cvs -d /home/www/files/cvs checkout CVSROOT
+        </programlisting>
+        <para>Once you have the control files checked out edit CVSROOT/config and add the line:</para>
+        <programlisting>
+          LockDir=/home/www/files/cvs-locks
+        </programlisting>
+        <para>You should create the lock directory and let the cvsread write to it:</para>
+        <programlisting>
+          mkdir /home/www/files/cvs-locks
+          chown :cvsread /home/www/files/cvs-locks
+          chmod g+ws /home/www/files/cvs-locks
+        </programlisting>
+        <para>Because different users will be accessing this directory and creating subdirectories and you want the whole thing to be accessible to all the members of the cvsread group. Setting the set-gid (sgid) bit on the directory solves this problem. On an executable sgid causes the program to run with the gid of the owner of the program, for a directory though it causes any subdirectories created under that directory to be owned by the owner of the parent directory and also to have the same permissions as the parent.</para>
+      </section>
+      <section id="repository">
+        <title>Repository Setup</title>
+        <para>All of the sites will be held in one project called <command>websites</command>. Getting this set up is fairly simple:</para>
+	<programlisting>
+          export CVSROOT=/home/www/files/cvs
+          mkdir websites
+          cd websites
+          cvs import websites honors start
+          cd ..
+          rm -rf websites
+          cvs checkout websites
+          cd websites
+          mkdir honors.tntech.edu
+          cvs add honors.tntech.edu
+          cd honors.tntech.edu
+          wget http://www.google.com
+          cvs add index.html
+          cvs commit -m "Test google page"
+          cd /home/www/files
+          cvs checkout -d html websites
+          cd html/honors.tntech.edu
+          ln -s . www
+          chown -R apache:apache /home/www/files/html/
+        </programlisting>
+        <para>If apache is running like it was set up before, <ulink url="http://www.honors.tntech.edu">http://www.honors.tntech.edu</ulink> should now be up with <ulink url="http://www.google.com">Google's page</ulink>.</para>
+        <para>The file webroot-update.sh which will be run after every checkin has the <command>-P</command> option to update. This will prune empty directories which keeps things cleaner overall, but if you add a new site it will not show up until there is at least one file on it. The symlink to . named www as mentioned earlier allows mod_vhost to serve up the same page for both <ulink url="http://honors.tntech.edu">honors.tntech.edu</ulink> and <ulink url="http://www.honors.tntech.edu">www.honors.tntech.edu</ulink>.</para>
+      </section>
+      <section id="synchronized-cvs-setup">
+        <title>Setting up the synchronized repository</title>
+        <para>You are going to have a checked out version of the repository at /home/www/files/html and from this apache is going to serve requests. This copy always needs to be up to date with the repository so we will put an option into CVSROOT/loginfo (which is run after every commit) to update Apache's copy of the files. An issue here is that the script in loginfo runs as the user performing the commit. Because the files in Apache's copy are owned by apache the user will not have the rights to perform the update. There are a couple of ways to deal with the, one is to give the user access rights to Apache's copy by making the files group writable and then add everyone maintaining the site to that group. Another way is to use <command>sudo</command> to run the update as apache. sudo is more secure and easier to maintain.</para>
+        <para>So to CVSROOT/loginfo we add:</para>
+        <programlisting>
+          DEFAULT (sleep 2; sudo -u apache /home/www/files/webroot-update.sh; &#x0026;) >> /home/www/var/log/cvs-update.log 2>&#x0026;1
+        </programlisting>
+        <para>And then /home/www/files/webroot-update.sh looks like:</para>
+        <programlisting>
+          #!/bin/sh
+          cd /home/www/files/html;
+          /usr/bin/cvs -Q update -d -P;
+        </programlisting>
+        <para>The permissions on apache-update.sh then need to be set with <command>chown apache:apache /home/www/files/apache-update.sh</command>.</para>
+        <para>It is also necessary to inform sudo to allow members of the www group to run the webroot-update script. Changes to the sudo configuration are done using <command>visudo</command> which will bring up the configuration and then syntax check it before committing. Simple add the line:</para>
+       <programlisting>
+         %www            ALL=(apache) NOPASSWD: /home/www/bin/webroot-update.sh
+       </programlisting>
+      </section>
+    </section>
+    <section id="directory-structure">
+      <title>Setting up the Directory Structure</title>
+      <para>The cvs access is going to be a little bit strange because there are two different ways that it will be accessed. On the one hand ViewCVS will be accessing the repository from one of Apache's subprocesses and thus within the chroot jail. Regular users however will be accessing the repository from outside of the jail and so it is necessary to set up a series of symlinks, so that the two directory structures appear the same. Rather than clutter the root filesystem with symlinks we will create an artificial structure inside of /home/www.</para>
+      <para>Outside of the chroot it appears as though the repository is at /home/www/files/cvs/. From within it seems as though it appears to be at /files/cvs. Therefore it is necessary to create some structure such that /home/www/home/www is a relative symlink to /home/www.</para>
+      <para>One very simple way to do it is to:</para>
+      <programlisting>
+        cd /home/www
+        ln -s . home
+        ln -s . www
+      </programlisting>
+      <para>/home/www/home/www is now the same place as /home/www. This will work, but there is another setup that makes a little more sense.</para>
+      <para>In order for apache to allow access of user's home directories (<ulink url="http://honors.tntech.edu/~will/">http://honors.tntech.edu/~will/</ulink>) those directories have to be inside the chroot. In order to place these files on the large storage partition they are at /home/www/files/home (or within the chroot they would appear to be at /files/home.) It makes sense to link these home directories to /home in the chroot:</para>
+      <programlisting>
+        cd /home/www
+        ln -s files/home
+      </programlisting>
+      <para>Now to make the two sets of directories line up:</para>
+      <programlisting>
+        cd /home/www/files/home
+        ln -s ../.. www
+      </programlisting>
+      <para>Now from within and without the chroot /home/www points to the same directory (and thus /home/www/files/cvs is the same place.)</para>
+    </section>
+    <section id="accounts">
+      <title>User Accounts</title>
+      <para>Now that the basic setup is complete some user accounts can be added. Users will have very limited access to the system. Specifically they will be able to:</para>
+      <itemizedlist>
+        <listitem><simpara>Checkout files from the repository via cvs</simpara></listitem>
+        <listitem><simpara>Access their personal webpages via windows filesharing</simpara></listitem>
+        <listitem><simpara>Change their passwords</simpara></listitem>
+      </itemizedlist>
+      <para>Other than that they should have no access to the server. This is accomplished in a fairly straightforward way. As an example I will add a new user. His name is Mark Spence and he is working with someone else on developing a page for the Associate Director of the program. This little shell script will add him as a user:</para>
+      <programlisting><![CDATA[
+        #!/bin/bash
+        BASEDIR=/home/www/files/home
+        REL_PATH=../../../../../usr/bin # Relative path from BASEDIR to programs to be linked in
+        read -p "New Username: " NEW_USER
+        cat /etc/passwd | sed -e "s/:.*//g" | grep $NEW_USER > /dev/null && echo "Username $NEW_USER already present in /etc/passwd" && exit 1
+        [ -d $BASEDIR/$NEW_USER ] && echo "$BASEDIR/$NEW_USER already exists" && exit 1
+        read -p "User's Full Name: " FULLNAME
+        read -p "User's NT Id: " NT_ID
+        useradd -g www -G cvsread -d "$BASEDIR/$NEW_USER" -s /bin/rbash -c "$FULLNAME" -M -n $NEW_USER
+        smbadduser "$NEW_USER:$NT_ID"
+        mkdir $BASEDIR/$NEW_USER
+        cd $BASEDIR/$NEW_USER
+        ln -s $REL_PATH/passwd
+        ln -s $REL_PATH/smbpasswd
+        ln -s $REL_PATH/cvs
+        ln -s $REL_PATH/quota
+        ln -s $REL_PATH/du
+        echo "# .bash_profile" > .bash_profile
+        echo "# $FULLNAME ($NEW_USER) added " $(date +"%A, %Y %B %d, %T (%-I:%M:%S %p)") >> .bash_profile
+        echo export PATH=. >> .bash_profile
+        mkdir www
+        chown -R $NEW_USER:www .
+        chmod -R a-w .
+        chattr +i . .bash_profile
+      ]]></programlisting>
+      <para>You might not have rbash set up on your system. If you don't, just create a symlink to bash named rbash. This is a restricted shell and the user is not allowed to change directories or set the environment variables SHELL, PATH, ENV, or BASH_ENV. Also they can't run commands with a / in them, so setting their path to . and not allowing them to own their home directory fairly effectively limits them to only running the programs symlinked into their home directory (passwd, smbpasswd and cvs).</para>
+      <para>Because the path is set to . the user cannot be allowed to write to her home directory, else she might put a new shell there and execute it. Also the directory and bash profile are set to immutable because even though they don't have access to the chmod command via a shell they can still change permissions via the windows filesharing. This box is intended only as a webserver and not for any other type of storage. There will be another computer running where they can have user accounts to learn on.</para>
+      <para>I am also imposing 150mb quotas on everyone which ought to be more than enough for most anything they would like to do.</para>
+      <programlisting>
+        edquota mspence
+      </programlisting>
+      <para>And the input looks something like:</para>
+      <programlisting>
+        Disk quotas for user mspence (uid 517):
+          Filesystem                   blocks       soft       hard     inodes     soft     hard
+          /dev/hdb4                        16     150000     150000          7        0        0
+      </programlisting>
+      <para>Conveniently enough this information is also available via the windows explorer properties if his home directory is mapped via smb.</para>
+      <para>This creates a basic account for him. To add a branch in the main webroot for them do:</para>
+      <programlisting>
+        cvs -d /home/www/files/cvs checkout -l websites/honors.tntech.edu
+        mkdir rita_barnes
+        cvs add rita_barnes/
+      </programlisting>
+      <para>This directory will not show up on the server immediately because the way that the repository is updated prunes empty directories. In order for this directory to be available for Mark to update it needs to be owned by his group:</para>
+      <programlisting>
+        groupadd www-rita_barnes
+        usermod -G $(id -G mspence | sed -e "s/ /,/g"),www-rita_barnes mspence
+        chown :www-rita_barnes /home/www/files/cvs/websites/honors.tntech.edu/rita_barnes
+      </programlisting>
+      <para>Once I get a password to Mark Spence he should now be able to log in via ssh and make changes to that part of the repository. A simple session either from another Linux box or from cygwin might look like:</para>
+      <programlisting>
+        export CVS_RSH=ssh
+        cvs -d ":ext:mspence@honors.tntech.edu:/home/www/files/cvs/" checkout websites/honors.tntech.edu/rita_barnes
+        cd websites/honors.tntech.edu/rita_barnes/
+        echo "hi" > test.txt
+        cvs add test.txt
+        cvs commit -m "Testing adding a file" test.txt
+        lynx http://www.honors.tntech.edu/rita_barnes/test.txt
+      </programlisting>
+      <para>This same basic process is available from any platform that has a cvs client and a ssh client.</para>
+    </section>
+  </chapter>
+</book>

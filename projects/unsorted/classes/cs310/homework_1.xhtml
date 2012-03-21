@@ -1,0 +1,1015 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-310 Homework #1</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math { margin-top: .75em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 310: Design and Analysis of Algorithms</h1>
+      <h2>Homework #1</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 13:10 Wed., 23 January 2008</h2>
+    </div>
+    <blockquote><p>All work should be done on your own. If you discuss this assignment in any way with anyone else, or find help for getting the answer from any source, you must state so clearly at the top of your submission. There should be no working together except to understand the question.</p></blockquote>
+    <ol>
+      <li>
+        <div class="question" id="1">
+          <p>Consider the function:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>f</mo><mfenced><mi>x</mi><mi>y</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced open="{" close="">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mo>f</mo><mfenced><mfrac><mi>x</mi><mn>2</mn></mfrac><mi>y</mi></mfenced><mo>+</mo>
+                          <mo>f</mo><mfenced><mi>x</mi><mfrac><mi>y</mi><mn>2</mn></mfrac></mfenced>
+                        </mtd>
+                        <mtd><mo>;</mo></mtd>
+                        <mtd><mfenced open="" close=""><mi>x</mi><mi>y</mi></mfenced><mo>&gt;</mo><mn>1</mn></mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd><mn>1</mn></mtd>
+                        <mtd><mo>;</mo></mtd>
+                        <mtd><mi>x</mi><mo>&le;</mo><mn>1</mn><mo>&or;</mo><mi>y</mi><mo>&le;</mo><mn>1</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Prove that a program which solves this recursively will always halt.</p>
+            </div>
+            <div class="answer">
+              <p>Consider a similar function:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>g</mo><mfenced><mi>x</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced open="{" close="">
+                        <mtable>
+                          <mtr>
+                            <mtd>
+                              <mo>g</mo><mfenced><mfrac><mi>x</mi><mn>2</mn></mfrac></mfenced><mo>+</mo><mn>1</mn>
+                            </mtd>
+                            <mtd><mo>;</mo></mtd>
+                            <mtd><mfenced open="" close=""><mi>x</mi></mfenced><mo>&gt;</mo><mn>1</mn></mtd>
+                          </mtr>
+                          <mtr>
+                            <mtd><mn>1</mn></mtd>
+                            <mtd><mo>;</mo></mtd>
+                            <mtd><mi>x</mi><mo>&le;</mo><mn>1</mn></mtd>
+                          </mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The expansion of this function will look like:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>g</mo><mfenced><mi>x</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn"><mo>g</mo><mfenced><mfrac><mi>x</mi><mn>2</mn></mfrac></mfenced><mo>+</mo><mn>1</mn></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn"><mo>g</mo><mfenced><mfrac><mi>x</mi><msup><mn>2</mn><mn>2</mn></msup></mfrac></mfenced><mo>+</mo><mn>2</mn></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn"><mo>g</mo><mfenced><mfrac><mi>x</mi><msup><mn>2</mn><mn>3</mn></msup></mfrac></mfenced><mo>+</mo><mn>3</mn></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd>&hellip;</mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn"><mo>g</mo><mfenced><mfrac><mi>x</mi><msup><mn>2</mn><mi>i</mi></msup></mfrac></mfenced><mo>+</mo><mi>i</mi></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>This expansion will continue until 2<sup><em>i</em></sup> &ge; <em>x</em>. Since, by definition:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac><mi>x</mi><msup><mi>y</mi><mi>a</mi></msup></mfrac></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mn>1</mn></mtd>
+                    <mtd><mo>&rArr;</mo></mtd>
+                    <mtd><mi>x</mi></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><msup><mi>y</mi><mi>a</mi></msup></mtd>
+                    <mtd><mo>&rArr;</mo></mtd>
+                    <mtd><mi>a</mi></mtd> 
+                    <mtd><mo>&ge;</mo></mtd>
+                    <mtd><msub><mo>log</mo><mi>y</mi></msub><mi>x</mi></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>
+                &ForAll; <em>x</em> &Exists; log<sub>2</sub><em>x</em> &SuchThat; the recursion will halt after
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mfenced open="&lceil;" close="&rceil;">
+                    <mrow><msub><mo>log</mo><mn>2</mn></msub><mi>x</mi></mrow>
+                  </mfenced>
+                </math>
+                iterations. Since 1 is added each iteration with an extra 1 when <em>x</em> &le; 2<sup><em>i</em></sup>, g(<em>x</em>) may also be expressed as:
+              </p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>g</mo><mfenced><mi>x</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced open="{" close="">
+                        <mtable>
+                          <mtr>
+                            <mtd>
+                              <mfenced open="&lceil;" close="&rceil;">
+                                <mrow><msub><mo>log</mo><mn>2</mn></msub><mi>x</mi></mrow>
+                              </mfenced>
+                              <mo>+</mo><mn>1</mn>
+                            </mtd>
+                            <mtd><mo>;</mo></mtd>
+                            <mtd><mfenced open="" close=""><mi>x</mi></mfenced><mo>&gt;</mo><mn>1</mn></mtd>
+                          </mtr>
+                          <mtr>
+                            <mtd><mn>1</mn></mtd>
+                            <mtd><mo>;</mo></mtd>
+                            <mtd><mi>x</mi><mo>&le;</mo><mn>1</mn></mtd>
+                          </mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The original function, f(<em>x</em>,<em>y</em>), reduces each of its recursive addends in a manner similar to g(<em>x</em>) and will eventually terminate.</p>
+              <hr />
+              <p>A more interesting proof was given in class:</p>
+              <p>Assume that the pair (<em>x</em>, <em>y</em>) is the smallest pair of values for which the algorithm will not halt. The ordering of the pairs (<em>x</em>, <em>y</em>) is lexigraphical, that is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfenced><mi>x</mi><mi>y</mi></mfenced></mtd>
+                    <mtd><mo>&lt;</mo></mtd>
+                    <mtd><mfenced><mi>x</mi><mrow><mi>y</mi><mo>+</mo><mi>k</mi></mrow></mfenced></mtd>
+                    <mtd><mo>&lt;</mo></mtd>
+                    <mtd><mfenced><mrow><mi>x</mi><mo>+</mo><mi>k</mi></mrow><mi>y</mi></mfenced></mtd>
+                    <mtd><mo>&SuchThat;</mo></mtd>
+                    <mtd><mfenced open="" close="">
+                      <mrow><mi>k</mi><mo>&Element;</mo><mi>&naturals;</mi></mrow>
+                      <mrow><mi>k</mi><mo>&ge;</mo><mn>1</mn></mrow>
+                    </mfenced></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The expansion then is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>f</mo><mfenced><mi>x</mi><mi>y</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>f</mo><mfenced><mfrac><mi>x</mi><mn>2</mn></mfrac><mi>y</mi></mfenced><mo>+</mo>
+                      <mo>f</mo><mfenced><mi>x</mi><mfrac><mi>y</mi><mn>2</mn></mfrac></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>As defined by the ordering:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfenced><mfrac><mi>x</mi><mn>2</mn></mfrac><mi>y</mi></mfenced></mtd>
+                    <mtd><mo>&lt;</mo></mtd>
+                    <mtd><mfenced><mi>x</mi><mfrac><mi>y</mi><mn>2</mn></mfrac></mfenced></mtd>
+                    <mtd><mo>&lt;</mo></mtd>
+                    <mtd><mfenced><mi>x</mi><mi>y</mi></mfenced></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>Since (<em>x</em>, <em>y</em>) was the minmum value that f(<em>x</em>, <em>y</em>) would halt on, each of the addends will halt, f(<em>x</em>, <em>y</em>) will then halt, so (<em>x</em>, <em>y</em>) cannot exist.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>What is f(<em>x</em>,2)?</p>
+            </div>
+            <div class="answer">
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>f</mo><mfenced><mi>x</mi><mn>2</mn></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mo>f</mo><mfenced><mfrac><mi>x</mi><mn>2</mn></mfrac><mn>2</mn></mfenced><mo>+</mo>
+                      <mo>f</mo><mfenced><mi>x</mi><mfrac><mn>2</mn><mn>2</mn></mfrac></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mo>f</mo><mfenced><mfrac><mi>x</mi><mn>2</mn></mfrac><mn>2</mn></mfenced><mo>+</mo><mn>1</mn>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mo>f</mo><mfenced><mfrac><mi>x</mi><msup><mn>2</mn><mn>2</mn></msup></mfrac><mn>2</mn></mfenced><mo>+</mo>
+                      <mo>f</mo><mfenced><mfrac><mi>x</mi><mn>2</mn></mfrac><mfrac><mn>2</mn><mn>2</mn></mfrac></mfenced><mo>+</mo><mn>1</mn>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mo>f</mo><mfenced><mfrac><mi>x</mi><msup><mn>2</mn><mn>2</mn></msup></mfrac><mn>2</mn></mfenced><mo>+</mo><mn>2</mn>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mo>f</mo><mfenced><mfrac><mi>x</mi><msup><mn>2</mn><mn>3</mn></msup></mfrac><mn>2</mn></mfenced><mo>+</mo>
+                      <mo>f</mo><mfenced><mfrac><mi>x</mi><msup><mn>2</mn><mn>2</mn></msup></mfrac><mfrac><mn>2</mn><mn>2</mn></mfrac></mfenced><mo>+</mo>
+                      <mn>2</mn>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mo>f</mo><mfenced><mfrac><mi>x</mi><msup><mn>2</mn><mn>3</mn></msup></mfrac><mn>2</mn></mfenced><mo>+</mo><mn>3</mn>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd>&hellip;</mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mo>f</mo><mfenced><mfrac><mi>x</mi><msup><mn>2</mn><mi>i</mi></msup></mfrac><mn>2</mn></mfenced><mo>+</mo><mi>i</mi>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn"><mo>g</mo><mfenced><mi>x</mi></mfenced></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>Support for this conclusion is given by <a href="dual_recursion.py">a program</a> which compares the recursive solution to log<sub>2</sub>(<em>x</em>) + 1.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question" id="2">
+          <p>
+            Suppose that you have a recurrence of the form
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <mo>T</mo><mfenced><mi>n</mi></mfenced><mo>=</mo>
+              <mfrac><mi>n</mi><mn>2</mn></mfrac><mo>T</mo><mfenced><mfrac><mi>n</mi><mn>2</mn></mfrac></mfenced>
+              <mo>+</mo><mn>1</mn>
+            </math>.
+            What is the solution in terms of order notation?
+          </p>
+        </div>
+        <div class="answer">
+          <p>Recall:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>f</mo><mfenced><mi>n</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>O</mo><mfenced><mrow><mo>g</mo><mfenced><mi>n</mi></mfenced></mrow></mfenced></mtd>
+                <mtd><mo>&Implies;</mo></mtd>
+                <mtd><mo>&Exists;</mo></mtd>
+                <mtd><mi>c</mi></mtd>
+                <mtd><mo>&SuchThat;</mo></mtd>
+                <mtd><mo>T</mo><mfenced><mrow><mo>f</mo><mfenced><mi>n</mi></mfenced></mrow></mfenced></mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd><mi>c</mi><mo>g</mo><mfenced><mi>n</mi></mfenced></mtd>
+                <mtd><mo>&ForAll;</mo></mtd>
+                <mtd><mi>n</mi></mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd><mo>o</mo><mfenced><mrow><mo>g</mo><mfenced><mi>n</mi></mfenced></mrow></mfenced></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd><mo>&lt;</mo></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd><mo>&Omega;</mo><mfenced><mrow><mo>g</mo><mfenced><mi>n</mi></mfenced></mrow></mfenced></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd><mo>&ge;</mo></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd><mo>&Theta;</mo><mfenced><mrow><mo>g</mo><mfenced><mi>n</mi></mfenced></mrow></mfenced></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <p id="2ans">Consider the expansion of the expression:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>T</mo><mfenced><mi>n</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <mfrac><mi>n</mi><mn>2</mn></mfrac><mo>T</mo><mfenced><mfrac><mi>n</mi><mn>2</mn></mfrac></mfenced><mo>+</mo><mn>1</mn>
+                </mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <mfrac><mi>n</mi><mn>2</mn></mfrac>
+                  <mfenced><mrow>
+                    <mfrac><mi>n</mi><msup><mn>2</mn><mn>2</mn></msup></mfrac>
+                    <mo>T</mo><mfenced><mfrac><mi>n</mi><msup><mn>2</mn><mn>2</mn></msup></mfrac></mfenced><mo>+</mo><mn>1</mn>
+                  </mrow></mfenced>
+                  <mo>+</mo><mn>1</mn>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <mfrac><msup><mi>n</mi><mn>2</mn></msup><msup><mn>2</mn><mn>3</mn></msup></mfrac>
+                  <mo>T</mo><mfenced><mfrac><mi>n</mi><msup><mn>2</mn><mn>2</mn></msup></mfrac></mfenced>
+                  <mo>+</mo><mfrac><mi>n</mi><mn>2</mn></mfrac>
+                  <mo>+</mo><mn>1</mn>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <mfrac><msup><mi>n</mi><mn>2</mn></msup><msup><mn>2</mn><mn>3</mn></msup></mfrac>
+                  <mfenced><mrow>
+                    <mfrac><mi>n</mi><msup><mn>2</mn><mn>3</mn></msup></mfrac>
+                    <mo>T</mo><mfenced><mfrac><mi>n</mi><msup><mn>2</mn><mn>3</mn></msup></mfrac></mfenced><mo>+</mo><mn>1</mn>
+                  </mrow></mfenced>
+                  <mo>+</mo><mfrac><mi>n</mi><mn>2</mn></mfrac>
+                  <mo>+</mo><mn>1</mn>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <mfrac><msup><mi>n</mi><mn>3</mn></msup><msup><mn>2</mn><mn>6</mn></msup></mfrac>
+                  <mo>T</mo><mfenced><mfrac><mi>n</mi><msup><mn>2</mn><mn>3</mn></msup></mfrac></mfenced>
+                  <mo>+</mo><mfrac><mi>n</mi><msup><mn>2</mn><mn>3</mn></msup></mfrac>
+                  <mo>+</mo><mfrac><mi>n</mi><mn>2</mn></mfrac>
+                  <mo>+</mo><mn>1</mn>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <mfrac><msup><mi>n</mi><mn>3</mn></msup><msup><mn>2</mn><mn>6</mn></msup></mfrac>
+                  <mfenced><mrow>
+                    <mfrac><mi>n</mi><msup><mn>2</mn><mn>4</mn></msup></mfrac>
+                    <mo>T</mo><mfenced><mfrac><mi>n</mi><msup><mn>2</mn><mn>4</mn></msup></mfrac></mfenced><mo>+</mo><mn>1</mn>
+                  </mrow></mfenced>
+                  <mo>+</mo><mfrac><mi>n</mi><msup><mn>2</mn><mn>3</mn></msup></mfrac>
+                  <mo>+</mo><mfrac><mi>n</mi><mn>2</mn></mfrac>
+                  <mo>+</mo><mn>1</mn>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <mfrac><msup><mi>n</mi><mn>4</mn></msup><msup><mn>2</mn><mn>10</mn></msup></mfrac>
+                  <mo>T</mo><mfenced><mfrac><mi>n</mi><msup><mn>2</mn><mn>4</mn></msup></mfrac></mfenced>
+                  <mo>+</mo><mfrac><mi>n</mi><msup><mn>2</mn><mn>6</mn></msup></mfrac>
+                  <mo>+</mo><mfrac><mi>n</mi><msup><mn>2</mn><mn>3</mn></msup></mfrac>
+                  <mo>+</mo><mfrac><mi>n</mi><mn>2</mn></mfrac>
+                  <mo>+</mo><mn>1</mn>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd>&hellip;</mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn" columnspan="3">
+                  <mfenced open="" close="|"><mrow>
+                    <mfrac>
+                      <msup><mi>n</mi><mi>m</mi></msup>
+                      <msup>
+                        <mn>2</mn>
+                        <mrow>
+                          <munderover>
+                            <mo>&Sigma;</mo>
+                            <mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow>
+                            <mrow><mi>m</mi><mo>+</mo><mn>1</mn></mrow>
+                          </munderover>
+                          <mi>j</mi>
+                        </mrow>
+                      </msup>
+                    </mfrac>
+                    <mo>T</mo><mfenced><mn>1</mn></mfenced>
+                    <mo>+</mo>
+                    <mfenced><mrow>
+                      <munderover>
+                        <mo>&Sigma;</mo>
+                        <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                        <mi>m</mi>
+                      </munderover>
+                      <mfrac>
+                        <mi>n</mi>
+                        <msup>
+                          <mn>2</mn>
+                          <mrow>
+                            <munderover><mo>&Sigma;</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>i</mi></munderover>
+                            <mi>j</mi>
+                          </mrow>
+                        </msup>
+                      </mfrac>
+                    </mrow></mfenced>
+                    <mo>+</mo><mn>1</mn>
+                  </mrow></mfenced>
+                  <mi>m</mi><mo>=</mo>
+                  <mfenced open="&lceil;" close="&rceil;"><mrow><msub><mo>log</mo><mn>2</mn></msub><mi>n</mi></mrow></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn" columnspan="3">
+                  <mfrac>
+                    <msup><mi>n</mi><mi>m</mi></msup>
+                    <msup>
+                      <mn>2</mn>
+                      <mrow>
+                        <mfrac>
+                          <mrow>
+                            <mfenced><mrow><mi>m</mi><mo>+</mo><mn>1</mn></mrow></mfenced>
+                            <mfenced><mrow><mi>m</mi><mo>+</mo><mn>2</mn></mrow></mfenced>
+                          </mrow>
+                          <mn>2</mn>
+                        </mfrac>
+                      </mrow>
+                    </msup>
+                  </mfrac>
+                  <mo>T</mo><mfenced><mn>1</mn></mfenced>
+                  <mo>+</mo>
+                  <mfenced><mrow>
+                    <munderover>
+                      <mo>&Sigma;</mo>
+                      <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                      <mi>m</mi>
+                    </munderover>
+                    <mfrac>
+                      <mi>n</mi>
+                      <msup>
+                        <mn>2</mn>
+                        <mrow><mfrac><mrow><mi>i</mi><mfenced><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></mfenced></mrow><mn>2</mn></mfrac></mrow>
+                      </msup>
+                    </mfrac>
+                  </mrow></mfenced>
+                  <mo>+</mo><mn>1</mn>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn" columnspan="3">
+                  <msup><mi>n</mi><mi>m</mi></msup>
+                  <msup>
+                    <msqrt><mn>2</mn></msqrt>
+                    <mrow>
+                      <mo>-</mo>
+                      <mfenced><mrow><mi>m</mi><mo>+</mo><mn>1</mn></mrow></mfenced>
+                      <mfenced><mrow><mi>m</mi><mo>+</mo><mn>2</mn></mrow></mfenced>
+                    </mrow>
+                  </msup>
+                  <mo>T</mo><mfenced><mn>1</mn></mfenced>
+                  <mo>+</mo>
+                  <mi>n</mi><mi>m</mi>
+                  <munderover>
+                    <mo>&Sigma;</mo>
+                    <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                    <mi>m</mi>
+                  </munderover>
+                  <msup>
+                    <msqrt><mn>2</mn></msqrt>
+                    <mrow><mo>-</mo><mi>i</mi><mfenced><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></mfenced></mrow>
+                  </msup>
+                  <mo>+</mo><mn>1</mn>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>&lt;</mo></mtd>
+                <mtd class="eqn" columnspan="3">
+                  <msup><mi>n</mi><mi>m</mi></msup>
+                  <msup>
+                    <msqrt><mn>2</mn></msqrt>
+                    <mrow><mo>-</mo><msup><mi>m</mi><mn>2</mn></msup></mrow>
+                  </msup>
+                  <mo>T</mo><mfenced><mn>1</mn></mfenced>
+                  <mo>+</mo>
+                  <mi>n</mi><mi>m</mi>
+                  <munderover>
+                    <mo>&Sigma;</mo>
+                    <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                    <mi>m</mi>
+                  </munderover>
+                  <msup>
+                    <msqrt><mn>2</mn></msqrt>
+                    <mrow><mo>-</mo><msup><mi>i</mi><mn>2</mn></msup></mrow>
+                  </msup>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn" columnspan="3">
+                  <mo>O</mo>
+                  <mfenced><mfrac>
+                    <mrow><msup><mi>n</mi><mrow><msub><mo>log</mo><mn>2</mn></msub><mi>n</mi></mrow></msup></mrow>
+                    <mrow><msup><mi>n</mi><mrow><mfrac><mrow><msub><mo>log</mo><mn>2</mn></msub><mi>n</mi></mrow><mn>2</mn></mfrac></mrow></msup></mrow>
+                  </mfrac></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn" columnspan="3">
+                  <mo>O</mo>
+                  <mfenced><mrow>
+                    <msup>
+                      <mi>n</mi>
+                      <mrow>
+                        <msub><mo>log</mo><mn>2</mn></msub><mi>n</mi><mo>-</mo>
+                        <mfrac><mrow><msub><mo>log</mo><mn>2</mn></msub><mi>n</mi></mrow><mn>2</mn></mfrac>
+                      </mrow>
+                    </msup>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn" columnspan="3">
+                  <mo>O</mo>
+                  <mfenced><mrow>
+                    <msup><mi>n</mi><mrow><mfrac><mrow><msub><mo>log</mo><mn>2</mn></msub><mi>n</mi></mrow><mn>2</mn></mfrac></mrow></msup>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn" columnspan="3">
+                  <mo>O</mo>
+                  <mfenced><mrow>
+                    <msup><mi>n</mi><mrow><mfrac><mrow><mo>log</mo><mi>n</mi></mrow><mn>2</mn></mfrac></mrow></msup>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <hr />
+
+          <p><em>
+            I originally ended up with
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <mo>O</mo><mfenced><mrow><msup><mi>n</mi><mrow><mo>log</mo><mi>n</mi></mrow></msup></mrow></mfenced>
+            </math>,
+            and in all honesty don't entierly understand this solution.
+          </em></p>
+
+          <hr />
+
+          <p>One option for determining the solution is <em>not</em> the "master theorem." Consider a general expression:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>T</mo><mfenced><mi>n</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <mi>a</mi><mo>T</mo><mfenced><mfrac><mi>n</mi><mi>b</mi></mfrac></mfenced><mo>+</mo>
+                  <mo>f</mo><mfenced><mi>n</mi></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <msup><mi>b</mi><mrow><msub><mo>log</mo><mi>b</mi></msub><mi>a</mi></mrow></msup>
+                  <mo>T</mo><mfenced><mfrac><mi>n</mi><mi>b</mi></mfrac></mfenced><mo>+</mo>
+                  <msup><mi>n</mi><mrow><msub><mo>log</mo><mi>b</mi></msub><mi>a</mi></mrow></msup>
+                  <mfrac>
+                    <mrow><mo>f</mo><mfenced><mi>n</mi></mfenced></mrow>
+                    <msup><mi>n</mi><mrow><msub><mo>log</mo><mi>b</mi></msub><mi>a</mi></mrow></msup>
+                  </mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <mfenced open="" close="|"><mrow>
+                    <msup><mi>b</mi><mi>p</mi></msup>
+                    <mo>T</mo><mfenced><mfrac><mi>n</mi><mi>b</mi></mfrac></mfenced><mo>+</mo>
+                    <msup><mi>n</mi><mi>p</mi></msup><mrow><mo>g</mo><mfenced><mi>n</mi></mfenced></mrow>
+                  </mrow></mfenced>
+                  <mfenced open="" close="">
+                    <mrow><mi>p</mi><mo>=</mo><msub><mo>log</mo><mi>b</mi></msub><mi>a</mi></mrow>
+                    <mrow>
+                      <mo>g</mo><mfenced><mi>x</mi></mfenced><mo>=</mo>
+                      <mfrac><mrow><mo>f</mo><mfenced><mi>n</mi></mfenced></mrow><msup><mi>n</mi><mi>p</mi></msup></mfrac>
+                    </mrow>
+                  </mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <msup><mi>n</mi><mi>p</mi></msup><mrow><mo>g</mo><mfenced><mi>n</mi></mfenced></mrow><mo>+</mo>
+                  <msup><mi>n</mi><mi>p</mi></msup><mrow><mo>g</mo><mfenced><mfrac><mi>n</mi><mi>b</mi></mfrac></mfenced></mrow><mo>+</mo>
+                  <msup><mi>b</mi><mrow><mn>2</mn><mi>p</mi></mrow></msup>
+                  <mo>T</mo><mfenced><mfrac><mi>n</mi><msup><mi>b</mi><mn>2</mn></msup></mfrac></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <msup><mi>n</mi><mi>p</mi></msup><mrow><mo>g</mo><mfenced><mi>n</mi></mfenced></mrow><mo>+</mo>
+                  <msup><mi>n</mi><mi>p</mi></msup><mrow><mo>g</mo><mfenced><mfrac><mi>n</mi><mi>b</mi></mfrac></mfenced></mrow><mo>+</mo>
+                  <msup><mi>n</mi><mi>p</mi></msup><mrow><mo>g</mo><mfenced><mfrac><mi>n</mi><msup><mi>b</mi><mn>2</mn></msup></mfrac></mfenced></mrow><mo>+</mo>
+                  <msup><mi>b</mi><mrow><mn>3</mn><mi>p</mi></mrow></msup>
+                  <mo>T</mo><mfenced><mfrac><mi>n</mi><msup><mi>b</mi><mn>3</mn></msup></mfrac></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd>&hellip;</mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <msup><mi>n</mi><mi>p</mi></msup>
+                  <mfenced><mrow>
+                    <mrow><mo>g</mo><mfenced><mi>n</mi></mfenced></mrow><mo>+</mo>
+                    <mrow><mo>g</mo><mfenced><mfrac><mi>n</mi><mi>b</mi></mfrac></mfenced></mrow><mo>+</mo>
+                    <mrow><mo>g</mo><mfenced><mfrac><mi>n</mi><msup><mi>b</mi><mn>2</mn></msup></mfrac></mfenced></mrow><mo>+</mo>
+                    <mo>&hellip;</mo><mo>+</mo>
+                    <mrow><mo>g</mo><mfenced><mfrac><mi>n</mi><msup><mi>b</mi><mi>i</mi></msup></mfrac></mfenced></mrow>
+                  </mrow></mfenced>
+                  <mo>+</mo><msup><mi>b</mi><mrow><mi>i</mi><mi>p</mi></mrow></msup>
+                  <mo>T</mo><mfenced><mfrac><mi>n</mi><msup><mi>b</mi><mi>i</mi></msup></mfrac></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <msup><mi>n</mi><mi>p</mi></msup>
+                  <munderover>
+                    <mo>&Sigma;</mo>
+                    <mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow>
+                    <mrow><msub><mo>log</mo><mi>b</mi></msub><mi>n</mi></mrow>
+                  </munderover>
+                  <mrow><mo>g</mo><mfenced><mfrac><mi>n</mi><msup><mi>b</mi><mi>i</mi></msup></mfrac></mfenced></mrow>
+                  <mo>+</mo><msup><mi>b</mi><mrow><mi>p</mi><mrow><msub><mo>log</mo><mi>b</mi></msub><mi>n</mi></mrow></mrow></msup>
+                  <mo>T</mo><mfenced><mfrac><mi>n</mi><msup><mi>b</mi><mrow><msub><mo>log</mo><mi>b</mi></msub><mi>n</mi></mrow></msup></mfrac></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <msup><mi>n</mi><mi>p</mi></msup>
+                  <munderover>
+                    <mo>&Sigma;</mo>
+                    <mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow>
+                    <mrow><msub><mo>log</mo><mi>b</mi></msub><mi>n</mi></mrow>
+                  </munderover>
+                  <mrow><mo>g</mo><mfenced><mfrac><mi>n</mi><msup><mi>b</mi><mi>i</mi></msup></mfrac></mfenced></mrow>
+                  <mo>+</mo><msup><mi>n</mi><mi>p</mi></msup>
+                  <mo>T</mo><mfenced><mn>1</mn></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>There are three options for how g(<em>n</em>) will perform:</p>
+          <ul>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mo>g</mo><mfenced><mi>n</mi></mfenced>
+              </math>
+              is increasing &bull; the
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mo>g</mo><mfenced><mi>n</mi></mfenced>
+              </math>
+              term will dominate the expression
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mo>g</mo><mfenced><mi>n</mi></mfenced>
+              </math>
+              is constant &bull; the
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mo>g</mo><mfenced><mfrac><mi>n</mi><msup><mi>b</mi><mi>i</mi></msup></mfrac></mfenced>
+              </math>
+              terms will all matter
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mo>g</mo><mfenced><mi>n</mi></mfenced>
+              </math>
+              is decreasing &bull; the
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mo>g</mo><mfenced><mn>1</mn></mfenced>
+              </math>
+              term will dominate the expression
+            </li>
+          </ul>
+          <p>For this particular problem, T(<em>n</em>) is modified by a factor f(<em>n</em>) rather than a constant, so the solution cannot be applied.</p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>In a certain set decomposition algorithm, a set is split into two non-intersecting subsets and the subsets are recursively subdivided. Each decomposition takes time propotional to the square of the number of elements in the current set being decomposed.</p>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Show that the worst case time for this decomposition is &Theta;(<em>n</em><sup>3</sup>).</p>
+            </div>
+            <div class="answer">
+              <p>The size of the subsets will be:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mi>n</mi></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msub><mi>n</mi><mn>1</mn></msub><mo>+</mo><msub><mi>n</mi><mn>2</mn></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfrac><mrow><mi>a</mi><mi>n</mi></mrow><mi>c</mi></mfrac><mo>+</mo>
+                      <mfrac><mrow><mfenced><mrow><mi>c</mi><mo>-</mo><mi>a</mi></mrow></mfenced><mi>n</mi></mrow><mi>c</mi></mfrac>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The time for generating each of these subsets is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>T</mo><mfenced><mi>n</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>c</mi><msup><mi>n</mi><mn>2</mn></msup><mo>+</mo>
+                      <mo>T</mo><mfenced><msub><mi>n</mi><mn>1</mn></msub></mfenced><mo>+</mo>
+                      <mo>T</mo><mfenced><msub><mi>n</mi><mn>2</mn></msub></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>This combination has a minima when n<sub>1</sub> = n<sub>2</sub>. The maximum is when one element is as large as possible. Because each subset must contain at least one element or the algorithm will not progress, this is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>n</mi><mn>1</mn></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mi>n</mi><mo>-</mo><mn>1</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>T</mo><mfenced><mi>n</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mi>c</mi><msup><mi>n</mi><mn>2</mn></msup><mo>+</mo>
+                      <mo>T</mo><mfenced><msub><mi>n</mi><mn>1</mn></msub></mfenced><mo>+</mo>
+                      <mo>T</mo><mfenced><msub><mi>n</mi><mn>2</mn></msub></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mi>c</mi><msup><mi>n</mi><mn>2</mn></msup><mo>+</mo>
+                      <mo>T</mo><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                      <mo>+</mo><mo>T</mo><mfenced><mn>1</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mi>c</mi><msup><mi>n</mi><mn>2</mn></msup><mo>+</mo>
+                      <mfenced><mrow>
+                        <mi>c</mi><msup><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced><mn>2</mn></msup>
+                        <mo>+</mo><mo>T</mo><mfenced><mrow><mi>n</mi><mo>-</mo><mn>2</mn></mrow></mfenced>
+                        <mo>+</mo><mo>T</mo><mfenced><mn>1</mn></mfenced>
+                      </mrow></mfenced>
+                      <mo>+</mo><mo>T</mo><mfenced><mn>1</mn></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mi>c</mi><msup><mi>n</mi><mn>2</mn></msup><mo>+</mo>
+                      <mi>c</mi><msup><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced><mn>2</mn></msup>
+                      <mo>+</mo><mo>T</mo><mfenced><mrow><mi>n</mi><mo>-</mo><mn>2</mn></mrow></mfenced>
+                      <mo>+</mo><mn>2</mn><mo>T</mo><mfenced><mn>1</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd>&hellip;</mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <munderover>
+                        <mo>&Sigma;</mo>
+                        <mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow>
+                        <mi>k</mi>
+                      </munderover>
+                      <mi>c</mi>
+                      <msup><mfenced><mrow><mi>n</mi><mo>-</mo><mn>i</mn></mrow></mfenced><mn>2</mn></msup>
+                      <mo>+</mo><mo>T</mo><mfenced><mrow><mi>n</mi><mo>-</mo><mi>k</mi></mrow></mfenced>
+                      <mo>+</mo><mi>k</mi><mo>T</mo><mfenced><mn>1</mn></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mi>c</mi>
+                      <munderover>
+                        <mo>&Sigma;</mo>
+                        <mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow>
+                        <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                      </munderover>
+                      <msup><mfenced><mrow><mi>n</mi><mo>-</mo><mn>i</mn></mrow></mfenced><mn>2</mn></msup>
+                      <mo>+</mo><mi>n</mi><mo>T</mo><mfenced><mn>1</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn"><mo>&Theta;</mo><mfenced><mrow><msup><mi>n</mi><mn>3</mn></msup></mrow></mfenced></mtd>
+                    <mtd></mtd>
+                    <mtd></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>
+                Show that if the decomposition has the property that neither subset of a decomposition step has more than
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mfrac><mn>3</mn><mn>4</mn></mfrac>
+                </math>
+                of the elements from the set being decomposed, the worst case of the decomposition is &Theta;(<em>n</em><sup>2</sup>).
+              </p>
+            </div>
+            <div class="answer">
+              <p>As before, the worst case scenario is when one element, n<sub>i</sub>, is maximized. The exact nature of that decomposition is a bit tricky, however. The most obvious method for maximizing one quantity is to say:</p>
+              
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mi>n</mi></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mfrac><mrow><mn>3</mn><mi>n</mi></mrow><mn>4</mn></mfrac><mo>+</mo>
+                      <mfrac><mi>n</mi><mn>4</mn></mfrac>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>
+                However, since
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mfenced open="" close=""><mi>n</mi><msub><mi>n</mi><mn>1</mn></msub><msub><mi>n</mi><mn>2</mn></msub></mfenced>
+                  <mo>&Element;</mo><mi>&naturals;</mi>
+                </math>
+                there are times that it will not be posible to have a decomposition that divides evenly. The best case for maximization is:
+              </p>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>n</mi><mn>1</mn></msub></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mfrac><mrow><mn>3</mn><mi>n</mi></mrow><mn>4</mn></mfrac></mtd>
+                    <mtd><mo>,</mo></mtd>
+                    <mtd><msub><mi>n</mi><mn>2</mn></msub></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mfrac><mi>n</mi><mn>2</mn></mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>Hypothesize that:</p>
+              
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>T</mo><mfenced><mi>n</mi></mfenced></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mi>k</mi><msup><mi>n</mi><mn>2</mn></msup></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>T</mo><mfenced><mi>n</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn">
+                      <mi>c</mi><msup><mi>n</mi><mn>2</mn></msup><mo>+</mo>
+                      <mo>T</mo><mfenced><msub><mi>n</mi><mn>1</mn></msub></mfenced><mo>+</mo>
+                      <mo>T</mo><mfenced><msub><mi>n</mi><mn>2</mn></msub></mfenced>
+                    </mtd>
+                    <mtd><mo>&lt;</mo></mtd>
+                    <mtd class="eqn">
+                      <mi>c</mi><msup><mi>n</mi><mn>2</mn></msup><mo>+</mo>
+                      <mo>T</mo><mfenced><mfrac><mrow><mn>3</mn><mi>n</mi></mrow><mn>4</mn></mfrac></mfenced>
+                      <mo>+</mo><mo>T</mo><mfenced><mfrac><mi>n</mi><mn>2</mn></mfrac></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd class="eqn">
+                      <mi>c</mi><msup><mi>n</mi><mn>2</mn></msup><mo>+</mo>
+                      <mi>k</mi><msup><mfenced><mfrac><mrow><mn>3</mn><mi>n</mi></mrow><mn>4</mn></mfrac></mfenced><mn>2</mn></msup>
+                      <mo>+</mo><mi>k</mi><msup><mfenced><mfrac><mi>n</mi><mn>2</mn></mfrac></mfenced><mn>2</mn></msup>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd class="eqn" columnspan="3">
+                      <mi>c</mi><msup><mi>n</mi><mn>2</mn></msup><mo>+</mo>
+                      <mfrac><mrow><mn>13</mn><mi>k</mi><msup><mi>n</mi><mn>2</mn></msup></mrow><mn>16</mn></mfrac>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p><em>I'm missing a step, then it's:</em></p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mi>c</mi><msup><mi>n</mi><mn>2</mn></msup></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mfrac><mrow><mn>13</mn><mi>k</mi><msup><mi>n</mi><mn>2</mn></msup></mrow><mn>16</mn></mfrac></mtd>
+                    <mtd><mo>&iff;</mo></mtd>
+                    <mtd><mi>k</mi></mtd>
+                    <mtd><mo>&ge;</mo></mtd>
+                    <mtd><mfrac><mrow><mn>16</mn><mi>c</mi></mrow><mn>13</mn></mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </body>
+</html>

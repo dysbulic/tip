@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Robot Control Prototyping Plan</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <style type="text/css">
+      p, h2, ul { margin-left: 50px; }
+      .interface { width: 100%; height: 400px; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS-352 &mdash; Robot Control Prototyping Plan</h1>
+      <h2>Sanford Freeman and Will Holcomb</h2>
+      <h2>4 October 2007</h2>
+    </div>
+
+    <h2>Data Collection Techniques</h2>
+
+    <p>The initial development began with an examination of existing interfaces. Open-ended interviews were held with the clients to get a sense of elements that they wish to retain and functionality they want to add.</p>
+
+    <p>In preparation for the prototyping plan, additional meetings were held where the existing requirements specification was reviewed. The primary point of dissatisfaction was a desire for the validation requirements to be more focused on demonstrable user interface tests. The requirements were accordingly updated.</p>
+
+    <p>For the discussion of the prototype, interface drawings were coupled with a narrative description of a typical program usage. The clients offered comments on elements that were either unclear to them or which the developers didn't understand sufficiently. Potential scenarios for user testing were discussed, but no definitive decisions were made.</p>
+
+    <h2>Prototype Description</h2>
+
+    <p>This interface interface is divided into two primary subinterfaces to support the operator in controlling both the overarching disaster response as well as teloperation of specific vehicles. Certain elements of the interface will remain consistent between the two views and they are illustrated in Figure 1:</p>
+    
+    <div class="figure">
+      <object class="interface" type="image/svg+xml" data="common_interface_elements.svg">
+      </object>
+      <p class="caption">Figure 1: Common Interface Elements</p>
+    </div>
+
+    <ul>
+      <li>Menu Bar &mdash; This is an interface common to GUI programs providing access to all program functions through a set of hierarchical menus.</li>
+      <li>Manipulation or Orchestration Interface &mdash; The contents of this portion of the interface will change depend on the interface the user is accessing and they are discussed below.</li>
+      <li>Robot Status &mdash; Certain information about the vehicles is present on the screen at all times. This includes certain information common to all robots such as time left in field (battery or gas level). It also includes certain information specific to particular types of robots. This area also serves through the use of color to indicate groupings of robots and allows alerting the operator of situations requiring attention.</li>
+      <li>Available Overlays &mdash; The interface will permit the operator to blend together different images to increase situational awareness while manipulating a specific robot. This area allows the selection of which overlays are included in the overlay. Available information might include robot position, chemical sensing heatmaps or aerial coverage maps.</li>
+      <li>Interface Specific Status Information &mdash; Information about the specific interface being shown at the current time.</li>
+    </ul>
+
+    <div class="figure">
+      <object class="interface" type="image/svg+xml" data="orchestration_interface.svg">
+      </object>
+      <p class="caption">Figure 2: Orchestration Interface Elements</p>
+    </div>
+
+    <p>The orchestration interface provides a high level overview of the entire response scene. It is used by the operator for three primary purposes:</p>
+
+    <ul>
+      <li>Group Definition &mdash; Associating robots together in groups</li>
+      <li>Task Definition &mdash; Defining the tasks that need to be completed as a part of the disaster response</li>
+      <li>Waypoint Definition &mdash; Robots will need to move around the world to complete their tasks. The operator will specify one or more waypoints to define a path for the robots to take.</li>
+    </ul>
+
+    <div class="figure">
+      <object class="interface" type="image/svg+xml" data="manipulation_interface.svg">
+      </object>
+      <p class="caption">Figure 3: Manipulation Interface Elements</p>
+    </div>
+
+    <p>The manipulation provides teleoperation access to an individual robot. It is used by the operator to perform tasks that autonomous systems are currently incapable of. The exact controls and status monitors are dependent on the specific robot being controlled.</p>
+
+    <h2>Prototype Technologies</h2>
+
+    <p>To best meet the client requirements, user interface testing for this project will be conducted with a partial implementation prototype. A variety of technologies will be employed in the development of the prototype:</p>
+
+    <ul>
+      <li><a href="http://usarsim.sourceforge.net">USARSim</a> &mdash; For user testing, data from actual robots is not necessary. A simulation is both easier to set up and more reliably reproducible. Urban Search And Rescue Simulation (USARSim) provides a virtual environment that tracks the position and state of the robots. The program uses <a href="http://www.unrealtournament2003.com/ut2004/">Unreal Tournament 2004</a> for physics simulation and scene rendering.</li>
+      <li>ImageServer &mdash; USARSim provides simulated cameras positioned on robots. Unreal Tournament does not provide a simple interface for getting an image of the current scene. The image server uses low-level Windows system calls to generate a video stream for camera simulation.</li>
+      <li>
+        <a href="http://playerstage.sourceforge.net/index.php?src=player">Player</a> &mdash; This program needs to eventually interface with a variety of different types of robots. Player is an abstraction library that provides a unified interface for querying and controlling robots as well as implementations of some established algorithms for route finding and obstacle avoidance. Player is a client/server architecture which communicate via a network and the components are:
+        <ul>
+          <li>Player Server &mdash; The server runs on an individual robot and receives queries and control commands. Various drivers exist for controlling different pieces of hardware including drivers to return the simulated data from USARSim as though it represented actual robots.</li>
+          <li>Player Client &mdash; The client is an application library utilized by the interface to communicate with the server.</li>
+        </ul>
+      </li>
+      <li><a href="http://trolltech.com/products/qt">QT</a> &mdash; The graphical components of the interface require a toolkit for rapid development. QT is a flexible and powerful cross-platform library for developing GUIs. It includes facilities for sophisticated composition of different types of images which is an important feature for this interface.</li>
+    </ul>
+    <p>All of the technologies for this application were chosen for their cross-platform capabilities and ease of use. Rapid prototyping packages such as Visual Basic, and prototyping techniques such as mimicking live video with pre-recorded video will not be used for two primary reasons. First, this interface in a completed form may be needed in the near future and time may not be available to reimplement it with more powerful methods. Second, user testing is specifically to ascertain a user's efficacy in controlling a robot, so using prerecorded video is not feasible.</p>
+
+    <p>Figure 4 provides a structural diagram describing the connections between the different technologies and the resultant data paths. The system may potentially employ up to three separate computers. Although it may be possible to instantiate each sub-system on the same machine, computational complexity may prohibit this deployment strategy. Currently, the only platform limited technology is the Image Server which has Windows-specific requirements.</p>
+    <p>The Player libraries and and QT will run on the majority of POSIX-based operating systems, including the <a href="http://www.cygwin.com">Cygwin</a> environment on Windows. Since a client-specified requirement states that the application must run under Windows, the interface application, ImageServer, and USARSim will be running under Windows during user testing.</p>
+
+    <div class="figure">
+      <img src="system_structure.jpg" alt="Figure 1: System Structure Diagram" />
+      <p class="caption">Figure 4: System Structure Diagram</p>
+    </div>
+
+    <h2>Prototype Limitations</h2>
+
+    <p>This protopype is being developed on an extremely abbreviated timeline. Due to these time constraints elements of the ideal interface will have to be remain unimplemented. The elements that will need to be implemented for user testing are:</p>
+
+    <ul>
+      <li>Orchestration Interface:
+      <ul>
+        <li>Display Map &mdash; Show a 2D map of the world being explored</li>
+        <li>Waypoint Definition &mdash; Permit the user to specify a path for the robots to follow</li>
+        <li>Robot Map Position &mdash; Display the position of the robot in the world</li>
+        <li>Orchestration Status Display &mdash; Display salient information about the state of the world including defined tasks and robot groups</li>
+      </ul>
+      </li>
+      <li>Manipulation Interface:
+      <ul>
+        <li>Robot Video &mdash; Show video from the robot in the manipulation interface</li>
+        <li>Manipulation Status Display &mdash; Display information about the operating characteristics of a particular vehicle</li>
+        <li>Robot Manipulation &mdash; Allow teleoperation of individual vehicles</li>
+      </ul>
+      </li>
+      <li>Common Elements:
+      <ul>
+        <li>Robots Status &mdash; Show cursory information about the state of all the robots controlled by the interface</li>
+        <li>Ground Robots &mdash; Place ground-based robots in the interface</li>
+      </ul>
+      </li>
+    </ul>
+
+    <p>Elements that would ideally be a part of this interface, but which won't be implemented for time reasons:</p>
+    <ul>
+      <li>Task Definition &mdash; Specify information about the tasks that need to be completed</li>
+      <li>Group Creation &mdash; Create collections of associated robots</li>
+      <li>Overlay Selection &mdash; Allow toggling of information pertinent to the world or to the camera view</li>
+      <li>Aerial Robots &mdash; Place aerial vehicles in the interface</li>
+      <li>Map Scaling &mdash; Permit the user to zoom and pan the map in the orchestration view</li>
+    </ul>
+  </body>
+</html>

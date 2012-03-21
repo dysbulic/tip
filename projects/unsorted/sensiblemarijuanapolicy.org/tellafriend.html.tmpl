@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<tmpl:template xmlns="http://www.w3.org/1999/xhtml"
+               xmlns:tmpl="http://odin.himinbi.org/templ/0.1/">
+  <tmpl:var name="title">Tell Someone About the Committee for Sensible Marijuana Policy</tmpl:var>
+  <tmpl:var name="header">
+     <link rel="stylesheet" type="text/css" href="form.css" />
+  </tmpl:var>
+  <tmpl:var name="content">
+    <h2>Tell a Friend</h2>
+
+    <p>Please note that this message will be e-mailed directly to your friend(s), and their e-mail addresses will not be saved or otherwise reused.</p>
+    
+    <form id="tellafriend" action="tellafriend.php" method="post">
+      <ul class="form">
+        <li class="required">
+          <label>Your Name:</label>
+          <input type="text" name="name" />
+        </li>
+        <li class="required">
+          <label>Your E-Mail:</label>
+          <input type="text" name="sender" />
+        </li>
+        <li class="required">
+          <label>Recipients:</label>
+          <textarea name="recipients"> </textarea>
+        </li>
+        <li id="message">
+          <p>Text of message to friend:</p>
+          <blockquote>
+            <p>The Committee for Sensible Marijuana Policy is working to get an initiative on the 2008 Massachusetts ballot that will decriminalize the possession of small amounts of marijuana.</p>
+
+            <p>The campaign must collect 66,417 valid signatures by the end of November to get the initiative on the ballot. If only a small percentage of supporters throughout the state can commit either to donating/raising $1,000 or to collecting 1,000 signatures themselves from Massachusetts voters, the signature drive will be self-funding. You can get involved to help today!</p>
+
+            <p>To receive occasional updates on this campaign, please visit www.SensibleMarijuanaPolicy.org/subscribe to receive the latest news about the initiative campaign.</p>
+
+            <p>Please see www.SensibleMarijuanaPolicy.org for more information. Thank you for considering this, and I hope you can help them out!</p>
+
+            <textarea name="message" id="message"> </textarea>
+          </blockquote>
+        </li>
+        <li class="submit"><input type="submit" value="Send E-Mail" /></li>
+      </ul>
+    </form>
+    <script type="text/javascript">
+      $(document.forms['tellafriend']['message']).one("focus", function() { $(this).get(0).value = ""; });
+      $(document.forms['tellafriend']['message']).get(0).value = "Add your own custom message";
+    </script>
+  </tmpl:var>
+</tmpl:template>

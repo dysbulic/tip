@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "mathml.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Abstract for ACM Southeast 2003 -- Finding the Meaning: Translation of Controlled English into Prolog</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-939849-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+  </head>
+  <body>
+    <blockquote>"Open the pod bay doors, please, HAL." (2001: A Space
+     Odyssey).</blockquote>
+
+    <p>Programming languages are a useful way of communicating
+     information to a computer, but there are a variety of situations
+     such as software specification testing and machine learning where
+     a programming language can be too cumbersome for the intended
+     audience. Natural languages involve the interaction of too many
+     complex systems to process, but it is possible to come up with a
+     "controlled language" subset that can be disambiguated
+     systematically. Xcel is a modular system designed to make
+     translating between controlled English and prolog flexible and
+     easily extensible. This full length student paper deals with the
+     characteristics of the xcel system.</p>
+
+    <p>The system is most easily conceptualized as a pipeline that
+     takes a document written in Attempto Controlled English (ACE) at
+     one end and produces prolog from the other. Each section of pipe
+     has a meaningful input and output that is coupled in a generic
+     way. These couplings not only make it possible to debug the
+     program incrementally, but also make extensions simpler by
+     allowing simple splitting points.</p>
+
+    <p>The source of the process is a lexical analysis performed by a
+     tokenizer chain loaded dynamically from a tokenizer chain markup
+     language (TCML) specification using java reflection. The
+     base is a a tokenizer which breaks apart the source based on
+     regular expressions into symbolic tokens that have both a type
+     and value. This stream of tokens then passes through a set of
+     filters that perform secondary operations (discarding whitespace,
+     identifying parts of speech, etc.) </p>
+
+    <p>The token stream is fed into a LR(k) parser generated from a
+     symbolic Backus-Naur form (SBNF) grammar. SBNF is syntactically
+     equivalent to ISO EBNF except that its productions are the token
+     types from the token stream rather than characters. As output,
+     the parser generates a events for the start and finish of rules
+     and the passage of terminals in the parse.</p>
+
+    <p>Cocoon is a framework from the Apache XML project used to
+     generate content for the web by passing simple api for XML
+     parsing (SAX) events through a set of transformations. The next
+     part of the system translates the events from the SBNF parser
+     into SAX events and sets them up as a Cocoon "generator".</p>
+
+    <p>Cocoon allows the application of extensible stylesheet
+     transformations (XSLT) to the SAX events from the generator. The
+     next three parts of the system are XSLT's. The first
+     disambiguates the parse tree by performing operations like
+     establishing the referents of pronouns and anaphors in a regular
+     way. The unambiguous tree is then converted into a XML
+     representation of first-order predicate calculus (FOPC) by the
+     second XSLT. The third XSLT then converts the FOPC markup into
+     ISO prolog.</p>
+    
+    <p>The separation of concerns in xcel works well. Lexical
+     information is captured in the tokenization, then semantic
+     information in the parsing. The use of XML in the subsequent
+     transformations allows for semantic information to be maintained
+     in an easily accessible form. Having only to deal with the parse
+     trees makes alterations to the grammar much easier to propagate
+     through the system.</p>
+     
+    <p>Keywords:</p>
+    <ul>
+      <li>XML</li>
+      <li>parsing</li>
+      <li>XSLT</li>
+      <li>controlled language processing</li>
+      <li>predicate calculus</li>
+      <li>logic programming</li>
+    </ul>
+  </body>
+</html>

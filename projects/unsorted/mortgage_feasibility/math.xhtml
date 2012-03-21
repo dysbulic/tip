@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" -->
+<!DOCTYPE html PUBLIC
+ "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd"
+ [ <!ENTITY mathml  "http://www.w3.org/1998/Math/MathML">
+   <!ENTITY hellip  "&#x2026;">
+   <!ENTITY bull    "&#x7E6;">
+   <!ENTITY deg     "&#xB0;">
+   <!ENTITY gamma   "&#x3B3;">
+   <!ENTITY epsilon "&#x3B5;">
+   <!ENTITY Delta   "&#x394;">
+   <!ENTITY delta   "&#x3B4;">
+   <!ENTITY sum     "&#x2211;">
+
+   <!ENTITY minus   "&#x2212;">
+
+   <!ENTITY SuchThat "&#x220B;">
+   <!ENTITY ForAll  "&#x2200;">
+   <!ENTITY Element "&#x2208;">
+   <!ENTITY Exists  "&#x2203;">
+   <!ENTITY Therefore     "&#x2234;">
+   <!ENTITY ApplyFunction "&#x2061;">
+   <!ENTITY geq     "&#x2265;">
+   <!ENTITY leq     "&#x2264;">
+   <!ENTITY lfloor  "&#x230A;">
+
+   <!ENTITY rfloor  "&#x230B;">
+   <!ENTITY isin    "&#x2208;">
+   <!ENTITY notin   "&#x2209;">
+   <!ENTITY real    "&#x211D;">
+   <!ENTITY rarr    "&#x21D2;"> ]>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:math="http://www.w3.org/1998/Math/MathML">
+  <head>
+    <title>Mortgage Calculator</title>
+    <style type="text/css">
+      body {
+        padding: 2em 5em 0 5em;
+        font-size: 13pt;
+      }
+      form {
+        display: block;
+        width: 21em;
+        margin: 0 auto 2em auto;
+      }
+      .dot {
+        float: left;
+        width: 1em;
+        height: .25em;
+        text-align: center;
+        color: #CCC;
+      }
+      label {
+        float: left;
+        width: 8em;
+	text-align: right;
+	margin-right: .75em;
+      }
+      input {
+        width: 12em;
+        padding: 0 .5em 0 .5em;
+	border: solid;
+      }
+      input:active {
+        border-color: blue;
+      }
+      .active {
+        border-color: red;
+        background-color: #FED;
+      }
+      input[type="reset"] {
+        margin-left: 12em;
+      }
+      input[type="reset"]:hover {
+        background-color: #DEF;
+      }
+      #mortgage div {
+        padding: .25em 0 .25em 0;
+      }
+      #mortgage div.selectable:hover {
+        background-color: #EEE;
+      }
+      #mortgage div.active.selectable {
+        background-color: #BEB;
+      }
+    </style>
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-939849-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+    <script type="text/javascript" src="http://odin.himinbi.org/javascript_compatability/compatability.js"></script>
+    <script type="text/javascript">//<![CDATA[
+      var defaults = { 'term':'15', 'interest':'5.5', 'payment':'750' };
+      var determinations = new Array(); // equations for finding various variables
+      determinations['payment'] = function(values) {
+        var r = values['interest'] / (12 * 100);
+        var z = 1 + r;
+        var t = values['term'] * 12;
+        var loan = (values['cost'] - values['downpayment']);
+        var rate = 1;
+        if(t != 0 && z != 1) { // will cause a divide by 0
+          loan *= Math.pow(z, t);
+          rate = -r / (1 - Math.pow(z, t));
+        } else if(z == 1 && t != 0) {
+          loan = loan / t;
+        }
+	values['payment'] = loan * rate;
+      }
+      determinations['loan'] = function(values) {
+        var r = values['interest'] / (12 * 100);
+        var z = 1 + r;
+        var t = values['term'] * 12;
+        var rate = t;
+        if(r != 0) { // will cause a divide by 0
+          rate = (1 - Math.pow(z, t)) / (-r * Math.pow(z, t))
+        }
+	values['loan'] = values['payment'] * rate;
+      }
+      determinations['cost'] = function(values) {
+        determinations['loan'](values);
+        values['cost'] = values['loan'] + values['downpayment'];
+      }
+      determinations['downpayment'] = function(values) {
+        determinations['loan'](values);
+        values['downpayment'] = values['cost'] - values['loan'];
+      }
+      /*
+      // From: http://www.hughchou.org/calc/formula.html
+      // Use a birary search rather than an equation
+      determinations['interest'] = function(values) {
+        var max_rate = 10000000000, min_rate = -max_rate;
+        var saved_payment = values['payment'];
+        while(min_rate < max_rate - 0.0001) {
+          values['interest'] = (min_rate + max_rate) / 2;
+          determinations['payment'](values);
+          if(values['payment'] < saved_payment) max_rate = values['interest'];
+          else min_rate = values['interest'];
+        }
+        values['payment'] = saved_payment;
+      }
+      */
+      var elements = new Array();
+      var unknownProperty;
+      function init() {
+        form = document.forms['mortgage'];
+        body = document.getElementsByTagName("body")[0];
+        for(input in form) {
+          if(typeof(form[input]) != "undefined" && form[input] != null
+             && typeof(form[input].nodeName) != "undefined" && form[input].nodeName.toLowerCase() == "input") {
+            var keylistener = new Function("e", "keypressed(e, this.name);");
+            keylistener.name = input;
+            addListener(form[input], "keypress", keylistener, true);
+            addListener(form[input], "change", eval("function(e) { var name = \"" + input + "\"; changed(e, name); }"), true);
+            addListener(form[input], "focus", focused, true);
+            addListener(form[input], "blur", blured, true);
+            elements[input] = new Object();
+            elements[input].input = form[input];
+            elements[input].type = form[input].className;
+          }
+        }
+	for(i = 0; i < form.childNodes.length; i++) {
+	  child = form.childNodes[i];
+	  if(child.nodeType == Node.ELEMENT_NODE && child.nodeName.toLowerCase() == "div") {
+            var dot = document.createElement("span");
+            dot.className = "dot";
+            child.insertBefore(dot, child.firstChild);
+            for(j = 0; j < child.childNodes.length; j++) {
+              var divchild = child.childNodes[j];
+              if(divchild.nodeType == Node.ELEMENT_NODE && divchild.nodeName.toLowerCase() == "input"
+                 && typeof(divchild.name) != "undefined" && divchild.name != "") {
+                elements[divchild.name].div = child;
+                if(typeof(determinations[divchild.name]) != "undefined") {
+                  child.className += " selectable";
+                  dot.appendChild(document.createTextNode(String.fromCharCode(8226)));
+                  addListener(child, "click", eval("function(e) { var name = \"" + divchild.name + "\"; selectDiv(e, name); }"), false);
+                  if(typeof(unknownProperty) == "undefined") {
+                    setActiveProperty(divchild.name);
+                  }
+                  break;
+                }
+              }
+            }
+	  }
+	}
+      }
+      function setActiveProperty(name) {
+        if(name != unknownProperty) {
+          if(typeof(unknownProperty) != "undefined") {
+            elements[unknownProperty].div.className = elements[unknownProperty].div.className.replace(/\s*active/g, "");
+            elements[unknownProperty].input.disabled = false;
+          }
+          elements[name].div.className += " active";
+          elements[name].input.disabled = true;
+          unknownProperty = name;
+        }
+      }
+      function selectDiv(event, name) {
+        if(getSource(event).nodeName.toLowerCase() != "input") {
+          setActiveProperty(name);
+        }
+      }
+      function keypressed(event, name) {
+        if(event.altKey || event.ctrlKey || event.metaKey) {
+          return;
+        }
+        var whichchar = String.fromCharCode(event.which); // the char codes are completely broken on a mac
+        if(whichchar == "" || whichchar.match(/[1-9]/) || whichchar.match(/[\x00\x08]/)) {
+          return;
+        }
+        if(whichchar.match(/[\x0D]/)) { // enter key
+          computeElement(unknownProperty);
+        }
+        var value = getSource(event).value;
+        if(name == "interest" && whichchar == "." && value.indexOf(".") == -1) {
+          return;
+        }
+        if(name != "term" && whichchar == "0") {
+          return;
+        }
+        if(name == "term" && whichchar == "0" && value.match(/[1-9\.]/)) {
+          return;
+        }
+        killEvent(event);
+      }
+      function commaify(value, decimalDegree) {
+        newvalue = "";
+        var pointIndex = value.indexOf(".");
+        if(pointIndex == -1) {
+          pointIndex = value.length;
+        }
+	for(start = 0, end = (pointIndex % 3); end <= pointIndex; start = end, end += 3) {
+          newvalue += value.substring(start, end);
+	  if(end != 0 && end < pointIndex) {
+            newvalue += ",";
+          }
+        }
+        if(pointIndex < value.length) {
+          decimal = value.substring(pointIndex, value.length);
+          if(typeof(decimalDegree) != "undefined") {
+            decimal = Math.round(decimal * Math.pow(10, decimalDegree)) / Math.pow(10, decimalDegree);
+          }
+          newvalue += decimal.toString().replace(/^0*/, "");
+        }
+        return newvalue;
+      }
+      function formatValue(value, type) {
+        //alert("Formating " + value + " (" + typeof(value) + ") as " + type);
+        if(value) {
+          var decimalDegree = 2;
+          if(type == "interest") { decimalDegree = 3; }
+          newvalue = commaify(value, decimalDegree);
+          switch(type) {
+            case "money": newvalue = "$" + newvalue; break;
+            case "interest": newvalue += "%"; break;
+            case "time":
+              newvalue += " year";
+              if(value != "1") { newvalue += "s"; }
+              break;
+          }
+        }
+        return newvalue;
+      }
+      function computeElement(name) {
+        var values = new Array();
+        for(input in elements) {
+          if(input != name && typeof(elements[input].input) != "undefined") {
+            if(elements[input].input.value == "") {
+              var defaultValue = "0";
+              if(typeof(defaults[input]) != "undefined") {
+                defaultValue = defaults[input];
+              }
+              elements[input].input.value = formatValue(defaultValue, elements[input].type);
+            }
+            values[input] = parseFloat(elements[input].input.value.replace(/[$,%a-z\s]/g, ""));
+          }
+        }
+        determinations[name](values);
+        elements[name].input.value = formatValue(values[name].toString(), elements[name].type);
+      }
+      function changed(event, name) {
+        computeElement(unknownProperty);
+        var source = getSource(event);
+        var value = source.value.replace(/[$,%a-z\s]/g, "");
+        if(value.match(/[1-9.]/)) {
+          value = value.replace(/^0*/, "");
+        }
+        source.value = formatValue(value, elements[name].type);
+      }
+      function focused(event) {
+        source = getSource(event);
+        source.className += " active";
+        if(source.value) { source.value = source.value.replace(/[$,%a-z\s]/g, "").replace(/^0*/, ""); }
+      }
+      function blured(event) {
+        source = getSource(event);
+        source.className = source.className.replace(/\s*active/g, "");
+      }
+    //]]></script>
+  </head>
+  <body onload="init()">
+    <form id="mortgage" action="" onsubmit="return false">
+      <div><label>House Cost:</label><input class="money" name="cost" type="text" /></div>
+      <div><label>Downpayment:</label><input class="money" name="downpayment" type="text" /></div>
+      <div><label>Mortgage Term:</label><input class="time" name="term" type="text" /></div>
+      <div><label>Interest Rate:</label><input class="interest" name="interest" type="text" /></div>
+      <div><label>Monthly Payment:</label><input class="money" name="payment" type="text" /></div>
+      <div><input type="reset" /></div>
+    </form>
+    <hr />
+    <h1>Mortgage Math</h1>
+    <h2>Variables</h2>
+    <p>Ok, so you want a mortgage, but don't know what you can afford. The math for figuring it out is a little complicated, but once you understand it, not difficult. First we need to define some variables:</p>
+    <ul>
+      <li>l &rarr; the amount of the mortgage loan (the cost minus the downpayment)</li>
+      <li>T &rarr; the term of the loan in years (generally 15 or 30)</li>
+      <li>R &rarr; the percentage rate for the loan</li>
+      <li>p &rarr; the monthly payment on the loan</li>
+    </ul>
+    <p>First it is important to get everything into the same units. The term and rate are both in terms of a year, so new terms need to be defined. Also, the rate is currently a percentage, so it needs to be scaled down by a factor of 100 to get a decimal to use in calculations:</p>
+    <ul>
+      <li>
+        <math xmlns="&mathml;">
+          <mi>r</mi><mo>=</mo>
+          <mi>R</mi><mfrac><mn>1</mn><mn>12</mn></mfrac><mfrac><mn>1</mn><mn>100</mn></mfrac><mo>=</mo>
+          <mfrac><mi>R</mi><mn>1200</mn></mfrac>
+        </math>
+        &rarr; the monthly interest rate
+      </li>
+      <li>
+        <math xmlns="&mathml;">
+          <mi>t</mi><mo>=</mo><mn>12</mn><mi>T</mi>
+        </math>
+        &rarr; the term of the loan in months
+      </li>
+    </ul>
+    <h2>The Mortgage</h2>
+    <p>The loan value for the first month (<math xmlns="&mathml;"><msub><mi>l</mi><mn>0</mn></msub></math>) is simply the total loan amount. After that first month though, there is both accumulated interest and a payment. So, the value for the next month is:</p>
+    <math xmlns="&mathml;" mode="display">
+      <msub><mi>l</mi><mn>1</mn></msub><mo>=</mo>
+      <msub><mi>l</mi><mn>0</mn></msub><mo>+</mo><msub><mi>l</mi><mn>0</mn></msub><mi>r</mi><mo>&minus;</mo><mi>p</mi><mo>=</mo>
+      <msub><mi>l</mi><mn>0</mn></msub><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo><mo>&minus;</mo><mi>p</mi>
+    </math>
+    <p>The next month then will be:</p>
+    <math xmlns="&mathml;" mode="display">
+      <msub><mi>l</mi><mn>2</mn></msub><mo>=</mo>
+      <msub><mi>l</mi><mn>1</mn></msub><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo><mo>&minus;</mo><mi>p</mi><mo>=</mo>
+      <mo>(</mo>
+      <msub><mi>l</mi><mn>0</mn></msub><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo><mo>&minus;</mo><mi>p</mi>
+      <mo>)</mo>
+      <mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo><mo>&minus;</mo><mi>p</mi><mo>=</mo>
+      <msub><mi>l</mi><mn>0</mn></msub><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mn>2</mn></msup>
+      <mo>&minus;</mo><mi>p</mi><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo><mo>&minus;</mo><mi>p</mi>
+    </math>
+    <p>This continues to unfold and in a general form is:</p>
+    <math xmlns="&mathml;" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><msub><mi>l</mi><mi>i</mi></msub></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <msub><mi>l</mi><mrow><mi>i</mi><mo>&minus;</mo><mn>1</mn></mrow></msub><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo>
+            <mo>&minus;</mo><mi>p</mi>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mo>(</mo>
+            <msub><mi>l</mi><mrow><mi>i</mi><mo>&minus;</mo><mn>2</mn></mrow></msub><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo>
+            <mo>&minus;</mo><mi>p</mi>
+            <mo>)</mo>
+            <mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo>
+            <mo>&minus;</mo><mi>p</mi>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <msub><mi>l</mi><mrow><mi>i</mi><mo>&minus;</mo><mn>2</mn></mrow></msub>
+            <msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mn>2</mn></msup>
+            <mo>&minus;</mo><mi>p</mi>
+            <mo>&minus;</mo><mi>p</mi>
+            <mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mo>(</mo>
+            <msub><mi>l</mi><mrow><mi>i</mi><mo>&minus;</mo><mn>3</mn></mrow></msub>
+            <mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo>
+            <mo>&minus;</mo><mi>p</mi>
+            <mo>)</mo>
+            <msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mn>2</mn></msup>
+            <mo>&minus;</mo><mi>p</mi>
+            <mo>&minus;</mo><mi>p</mi>
+            <mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <msub><mi>l</mi><mrow><mi>i</mi><mo>&minus;</mo><mn>3</mn></mrow></msub>
+            <msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mn>3</mn></msup>
+            <mo>&minus;</mo><mi>p</mi>
+            <mo>&minus;</mo><mi>p</mi>
+            <mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo>
+            <mo>&minus;</mo><mi>p</mi>
+            <msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mn>2</mn></msup>
+          </mtd>
+        </mtr>
+        <mtr><mtd></mtd><mtd></mtd><mtd>&hellip;</mtd></mtr>
+        <mtr>
+          <mtd></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <msub><mi>l</mi><mn>0</mn></msub>
+            <msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mn>i</mn></msup>
+            <mo>&minus;</mo><mi>p</mi>
+            <mo>&minus;</mo><mi>p</mi>
+            <mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo>
+            <mo>&minus;</mo><mi>p</mi>
+            <msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mn>2</mn></msup>
+            <mo>&hellip;</mo>
+            <mo>&minus;</mo><mi>p</mi>
+            <msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mrow><mi>i</mi><mo>&minus;</mo><mn>1</mn></mrow></msup>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <msub><mi>l</mi><mn>0</mn></msub>
+            <msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mn>i</mn></msup>
+            <mo>&minus;</mo><mi>p</mi>
+            <mo>[</mo>
+            <mn>1</mn><mo>+</mo>
+            <mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo><mo>+</mo>
+            <msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mn>2</mn></msup><mo>+</mo>
+            <mo>&hellip;</mo>
+            <mo>+</mo>
+            <msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mrow><mi>i</mi><mo>&minus;</mo><mn>1</mn></mrow></msup>
+            <mo>]</mo>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <msub><mi>l</mi><mn>0</mn></msub>
+            <msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mn>i</mn></msup>
+            <mo>&minus;</mo><mi>p</mi>
+            <munderover>
+              <mo>&sum;</mo>
+              <mrow><mi>x</mi><mo>=</mo><mn>0</mn></mrow>
+              <mrow><mi>i</mi><mo>&minus;</mo><mn>1</mn></mrow>
+            </munderover>
+            <msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>x</mi></msup>
+          </mtd>
+        </mtr>
+      </mtable>
+    </math>
+    <p>The payments are collecting according to the summation of a <a href="http://mathworld.wolfram.com/GeometricSeries.html">geometric series</a>. That summation is generally:</p>
+    <math xmlns="&mathml;" mode="display">
+      <msub><mi>S</mi><mi>n</mi></msub><mo>=</mo>
+      <munderover>
+        <mo>&sum;</mo>
+        <mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow>
+        <mi>n</mi>
+      </munderover>
+      <msup><mi>r</mi><mi>k</mi></msup>
+      <mo>=</mo>
+      <mfrac>
+        <mrow><mn>1</mn><mo>&minus;</mo><msup><mi>r</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup></mrow>
+        <mrow><mn>1</mn><mo>&minus;</mo><mi>r</mi></mrow>
+      </mfrac>
+    </math>
+    <math xmlns="&mathml;" mode="display">
+      <msub><mi>S</mi><mrow><mi>n</mi><mo>&minus;</mo><mn>1</mn></mrow></msub><mo>=</mo>
+      <munderover>
+        <mo>&sum;</mo>
+        <mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow>
+        <mrow><mi>n</mi><mo>&minus;</mo><mn>1</mn></mrow>
+      </munderover>
+      <msup><mi>r</mi><mi>k</mi></msup>
+      <mo>=</mo>
+      <mfrac>
+        <mrow><mn>1</mn><mo>&minus;</mo><msup><mi>r</mi><mrow><mo>(</mo><mi>n</mi><mo>&minus;</mo><mn>1</mn><mo>)</mo><mo>+</mo><mn>1</mn></mrow></msup></mrow>
+        <mrow><mn>1</mn><mo>&minus;</mo><mi>r</mi></mrow>
+      </mfrac>
+      <mo>=</mo>
+      <mfrac>
+        <mrow><mn>1</mn><mo>&minus;</mo><msup><mi>r</mi><mi>n</mi></msup></mrow>
+        <mrow><mn>1</mn><mo>&minus;</mo><mi>r</mi></mrow>
+      </mfrac>
+    </math>
+    <p>So, for the mortgage, the value any given month is:</p>
+    <math xmlns="&mathml;" mode="display">
+      <msub><mi>l</mi><mi>i</mi></msub><mo>=</mo>
+      <msub><mi>l</mi><mn>0</mn></msub><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>i</mi></msup>
+      <mo>&minus;</mo><mi>p</mi>
+      <mfrac>
+        <mrow><mn>1</mn><mo>&minus;</mo><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>i</mi></msup></mrow>
+        <mrow><mn>1</mn><mo>&minus;</mo><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow>
+      </mfrac>
+      <mo>=</mo>
+      <msub><mi>l</mi><mn>0</mn></msub><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>i</mi></msup>
+      <mo>&minus;</mo><mi>p</mi>
+      <mfrac>
+        <mrow><mn>1</mn><mo>&minus;</mo><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>i</mi></msup></mrow>
+        <mrow><mo>&minus;</mo><mi>r</mi></mrow>
+      </mfrac>
+    </math>
+    <h2>The Payment</h2>
+    <p>Figuring out what your payment will be each month is based on the fact that at the end you will have paid off the loan, so <math xmlns="&mathml;"><msub><mi>l</mi><mi>t</mi></msub><mo>=</mo><mn>0</mn></math>.</p>
+    <math xmlns="&mathml;" mode="display">
+      <msub><mi>l</mi><mi>t</mi></msub><mo>=</mo>
+      <mn>0</mn><mo>=</mo>
+      <msub><mi>l</mi><mn>0</mn></msub><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>t</mi></msup>
+      <mo>&minus;</mo><mi>p</mi>
+      <mfrac>
+        <mrow><mn>1</mn><mo>&minus;</mo><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>t</mi></msup></mrow>
+        <mrow><mo>&minus;</mo><mi>r</mi></mrow>
+      </mfrac>
+    </math>
+    <math xmlns="&mathml;" mode="display">
+      <mi>p</mi><mo>=</mo>
+      <msub><mi>l</mi><mn>0</mn></msub><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>t</mi></msup>
+      <mfrac>
+        <mrow><mo>&minus;</mo><mi>r</mi></mrow>
+        <mrow><mn>1</mn><mo>&minus;</mo><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>t</mi></msup></mrow>
+      </mfrac>
+    </math>
+    <h2>The Loan</h2>
+    <p>The equation for <math xmlns="&mathml;"><msub><mi>l</mi><mi>t</mi></msub></math> is also easily solved for the loan amount:</p>
+    <math xmlns="&mathml;" mode="display">
+      <msub><mi>l</mi><mi>t</mi></msub><mo>=</mo>
+      <mn>0</mn><mo>=</mo>
+      <msub><mi>l</mi><mn>0</mn></msub><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>t</mi></msup>
+      <mo>&minus;</mo><mi>p</mi>
+      <mfrac>
+        <mrow><mn>1</mn><mo>&minus;</mo><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>t</mi></msup></mrow>
+        <mrow><mo>&minus;</mo><mi>r</mi></mrow>
+      </mfrac>
+    </math>
+    <math xmlns="&mathml;" mode="display">
+      <msub><mi>l</mi><mn>0</mn></msub><mo>=</mo>
+      <mi>p</mi>
+      <mfrac>
+        <mrow><mn>1</mn><mo>&minus;</mo><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>t</mi></msup></mrow>
+        <mrow><mo>&minus;</mo><mi>r</mi><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo>)</mo></mrow><mi>t</mi></msup></mrow>
+      </mfrac>
+    </math>
+  </body>
+</html>

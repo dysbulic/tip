@@ -1,0 +1,9 @@
+RewriteEngine on
+RewriteOptions inherit
+
+#RewriteRule ^[1-3x][rgpx][shlx][sodx].*\.svg$ choice_card.svg
+
+RewriteCond %{REQUEST_FILENAME} [1-3x][rgpx][shlx][sodx].*\.svg$
+RewriteCond %{REQUEST_URI} ^(.*)/([^/]*)$
+
+RewriteRule ^.*$ %1/choice_card.svg

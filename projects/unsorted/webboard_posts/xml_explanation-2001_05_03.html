@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>Honors webboard post on xml</title>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+<p>I am stuck at work. I have this little program positioning paths on a graph that should be a pretty simple task but it has proven to be more complicated than expected. I've been beating my head on it for 3 days trying to get the math right.</p>
+<p>What seems to happen when I get stuck at work though is it like there is a dam blocking the flow and random pieces of information start leaking out around the edges. Wayne had the misfortune to ask me for some <a href="http://www.archange1.org">hosting</a> help a couple days ago. I have since overloaded him with more than he would ever want to know about <a href="http://httpd.apache.org/docs/mod/mod_vhost_alias.html">virtual hosting</a>, <a href="http://httpd.apache.org/docs/mod/mod_alias.html">aliasing</a>, <a href="http://www.snort.org">security</a>, <a href="http://www.gnu.org/software/emacs/emacs.html">emacs</a> and whatever else I happen to be dealing with in avoidance of work. Last night I blew a good hour writing about <a href="http://odin.himinbi.org/inferno_css.html">cascading style sheets</a></p>
+<p>And so I am tempted to tell you my thoughts on the future of the web at length. I will at least feign responsibility though and only cover lightly what I think is a strong possibility for the development of the web.</p>
+<p>The issue that you are talking about is the fact that html describes the structure of a document but says nothing about the semantic content of the information. So, computer programs can examine the information and tell reasonably how to display it but any type of intelligent processing on the actual information in the document must be done by using best guesses and language processing. The author has no way to convey information about the information (i.e. metainformation) to the reader.</p>
+<p>Enter eXtensible Markup Language (<a href="http://www.w3.org/XML/">XML</a>). If you have ever written <a href="http://www.w3.org/MarkUp/">html</a> then you already have a pretty good idea of how to write xml. Both are derivatives of a more general language called Standard Generalized Markup Language (<a href="http://www.w3.org/MarkUp/SGML/">SGML</a>) and both consist of tags in &lt;&gt;'s. The main differences between html and xml are:</p>
+<ol>
+  <li>xml tags are case sensitive: &lt;p&gt; and &lt;P&gt; are different tags</li>
+  <li>xml documents must be fully nested: &lt;b&gt;&lt;i&gt;bold/italic&lt;/b&gt;italic&lt;/i&gt; (the tag being closed is not the last tag opened, in that example &lt;b&gt; is closed when &lt;i&gt; was the last tag opened) is not allowed in xml, it would have to be written as &lt;b&gt;&lt;i&gt;bold/italic&lt;/i&gt;&lt;/b&gt;&lt;i&gt;italic&lt;/i&gt;</li>
+  <li>there are no incomplete tags: &lt;img&gt; is a valid html tag; it is illegal in xml. There are empty tags (tags which do not enclose anything and they are written as &lt;img&gt;&lt;/img&gt; or a shorthand is &lt;img/&gt;)</li>
+</ol>
+<p>Also, html is a specific language with a specific purpose; xml is not. XML is just a format for how tags will be structured and written in a document. Using that basic format you then create xml based markups for specific situations. I happen to be working on a markup now for documentation to be generated after a missile flight. It looks something like:</p>
+<p>
+&nbsp;&nbsp;&lt;document&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;section name="section name"&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;paragraph/&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;paragraph&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;table/&gt;&lt;figure/&gt;&lt;reference/&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/paragraph&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/section&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;section/&gt;<br />
+&nbsp;&nbsp;&lt;/document&gt;<br />
+</p>
+<p>I make up the tags and decide what is allowed to go where. Then I write up a <a href="http://www.w3.org/XML/Schema">schema</a> which allows a computer program to understand the structure of my document. I have now created a new xml based markup language. The usefulness of it is that unlike html this markup isn't describing the display structure of the document, instead it is describing semantic information. It tells the reader how sections are grouped and what figures there are. If I want the 5th section or the section named "Appendix A" I can write a computer program to do that because the information about how sections are grouped is stored in the document. With html I might be able to find the 5th paragraph or maybe search for a certain string in the document but there is no sure way to know that I would get what I was looking for.</p>
+<p>The problem now is that I have the semantic information about the document but I don't know how to display it for the reader. This is where some of the restrictions on xml become meaningful. Because xml always closes tags and tags must be fully nested the xml document can be seen as a tree. For instance my little sample document could be:</p>
+<p>
+&nbsp;&nbsp;document<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+- section<br />
+&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;+- paragraph<br />
+&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;+- paragraph<br />
+&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+- table<br />
+&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+- figure<br />
+&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+- reference<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+- section<br />
+</p>
+<p>You then create a document called an eXtensible Stylesheet Transformation (<a href="http://www.w3.org/TR/xslt">XSLT</a>) that will transform that xml tree into another one. There is now a type of html called xhtml. It is pretty much regular html except all tags are lowercase and all tags are balanced and fully nested. I could write a simple xslt that would change all my &lt;section&gt; tags into &lt;p&gt; tags. Then the document could be displayed in an xhtml browser.</p>
+<p>The cool thing is that I am not limited to a single xslt. I could write one to transform my document markup into xhtml and one to transform it into <a href="http://www.w3.org/Voice/">VoiceML</a> (a markup to describe documents meant for speech readers) and one to go to WML for access on pda's (though the move is to go to xhtml for those). I can translate the document into as many formats as I want without changing the source. I can even change it into another version of itself; lets say I wanted to make an appendix that just has the titles of the figures; I could write a xslt to do that. The separation of the content from the presentation structure allows multiple presentations of the same information. Also I just have to write the transformation once and then I can change the source however I want (so long as I stick to my original markup specification) and I can rerun the transformations without having to alter the xslt.</p>
+<p>The other benefit of having the semantic content is the document is what is more pertinent to the discussion at hand. It allows for computers to gleam semantic information without guesswork. That means that web searching and web filtering can operate on the actual documents and eliminate much of the guesswork.</p>
+<p>Anyhow, I have taken longer than I meant to writing this, so I am going to go abuse some more math. If you are interested in an example of xml + xslt I took a bbs I was on my freshman year and <a href="http://odin.himinbi.org/godbbs/godbbs.xml">xmlized it</a> (<em>ie does a good job of displaying xml, netscape just dumps it on the screen</em>) then wrote a <a href="http://odin.himinbi.org/godbbs/bbs-html.xsl">xslt</a> for the <a href="http://odin.himinbi.org/godbbs/bbs.dtd">document type</a> (<em>note that this is not a schema, instead the document type for this markup is an older sgml doctype specification</em>) and those to went together to make <a href="http://odin.himinbi.org/godbbs/godbbs.html">html</a>. If you look at the html you will notice that some stuff like the post numbering and the placement of aliases and stuff is not in the original xml document. XSLT lets you put extra information into the document as well as just restructuring it.</p>
+<code>
+print substr("<a
+href="http://www.himinbi.org" target="_top" onmouseover="window.status = 'Himinbiorg'; return true;" onmouseout="window.status = ''; return true;">show ja\ne climb-</a>",hex,1)<br>foreach(split//,"F43CBbc6D456d80912bA2dE7")
+</code>
+  </body>
+</html>

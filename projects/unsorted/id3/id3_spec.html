@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>ID3 Specifications</title>
+
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+
+    <link rel="stylesheet" href="../styles/main.css" type="text/css"/>
+    <style type="text/css">
+      table { border-collapse: collapse; }
+      td, th { width: 1.5em; height: 1.5em; padding: 0; border: 1px solid #CCC; text-align: left; }
+
+      #leftcol, #centercol, #rightcol { float: left; border-top: 1px solid; }
+      #leftcol, #rightcol { width: 10em; }
+
+      #leftcol, #rightcol { display: table; }
+      .row { display: table-row; }
+      .row > * { display: table-cell; vertical-align: middle;
+                 border-bottom: 1px solid; border-left: none; border-right: none; text-align: center;
+                 margin-top: -1px; }
+
+      #id3v1 { width: 26.3em; border: .05em solid black; border-top-width: .05em; border-bottom: none; margin: auto; }
+      #id3v1:after, #genres:after { content: ""; display: block; height: 0; clear: both; }
+
+      /* blocking out the header 1-3 */
+      #leftcol .header { height: 1.5em; }
+      .byte-1, .byte-2, .byte-3 { border-top-color: black; border-bottom-color: black; }
+      .byte-3 { border-right-color: black; }
+
+      /* blocking out the title 4-33 */
+      #leftcol .title { height: 12em; }
+      #rightcol .title { height: 12em; }
+      .byte-4 { border-top-color: black; }
+      .byte-30, .byte-31, .byte-32, .byte-33 { border-bottom-color: black; }
+      .byte-33 { border-right-color: black; }
+
+      /* blocking out the artist 34-63*/
+      #leftcol .artist { height: 10.5em; }
+      #rightcol .artist { height: 10.5em; }
+      .byte-60, .byte-61, .byte-62, .byte-63 { border-bottom-color: black; }
+      .byte-63 { border-right-color: black; }
+
+      /* blocking out the album 64-93 */
+      #leftcol .album { height: 12em; }
+      #rightcol .album { height: 12em; }
+      .byte-90, .byte-91, .byte-92, .byte-93 { border-bottom-color: black; }
+      .byte-93 { border-right-color: black; }
+
+      /* blocking out the year 94-97 */
+      #leftcol .year { height: 1.5em; }
+      #rightcol .year { height: 1.5em; }
+      .byte-94, .byte-95, .byte-96, .byte-97 { border-bottom-color: black; }
+      .byte-97 { border-right-color: black; }
+
+      /* blocking out the comment 98-127 */
+      #leftcol .comment { height: 10.5em; }
+      #rightcol .comment { height: 10.5em; }
+      .byte-124, .byte-125, .byte-126, .byte-127 { border-bottom-color: black; }
+      .byte-127 { border-right-color: black; }
+
+      /* blocking out the comment 128 */
+      #leftcol .genre { height: 0px; }
+      #rightcol .genre { height: 1.5em; }
+      .byte-128 { border-bottom-color: black; }
+
+      .header { background-color: rgb(162, 210, 255); }
+      .title { background-color: rgb(255, 245, 209); }
+      .artist { background-color: rgb(185, 255, 208); }
+      .album { background-color: rgb(230, 209, 255); }
+      .year { background-color: rgb(255, 199, 185); }
+      .comment { background-color: rgb(187, 170, 208); }
+      .genre { background-color: rgb(153, 181, 240); }
+
+      #genres { width: 75%; margin: auto; }
+      #genres table { float: left; margin-left: 1em; margin-top: .5em; }
+      #genres td, .bytes td, .bytes th { padding: 0 .5em 0 .5em; }
+      #genres td:last-child { white-space: pre; }
+
+      .bytes ul { float: left; }
+      .bytes td:last-child { width: 25em; }
+
+      td table { margin-bottom: -1px; }
+    </style>
+  </head>
+  <body>
+    <h2>ID3v1</h2>
+    <p>The <a href="http://www.id3.org">ID3 site</a> has a <a href="http://www.id3.org/id3v1.html">good overview</a> of ID3. There is a type of graph that I would like to reproduce and so I'll try:</p>
+    <div id="id3v1">
+      <div id="leftcol">
+        <div class="row"><div class="header">Header ("TAG")</div></div>
+        <div class="row"><div class="title">Title</div></div>
+        <div class="row"><div class="artist">Artist</div></div>
+        <div class="row"><div class="album">Album</div></div>
+        <div class="row"><div class="year">Year</div></div>
+        <div class="row"><div class="comment">Comment</div></div>
+      </div>
+      <div id="centercol"></div>
+      <div id="rightcol">
+        <div class="row"><div class="title">(30 bytes)</div></div>
+        <div class="row"><div class="artist">(30 bytes)</div></div>
+        <div class="row"><div class="album">(30 bytes)</div></div>
+        <div class="row"><div class="year">(4 bytes)</div></div>
+        <div class="row"><div class="comment">(30 bytes)</div></div>
+        <div class="row"><div class="genre">Genre (1 byte)</div></div>
+      </div>
+    </div>
+    <script type="text/javascript">//<![CDATA[
+      var table = document.createElement("table");
+      var count = 128;
+      columnsPerRow = 4;
+      var elements = new Array();
+      while(elements.length < count) {
+        var row = document.createElement("tr");
+        for(col = 1; col <= columnsPerRow; col++) {
+          var element = document.createElement("td");
+          elements.push(element);
+          element.className = "byte-" + elements.length + " row-" + (elements.length / count + 1);
+          if(elements.length > count) element.classname += " extra";
+          row.appendChild(element);
+        }
+        table.appendChild(row);
+      }
+      var col = document.getElementById("centercol");
+      col.appendChild(table);
+      function addClass(elements, startIndex, endIndex, className) {
+        for(index = startIndex; index <= endIndex; index++) {
+          elements[index - 1].className += " " + className;
+        }
+      }
+      addClass(elements, 1, 3, "header");
+      addClass(elements, 4, 33, "title");
+      addClass(elements, 34, 63, "artist");
+      addClass(elements, 64, 93, "album");
+      addClass(elements, 94, 97, "year");
+      addClass(elements, 98, 127, "comment");
+      addClass(elements, 128, 128, "genre");
+    //]]></script>
+    <p>Well, it's a pretty graph, but really better suited for showing proportions than a technical spec. I guess I'll leave it here for reference&hellip; The fields are null padded to their appropriate length. The <code>genre</code> is a code. Initially there were 80 possible genres and this list was extended by <a href="">Nullsoft</a>:</p>
+    <div id="genres">
+      <table>
+        <tr><td>00</td><td>Blues</td></tr>
+        <tr><td>01</td><td>Classic Rock</td></tr>
+        <tr><td>02</td><td>Country</td></tr>
+        <tr><td>03</td><td>Dance</td></tr>
+        <tr><td>04</td><td>Disco</td></tr>
+        <tr><td>05</td><td>Funk</td></tr>
+        <tr><td>06</td><td>Grunge</td></tr>
+        <tr><td>07</td><td>Hip-Hop</td></tr>
+        <tr><td>08</td><td>Jazz</td></tr>
+        <tr><td>09</td><td>Metal</td></tr>
+        <tr><td>0A</td><td>New Age</td></tr>
+        <tr><td>0B</td><td>Oldies</td></tr>
+        <tr><td>0C</td><td>Other</td></tr>
+        <tr><td>0D</td><td>Pop</td></tr>
+        <tr><td>0E</td><td>R&amp;B</td></tr>
+      </table>
+      <table>
+        <tr><td>0F</td><td>Rap</td></tr>
+        <tr><td>10</td><td>Reggae</td></tr>
+        <tr><td>11</td><td>Rock</td></tr>
+        <tr><td>12</td><td>Techno</td></tr>
+        <tr><td>13</td><td>Industrial</td></tr>
+        <tr><td>14</td><td>Alternative</td></tr>
+        <tr><td>15</td><td>Ska</td></tr>
+        <tr><td>16</td><td>Death Metal</td></tr>
+        <tr><td>17</td><td>Pranks</td></tr>
+        <tr><td>18</td><td>Soundtrack</td></tr>
+        <tr><td>19</td><td>Euro-Techno</td></tr>
+        <tr><td>1A</td><td>Ambient</td></tr>
+        <tr><td>1B</td><td>Trip-Hop</td></tr>
+        <tr><td>1C</td><td>Vocal</td></tr>
+        <tr><td>1D</td><td>Jazz+Funk</td></tr>
+      </table>
+      <table>
+        <tr><td>1E</td><td>Fusion</td></tr>
+        <tr><td>1F</td><td>Trance</td></tr>
+        <tr><td>20</td><td>Classical</td></tr>
+        <tr><td>21</td><td>Instrumental</td></tr>
+        <tr><td>22</td><td>Acid</td></tr>
+        <tr><td>23</td><td>House</td></tr>
+        <tr><td>24</td><td>Game</td></tr>
+        <tr><td>25</td><td>Sound Clip</td></tr>
+        <tr><td>26</td><td>Gospel</td></tr>
+        <tr><td>27</td><td>Noise</td></tr>
+        <tr><td>28</td><td>Alternative Rock</td></tr>
+        <tr><td>29</td><td>Bass</td></tr>
+        <tr><td>2A</td><td>Soul</td></tr>
+        <tr><td>2B</td><td>Punk</td></tr>
+        <tr><td>2C</td><td>Space</td></tr>
+      </table>
+      <table>
+        <tr><td>2D</td><td>Meditative</td></tr>
+        <tr><td>2E</td><td>Instrumental Pop</td></tr>
+        <tr><td>2F</td><td>Instrumental Rock</td></tr>
+        <tr><td>30</td><td>Ethnic</td></tr>
+        <tr><td>31</td><td>Gothic</td></tr>
+        <tr><td>32</td><td>Darkwave</td></tr>
+        <tr><td>33</td><td>Techno-Industrial</td></tr>
+        <tr><td>34</td><td>Electronic</td></tr>
+        <tr><td>35</td><td>Pop-Folk</td></tr>
+        <tr><td>36</td><td>Eurodance</td></tr>
+        <tr><td>37</td><td>Dream</td></tr>
+        <tr><td>38</td><td>Southern Rock</td></tr>
+        <tr><td>39</td><td>Comedy</td></tr>
+        <tr><td>3A</td><td>Cult</td></tr>
+        <tr><td>3B</td><td>Gangsta</td></tr>
+      </table>
+      <table>
+        <tr><td>3C</td><td>Top 40</td></tr>
+        <tr><td>3D</td><td>Christian Rap</td></tr>
+        <tr><td>3E</td><td>Pop/Funk</td></tr>
+        <tr><td>3F</td><td>Jungle</td></tr>
+        <tr><td>40</td><td>Native US</td></tr>
+        <tr><td>41</td><td>Cabaret</td></tr>
+        <tr><td>42</td><td>New Wave</td></tr>
+        <tr><td>43</td><td>Psychadelic</td></tr>
+        <tr><td>44</td><td>Rave</td></tr>
+        <tr><td>45</td><td>Showtunes</td></tr>
+        <tr><td>46</td><td>Trailer</td></tr>
+        <tr><td>47</td><td>Lo-Fi</td></tr>
+        <tr><td>48</td><td>Tribal</td></tr>
+        <tr><td>49</td><td>Acid Punk</td></tr>
+        <tr><td>4A</td><td>Acid Jazz</td></tr>
+      </table>
+      <table>
+        <tr><td>4B</td><td>Polka</td></tr>
+        <tr><td>4C</td><td>Retro</td></tr>
+        <tr><td>4D</td><td>Musical</td></tr>
+        <tr><td>4E</td><td>Rock &amp; Roll</td></tr>
+        <tr><td>4F</td><td>Hard Rock</td></tr>
+        <tr><td>50</td><td> Folk</td></tr>
+        <tr><td>51</td><td> Folk-Rock</td></tr>
+        <tr><td>52</td><td> National Folk</td></tr>
+        <tr><td>53</td><td>Swing</td></tr>
+        <tr><td>54</td><td>Fast Fusion</td></tr>
+        <tr><td>55</td><td>Bebob</td></tr>
+        <tr><td>56</td><td>Latin</td></tr>
+        <tr><td>57</td><td>Revival</td></tr>
+        <tr><td>58</td><td>Celtic</td></tr>
+        <tr><td>59</td><td>Bluegrass</td></tr>
+      </table>
+      <table>
+        <tr><td>5A</td><td>Avantgarde</td></tr>
+        <tr><td>5B</td><td>Gothic Rock</td></tr>
+        <tr><td>5C</td><td>Progressive Rock</td></tr>
+        <tr><td>5D</td><td>Psychedelic Rock</td></tr>
+        <tr><td>5E</td><td>Symphonic Rock</td></tr>
+        <tr><td>5F</td><td>Slow Rock</td></tr>
+        <tr><td>60</td><td>Big Band</td></tr>
+        <tr><td>61</td><td>Chorus</td></tr>
+        <tr><td>62</td><td>Easy Listening</td></tr>
+        <tr><td>63</td><td>Acoustic</td></tr>
+        <tr><td>64</td><td>Humour</td></tr>
+        <tr><td>65</td><td>Speech</td></tr>
+        <tr><td>66</td><td>Chanson</td></tr>
+        <tr><td>67</td><td>Opera</td></tr>
+        <tr><td>68</td><td>Chamber Music</td></tr>
+      </table>
+      <table>
+        <tr><td>69</td><td>Sonata</td></tr>
+        <tr><td>6A</td><td>Symphony</td></tr>
+        <tr><td>6B</td><td>Booty Bass</td></tr>
+        <tr><td>6C</td><td>Primus</td></tr>
+        <tr><td>6D</td><td>Porn Groove</td></tr>
+        <tr><td>6E</td><td>Satire</td></tr>
+        <tr><td>6F</td><td>Slow Jam</td></tr>
+        <tr><td>70</td><td>Club</td></tr>
+        <tr><td>71</td><td>Tango</td></tr>
+        <tr><td>72</td><td>Samba</td></tr>
+        <tr><td>73</td><td>Folklore</td></tr>
+        <tr><td>74</td><td>Ballad</td></tr>
+        <tr><td>75</td><td>Power Ballad</td></tr>
+        <tr><td>76</td><td>Rhythmic Soul</td></tr>
+        <tr><td>77</td><td>Freestyle</td></tr>
+      </table>
+      <table>
+        <tr><td>78</td><td>Duet</td></tr>
+        <tr><td>79</td><td>Punk Rock</td></tr>
+        <tr><td>7A</td><td>Drum Solo</td></tr>
+        <tr><td>7B</td><td>Acapella</td></tr>
+        <tr><td>7C</td><td>Euro-House</td></tr>
+        <tr><td>7D</td><td>Dance Hall</td></tr>
+        <tr><td>7E</td><td>Goa</td></tr>
+        <tr><td>7F</td><td>Drum &amp; Bass</td></tr>
+        <tr><td>80</td><td>Club-House</td></tr>
+        <tr><td>81</td><td>Hardcore</td></tr>
+        <tr><td>82</td><td>Terror</td></tr>
+        <tr><td>83</td><td>Indie</td></tr>
+        <tr><td>84</td><td>BritPop</td></tr>
+        <tr><td>85</td><td>Negerpunk</td></tr>
+        <tr><td>86</td><td>Polsk Punk</td></tr>
+      </table>
+      <table>
+        <tr><td>87</td><td>Beat</td></tr>
+        <tr><td>88</td><td>Christian Gangsta</td></tr>
+        <tr><td>89</td><td>Heavy Metal</td></tr>
+        <tr><td>8A</td><td>Black Metal</td></tr>
+        <tr><td>8B</td><td>Crossover</td></tr>
+        <tr><td>8C</td><td>Contemporary Christian</td></tr>
+        <tr><td>8D</td><td>Christian Rock</td></tr>
+        <tr><td>8E</td><td>Meringue</td></tr>
+        <tr><td>8F</td><td>Salsa</td></tr>
+        <tr><td>90</td><td>Thrash Metal</td></tr>
+        <tr><td>91</td><td>Anime</td></tr>
+        <tr><td>92</td><td>JPop</td></tr>
+        <tr><td>93</td><td>SynthPop</td></tr>
+      </table>
+    </div>
+
+    <a name="v1_1"></a>
+    <h2>ID3v1.1</h2>
+    <p>This is essentially the same as <a href="#v1">v1</a>, but the last two bytes of the <code>comment</code> are taken to represent the <code>track number</code>. The first byte is a null just to guarantee that a v1 parser doesn't try to parse the track number. The second byte is the track number (not an ASCII digit).</p>
+
+    <a name="v2"></a>
+    <h2>ID3v2</h2>
+    <p>The rigidity of ID3v1 should be readily apparent. To deal with this, as well as some other issues, <a href="http://en.wikipedia.org/wiki/ID3#ID3v2">ID3v2</a> was introduced. It is a frame based format allowing for quite a bit of flexibility and extensibility.</p>
+
+    <a name="v2_2"></a>
+    <h2>ID3v2.2</h2>
+    <p>There are two primary components added are tags and frames:</p>
+    
+    <h3>ID3v2.2 Tag</h3>
+    <p>The tag is a container for several frames that contain actual information. The tag has a ten byte header:</p>
+
+    <table class="bytes">
+      <tr><td>Identifier</td><td>1-3</td><td>"<code>ID3</code>"</td></tr>
+      <tr><td>Version</td><td>4-5</td><td>major (<code>02</code>) minor (<code>02</code>)</td></tr>
+      <tr><td>Flags</td><td>6</td>
+        <td>[uc000000] <ul>
+          <li><code>u</code> - if the data is <a href="#synchronization">unsynchronized</a></li>
+          <li><code>c</code> - if the data is <a href="#compression">compressed</a></li>
+        </ul></td></tr>
+      <tr><td>Size</td><td>7-10</td><td>[0xxxxxxx]{4} 28 bits for the size of the tag after unsynchronization without the header</td></tr>
+    </table>
+
+    <h3>ID3v2.2 Frame</h3>
+    <p>The tag is comprised of several frames which contain the actual information. The header for the frame is:</p>
+    <table class="bytes">
+      <tr><td>Identifier</td><td>1-3</td><td>[A-Z0-9]{3} ([XYZ][A-Z0-9]{2} for experimental use)</td></tr>
+      <tr><td>Size</td><td>4-7</td><td>size of the tag</td></tr>
+      <tr><td>Encoding</td><td></td><td></td></tr>
+    </table>
+
+    <h2>ID3v2.4</h2>
+
+    <p>The various frames are pretty straightforward, but there are a couple changes in 2.4 that are particularly interesting to me:</p>
+
+    <h3>TPE[1-4] Frame</h3>
+    
+    <ul>
+      <li>TPE1 &bull; 'Lead artist/Lead performer/Soloist/Performing group'</li>
+      <li>TPE2 &bull; 'Band/Orchestra/Accompaniment'</li>
+      <li>TPE3 &bull; 'Conductor'</li>
+      <li>TPE4 &bull; 'Interpreted, remixed, or otherwise modified by'</li>
+    </ul>
+
+    <p>The performer has been identified for a while. What is new in 2.4 is:</p>
+
+    <blockquote>"There may only be one text information frame of its kind in an tag. <em>All text information frames supports multiple strings, stored as a null separated list</em>, where null is represented by the termination code for the character encoding. All text frame identifiers begin with "T". Only text frame identifiers begin with "T", with the exception of the "TXXX" frame.</blockquote>
+
+    <p>Because of the amount of data I am dealing with in this program, I am planning on backing it with a database. One of the irritating things that I would be doing is taking songs with multiple artists nd separate the artists. As it is when I search for songs by Ciara, I don't get duets which include Ciara because the name doesn't match. If I have the names separated out I can search better.</p>
+    <p>In ID3v2.3 doing this requires some method for taking a list of artists and combining them. A good method is to separate each artist from the next with a comma except for the last two which are separated by "and." This way we get John, Paul and Ringo. What happens with Crosby, Stills and Nash though? That is a single band and I don't want to separate those artists. Also Jay-Z and Linkin Park should be split, C and C Music Factory should not. Allowing multiple artists to be stored unambiguously is nice.</p>
+
+    <h3>SYLT Frame</h3>
+
+    <p>Synchronized Lyrics and Text lets me set up karaoke, which is cool, and singalong, which is even cooler. One of my goals in life is to be able to understand French rap and I'd love to be able to have the lyrics play in time with the music. Additionally the program for syncing the lyrics could be used for creating <acronym title="Event Timing Codes">ETCO</acronym> transition points for the <a href="../slideshow/">slideshow program</a>. I'd just need some sort of interface to record them in conjunction with keyboard events or something like that.</p>
+    
+    <table class="bytes">
+      <tr><th colspan="2">Synchronized Lyrics/Text Header (SYLT)</th></tr>
+      <tr><td>Text Encoding</td>
+      <td><ul>
+        <li>$00 &bull; ISO-8859-1 [ISO-8859-1]. Terminated with $00.</li>
+        <li>$01 &bull; UTF-16 [UTF-16] encoded Unicode [UNICODE] with BOM. All strings in the same frame SHALL have the same byteorder. Terminated with $00 00.</li>
+        <li>$02 &bull; UTF-16BE [UTF-16] encoded Unicode [UNICODE] without BOM. Terminated with $00 00.</li>
+        <li>$03 &bull; UTF-8 [UTF-8] encoded Unicode [UNICODE]. Terminated with $00.</li>
+      </ul></td></tr>
+      <tr><td>Language</td><td>ISO-639-2 three byte language code</td></tr>
+      <tr><td>Time Stamp Format</td>
+      <td><ul>
+        <li>$01 &bull; Absolute time, 32 bit sized, using MPEG [MPEG] frames as unit</li>
+        <li>$02 &bull; Absolute time, 32 bit sized, using milliseconds as unit</li>
+      </ul></td></tr>
+      <tr><td>Content Type</td>
+      <td><ul>
+        <li>$00 &bull; other</li>
+        <li>$01 &bull; lyrics</li>
+        <li>$02 &bull; text transcription</li>
+        <li>$03 &bull; movement/part name (e.g. "Adagio")</li>
+        <li>$04 &bull; events (e.g. "Don Quixote enters the stage")</li>
+        <li>$05 &bull; chord (e.g. "Bb F Fsus")</li>
+        <li>$06 &bull; trivia/'pop up' information</li>
+        <li>$07 &bull; URLs to webpages</li>
+        <li>$08 &bull; URLs to images</li>
+      </ul></td></tr>
+      <tr><td>Content Descriptor</td><td>text string according to encoding</td></tr>
+    </table>
+
+    <p>Each syllable is positioned chronologically. The example given in the spec is: (note the placement of spaces and the newline (<code>0A</code>) character)</p>
+
+    <blockquote><code>"Strang" $00 xx xx "ers" $00 xx xx " in" $00 xx xx " the" $00 xx xx " night" $00 xx xx 0A "Ex" $00 xx xx "chang" $00 xx xx "ing" $00 xx xx "glan" $00 xx xx "ces" $00 xx xx</code></blockquote>
+
+    <p>I like this system more than the <acronym title="Compact Disc + Graphics">CD+G</acronym> used in normal karaoke machines. That allows for arbitrary bitmaps to be displayed on screen, which is more versatile, but which destroys the actual text. If all my songs included these tags, I could search for songs based on a lyric from the song.</p>
+
+    <h3>UFID Frame</h3>
+
+    <p>The Unique File Identifier frame is interesting to me because though I really like the idea, I am not at all pleased with <a href="http://musicbrainz.org">musicbrainz</a>'s interface. This frame could be used to hold a MusicBrainz id.</p>
+
+    <table class="bytes">
+      <tr><th colspan="2">Unique File Identifier Header (UFID)</th></tr>
+      <tr><td>Owner Identifier</td><td>ISO-8859-1 encoded uri (preferably mailto:) $00</td></tr>
+      <tr><td>Identifier</td><td>up to 64 bytes binary data</td></tr>
+    </table>
+
+    <h1><acronym title="Application Programming Interface">API</acronym></h1>
+    
+    <hr />
+
+    <a name="synchronization"></a>
+    <h2>Synchronization</h2>
+    <p>The format of an <acronym title="Motion Picture Experts Group">MPEG</acronym> frame header is:</p>
+    <table class="bytes">
+      <tr><td>Synchronization</td><td>1-11</td><td><code>11111111111</code></td></tr>
+      <tr><td>Version</td><td>12-13</td>
+        <td><ul>
+          <li>00 - MPEG Version 2.5</li>
+          <li>01 - reserved</li>
+          <li>10 - MPEG Version 2 (ISO/IEC 13818-3)</li>
+          <li>11 - MPEG Version 1 (ISO/IEC 11172-3)</li>
+        </ul></td>
+      </tr>
+      <tr><td>Layer</td><td>14-15</td>
+        <td><ul>
+          <li>00 - reserved</li>
+          <li>01 - Layer III</li>
+          <li>10 - Layer II</li>
+          <li>11 - Layer I</li>
+        </ul></td>
+      </tr>
+      <tr><td>CRC Present</td><td>16</td>
+        <td><ul>
+          <li>0 - Protected by CRC (16bit crc follows header)</li>
+          <li>1 - Not protected</li>
+        </ul></td>
+      </tr>
+      <tr><td>Bitrate in kbps</td><td>17-20</td>
+        <td><table>
+          <tr><th>bits</th><th>V1, L1</th><th>V1, L2</th><th>V1, L3</th><th>V2, L1</th><th>V2, L2 &amp; L3</th></tr>
+          <tr><td>0000</td><td>free</td><td>free</td><td>free</td><td>free</td><td>free</td></tr>
+          <tr><td>0001</td><td>32</td><td>32</td><td>32</td><td>32</td><td>8</td></tr>
+          <tr><td>0010</td><td>64</td><td>48</td><td>40</td><td>48</td><td>16</td></tr>
+          <tr><td>0011</td><td>96</td><td>56</td><td>48</td><td>56</td><td>24</td></tr>
+          <tr><td>0100</td><td>128</td><td>64</td><td>56</td><td>64</td><td>32</td></tr>
+          <tr><td>0101</td><td>160</td><td>80</td><td>64</td><td>80</td><td>40</td></tr>
+          <tr><td>0110</td><td>192</td><td>96</td><td>80</td><td>96</td><td>48</td></tr>
+          <tr><td>0111</td><td>224</td><td>112</td><td>96</td><td>112</td><td>56</td></tr>
+          <tr><td>1000</td><td>256</td><td>128</td><td>112</td><td>128</td><td>64</td></tr>
+          <tr><td>1001</td><td>288</td><td>160</td><td>128</td><td>144</td><td>80</td></tr>
+          <tr><td>1010</td><td>320</td><td>192</td><td>160</td><td>160</td><td>96</td></tr>
+          <tr><td>1011</td><td>352</td><td>224</td><td>192</td><td>176</td><td>112</td></tr>
+          <tr><td>1100</td><td>384</td><td>256</td><td>224</td><td>192</td><td>128</td></tr>
+          <tr><td>1101</td><td>416</td><td>320</td><td>256</td><td>224</td><td>144</td></tr>
+          <tr><td>1110</td><td>448</td><td>384</td><td>320</td><td>256</td><td>160</td></tr>
+          <tr><td>1111</td><td>bad</td><td>bad</td><td>bad</td><td>bad</td><td>bad</td></tr>
+        </table></td>
+      </tr>
+      <tr><td>Sampling Rate in Hz</td><td>21-22</td>
+        <td><table>
+          <tr><th>bits</th><th>MPEG1</th><th>MPEG2</th><th>MPEG2.5</th></tr>
+          <tr><td>00</td><td>44100</td><td>22050</td><td>11025</td></tr>
+          <tr><td>01</td><td>48000</td><td>24000</td><td>12000</td></tr>
+          <tr><td>10</td><td>32000</td><td>16000</td><td>8000</td></tr>
+          <tr><td>11</td><td>reserv.</td><td>reserv.</td><td>reserv.</td></tr>
+        </table></td>
+      </tr>
+      <tr><td>Padding</td><td>23</td>
+        <td><ul>
+          <li>0 - frame is not padded</li>
+          <li>1 - frame is padded with one extra slot (4 bytes in L1, 1 byte in L2 and L3)</li>
+        </ul></td>
+      </tr>
+      <tr><td>Experimental</td><td>24</td><td>Reserved for application use</td></tr>
+      <tr><td>Channel Mode</td><td>25-28</td>
+        <td><ul>
+          <li>00 - Stereo</li>
+          <li>01 - Joint stereo (Stereo)</li>
+          <li>10 - Dual channel (Stereo)</li>
+          <li>11 - Single channel (Mono)</li>
+        </ul></td>
+      </tr>
+      <tr><td>Mode Extension (for joint stereo)</td><td>29-30</td>
+        <td><ul>
+          <li>Layer I &amp; II
+          <ul>
+            <li>00 - bands 4 to 31</li>
+            <li>01 - bands 8 to 31</li>
+            <li>10 - bands 12 to 31</li>
+            <li>11 - bands 16 to 31</li>
+          </ul></li>
+          <li>Layer III [im]
+          <ul>
+            <li><code>i</code> - intensity stereo</li>
+            <li><code>m</code> - m/s stereo</li>
+          </ul></li>
+        </ul></td>
+      </tr>
+      <tr><td>Copyright</td><td>31</td>
+        <td><ul>
+          <li>0 - Audio is not copyrighted</li>
+          <li>1 - Audio is copyrighted</li>
+        </ul></td>
+      </tr>
+      <tr><td>Original</td><td>32</td>
+        <td><ul>
+          <li>0 - Copy of original media</li>
+          <li>1 - Original media</li>
+        </ul></td>
+      </tr>
+      <tr><td>Emphasis</td><td>33-34</td>
+        <td><ul>
+          <li>00 - none</li>
+          <li>01 - 50/15 ms</li>
+          <li>10 - reserved</li>
+          <li>11 - CCIT J.17</li>
+        </ul></td>
+      </tr>
+    </table>
+    <p>The important bit in all that so far as tagging is the first 11 bits, all <code>1</code> which represent a frame sync. If a tag were to contain those bits in a player that doesn't recognize ID3v2 tags, the tag data would be incorrectly interpreted as MPEG frame data. To avoid this, if a tag is marked as unsynchronized, all occurrences of <code>11111111 111xxxxx</code> are replaced with <code>11111111 00000000 111xxxxxx</code>. This process performed after any compression and undone before the frames interpreted.</p>
+    <p>The issue is that the string <code>11111111 00000000</code> could occur in the data before unsynchronization and upon resynchronization the <code>00000000</code> would be erroneously lost. To avoid this, <code>11111111 00000000</code> is replaced with <code>11111111 00000000 00000000</code> in the unsyncronization process.</p>
+  </body>
+</html>

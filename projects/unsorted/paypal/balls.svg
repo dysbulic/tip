@@ -1,0 +1,553 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="-10 -10 1120 1040" preserveAspectRatio="xMinyMin">
+  <title>Balancing Balls</title>
+  <desc>You are given 12 balls all of which weigh the same except for one which may be heavier or lighter. How can you determine the odd ball given three weighings on a balance? This graph outlines a workable process.</desc>
+  <style type="text/css">
+    rect, line { fill: none; stroke: black; }
+    text { text-anchor: middle; font-size: 12px; font-family: Verdana; }
+    tspan.unknown { fill: green; }
+    tspan.eliminated { fill: grey; }
+    tspan.heavier { fill: red; }
+    tspan.lighter { fill: blue; }
+    text.intro, text.key, text.note { text-anchor: start; font-family: serif; }
+    text.key { font-size: 20px; }
+    text.intro { font-size: 21px; }
+    text.note { font-size: 18px; }      
+    rect.weigh { stroke: black; stroke-dasharray: 4 2; }
+    tspan.weigh { fill: black; }
+    rect.result { stroke: orange; stroke-dasharray: 5 1; }
+    tspan.result { fill: orange; }
+    rect.result-reverseable { stroke: purple; stroke-dasharray: 7 2; }
+    tspan.result-reverseable { fill: purple; }
+  </style>
+
+  <g transform="translate(0, 10)">
+    <text class="intro">
+      <tspan x="0" y="0">Problem: You are given 12 balls all of which weigh the same except for one which</tspan>
+      <tspan x="10" y="20">may be heavier or lighter. How can you determine the odd ball given three</tspan>
+      <tspan x="10" y="40">weighings on a balance?</tspan>
+    </text>
+  </g>
+
+  <g transform="translate(0, 90)">
+    <text class="note">
+      <tspan x="0" y="0">Note: There are in fact 24 outcomes because each ball might</tspan>
+      <tspan x="10" y="17">have been heavier or lighter. This graph only shows 12.</tspan>
+      <tspan x="10" y="34">Because the numbering of the balls is arbitrary initially,</tspan>
+      <tspan x="10" y="51">so long as an experiment has not been carried out that</tspan>
+      <tspan x="10" y="68">requires a unique designation for a ball it can be renumbered.</tspan>
+      <tspan x="10" y="85">For instance in the first experiment 1234 are chosen to be</tspan>
+      <tspan x="10" y="102">the balls on the side that goes down after the weighing</tspan>
+      <tspan x="10" y="119">takes place. The numbers could be swapped with the four</tspan>
+      <tspan x="10" y="134">on the other side; this reversal of numbers would</tspan>
+      <tspan x="10" y="151">produce another 8 results.</tspan>
+    </text>
+  </g>
+
+  <g transform="translate(0, 850)">
+    <text class="key">
+      <tspan x="0" y="0"  class="unknown">Unknown</tspan>
+      <tspan x="0" y="20" class="heavier">Might be heavier</tspan>
+      <tspan x="0" y="40" class="lighter">Might be lighter</tspan>
+      <tspan x="0" y="60" class="eliminated">Eliminated</tspan>
+      <tspan x="0" y="90" class="weigh">Weighing</tspan>
+      <tspan x="0" y="110" class="result">Result</tspan>
+      <tspan x="0" y="130" class="result-reverseable">Reverseable result</tspan>
+    </text>
+  </g>
+
+  <!-- First weighing -->
+  <g transform="translate(0, 476.5)">
+    <rect class="weigh" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="unknown">9ABC</tspan></text>
+    <text x="22.5" y="45"><tspan class="unknown">1234</tspan></text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45"><tspan class="unknown">5678</tspan></text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+
+  <line x1="100" y1="510" x2="200" y2="382.5" />
+  <line x1="100" y1="510" x2="200" y2="892.5" />
+
+  <!-- Results of first weighing -->
+  <g transform="translate(200, 340)">
+    <rect class="result-reverseable" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="eliminated">9ABC</tspan></text>
+    <text x="22.5" y="55"><tspan class="heavier">1234</tspan></text>
+    <rect x="10" y="60" width="25" height="10" />
+    <circle cx="30" cy="65" r="1.5" />
+    <line x1="30" y1="65" x2="70" y2="45" />
+    <circle cx="70" cy="45" r="1.5" />
+    <rect x="65" y="40" width="25" height="10" />
+    <text x="77.5" y="35"><tspan class="lighter">5678</tspan></text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(200, 850)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="unknown">9ABC</tspan></text>
+    <text x="22.5" y="45"><tspan class="eliminated">1234</tspan></text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45"><tspan class="eliminated">5678</tspan></text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+
+  <line x1="300" y1="382.5" x2="400" y2="382.5" />
+  <line x1="300" y1="892.5" x2="400" y2="892.5" />
+
+  <!-- Second weighing -->
+  <g transform="translate(400, 340)">
+    <rect class="weigh" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20">
+      <tspan class="lighter">4</tspan>
+      <tspan class="heavier">78</tspan>
+      <tspan class="eliminated">ABC</tspan>
+    </text>
+    <text x="22.5" y="45">
+      <tspan class="lighter">12</tspan>
+      <tspan class="heavier">6</tspan>
+    </text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45">
+      <tspan class="lighter">3</tspan>
+      <tspan class="heavier">5</tspan>
+      <tspan class="eliminated">9</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(400, 850)">
+    <rect class="weigh" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20">
+      <tspan class="eliminated">2345678</tspan>
+      <tspan class="unknown">C</tspan>
+    </text>
+    <text x="22.5" y="45"><tspan class="unknown">9A</tspan></text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45">
+      <tspan class="eliminated">1</tspan>
+      <tspan class="unknown">B</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+
+  <line x1="500" y1="382.5" x2="600" y2="130" />
+  <line x1="500" y1="382.5" x2="600" y2="340" />
+  <line x1="500" y1="382.5" x2="600" y2="555.5" />
+
+  <line x1="500" y1="892.5" x2="600" y2="807.5" />
+  <line x1="500" y1="892.5" x2="600" y2="977.5" />
+
+  <!-- Result of second weighing -->
+  <g transform="translate(600, 85)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="eliminated">4789ABC</tspan></text>
+    <text x="22.5" y="35">
+      <tspan class="lighter">12</tspan>
+      <tspan class="eliminated">6</tspan>
+    </text>
+    <rect x="10" y="40" width="25" height="10" />
+    <circle cx="30" cy="45" r="1.5" />
+    <line x1="30" y1="45" x2="70" y2="65" />
+    <circle cx="70" cy="65" r="1.5" />
+    <rect x="65" y="60" width="25" height="10" />
+    <text x="77.5" y="55">
+      <tspan class="eliminated">3</tspan>
+      <tspan class="heavier">5</tspan>
+      <tspan class="eliminated">9</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(600, 297.5)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="eliminated">4789ABC</tspan></text>
+    <text x="22.5" y="55">
+      <tspan class="eliminated">12</tspan>
+      <tspan class="heavier">6</tspan>
+    </text>
+    <rect x="10" y="60" width="25" height="10" />
+    <circle cx="30" cy="65" r="1.5" />
+    <line x1="30" y1="65" x2="70" y2="45" />
+    <circle cx="70" cy="45" r="1.5" />
+    <rect x="65" y="40" width="25" height="10" />
+    <text x="77.5" y="35">
+      <tspan class="lighter">3</tspan>
+      <tspan class="eliminated">59</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(600, 510)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20">
+      <tspan class="lighter">4</tspan>
+      <tspan class="heavier">78</tspan>
+      <tspan class="eliminated">ABC</tspan>
+    </text>
+    <text x="22.5" y="45">
+      <tspan class="eliminated">126</tspan>
+    </text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45">
+      <tspan class="eliminated">359</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(600, 765)">
+    <rect class="result-reverseable" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="eliminated">2345678C</tspan></text>
+    <text x="22.5" y="35">
+      <tspan class="lighter">9A</tspan>
+    </text>
+    <rect x="10" y="40" width="25" height="10" />
+    <circle cx="30" cy="45" r="1.5" />
+    <line x1="30" y1="45" x2="70" y2="65" />
+    <circle cx="70" cy="65" r="1.5" />
+    <rect x="65" y="60" width="25" height="10" />
+    <text x="77.5" y="55">
+      <tspan class="eliminated">1</tspan>
+      <tspan class="heavier">B</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(600, 935)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20">
+      <tspan class="eliminated">2345678</tspan>
+      <tspan class="unknown">C</tspan>
+    </text>
+    <text x="22.5" y="45"><tspan class="eliminated">9A</tspan></text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45">
+      <tspan class="eliminated">B1</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+
+  <line x1="700" y1="127.5" x2="800" y2="127.5" />
+  <line x1="700" y1="340" x2="800" y2="340" />
+  <line x1="700" y1="555.5" x2="800" y2="555.5" />
+  <line x1="700" y1="807.5" x2="800" y2="807.5" />
+  <line x1="700" y1="977.5" x2="1000" y2="977.5" />
+
+  <!-- Third weighing -->
+  <g transform="translate(800, 85)">
+    <rect class="weigh" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20">
+      <tspan class="lighter">2</tspan>
+      <tspan class="eliminated">6789ABC</tspan>
+    </text>
+    <text x="22.5" y="45">
+      <tspan class="lighter">1</tspan>
+      <tspan class="heavier">5</tspan>
+    </text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45">
+      <tspan class="eliminated">34</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(800, 297.5)">
+    <rect class="weigh" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="eliminated">45789ABC</tspan></text>
+    <text x="22.5" y="45">
+      <tspan class="lighter">3</tspan>
+      <tspan class="heavier">6</tspan>
+    </text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45"><tspan class="eliminated">12</tspan></text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(800, 510)">
+    <rect class="weigh" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20">
+      <tspan class="eliminated">356</tspan>
+      <tspan class="heavier">8</tspan>
+      <tspan class="eliminated">9ABC</tspan>
+    </text>
+    <text x="22.5" y="45">
+      <tspan class="lighter">4</tspan>
+      <tspan class="heavier">7</tspan>
+    </text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45"><tspan class="eliminated">12</tspan></text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(800, 765)">
+    <rect class="weigh" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20">
+      <tspan class="eliminated">345678</tspan>
+      <tspan class="lighter">A</tspan>
+      <tspan class="eliminated">C</tspan>
+    </text>
+    <text x="22.5" y="45">
+      <tspan class="lighter">9</tspan>
+      <tspan class="heavier">B</tspan>
+    </text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45"><tspan class="eliminated">12</tspan></text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+
+  <line x1="900" y1="127.5" x2="1000" y2="42.5" />
+  <line x1="900" y1="127.5" x2="1000" y2="127.5" />
+  <line x1="900" y1="127.5" x2="1000" y2="212.5" />
+  <line x1="900" y1="340" x2="1000" y2="297.5" />
+  <line x1="900" y1="340" x2="1000" y2="385.5" />
+  <line x1="900" y1="555.5" x2="1000" y2="470.5" />
+  <line x1="900" y1="555.5" x2="1000" y2="555.5" />
+  <line x1="900" y1="555.5" x2="1000" y2="640.5" />
+  <line x1="900" y1="807.5" x2="1000" y2="722.5" />
+  <line x1="900" y1="807.5" x2="1000" y2="807.5" />
+  <line x1="900" y1="807.5" x2="1000" y2="892.5" />
+
+  <!-- Result of third weighing -->
+  <g transform="translate(1000, 0)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="eliminated">26789ABC</tspan></text>
+    <text x="22.5" y="35">
+      <tspan class="lighter">1</tspan>
+      <tspan class="eliminated">5</tspan>
+    </text>
+    <rect x="10" y="40" width="25" height="10" />
+    <circle cx="30" cy="45" r="1.5" />
+    <line x1="30" y1="45" x2="70" y2="65" />
+    <circle cx="70" cy="65" r="1.5" />
+    <rect x="65" y="60" width="25" height="10" />
+    <text x="77.5" y="55">
+      <tspan class="eliminated">34</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(1000, 85)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="eliminated">26789ABC</tspan></text>
+    <text x="22.5" y="55">
+      <tspan class="eliminated">1</tspan>
+      <tspan class="heavier">5</tspan>
+    </text>
+    <rect x="10" y="60" width="25" height="10" />
+    <circle cx="30" cy="65" r="1.5" />
+    <line x1="30" y1="65" x2="70" y2="45" />
+    <circle cx="70" cy="45" r="1.5" />
+    <rect x="65" y="40" width="25" height="10" />
+    <text x="77.5" y="35">
+      <tspan class="eliminated">34</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(1000, 170)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20">
+      <tspan class="lighter">2</tspan>
+      <tspan class="eliminated">6789ABC</tspan>
+    </text>
+    <text x="22.5" y="45">
+      <tspan class="eliminated">15</tspan>
+    </text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45">
+      <tspan class="eliminated">34</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(1000, 255)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="eliminated">45789ABC</tspan></text>
+    <text x="22.5" y="35">
+      <tspan class="lighter">3</tspan>
+      <tspan class="eliminated">6</tspan>
+    </text>
+    <rect x="10" y="40" width="25" height="10" />
+    <circle cx="30" cy="45" r="1.5" />
+    <line x1="30" y1="45" x2="70" y2="65" />
+    <circle cx="70" cy="65" r="1.5" />
+    <rect x="65" y="60" width="25" height="10" />
+    <text x="77.5" y="55">
+      <tspan class="eliminated">12</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(1000, 340)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="eliminated">45789ABC</tspan></text>
+    <text x="22.5" y="55">
+      <tspan class="eliminated">3</tspan>
+      <tspan class="heavier">6</tspan>
+    </text>
+    <rect x="10" y="60" width="25" height="10" />
+    <circle cx="30" cy="65" r="1.5" />
+    <line x1="30" y1="65" x2="70" y2="45" />
+    <circle cx="70" cy="45" r="1.5" />
+    <rect x="65" y="40" width="25" height="10" />
+    <text x="77.5" y="35">
+      <tspan class="eliminated">12</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(1000, 425)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="eliminated">5689ABC</tspan></text>
+    <text x="22.5" y="35">
+      <tspan class="lighter">4</tspan>
+      <tspan class="eliminated">7</tspan>
+    </text>
+    <rect x="10" y="40" width="25" height="10" />
+    <circle cx="30" cy="45" r="1.5" />
+    <line x1="30" y1="45" x2="70" y2="65" />
+    <circle cx="70" cy="65" r="1.5" />
+    <rect x="65" y="60" width="25" height="10" />
+    <text x="77.5" y="55">
+      <tspan class="eliminated">12</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(1000, 510)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="eliminated">35689ABC</tspan></text>
+    <text x="22.5" y="55">
+      <tspan class="eliminated">4</tspan>
+      <tspan class="heavier">7</tspan>
+    </text>
+    <rect x="10" y="60" width="25" height="10" />
+    <circle cx="30" cy="65" r="1.5" />
+    <line x1="30" y1="65" x2="70" y2="45" />
+    <circle cx="70" cy="45" r="1.5" />
+    <rect x="65" y="40" width="25" height="10" />
+    <text x="77.5" y="35">
+      <tspan class="eliminated">12</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(1000, 595)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20">
+      <tspan class="eliminated">3456</tspan>
+      <tspan class="heavier">8</tspan>
+      <tspan class="eliminated">9ABC</tspan>
+    </text>
+    <text x="22.5" y="45">
+      <tspan class="eliminated">47</tspan>
+    </text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45">
+      <tspan class="eliminated">12</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(1000, 680)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="eliminated">345678AC</tspan></text>
+    <text x="22.5" y="35">
+      <tspan class="lighter">9</tspan>
+      <tspan class="eliminated">C</tspan>
+    </text>
+    <rect x="10" y="40" width="25" height="10" />
+    <circle cx="30" cy="45" r="1.5" />
+    <line x1="30" y1="45" x2="70" y2="65" />
+    <circle cx="70" cy="65" r="1.5" />
+    <rect x="65" y="60" width="25" height="10" />
+    <text x="77.5" y="55">
+      <tspan class="eliminated">12</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(1000, 765)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20"><tspan class="eliminated">345678AC</tspan></text>
+    <text x="22.5" y="55">
+      <tspan class="eliminated">9</tspan>
+      <tspan class="heavier">B</tspan>
+    </text>
+    <rect x="10" y="60" width="25" height="10" />
+    <circle cx="30" cy="65" r="1.5" />
+    <line x1="30" y1="65" x2="70" y2="45" />
+    <circle cx="70" cy="45" r="1.5" />
+    <rect x="65" y="40" width="25" height="10" />
+    <text x="77.5" y="35">
+      <tspan class="eliminated">12</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(1000, 850)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20">
+      <tspan class="eliminated">345678</tspan>
+      <tspan class="lighter">A</tspan>
+      <tspan class="eliminated">C</tspan>
+    </text>
+    <text x="22.5" y="45">
+      <tspan class="eliminated">9B</tspan>
+    </text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45">
+      <tspan class="eliminated">12</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+  <g transform="translate(1000, 935)">
+    <rect class="result" x="0" y="0" width="100" height="85" />
+    <text x="50" y="20">
+      <tspan class="eliminated">2345678</tspan>
+      <tspan class="unknown">C</tspan>
+    </text>
+    <text x="22.5" y="45"><tspan class="eliminated">9A</tspan></text>
+    <rect x="10" y="50" width="25" height="10" />
+    <circle cx="30" cy="55" r="1.5" />
+    <line x1="30" y1="55" x2="70" y2="55" />
+    <circle cx="70" cy="55" r="1.5" />
+    <rect x="65" y="50" width="25" height="10" />
+    <text x="77.5" y="45">
+      <tspan class="eliminated">B1</tspan>
+    </text>
+    <path d="M 45 80 L 50 55 L 55 80 z" />
+  </g>
+</svg>

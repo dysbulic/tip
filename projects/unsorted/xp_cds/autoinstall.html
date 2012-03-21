@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Automating an XP Install</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p>Ok, it is 11:30pm. I leave town at 8am. I need to have a set of
+    CDs to do an automatic XP install before I go. Can I do it? We'll
+    see&hellip;</p>
+    <p><strong>11:30pm</strong>: I've already got the basics worked
+    out with information from <a
+    href="http://unattended.msfn.org/">unattended.msfn.org</a>. I've
+    <a href="eltorito_extraction.html">the eltorito image</a> and <a
+    href="lockdown.reg">a set or registry restrictions</a>. I can use
+    <a
+    href="http://unattended.msfn.org/global/cdimage.htm">CDImage</a>
+    to create images even though mkisofs's don't. The <a
+    href="winnt.sif">unattended install config</a> I'm using seems
+    pretty good and I only accidentally reformatted one machine in
+    developing that, so that's good. &#x263A;</p>
+    <p>Where I'm stuck right now is scripting the user account
+    creation. I have three user accounts which are in three different
+    character sets. (I'm using XP's
+    <a href="Multilanguage User Interface">MUI</a>.
+    "<code>student</code>" is the English speaking
+    student account and it is
+    <acronym title="American Standard Code for Information Interchange">ASCII</acronym>.
+    "<code>étudiant</code>" is the French account in ISO-8859-1 and
+    "<code>&#x637;&#x627;&#x644;&#x628;&#x629;</code>" in the Arabic
+    account in ISO-8859-6. The obvious solution when writing the
+    script to run <code>net user</code> is UTF-8. The problem is my
+    French account is coming in as <code>&#xC3;&#xA9;tudiant</code>
+    meaning the multibyte characters are being misinterpreted as
+    ISO-8859-1. I switched from a batch file to a VBScript in hopes of
+    bypassing the command interpreter and fixing the problem, but to
+    no avail.</p>
+
+    <p><strong>12:30</strong>: First, I need to get the languages
+    right in my install. (The systems here can't access microsoft.com
+    from time to time and I couldn't do get the codes when I did the
+    original install. I can get to the <a
+    href="http://www.microsoft.com/globaldev/reference/win2k/setup/localsupport.mspx">language
+    ids</a> and <a
+    href="http://www.microsoft.com/globaldev/reference/win2k/setup/lcid.mspx">locales</a>
+    now.)</p>
+
+    <p><strong>1:00</strong>: I figure that all the <code>net
+    user</code> command does is add some registry entries since the
+    <code>Default User</code> files aren't copied over until the first
+    login. How can I find out which keys are added? Maybe I could diff
+    the registry hives. Those files are located at:
+    <code>%WinDir%\system32\config\(software|system|sam|security|default)</code>.</p>
+
+    <p><strong>1:30</strong>: Creating the ISO and burning it takes
+    forever. Especially since I'm creating the image on my laptop via
+    a samba share burning to a CD-RW with cdrecord. Attempt one
+    wouldn't boot, so I'm trying again&hellip;</p>
+
+    <p><strong>2:00</strong>: Grr, still not working&hellip; Going to
+    do an install with my old disk that does England as the default
+    locale so I have something to test with while working.</p>
+
+    <p><strong>2:30</strong>: I have found one thing that may help
+    with a problem I haven't gotten to addressing yet. When I create
+    the user accounts, I need to change some of the registry settings.
+    I want to both lock down the system and set the interface
+    language. This is a problem because even if I figure out how to
+    create accounts without using the <code>net user</code> command,
+    the user profiles are not copied from the <code>Default
+    User</code> profile until the first time the user logs in. The
+    <code>HKEY_CURRENT_USER</code> hive is in the user's profile, so I
+    can't change it until the profile has been copied over.</p>
+    <p>It turns out that profile copying is called Active Setup and
+    includes a process called Just In Time configuration (JIT, like
+    the java compiler). In addition there are a set of keys that
+    control programs that are run when the account is created under a
+    GUID at: <code>HKLM\SOFTWARE\Microsoft\Active Setup\Installed
+    Components</code> with the <code>REG_SZ</code> (or, better,
+    <code>REG_EXPAND_SZ</code>) value <code>StubPath</code>,
+    <code>REG_SZ</code> value <code>ComponentID</code> and
+    <code>REG_DWORD</code> value <code>IsInstalled</code> set to
+    <code>1</code>. Hopefully I can write a script that does the
+    lockdown and sets the MUI language.</p>
+
+    <p><strong>8:00</strong>: Shit fire. I have been going around in
+    circles trying to get this system to boot. The damned CD-ROM drive
+    doesn't read CD-RWs. I've been assuming the problem was with the
+    image and deleted the original sources. How do I get them
+    back?</p>
+    <ol>
+      <li>Copy <code>i386</code> and files off the root of the
+      original CD</li>
+      <li>Slipstream the service pack with <code>xpsp1a_en_x86.exe
+      -s:'c:\temp\xp_cd\'</code></li>
+      <li>Delete 9x and NT upgrades from <code>i386</code></li>
+      <li>Copy <a href="winnt.sif">winnt.sif</a> into
+      <code>i386</code></li>
+      <li>Run <a
+      href="http://unattended.msfn.org/global/cdimage.htm">CDImage</a>
+      on the results</li>
+    </ol>
+    
+    <p><strong>9:00</strong>: Head is getting fuzzy from too much
+    computer. The absolute latest I can leave is 1. The <a
+    href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnanchor/html/anch_wmi.asp">Windows
+    Management Instrumentation</a> looks like a good bet for creating
+    accounts. If I weren't going dumb from overdosing on caffeine, I'd
+    probably have figured out how to use it by now&hellip;</p>
+
+    <p><strong>10:00</strong>: I hate computers.</p>
+
+    <p><strong>11:00</strong>: Ok, I am making some progress using the
+    Active Directory Services Interface to interact with the Security
+    Account Manager. Thank Jesus.</p>
+
+    <p><strong>11:30</strong>: It looks as if the majority of my CD
+    booting problems were coming from the fact I was using a CD-RW to
+    test. Both of mt test machines are cast-offs from the embassy, so
+    they're pretty old. Now that I've switched over it seems to be
+    working fine. It means that I'll make some useless CDs, but it's
+    well worth it.</p>
+
+    <p><strong>12:00</strong>: I'm pretty sure I've got a <a
+    href="create_user.vbs">working script</a> to create the users. I
+    have to wait for the install to finish to find out. 30 minutes.
+    Damn.</p>
+   
+  </body>
+</html>

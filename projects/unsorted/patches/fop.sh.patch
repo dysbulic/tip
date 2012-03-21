@@ -1,0 +1,14 @@
+--- fop.sh.orig	2003-03-24 17:24:18.000000000 -0600
++++ fop.sh	2003-03-24 17:52:25.000000000 -0600
+@@ -29,10 +29,9 @@
+   progname=`basename $0`
+   
+   while [ -h "$PRG" ] ; do
+-    echo "Checking $PRG"
+     ls=`ls -ld "$PRG"`
+     link=`expr "$ls" : '.*-> \(.*\)$'`
+-    if expr "$link" : '.*/.*' > /dev/null; then
++    if expr "$link" : '/' > /dev/null; then
+ 	PRG="$link"
+     else
+ 	PRG="`dirname $PRG`/$link"

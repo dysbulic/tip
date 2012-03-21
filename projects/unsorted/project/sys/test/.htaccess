@@ -1,0 +1,11 @@
+RewriteEngine on
+
+#RewriteCond %{REQUEST_URI} ^(.+\.php)s$
+#RewriteRule ^.*$ %1 [T=application/x-httpd-php-source] 
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^mod_rewrite_substring http://google.com [R,L]
+
+<FilesMatch "test_iframe.html">
+  AddHandler php-cgi .html
+</FilesMatch>

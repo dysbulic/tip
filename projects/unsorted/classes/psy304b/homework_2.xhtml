@@ -1,0 +1,848 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>PSY-304B Homework #2</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math, table + math, math + table { margin-top: .75em; }
+      .data td, .data th { text-align: center; padding: .25em; border: 1px solid; }
+      td, th { padding: .25em .5em; border: 1px solid; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY-304B: Quantitative Methods &amp; Experimental Design</h1>
+      <h2>Homework #2</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 14:35 Thrs., 21 February 2008</h2>
+    </div>
+    <blockquote>
+      <p>For all problems, unless otherwise indicated, assume a Type 1 error rate = .05.</p>
+    </blockquote>
+    <ol>
+      <li id="p1">
+        <div class="question">
+          <p>An experiment is conducted that compares the effects of three different levels of stress on cortisol secretion: high, medium, and low stress. Below are the data:</p>
+          <table class="data">
+            <tr><th>High Stress</th><td>77</td><td>63</td><td>80</td><td>45</td><td>86</td><td>72</td></tr>
+            <tr><th>Medium Stress</th><td>34</td><td>72</td><td>60</td><td>44</td><td>39</td><td>48</td></tr>
+            <tr><th>Low Stress</th><td>51</td><td>44</td><td>29</td><td>48</td><td>33</td><td>32</td></tr>
+          </table>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Using R, conduct a one-way ANOVA on these data.</p>
+            </div>
+            <div class="answer">
+              <p>The R code is in <a href="homework_2.R">homework_2.R</a> to produce:</p>
+<pre>Response: Cortisol_Secretion
+             Df  Sum Sq Mean Sq F value   Pr(>F)   
+Stress_Level  2 3004.00 1502.00    8.96 0.002753 **
+Residuals    15 2514.50  167.63</pre>
+              <p>To double check, the SAS program <a href="homework_2.sas">homework_2.sas</a> gives similar output:</p>
+<pre>                       Sum of
+ Source           DF  Squares  Mean Square  F Value  Pr > F
+ Model             2  3004.00  1502.000000     8.96  0.0028
+ Error            15  2514.50   167.633333
+ Corrected Total  17  5518.50</pre>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Indicate whether you reject the null hypothesis.</p>
+            </div>
+            <div class="answer">
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mmultiscripts>
+                        <mi>F</mi>
+                        <mfenced open="" close=""><mn>2</mn><mn>15</mn></mfenced><none/>
+                        <mprescripts/><mn>0.00275</mn><none/>
+                      </mmultiscripts>
+                    </mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>8.96</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>There is only a 0.275% chance that this data came from a central F-distribution. This is less than the 5% cutoff required to reject, so H<sub>0</sub> is rejected.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Compute an estimate of the population value for Cohen's f.</p>
+            </div>
+            <div class="answer">
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mi>f</mi></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><msub><mi>&sigma;</mi><mi>&mu;</mi></msub><msub><mi>&sigma;</mi><mi>y</mi></msub></mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <msqrt><mfrac>
+                        <mrow>
+                          <mo>&Sum;</mo>
+                          <msup>
+                            <mfenced><mrow><msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo><mover><mi>&mu;</mi><mo>_</mo></mover></mrow></mfenced>
+                            <mn>2</mn>
+                          </msup>
+                        </mrow>
+                        <mi>J</mi>
+                      </mfrac></msqrt>
+                      <msub><mi>&sigma;</mi><mi>y</mi></msub>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msqrt><mfrac>
+                      <mrow>
+                        <mo>&Sum;</mo>
+                        <msup>
+                          <mfenced><mrow><msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo><mover><mi>&mu;</mi><mo>_</mo></mover></mrow></mfenced>
+                          <mn>2</mn>
+                        </msup>
+                      </mrow>
+                      <mrow><mi>J</mi><msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup></mrow>
+                    </mfrac></msqrt></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>Cohen's magnitudes for effect size are:</p>
+              <table>
+                <tr><th>Size</th><th>Cohen's <em>d</em></th><th>Cohen's <em>f</em></th></tr>
+                <tr><th>Small</th><td>0.2</td><td>0.1</td></tr>
+                <tr><th>Medium</th><td>0.5</td><td>0.25</td></tr>
+                <tr><th>Large</th><td>0.8</td><td>0.4</td></tr>
+              </table>
+              <p>No unbiased estimator of <em>f</em> is known. An only slightly biased estimator for equal sized groups is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mover><mi>f</mi><mo>&Hat;</mo></mover></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msqrt><mfrac>
+                      <mrow>
+                        <mfrac><mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow><mi>N</mi></mfrac>
+                        <mfenced open="|" close="|"><mrow>
+                          <html:acronym title="Mean Square Between">MSB</html:acronym><mo>-</mo>
+                          <html:acronym title="Mean Square Within">MSW</html:acronym>
+                        </mrow></mfenced>
+                      </mrow>
+                      <html:acronym title="Mean Square Within">MSW</html:acronym>
+                    </mfrac></msqrt></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><msqrt><mfrac>
+                      <msubsup><mi>&sigma;</mi><mi>&mu;</mi><mn>2</mn></msubsup><msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup>
+                    </mfrac></msqrt></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>
+                The R code in <a href="homework_2.R">homework_2.R</a> produces
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mover><mi>f</mi><mo>&Hat;</mo></mover><mo>&ape;</mo><mn>0.94045</mn>
+                </math>
+                which is large.
+              </p>
+              <p>Another suggested slightly biased estimator is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mover><mi>f</mi><mo>&Hat;</mo></mover></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msqrt><mfrac>
+                      <msup><mover><mi>R</mi><mo>~</mo></mover><mn>2</mn></msup>
+                      <mrow><mn>1</mn><mo>-</mo><msup><mover><mi>R</mi><mo>~</mo></mover><mn>2</mn></msup></mrow>
+                    </mfrac></msqrt></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>
+                The R code in <a href="homework_2.R">homework_2.R</a> produces
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mover><mi>f</mi><mo>&Hat;</mo></mover><mo>&ape;</mo><mn>0.96772</mn>
+                </math>.
+              </p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Is the R<sup>2</sup> value listed in the SAS output an optimal measure of the proportion of variance in cortisol values accounted for by stress? Explain.</p>
+            </div>
+            <div class="answer">
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msup><mi>&eta;</mi><mn>2</mn></msup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msup><mi>R</mi><mn>2</mn></msup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <html:acronym title="Sum of Squares Between">SSB</html:acronym>
+                      <mrow>
+                        <html:acronym title="Sum of Squares Between">SSB</html:acronym><mo>+</mo>
+                        <html:acronym title="Sum of Squares Within">SSW</html:acronym>
+                      </mrow>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <html:acronym title="Sum of Squares Between">SSB</html:acronym>
+                      <html:acronym title="Sum of Squares Total">SST</html:acronym>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>This proportion varies between 0 (all variability is within groups) and 1 (all variability is between groups).</p>
+              <p>Typically, <em>R</em><sup>2</sup> will overestimate <em>r</em><sup>2</sup>. The amount of this bias is proportional to the ratio between the degrees of freedom. A "shrunken" value can take this into account and will give a less biased estimate:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msup><mover><mi>R</mi><mo>~</mo></mover><mn>2</mn></msup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <mfrac>
+                        <msub><mi>df</mi><html:acronym title="Sum of Squares Total">SST</html:acronym></msub>
+                        <msub><mi>df</mi><html:acronym title="Sum of Squares Within">SSW</html:acronym></msub>
+                      </mfrac>
+                      <mfenced><mrow><mn>1</mn><mo>-</mo><msup><mi>R</mi><mn>2</mn></msup></mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <mfrac><mrow><mi>N</mi><mo>-</mo><mn>1</mn></mrow><mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow></mfrac>
+                      <mfenced><mrow><mn>1</mn><mo>-</mo><msup><mi>R</mi><mn>2</mn></msup></mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>R gives both values:</p>
+              <pre>Multiple R.Squared: 0.5444, Adjusted R.squared: 0.4836</pre>
+              <p>SAS gives just <em>R</em><sup>2</sup>:</p>
+              <pre>R-Square     Coeff Var      Root MSE    cortisol Mean
+0.544351      24.35234      12.94733         53.16667</pre>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Compute two alternative measures of proportion of variance.</p>
+            </div>
+            <div class="answer">
+              <p>
+                One measure is
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msup><mover><mi>R</mi><mo>~</mo></mover><mn>2</mn></msup>
+                </math>
+                listed above. The other is 
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msup><mi>&omega;</mi><mn>2</mn></msup>
+                </math>:
+              </p>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msubsup><mi>&sigma;</mi><mi>Y</mi><mn>2</mn></msubsup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msubsup><mi>&sigma;</mi><mi>&alpha;</mi><mn>2</mn></msubsup><mo>+</mo>
+                      <msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd><msubsup><mi>&sigma;</mi><mi>&alpha;</mi><mn>2</mn></msubsup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <munder><mo>&Sum;</mo><mi>j</mi></munder>
+                        <msup><mfenced><mrow><msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo><mi>&mu;</mi></mrow></mfenced><mn>2</mn></msup>
+                      </mrow>
+                      <mi>J</mi>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <munder><mo>&Sum;</mo><mi>j</mi></munder><msubsup><mi>&alpha;</mi><mi>j</mi><mn>2</mn></msubsup>
+                      </mrow>
+                      <mi>J</mi>
+                    </mfrac></mtd>
+                  </mtr>
+                  <mtr>
+                    <msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+                        <msup>
+                          <mfenced><mrow>
+                            <msub><mi>Y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                            <msub><mi>&mu;</mi><mi>j</mi></msub>
+                          </mrow></mfenced>
+                          <mn>2</mn>
+                        </msup>
+                      </mrow>
+                      <mi>N</mi>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msup><mi>&omega;</mi><mn>2</mn></msup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <msubsup><mi>&sigma;</mi><mi>&alpha;</mi><mn>2</mn></msubsup>
+                      <mrow>
+                        <msubsup><mi>&sigma;</mi><mi>&alpha;</mi><mn>2</mn></msubsup><mo>+</mo>
+                        <msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                      </mrow>
+                    </mfrac></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd><msup><mover><mi>&omega;</mi><mo>&Hat;</mo></mover><mn>2</mn></msup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <html:acronym title="Sum of Squares Between">SSB</html:acronym><mo>-</mo>
+                        <mfenced><mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                        <html:acronym title="Mean Square Within">MSW</html:acronym>
+                      </mrow>
+                      <mrow>
+                        <html:acronym title="Sum of Squares Total">SST</html:acronym><mo>+</mo>
+                        <html:acronym title="Mean Square Within">MSW</html:acronym>
+                      </mrow>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>
+                The R code in <a href="homework_2.R">homework_2.R</a> produces
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msup><mover><mi>&omega;</mi><mo>&Hat;</mo></mover><mn>2</mn></msup><mo>&ape;</mo><mn>0.46934</mn>
+                </math>
+                which is less than
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msup><mover><mi>R</mi><mo>~</mo></mover><mn>2</mn></msup>
+                </math>.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li id="p2">
+        <div class="question">
+          <p>Suppose that you are planning a study to compare the effects of four recall-cue conditions (denoted A, B, C, and D) on memory for spatial relations. The primary dependent measure will be the number of spatial relations accurately recalled.</p>
+        </div>
+        <ol>
+          <li id="p2a">
+            <div class="question">
+              <p>You assume that the within-population standard deviations all equal 9. You set the Type 1 error rate at &alpha; = .05. You presume that the population means will have the following values: u<sub>A</sub> = 17.5, u<sub>B</sub> = 19, u<sub>C</sub> = 25, and u<sub>D</sub> = 20.5. You intend to run 80 subjects in all, with equal n's across all 4 groups. You plan on conducting a one-way ANOVA. Using <code>GLMPOWER</code>, compute your power to reject the null hypothesis under these conditions.</p>
+            </div>
+            <div class="answer">
+              <p>From <a href="homework_2.R">R</a> using <code>power.anova.test</code>, I get:</p>
+              <pre>Balanced one-way analysis of variance power calculation
+     groups = 4
+          n = 20
+between.var = 10.5
+ within.var = 81
+  sig.level = 0.05
+      power = 0.615523</pre>
+              <p>From <a href="homework_2.sas">SAS</a>, I get:</p>
+              <pre>Power
+0.616</pre>
+            </div>
+          </li>
+          <li id="p2b">
+            <div class="question">
+              <p>You have the same Type 1 error rate and make the same assumptions about the population standard deviation and the population means as in part a. You still have 80 subjects in all but now you want to know how power might change by running 10 subjects in groups A, B, and D and 50 subjects in group C. Using <code>GLMPOWER</code>, determine the power under this subject allocation scheme. How would it compare to the power under the scheme noted in part a? Why do you think your power differs in the two cases?</p>
+            </div>
+            <div class="answer">
+              <p>From <a href="homework_2.sas">SAS</a>, I get:</p>
+              <pre>Power
+0.680</pre>
+              <p>I don't know how to do this calculation automatically in R. So, calculating the answer requires returning to the theoretical basis.</p>
+              <p>The conceptual structure of the F-distribution is built as a combination of other distributions:</p>
+              <ol>
+                <li>
+                  The central limit theorem says that any population meeting <a href="http://en.wikipedia.org/wiki/Central_limit_theorem">certain broad criteria</a>, if randomly sampled for long enough will see the distribution of sample values converge on a normal distribution modeled by the probability distribution function:
+                  <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mi>N</mi><mfenced separators=";"><mi>x</mi><mfenced open="" close=""><mi>&mu;</mi><mi>&sigma;</mi></mfenced></mfenced>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mfrac>
+                            <mn>1</mn><mrow><msqrt><mn>2</mn><mi>&pi;</mi></msqrt><mi>&sigma;</mi></mrow>
+                          </mfrac>
+                          <msup>
+                            <mi>e</mi>
+                            <mrow>
+                              <mo>-</mo><mfrac><mn>1</mn><mn>2</mn></mfrac>
+                              <msup>
+                                <mfenced><mfrac><mrow><mi>x</mi><mo>-</mo><mi>&mu;</mi></mrow><mi>&sigma;</mi></mfrac></mfenced>
+                                <mn>2</mn>
+                              </msup>
+                            </mrow>
+                          </msup>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </li>
+                <li>
+                  If those random samples are divided by the deviation and shifted by the mean, they will become z-scores:
+                  <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mtable>
+                      <mtr>
+                        <mtd><mi>z</mi></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac><mrow><mi>x</mi><mo>-</mo><mi>&mu;</mi></mrow><mi>&sigma;</mi></mfrac></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  These scores will be distributed as:
+                  <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mtable>
+                      <mtr>
+                        <mtd><mi>z</mi></mtd>
+                        <mtd><mo>~</mo></mtd>
+                        <mtd>
+                          <mi>N</mi><mfenced><mrow><mi>&mu;</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>&sigma;</mi><mo>=</mo><mn>1</mn></mrow></mfenced>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </li>
+                <li>
+                  If the values of these z-scores are then squared, they will be distributed as a
+                  <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>&chi;</mi><mn>2</mn></msup></math>-distribution.
+                  Each independent sample that is taken adds a degree of freedom,
+                  <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>r</mi></math>.
+                </li>
+                <li>
+                  The F-distribution is two
+                  <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>&chi;</mi><mn>2</mn></msup></math>-distributions
+                  each divided by their degrees of freedom:
+                  <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mtable>
+                      <mtr>
+                        <mtd><mfrac>
+                          <mfrac>
+                            <msubsup><mi>&chi;</mi><msub><mi>r</mi><mn>1</mn></msub><mn>2</mn></msubsup>
+                            <msub><mi>r</mi><mn>1</mn></msub>
+                          </mfrac>
+                          <mfrac>
+                            <msubsup><mi>&chi;</mi><msub><mi>r</mi><mn>2</mn></msub><mn>2</mn></msubsup>
+                            <msub><mi>r</mi><mn>2</mn></msub>
+                          </mfrac>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <msub><mi>F</mi><mfenced open="" close=""><msub><mi>r</mi><mn>1</mn></msub><msub><mi>r</mi><mn>2</mn></msub></mfenced></msub>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </li>
+                <li>
+                  The 
+                  <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>&chi;</mi><mn>2</mn></msup></math>-distributions
+                  that form the basis for this F-distribution are known as "central" distributions because the mean for all the independent samples is 0. Consider instead a
+                  <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>&chi;</mi><mn>2</mn></msup></math>-distribution
+                  which samples from
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mi>N</mi><mfenced><msub><mi>&mu;</mi><mi>i</mi></msub><mrow><mi>&sigma;</mi><mo>=</mo><mn>1</mn></mrow></mfenced>
+                  </math>
+                  distributions. This is known as a non-central
+                  <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>&chi;</mi><mn>2</mn></msup></math>
+                  (unless
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <msub><mi>&mu;</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn><mo>&ForAll;</mo><mi>i</mi>
+                  </math>),
+                  and the distribution is modified by an additional parameter,
+                  <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>&lambda;</mi></math>.
+                  <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mtable>
+                      <mtr>
+                        <mtd><mi>&lambda;</mi></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mo>&Sum;</mo>
+                          <msup>
+                            <mfenced><mfrac><msub><mi>&mu;</mi><mi>i</mi></msub><msub><mi>&sigma;</mi><mi>i</mi></msub></mfrac></mfenced><mn>2</mn>
+                          </msup>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  The distribution is then written with two parameters:
+                  <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <msubsup><mi>&chi;</mi><mfenced open="" close=""><mi>r</mi><mi>&gamma;</mi></mfenced><mn>2</mn></msubsup>
+                  </math>
+                </li>
+                <li>
+                  A non-central F-distribution is the combination of a non-central and central
+                  <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>&chi;</mi><mn>2</mn></msup></math>:
+                  <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mtable>
+                      <mtr>
+                        <mtd><mfrac>
+                          <mfrac>
+                            <msubsup>
+                              <mi>&chi;</mi>
+                              <mfenced open="" close=""><msub><mi>r</mi><mn>1</mn></msub><msub><mi>&gamma;</mi><mn>1</mn></msub></mfenced>
+                              <mn>2</mn>
+                            </msubsup>
+                            <msub><mi>r</mi><mn>1</mn></msub>
+                          </mfrac>
+                          <mfrac>
+                            <msubsup>
+                              <mi>&chi;</mi>
+                              <mfenced open="" close="">
+                                <msub><mi>r</mi><mn>2</mn></msub>
+                                <mrow><msub><mi>&gamma;</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn></mrow>
+                              </mfenced>
+                              <mn>2</mn>
+                            </msubsup>
+                            <msub><mi>r</mi><mn>2</mn></msub>
+                          </mfrac>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <msub>
+                          <mi>F</mi>
+                          <mfenced open="" close=""><msub><mi>r</mi><mn>1</mn></msub><msub><mi>r</mi><mn>2</mn></msub><mi>&gamma;</mi></mfenced>
+                          </msub>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mtable>
+                      <mtr>
+                        <mtd><mi>&gamma;</mi></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mrow>
+                            <mo>&Sum;</mo><msub><mi>n</mi><mi>j</mi></msub>
+                            <msup>
+                              <mfenced><mrow><msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo><mover><mi>&mu;</mi><mo>_</mo></mover></mrow></mfenced>
+                              <mn>2</mn>
+                            </msup>
+                          </mrow>
+                          <msubsup><mi>&sigma;</mi><mi>Y</mi><mn>2</mn></msubsup>
+                        </mfrac></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </li>
+                <li>In general, the ratio of the Mean Square Between and Mean Square Within will have a non-central F-distribution. If all the means are actually equal then &gamma; = 0, otherwise the distribution is shifted to the right. Power in this situation is computed by finding the 95% cutoff point in a central F and finding the probability that the non-central F will produce that value.</li>
+              </ol>
+              <p><a href="homework_2.R">My R code</a> comes up with the same value as SAS: 0.680. Power increases slightly because the non-centrality parameter increased from 7.778 to 8.889. It is important to recall that power is the likelihood of a correct rejection. As the real distribution moves to the right (with an increase in &lambda;), it increases the likelihood that the sampled value will be greater than the critical value for the central F.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Again, you assume that the within-population standard deviations all equal 9. You set the Type 1 error rate at &alpha; = .05. You are assuming that you want to conduct the study with equal sample sizes in the groups. You do not think that you know enough to be able to accurately estimate the specific values of the population means. However, you do know that you want to have at least 80% power to detect a medium effect size (f = .25) Using <code>GLMPOWER</code>, determine what the group sample sizes should be.</p>
+              <p><em>HINT: It really doesn't matter what the precise pattern of 4 population means is, as long as it results in an f = .25. So, you might consider:</em></p>
+              <ol>
+                <li><em>setting the population standard deviation at 9</em></li>
+                <li><em>setting the grand mean to a reasonable value (say 20.5 based on the values noted in part a)</em></li>
+                <li><em>setting two of the group means equal to the value of the grand mean</em></li>
+                <li><em>then figuring out the value of the remaining two means which would result in f = .25. You can do your computations figuring out appropriate values of the means outside SAS if you want. Just let me know somehow what those values are (they will have to show up in your SAS program somewhere).</em></li>
+              </ol>
+            </div>
+            <div class="answer">
+              <p>R uses the between and within group variances to compute power rather than a set of means. This means that the issue is finding a relationship between those characteristics rather than coming up with an appropriate set of means. Cohen's f is simply the ratio of the standard deviation between populations to the deviation within with populations. This means that given <em>f</em> and <em>&sigma;<sub>y</sub></em>:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr> 
+                    <mtd><mi>f</mi></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <msub><mi>&sigma;</mi><mi>&mu;</mi></msub>
+                      <msub><mi>&sigma;</mi><mi>y</mi></msub>
+                    </mfrac></mtd>
+                    <mtd><mo>&rArr;</mo></mtd>
+                    <mtd><msub><mi>&sigma;</mi><mi>&mu;</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mi>f</mi><msub><mi>&sigma;</mi><mi>y</mi></msub></mtd>
+                    <mtd><mo>&rArr;</mo></mtd>
+                    <mtd><msubsup><mi>&sigma;</mi><mi>&mu;</mi><mn>2</mn></msubsup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msup>
+                        <mfenced><mrow><mi>f</mi><msub><mi>&sigma;</mi><mi>y</mi></msub></mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p><a href="homework_2.R">R</a> computes:</p>
+              <pre>Balanced one.way analysis of variance power calculation
+     groups = 4
+          n = 59.13301
+between.var = 5.0625
+ within.var = 81
+  sig.level = 0.05
+      power = 0.8</pre>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>Let's say that a researcher conducts an experiment assessing whether males and females differ in verbal learning. Subjects are forced to perform a demanding secondary task when being exposed to verbal stimuli. Then number of verbal stimuli recalled is assessed. 40 married couples are randomly sampled (leading to 40 male and 40 female subjects and 80 subjects in all). The experimenter analyzes the data as a between-groups t test comparing the male and female groups. She finds that t(76) =  1.83, p &lt; .07, and concludes that there is not sufficient evidence to reject the null hypothesis. Comment.</p>
+        </div>
+        <div class="answer">
+          <p>One of the assumptions of the t-test is the independence of sample populations. Husbands and wives are very likely positively correlated in verbal capacity. The violation of the assumption of independence reduces the power of the test. The experimenter should choose a test statistic that takes into account the correlation such as a paired t-test.</p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Two effect size measures that we have talked about are Cohen's <em>d</em> for the two group t-test situation and Cohen's <em>f</em> for the one-way ANOVA.  The formulas for these measures are as follows:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>d</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo><msub><mi>&mu;</mi><mn>2</mn></msub></mrow>
+                  <msub><mi>&sigma;</mi><mi>y</mi></msub>
+                </mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>f</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <msqrt><mfrac>
+                    <mrow>
+                      <mo>&Sum;</mo>
+                      <msup>
+                        <mfenced><mrow>
+                          <msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo><msub><mi>&mu;</mi><mo>&bull;&bull;</mo></msub>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                    </mrow>
+                    <mi>J</mi>
+                  </mfrac></msqrt>
+                  <msub><mi>&sigma;</mi><mi>y</mi></msub>
+                </mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>It is well known that if you have two groups in the context of a between-groups design, you can do either a t-test or a one-way ANOVA.  Correspondingly, one would expect that there would be a predictable mathematical relation between Cohen's <em>d</em> and <em>f</em> in the case of a two-group design. In fact, consideration of Cohen's recommendations for small, medium, and large effect sizes indicates such a relation. He has described small, medium, and large effect size d values of .2, .5, and .8 respectively, and f values of .1, .25 and .4, respectively. Using the formulas for <em>d</em> and <em>f</em> shown above, algebraically derive the relation between <em>d</em> and <em>f</em>.</p>
+        </div>
+        <div class="answer">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>d</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo><msub><mi>&mu;</mi><mn>2</mn></msub></mrow>
+                  <msub><mi>&sigma;</mi><mi>y</mi></msub>
+                </mfrac></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><msub><mi>&sigma;</mi><mi>y</mi></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo><msub><mi>&mu;</mi><mn>2</mn></msub></mrow>
+                  <mi>d</mi>
+                </mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub>
+                  <mfenced open="" close="|"><mi>f</mi></mfenced><mrow><mi>J</mi><mo>=</mo><mn>2</mn></mrow>
+                </msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <msqrt><mfrac>
+                    <mrow>
+                      <munderover><mo>&Sum;</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mn>2</mn></munderover>
+                      <msup>
+                        <mfenced><mrow>
+                          <msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo><mover><mi>&mu;</mi><mo>_</mo></mover>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                    </mrow>
+                    <mn>2</mn>
+                  </mfrac></msqrt>
+                  <msub><mi>&sigma;</mi><mi>y</mi></msub>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <msqrt><mfrac>
+                    <mrow>
+                      <msup>
+                        <mfenced><mrow>
+                          <msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo>
+                          <mfrac>
+                            <mrow>
+                              <msub><mi>&mu;</mi><mn>1</mn></msub><mo>+</mo><msub><mi>&mu;</mi><mn>2</mn></msub>
+                            </mrow>
+                            <mn>2</mn>
+                          </mfrac>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                      <mo>+</mo>
+                      <msup>
+                        <mfenced><mrow>
+                          <msub><mi>&mu;</mi><mn>2</mn></msub><mo>-</mo>
+                          <mfrac>
+                            <mrow>
+                              <msub><mi>&mu;</mi><mn>1</mn></msub><mo>+</mo><msub><mi>&mu;</mi><mn>2</mn></msub>
+                            </mrow>
+                            <mn>2</mn>
+                          </mfrac>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                    </mrow>
+                    <mn>2</mn>
+                  </mfrac></msqrt>
+                  <msub><mi>&sigma;</mi><mi>y</mi></msub>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <msqrt><mfrac>
+                    <mrow>
+                      <msup>
+                        <mfenced><mrow>
+                          <mfrac>
+                            <mrow>
+                              <mn>2</mn><msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo>
+                              <msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo><msub><mi>&mu;</mi><mn>2</mn></msub>
+                            </mrow>
+                            <mn>2</mn>
+                          </mfrac>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                      <mo>+</mo>
+                      <msup>
+                        <mfenced><mrow>
+                          <mfrac>
+                            <mrow>
+                              <mn>2</mn><msub><mi>&mu;</mi><mn>2</mn></msub><mo>-</mo>
+                              <msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo><msub><mi>&mu;</mi><mn>2</mn></msub>
+                            </mrow>
+                            <mn>2</mn>
+                          </mfrac>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                    </mrow>
+                    <mn>2</mn>
+                  </mfrac></msqrt>
+                  <msub><mi>&sigma;</mi><mi>y</mi></msub>
+                </mfrac></mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <msqrt><mfrac>
+                    <mrow>
+                      <msup>
+                        <mfenced><mrow>
+                          <mfrac>
+                            <mrow>
+                              <msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo><msub><mi>&mu;</mi><mn>2</mn></msub>
+                            </mrow>
+                            <mn>2</mn>
+                          </mfrac>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                      <mo>+</mo>
+                      <msup>
+                        <mfenced><mrow>
+                          <mfrac>
+                            <mrow>
+                              <msub><mi>&mu;</mi><mn>2</mn></msub><mo>-</mo><msub><mi>&mu;</mi><mn>1</mn></msub>
+                            </mrow>
+                            <mn>2</mn>
+                          </mfrac>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                    </mrow>
+                    <mn>2</mn>
+                  </mfrac></msqrt>
+                  <msub><mi>&sigma;</mi><mi>y</mi></msub>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <msqrt><mfrac>
+                    <mrow>
+                      <mn>2</mn>
+                      <msup>
+                        <mfenced><mrow>
+                          <msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo><msub><mi>&mu;</mi><mn>2</mn></msub>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                    </mrow>
+                    <mn>8</mn>
+                  </mfrac></msqrt>
+                  <msub><mi>&sigma;</mi><mi>y</mi></msub>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo><msub><mi>&mu;</mi><mn>2</mn></msub></mrow>
+                  <mrow><mn>2</mn><msub><mi>&sigma;</mi><mi>y</mi></msub></mrow>
+                </mfrac></mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo><msub><mi>&mu;</mi><mn>2</mn></msub></mrow>
+                  <mrow>
+                    <mn>2</mn>
+                    <mfenced><mfrac>
+                      <mrow><msub><mi>&mu;</mi><mn>1</mn></msub><mo>-</mo><msub><mi>&mu;</mi><mn>2</mn></msub></mrow>
+                      <mi>d</mi>
+                    </mfrac></mfenced>
+                  </mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mi>d</mi><mn>2</mn></mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>
