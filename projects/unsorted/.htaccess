@@ -1,23 +1,23 @@
-AddType application/rdf+xml .foaf
+#AddType application/rdf+xml .foaf
 
-RemoveHandler .pl
-RemoveHandler .py
-RemoveHandler .sh
+#RemoveHandler .pl
+#RemoveHandler .py
+#RemoveHandler .sh
 
-RewriteEngine on
+#RewriteEngine on
 
-RewriteCond %{REMOTE_ADDR} !^10\.
-RewriteCond %{REMOTE_ADDR} !^192\.168\.
-RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.
-RewriteCond %{REMOTE_ADDR} !^::1
-RewriteCond %{SERVER_NAME} !^trogdor\.mr$ [NC]
-RewriteCond %{SERVER_NAME} !^webdev\.local$ [NC]
-RewriteCond %{SERVER_NAME} !^ebene [NC]
-RewriteCond %{SERVER_NAME} !^odin\.himinbi\.org$ [NC]
-RewriteCond %{REQUEST_URI} ^.*odin/*(.*)$ [NC]
-
-RewriteRule ^(.*)$ http://odin.himinbi.org/%1 [R,L]
-
-RewriteRule favicon\.ico$ http://odin.himinbi.org/gallery/main.php?g2_view=core.DownloadItem&g2_itemId=8950 [L]
-
-RewriteRule ^file.html$ http://google.com [R,L]
+#RewriteCond %{REMOTE_ADDR} !^10\.
+#RewriteCond %{REMOTE_ADDR} !^192\.168\.
+#RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.
+#RewriteCond %{REMOTE_ADDR} !^::1
+#RewriteCond %{SERVER_NAME} !^trogdor\.mr$ [NC]
+#RewriteCond %{SERVER_NAME} !^webdev\.local$ [NC]
+#RewriteCond %{SERVER_NAME} !^ebene [NC]
+#RewriteCond %{SERVER_NAME} !^odin\.himinbi\.org$ [NC]
+#RewriteCond %{REQUEST_URI} ^.*odin/*(.*)$ [NC]
+#
+#RewriteRule ^(.*)$ http://odin.himinbi.org/%1 [R,L]
+#
+#RewriteRule favicon\.ico$ http://odin.himinbi.org/gallery/main.php?g2_view=core.DownloadItem&g2_itemId=8950 [L]
+#
+#RewriteRule ^file.html$ http://google.com [R,L]
