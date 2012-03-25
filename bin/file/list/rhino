@@ -32,7 +32,7 @@ function list( path ) {
     $fileList.empty()
     
     var type
-    if( root.isFile() ) { //root.isDirectory() ) { // always returns true
+    if( root.isFile() ) {
         type = 'file'
     } else {
         type = 'directory'
@@ -57,4 +57,13 @@ function list( path ) {
         $fileList.append( $item )
     }
 }
-list( "c:\\" )
+
+var $propList = $('<ol id="props"/>')
+$('body').append( $propList )
+$propList.append( $('<li/>').text( java.lang.System.getProperty("os.name") ) )
+
+if( java.lang.System.getProperty("os.name").startsWith( "Windows" ) ) {
+    list( "c:\\" )
+} else {
+    list( "/" )
+}
