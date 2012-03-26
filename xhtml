@@ -5,8 +5,9 @@
       xmlns:tip="http://dhappy.org/tip/0.1/a"
       xmlns:var="tip:core/var">
   <head>
-    <title>XMPP List</title>
+    <title>Testing Tip</title>
     <link rel="stylesheet" type="text/css" href=".../style/blog/" />
+    <link rel="stylesheet" type="text/css" href="css" />
     <style type="text/css">
       li:hover { color: orange; }
     </style>
@@ -14,19 +15,15 @@
 	    src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
     </script>
     <script type="text/javascript" src=".../lib/tip/lib/jquery/indirect/js"></script>
-      <script type="application/javascript">
-        function getip(json){
-            alert(json); // alerts the ip address
-        }
-      </script>
 
-<script type="application/javascript" src="bin/client/ip/?callback=getip"></script>
     <script type="text/javascript">
       console.log( 'Entered: xhtml' )
       $( function() {
         var applet = $('applet').get(0)
         applet.eval( '/lib/jquery/indirect/rhino' ) // paired w/ js above
+        applet.eval( '/lib/load/rhino' )
         applet.eval( '/bin/file/list/rhino' )
+        applet.eval( '/bin/xmpp/list/rhino' )
         //applet.eval( '/bin/storage/spider/rhino' )
       } )
     </script>
@@ -43,7 +40,7 @@
 	    width="100%" height="100">Tip</applet>
 -->
     <applet codebase="cache/agent/" archive="jar" code="org.dhappy.mimis.ScriptRunnerApplet"
-	    width="100%" height="100">
+	    width="100%" height="100" alt="">
       <param name="script" value="/bin/hello/world/js"/>Tip</applet>
   </body>
 </html>
