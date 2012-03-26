@@ -6,6 +6,9 @@ $('body').append( $('<label/>').text( "Password:") )
 var $password = $('<input type="password"/>')
 $('body').append( $password )
 
+var $status = $('<ol id="xmppstatus"/>')
+$('body').append( $status )
+
 var clickHandler = function() {
     var File = java.io.File
     var ConnectionConfiguration = Packages.org.jivesoftware.smack.ConnectionConfiguration
@@ -18,10 +21,10 @@ var clickHandler = function() {
     
     try {
         connection.connect()
-        print( "Connected to " + connection.host + "\n" )
+        //$status.append( $('<li/>').text( "Connected to " + connection.host ) )
     } catch( ex ) {
-        ex.printStackTrace()
-        print( "Failed to connect to " + connection.host + "\n" )
+        $status.append( $('<li/>').text( ex.printStackTrace() ) )
+        $status.append( $('<li/>').text( "Failed to connect to " + connection.host + "\n" ) )
     }
     try {
         SASLAuthentication.supportSASLMechanism( 'PLAIN', 0 )
@@ -29,7 +32,7 @@ var clickHandler = function() {
         connection.login( $username.val() + "@gmail.com",
                           $password.val(),
                         'mimis/bot/' )
-        print( "Logged in as " + connection.getUser() + "\n" )
+        $status.append( $('<li/>').text( "Logged in as " + connection.getUser() + "\n" ) )
         
         var presence = new Presence( Presence.Type.available,
                                      'Mimis Bot',
@@ -37,8 +40,8 @@ var clickHandler = function() {
                                      Presence.Mode.away )
         connection.sendPacket( presence );
     } catch( ex ) {
-        ex.printStackTrace()
-        print( "Failed to log in as " + $username.val() + "\n" )
+        $status.append( $('<li/>').text( ex.printStackTrace() ) )
+        $status.append( $('<li/>').text( "Failed to log in as " + $username.val() + "\n" ) )
     }
 
     var MessageListener = Packages.org.jivesoftware.smack.MessageListener
@@ -47,7 +50,7 @@ var clickHandler = function() {
         "will@dhappy.org",
         new MessageListener( {
             processMessage : function( chat, message ) {
-                print( "Received message: " + message )
+                $status.append( $('<li/>').text( "Received message: " + message ) )
             },
         } ) )
 
@@ -107,10 +110,10 @@ var clickHandler = function() {
     try {
         connection.addPacketListener( msgListener, filter )
     } catch( ex ) {
-        print( "bin/xmpp/list/clickHandler/connection.addPacketListener: " + ex.message + "\n" )
+        $status.append( $('<li/>').text( "bin/xmpp/list/clickHandler/connection.addPacketListener: " + ex.message + "\n" ) )
     }
 }
 
 $('body').append(
-    $('<input type="button" value="XMPP Login"/>')
+    $('<input type="button" value="Google Login"/>')
         .click( clickHandler ) )
