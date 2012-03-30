@@ -21,7 +21,7 @@ var clickHandler = function() {
     
     try {
         connection.connect()
-        //$status.append( $('<li/>').text( "Connected to " + connection.host ) )
+        $status.append( $('<li/>').text( "Connected to " + connection.host ) )
     } catch( ex ) {
         $status.append( $('<li/>').text( ex.printStackTrace() ) )
         $status.append( $('<li/>').text( "Failed to connect to " + connection.host + "\n" ) )
@@ -29,9 +29,13 @@ var clickHandler = function() {
     try {
         SASLAuthentication.supportSASLMechanism( 'PLAIN', 0 )
         
-        connection.login( $username.val() + "@gmail.com",
+        var username = $username.val()
+        if( username.indexOf( '@' ) < 0 ) {
+            username +=  "@gmail.com"
+        }
+        connection.login( username,
                           $password.val(),
-                        'mimis/bot/' )
+                          'mimis/bot/' )
         $status.append( $('<li/>').text( "Logged in as " + connection.getUser() + "\n" ) )
         
         var presence = new Presence( Presence.Type.available,
@@ -40,8 +44,7 @@ var clickHandler = function() {
                                      Presence.Mode.away )
         connection.sendPacket( presence );
     } catch( ex ) {
-        $status.append( $('<li/>').text( ex.printStackTrace() ) )
-        $status.append( $('<li/>').text( "Failed to log in as " + $username.val() + "\n" ) )
+        $status.append( $('<li/>').text( "Failed to log in as " + username + "\n" ) )
     }
 
     var MessageListener = Packages.org.jivesoftware.smack.MessageListener
@@ -56,9 +59,40 @@ var clickHandler = function() {
 
     //chat.sendMessage("Howdy!")
   
-    var $roster = $('<ol/>')
+    var $rosterTable = $('<table/>')
+    $rosterTable.append( $('<thead/>').append( $('<tr/>')
+                                               .append( $('<th/>').text( 'Presence' ) )
+                                               .append( $('<th/>').text( 'Username' ) )
+                                               .append( $('<th/>').text( 'Name' ) )
+                                               .append( $('<th/>').text( 'Status' ) ) ) )
+    var $roster = $('<tbody/>')
+    $rosterTable.append( $roster )
+
+    var rosterEntries = {}
+    function updateEntry( roster, entry ) {
+        var $entry = rosterEntries[ entry.user ]
+        if( typeof $entry == 'undefined' ) {
+            $entry = $('<tr/>')
+            $roster.append( $entry )
+        }
+        var presence = roster.getPresence( entry.user )
+        var mode = presence.type
+        if( mode == Presence.Type.available && presence.mode != null ) {
+            mode = presence.mode
+        }
+        var status = presence.status
+
+        $entry.attr( { presence: mode } )
+
+        $entry.empty()
+        $entry.append( $('<td/>').attr( { title: mode } ).text( '•' ) )
+            .append( $('<td/>').text( entry.user ) )
+            .append( $('<td/>').text( entry.name ) )
+            .append( $('<td/>').text( status ) )
+    }
+
     $('body')
-        .append( $roster )
+        .append( $rosterTable )
         .append( $('<input type="button" value="Roster"/>')
                  .click( function() {
                      $roster.empty()
@@ -66,13 +100,7 @@ var clickHandler = function() {
                      var entries = roster.getEntries()
                      var iterator = entries.iterator()
                      while( iterator.hasNext() ) {
-                         var entry = iterator.next()
-                         var presence = roster.getPresence( entry.username )
-                         var status = presence.getStatus()
-                         var line = ( entry.name +
-                                      + ": " + presence
-                                      + ( status == null ? '' : ( " (" + status + ")" ) ) )
-                         $roster.append( $('<li/>').text( line ) )
+                         updateEntry( roster, iterator.next() )
                      }
                  } ) )
 

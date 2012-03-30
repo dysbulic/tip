@@ -58,10 +58,6 @@ function list( path ) {
     }
 }
 
-var $propList = $('<ol id="props"/>')
-$('body').append( $propList )
-$propList.append( $('<li/>').text( java.lang.System.getProperty("os.name") ) )
-
 if( java.lang.System.getProperty("os.name").startsWith( "Windows" ) ) {
     list( "c:\\" )
 } else {
