@@ -8,6 +8,8 @@ var $crumbLists = []
 var $fileList = $('<ol id="files"/>')
 $('body').append( $fileList )
 
+$log = $('<ol id="filelist"/>').addClass( 'log' )
+
 function list( path ) {
     var root = new File( new String( path ) )
 
@@ -38,7 +40,7 @@ function list( path ) {
         type = 'directory'
     }
 
-    print( "Listing: " + path + "\n" )
+    $log.append( $('<li/>').text( "Listing: " + path ) )
     var files = root.listFiles()
     for( idx in files ) {
         var file = files[ idx ]
@@ -50,7 +52,7 @@ function list( path ) {
 	    } )
 	    .click( function() {
                 var href = $(this).attr( 'href' )
-                print( "Clicked: " + href  + "\n" )
+                $log.append( $('<li/>').text( "Clicked: " + href ) )
 		list( href )
 	    } )
             .text( file.name )
