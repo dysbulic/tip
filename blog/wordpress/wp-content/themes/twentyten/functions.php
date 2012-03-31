@@ -88,10 +88,10 @@ function twentyten_setup() {
 
 	// Make theme available for translation
 	// Translations can be filed in the /languages/ directory
-	load_theme_textdomain( 'twentyten', TEMPLATEPATH . '/languages' );
+	load_theme_textdomain( 'twentyten', get_template_directory() . '/languages' );
 
 	$locale = get_locale();
-	$locale_file = TEMPLATEPATH . "/languages/$locale.php";
+	$locale_file = get_template_directory() . "/languages/$locale.php";
 	if ( is_readable( $locale_file ) )
 		require_once( $locale_file );
 
@@ -105,12 +105,11 @@ function twentyten_setup() {
 
 	// Your changeable header business starts here
 	if ( ! defined( 'HEADER_TEXTCOLOR' ) )
-		define( 'HEADER_TEXTCOLOR', '000' );
+		define( 'HEADER_TEXTCOLOR', '' );
 
 	// No CSS, just IMG call. The %s is a placeholder for the theme template directory URI.
-	// The following is commented out because on WP.com we have our own random header definition.
-	// if ( ! defined( 'HEADER_IMAGE' ) )
-	// 	define( 'HEADER_IMAGE', '%s/images/headers/path.jpg' );
+	if ( ! defined( 'HEADER_IMAGE' ) )
+		define( 'HEADER_IMAGE', '%s/images/headers/path.jpg' );
 
 	// The height and width of your custom header. You can hook into the theme's own filters to change these values.
 	// Add a filter to twentyten_header_image_width and twentyten_header_image_height to change these values.
@@ -122,9 +121,13 @@ function twentyten_setup() {
 	// Larger images will be auto-cropped to fit, smaller ones will be ignored. See header.php.
 	set_post_thumbnail_size( HEADER_IMAGE_WIDTH, HEADER_IMAGE_HEIGHT, true );
 
+	// Don't support text inside the header image.
+	if ( ! defined( 'NO_HEADER_TEXT' ) )
+		define( 'NO_HEADER_TEXT', true );
+
 	// Add a way for the custom header to be styled in the admin panel that controls
 	// custom headers. See twentyten_admin_header_style(), below.
-	add_custom_image_header( 'twentyten_header_style', 'twentyten_admin_header_style', 'twentyten_admin_header_image' );
+	add_custom_image_header( '', 'twentyten_admin_header_style' );
 
 	// ... and thus ends the changeable header business.
 
@@ -179,57 +182,8 @@ function twentyten_setup() {
 			'description' => __( 'Sunset', 'twentyten' )
 		)
 	) );
-
-	// Use a consistent random default header
-	global $_wp_default_headers;
-	$header_names = array_keys( $_wp_default_headers );
-	$header_key = crc32( site_url( '', 'http' ) ) % count( $_wp_default_headers );
-	define( 'HEADER_IMAGE', $_wp_default_headers[$header_names[$header_key]]['url'] );
 }
 endif;
-
-if ( ! function_exists( 'twentyten_header_style' ) ) :
-/**
- * Styles the blog header text and image.
- *
- * Referenced via add_custom_image_header() in twentyten_setup().
- *
- * @since Twenty Ten 1.4-wpcom
- */
-function twentyten_header_style() {
-	// If no custom options for text are set, let's bail
-	// get_header_textcolor() options: HEADER_TEXTCOLOR is default, hide text (returns 'blank') or any hex value
-	if ( HEADER_TEXTCOLOR == get_header_textcolor() )
-		return;
-	// If we get this far, we have custom styles. Let's do this.
-	?>
-	<style type="text/css">
-	<?php
-		// Has the text been hidden? Let's hide it then.
-		if ( 'blank' == get_header_textcolor() ) :
-	?>
-		#header {
-		    padding: 20px 0 0;
-		}
-		#site-title,
-		#site-description {
-			position: absolute !important;
-			clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
-			clip: rect(1px, 1px, 1px, 1px);
-		}
-	<?php
-		// If the user has set a custom color for the text use that
-		else :
-	?>
-		#site-title a,
-		#site-description {
-			color: #<?php echo get_header_textcolor(); ?> !important;
-		}
-	<?php endif; ?>
-	</style>
-<?php
-}
-endif; // ! function_exists( 'twentyten_header_style' ) 
 
 if ( ! function_exists( 'twentyten_admin_header_style' ) ) :
 /**
@@ -243,69 +197,18 @@ function twentyten_admin_header_style() {
 ?>
 <style type="text/css">
 /* Shows the same border as on front end */
-.appearance_page_custom-header #headimg {
-	border: none;
-	overflow: hidden;
-	width: 940px;
-}
-#headimg img {
+#headimg {
 	border-bottom: 1px solid #000;
 	border-top: 4px solid #000;
 }
-#headimg h1 {
-    float: left;
-    line-height: 36px;
-    margin: 0 0 18px;
-    width: 700px;
-}
-#headimg #name {
-	font-size: 30px;
-	font-family: "Helvetica Neue", Arial, Helvetica, "Nimbus Sans L", sans-serif;
-	font-weight: bold;
-	text-decoration: none;
-}
-#headimg #desc {
-	clear: right;
-    float: right;
-	font-family: Georgia, "Bitstream Charter", serif;
-    font-style: italic;
-    margin: 15px 0 18px;
-    opacity: 0.65;
-    width: 220px;
-}
+/* If NO_HEADER_TEXT is false, you would style the text with these selectors:
+	#headimg #name { }
+	#headimg #desc { }
+*/
 </style>
 <?php
 }
-endif; // ! function_exists( 'twentyten_admin_header_style' )
-
-if ( ! function_exists( 'twentyten_admin_header_image' ) ) :
-/**
- * Adds custom markup for the header image displayed on the Appearance > Header admin panel.
- *
- * Referenced via add_custom_image_header() in twentyten_setup().
- *
- * @since Twenty Ten 1.4-wpcom
- */
-function twentyten_admin_header_image() {
-?>
-	<div id="headimg">
-		<?php
-		if ( 'blank' == get_theme_mod( 'header_textcolor', HEADER_TEXTCOLOR ) || '' == get_theme_mod( 'header_textcolor', HEADER_TEXTCOLOR ) )
-			$style = ' style="display:none;"';
-		else
-			$style = ' style="color:#' . get_theme_mod( 'header_textcolor', HEADER_TEXTCOLOR ) . ';"';
-		?>
-		<h1><a id="name"<?php echo $style; ?> onclick="return false;" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
-		<div id="desc"<?php echo $style; ?>><?php bloginfo( 'description' ); ?></div>
-		<?php $header_image = get_header_image();
-		if ( ! empty( $header_image ) ) : ?>
-			<img src="<?php echo esc_url( $header_image ); ?>" alt="" />
-		<?php endif; ?>
-	</div>
-<?php
-}
-endif; //  ! function_exists( 'twentyten_admin_header_image' ) 
-
+endif;
 
 /**
  * Get our wp_nav_menu() fallback, wp_page_menu(), to show a home link.
@@ -400,6 +303,9 @@ add_filter( 'use_default_gallery_style', '__return_false' );
 function twentyten_remove_gallery_css( $css ) {
 	return preg_replace( "#<style type='text/css'>(.*?)</style>#s", '', $css );
 }
+// Backwards compatibility with WordPress 3.0.
+if ( version_compare( $GLOBALS['wp_version'], '3.1', '<' ) )
+	add_filter( 'gallery_style', 'twentyten_remove_gallery_css' );
 
 if ( ! function_exists( 'twentyten_comment' ) ) :
 /**
@@ -540,6 +446,10 @@ add_action( 'widgets_init', 'twentyten_widgets_init' );
  * To override this in a child theme, remove the filter and optionally add your own
  * function tied to the widgets_init action hook.
  *
+ * This function uses a filter (show_recent_comments_widget_style) new in WordPress 3.1
+ * to remove the default style. Using Twenty Ten 1.2 in WordPress 3.0 will show the styles,
+ * but they won't have any effect on the widget in default Twenty Ten styling.
+ *
  * @since Twenty Ten 1.0
  */
 function twentyten_remove_recent_comments_style() {
@@ -549,36 +459,24 @@ add_action( 'widgets_init', 'twentyten_remove_recent_comments_style' );
 
 if ( ! function_exists( 'twentyten_posted_on' ) ) :
 /**
- * Prints HTML with meta information for the current post-date/time.
+ * Prints HTML with meta information for the current post-date/time and author.
  *
  * @since Twenty Ten 1.0
  */
 function twentyten_posted_on() {
-	printf( __( '<span class="%1$s">Posted on</span> %2$s ', 'twentyten' ),
+	printf( __( '<span class="%1$s">Posted on</span> %2$s <span class="meta-sep">by</span> %3$s', 'twentyten' ),
 		'meta-prep meta-prep-author',
 		sprintf( '<a href="%1$s" title="%2$s" rel="bookmark"><span class="entry-date">%3$s</span></a>',
 			get_permalink(),
 			esc_attr( get_the_time() ),
 			get_the_date()
+		),
+		sprintf( '<span class="author vcard"><a class="url fn n" href="%1$s" title="%2$s">%3$s</a></span>',
+			get_author_posts_url( get_the_author_meta( 'ID' ) ),
+			esc_attr( sprintf( __( 'View all posts by %s', 'twentyten' ), get_the_author() ) ),
+			get_the_author()
 		)
 	);
-}
-endif;
-
-if ( ! function_exists( 'twentyten_posted_by' ) ) :
-/**
- * Prints HTML with meta information for the current author on multi-author blogs
- *
- * @since Twenty Ten 1.4
- */
-function twentyten_posted_by() {
-	if ( ! is_author() ) {
-		printf( __( '<span class="by-author"><span class="sep">by</span> <span class="author vcard"><a class="url fn n" href="%1$s" title="%2$s" rel="author">%3$s</a></span> </span>', 'twentyten' ),
-			esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
-			esc_attr( sprintf( __( 'View all posts by %s', 'twentyten' ), get_the_author_meta( 'display_name' ) ) ),
-			esc_attr( get_the_author_meta( 'display_name' ) )
-		);
-	}
 }
 endif;
 
@@ -608,31 +506,3 @@ function twentyten_posted_in() {
 	);
 }
 endif;
-
-/**
- * Adds a class to the array of body classes if the site has only had one author with published posts.
- *
- * @since Twenty Ten 1.4
- */
-function twentyten_body_classes( $classes ) {
-
-	if ( ! is_multi_author() ) {
-		$classes[] = 'single-author';
-	}
-
-	return $classes;
-}
-add_filter( 'body_class', 'twentyten_body_classes' );
-
-/**
- * Set theme colors for WordPress.com.
- */
-if ( ! isset( $themecolors ) ) {
-	$themecolors = array(
-		'bg' => 'ffffff',
-		'text' => '333333',
-		'link' => '0066cc',
-		'border' => 'f2f7fc',
-		'url' => 'ff4b33',
-	);
-}
