@@ -1,4 +1,4 @@
-0/**
+/**
  * Provides a jQuery interface to the DOM of the page where an applet
  * is executing this script.
  *
@@ -11,6 +11,15 @@ var JSObject = Packages.netscape.javascript.JSObject
 
 var clickHandlers = [] // Limit 1, atm
 var $rets = []
+
+function guidClicked( guid ) {
+    var handler = clickHandlers[ guid ]
+    if( handler != undefined ) {
+        handler.call( $rets[ guid ] )
+    } else {
+        print( "Couldn't get handler: " + guid + " : " + clickHandlers[3] + "\n" )
+    }
+}
 
 var $ = function( arg1 ) {
     if( arg1.isIndirectJQuery && arguments.length == 1 ) {
@@ -38,6 +47,16 @@ var $ = function( arg1 ) {
             remove: function() {
                 var args = Array.prototype.slice.call( arguments )
                 $obj.call( 'remove', args )
+                return $ret
+            },
+            addClass: function() {
+                var args = Array.prototype.slice.call( arguments )
+                $obj.call( 'addClass', args )
+                return $ret
+            },
+            removeClass: function() {
+                var args = Array.prototype.slice.call( arguments )
+                $obj.call( 'removeClass', args )
                 return $ret
             },
             val: function() {
@@ -90,13 +109,4 @@ var $ = function( arg1 ) {
     }
     $rets[ guid ] = $ret
     return $ret
-}
-
-function guidClicked( guid ) {
-    var handler = clickHandlers[ guid ]
-    if( handler != undefined ) {
-        handler.call( $rets[ guid ] )
-    } else {
-        print( "Couldn't get handler: " + guid + " : " + clickHandlers[3] + "\n" )
-    }
 }
