@@ -23,7 +23,7 @@ function AtD_http_post( $request, $host, $path, $port = 80 ) {
 	$response = wp_remote_post( $AtD_url, $http_args );
 	
 	if ( is_wp_error( $response ) )
-		return array();
+		return '';
 	
 	return array( $response['headers'], $response['body'] );
 }
@@ -54,9 +54,6 @@ function AtD_redirect_call() {
         $data = AtD_http_post( $postText . "&guess=$guess", defined('ATD_HOST') ? ATD_HOST : $service, $url, defined('ATD_PORT') ? ATD_PORT : 80 );
 
         header( 'Content-Type: text/xml' );
-
-		if ( !empty($data[1]) )
-			echo $data[1];
-
-		die();
+        echo $data[1];
+        die();
 }

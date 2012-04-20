@@ -6,7 +6,7 @@
  * @subpackage The Morning After
  */
 ?>
-<div class="column primary-sidebar last">
+<div class="column span-3 last">
 	
 	<?php if ( !dynamic_sidebar( 'primary-sidebar' ) ) : ?>
 		

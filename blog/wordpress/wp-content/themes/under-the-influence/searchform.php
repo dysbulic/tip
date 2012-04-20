@@ -4,7 +4,7 @@
  * @subpackage Template
  */
 ?>
-<form class="searchform" method="get" action="<?php echo home_url( '/' ); ?>">
+<form class="searchform" method="get" action="<?php bloginfo( 'url' ); ?>">
 	<input onfocus="if(this.value==this.defaultValue) this.value='';" class="search" name="s"
-		type="text" value="<?php esc_attr_e( 'Search...', 'uti_theme' ); ?>" tabindex="1" />
+		type="text" value="<?php _e('Search...', 'uti_theme')?>" tabindex="1" />
 </form><!--END #searchform-->

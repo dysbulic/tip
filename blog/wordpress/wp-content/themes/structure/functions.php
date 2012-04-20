@@ -6,7 +6,6 @@
  
 $content_width = 640; 
 
-
 // This theme uses wp_nav_menu()
 register_nav_menus( array(
 	'primary' => __( 'Primary Navigation', 'structuretheme' ),
@@ -152,26 +151,4 @@ function theme_get_next_attachment_url() {
 		}
 }
 
-/**
- * WP.com: Check the current color scheme and set the correct themecolors array
- */
-if ( ! isset( $themecolors ) ) {
-	if ( st_option( 'dark_scheme' ) ) {
-		$themecolors = array(
-			'bg' => '000000',
-			'border' => '222222',
-			'text' => '999999',
-			'link' => 'ffffff',
-			'url' => 'ffffff',
-		);
-	} else {
-		$themecolors = array(
-			'bg' => 'ffffff',
-			'border' => '222222',
-			'text' => '666666',
-			'link' => '000000',
-			'url' => '999999',
-		);	
-	}
-}
 ?>

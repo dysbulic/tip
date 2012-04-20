@@ -2,10 +2,10 @@
 
 Theme Name: Spectrum
 Theme URI: http://spectrum-theme.com/
-Description: A beautiful and colorful theme that can be further customized with support for custom menus, background, and header. It also features a full-width template for showing your images. It supports several post formats including aside, gallery, link, status, and quote.
+Description: A beautiful and colorful theme that can be further customized with support for custom menus, background, and header. It also features a full-width template for showing your images.
 Version: 1.0.2-wpcom
 Author: Ignacio Ricci
-Tags: blue, green, orange, pink, purple, red, silver, white, light, two-columns, right-sidebar, theme-options, fixed-width, full-width-template, custom-menu, custom-header, custom-background, post-formats, translation-ready, rtl-language-support, colorful, bright, curved, vibrant, playful, art, blog
+Tags: blue, green, orange, pink, purple, red, silver, white, light, two-columns, right-sidebar, theme-options, fixed-width, full-width-template, custom-menu, custom-header, custom-background, translation-ready, rtl-language-support, colorful, bright, curved, vibrant, playful, art, blog
 
 */
 
@@ -120,9 +120,12 @@ div.pingback {
 	overflow: hidden;
 }
 .accesible {
-	position: absolute !important;
-	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
-	clip: rect(1px, 1px, 1px, 1px);
+	width: 1px;
+	height: 1px;
+	position: absolute;
+	top: 0;
+	left: -9000px;
+	overflow: hidden;
 }
 .fieldFocus {
 	color: #000 !important;
@@ -353,9 +356,6 @@ div.bypostauthor .pointer {
 	width: 660px;
 	margin-left: -30px;
 }
-.page-template-full-width-php #content {
-	width: 940px;
-}
 #sidebar {
 	float: right;
 	width: 300px;
@@ -406,9 +406,6 @@ div.bypostauthor .pointer {
 }
 .post-meta p {
 	padding-left: 25px;
-}
-.post-meta p.date {
-	padding-left: 5px;
 }
 .post-meta a {
 	line-height: 130%;
@@ -637,7 +634,6 @@ div.bypostauthor .pointer {
 .wp-caption {
 	background: #f4f4f4;
 	margin-bottom: 20px;
-	max-width: 100%;
 	padding: 4px;
 	text-align: center;
 }
@@ -648,64 +644,6 @@ div.bypostauthor .pointer {
 	padding-bottom: 0;
 }
 
-
-/* =Images
------------------------------------------------ */
-
-.hentry img,
-.comments img,
-.widget img {
-        max-width: 100%; /* Fluid images for posts, comments, and widgets */
-}
-img[class*="align"],
-img[class*="wp-image-"],
-img[class*="attachment-"] {
-        height: auto; /* Make sure images with WordPress-added height and width attributes are scaled correctly */
-}
-.widget img,
-img.size-full,
-img.size-large {
-        max-width: 100%;
-        width: auto; /* Prevent stretching of full-size and large-size images with height and width attributes in IE8 */
-        height: auto; /* Make sure images with WordPress-added height and width attributes are scaled correctly */
-}
-
-
-/* =Post Formats
------------------------------------------------ */
-
-/* Status */
-.format-status div.avatar {
-	border: 1px solid #e3cbc4;
-	padding: 4px;
-	float: left;
-	height: 80px;
-	margin: 0 20px 0 0;
-	width: 80px;
-}
-/* Quotes */
-.format-quote blockquote {
-	font-size: 2.0em;
-}
-.format-quote blockquote p {
-	Overflow: hidden;
-}
-.format-quote blockquote cite {
-	display: block;
-	font-size: .7em;
-}
-/* Gallery */
-.format-gallery .gallery-thumb {
-	border: 1px solid #e3cbc4;
-	padding: 4px 4px 0px;
-	float: left;
-	margin: 0 20px 0 0;
-}
-/* Link */
-.format-link .main-title h3 a:after{
-	content: "\2192";
-	padding-left: 6px;
-}
 
 /*------------------------------------------*/
 /* ATTACHMENT				*/
@@ -909,15 +847,15 @@ li.comment:hover .reply-link {
 
 /*- Comment Form -----------------------------------------------------------*/
 
-div#respond {
+#respond {
 	clear: both;
 	padding-bottom: 50px;
 }
-div#respond #reply-title {
+#respond #reply-title {
 	background: url(images/bgs/comments/commentForm-title.jpg) repeat-y 0 0;
 	padding-left: 65px;
 }
-div#respond .sub-title-border {
+#respond .sub-title-border {
 	background: url(images/bgs/comments/commentForm-title-border.jpg) no-repeat 0 100%;
 	position: relative;
 }
@@ -925,8 +863,8 @@ div#respond .sub-title-border {
 	color: #C09104;
 	text-shadow: 1px 1px #FBEECA;
 }
-div#respond form {
-	margin: 40px 0 0 60px;
+#respond form {
+	margin: 40px 0;
 }
 #respond p {
 	padding: 0 0 15px 65px;
@@ -980,9 +918,6 @@ label.subscribe-label {
 }
 .form-allowed-tags:hover {
 	color: #999;
-}
-#respond h3#reply-title {
-	padding: 11px 0 10px 65px;
 }
 #respond h3 small a {
 	font-size: 11px;
@@ -1446,8 +1381,7 @@ label.subscribe-label {
 	color: #111;
 }
 img#wpstats {
-	display: block;
-	margin: 0 auto 20px;
+	margin: 30px 0;
 }
 #about {
 	float: left;

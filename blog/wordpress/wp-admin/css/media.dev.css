@@ -1,8 +1,6 @@
-/* Styles for the media library iframe (not used on the Library screen) */
-
 div#media-upload-header {
 	margin: 0;
-	padding: 5px 5px 0;
+	padding: 0 5px;
 	font-weight: bold;
 	position: relative;
 	border-bottom-width: 1px;
@@ -18,6 +16,11 @@ body#media-upload ul#sidemenu {
 	overflow: hidden;
 }
 
+div#media-upload-error {
+	margin: 1em;
+	font-weight: bold;
+}
+
 form {
 	margin: 1em;
 }
@@ -31,7 +34,7 @@ th {
 }
 
 .media-upload-form label.form-help, td.help {
-	font-family: sans-serif;
+	font-family: "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
 	font-style: italic;
 	font-weight: normal;
 }
@@ -73,11 +76,14 @@ tr.image-size td {
 }
 
 tr.image-size div.image-size-item {
-	margin: 0 0 5px;
+	float: left;
+	width: 25%;
+	margin: 0;
 }
 
 #library-form .progress,
 #gallery-form .progress,
+#flash-upload-ui,
 .insert-gallery,
 .describe.startopen,
 .describe.startclosed {
@@ -93,6 +99,12 @@ thead.media-item-info tr {
 	background-color: transparent;
 }
 
+thead.media-item-info th,
+thead.media-item-info td {
+	border: none;
+	margin: 0;
+}
+
 .form-table thead.media-item-info {
 	border: 8px solid #fff;
 }
@@ -104,6 +116,11 @@ abbr.required {
 
 .describe label {
 	display: inline;
+}
+
+.describe td {
+	vertical-align: middle;
+	padding: 0 5px 8px 0;
 }
 
 .describe td.error {
@@ -121,6 +138,13 @@ abbr.required {
 	border-style: solid;
 }
 
+.hidden {
+	height: 0;
+	width: 0;
+	overflow: hidden;
+	border: none;
+}
+
 /* Specific to Uploader */
 
 #media-upload p.ml-submit {
@@ -129,13 +153,58 @@ abbr.required {
 
 #media-upload p.help,
 #media-upload label.help {
-	font-family: sans-serif;
+	font-family: "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
 	font-style: italic;
 	font-weight: normal;
 }
 
+#media-upload tr.image-size td.field {
+	text-align: center;
+}
+
+#media-upload #media-items {
+	border-width: 1px;
+	border-style: solid;
+	border-bottom: none;
+	width: 623px;
+}
+
+#media-upload .media-item {
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	min-height: 36px;
+	width: 100%;
+}
+
 #media-upload .ui-sortable .media-item {
 	cursor: move;
+}
+
+.filename {
+	line-height: 36px;
+	padding: 0 10px;
+	overflow: hidden;
+}
+
+#media-upload .describe {
+	width: 100%;
+	clear: both;
+	cursor: default;
+}
+
+#media-upload .slidetoggle {
+	border-top-width: 1px;
+	border-top-style: solid;
+}
+
+#media-upload .describe th.label {
+	padding-top: .2em;
+	text-align: left;
+	min-width: 120px;
+}
+
+#media-upload tr.align td.field {
+	text-align: center;
 }
 
 #media-upload tr.image-size {
@@ -282,7 +351,7 @@ h4.media-sub-title {
 }
 
 #gallery-settings .align .field label {
-	margin: 0 1em 0 3px;
+	margin: 0 1.5em 0 0;
 }
 
 #gallery-settings p.ml-submit {
@@ -311,20 +380,4 @@ h4.media-sub-title {
 
 #sort-buttons span {
 	margin-right: 25px;
-}
-
-p.media-types {
-	margin: 1em;
-}
-
-tr.not-image {
-	display: none;
-}
-
-table.not-image tr.not-image {
-	display: table-row;
-}
-
-table.not-image tr.image-only {
-	display: none;
 }

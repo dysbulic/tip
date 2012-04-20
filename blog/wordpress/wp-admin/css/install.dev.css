@@ -5,22 +5,24 @@ html {
 body {
 	background: #fff;
 	color: #333;
-	font-family: sans-serif;
+	font-family: "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
 	margin: 2em auto;
+	width: 700px;
 	padding: 1em 2em;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
+	-moz-border-radius: 11px;
+	-khtml-border-radius: 11px;
+	-webkit-border-radius: 11px;
+	border-radius: 11px;
 	border: 1px solid #dfdfdf;
-	max-width: 700px;
 }
 
 a {
-	color: #21759B;
+	color: #2583ad;
 	text-decoration: none;
 }
 
 a:hover {
-	color: #D54E21;
+	color: #d54e21;
 }
 
 h1 {
@@ -28,7 +30,7 @@ h1 {
 	clear: both;
 	color: #666;
 	font: 24px Georgia, "Times New Roman", Times, serif;
-	margin: 30px 0 0 0;
+	margin: 5px 0 0 -4px;
 	padding: 0;
 	padding-bottom: 7px;
 }
@@ -39,12 +41,12 @@ h2 {
 
 p, li, dd, dt {
 	padding-bottom: 2px;
-	font-size: 14px;
-	line-height: 1.5;
+	font-size: 12px;
+	line-height: 18px;
 }
 
 code, .code {
-	font-size: 14px;
+	font-size: 13px;
 }
 
 ul, ol, dl {
@@ -72,7 +74,7 @@ abbr {
 }
 
 .submit input, .button, .button-secondary {
-	font-family: sans-serif;
+	font-family: "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
 	text-decoration: none;
 	font-size: 14px !important;
 	line-height: 16px;
@@ -80,10 +82,13 @@ abbr {
 	cursor: pointer;
 	border: 1px solid #bbb;
 	color: #464646;
+	-moz-border-radius: 15px;
+	-khtml-border-radius: 15px;
 	-webkit-border-radius: 15px;
 	border-radius: 15px;
 	-moz-box-sizing: content-box;
 	-webkit-box-sizing: content-box;
+	-khtml-box-sizing: content-box;
 	box-sizing: content-box;
 }
 
@@ -101,11 +106,11 @@ abbr {
 }
 
 textarea {
-	border: 1px solid #dfdfdf;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
-	font-family: sans-serif;
-	width:  695px;
+	border: 1px solid #bbb;
+	-moz-border-radius: 4px;
+	-khtml-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
 }
 
 .form-table {
@@ -116,24 +121,27 @@ textarea {
 
 .form-table td {
 	margin-bottom: 9px;
-	padding: 10px 20px 10px 0;
+	padding: 10px;
 	border-bottom: 8px solid #fff;
-	font-size: 14px;
-	vertical-align: top
+	font-size: 12px;
 }
 
 .form-table th {
-	font-size: 14px;
+	font-size: 13px;
 	text-align: left;
-	padding: 16px 20px 10px 0;
+	padding: 16px 10px 10px 10px;
 	border-bottom: 8px solid #fff;
-	width: 140px;
+	width: 130px;
 	vertical-align: top;
+}
+
+.form-table tr {
+	background: #f3f3f3;
 }
 
 .form-table code {
 	line-height: 18px;
-	font-size: 14px;
+	font-size: 18px;
 }
 
 .form-table p {
@@ -145,34 +153,10 @@ textarea {
 	line-height: 20px;
 	font-size: 15px;
 	padding: 2px;
-	border: 1px #DFDFDF solid;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
-	font-family: sans-serif;
-}
-
-.form-table input[type=text],
-.form-table input[type=password] {
-	width: 206px;
 }
 
 .form-table th p {
 	font-weight: normal;
-}
-
-.form-table.install-success td {
-	vertical-align: middle;
-	padding: 16px 20px 10px 0;
-}
-
-.form-table.install-success td p {
-	margin: 0;
-	font-size: 14px;
-}
-
-.form-table.install-success td code {
-	margin: 0;
-	font-size: 18px;
 }
 
 #error-page {
@@ -180,13 +164,13 @@ textarea {
 }
 
 #error-page p {
-	font-size: 14px;
+	font-size: 12px;
 	line-height: 18px;
 	margin: 25px 0 20px;
 }
 
 #error-page code, .code {
-	font-family: Consolas, Monaco, monospace;
+	font-family: Consolas, Monaco, Courier, monospace;
 }
 
 #pass-strength-result {
@@ -194,7 +178,7 @@ textarea {
 	border-color: #ddd !important;
 	border-style: solid;
 	border-width: 1px;
-	margin: 5px 5px 5px 0;
+	margin: 5px 5px 5px 1px;
 	padding: 5px;
 	text-align: center;
 	width: 200px;
@@ -227,39 +211,3 @@ textarea {
 	margin: 5px 0 15px;
 	background-color: #ffffe0;
 }
-
-
-/* install-rtl */
-body.rtl {
-	font-family: Tahoma, arial;
-}
-
-.rtl h1 {
-	font-family: arial;
-	margin: 5px -4px 0 0;
-}
-
-.rtl ul,
-.rtl  ol {
-	padding: 5px 22px 5px 5px;
-}
-
-.rtl .step,
-.rtl th,
-.rtl .form-table th {
-	text-align: right;
-}
-
-.rtl .submit input,
-.rtl .button,
-.rtl .button-secondary {
-	margin-right: 0;
-}
-
-.rtl #user_login,
-.rtl #admin_email,
-.rtl #pass1,
-.rtl #pass2 {
-	direction: ltr;
-}
-

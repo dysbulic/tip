@@ -57,8 +57,8 @@
 	<h2><?php _e( 'Meta', 'fjords' ); ?></h2>
 		<ul>
 			<li><?php wp_loginout(); ?></li>
-			<li><a href="<?php bloginfo( 'rss2_url' ); ?>" title="<?php esc_attr_e( 'Syndicate this site using RSS 2.0', 'fjords' ); ?>"><?php _e( 'Entries <abbr title="Really Simple Syndication">RSS</abbr>', 'fjords' ); ?></a></li>
-			<li><a href="<?php bloginfo( 'comments_rss2_url' ); ?>" title="<?php esc_attr_e( 'The latest comments to all posts in RSS', 'fjords' ); ?>"><?php _e( 'Comments <abbr title="Really Simple Syndication">RSS</abbr>', 'fjords' ); ?></a></li>
+			<li><a href="<?php bloginfo( 'rss2_url' ); ?>" title="<?php _e( 'Syndicate this site using RSS 2.0', 'fjords' ); ?>"><?php _e( 'Entries <abbr title="Really Simple Syndication">RSS</abbr>', 'fjords' ); ?></a></li>
+			<li><a href="<?php bloginfo( 'comments_rss2_url' ); ?>" title="<?php _e( 'The latest comments to all posts in RSS', 'fjords' ); ?>"><?php _e( 'Comments <abbr title="Really Simple Syndication">RSS</abbr>', 'fjords' ); ?></a></li>
 			<?php wp_meta(); ?>
 		</ul>
 	</li>

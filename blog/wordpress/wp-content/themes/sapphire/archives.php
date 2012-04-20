@@ -8,7 +8,7 @@ Template Name: Archives
 
 <div id="content" class="widecolumn">
 
-<?php get_search_form(); ?>
+<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 
 <h2><?php _e('Archives by Month:', 'sapphire'); ?></h2>
   <ul>

@@ -4,18 +4,6 @@ Two-column theme with different color schemes. Based on the original design of h
 
 == Changelog ==
 
-= 0.6 - Oct 5 2011 =
-* Set svn:eol-style and svn:mime-type for all files
-* Properly escape translatable attribute values with esc_attr_e()
-* the_post should always be called in the loop
-
-= 0.5 - Aug 1 2011 =
-* Theme colors updates
-* Add missing textdomain call
-* Fix screenshot size
-* Footer credits: add trailing period for consistent look
-* Send the comment object to get_avatar() directly instead of using the email address
-
 = 0.4 - Jan 6 2011 =
 * Layout: fix several clearing issues and correct image centering for captions
 * Change sandbox_ prefix to notesil_

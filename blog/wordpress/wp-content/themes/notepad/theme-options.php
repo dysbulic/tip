@@ -87,7 +87,7 @@ function theme_options_do_page() {
 			</table>
 
 			<p class="submit">
-				<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Options' ); ?>" />
+				<input type="submit" class="button-primary" value="<?php _e('Save Options') ?>" />
 			</p>
 		</form>
 	</div>

@@ -1,15 +1,10 @@
 <?php
 /**
- * Upload new media Administration Screen.
+ * Upload new media Administration Panel.
  *
  * @package WordPress
  * @subpackage Administration
  */
-
-global $is_iphone;
-
-if ( $is_iphone ) // cannot upload files from iPhone/iPad
-	return;
 
 $_GET['inline'] = 'true';
 /** Administration bootstrap */

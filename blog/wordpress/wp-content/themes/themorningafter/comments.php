@@ -21,7 +21,7 @@ if ( !empty( $_SERVER['SCRIPT_FILENAME'] ) && 'comments.php' == basename( $_SERV
 	<!-- You can start editing here. -->
 	<div id="comments">
 	
-		<?php if ( is_page() && ! comments_open() && ! have_comments() ) : // hode the Discussion heading when comment is disabled on a page ?>
+		<?php if ( ( is_page() ) && ( ! comments_open() ) ) : // hode the Discussion heading when comment is disabled on a page ?>
 		<?php else : ?>
 			<div id="commenthead">
 				<h2 class="post_comm"><?php _e( 'Discussion','woothemes' );?></h2>
@@ -76,6 +76,6 @@ if ( !empty( $_SERVER['SCRIPT_FILENAME'] ) && 'comments.php' == basename( $_SERV
 		
 	<?php if ( comments_open() ) : ?>
 	
-		<?php comment_form(); ?>
+		<?php comment_form( array( 'title_reply' => 'Leave a Comment' ) ); ?>
 
 	<?php endif; // if you delete this the sky will fall on your head ?>

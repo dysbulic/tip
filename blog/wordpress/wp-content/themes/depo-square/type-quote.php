@@ -1,13 +1,8 @@
 			<div <?php post_class(depo_post_category()) ?> id="post-<?php the_ID(); ?>">
 				<?php before_post(); ?>
 				<p class="category"><?php depo_post_category_html(); ?></p>
-				<h2>
-					<?php if ( ! is_single() ) : ?>
-						<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php printf(__('Permanent Link to %s', 'depo-squared'), the_title_attribute('echo=0')); ?>"><?php the_title(); ?></a>
-					<?php else : ?>
-						<?php the_title(); ?>
-					<?php endif; ?>
-				</h2>
+				<h2><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php printf(__('Permanent Link to %s', 'depo-squared'), the_title_attribute('echo=0')); ?>"><?php the_title(); ?></a></h2>
+
 				<div class="entry">
 					<?php the_content(__('Read More &raquo;', 'depo-squared')); ?>
 				</div>

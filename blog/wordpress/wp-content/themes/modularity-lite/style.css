@@ -2,11 +2,11 @@
 Theme Name: Modularity Lite
 Theme URI: http://graphpaperpress.com/2008/10/06/modularity-lite-theme-framework-for-wordpress/
 Description: A minimally styled photo theme with a Custom Header and Custom Background. The Theme Options page allows a one or two-column layout, welcome message, and a home page slideshow using featured images. Supports featured images as thumbnails on index and archive pages.
-Version: 1.3-wpcom
+Version: 1.2-wpcom
 Author: Thad Allender
 Author URI: http://graphpaperpress.com
 License: GPL
-Tags: black, dark, light, white, one-column, two-columns, fixed-width, custom-header, theme-options, custom-background, custom-menu, featured-images, photoblogging, rtl-language-support, translation-ready, full-width-template, art, artistic, blog, grungy, industrial, music, photography, portfolio, textured, travel, video
+Tags: black, dark, one-column, two-columns, fixed-width, custom-header, theme-options, custom-background, custom-menu, featured-images, photoblogging, rtl-language-support, translation-ready, full-width-template, art, artistic, blog, grungy, industrial, music, photography, portfolio, textured, travel, video
 */
 
 /*
@@ -31,8 +31,7 @@ Tags: black, dark, light, white, one-column, two-columns, fixed-width, custom-he
 
 body {
 	color: #eee;
-	background: #111 url(images/bg.jpg) no-repeat center top;
-	background-attachment: fixed;
+	background: #111 url(images/bg.jpg) no-repeat center fixed;
 }
 .container-inner {
 	width: 950px;
@@ -56,7 +55,6 @@ h3.sub,h2.sub {
 	padding: 0 0 5px 0;
 	font-size: 1.1em;
 	font-weight: bold;
-	font-family: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", Arial, sans-serif;
 	line-height: 1em;
 	text-transform: uppercase;
 	letter-spacing: 2px;
@@ -95,10 +93,9 @@ h6.top {
 	height: 36px
 }
 #masthead h4, #masthead span {
-	font-family: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", Arial, sans-serif;
-	line-height: 2em;
 	margin: 0;
 	padding: 10px 0 0;
+	line-height: 2em
 }
 #masthead h4 {
 	font-weight: bold;
@@ -345,11 +342,6 @@ h6.underlined {
 
 /* Widgets */
 
-.item img {
-	max-width: 100%; /* When images are too wide for containing element, force them to fit. */
-	height: auto; /* Override height to match resized width for correct aspect ratio. */
-}
-
 /* Some widget link styles will need a little resetting for inline links */
 #sidebar .widget_categories ul li a,
 #footer .widget_categories ul li a,
@@ -486,20 +478,23 @@ img.centered {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-	max-width: 950px;
+	max-width: 950px
 }
 img.alignright {
-	margin: 7px 0 6px 14px;
+	padding: 4px 0 4px 4px;
+	margin: 3px 0 2px 10px;
 	display: inline;
 	max-width: 950px
 }
 img.alignleft,img.attachment-post-thumbnail {
-	margin: 7px 14px 6px 0;
+	padding: 4px 4px 4px 0;
+	margin: 3px 10px 2px 0;
 	display: inline;
 	max-width: 950px
 }
 img.alignnone {
-	margin: 7px 0 6px;
+	padding: 4px 4px 4px 0;
+	margin: 3px 10px 2px 0;
 	display: block;
 	max-width: 950px
 }

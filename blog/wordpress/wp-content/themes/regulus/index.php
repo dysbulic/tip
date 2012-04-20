@@ -8,14 +8,8 @@
 <?php is_tag(); ?>
 <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 <div <?php post_class(); ?>>
-	<h2>
-		<?php if ( ! is_single() ) : ?>
-			<a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'regulus' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a>
-		<?php else : ?>
-			<?php the_title(); ?>
-		<?php endif; ?>
-		<em><?php the_time(get_option("date_format")); ?></em>
-	</h2>
+	<h2><a href="<?php the_permalink() ?>" title="<?php echo esc_attr( sprintf( __( 'Permalink for : %s' ), the_title_attribute( 'echo=0' ) ) ); ?>"><?php the_title(); ?></a>
+	<em><?php the_time(get_option("date_format")); ?></em></h2>
 	<em class="info">Posted by <?php the_author(); ?> in <?php the_category( ", " ) ?>.
 <br />
 <?php the_tags('Tags: ', ', ', '<br />'); ?>
@@ -31,18 +25,18 @@
 			}
 
 	} else {
-
+	
 	        // trackback links
 	        ?>
 	        <a href="<?php trackback_url(display); ?>" title="trackback url">trackback</a>
 			<?php
-
-
+	        
+	        
 	}
 	edit_post_link( 'edit post', ' , ', ' ' );
 	?>
 	</em>
-
+			  
 	<?php
 
 	// single page
@@ -54,7 +48,7 @@
 		} else {
 			the_excerpt();
 		}
-
+		
  	} else {
 		the_content();
 	}
@@ -62,7 +56,7 @@
 	wp_link_pages();
 ?></div><?php
 	if( is_single() ) {
-
+	
 		comments_template();
 
 	}

@@ -24,7 +24,7 @@
 	<?php else : ?>
 
 		<h2 class="center"><?php _e('No posts found. Try a different search?', 'chaoticsoul'); ?></h2>
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 
 	<?php endif; ?>
 

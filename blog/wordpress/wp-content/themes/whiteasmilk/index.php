@@ -29,7 +29,7 @@
 
 		<h2 class="center"><?php _e('Not Found','whiteasmilk'); ?></h2>
 		<p class="center"><?php _e("Sorry, but you are looking for something that isn't here.","whiteasmilk"); ?></p>
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . "/searchform.php"); ?>
 
 	<?php endif; ?>
 

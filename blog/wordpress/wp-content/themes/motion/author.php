@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Motion
+ * @package WordPress
+ * @subpackage Motion
  */
 get_header(); ?>
 
@@ -25,7 +26,7 @@ get_header(); ?>
 			<div class="posttop">
 				<h2 class="posttitle"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink to %s' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></h2>
 				<div class="postmetatop">
-					<div class="categs"><?php printf( __( 'Filed under: %1$s' ), get_the_category_list(', ') ); ?></div>
+					<div class="categs"><?php printf( __( 'Filed under: %1$s' ), get_the_category_list(', ') ); ?></div>					
 					<div class="date"><span><?php the_time( get_option( 'date_format' ) ); ?></span></div>
 				</div>
 			</div>

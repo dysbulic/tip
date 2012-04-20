@@ -10,7 +10,7 @@
 	wp_head();
 ?>
 </head>
-<body id="section-index" <?php body_class(); ?>>
+<body id="section-index">
 
 
 <div id="navigation" class="clearfix">
@@ -27,26 +27,14 @@
 
 
 <?php if ( -1 != get_option('blog_public') ) : ?>
-	<?php $mistylook_options = get_option( 'mistylook_theme_options' ); ?>
-
-	<?php if ( ! $mistylook_options['hide-post-feed-link'] || ! $mistylook_options['hide-comments-feed-link'] ) : ?>
-	<div id="feedarea">
-	<dl>
-		<dt><strong><?php _e('Feeds:','mistylook'); ?></strong></dt>
-
-	<?php if ( ! $mistylook_options['hide-post-feed-link'] ) : ?>
-		<dd><a href="<?php bloginfo('rss2_url'); ?>"><?php _e('Posts','mistylook'); ?></a></dd>
-	<?php endif; ?>
-
-	<?php if ( ! $mistylook_options['hide-comments-feed-link'] ) : ?>
-		<dd><a href="<?php bloginfo('comments_rss2_url'); ?>"><?php _e('Comments','mistylook'); ?></a></dd>
-	<?php endif; ?>
-	</dl>
-	</div><!-- end id:feedarea -->
-	<?php endif; ?>
+<div id="feedarea">
+<dl>
+	<dt><strong><?php _e('Feeds:','mistylook'); ?></strong></dt>
+	<dd><a href="<?php bloginfo('rss2_url'); ?>"><?php _e('Posts','mistylook'); ?></a></dd>
+	<dd><a href="<?php bloginfo('comments_rss2_url'); ?>"><?php _e('Comments','mistylook'); ?></a></dd>
+</dl>
+</div><!-- end id:feedarea -->
 <?php endif; ?>
 
 	<div id="headerimage">
 </div><!-- end id:headerimage -->
-
-<?php do_action( 'wpcom_adcontrol_leaderboard_ad' ); ?>

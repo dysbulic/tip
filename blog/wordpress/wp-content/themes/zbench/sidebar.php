@@ -8,7 +8,7 @@
 
 
 /* Grab theme options from database */
-$options = zbench_get_theme_options();
+$options = get_option( 'zbench_theme_options' );
 
 
 /**

@@ -10,7 +10,7 @@
 
 		<div id="pagina">
 
-			<h2 class="post-titulo" id="post-<?php the_ID(); ?>"><?php the_title(); ?></h2>
+			<h2 class="post-titulo" id="post-<?php the_ID(); ?>"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php echo esc_attr( sprintf( __( 'Permanent link to %s' ), the_title_attribute( 'echo=0' ) ) ); ?>"><?php the_title(); ?></a></h2>
 
 			<p class="postmeta">
 			<?php printf( __( '%1$s at %2$s', 'fjords' ), get_the_time( get_option( 'date_format' ) ), get_the_time() ); ?>

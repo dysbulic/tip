@@ -4,7 +4,7 @@
 
 				<div id="content">
 
-<?php while ( have_posts() ) : the_post(); ?>
+<?php the_post(); ?>
 
 <div id="nav-above" class="navigation">
 	<div class="nav-previous"><?php previous_post_link( '%link', '<span class="meta-nav">&lsaquo;</span> %title' ) ?></div>
@@ -44,10 +44,10 @@
 									// or, if there's only 1 image, get the URL of the image
 									$next_attachment_url = wp_get_attachment_url();
 								}
-							?>
+							?>							
 							<p><a href="<?php echo $next_attachment_url; ?>" title="<?php echo esc_attr( get_the_title() ); ?>" rel="attachment"><?php
 							$attachment_size = apply_filters( 'theme_attachment_size',  860 );
-							echo wp_get_attachment_image( $post->ID, array( $attachment_size, $attachment_size ) );
+							echo wp_get_attachment_image( $post->ID, array( $attachment_size, $attachment_size ) ); 
 							?></a></p>
 
 	<?php if (has_excerpt()) : ?>
@@ -85,8 +85,6 @@
 						</div>
 
 					</div><!-- #post-<?php the_ID(); ?> -->
-
-<?php endwhile; // end of the loop. ?>
 
 				</div><!-- content -->
 

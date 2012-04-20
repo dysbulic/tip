@@ -4,191 +4,189 @@
  * @subpackage P2
  */
 
-require_once( 'inc/utils.php' );
+define( 'P2_INC_PATH',  get_template_directory() . '/inc' );
+define( 'P2_INC_URL',  get_template_directory_uri() . '/inc' );
+define( 'P2_JS_PATH',  get_template_directory() . '/js' );
+define( 'P2_JS_URL', get_template_directory_uri() . '/js' );
 
-p2_maybe_define( 'P2_INC_PATH', get_template_directory()     . '/inc' );
-p2_maybe_define( 'P2_INC_URL',  get_template_directory_uri() . '/inc' );
-p2_maybe_define( 'P2_JS_PATH',  get_template_directory()     . '/js'  );
-p2_maybe_define( 'P2_JS_URL',   get_template_directory_uri() . '/js'  );
+require_once( P2_INC_PATH . '/compat.php' );
+require_once( P2_INC_PATH . '/p2.php' );
+require_once( P2_INC_PATH . '/js.php' );
+require_once( P2_INC_PATH . '/options-page.php' );
+require_once( P2_INC_PATH . '/template-tags.php' );
+require_once( P2_INC_PATH . '/widgets/recent-tags.php' );
+require_once( P2_INC_PATH . '/widgets/recent-comments.php' );
+require_once( P2_INC_PATH . '/list-creator.php' );
 
-class P2 {
-	/**
-	 * DB version.
-	 *
-	 * @var int
-	 */
-	var $db_version = 1;
+$content_width = '632';
 
-	/**
-	 * Options.
-	 *
-	 * @var array
-	 */
-	var $options = array();
-
-	/**
-	 * Option name in DB.
-	 *
-	 * @var string
-	 */
-	var $option_name = 'p2_manager';
-
-	/**
-	 * Components.
-	 *
-	 * @var array
-	 */
-	var $components = array();
-
-	/**
-	 * Includes and instantiates the various P2 components.
-	 */
-	function P2() {
-		// Fetch options
-		$this->options = get_option( $this->option_name );
-		if ( false === $this->options )
-			$this->options = array();
-
-		// Include the P2 components
-		$includes = array( 'compat', 'terms-in-comments', 'js-locale',
-			'mentions', 'search', 'js', 'options-page',
-			'template-tags', 'widgets/recent-tags', 'widgets/recent-comments',
-			'list-creator', 'instapost' );
-
-		if ( defined('DOING_AJAX') && DOING_AJAX )
-			$includes[] = 'ajax';
-
-		foreach ( $includes as $name ) {
-			require_once( P2_INC_PATH . "/$name.php" );
-		}
-
-		// Add the default P2 components
-		$this->add( 'mentions',             'P2_Mentions'             );
-		$this->add( 'search',               'P2_Search'               );
-		$this->add( 'post-list-creator',    'P2_Post_List_Creator'    );
-		$this->add( 'comment-list-creator', 'P2_Comment_List_Creator' );
-
-		// Bind actions
-		add_action( 'init',       array( &$this, 'init'             ) );
-		add_action( 'admin_init', array( &$this, 'maybe_upgrade_db' ) );
-	}
-
-	function init() {
-		// Load language pack
-		load_theme_textdomain( 'p2', get_template_directory() . '/languages' );
-	}
-
-	/**
-	 * Will upgrade the database if necessary.
-	 *
-	 * When upgrading, triggers actions:
-	 *    'p2_upgrade_db_version'
-	 *    'p2_upgrade_db_version_$number'
-	 *
-	 * Flushes rewrite rules automatically on upgrade.
-	 */
-	function maybe_upgrade_db() {
-		if ( ! isset( $this->options['db_version'] ) || $this->options['db_version'] < $this->db_version ) {
-			$current_db_version = isset( $this->options['db_version'] ) ? $this->options['db_version'] : 0;
-
-			do_action( 'p2_upgrade_db_version', $current_db_version );
-			for ( ; $current_db_version <= $this->db_version; $current_db_version++ ) {
-				do_action( "p2_upgrade_db_version_$current_db_version" );
-			}
-
-			// Flush rewrite rules once, so callbacks don't have to.
-			flush_rewrite_rules();
-
-			$this->set_option( 'db_version', $this->db_version );
-			$this->save_options();
-		}
-	}
-
-	/**
-	 * COMPONENTS API
-	 */
-	function add( $component, $class ) {
-		$class = apply_filters( "p2_add_component_$component", $class );
-		if ( class_exists( $class ) )
-			$this->components[ $component ] = new $class();
-	}
-	function get( $component ) {
-		return $this->components[ $component ];
-	}
-	function remove( $component ) {
-		unset( $this->components[ $component ] );
-	}
-
-	/**
-	 * OPTIONS API
-	 */
-	function get_option( $key ) {
-		return isset( $this->options[ $key ] ) ? $this->options[ $key ] : null;
-	}
-	function set_option( $key, $value ) {
-		return $this->options[ $key ] = $value;
-	}
-	function save_options() {
-		update_option( $this->option_name, $this->options );
-	}
+if ( function_exists( 'register_sidebar' ) ) {
+	register_sidebar( array(
+		'name' => __( 'Sidebar', 'p2' ),
+	) );
 }
-
-$GLOBALS['p2'] = new P2;
-
-function p2_get( $component = '' ) {
-	global $p2;
-	return empty( $component ) ? $p2 : $p2->get( $component );
-}
-function p2_get_option( $key ) {
-	return $GLOBALS['p2']->get_option( $key );
-}
-function p2_set_option( $key, $value ) {
-	return $GLOBALS['p2']->set_option( $key, $value );
-}
-function p2_save_options() {
-	return $GLOBALS['p2']->save_options();
-}
-
-
-
-
-/**
- * ----------------------------------------------------------------------------
- * NOTE: Ideally, the rest of this file should be moved elsewhere.
- * ----------------------------------------------------------------------------
- */
-
-
-
-
-$content_width = 632;
-
-$themecolors = array(
-	'bg' => 'ffffff',
-	'text' => '555555',
-	'link' => '3478e3',
-	'border' => 'f1f1f1',
-	'url' => 'd54e21',
-);
-
-register_sidebar( array(
-	'name' => __( 'Sidebar', 'p2' ),
-) );
-
-// Run make_clickable later to avoid shortcode conflicts
-add_filter( 'the_content', 'make_clickable', 12 );
 
 // Content Filters
+function p2_get_at_name_map() {
+	global $wpdb;
+	static $name_map = array();
+	if ( $name_map ) // since $names is static, the stuff below will only get run once per page load.
+ 		return $name_map;
 
-function p2_title( $before = '<h2>', $after = '</h2>', $echo = true ) {
+	$users = array();
+	if ( function_exists( 'get_users' ) )
+		$users = get_users();
+	else
+		$users = get_users_of_blog();
+
+	// get display names (can take out if you only want to handle nicenames)
+	foreach ( $users as $user ) {
+ 		$name_map["@$user->user_login"]['id'] = $user->ID;
+		$users_to_array[] = $user->ID;
+	}
+	// get nicenames (can take out if you only want to handle display names)
+	$user_ids = join( ',', array_map( 'intval', $users_to_array ) );
+
+	foreach ( $wpdb->get_results( "SELECT ID, display_name, user_nicename from $wpdb->users WHERE ID IN($user_ids)" ) as $user ) {
+ 		$name_map["@$user->display_name"]['id'] = $user->ID;
+		$name_map["@$user->user_nicename"]['id'] = $user->ID;
+	}
+
+	foreach ( $name_map as $name => $values) {
+		$username = get_userdata( $values['id'] )->user_login;
+ 		$name_map[$name]['replacement'] = '<a href="' . esc_url( '/mentions/' . $username ) . '/">' . esc_html( $name ) . '</a>';
+	}
+
+	// remove any empty name just in case
+	unset( $name_map['@'] );
+	return $name_map;
+}
+
+add_action( 'init', 'mention_taxonomy', 0 ); // initialize the taxonomy
+
+function mention_taxonomy() {
+	register_taxonomy( 'mentions', 'post', array( 'show_ui' => false, 'show_in_nav_menus' => false ) );
+	p2_flush_rewrites();
+}
+
+function p2_flush_rewrites() {
+	if ( false == get_option( 'p2_rewrites_flushed' ) ) {
+		update_option( 'p2_rewrites_flushed', true );
+		global $wp_rewrite;
+		$wp_rewrite->flush_rules();
+	}
+}
+
+// Filter to be ran on the_content, calls the do_list function from our class
+function p2_list_creator( $content ) {
+	$list_creator = new P2ListCreator;
+
+	return $list_creator->do_list( $content );
+}
+
+// Call the filter on normal, non admin calls (this code exists in ajax.php for the special p2 instances)
+if ( ! is_admin() )
+	add_filter( 'pre_kses', 'p2_list_creator', 1 );
+add_filter( 'pre_comment_content', 'p2_list_creator', 1 );
+
+function p2_at_names( $content ) {
+	global $post, $comment;
+	$name_map = p2_get_at_name_map(); // get users user_login and display_name map
+	$content_original = $content; // save content before @names are found
+	$users_to_add = array();
+
+	foreach ( $name_map as $name => $values ) { //loop and...
+		$content = preg_replace( "/\B" . preg_quote( $name, '/' ) . "(?![^<]*<\/a)\b/i", $values['replacement'], $content );
+		$content = strtr( $content, $name, $name ); // Replaces keys with values longest to shortest, without re-replacing pieces it's already done
+		if ( $content != $content_original ) // if the content has changed, an @name has been found.
+ 			$users_to_add[] = get_userdata( $name_map[$name]['id'] )->user_login; // add that user to an array
+		$content_original = $content;
+	}
+	if ( !empty( $users_to_add ) )
+		$cache_data = implode($users_to_add); // if we've got an array, make it a comma delimited string
+	if ( isset($cache_data) && $cache_data != wp_cache_get( 'mentions', $post->ID) ) {
+		wp_set_object_terms( $post->ID, $users_to_add, 'mentions', true ); // tag the post.
+		wp_cache_set( 'mentions', $cache_data, $post->ID);
+	}
+
+	return $content;
+}
+
+if ( !is_admin() ) add_filter( 'the_content', 'p2_at_names' ); // hook into content
+if ( !is_admin() ) add_filter( 'comment_text', 'p2_at_names' ); // hook into comment text
+
+function p2_at_name_highlight( $c ) {
+
+	if ( !( get_query_var( 'taxonomy' ) && 'mentions' == get_query_var( 'taxonomy' ) ) )
+		return $c;
+
+	$mention_name = '';
+	$names = array();
+	$name_map = p2_get_at_name_map();
+
+	if ( get_query_var( 'term' ) )
+		$mention_name = get_query_var( 'term' );
+
+	if ( isset( $name_map["@$mention_name"] ) ) {
+		$names[] = get_userdata( $name_map["@$mention_name"]['id'] )->display_name;
+		$names[] = get_userdata( $name_map["@$mention_name"]['id'] )->user_login;
+	}
+
+	foreach ( $names as $key => $name ) {
+		$at_name = "@$name";
+		$c = str_replace( $at_name, "<span class='mention-highlight'>$at_name</span>", $c );
+	}
+
+	return $c;
+}
+
+add_filter( 'the_content', 'p2_at_name_highlight' );
+add_filter( 'comment_text', 'p2_at_name_highlight' );
+
+// Widgets
+function prologue_flush_tag_cache( $post_ID, $post ) {
+	// Don't call for anything but normal posts (avoid pages, custom taxonomy, nav menu items)
+	if ( ! is_object( $post ) || 'post' !== $post->post_type )
+		return;
+
+	wp_cache_delete( 'prologue_theme_tag_list' );
+}
+add_action( 'save_post', 'prologue_flush_tag_cache', 10, 2 );
+
+function prologue_get_avatar( $user_id, $email, $size ) {
+	if ( $user_id )
+		return get_avatar( $user_id, $size );
+	else
+		return get_avatar( $email, $size );
+}
+
+function prologue_comment( $comment, $args, $depth ) {
+	$GLOBALS['comment'] = $comment;
+?>
+<li <?php comment_class(); ?> id="comment-<?php comment_ID( ); ?>">
+	<?php echo get_avatar( $comment, 32 ); ?>
+	<h4>
+		<?php comment_author_link(); ?>
+		<span class="meta"><?php comment_time(); ?> <?php _e( 'on', 'p2' ); ?> <?php comment_date(); ?> <span class="actions"><a href="#comment-<?php comment_ID( ); ?>"><?php _e( 'Permalink', 'p2' ); ?></a><?php echo comment_reply_link(array( 'depth' => $depth, 'max_depth' => $args['max_depth'], 'before' => ' | ' )); ?><?php edit_comment_link( __( 'Edit' , 'p2' ), ' | ','' ); ?></span><br /></span>
+	</h4>
+	<div class="commentcontent<?php if (current_user_can( 'edit_post', $comment->comment_post_ID)) echo( ' comment-edit' ); ?>"  id="commentcontent-<?php comment_ID( ); ?>">
+			<?php comment_text( ); ?>
+	<?php if ( $comment->comment_approved == '0' ) : ?>
+	<p><em><?php _e( 'Your comment is awaiting moderation.', 'p2' ); ?></em></p>
+	<?php endif; ?>
+	</div>
+<?php
+}
+
+function p2_title( $before = '<h2>', $after = '</h2>', $returner = false ) {
 	if ( is_page() )
 		return;
 
-	if ( is_single() && false === p2_the_title( '', '', false ) ) { ?>
+	if ( is_single() && false === p2_the_title( '', '', true ) ) { ?>
 		<h2 class="transparent-title"><?php echo the_title(); ?></h2><?php
 		return true;
 	} else {
-		p2_the_title( $before, $after, $echo );
+		p2_the_title( $before, $after, $returner );
 	}
 }
 
@@ -207,7 +205,7 @@ function p2_title( $before = '<h2>', $after = '</h2>', $echo = true ) {
  * @param    string    $echo      echo or return
  * @return   string    $out       nicely formatted title, will be boolean(false) if no title
  */
-function p2_the_title( $before = '<h2>', $after = '</h2>', $echo = true ) {
+function p2_the_title( $before = '<h2>', $after = '</h2>', $returner = false ) {
 	global $post;
 
 	$temp = $post;
@@ -252,61 +250,67 @@ function p2_the_title( $before = '<h2>', $after = '</h2>', $echo = true ) {
 		else
 			$out = $before . '<a href="' . get_permalink( $temp->ID ) . '">' . $t . '&nbsp;</a>' . $after;
 
-		if ( $echo )
-			echo $out;
-		else
+		if ( $returner )
 			return $out;
+		else
+			echo $out;
 	}
 
 	return false;
 }
 
-function p2_comments( $comment, $args ) {
+function prologue_loop() {
+	global $looping;
+	$looping = ($looping === 1 ) ? 0 : 1;
+}
+add_action( 'loop_start', 'prologue_loop' );
+add_action( 'loop_end', 'prologue_loop' );
+
+
+function p2_comments( $comment, $args, $echo = true ) {
 	$GLOBALS['comment'] = $comment;
 
-	if ( !is_single() && get_comment_type() != 'comment' )
-		return;
-
-	$depth          = prologue_get_comment_depth( get_comment_ID() );
-	$can_edit_post  = current_user_can( 'edit_post', $comment->comment_post_ID );
-
-	$reply_link     = prologue_get_comment_reply_link(
-		array( 'depth' => $depth, 'max_depth' => $args['max_depth'], 'before' => ' | ', 'reply_text' => __( 'Reply', 'p2' ) ),
-		$comment->comment_ID, $comment->comment_post_ID );
-
-	$content_class  = 'commentcontent';
-	if ( $can_edit_post )
-		$content_class .= ' comment-edit';
-
-	?>
-	<li id="comment-<?php comment_ID(); ?>" <?php comment_class(); ?>>
-		<?php do_action( 'p2_comment' ); ?>
-
-		<?php echo get_avatar( $comment, 32 ); ?>
+	$depth = prologue_get_comment_depth( get_comment_ID() );
+	$comment_text =  apply_filters( 'comment_text', $comment->comment_content );
+	$comment_class = comment_class( '', null, null, false );
+	$comment_time = get_comment_time();
+	$comment_date = get_comment_date();
+	$id = get_comment_ID();
+	$avatar = get_avatar( $comment, 32 );
+	$author_link = get_comment_author_link();
+	$reply_link = prologue_get_comment_reply_link(
+				array( 'depth' => $depth, 'max_depth' => $args['max_depth'], 'before' => ' | ', 'reply_text' => __( 'Reply', 'p2' ) ),
+				$comment->comment_ID, $comment->comment_post_ID );
+	$can_edit = current_user_can( 'edit_post', $comment->comment_post_ID );
+	$edit_comment_url = get_edit_comment_link( $comment->comment_ID );
+	$edit_link = $can_edit? " | <a class='comment-edit-link' href='$edit_comment_url' title='".esc_attr__( 'Edit comment', 'p2' )."'>".__( 'Edit', 'p2' )."</a>" : '';
+	$content_class = $can_edit? 'commentcontent comment-edit' : 'commentcontent';
+	$awaiting_message = $comment->comment_approved == '0'? '<p><em>' . __( 'Your comment is awaiting moderation.', 'p2' ) . '</em></p>' : '';
+	$permalink = esc_url( get_comment_link() );
+	$permalink_text = __( 'Permalink', 'p2' );
+	$date_time = p2_date_time_with_microformat( 'comment' );
+	$html = <<<HTML
+<li $comment_class id="comment-$id">
+		$avatar
 		<h4>
-			<?php echo get_comment_author_link(); ?>
-			<span class="meta">
-				<?php echo p2_date_time_with_microformat( 'comment' ); ?>
-				<span class="actions">
-					<a class="thepermalink" href="<?php echo esc_url( get_comment_link() ); ?>" title="<?php _e( 'Permalink', 'p2' ); ?>"><?php _e( 'Permalink', 'p2' ); ?></a>
-					<?php
-					echo $reply_link;
-
-					if ( $can_edit_post )
-						edit_comment_link( __( 'Edit', 'p2' ), ' | ' );
-
-					?>
+				$author_link
+				<span class="meta">
+						$date_time
+						<span class="actions"><a href="$permalink">$permalink_text</a> $reply_link $edit_link</span>
 				</span>
-			</span>
 		</h4>
-		<div id="commentcontent-<?php comment_ID(); ?>" class="<?php echo esc_attr( $content_class ); ?>"><?php
-				echo apply_filters( 'comment_text', $comment->comment_content, $comment );
-
-				if ( $comment->comment_approved == '0' ): ?>
-					<p><em><?php esc_html_e( 'Your comment is awaiting moderation.', 'p2' ); ?></em></p>
-				<?php endif; ?>
+		<div class="$content_class" id="commentcontent-$id">
+				$comment_text
+				$awaiting_message
 		</div>
-	<?php
+HTML;
+	if (!is_single() && get_comment_type() != 'comment' )
+		return false;
+
+	if ( $echo )
+		echo $html;
+	else
+		return $html;
 }
 
 function get_tags_with_count( $post, $format = 'list', $before = '', $sep = '', $after = '' ) {
@@ -334,6 +338,15 @@ function get_tags_with_count( $post, $format = 'list', $before = '', $sep = '', 
 function tags_with_count( $format = 'list', $before = '', $sep = '', $after = '' ) {
 	global $post;
 	echo get_tags_with_count( $post, $format, $before, $sep, $after );
+}
+
+
+function latest_post_permalink() {
+	global $wpdb;
+	$sql = "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' ORDER BY post_date DESC LIMIT 1";
+	$last_post_id = $wpdb->get_var($sql);
+	$permalink = get_permalink($last_post_id);
+	return $permalink;
 }
 
 function p2_title_from_content( $content ) {
@@ -371,11 +384,6 @@ function p2_excerpted_title( $content, $word_count ) {
 	return $content;
 }
 
-function p2_add_reply_title_attribute( $link ) {
-	return str_replace( "rel='nofollow'", "rel='nofollow' title='" . __( 'Reply', 'p2' ) . "'", $link );
-}
-add_filter( 'post_comments_link', 'p2_add_reply_title_attribute' );
-
 function p2_fix_empty_titles( $post_ID, $post ) {
 
 	// Don't call for anything but normal posts (avoid pages, custom taxonomy, nav menu items)
@@ -392,6 +400,16 @@ function p2_fix_empty_titles( $post_ID, $post ) {
 }
 add_action( 'save_post', 'p2_fix_empty_titles', 10, 2 );
 
+function p2_init_at_names() {
+	global $init_var_names, $name;
+
+	// @names
+	$init_var_names = array( 'comment_author', 'comment_author_email', 'comment_author_url' );
+	foreach($init_var_names as $name)
+		if (!isset($$name)) $$name = '';
+}
+add_action( 'template_redirect' , 'p2_init_at_names' );
+
 function p2_add_head_content() {
 	if ( is_home() && is_user_logged_in() ) {
 		include_once( ABSPATH . '/wp-admin/includes/media.php' );
@@ -399,8 +417,8 @@ function p2_add_head_content() {
 }
 add_action( 'wp_head', 'p2_add_head_content' );
 
-function p2_new_post_noajax() {
-	if ( empty( $_POST['action'] ) || $_POST['action'] != 'post' )
+function prologue_new_post_noajax() {
+	if ( 'POST' != $_SERVER['REQUEST_METHOD'] || empty( $_POST['action'] ) || $_POST['action'] != 'post' )
 	    return;
 
 	if ( !is_user_logged_in() )
@@ -411,59 +429,108 @@ function p2_new_post_noajax() {
 		exit;
 	}
 
-	$current_user = wp_get_current_user();
+	global $current_user;
 
 	check_admin_referer( 'new-post' );
 
-	$user_id        = $current_user->ID;
-	$post_content   = $_POST['posttext'];
-	$tags           = $_POST['tags'];
+	$user_id		= $current_user->ID;
+	$post_content	= $_POST['posttext'];
+	$tags			= $_POST['tags'];
 
 	$post_title = p2_title_from_content( $post_content );
 
 	$post_id = wp_insert_post( array(
-		'post_author'   => $user_id,
-		'post_title'    => $post_title,
-		'post_content'  => $post_content,
-		'tags_input'    => $tags,
-		'post_status'   => 'publish'
+		'post_author'	=> $user_id,
+		'post_title'	=> $post_title,
+		'post_content'	=> $post_content,
+		'tags_input'	=> $tags,
+		'post_status'	=> 'publish'
 	) );
 
 	wp_redirect( home_url( '/' ) );
 
 	exit;
 }
-add_filter( 'template_redirect', 'p2_new_post_noajax' );
+add_filter( 'template_redirect', 'prologue_new_post_noajax' );
+
+//Search related Functions
+
+function search_comments_distinct( $distinct ) {
+	global $wp_query;
+	if (!empty($wp_query->query_vars['s']))
+		return 'DISTINCT';
+}
+add_filter( 'posts_distinct', 'search_comments_distinct' );
+
+function search_comments_where( $where ) {
+	global $wp_query, $wpdb;
+	if (!empty($wp_query->query_vars['s'])) {
+			$or = " OR ( comment_post_ID = ".$wpdb->posts . ".ID  AND comment_approved =  '1' AND comment_content LIKE '%" . like_escape( $wpdb->escape($wp_query->query_vars['s'] ) ) . "%' ) ";
+				$where = preg_replace( "/\bor\b/i", $or." OR", $where, 1 );
+	}
+	return $where;
+}
+add_filter( 'posts_where', 'search_comments_where' );
+
+function search_comments_join( $join ) {
+	global $wp_query, $wpdb, $request;
+	if (!empty($wp_query->query_vars['s']))
+		$join .= " LEFT JOIN $wpdb->comments ON ( comment_post_ID = ID  AND comment_approved =  '1' )";
+	return $join;
+}
+add_filter( 'posts_join', 'search_comments_join' );
+
+function get_search_query_terms() {
+	$search = get_query_var( 's' );
+	$search_terms = get_query_var( 'search_terms' );
+	if ( !empty($search_terms) ) {
+		return $search_terms;
+	} else if ( !empty($search) ) {
+		return array($search);
+	}
+	return array();
+}
+
+function hilite( $text ) {
+	$query_terms = array_filter( array_map( 'trim', get_search_query_terms() ) );
+	foreach ( $query_terms as $term ) {
+	    $term = preg_quote( $term, '/' );
+		if ( !preg_match( '/<.+>/', $text ) ) {
+			$text = preg_replace( '/(\b'.$term.'\b)/i','<span class="hilite">$1</span>', $text );
+		} else {
+			$text = preg_replace( '/(?<=>)([^<]+)?(\b'.$term.'\b)/i','$1<span class="hilite">$2</span>', $text );
+		}
+	}
+	return $text;
+}
+
+function hilite_tags( $tags ) {
+	$query_terms = array_filter( array_map( 'trim', get_search_query_terms() ) );
+	// tags are kept escaped in the db
+	$query_terms = array_map( 'esc_html', $query_terms );
+	foreach( array_filter((array)$tags) as $tag )
+	    if ( in_array( trim($tag->name), $query_terms ) )
+	        $tag->name ="<span class='hilite'>". $tag->name . "</span>";
+	return $tags;
+}
+
+// Highlight text and comments:
+add_filter( 'the_content', 'hilite' );
+add_filter( 'get_the_tags', 'hilite_tags' );
+add_filter( 'the_excerpt', 'hilite' );
+add_filter( 'comment_text', 'hilite' );
 
 function iphone_css() {
 if ( strstr( $_SERVER['HTTP_USER_AGENT'], 'iPhone' ) or isset($_GET['iphone']) && $_GET['iphone'] ) { ?>
-<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+<meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 <style type="text/css">
 /* <![CDATA[ */
 /* iPhone CSS */
 <?php $iphonecss = dirname( __FILE__ ) . '/style-iphone.css'; if ( is_file( $iphonecss ) ) require $iphonecss; ?>
 /* ]]> */
 </style>
-
 <?php } }
-add_action( 'wp_head', 'iphone_css', 1000 );
-
-function iphone_js() {
-	if ( strstr( $_SERVER['HTTP_USER_AGENT'], 'iPhone' ) or isset($_GET['iphone']) && $_GET['iphone'] ) { ?>
-		<script type="text/javascript">
-			jQuery( function(jq) {
-				jq( 'a#mobile-post-button' ).click( function(e) {
-					e.preventDefault();
-					if ( jq( 'div#postbox' ).is( ':visible' ) )
-						jq( 'div#postbox' ).slideUp( 'fast' );
-					else
-						jq( 'div#postbox' ).slideDown( 'fast' );
-				});
-			} );
-		</script>		
-	<?php }
-}
-add_action( 'wp_footer', 'iphone_js', 1000 );
+add_action( 'wp_head', 'iphone_css' );
 
 /*
 	Modified to replace query string with blog url in output string
@@ -496,7 +563,7 @@ function prologue_get_comment_reply_link( $args = array(), $comment = null, $pos
 	if ( get_option( 'comment_registration' ) && !$user_ID )
 		$link = '<a rel="nofollow" href="' . site_url( 'wp-login.php?redirect_to=' . urlencode( get_permalink() ) ) . '">' . esc_html( $login_text ) . '</a>';
 	else
-		$link = "<a rel='nofollow' class='comment-reply-link' href='". get_permalink($post). "#" . urlencode( $respond_id ) . "' title='". __( 'Reply', 'p2' )."' onclick='return addComment.moveForm(\"" . esc_js( "$add_below-$comment->comment_ID" ) . "\", \"$comment->comment_ID\", \"" . esc_js( $respond_id ) . "\", \"$post->ID\")'>$reply_text</a>";
+		$link = "<a rel='nofollow' class='comment-reply-link' href='". get_permalink($post). "#" . urlencode( $respond_id ) . "' onclick='return addComment.moveForm(\"" . esc_js( "$add_below-$comment->comment_ID" ) . "\", \"$comment->comment_ID\", \"" . esc_js( $respond_id ) . "\", \"$post->ID\")'>$reply_text</a>";
 	return apply_filters( 'comment_reply_link', $before . $link . $after, $args, $comment, $post);
 }
 
@@ -648,7 +715,7 @@ function p2_background_image() {
 ?>
 	<style type="text/css">
 		body {
-			background-image: url( <?php echo get_template_directory_uri() . '/i/backgrounds/pattern-' . sanitize_key( $p2_background_image ) . '.png' ?> );
+			background-image: url( <?php echo get_template_directory_uri() . '/i/backgrounds/pattern-' . $p2_background_image . '.png' ?> );
 		}
 	</style>
 <?php
@@ -668,6 +735,69 @@ function p2_hidden_sidebar_css() {
 	<?php endif;
 }
 add_action( 'wp_head', 'p2_hidden_sidebar_css' );
+
+function p2_user_suggestion() {
+	global $wpdb, $current_user;
+
+	if ( ( function_exists( 'is_user_member_of_blog' ) && is_user_member_of_blog( $current_user->id ) ) || ( current_user_can( 'edit_posts' ) ) ) {
+
+		$p2_users = array();
+		if ( function_exists( 'get_users' ) )
+			$p2_users = get_users();
+		else
+			$p2_users = get_users_of_blog();
+
+		foreach( $p2_users as $p2_user ) {
+			$p2_user_ids[$p2_user->ID] = $p2_user->ID;
+		}
+
+		$post_counts = count_many_users_posts( array_keys( $p2_user_ids ) );
+		$users = array();
+
+		foreach( $p2_users as $p2_user ) {
+			if ( $post_counts[$p2_user->ID] > 0 ) {
+				$gravatar = get_avatar( $p2_user->user_email, 32 );
+				$users[] = array( 'name' => $p2_user->display_name, 'username' => $p2_user->user_login, 'gravatar' => $gravatar );
+			}
+		}
+
+	 	$users = apply_filters( "p2_user_suggestion", $users );
+		$users = json_encode( $users );
+		?>
+		<script type="text/javascript">
+		/* <![CDATA[ */
+			jQuery(document).ready(function() {
+					var json = <?php echo $users; ?>;
+					var names = [];
+					for( var i = 0, ol = json.length; i < ol; i++ ) {
+						names[i] = [json[i].name, json[i].username, json[i].gravatar];
+					}
+					jQuery("#comment").autocomplete(names, {
+						matchContains: true,
+						hotkeymode:true,
+						scroll: false,
+						formatItem: function(row) { return row[2] + ' ' + row[0] + ' @' + row[1] },
+						startmsg: '<?php echo esc_js( __( 'After typing @, type a name or username to find a member of this site' ) ); ?>',
+						noresultsmsg: '<?php echo esc_js( __( 'No matches.' ) ); ?>',
+						formatResult: function(row) { return '@' + row[1]; }
+					});
+					jQuery("#posttext").autocomplete(names, {
+						matchContains: true,
+						hotkeymode:true,
+						scroll: false,
+						formatItem: function(row) { return row[2] + ' ' + row[0] + ' @' + row[1] },
+						startmsg: '<?php echo esc_js( __( 'After typing @, type a name or username to find a member of this site' ) ); ?>',
+						noresultsmsg: '<?php echo esc_js( __( 'No matches.' ) ); ?>',
+						formatResult: function(row) { return '@' + row[1]; }
+					});
+			});
+		/* ]]> */
+		</script>
+<?php
+	}
+}
+
+add_action( 'wp_footer', 'p2_user_suggestion', 10 );
 
 // Network signup form
 function p2_before_signup_form() {

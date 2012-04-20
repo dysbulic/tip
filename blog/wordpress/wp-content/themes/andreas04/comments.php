@@ -11,7 +11,7 @@ if ( post_password_required() ) {
 if ( have_comments() ) : ?>
 <h2 id="comments"><?php comments_number(__('Leave a Comment','andreas04'), __('1 Comment','andreas04'), __('% Comments','andreas04')); ?> 
 <?php if ( comments_open() ) : ?>
-	<a href="#postcomment" title="<?php esc_attr_e( 'Leave a comment', 'andreas04' ); ?>">&raquo;</a>
+	<a href="#postcomment" title="<?php _e('Leave a comment','andreas04'); ?>">&raquo;</a>
 <?php endif; ?>
 </h2>
 
@@ -34,7 +34,7 @@ if ( have_comments() ) : ?>
 <?php endif; ?>
 
 <?php if ( comments_open() ) : ?>
-	<?php comment_form(); ?>
+	<?php comment_form( array( 'title_reply' => __( 'Leave a Comment', 'andreas04' ) ) ); ?>
 <?php else: ?>
 	<?php if ( ! is_page() ) : ?>
 	<p><?php _e( 'Sorry, the comment form is closed at this time.', 'andreas04' ); ?></p>

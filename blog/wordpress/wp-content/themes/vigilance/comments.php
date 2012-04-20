@@ -1,9 +1,4 @@
 <?php
-/**
- * @package Vigilance
- */
-?>
-<?php
 // Do not delete these lines
 	if (!empty($_SERVER['SCRIPT_FILENAME']) && 'comments.php' == basename($_SERVER['SCRIPT_FILENAME']))
 		die ('Please do not load this page directly. Thanks!');
@@ -20,7 +15,7 @@
 	<div class="comment-number">
 		<span><?php comments_number(__('Leave a Comment', 'vigilance'), __('One Comment', 'vigilance'), __('% Comments', 'vigilance')); ?></span>
 	<?php if (comments_open()) : ?>
-		<a id="leavecomment" href="#respond" title="<?php esc_attr_e( 'Leave One', 'vigilance' ); ?>"><?php _e('leave one &rarr;', 'vigilance'); ?></a>
+		<a id="leavecomment" href="#respond" title="<?php _e('Leave One', 'vigilance'); ?>"><?php _e('leave one &rarr;', 'vigilance'); ?></a>
 	<?php endif; ?>
 	</div><!--end comment-number-->
 	<?php if ( ! empty($comments_by_type['comment']) ) : ?>

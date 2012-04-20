@@ -1,20 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Fleur
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
 	'text' => '000000',
-	'link' => 'aa7d39',
-	'border' => 'c96666',
-	'url' => 'dadace',
+	'link' => 'aa7d39'
 );
 
 $content_width = 500;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 if ( function_exists('register_sidebars') )
 	register_sidebars(1);

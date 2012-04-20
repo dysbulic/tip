@@ -21,7 +21,7 @@ if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
 wp_head(); 
 ?>
 </head>
-<body <?php body_class(); ?>>
+<body>
 	<div id="header">
 		<div class="inside">
 			<div id="search">

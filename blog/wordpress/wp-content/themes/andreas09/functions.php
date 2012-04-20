@@ -1,10 +1,10 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Andreas09
- */
 
-add_filter( 'body_class', '__return_empty_array', 1 );
+$themecolors = array(
+	'bg' => 'fafcff',
+	'text' => '2a2a2a',
+	'link' => '303030'
+);
 
 add_theme_support( 'automatic-feed-links' );
 
@@ -26,7 +26,7 @@ register_sidebar(array('name' => 'Right Sidebar', 'id' => 'right-sidebar'));
 // WP-Andreas09 Search Box 	
 function widget_andreas09_search() {
 ?>
-   <li><?php get_search_form(); ?></li>
+   <li><?php include (TEMPLATEPATH . '/searchform.php'); ?></li>
 <?php
 }
 wp_register_sidebar_widget('search', __('Search'), 'widget_andreas09_search');
@@ -65,7 +65,7 @@ load_theme_textdomain('andreas09');
 
 function wp_andreas09_add_theme_page() {
 
-	if ( isset( $_GET['page'] ) && $_GET['page'] == basename(__FILE__) ) {
+	if ( $_GET['page'] == basename(__FILE__) ) {
 		if ( 'save' == $_REQUEST['action'] ) {
 			update_option( 'wp_andreas09_ImageColour', $_REQUEST[ 'set_ImageColour' ] );
 			header("Location: themes.php?page=functions.php&saved=true");
@@ -350,7 +350,7 @@ function andreas09_callback($comment, $args, $depth) {
 	<br />
 <?php endif; ?>
 	
-	<small class="comment-meta commentmetadata"><a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>">
+	<small class="comment-meta commentmetadata"><a href="<?php echo htmlspecialchars( get_comment_link( $comment->comment_ID ) ) ?>">
 	<?php comment_date() ?> <?php _e('at','andreas09'); ?> <?php comment_time() ?></a> <?php edit_comment_link('e','',''); ?></small>
 	
 	<?php comment_text(); ?>
@@ -359,158 +359,4 @@ function andreas09_callback($comment, $args, $depth) {
 	<?php comment_reply_link(array_merge( $args, array('add_below' => 'comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
 	</div>
 <?php 
-}
-
-function andreas09_comment_form_defaults( $args ) {
-	$args['title_reply'] = __( 'Leave a Comment', 'andreas09' );
-	return $args;
-}
-
-add_filter( 'comment_form_defaults', 'andreas09_comment_form_defaults' );
-
-/**
- * Set the default theme colors based on the current color scheme
- */
-$color_scheme = get_settings( 'wp_andreas09_ImageColour' );
-
-switch ( $color_scheme ) {
-	case 'green':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => '09b910',
-			'url' => '808080',
-		);
-		break;
-
-	case 'red':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => 'c0090e',
-			'url' => '808080',
-		);
-		break;
-
-	case 'orange':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => 'c9740a',
-			'url' => '808080',
-		);
-		break;
-
-	case 'purple':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => '890abb',
-			'url' => '808080',
-		);
-		break;
-
-	case 'black':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => '5c5c5c',
-			'url' => '808080',
-		);
-		break;
-
-	case 'isecore':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => '536d88',
-			'url' => '808080',
-		);
-		break;
-
-	case 'pink':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => 'd964bf',
-			'url' => '808080',
-		);
-		break;
-
-	case 'blue2':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => '0b6d90',
-			'url' => '808080',
-		);
-		break;
-
-	case 'green2':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => '1d8807',
-			'url' => '808080',
-		);
-		break;
-
-	case 'red2':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => '940c0e',
-			'url' => '808080',
-		);
-		break;
-
-	case 'orange2':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => 'ce750d',
-			'url' => '808080',
-		);
-		break;
-
-	case 'purple2':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => '6c0c91',
-			'url' => '808080',
-		);
-		break;
-
-	case 'black2':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => '4e4e4e',
-			'url' => '808080',
-		);
-		break;
-
-	case 'blue':
-		$themecolors = array(
-			'bg' => 'fafcff',
-			'border' => 'f0f1f3',
-			'text' => '2a2a2a',
-			'link' => '0a8fbc',
-			'url' => '808080',
-		);
-		break;
 }

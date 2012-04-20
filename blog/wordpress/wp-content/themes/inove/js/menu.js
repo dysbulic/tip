@@ -45,14 +45,8 @@ GhostlyMenu.prototype = {
 			var left = getWidth(this.body) * (-1);
 			}
 		} else {
-			var pos = cumulativeOffset(this.title);			
-			
-			if ( document.body.className.indexOf( 'loggedin' ) != -1 ) { 
-				var top = pos[1] + ( 2 * getHeight( this.title ) ) - 3;	
-			} else {
-				var top = pos[1] + getHeight( this.title );
-			}
-			
+			var pos = cumulativeOffset(this.title);
+			var top = pos[1] + getHeight(this.title);
 			var left = pos[0];
 			if (this.align == 'right') {
 				var offset = getWidth(this.title) - getWidth(this.body);

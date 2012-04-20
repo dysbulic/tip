@@ -15,7 +15,7 @@
 	?>
 
 </head>
-<body <?php body_class(); ?>>
+<body>
 
 
 <div class="blogname"><a class="blognamelink" href="<?php echo home_url( '/' ); ?>"><?php bloginfo('name'); ?></a></div>

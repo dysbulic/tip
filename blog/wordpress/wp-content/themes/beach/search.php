@@ -18,7 +18,7 @@ get_header(); ?>
 				<?php beach_content_nav( 'nav-above' ); ?>
 
 				<?php /* Start the Loop */ ?>
-				<?php while ( have_posts() ) : the_post(); ?>
+				<?php while ( have_posts() ) : the_post(); ?>				
 
 					<?php get_template_part( 'content', 'search' ); ?>
 
@@ -42,8 +42,8 @@ get_header(); ?>
 			<?php endif; ?>
 
 			</div><!-- #content -->
-
-			<?php get_sidebar(); ?>
+			
+			<?php get_sidebar(); ?>			
 		</section><!-- #primary -->
 
 <?php get_footer(); ?>

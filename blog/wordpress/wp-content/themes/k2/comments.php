@@ -18,7 +18,7 @@ if ((have_comments()) or (comments_open())) : $shownavigation = 'yes'; ?>
 
 		<div class="metalinks">
 			<span class="commentsrsslink"><?php post_comments_feed_link( __( 'Feed for this Entry', 'k2_domain' ) ); ?></span>
-			<?php if ('open' == $post->ping_status) { ?><span class="trackbacklink"><a href="<?php trackback_url(); ?>" title="<?php esc_attr_e( 'Copy this URI to trackback this entry.', 'k2_domain' ); ?>"><?php _e('Trackback Address','k2_domain'); ?></a></span><?php } ?>
+			<?php if ('open' == $post->ping_status) { ?><span class="trackbacklink"><a href="<?php trackback_url(); ?>" title="<?php _e('Copy this URI to trackback this entry.','k2_domain'); ?>"><?php _e('Trackback Address','k2_domain'); ?></a></span><?php } ?>
 		</div>
 	<hr />
 

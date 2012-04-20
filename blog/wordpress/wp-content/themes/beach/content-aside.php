@@ -22,7 +22,7 @@
 					get_the_date( 'c' ),
 					get_the_date(),
 					get_author_posts_url( get_the_author_meta( 'ID' ) ),
-					esc_attr( sprintf( __( 'View all posts by %s', 'beach' ), get_the_author() ) ),
+					sprintf( esc_attr__( 'View all posts by %s', 'beach' ), get_the_author() ),
 					get_the_author()
 				);
 			?>

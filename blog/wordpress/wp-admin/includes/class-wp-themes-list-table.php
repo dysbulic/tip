@@ -24,8 +24,9 @@ class WP_Themes_List_Table extends WP_List_Table {
 
 		$themes = get_allowed_themes();
 
-		if ( ! empty( $_REQUEST['s'] ) ) {
-			$search = strtolower( stripslashes( $_REQUEST['s'] ) );
+		$search = !empty( $_REQUEST['s'] ) ? trim( stripslashes( $_REQUEST['s'] ) ) : '';
+
+		if ( '' !== $search ) {
 			$this->search = array_merge( $this->search, array_filter( array_map( 'trim', explode( ',', $search ) ) ) );
 			$this->search = array_unique( $this->search );
 		}
@@ -47,7 +48,7 @@ class WP_Themes_List_Table extends WP_List_Table {
 		unset( $themes[$ct->name] );
 		uksort( $themes, "strnatcasecmp" );
 
-		$per_page = 24;
+		$per_page = 15;
 		$page = $this->get_pagenum();
 
 		$start = ( $page - 1 ) * $per_page;
@@ -92,7 +93,7 @@ class WP_Themes_List_Table extends WP_List_Table {
 		if ( $this->get_pagination_arg( 'total_pages' ) <= 1 )
 			return;
 		?>
-		<div class="tablenav themes <?php echo $which; ?>">
+		<div class="tablenav <?php echo $which; ?>">
 			<?php $this->pagination( $which ); ?>
 		   <img src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" class="ajax-loading list-ajax-loading" alt="" />
 		  <br class="clear" />
@@ -105,9 +106,11 @@ class WP_Themes_List_Table extends WP_List_Table {
 ?>
 		<?php $this->tablenav( 'top' ); ?>
 
-		<div id="availablethemes">
-			<?php $this->display_rows_or_placeholder(); ?>
-		</div>
+		<table id="availablethemes" cellspacing="0" cellpadding="0">
+			<tbody id="the-list" class="list:themes">
+				<?php $this->display_rows_or_placeholder(); ?>
+			</tbody>
+		</table>
 
 		<?php $this->tablenav( 'bottom' ); ?>
 <?php
@@ -122,11 +125,25 @@ class WP_Themes_List_Table extends WP_List_Table {
 		$theme_names = array_keys( $themes );
 		natcasesort( $theme_names );
 
-	foreach ( $theme_names as $theme_name ) {
-		$class = array( 'available-theme' );
-	?>
-	<div class="<?php echo join( ' ', $class ); ?>">
-	<?php if ( !empty( $theme_name ) ) :
+		$table = array();
+		$rows = ceil( count( $theme_names ) / 3 );
+		for ( $row = 1; $row <= $rows; $row++ )
+			for ( $col = 1; $col <= 3; $col++ )
+				$table[$row][$col] = array_shift( $theme_names );
+
+		foreach ( $table as $row => $cols ) {
+?>
+<tr>
+<?php
+foreach ( $cols as $col => $theme_name ) {
+	$class = array( 'available-theme' );
+	if ( $row == 1 ) $class[] = 'top';
+	if ( $col == 1 ) $class[] = 'left';
+	if ( $row == $rows ) $class[] = 'bottom';
+	if ( $col == 3 ) $class[] = 'right';
+?>
+	<td class="<?php echo join( ' ', $class ); ?>">
+<?php if ( !empty( $theme_name ) ) :
 	$template = $themes[$theme_name]['Template'];
 	$stylesheet = $themes[$theme_name]['Stylesheet'];
 	$title = $themes[$theme_name]['Title'];
@@ -178,8 +195,10 @@ class WP_Themes_List_Table extends WP_List_Table {
 <?php endif; ?>
 		<?php theme_update_available( $themes[$theme_name] ); ?>
 <?php endif; // end if not empty theme_name ?>
-	</div>
-<?php } // end foreach $theme_names
+	</td>
+<?php } // end foreach $cols ?>
+</tr>
+<?php } // end foreach $table
 	}
 
 	function search_theme( $theme ) {

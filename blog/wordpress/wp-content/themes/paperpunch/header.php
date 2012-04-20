@@ -36,7 +36,7 @@
 	<div id="header" class="clear">
 		<ul id="follow">
 			<li>
-				<a href="<?php bloginfo( 'rss2_url' ); ?>"><img src="<?php bloginfo( 'template_url' ); ?>/images/flw-rss.png" alt="<?php esc_attr_e( 'RSS Feed', 'paperpunch' ); ?>"/></a>
+				<a href="<?php bloginfo( 'rss2_url' ); ?>"><img src="<?php bloginfo( 'template_url' ); ?>/images/flw-rss.png" alt="<?php _e( 'RSS Feed', 'paperpunch' ); ?>"/></a>
 			</li>
 		</ul>
 		<?php if (is_front_page()) echo( '<h1 id="title">' ); else echo( '<div id="title">' );?><a href="<?php bloginfo( 'url' ); ?>"><?php bloginfo( 'name' ); ?></a><?php if (is_front_page()) echo( '</h1>' ); else echo( '</div>' );?>

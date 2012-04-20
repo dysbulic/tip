@@ -34,7 +34,8 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>';
 	<?php do_action('commentsrss2_head'); ?>
 <?php
 if ( have_comments() ) : while ( have_comments() ) : the_comment();
-	$comment_post = $GLOBALS['post'] = get_post( $comment->comment_post_ID );
+	$comment_post = get_post($comment->comment_post_ID);
+	get_post_custom($comment_post->ID);
 ?>
 	<item>
 		<title><?php

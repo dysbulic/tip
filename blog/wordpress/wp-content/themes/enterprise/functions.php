@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Enterprise
+ * @package WordPress
+ * @subpackage Enterprise
  */
 
 $themecolors = array(

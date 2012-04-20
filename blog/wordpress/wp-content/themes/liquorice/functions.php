@@ -10,9 +10,9 @@
 $themecolors = array(
 	'bg' => 'f7f3ed',
 	'border' => 'd1bfa6',
-	'text' => '121212',
+	'text' => '000000',
 	'link' => 'cc4d22',
-	'url' =>  '07818c',
+	'url' =>  'cc4d22'
 );
 
 /**
@@ -22,7 +22,7 @@ $themecolors = array(
  * is designed for, generally via the style.css stylesheet.
  */
 if ( ! isset( $content_width ) )
-	$content_width  = 610;
+	$content_width  = '610';
 
 /**
 * Load the Theme Options Page that lets users control the social media icons at the top
@@ -226,7 +226,7 @@ function liquorice_posted_on() {
 		),
 		sprintf( '<span class="author vcard"><a class="url fn n" href="%1$s" title="%2$s">%3$s</a></span>',
 			get_author_posts_url( get_the_author_meta( 'ID' ) ),
-			esc_attr( sprintf( __( 'View all posts by %s', 'liquorice' ), get_the_author() ) ),
+			sprintf( esc_attr__( 'View all posts by %s', 'liquorice' ), get_the_author() ),
 			get_the_author()
 		),
 		'byline'

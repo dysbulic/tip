@@ -2,7 +2,7 @@
 <!--[if lte IE 7]>
 <html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?> class="lteIE7">
 <![endif]-->
-<!--[if (gt IE 7) | (!IE)]><!-->
+<!--[if (gt IE 7) | (!IE)]><!--> 
 <html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
 <!--<![endif]-->
 
@@ -15,7 +15,7 @@
 	<?php $options = get_option('wuwei_theme_options'); if ( $options['colorscheme'] == 1 ) : ?>
 	<link rel='stylesheet' type='text/css' href="<?php bloginfo('template_url'); ?>/colours.css" />
 		<?php if ( is_rtl() ) : ?>
-	<link rel='stylesheet' type='text/css' href="<?php bloginfo('template_url'); ?>/colours-rtl.css" />
+	<link rel='stylesheet' type='text/css' href="<?php bloginfo('template_url'); ?>/colours-rtl.css" />			
 		<?php endif; ?>
 	<?php endif; ?>
 
@@ -23,7 +23,7 @@
 
 	<?php if ( is_singular() && get_option( 'thread_comments' ) )
 			wp_enqueue_script( 'comment-reply' ); ?>
-
+		
 	<?php wp_head(); ?>
 </head>
 
@@ -32,7 +32,7 @@
 	<div class="full-column">
 
 		<div class="center-column">
-
+			
 			<?php wp_nav_menu( 'container_class=menu menu-main&theme_location=primary' ); ?>
 
 			<div class="clearboth"><!-- --></div>

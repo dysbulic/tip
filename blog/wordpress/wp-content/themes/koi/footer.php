@@ -3,7 +3,7 @@
  * @package WordPress
  * @subpackage Koi
  */
-?>
+get_header(); ?>
 
 	<div id="secondary">
 

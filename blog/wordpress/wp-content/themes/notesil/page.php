@@ -3,7 +3,7 @@
 	<div id="container">
 		<div id="content">
 
-			<?php while ( have_posts() ) : the_post(); ?>
+<?php the_post(); ?>
 
 			<div id="post-<?php the_ID(); ?>" class="<?php notesil_post_class(); ?>">
 				<h2 class="entry-title"><?php the_title(); ?></h2>
@@ -14,9 +14,7 @@
 				</div>
 			</div><!-- .post -->
 
-			<?php comments_template(); ?>
-
-			<?php endwhile; // end of the loop. ?>
+<?php comments_template(); ?>
 
 		</div><!-- #content -->
 		<?php get_sidebar(); ?>

@@ -25,7 +25,7 @@ class WP_Locale {
 	 * Stores the translated strings for the one character weekday names.
 	 *
 	 * There is a hack to make sure that Tuesday and Thursday, as well
-	 * as Sunday and Saturday, don't conflict. See init() method for more.
+	 * as Sunday and Saturday don't conflict. See init() method for more.
 	 *
 	 * @see WP_Locale::init() for how to handle the hack.
 	 *
@@ -65,7 +65,7 @@ class WP_Locale {
 	/**
 	 * Stores the translated strings for 'am' and 'pm'.
 	 *
-	 * Also the capitalized versions.
+	 * Also the capalized versions.
 	 *
 	 * @since 2.1.0
 	 * @var array
@@ -314,7 +314,7 @@ class WP_Locale {
 	}
 
 	/**
-	 * Constructor which calls helper methods to set up object variables
+	 * PHP4 style constructor which calls helper methods to set up object variables
 	 *
 	 * @uses WP_Locale::init()
 	 * @uses WP_Locale::register_globals()
@@ -322,7 +322,7 @@ class WP_Locale {
 	 *
 	 * @return WP_Locale
 	 */
-	function __construct() {
+	function WP_Locale() {
 		$this->init();
 		$this->register_globals();
 	}

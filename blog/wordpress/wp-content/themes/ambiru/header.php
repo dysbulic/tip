@@ -15,7 +15,7 @@ if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
 wp_head();
 ?>
 </head>
-<body <?php if(is_home()){echo 'id="home"';}?> <?php body_class(); ?>>
+<body <?php if(is_home()){echo 'id="home"';}?>>
 <div id="wrap" class="clearfix">
 <div id="header">
 	<h1><a href="<?php echo home_url( '/' ); ?>"><?php bloginfo('name'); ?></a></h1>

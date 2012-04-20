@@ -43,8 +43,9 @@
 
 				<p class="postmetadata">
 					<small>
-						<?php printf( __( 'Posted on %1$s at %2$s in', 'uti_theme' ), get_the_date(), get_the_time() ); echo ' '; the_category( ', ' ); ?>
+						<?php printf(__('Posted on %1$s at %2$s in ', 'uti_theme'), get_the_time('l, F jS, Y'), get_the_time()); the_category(' ') ?>
 						&nbsp;&nbsp;&#124;&nbsp;&nbsp;<?php post_comments_feed_link(_e('RSS feed', 'uti_theme')); ?>
+<!--</a> I think this is out of place -->
 						<?php if ( comments_open() && pings_open() ) {
 							// Both Comments and Pings are open ?>
 							&#124;&nbsp;&nbsp;<a href="#respond">
@@ -64,9 +65,9 @@
 
 						<?php } elseif ( comments_open() && !pings_open() ) {
 							// Comments are open, Pings are not ?>
-							<?php _e( 'Pinging is disabled. But you can skip to the end and leave a', 'uti_theme' ); ?>&nbsp;
+							<?php _e('Pinging is disabled. But you can skip to the end and leave a ', 'uti_theme')?>
 							<a href="#respond">
-								<?php _e( 'response.','uti_theme' ); ?>
+								<?php _e('response.','uti_theme')?>
 							</a>
 
 						<?php } elseif ( !comments_open() && !pings_open() ) {

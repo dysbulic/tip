@@ -8,20 +8,18 @@ get_header(); ?>
 
 		<div id="primary">
 			<div id="content" role="main">
-
+			
 			<?php if ( '' != get_header_image() ) : ?>
 			<div class="header-image">
 				<img src="<?php header_image(); ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" />
 			</div>
 			<?php endif; ?>
 
-				<?php while ( have_posts() ) : the_post(); ?>
+				<?php the_post(); ?>
 
-					<?php get_template_part( 'content', 'page' ); ?>
+				<?php get_template_part( 'content', 'page' ); ?>
 
-					<?php comments_template( '', true ); ?>
-
-				<?php endwhile; // end of the loop. ?>
+				<?php comments_template( '', true ); ?>
 
 			</div><!-- #content -->
 		</div><!-- #primary -->

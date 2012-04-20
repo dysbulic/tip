@@ -10,7 +10,7 @@
 <meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php bloginfo( 'charset' ); ?>" />
 <title><?php wp_title(); ?> <?php bloginfo( 'name' ); ?></title>
 <link rel="stylesheet" href="<?php bloginfo( 'stylesheet_url' ); ?>" type="text/css" media="screen" />
-<!--[if lte IE 7]><link href="<?php echo get_template_directory_uri(); ?>/css/style-ie.css" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="<?php bloginfo( 'template_directory' ); ?>/css/style-ie.css" rel="stylesheet" type="text/css" /><![endif]-->
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
 <?php if ( is_singular() ) wp_enqueue_script( 'comment-reply' ); ?>
 <?php wp_head(); ?>
@@ -18,7 +18,7 @@
 <body <?php body_class(); ?>>
 <div id="container">
 <div id="header">
-	<h1><a href="<?php echo home_url( '/' ); ?>" title="<?php bloginfo( 'name' ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
+	<h1><a href="<?php bloginfo( 'url' ); ?>" title="<?php bloginfo( 'name' ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
 	<p><?php bloginfo( 'description' ); ?></p>
 
 	<div id="menu">
@@ -26,6 +26,6 @@
 	</div>
 
 	<div id="search">
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . '/searchform.php' ); ?>
 	</div>
 </div><!-- /header -->

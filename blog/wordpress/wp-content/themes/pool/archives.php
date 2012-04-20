@@ -10,17 +10,17 @@ Template Name: Archives
 
 	<div id="noticias">
 		<div class="entrada">
-			<h2><?php _e( 'Archives', 'pool' ); ?></h2>
-			<h3><?php _e( 'By month:', 'pool'); ?></h3>
-			<ul>
-				<?php wp_get_archives( 'type=monthly&show_post_count=1' ); ?>
-			</ul>
-
-			<h3><?php _e( 'By category:', 'pool' ); ?></h3>
-			<ul>
-				<?php wp_list_categories( 'orderby=name&show_count=1&feed=RSS' ); ?>
-			</ul>
-		</div><!-- #entrada -->
-	</div><!-- #noticias -->
+			<h2>Archives</h2>
+				<h3>By month:</h3>
+				<ul>
+					<?php wp_get_archives('type=monthly&show_post_count=1'); ?>
+				</ul>
+			
+				<h3>By category:</h3>
+				<ul>
+					<?php wp_list_cats('sort_column=name&optioncount=1&feed=Feed'); ?>
+				</ul>
+		</div>
+	</div>
 
 <?php get_footer(); ?>

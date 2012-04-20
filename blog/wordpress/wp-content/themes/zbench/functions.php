@@ -11,10 +11,10 @@
  */
 $themecolors = array(
 	'bg' => 'f7f7f7',
-	'border' => 'f2f2f2',
+	'border' => 'cccccc',
 	'text' => '242424',
-	'link' => '333333',
-	'url' => '4a630f',
+	'link' => '333',
+	'url' => '333'
 );
 
 // Calculate content_width based on layout option
@@ -40,7 +40,7 @@ function zbench_setup() {
 	);
 
 	// This theme has some pretty cool theme options
-	require_once( dirname( __FILE__ ) . '/inc/theme-options.php' );
+	require ( dirname( __FILE__ ) . '/theme-options.php' );
 
 	// This theme allows users to set a custom background
 	add_custom_background();
@@ -85,7 +85,7 @@ function zbench_header_style() { ?>
 	}
 	#header-background a span {
 		visibility: hidden;
-	}
+	}	
 	<?php endif;
 	if ( get_header_textcolor() ) : ?>
 	#title h1,
@@ -287,23 +287,12 @@ if ( is_readable( $locale_file ) )
 	require_once( $locale_file );
 
 /**
- * Get current theme options with defaults as fallback
- */
-function zbench_get_theme_options() {
-	$defaults = array(
-		'theme_layout' => 'content-sidebar',
-	);
-	$options = get_option( 'zbench_theme_options', $defaults );
-	return $options;
-}
-
-/**
  * Returns the current zBench layout as selected in the theme options
  *
  * @since zBench 1.0
  */
 function zbench_current_layout() {
-	$options = zbench_get_theme_options();
+	$options = get_option( 'zbench_theme_options' );
 	$current_layout = $options['theme_layout'];
 
 	$two_columns = array( 'content-sidebar', 'sidebar-content' );
@@ -433,4 +422,21 @@ function zbench_comment( $comment, $args, $depth ) {
 	<li class="post pingback">
 		<p><?php _e( 'Pingback: ', 'zbench' ); ?><?php comment_author_link(); ?><?php edit_comment_link ( __( 'edit', 'zbench' ), '&nbsp;&nbsp;', '' ); ?></p>
 	<?php endif;
+}
+
+/*
+ * Register with hook 'wp_print_styles'
+ * Enqueue style sheet
+ *
+ * @since zBench 1.0
+ */
+add_action( 'wp_print_styles', 'zbench_stylesheet' );
+function zbench_stylesheet() {
+	$options = get_option( 'zbench_theme_options' );
+
+	// Register stylesheets
+	wp_register_style( 'zbench_stylesheet', get_bloginfo( 'stylesheet_url' ) );
+
+	// Load stylesheets
+	wp_enqueue_style( 'zbench_stylesheet' );
 }

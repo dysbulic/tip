@@ -62,9 +62,11 @@
 	if ( $headerImageURL == "" ) {
 		$classExtra .= " hid_$headerImage";
 	}
+	
+	echo "<body class=\"$classExtra\">";
+
 ?>
 
-<body <?php body_class( $classExtra ); ?>>
 
 <div id="wrapper">
 

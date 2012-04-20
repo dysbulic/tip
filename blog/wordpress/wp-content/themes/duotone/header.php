@@ -29,7 +29,7 @@ wp_head();
 	/* ]]> */
 </script>
 </head>
-<body <?php image_orientation(); // calls body_class() ?>>
+<body<?php image_orientation(); ?>>
 
 <div id="page">
 

@@ -15,7 +15,7 @@
 
 		<div class="post">
 
-			<h2 class="post-title"><a href="<?php the_permalink(); ?>" title="<?php esc_attr_e( 'Permanent Link to' ); ?> <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+			<h2 class="post-title"><a href="<?php the_permalink(); ?>" title="<?php _e( 'Permanent Link to' ); ?> <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 
 			<div class="post-content">
 				<?php the_content( __( 'Read more&hellip;' ) ); ?>

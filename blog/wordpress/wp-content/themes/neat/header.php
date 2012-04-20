@@ -13,7 +13,7 @@
 	wp_head(); 
 	?>
 </head>
-<body <?php body_class(); ?>>
+<body>
 <br /><br /><br />
 <div id="page">
 

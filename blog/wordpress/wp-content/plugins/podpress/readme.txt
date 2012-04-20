@@ -3,16 +3,19 @@ Tags: post, podcast, podcasting, audio, video, admin, feed, widget, stats, stati
 Contributors: seek3r, macx, iscifi
 Donate link: http://www.mightyseek.com/podpress_donate.php
 Requires at least: 2.2
-Tested up to: 3.2.1
-Stable Tag: 8.8.10.12
+Tested up to: 3.1
+Stable Tag: 8.8.9.2
 
 A plugin for Podcasters using WordPress.
-
 
 == Description ==
 podPress adds a lot of features designed to make WordPress the ideal platform for hosting a podcast.
 
-podPress 8.8.10.12 includes a bug fix. You can read more about this version in the [Changelog](http://wordpress.org/extend/plugins/podpress/changelog/) and pay attention to the [Upgrade](http://wordpress.org/extend/plugins/podpress/other_notes/) section.
+podPress 8.8.10 includes new functions and several bug fixes. Read more about this version in the [Changelog](http://wordpress.org/extend/plugins/podpress/changelog/) and pay attention to the [Upgrade](http://wordpress.org/extend/plugins/podpress/other_notes/) section.
+
+Thank you to all who have reported bugs and have made improvement proposals. Special thanks to [Ray (raymer)](http://wordpress.org/support/profile/68146) who did extensive tests with the develpment versions of 8.8.5+ and helped a lot! 
+(Most patches for v8.8.5+ were made by [Tim Berger (ntm)](http://profiles.wordpress.org/ntm/))
+If somebody else is also interested in maintaining podPress while the main developers are out, please send an email to admin [at] laptoptips.ca.
 
 Features:
 
@@ -34,109 +37,21 @@ Available in these languages:
 * English
 * German
 
+If you discover a problem with this plugin, please report it in the [WP.org forum](http://wordpress.org/tags/podpress?forum_id=10) and add the tag "podpress" to your post resp. thread.
 
-If you discover a problem with this plugin, please report it in the [WP.org forum](http://wordpress.org/tags/podpress?forum_id=10) and add the tag "podpress" to your post.<br />
-Thank you to all who have reported bugs and have made improvement proposals. Special thanks to [Ray (raymer)](http://wordpress.org/support/profile/68146) who did extensive tests with the development versions since v8.8.5 and helped a lot! 
-
-This plugin is currently maintained by [Tim Berger (ntm)](http://profiles.wordpress.org/ntm/).<br />Latest news and announcements regarding podPress on Twitter: [podpress2010](http://twitter.com/podPress2010)
-
-If somebody else is also interested in maintaining podPress while the main developers are out, please send an email to admin [at] laptoptips.ca.
-
-For further information you may also visit the website
+For the more information visit the website
 http://www.mightyseek.com/podpress
-
 
 == Changelog ==
 
-Please, read the [Upgrade instructions](http://wordpress.org/extend/plugins/podpress/other_notes/).
-
-= v8.8.10.12 =
-*  This is a bug fix version for 8.8.10.11. I have forgotten to remove some code which has helped me to debug some things but which brought you trouble. I'm very sorry for my mistake! (Thank you [c365954](http://wordpress.org/support/profile/c365954) and [themacmommy](http://wordpress.org/support/profile/themacmommy) for [reporting the problem](http://wordpress.org/support/topic/cannot-download-or-play-podcast-via-player).)
-
-= v8.8.10.11 =
-* bug fix: It solves a problem which could occur since 8.8.10.8 on servers with a PHP installation which does not include the [Multibyte String extension (mbstring)](http://www.php.net/manual/en/book.mbstring.php) (functions like `mb_substr()` or `mb_strrpos()` are not usable without this extension). If your blog is on such server then this will help you - but probably only if you write posts in English. But if your blog is on such server and if you write posts in a different language which contains for instance characters with diacritical marks then you should make sure that the PHP on the server of your blog provides such functions. These functions are also used by WP and other plugins when it is necessary to process non-English text. If you have no problems with the RSS feed while podPress 8.8.10.10 is running then this should not concern you (mbstring is probably available). You may find out whether the PHP on the server of your blog supports mbstring functions or not with the help of a different plugin e.g. [WordPress System Health](http://wordpress.org/extend/plugins/wp-system-health) (look for "mbstring" in System > Server Setup (> show detailed) >  Loaded Extensions) or [PHP Server Info](http://wordpress.org/extend/plugins/php-server-info) (look for "mbstring") (Thank you [ptobia](http://wordpress.org/support/profile/ptobia) for [reporting the problem](http://wordpress.org/support/topic/podpress-881010-broken-rss-feed).)
-* new: This is for all who like to define custom CSS for the podPress output: All the elements in the line below the player have now an HTML attribute `class`. These attributes consist at least of a class name and the class name which depends on the type of the media file. For instance the Download link has the class names: `podpress_downloadlink podpress_downloadlink_audio_mp3` if the the file is a MP3 audio file. podPress uses audio, video, ebook, embed and misc as group type and all the file types which you can choose from the list in the podPress box below the post editor. For instace for a PDF file the file specific class would have the suffix `_ebook_pdf` (Thank you [david hickox](http://wordpress.org/support/profile/david-hickox) for [the idea](http://wordpress.org/support/topic/adding-classes-to-the-different-display-links).)
-
-= v8.8.10.10 =
-* bug fix: it corrects a problem with the function which limits the characters of several RSS tags. (Thank you [IAmediaworks](http://wordpress.org/support/profile/iamediaworks) for [reporting the problem](http://wordpress.org/support/topic/bugs-wp32podpress88108).)
-
-= v8.8.10.9 =
-* bug fix: it corrects a problem with the function which limits the characters of several RSS tags. (Thank you [johncsnider](http://wordpress.org/support/profile/johncsnider) for [reporting the problem](http://wordpress.org/support/topic/podcast-feed-404).)
-* bug fix: In 8.8.10.8 the Category Casting settings did not work in combination with the default Permalink scheme. (Thank you [ip_tara](http://wordpress.org/support/profile/ip_tara) for [reporting the problem](http://wordpress.org/support/topic/bugs-wp32podpress88108).)
-* bug fix: The Reading and General Settings link on the Feed Settings page of podPress are working now correctly. (Thank you [Madsex](http://wordpress.org/support/profile/madsex) for [reporting the problem](http://wordpress.org/support/topic/plugin-podpress-podpress-problem-with-options-generalphp-and-options-readingphp).)
-* bug fix: for a problem with the iTunes:category setting which could occur after switching the language of the blog after saving the feed settings
-* new: podpress_post_scriptblock is a new [filter hook](http://codex.wordpress.org/Plugin_API#Filters) of podPress. Read more about it in the [Other Notes](http://wordpress.org/extend/plugins/podpress/other_notes/) section.
-* CSS adjustment for WP 3.2 (background-color of .podpress_editor_table has changed)
-
-= v8.8.10.8 =
-<strong>Notice:</strong> Upgrading to this version from version 8.8.9.2 or older will rename the podPress `meta_key`s in the postmeta data base table of your blog (see bug fixes). Downgrading to a previous version is only possible if you reverse these changes.
-
-* bug fix: an upgrade to this version will remove an old deprecated option which could lead to the situation that podPress would add "Download Standard Podcast" somewhere in the iTunes:summary or iTunes:subtitle of post.  (Thank you [IAmediaworks](http://wordpress.org/support/profile/iamediaworks) for [reporting the problem](http://wordpress.org/support/topic/upgrade-added-download-standard-podcast-to-itunes-episode-description).)
-* bug fix: The `<link>` of the RSS image of the `<channel>` will include the 'Site address (URI)' set in Settings > General. (Thank you [lopo](http://wordpress.org/support/profile/lopo) for [reporting the problem and making suggestions](http://wordpress.org/support/topic/feed-validation-warning-image-link-doesnt-match-channel-link-wordaround).)
-* bug fix: If the option "Aggressively Protect the news feeds" was set to "Yes" then podPress has removed the formatting from the post content (`<content:encoded>`) in the feeds. Because this option is deprecated, it is removed now. (Thank you [sephage](http://wordpress.org/support/profile/sephage) for [reporting the problem](http://wordpress.org/support/topic/plugin-podpress-podpress-88107-breaks-rss-formatting).)
-* bug fix: Fix for a bug in the appearance of the iTunes:Keywords option in the podPress box below the post editor which occured when the new option "Use the tags of the post" was active. 
-* bug fix: The "Disable Player:" and "Disable Preview Player:" in the podPress box below the post editor are working again. (Thank you Philip for mentioning the problem.)
-* bug fix: The result of the duration auto detection could have a leading white space under some circumstances which is not desirable. (Thank you [Puck](http://wordpress.org/support/profile/puck) for [reporting the problem and making suggestions](http://wordpress.org/support/topic/plugin-podpress-podcast-duration-lostnot-being-saved-workaround-provided).)
-* bug fix: Chrome/Chromium >= v10 displayed the HTML5 audio player depending on certain CSS definitions of the theme without displaying the control elements properly. This podPress version includes a workaround/bug fix for this problem. (Thank you [Twanislas](http://wordpress.org/support/profile/twanislas) for [reporting the problem](http://wordpress.org/support/topic/podpress-suggestions).)
-* change: The options for the feed title of a category feed are re-arranged. Further it is possible to use the Site Title as the title of such a feed.
-* This version includes also some security improvements.
-
-= v8.8.10.7 =
-<strong>Notice:</strong> Upgrading to this version from version 8.8.9.2 or older will rename the podPress `meta_key`s in the postmeta data base table of your blog (see bug fixes). Downgrading to a previous version is only possible if you reverse these changes.
-
-* bug fix: the function which limits the number of characters for several feed elements is multibyte-character-safe and it does not cut through htmlentities anymore (Thank you [franky1029](http://wordpress.org/support/profile/franky1029), [welshes99](http://wordpress.org/support/profile/welshes99) and [drezac](http://wordpress.org/support/profile/drezac) for [reporting the problem](http://wordpress.org/support/topic/podpress-player-doesnt-show-in-post).)
-* bug fix: the HTML5 player appears also in IE9 (JS error fixed) (Thank you [dael3](http://wordpress.org/support/profile/dael3) for [reporting the problem](http://wordpress.org/support/topic/no-player).)
-* bug fix: the "Validate your feed" button at the Category Casting settings works again (Thank you [meetwp](http://wordpress.org/support/profile/meetwp) for [reporting the problem](http://wordpress.org/support/topic/plugin-podpress-category-casting-category-title-appears-twice-in-feed-title).)
-* new: It is now possible to "Use the tags of the post" as itunes:keywords. There is a new option with this name in the Post specific settings for iTunes (below the post editor). (Suggested by [Twanislas](http://wordpress.org/support/profile/twanislas) in [this thread](http://wordpress.org/support/topic/podpress-suggestions))
-* new: max. 12 itunes:keywords possible
-
-= v8.8.10.6 =
-<strong>Notice:</strong> Upgrading to this version from version 8.8.9.2 or older will rename the podPress `meta_key`s in the postmeta data base table of your blog (see bug fixes). Downgrading to a previous version is only possible if you reverse these changes.
-
-* bug fix: a further bug fix for the feed modifying functions. podPress is using now the WP-own list of HTML entities and their numeric equivalents (ent2ncr();) to transform non-ASCII characters in the additional feed elements into RSS-feed-save text. (Thank you [Aaron Frankel](http://wordpress.org/support/profile/aaronfrankel) for [reporting the problem](http://wordpress.org/support/topic/88105-xml-feed-still-down).)
-
-= v8.8.10.5 =
-<strong>Notice:</strong> Upgrading to this version from version 8.8.9.2 or older will rename the podPress `meta_key`s in the postmeta data base table of your blog (see bug fixes). Downgrading to a previous version is only possible if you reverse these changes.
-
-* bug fix: a further bug fix for the feed modifying functions
-* bug fix: podPresshas displayed under some circumstances the player and links twice on single post views
-
-= v8.8.10.4 =
-<strong>Notice:</strong> Upgrading to this version from version 8.8.9.2 or older will rename the podPress `meta_key`s in the postmeta data base table of your blog (see bug fixes). Downgrading to a previous version is only possible if you reverse these changes.
-
-* bug fix: for a problem with not escaped ampersands in iTunes:category names which appeared in 8.8.10.3 (Thank you [BibleStudyRadio](http://wordpress.org/support/profile/biblestudyradio), [UULosAlamos Webmaster](http://wordpress.org/support/profile/uulosalamos-webmaster),  [AJRitz](http://wordpress.org/support/profile/ajritz) and [raymer](http://wordpress.org/support/profile/raymer) for [reporting the problem](http://wordpress.org/support/topic/plugin-podpress-itune-feed-incorrect).)
-* bug fix: The iTunes:category settings for the podPress Feeds work now. Depending on your previous iTunes:category settings it might be necessary to adjust them now. The podPress Feeds will no longer use the comparable settings of the main feed settings.
-
-= v8.8.10.3 =
-<strong>Notice:</strong> Upgrading to this version from version 8.8.9.2 or older will rename the podPress `meta_key`s in the postmeta data base table of your blog (see bug fixes). Downgrading to a previous version is only possible if you reverse these changes.
-
-* The 3rd party statistic options are available again by default. If you have used them before then please control the related settings after the upgrade.
-* bug fix: podPress statistics counts HTML5 play events correct, now. It counts when the "onplaying" event happens (when someone clicks on play and not during when the the HTML5 player buffers (preload) the file). The download numbers with 8.8.10 - 8.8.10.2 are probably to high depending on how many of your listners have used Chrome/Chromium (or Safari desktop versions) to listen your podcasts.
-* bug fix: podPress will use the excerpt of a post if there is one as the iTunes:summary and 255 characters of it as iTunes:subtitle. If a post has no excerpt then podPress takes automatically the post content (or the first parts of it). In older versions podPress has ignored the excerpts. Furthermore podPress will respect the password protected posts and adds only the summary, subtitle and enclosure if there is no password protection or if the user has already entered the password for the post. (Thank you [MedHead](http://wordpress.org/support/profile/medhead) for [reporting the problem](http://wordpress.org/support/topic/plugin-podpress-itunes-summary-send-only-excerpt).)
-* bug fix: the iTunes:block options in the podPress Feeds section will show the correct status / current setting (so far it displayed always 'No' regardless of the setting) (Thank you [maydaytothemoon](http://wordpress.org/support/profile/maydaytothemoon) for [reporting the problem](http://wordpress.org/support/topic/plugin-podpress-podpress-settingspreferences-are-not-being-saved).)
-* bug fix: Now it is possible to deselect the iTunes feed button (Feed Buttons Widget). (Thank you [maydaytothemoon](http://wordpress.org/support/profile/maydaytothemoon) for [reporting the problem](http://wordpress.org/support/topic/plugin-podpress-podpress-settingspreferences-are-not-being-saved).)
-* bug fix: podPress checks whether or the stats tables exist and creates them if necessary when someone activates the stats feature. The db queries do not long include a specific table type. That prevents problems in cases in which the type was not the one which was hardcoded in previous versions of podPress.
-* podPress version number appears only if you want it to in the footer or the Feeds of your blog. It is also possible show only the name of the plugin without the version number.
-* The auto detection of the meta information of the media files can retrieve the cover art of m4a files.
-* on a first installation of podPress, only the podPress Feed with the slug "podcast" will be active by default
-
-= v8.8.10.2 =
-<strong>Notice:</strong> Upgrading to this version from version 8.8.9.2 or older will rename the podPress `meta_key`s in the postmeta data base table of your blog (see bug fixes). Downgrading to a previous version is only possible if you reverse these changes.
-
-* bug fix: podPress displays the download number for files with white spaces in their names in the "Downloads Per Media File" table and in the line below the player (Thank you [SmartPeoplePod](http://wordpress.org/support/profile/smartpeoplepod) for [reporting the problem](http://wordpress.org/support/topic/plugin-podpress-podpress-stats-per-post-are-gone-help).)
-* bug fix: ebooks will have no longer a "Play in Popup" link
-
-= v8.8.10.1 =
-<strong>Notice:</strong> Upgrading to this version from version 8.8.9.2 or older will rename the podPress `meta_key`s in the postmeta data base table of your blog (see bug fixes). Downgrading to a previous version is only possible if you reverse these changes.
-
-* bug fix: the jQuery and jQueryUI libraries are getting loaded correctly, regardless whether the file system on the server is case sensitive or not
+Please, read the [Upgrade instructions](http://wordpress.org/extend/plugins/podpress/other_notes/). 
 
 = v8.8.10 =
 <strong>Notice:</strong> Upgrading to this version will rename the podPress `meta_key`s in the postmeta data base table of your blog (see bug fixes). Downgrading to a previous version is only possible if you reverse these changes.
 
 * a new option at the General Settings page of podPress to display the file size of the media files along with the duration in the line below the player (or player preview)
 * new options at the General Settings page of podPress which make it possible to customize the displayed duration value
-* podPress uses the HTML 5 `<audio>` tag (instead of the 1PixelOut and Podango player) for MP3 files if the browser engine of a visitor is Webkit 525.x or newer (e.g. the current versions of Safari incl. the variants on iPhones, iPads and iPod Touch and of Chrome) or if it is an Internet Explorer 9.0 or newer. (see Player Settings page)
+* podPress uses the HTML 5 `<audio>` tag (instead of the 1PixelOut and Podango player) for MP3 files if the browser engine of a visitor is Webkit 525.x or newer (e.g. Safari, Chrome). (see Player Settings page)
 * a new option at the General Settings page of podPress which can be used to expand the blog-own search to search also in the podcast episode titles and URLs
 * a new option at the General Settings page of podPress which will make it possible to display the podPress meta box also below the post editor box of posts of custom post types. That makes it possible to add podcasts to post of custom post types. (this requires at least WP 2.9)
 * a new option for the XSPF widget. Now, it is possible to customize the playlist entires. 
@@ -412,10 +327,8 @@ Details about all the optional_files are in optional_files/details.txt
 = Requirements =
 podPress requires at least WP 2.1 but it is very recommended to use at least WP 2.3. Many features like the widgets, the custom feeds or the CategoryCasting feature will work only with WP 2.3 or later WP versions. Multiple Widgets are available in combination with WP 2.8.x or newer.
 
-The auto detection of the duration and other meta information requires PHP 5.0.5. But all other elements of the plugin work with PHP 4.x, too.
-
 = Included Software =
-podPress v8.8.10.11 includes:
+podPress v8.8.10 includes:
 
 * 1PixelOut Audio Player v2.0 - http://www.1pixelout.net/code/audio-player-wordpress-plugin/
 * Podango player - http://sites.google.com/site/podangohibernate/
@@ -432,7 +345,6 @@ If you have used the widgets of podPress then it will be necessary to reactivate
 podPress adds feeds to your blog. These Feeds have the names <em>podcast</em>, <em>premium</em>, <em>enhancedpodcast</em> (since 8.8.5) and <em>torrent</em> (since 8.8.5). In the past versions, you could not control these Feeds and their meta information via a settings page. That is why v8.8.8.x has a new section at the Feed/iTunes Settings page (which has also a new design). With this new podPress Feeds section in place, the purpose of the Feed Settings section has changed. Now, the Feed Settings section is for controlling the iTunes tags and other settings only of all the main Feeds of the blog (like the default Entries RSS2 Feed) and the podPress Feeds section is for controlling the additional Feeds which podPress adds to your blog (like <em>podcast</em>). In the past all the Feeds have shared the same information from the Feed Settings section. If you are using at least one of these Feeds to publish your podcast episodes or to route them to Feedburner or iTunes or a comparable service then you need to fill in the information about this Feed like the content description or the URL of Feed icon into the new podPress Feeds section. You may copy and paste the information from the Feed Settings section or you could use the chance to customize these information. If you are using a non-default Permalink scheme then you should save the Permalink settings after the podPress upgrade. You should also re-save the Permalink setting after you have changed, activated, deactivated or renamed a Feed or if you are using the podPress the first time in your blog). 
 podPress v8.8.5 and newer versions require at least WP 2.1 but it is recommended to use at least WP 2.3. To be able to use the full feature set (e.g. for multiple widget support) of podPress, you should use at least WP 2.9.x.
 Upgrading to v8.8.10 is going to rename the podPress `meta_key`s in the postmeta data base table of your blog (`podPressMedia` becomes `_podPressMedia` and `podPressPostSpecific` becomes `_podPressPostSpecific`). Downgrading to a previous version is only possible if you reverse these changes.
-
 
 == Upgrade ==
 Upgrading from 8.8.6.3 (or older version) to 8.8.8.x (or newer versions):
@@ -478,9 +390,8 @@ Since v8.8.5 you can filter some parts of the output of podPress
 * podpress_item_enclosure_and_itunesduration: a filter for each `<enclosure>` tag which podPress adds to the RSS feed items
 * nonpodpress_atom_enclosure: podPress adds the media files which are added with podPress at first to the news feeds. `<enclosure>` tags of media files which are added a different way (e.g. automatically via a link the post content) will arranged after the podPress `<enclosure>` tags by podPress. This filter is for filtering each of these non-podPress `<link rel="enclosure">` tags in ATOM feeds.
 * nonpodpress_rss_enclosure: This filter is for filtering each of these non-podPress `<enclosure>` tags in RSS feeds.
-* podpress_downloadlinks: a filter for the podPress row below the player (the `<div class="podPress_downloadlinks">` container). If you want to use this filter hook then make sure that the filtered result still contains the span element with an id like this: `'<span id="podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'_PlayLink" style="display:none">| '.__('Play Now', 'podpress').'</span>'`. This span element is in the filter input. Do not replace all of the content.
+* podpress_downloadlinks: a filter for the podPress row below the player (the `<div class="podPress_downloadlinks">` container) <br /> If you want to use this filter hook then make sure that the filtered result still contains the span element with an id like this: `<span id="podPressPlayerSpace_X_PlayLink" style="display:none">| Play Now</span>`. This span element is in the filter input. Do not replace all of the content.
 * podpress_post_content (since 8.8.8): a filter for the complete podPress section of posts with podPress attachment (for the sections `<!-- Begin: podPress --> ... <!-- End: podPress -->`)
-* podpress_post_scriptblock (since 8.8.10.9): a filter for the Javascript block of the podPress section of posts with podPress attachment
 * podpress_legacy_support_feed_icon (only in combination with WP < v2.2): it is a possibility to add a feed icon in front of each line of the Feed Buttons widget in text mode
 * podpress_posts_distinct (since 8.8.10): a filter for the modifications which podPress adds to the DISTINCT part of the posts query of WP
 * podpress_posts_join (since 8.8.10): a filter for the modifications which podPress adds to the JOIN part of the posts query of WP
@@ -506,7 +417,6 @@ If you have a custom XSPF playlist e.g. a .xspf file and you would like that the
 
 = How-To use custom variables for the XSPF player: =
 Create a sub folder in the plugins folder of your blog e.g. /wp-content/plugins/podpress_options/xspf_options/variables (create a different one for the slim player e.g. /wp-content/plugins/podpress_options/xspf_options/variables_slim/). Copy the podpress_xspf_config-sample.php file from the podpress folder to the podpress_options/ folder. Rename it to podpress_xspf_config.php and uncomment the line with constant PODPRESS_XSPF_USE_CUSTOM_VARIABLES_1 (or PODPRESS_XSPF_SLIM_USE_CUSTOM_VARIABLES_1 for custom variables for the slim player). The number 1 in the name of the name of the constant is stands for the ID of the blog (it is 1 for the main blog of a multi site installation or a single blog). If you want to define different variables for XSPF player in different (sub) blogs then you need to define constant and variables files with their IDs too. The last stept is to create the variables files and place them in the variables (or variables_slim) folder. They have the naming scheme variables_{blog ID}.txt. For more information about all possible variables see the [documentation of the XSPF Jukebox](http://lacymorrow.com/projects/jukebox/xspfdoc.html).
-
 
 == Frequently Asked Questions ==
 
@@ -537,18 +447,6 @@ After you have uploaded a media file, you create or edit the post (or page) whic
 
 (You can get probably a good impression how it works from [this WP.org forum thread](http://wordpress.org/support/topic/356947) although the original question is a little bit different. This [other WP.org forum thread](http://wordpress.org/support/topic/425141) might also be helpful.)
 
-= Does podPress has HTML5 support? =
-
-Yes. podPress (since 8.8.10) embeds .mp3, .ogg and .ogv media files with the HTML5 `<audio>` and `<video>` tags if the browser of the visitor supports these media file types in combination with these HTML5 tags. This means that podPress will embed MP3 files for all browsers with the WebKit layout engine of the version 525.x and newer (e.g. Safari, Chrome) and the Internet Explorer 9 (and newer) with the <audio> tag. Ogg Audio and Video files getting embedded with the HTML5 media tags for browsers with the Gecko engine of version 1.9.1 and newer (e.g. FireFox) and for browsers with the Presto engine of the version 2.5 and newer (e.g. Opera).
-For more information see the [Comparison of the layout engines](http://en.wikipedia.org/wiki/Comparison_of_layout_engines_%28HTML5_Media%29#Audio_format_support).
-Otherwise podPress embeds the media files as before with Flash-based players or as objects which require other browser plugins.
-
-It is possible to disable the usage of these HTML5 tags (podPress / Player Settings).
-
-The desktop versions of the browsers which support these HTML5 media tags have different behaviours regarding the buffering of the media files. For instance Safari and Chrome start to download/buffer all media files of one page which are embedded with these HTML5 tags after the page is loaded.
-Because this would probably increase the [web traffic](http://en.wikipedia.org/wiki/Web_traffic) podPress shows by default a Play button and only a click on such a button will make the player visible and start it.
-But if the amount of [web traffic](http://en.wikipedia.org/wiki/Web_traffic) does not matter then it is possible to let podPress show the HTML5 players directly.
-
 = How can I submit podcast episodes to iTunes? =
 
 podPress creates a RSS feed with additional information for iTunes. You can use the "Feed/iTunes settings"-page of podPress to determine what the content of these [iTunes RSS tags](http://www.apple.com/uk/itunes/podcasts/specs.html#rss) should be. It is possible to subscribe to this feed directly with the iTunes client program.
@@ -566,7 +464,7 @@ Apple describes [how it works](http://www.apple.com/itunes/podcasts/specs.html#c
 
 Define two custom field per post. One with the name <strong>podcast_episode_license_name</strong> and the name of the license as the value and one custom field with then name <strong>podcast_episode_license_url</strong> and the URL to the full license text. It is necessary to define at least the URL. If the name is not defined then the name will be the URL.
 
-= I have a post and have added two (or more) media files via podPress. Why is it not possible to mark them all for the usage in a RSS Feed? =
+= I have post and have added two (or more) media files via podPress. Why is it not possible to mark them all for the usage in a RSS Feed? =
 
 podPress allows only one media files enclosure per post in the RSS Feeds because the RSS specification is unclear about this point and [W3.org Feed Validator would say](http://feed2.w3.org/docs/warning/DuplicateEnclosure.html) that it is not recommended to have more than one `<enclosure>` per RSS post element (`<item>`). You can find a summary about this matter in [part 1](http://www.therssweblog.com/?guid=20070520140855) and [part 2](http://www.therssweblog.com/?guid=20070522234541) of in article at the therssweblog.com. But probably more important is that iTunes recognizes only the first `<enclosure>` of each `<item>`. That is also valid for multiple enclosure elements per `<entry>` element of an ATOM Feed. But if like to have more than one media file per post in an News Feed then you could use such a Feed.
 You can use the "Include in:" option in the box below the post editor to choose the media file which should be in the default RSS Feeds.

@@ -1,8 +1,3 @@
-<?php
-/**
- * @package Enterprise
- */
-?>
 <?php get_header(); ?>
 
 <div id="content">
@@ -23,14 +18,7 @@
                     <h1><?php the_title(); ?></h1>
 
                     <div class="post-info">
-                        <p>
-                        	<span class="time"><?php the_time( get_option( 'date_format' ) ); ?></span>
-                        	<?php if ( is_multi_author() ) { ?>
-	                        	<span class="author"><?php _e("by", 'enterprise'); ?> <?php the_author_posts_link(); ?></span>
-                        	<?php } ?>
-                        	<span class="post-comments"><a href="<?php the_permalink(); ?>#respond"><?php comments_number(__('Leave a Comment', 'enterprise'), __('1 Comment', 'enterprise'), __('% Comments', 'enterprise')); ?></a></span>
-                        	<?php edit_post_link(__('(Edit)', 'enterprise'), '', ''); ?>
-                        </p>
+                        <p><span class="time"><?php the_time( get_option( 'date_format' ) ); ?></span> <span class="author"><?php _e("by", 'enterprise'); ?> <?php the_author_posts_link(); ?></span> <span class="post-comments"><a href="<?php the_permalink(); ?>#respond"><?php comments_number(__('Leave a Comment', 'enterprise'), __('1 Comment', 'enterprise'), __('% Comments', 'enterprise')); ?></a></span> <?php edit_post_link(__('(Edit)', 'enterprise'), '', ''); ?></p>
                     </div>
 
                     <?php the_content(__('Read more', 'enterprise'));?><div class="clear"></div>

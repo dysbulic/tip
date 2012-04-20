@@ -9,7 +9,7 @@
 			<div class="page-content">
 				<?php the_content(); ?>
 	
-				<?php link_pages('<p><strong>' . __( 'Pages:', 'connections' ) . '</strong> ', '</p>', 'number'); ?>
+				<?php link_pages('<p><strong>Pages:</strong> ', '</p>', 'number'); ?>
 	
 			</div>
 		</div>

@@ -1,17 +1,14 @@
 <?php
-/**
- * @package Motion
- */
 
 // Load admin options page
 require_once( get_template_directory() . '/functions/options-page.php' );
 
 $themecolors = array(
 	'bg' => '002728',
-	'border' => '034450',
+	'border' => '021013',
 	'text' => 'ffffff',
 	'link' => 'a8ef9d',
-	'url' => 'afdaff',
+	'url' => 'a8ef9d'
 );
 
 $content_width = 640;
@@ -179,18 +176,3 @@ function motion_hide_categories() {
 function motion_hide_homelink() {
 	return get_option( 'motion_hide_homelink' );
 }
-
-if ( ! function_exists( 'motion_post_meta' ) ) :
-	function motion_post_meta() {
-		if ( is_multi_author() ) {
-			printf( __( 'Filed under: %1$s by %2$s &mdash; ' ),
-				get_the_category_list(', '),
-				get_the_author_meta( 'display_name' )
-			);
-		} else {
-			printf( __( 'Filed under: %1$s &mdash; ' ),
-				get_the_category_list(', ')
-			);
-		}
-	}
-endif;

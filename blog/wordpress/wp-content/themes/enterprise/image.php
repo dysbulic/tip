@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Enterprise
+ * @package WordPress
+ * @subpackage Enterprise
  */
 ?>
 <?php get_header(); ?>
@@ -8,13 +9,13 @@
 <div id="content">
 
 	<div id="content-left" class="image-attachment">
-
-        <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-
+                            
+        <?php if (have_posts()) : while (have_posts()) : the_post(); ?>        
+		                
             <div <?php post_class(); ?>>
-
-           		<div class="entry">
-
+				
+           		<div class="entry">                                                
+                       
                     <div class="post-info">
                         <?php
                         	$size = getimagesize( wp_get_attachment_url() );
@@ -25,56 +26,56 @@
                         		/* %4$s */ $size[0],
                         		/* %5$s */ $size[1],
                         		/* %6$s */ get_permalink( $post->post_parent ),
-                        		/* %7$s */ get_the_title( $post->post_parent )
-                        	);
+                        		/* %7$s */ get_the_title( $post->post_parent )								
+                        	);							
                         ?>
                         <?php edit_post_link( __( '(Edit)', 'enterprise' ) ); ?>
                         </p>
                     </div>
-
+                    
 					<div class="image-navigation">
-						<span class="previous-image"><?php previous_image_link( false, __( '&larr; Previous' , 'enterprise' ) ); ?></span>
-						<span class="next-image"><?php next_image_link( false, __( 'Next &rarr;' , 'enterprise' ) ); ?></span>
-					</div><!-- .image-navigation -->
-
-					<div class="entry-attachment">
+						<span class="previous-image"><?php previous_image_link( false, __( '&larr; Previous' , 'enterprise' ) ); ?></span>	
+						<span class="next-image"><?php next_image_link( false, __( 'Next &rarr;' , 'enterprise' ) ); ?></span>					
+					</div><!-- .image-navigation -->					                                        
+                    
+					<div class="entry-attachment">					
 						<div class="attachment">
 							<a href="<?php echo theme_get_next_attachment_url(); ?>" title="<?php echo esc_attr( get_the_title() ); ?>" rel="attachment"><?php
-							echo wp_get_attachment_image( $post->ID, array( 890, 890 ) );
+							echo wp_get_attachment_image( $post->ID, array( 890, 9999 ) ); 
 							?></a>
 						</div>
-					</div>
-
+					</div>		
+					
 					<?php if ( ! empty( $post->post_excerpt ) ) : ?>
 					<div class="entry-caption">
 						<?php the_excerpt(); ?>
 					</div>
-					<?php endif; ?>
+					<?php endif; ?>										
 
-					<?php if ( ! empty( $post->post_content ) ) : ?>
-					<h2 class="entry-title"><?php the_title(); ?></h2>
-
+					<?php if ( ! empty( $post->post_content ) ) : ?>				
+					<h2 class="entry-title"><?php the_title(); ?></h2>					                                        
+               
                     <?php the_content(__('Read more', 'enterprise'));?><div class="clear"></div>
                     <?php wp_link_pages(array('before' => '<p><strong>Pages:</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>
                     <?php endif; ?>
-
+                                
                     <!--
                     <?php trackback_rdf(); ?>
                     -->
-
-                </div>
-
-            </div>
-
+                
+                </div>                    
+                                
+            </div>			
+                                            
             <?php endwhile; else: ?>
-
+                
             <p><?php _e('Sorry, no posts matched your criteria.', 'enterprise'); ?></p><?php endif; ?>
             <p><?php posts_nav_link(' &#8212; ', __('&laquo; Previous Page', 'enterprise'), __('Next Page &raquo;', 'enterprise')); ?></p>
-
+                        
             <?php comments_template('',true); ?>
-
-    </div>
-
+                                    
+    </div>		
+			
 </div>
 
 <?php get_footer(); ?>

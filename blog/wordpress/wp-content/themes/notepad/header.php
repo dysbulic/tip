@@ -47,7 +47,7 @@
 				endforeach;
 
 				if ( $options['rss'] != '' ) : ?>
-					<a href="<?php bloginfo( 'rss2_url' ); ?>"><img alt="<?php esc_attr_e( 'RSS', 'notepad-theme' ); ?>" src="<?php bloginfo( 'template_directory' ); ?>/img/socialmedia/rss.png"><?php _e( 'RSS', 'notepad-theme' ); ?></a>
+					<a href="<?php bloginfo( 'rss2_url' ); ?>"><img alt="<?php _e( 'RSS', 'notepad-theme' ); ?>" src="<?php bloginfo( 'template_directory' ); ?>/img/socialmedia/rss.png"><?php _e( 'RSS', 'notepad-theme' ); ?></a>
 				<?php
 				endif;
 			?>
@@ -57,16 +57,4 @@
 
 		</div>
 		<!--/header -->
-		
-		<?php
-			// Check to see if the header image has been removed
-			$header_image = get_header_image();
-			if ( ! empty( $header_image ) ) :
-		?>
-		<div id="header-image">
-			<a class="home-link" href="<?php echo home_url( '/' ); ?>"><?php _e( 'Home', 'notepad-theme' ); ; ?></a>
-		</div>
-		<?php endif; ?>
-		
 		<div id="wrapper">
-			

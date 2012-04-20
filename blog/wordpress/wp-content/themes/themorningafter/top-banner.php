@@ -9,7 +9,7 @@
 
 <?php $morningafter_options = morningafter_get_theme_options();  ?>
 
-<div id="topbanner" class="column full-width" style="background-image:url(<?php header_image(); ?>)">
+<div id="topbanner" class="column span-14" style="background-image:url(<?php header_image(); ?>)">
 	
 		<?php
 			$prefix = esc_html( $morningafter_options['prefix_heading'] );

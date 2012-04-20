@@ -1,8 +1,3 @@
-<?php
-/**
- * @package Vigilance
- */
-?>
 <?php get_header(); ?>
 		<?php if (have_posts()) : ?>
 		<h1 class="pagetitle"><?php printf(__("Search results for '%s'", "vigilance"), get_search_query()); ?></h1>

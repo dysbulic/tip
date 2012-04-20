@@ -11,7 +11,6 @@
 
 				</div><!-- END Content -->
 				<div id="sidebar">
-					<?php do_action( 'before_sidebar' ); ?>
 					<ul class="xoxo">
 						<?php if ( !dynamic_sidebar() ) : ?>
 							<li class="widget widget_search">

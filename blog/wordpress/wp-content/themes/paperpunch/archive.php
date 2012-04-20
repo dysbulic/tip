@@ -24,7 +24,7 @@
 				<?php } ?>
 			</div><!--end post-header-->
 			<div class="entries">
-				<img class="archive-comment" src="<?php bloginfo( 'template_url' ); ?>/images/comments-bubble.png" width="17" height="14" alt="<?php esc_attr_e( 'comment', 'paperpunch' ); ?>"/>
+				<img class="archive-comment" src="<?php bloginfo( 'template_url' ); ?>/images/comments-bubble.png" width="17" height="14" alt="<?php _e( 'comment', 'paperpunch' ); ?>"/>
 				<ul>
 					<?php while (have_posts()) : the_post(); ?>
 						<li><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><span class="comments_number"><?php comments_number( '0', '1', '%', '' ); ?></span><span class="archdate"><?php the_time(__( 'n.j.y', 'paperpunch' )); ?></span><?php $title = get_the_title(); echo ( empty( $title ) ) ? '&hellip;' : $title; ?></a></li>

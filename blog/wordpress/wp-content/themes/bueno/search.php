@@ -11,18 +11,18 @@ get_header();
             
             <?php if (have_posts()) : $count = 0; ?>
             
-                <span class="archive_header"><?php printf( __('Search results for \'%s\'', 'woothemes'), get_search_query() ) ?></span>
+                <span class="archive_header"><?php printf( __('Search results for \'%s\'', 'woothemes'), $s ) ?></span>
                 
             <?php while (have_posts()) : the_post(); $count++; ?>
                                                                         
-                <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+                <div class="post">
 
                     <h2 class="title"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title(); ?>"><?php the_title(); ?></a></h2>
                     
-                    <a class="date" href="<?php the_permalink(); ?>">
+                    <p class="date">
                     	<span class="day"><?php the_time('j'); ?></span>
                     	<span class="month"><?php the_time('M'); ?></span>
-                    </a>
+                    </p>
                     
 					<div class="entry">
 						<?php the_content( __( 'Continue&nbsp;reading&nbsp;<span class="meta-nav">&rarr;</span>', 'woothemes' ) ); ?>
@@ -33,23 +33,19 @@ get_header();
                     
                     <div class="post-meta">
                     
-                    	<ul <?php if ( ! is_multi_author() ) echo 'class="single-author-meta"';?>>
-							<?php if ( ! post_password_required() && ( comments_open() || '0' != get_comments_number() ) ) : ?>
+                    	<ul>
                     		<li class="comments">
                     			<span class="head"><?php _e('Comments', 'woothemes') ?></span>
                     			<span class="body"><?php comments_popup_link(__('Leave a Comment', 'woothemes'), __('1 Comment', 'woothemes'), __('% Comments', 'woothemes')); ?></span>
                     		</li>
-							<?php endif; ?>
                     		<li class="categories">
                     			<span class="head"><?php _e('Categories', 'woothemes') ?></span>
                     			<span class="body"><?php the_category(', ') ?></span>
                     		</li>
-                    		<?php if ( is_multi_author() ) { ?>
-	                    		<li class="author">
-	                    			<span class="head"><?php _e('Author', 'woothemes') ?></span>
-	                    			<span class="body"><?php the_author_posts_link(); ?></span>
-	                    		</li>
-                    		<?php } ?>
+                    		<li class="author">
+                    			<span class="head"><?php _e('Author', 'woothemes') ?></span>
+                    			<span class="body"><?php the_author_posts_link(); ?></span>
+                    		</li>
                     	</ul>
                     	
                     	<div class="fix"></div>

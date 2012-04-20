@@ -10,8 +10,7 @@ if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
 wp_head();
 ?>
 </head>
-<body <?php body_class(); ?>><div id="container">
-<?php do_action( 'before' ); ?>
+<body><div id="container">
 
 <div id="header">
 
@@ -32,10 +31,10 @@ wp_head();
 	</div>
 
 	<div id="syndication">
-		<a href="<?php bloginfo('rss2_url'); ?>" title="<?php esc_attr_e( 'Syndicate this site using RSS', 'digg3' ); ?>" class="feed"><?php _e('Entries <abbr title="Really Simple Syndication">RSS</abbr>', 'digg3'); ?></a> &#124; <a href="<?php bloginfo('comments_rss2_url'); ?>" title="<?php esc_attr_e( 'Syndicate comments using RSS', 'digg3' ); ?>"><?php esc_attr_e( 'Comments RSS', 'digg3' ); ?></a>
+		<a href="<?php bloginfo('rss2_url'); ?>" title="<?php _e('Syndicate this site using RSS', 'digg3'); ?>" class="feed"><?php _e('Entries <abbr title="Really Simple Syndication">RSS</abbr>', 'digg3'); ?></a> &#124; <a href="<?php bloginfo('comments_rss2_url'); ?>" title="<?php _e('Syndicate comments using RSS', 'digg3'); ?>"><?php _e('Comments RSS', 'digg3')?></a>
 	</div>
 	<div id="searchbox">
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 	</div>
 	</div>
 </div>

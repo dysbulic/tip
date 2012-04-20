@@ -1,25 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Tarski
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
 	'text' => '545454',
-	'link' => '006a80',
-	'border' => 'cccccc',
-	'url' => '8fbf60',
-	
+	'link' => '005a80'
 );
 
 $content_width = 490; //takes into account aligned images with border - 4px padding with every size + 2pix of border width
-
-function tarski_body_class( $classes, $class ) {
-	return $class;
-}
-
-add_filter( 'body_class', 'tarski_body_class', 1, 2 );
 
 /**
  * Make theme available for translation
@@ -96,41 +83,10 @@ register_nav_menus( array(
 
 function tarski_page_menu() { // fallback for primary navigation ?>
 <ul id="nav-1">
-	<li<?php if ( is_home() ) echo " class='current_page_item'"; ?>><a title="<?php esc_attr_e( 'Return to front page', 'tarski' ); ?>" href="<?php echo home_url( '/' ); ?>"><?php _e( 'Home', 'tarski' ); ?></a></li>
+	<li<?php if ( is_home() ) echo " class='current_page_item'"; ?>><a title="<?php _e( 'Return to front page', 'tarski' ); ?>" href="<?php echo home_url( '/' ); ?>"><?php _e( 'Home', 'tarski' ); ?></a></li>
 	<?php wp_list_pages( 'sort_column=menu_order&depth=1&title_li=' ); ?>
 </ul>
 <?php }
 
 // Custom background
 add_custom_background();
-
-// Custom comment markup
-function tarski_comment($comment, $args, $depth) {
-	$GLOBALS['comment'] = $comment;
-	extract($args, EXTR_SKIP);
-?>
-	<?php if ($comment->comment_approved == '0') : ?>
-		<p><?php _e( 'Your comment is awaiting moderation.', 'tarski' ); ?></p>
-	<?php endif; ?>
-	
-	<div <?php comment_class(empty( $args['has_children'] ) ? 'vcard' : 'vcard parent') ?> id="comment-<?php comment_ID() ?>">
-		<div class="comment-metadata">
-			<p class="comment-permalink"><a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>" title="<?php esc_attr_e( 'Permalink to this comment', 'tarski' ); ?>"><?php comment_date() ?> <?php _e('at'); ?> <?php comment_time() ?></a></p>
-			<p class="comment-author"><strong class="fn"><?php comment_author_link(); ?></strong></p>
-			<?php edit_comment_link( __( 'edit', 'tarski' ), '<p class="comment-permalink">(', ')</p>' ); ?> 
-		</div>
-		
-		<div class="comment-content">
-			<?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?>
-			<?php comment_text(); ?>
-		</div>
-		<div class="reply">
-				<?php comment_reply_link(array_merge( $args, array('add_below' => 'comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
-		</div>
-	</div>
-<?php
-}
-
-function tarski_comment_end($comment, $args, $depth) {
-// null function to prevent extra ending /div
-}

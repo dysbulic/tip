@@ -51,21 +51,35 @@
 			<?php endif; ?>	
     	
     	<?php endif; ?>
+    	
+	<?php else : // this is displayed if there are no comments so far ?>
 
-	<?php endif; // have_comments() ?>
-	
-	<?php
-	/* If there are comments and comments are closed, let's leave a little note, shall we?
-	 * But we only want the note on posts and pages that had comments in the first place.
-	 * It's just the polite thing to do!
-	 */
-	if ( ! comments_open() && '0' != get_comments_number() ) :
-	?>
-		<div id="comments">
-	
-			<p class="nocomments"><?php _e('Comments are closed.', 'woothemes') ?></p>
-		
-		</div><!-- /#comments -->
+		<?php if ( comments_open() ) : ?>
+			<!-- If comments are open, but there are no comments. -->
+
+			<div id="comments">
+				
+				<p><?php _e('No comments yet', 'woothemes') ?></p>
+							
+			</div><!-- /#comments -->			
+
+		<?php else : // comments are closed ?>
+			<?php if ( ! is_page() ) : ?>
+			<!-- If comments are closed. -->
+			
+			<div id="comments">
+			
+				<p class="nocomments"><?php _e('Comments are closed.', 'woothemes') ?></p>
+				
+			</div><!-- /#comments -->
+			<?php endif; ?>
+
+		<?php endif; ?>
+
 	<?php endif; ?>
 
+<?php if ( comments_open() ) : ?>
+
 <?php comment_form(); ?>
+
+<?php endif; // if you delete this the sky will fall on your head ?>

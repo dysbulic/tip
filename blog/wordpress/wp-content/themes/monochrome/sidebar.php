@@ -9,7 +9,7 @@
    </div>
    <?php if ($options['rss_feed']) : ?>
    <div id="entries_rss">
-    <a href="<?php bloginfo('rss2_url'); ?>" title="<?php esc_attr_e( 'Entries RSS', 'monochrome' ); ?>" ><?php _e('RSS FEED','monochrome'); ?></a>
+    <a href="<?php bloginfo('rss2_url'); ?>" title="<?php _e('Entries RSS','monochrome'); ?>" ><?php _e('RSS FEED','monochrome'); ?></a>
    </div>
    <?php endif; ?>
   </div>
@@ -19,8 +19,8 @@
   <div class="side_box" id="search_area_top">
    <div id="search_area" class="clearfix">
     <form method="get" id="searchform" action="<?php bloginfo('url'); ?>/">
-     <div><input type="text" value="<?php esc_attr_e( 'Search', 'monochrome' ); ?>" name="s" id="search_input" onfocus="this.value=''; changefc('white');" /></div>
-     <div><input type="image" src="<?php bloginfo('template_url'); ?>/img/search_button_n<?php if ( get_bloginfo('text_direction') == 'rtl' ) echo '-rtl';?>.gif" alt="<?php esc_attr_e( 'Search from this blog.', 'monochrome' ); ?>" title="<?php esc_attr_e(  'Search from this blog.', 'monochrome' ); ?>" id="search_button" /></div>
+     <div><input type="text" value="<?php _e('Search','monochrome'); ?>" name="s" id="search_input" onfocus="this.value=''; changefc('white');" /></div>
+     <div><input type="image" src="<?php bloginfo('template_url'); ?>/img/search_button_n<?php if ( get_bloginfo('text_direction') == 'rtl' ) echo '-rtl';?>.gif" alt="<?php _e('Search from this blog.','monochrome'); ?>" title="<?php _e('Search from this blog.','monochrome'); ?>" id="search_button" /></div>
     </form>
    </div>
    <?php if ($options['tag_list']) : ?>
@@ -64,9 +64,9 @@
   <div class="side_box" id="search_area_bottom">
   <h3><?php _e('SEARCH','monochrome'); ?></h3>
    <div id="search_area" class="clearfix">
-    <form method="get" id="searchform" action="<?php echo home_url( '/' ); ?>">
-     <div><input type="text" value="<?php esc_attr_e(  'Search', 'monochrome' ); ?>" name="s" id="search_input" onfocus="this.value=''; changefc('white');" /></div>
-     <div><input type="image" src="<?php bloginfo('template_url'); ?>/img/search_button_n.gif" alt="<?php esc_attr_e( 'Search from this blog.', 'monochrome' ); ?>" title="<?php esc_attr_e( 'Search from this blog.', 'monochrome' ); ?>" id="search_button" /></div>
+    <form method="get" id="searchform" action="<?php bloginfo('url'); ?>/">
+     <div><input type="text" value="<?php _e('Search','monochrome'); ?>" name="s" id="search_input" onfocus="this.value=''; changefc('white');" /></div>
+     <div><input type="image" src="<?php bloginfo('template_url'); ?>/img/search_button_n.gif" alt="<?php _e('Search from this blog.','monochrome'); ?>" title="<?php _e('Search from this blog.','monochrome'); ?>" id="search_button" /></div>
     </form>
    </div>
    <?php if ($options['tag_list']) : ?>

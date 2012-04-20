@@ -21,7 +21,7 @@
 				
 				<h2><?php _e('Entries Authored by', 'fauna') ?> <?php the_author_meta('display_name'); ?></h2>
 
-				<p><?php _e('You can follow entries authored by', 'fauna') ?> <?php the_author_meta('user_nicename'); ?> <?php _e('via an', 'fauna') ?> <a href="<?php echo get_author_rss_link(0, $author, $author_nicename); ?>" title="<?php esc_attr_e( 'RSS 2.0', 'fauna' ) ?>"><?php _e('author-only RSS feed', 'fauna') ?></a>.</p>
+				<p><?php _e('You can follow entries authored by', 'fauna') ?> <?php the_author_meta('user_nicename'); ?> <?php _e('via an', 'fauna') ?> <a href="<?php echo get_author_rss_link(0, $author, $author_nicename); ?>" title="<?php _e('RSS 2.0', 'fauna') ?>"><?php _e('author-only RSS feed', 'fauna') ?></a>.</p>
 				<p><?php the_author_meta('user_nicename'); ?> <?php _e('has authored', 'fauna') ?> <?php the_author_posts(); ?> <?php _e('on this weblog', 'fauna') ?>:</p>
 				
 				<ul><?php } $about_text = true; ?>

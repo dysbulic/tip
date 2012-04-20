@@ -40,7 +40,7 @@
 				<?php echo get_avatar( get_the_author_meta( 'user_email' ), 60 ); ?>
 			</div><!-- #author-avatar -->
 			<div id="author-description">
-				<h2 id="author-info-title"><?php esc_html( printf( __( 'About %s', 'liquorice' ), get_the_author() ) ); ?></h2>
+				<h2 id="author-info-title"><?php printf( esc_attr__( 'About %s', 'liquorice' ), get_the_author() ); ?></h2>
 				<?php the_author_meta( 'description' ); ?>
 			</div><!-- #author-description -->
 			<div id="author-link">

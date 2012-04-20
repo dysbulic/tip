@@ -6,7 +6,7 @@
 		<div <?php post_class('post'); ?>>
 		<h2 id="post-<?php the_ID(); ?>"><?php the_title(); ?></h2>
 			<div class="entrytext">
-				<?php the_content('<p class="serif">' . __( 'Read the rest of this page &raquo;', 'sapphire' ) . '</p>'); ?>
+				<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
 	
 				<?php link_pages('<p><strong>' . __('Pages:', 'sapphire') . '</strong> ', '</p>', 'number'); ?>
 	

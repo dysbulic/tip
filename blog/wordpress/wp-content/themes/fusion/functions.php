@@ -8,7 +8,7 @@ $content_width = attachment_width();
 
 function fusion_setup() {
 
-	require_once( dirname( __FILE__ ) . '/inc/theme-options.php' );
+	require_once ( get_template_directory() . '/theme-options.php' );
 
 	add_theme_support( 'automatic-feed-links' );
 
@@ -23,15 +23,15 @@ function fusion_setup() {
 		'bg' => 'ffffff',
 		'border' => 'eeeeee',
 		'text' => '666666',
-		'link' => '20a3ca',
-		'url' => 'ffb200',
+		'link' => '000000',
+		'url' => '20A3CA'
 	);
 }
 
 add_action( 'after_setup_theme', 'fusion_setup' );
 
 function attachment_width() {
-	$options = fusion_get_theme_options();
+	$options = get_option( 'fusion_theme_options' );
 	$current_layout = $options['theme_layout'];
 	$flexible_layout = $options['flexible_layout'];
 
@@ -150,23 +150,10 @@ function fusion_header_style() {
 add_custom_image_header( 'fusion_header_style', 'fusion_admin_header_style' );
 
 /**
- *	Get current theme options with defaults as fallback
- */
-function fusion_get_theme_options() {
-	$defaults = array(
-		'post_length' => 'full-post',
-		'theme_layout' => 'content-sidebar',
-		'flexible_layout' => 'fixed',
-	);
-	$options = get_option( 'fusion_theme_options', $defaults );
-	return $options;
-}
-
-/**
  *	Returns either Full Posts or Excerpts as selected in the theme options
  */
 function fusion_current_post_length() {
-	$options = fusion_get_theme_options();
+	$options = get_option( 'fusion_theme_options' );
 	$post_length = $options[ 'post_length' ];
 
 	$excerpt_length = array( 'excerpt' );
@@ -181,7 +168,7 @@ function fusion_current_post_length() {
  *	Returns the current Fusion layout as selected in the theme options
  */
 function fusion_current_layout() {
-	$options = fusion_get_theme_options();
+	$options = get_option( 'fusion_theme_options' );
 	$current_layout = $options[ 'theme_layout' ];
 
 	$two_columns = array( 'content-sidebar', 'sidebar-content' );
@@ -191,6 +178,7 @@ function fusion_current_layout() {
 	else
 		return 'three-column ' . $current_layout;
 }
+
 
 /**
  *	Adds fusion_current_layout() to the array of body classes
@@ -202,15 +190,17 @@ function fusion_body_class($classes) {
 }
 add_filter( 'body_class', 'fusion_body_class' );
 
+
 /**
  *	Returns the current Fusion layout width option
  */
 function fusion_current_layout_width() {
-	$options = fusion_get_theme_options();
+	$options = get_option( 'fusion_theme_options' );
 	$current_layout = $options[ 'flexible_layout' ];
 
 	return $current_layout;
 }
+
 
 /**
  *	Adds fusion_current_layout_width() to the array of body classes
@@ -221,6 +211,7 @@ function fusion_layout_options($classes) {
 	return $classes;
 }
 add_filter( 'body_class', 'fusion_layout_options' );
+
 
 /**
  *  Lists Pings

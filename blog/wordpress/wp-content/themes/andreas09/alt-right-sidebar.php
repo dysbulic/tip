@@ -2,7 +2,7 @@
 <!-- Edit this sidebar as you want -->
 <div id="rightside">
 	<ul>
-		<li><?php get_search_form(); ?></li>
+		<li><?php include (TEMPLATEPATH . '/searchform.php'); ?></li>
 	</ul>
 	<ul class="box">
 		<li><h2><?php _e('Categories','andreas09'); ?></h2>

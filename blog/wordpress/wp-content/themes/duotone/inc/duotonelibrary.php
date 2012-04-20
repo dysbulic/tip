@@ -343,12 +343,9 @@ function is_vertical($url = null) {
 function image_orientation() {
 	global $vertical;
 	//set vertical class or archive class, if needed
-	$classes = array( $vertical && !is_archive() && !is_search() ? 'vertical' : 'horizontal' );
-	if ( is_archive() || is_search() ) {
-		$classes[] = 'archive';
-	}
-
-	body_class( $classes );
+	echo ( $vertical == true && !is_archive() && !is_search() ) ? ' class="vertical' : ' class="horizontal';
+	if(is_archive() or is_search()) echo ' archive';
+	echo '"';
 }
 
 function post_exif() {

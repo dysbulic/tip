@@ -1,22 +1,15 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Supposedly Clean
- */
 
 load_theme_textdomain( 'supposedly-clean' );
 
 $themecolors = array(
 	'bg' => 'fcf7ef',
-	'border' => '8d0a0a',
+	'border' => 'fcf7ef',
 	'text' => '000000',
-	'link' => '5984ad',
-	'url' => 'd84708',
+	'link' => '7094b7'
 );
 
 $content_width = 370;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 add_theme_support( 'automatic-feed-links' );
 
@@ -188,18 +181,4 @@ function mytheme_colors() {
 	if ($mytheme->option['wrapcolor']) print '#matt{background: '. $mytheme->option['wrapcolor'] . ";}\n";
 }
 
-function supposedly_clean_comment($comment, $args, $depth) {
-	$GLOBALS['comment'] = $comment;
-	extract($args, EXTR_SKIP);
 ?>
-<li <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="comment-<?php comment_ID() ?>">
-	<div id="div-comment-<?php comment_ID() ?>" class="comment-author vcard">
-	<?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?>
-	<?php comment_text(); ?>
-	<p><cite><?php comment_type(__('Comment', 'supposedly-clean'), __('Trackback', 'supposedly-clean'), __('Pingback', 'supposedly-clean')); ?> <?php _e('by', 'supposedly-clean'); ?> <span class="fn"><?php comment_author_link() ?></span> &#8212; <?php comment_date() ?> @ <a href="#comment-<?php comment_ID() ?>"><?php comment_time() ?></a></cite> <?php edit_comment_link(__("Edit This", 'supposedly-clean'), ' |'); ?></p>
-	<div class="reply">
-		<?php comment_reply_link(array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
-	</div>
-	</div>
-<?php
-}

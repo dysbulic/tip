@@ -1,3 +1,3 @@
-jQuery(window).load(function () {
-	jQuery('#content').masonry();
+$(window).load(function () {
+	$('#content').masonry();
 });

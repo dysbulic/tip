@@ -18,7 +18,7 @@
 
 			/* Add Custom CSS & JS */
 			function printAdminScripts () {
-				if ( isset( $_GET['page'] ) && $_GET['page'] == basename(__FILE__) ) {
+				if ( $_GET['page'] == basename(__FILE__) ) {
 					wp_enqueue_style('jestro', get_bloginfo('template_directory').'/functions/stylesheets/admin.css');
 					wp_enqueue_script('jestro', get_bloginfo('template_directory').'/functions/javascripts/admin.js', array('jquery') );
 					wp_enqueue_script('farbtastic');
@@ -71,8 +71,8 @@
 			/* Output of the Admin Page */
 			function adminPage () {
 				// global $themename, $shortname, $options;
-				if ( isset( $_REQUEST['saved'] ) && $_REQUEST['saved'] ) echo '<div id="message" class="updated fade"><p><strong>' . $this->themename . __(' options saved.', 'vigilance') . '</strong></p></div>';
-				if ( isset( $_REQUEST['reset'] ) && $_REQUEST['reset'] ) echo '<div id="message" class="updated fade"><p><strong>' . $this->themename . __(' options reset.', 'vigilance') . '</strong></p></div>'; ?>
+				if ( $_REQUEST['saved'] ) echo '<div id="message" class="updated fade"><p><strong>' . $this->themename . __(' options saved.', 'vigilance') . '</strong></p></div>';
+				if ( $_REQUEST['reset'] ) echo '<div id="message" class="updated fade"><p><strong>' . $this->themename . __(' options reset.', 'vigilance') . '</strong></p></div>'; ?>
 
 <div id="v-options" class="wrap">
 	<?php screen_icon(); echo "<h2>" . get_current_theme() . __( ' Theme Options' ) . "</h2>"; ?>
@@ -109,17 +109,21 @@
 							?>
 		<div class="v-field radio clear">
 			<div class="v-field-d"><span><?php echo $this->options[$i]["desc"]; ?></span></div>
-				<label for="<?php echo $this->options[$i]["id"]; ?>"><?php echo $this->options[$i]["name"]; ?></label>
 				<?php
-				$radio_setting = get_settings( $this->options[$i]['id'] );
-				foreach ( $this->options[$i]['options'] as $key => $val ) :
-					$checked = false;
-					if ( $key == $radio_setting || ( !$radio_setting && $key == $this->options[$i]['std'] ) ) {
+				$radio_setting = get_settings($this->options[$i]['id']);
+				$checked = '';
+				foreach ($this->options[$i]['options'] as $key => $val) :
+					if ($radio_setting != '' &&  $key == get_settings($this->options[$i]['id']) ) {
 						$checked = ' checked="checked"';
+					} else {
+						if ($key == $this->options[$i]['std']){
+							$checked = 'checked="checked"';
+						}
 					}
-				?>
-				<input type="radio" name="<?php echo $this->options[$i]['id']; ?>" value="<?php echo $key; ?>"<?php echo $checked; ?> /><?php echo $val; ?><span><img src="<?php echo get_template_directory_uri(); ?>/functions/images/<?php echo strtolower( $key ); ?>.gif" width="160" height="154" alt="" /></span><br /><br />
+					?>
+				<input type="radio" name="<?php echo $this->options[$i]['id']; ?>" value="<?php echo $key; ?>"<?php echo $checked; ?> /><?php echo $val; ?><br />
 				<?php endforeach; ?>
+			<label for="<?php echo $this->options[$i]["id"]; ?>"><?php echo $this->options[$i]["name"]; ?></label>
 		</div><!--end v-field radio-->
 						<?php
 							break;
@@ -185,14 +189,14 @@
 			</div>
 			<div class="v-saveall-button submit">
 				<input type="hidden" name="action" value="save" />
-				<input class="button-primary" type="submit" value="<?php esc_attr_e( 'Save Options', 'vigilance' ); ?>" name="save"/>
+				<input class="button-primary" type="submit" value="<?php _e('Save Options', 'vigilance'); ?>" name="save"/>
 			</div>
 			</form>
 			<div class="v-reset-button submit">
 				<form method="post">
 					<?php wp_nonce_field( 'reset-theme-options', 'reset-theme-options-nonce' ); ?>
 					<input type="hidden" name="action" value="reset" />
-					<input class="v-reset" type="submit" value="<?php esc_attr_e( 'Reset Options', 'vigilance' ); ?>" name="reset"/>
+					<input class="v-reset" type="submit" value="<?php _e('Reset Options', 'vigilance'); ?>" name="reset"/>
 				</form>
 			</div>
 

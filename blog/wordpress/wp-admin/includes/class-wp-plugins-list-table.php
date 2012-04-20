@@ -9,23 +9,25 @@
  */
 class WP_Plugins_List_Table extends WP_List_Table {
 
-	function __construct() {
+	function WP_Plugins_List_Table() {
 		global $status, $page;
 
-		$status = 'all';
-		if ( isset( $_REQUEST['plugin_status'] ) && in_array( $_REQUEST['plugin_status'], array( 'active', 'inactive', 'recently_activated', 'upgrade', 'network', 'mustuse', 'dropins', 'search' ) ) )
-			$status = $_REQUEST['plugin_status'];
-
-		if ( isset($_REQUEST['s']) )
-			$_SERVER['REQUEST_URI'] = add_query_arg('s', stripslashes($_REQUEST['s']) );
+		$default_status = get_user_option( 'plugins_last_view' );
+		if ( empty( $default_status ) )
+			$default_status = 'all';
+		$status = isset( $_REQUEST['plugin_status'] ) ? $_REQUEST['plugin_status'] : $default_status;
+		if ( !in_array( $status, array( 'all', 'active', 'inactive', 'recently_activated', 'upgrade', 'network', 'mustuse', 'dropins', 'search' ) ) )
+			$status = 'all';
+		if ( $status != $default_status && 'search' != $status )
+			update_user_meta( get_current_user_id(), 'plugins_last_view', $status );
 
 		$page = $this->get_pagenum();
 
-		parent::__construct( array(
+		parent::WP_List_Table( array(
 			'plural' => 'plugins',
 		) );
 	}
-
+	
 	function get_table_classes() {
 		return array( 'widefat', $this->_args['plural'] );
 	}
@@ -130,7 +132,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			uasort( $this->items, array( &$this, '_order_callback' ) );
 		}
 
-		$plugins_per_page = $this->get_items_per_page( str_replace( '-', '_', $screen->id . '_per_page' ), 999 );
+		$plugins_per_page = $this->get_items_per_page( str_replace( '-', '_', $screen->id . '_per_page' ) );
 
 		$start = ( $page - 1 ) * $plugins_per_page;
 
@@ -191,6 +193,13 @@ class WP_Plugins_List_Table extends WP_List_Table {
 
 	function get_sortable_columns() {
 		return array();
+	}
+
+	function display_tablenav( $which ) {
+		global $status;
+
+		if ( !in_array( $status, array( 'mustuse', 'dropins' ) ) )
+			parent::display_tablenav( $which );
 	}
 
 	function get_views() {
@@ -277,19 +286,11 @@ class WP_Plugins_List_Table extends WP_List_Table {
 	function extra_tablenav( $which ) {
 		global $status;
 
-		if ( ! in_array($status, array('recently_activated', 'mustuse', 'dropins') ) )
-			return;
-
-		echo '<div class="alignleft actions">';
-
-		if ( 'recently_activated' == $status )
-			submit_button( __( 'Clear List' ), 'secondary', 'clear-recent-list', false );
-		elseif ( 'top' == $which && 'mustuse' == $status )
-			echo '<p>' . sprintf( __( 'Files in the <code>%s</code> directory are executed automatically.' ), str_replace( ABSPATH, '/', WPMU_PLUGIN_DIR ) ) . '</p>';
-		elseif ( 'top' == $which && 'dropins' == $status )
-			echo '<p>' . sprintf( __( 'Drop-ins are advanced plugins in the <code>%s</code> directory that replace WordPress functionality when present.' ), str_replace( ABSPATH, '', WP_CONTENT_DIR ) ) . '</p>';
-
-		echo '</div>';
+		if ( 'recently_activated' == $status ) { ?>
+			<div class="alignleft actions">
+				<?php submit_button( __( 'Clear List' ), 'secondary', 'clear-recent-list', false ); ?>
+			</div>
+		<?php }
 	}
 
 	function current_action() {

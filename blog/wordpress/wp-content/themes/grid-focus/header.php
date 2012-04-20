@@ -17,7 +17,7 @@
 	<?php if ( is_singular() ) wp_enqueue_script( 'comment-reply' ); ?>
 	<?php wp_head(); ?>
 </head>
-<body <?php body_class(); ?>>
+<body>
 <div id="wrapper">
 	
 	<div id="masthead" class="fix">
@@ -31,15 +31,5 @@
 			<p id="authorIntro"><?php bloginfo('description'); ?></p>
 		</div>
 	</div>
-	
-	<?php
-		// Check to see if the header image has been removed
-		$header_image = get_header_image();
-		if ( ! empty( $header_image ) ) :
-	?>
-	<a class="home-link" href="<?php echo home_url( '/' ); ?>">
-		<img id="header-image" src="<?php header_image(); ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" />
-	</a>
-	<?php endif; ?>
 	
 	<?php include (TEMPLATEPATH . '/navigation.strip.php'); ?>

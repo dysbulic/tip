@@ -1,14 +1,10 @@
-<?php
-/**
- * @package INove
- */
-get_header(); ?>
+<?php get_header(); ?>
 <?php $options = get_option('inove_options'); ?>
 
 <?php if (have_posts()) : the_post(); ?>
 
 	<div id="postpath">
-		<a title="<?php esc_attr_e( 'Go to homepage', 'inove' ); ?>" href="<?php echo home_url( '/' ); ?>"><?php _e('Home', 'inove'); ?></a>
+		<a title="<?php _e('Go to homepage', 'inove'); ?>" href="<?php echo home_url( '/' ); ?>"><?php _e('Home', 'inove'); ?></a>
 		 &gt; <a href="<?php echo get_permalink($post->post_parent); ?>"><?php echo get_the_title($post->post_parent); ?></a>
 		 &gt; <?php the_title(); ?>
 	</div>

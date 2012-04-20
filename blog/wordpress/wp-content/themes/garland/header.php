@@ -13,7 +13,7 @@ wp_head();
 ?>
 </head>
 
-<body <?php body_class( 'sidebars' ); ?>>
+<body class="sidebars">
 
 <div id="navigation"></div>
 

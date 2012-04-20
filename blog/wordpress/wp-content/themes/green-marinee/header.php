@@ -20,8 +20,8 @@
 <body <?php body_class(); ?>>
 <div id="container">
 <div id="skip">
-	<p><a href="#content" title="<?php esc_attr_e( 'Skip to site content', 'greenmarinee' ); ?>"><?php _e('Skip to content','greenmarinee'); ?></a></p>
-	<p><a href="#search" title="<?php esc_attr_e( 'Skip to search', 'greenmarinee' ); ?>" accesskey="s"><?php _e('Skip to search - Accesskey = s','greenmarinee'); ?></a></p>
+	<p><a href="#content" title="<?php _e('Skip to site content', 'greenmarinee'); ?>"><?php _e('Skip to content','greenmarinee'); ?></a></p>
+	<p><a href="#search" title="<?php _e('Skip to search', 'greenmarinee'); ?>" accesskey="s"><?php _e('Skip to search - Accesskey = s','greenmarinee'); ?></a></p>
 </div>
 <hr />
 	<h1><a href="<?php bloginfo('url'); ?>"><?php bloginfo('name'); ?></a></h1>

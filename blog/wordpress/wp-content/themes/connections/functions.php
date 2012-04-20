@@ -1,20 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Connections
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
 	'text' => '29303b',
-	'link' => '909d73',
-	'border' => 'F3F6ED',
-	'url' => '676E04',
-);
+	'link' => '909d73'
+	);
 
 $content_width = 510;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 add_theme_support( 'automatic-feed-links' );
 
@@ -103,7 +95,7 @@ register_nav_menus( array(
 
 function connections_page_menu() { // fallback for primary navigation ?>
 	<ul id="topnav">
-		<li><a href="<?php bloginfo('url'); ?>" id="navHome" title="<?php esc_attr_e( 'Posted Recently' ); ?>" accesskey="h"><?php _e( 'Home' ); ?></a></li>
+		<li><a href="<?php bloginfo('url'); ?>" id="navHome" title="<?php _e('Posted Recently') ?>" accesskey="h"><?php _e('Home') ?></a></li>
 		<?php wp_list_pages('depth=1&title_li=' ); ?>
 	</ul>
 
@@ -126,7 +118,7 @@ function connections_comment($comment, $args, $depth) {
 	<?php endif; ?>
 	<br />
 
-	<small class="comment-meta commentmetadata"><a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>" title="">
+	<small class="comment-meta commentmetadata"><a href="<?php echo htmlspecialchars( get_comment_link( $comment->comment_ID ) ) ?>" title="">
 	<?php comment_date(); ?> at <?php comment_time(); ?></a> <?php edit_comment_link('e','',''); ?></small>
 
 	<?php comment_text(); ?>

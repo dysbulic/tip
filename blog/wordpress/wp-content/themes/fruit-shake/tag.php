@@ -11,6 +11,8 @@ get_header(); ?>
 		<section id="primary">
 			<div id="content" role="main">
 
+				<?php the_post(); ?>
+
 				<header class="page-header">
 					<h1 class="page-title"><?php
 						printf( __( 'Tag Archives: %s', 'fruit-shake' ), '<span>' . single_tag_title( '', false ) . '</span>' );
@@ -21,11 +23,11 @@ get_header(); ?>
 
 				<?php /* Start the Loop */ ?>
 				<?php while ( have_posts() ) : the_post(); ?>
-
+					
 					<?php get_template_part( 'content', get_post_format() ); ?>
 
 				<?php endwhile; ?>
-
+				
 			</div><!-- #content -->
 		</section><!-- #primary -->
 

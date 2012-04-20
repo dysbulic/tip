@@ -7,13 +7,7 @@ get_header();
 <?php the_date('','<h2>','</h2>'); ?>
 
 <div <?php post_class(); ?> id="post-<?php the_ID(); ?>">
-	 <h3 class="storytitle">
-	<?php if ( ! is_single() ) : ?>
-		<a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'classic' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a>
-	<?php else : ?>
-		<?php the_title(); ?>
-	<?php endif; ?>	 
-	 </h3>
+	 <h3 class="storytitle"><a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title(); ?></a></h3>
 	<div class="meta"><?php _e('Filed under:','classic'); ?>  <?php the_category( ', ' ) ?> &#8212; <?php the_tags(__('Tags: ', 'classic'), ', ', ' &#8212; '); ?> <?php the_author() ?> @ <?php the_time() ?> <?php edit_post_link(__('Edit This','classic')); ?></div>
 
 	<div class="storycontent">

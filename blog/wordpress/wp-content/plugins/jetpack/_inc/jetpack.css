@@ -1,22 +1,25 @@
+#screen-meta { display: none }
+
 #jp-header {
-	min-width: 741px;
+	background: /*#8CAA46*/ url( images/header-bg.png ) top center repeat-x;
+	min-width: 795px;
 	z-index: 0;
 	margin: 0 0 -30px 0;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
 }
 	#jp-header.small {
 		margin-bottom: 50px;
 	}
-
+	
 	#jp-header #jp-clouds {
 		position: relative;
-		background: transparent url( images/header-clouds-20110719.png ) -400px 100% repeat-x;
+		background: transparent url( images/header-clouds.png ) -400px 100% repeat-x;
 		padding-top: 110px;
-		-webkit-border-radius: 3px;
-		-moz-border-radius: 3px;
-		border-radius: 3px;
 	}
 		#jp-header.small #jp-clouds {
-			background: transparent url( images/header-clouds-sm-20110719.png ) -220px 100% repeat-x;
+			background: transparent url( images/header-clouds-sm.png ) -220px 100% repeat-x;
 			padding: 50px 0 0 0;
 			height: 70px;
 		}
@@ -26,7 +29,6 @@
 			color: #fff;
 			float: right;
 			margin: -35px 25px 0 0;
-			text-align: right;
 		}
 
 		#jp-header #jp-clouds #jp-disconnect a {
@@ -50,7 +52,7 @@
 				background-color: #839f40;
 				border-color: #6a8037;
 			}
-
+			
 			#jp-header #jp-clouds #jp-disconnect span { display: none; }
 
 	#jp-header h3 {
@@ -90,7 +92,7 @@
 		position: relative;
 		overflow: visible;
 		z-index: 50;
-		margin: 0 12px 0 28px;
+		margin: 0 22px 0 25px;
 		min-width: 780px;
 	}
 
@@ -116,7 +118,7 @@
 			background: #69acce;
 			-moz-box-shadow: inset 0 0 2px #fff, 0 1px 5px rgba(0,0,0,0.3);
 			-webkit-box-shadow: inset 0 0 2px #fff, 0 1px 5px rgba(0,0,0,0.3);
-			box-shadow: inset 0 0 2px #fff, 0 1px 5px rgba(0,0,0,0.3);
+			box-shadow: inset 0 0 2px #fff, 0 1px 5px rgba(0,0,0,0.3);		
 			padding: 12px 20px;
 			border: 1px solid #2a8cba;
 			-moz-border-radius: 5px;
@@ -147,9 +149,9 @@
 	position: relative;
 	z-index: 100;
 	border: 1px solid #2a8cba !important;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
 	background: url( images/cloudybox-back.png ) 100% 100% no-repeat;
 	background-color: #6aafcf !important;
 	-webkit-box-shadow: inset 0 0 15px rgba( 0,0,0,0.04 );
@@ -160,12 +162,12 @@
 	line-height: 180%;
 }
 	.jp-connect { padding: 10px 0 5px !important; }
-
+	
 	#jetpack-settings > .jetpack-message { margin: 10px 13px 10px 15px }
 
 	.jetpack-message .squeezer {
 		max-width: 940px;
-		margin: 0 0 2px;
+		margin: 0 auto 2px;
 		padding: 0 10px;
 		text-align: left;
 		overflow: hidden;
@@ -187,13 +189,11 @@
 		font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",Verdana,"Bitstream Vera Sans",sans-serif;
 		margin: 0;
 	}
-
-	.jetpack-message code, .jetpack-err p {
+	
+	.jetpack-message code {
 		background: rgba( 0,0,0,0.2 );
 		font-size: 14px;
-		padding: 3px 5px !important;
-		text-shadow: 0px 1px 1px rgba(0,0,0,0.4);
-		color: #fff;
+		padding: 2px;
 	}
 
 	.jetpack-message p {
@@ -201,10 +201,6 @@
 		padding: 0;
 		display: inline-block;
 	}
-		.jetpack-err p {
-			overflow: hidden;
-			margin-bottom: 10px !important;
-		}
 
 		.jetpack-message p a.button-primary {
 			font-size: 16px !important;
@@ -240,14 +236,14 @@
 	.more-info {
 		position: relative;
 		top: -5px;
-		margin: 0 15px 5px 15px;
+		margin: 0 12px 5px 15px;
 		height: 230px; /* Have to set height otherwise slideDown() doesn't work. */
 		padding-right: 15px !important;
 		padding-bottom: 15px;
 		clear: both;
 		overflow: visible !important;
 		color: #666 !important;
-		background: transparent url( images/module-clouds-sm.png ) bottom left repeat-x;
+		background: transparent url( images/header-clouds-sm.png ) bottom left repeat-x;
 		background-color: #f0f0f0 !important;
 		border-color: #dcdcdc !important;
 		text-shadow: 0px 1px 0px #fff;
@@ -284,52 +280,35 @@
 			line-height: 150%;
 			display: block;
 		}
-
-		.more-info ul {
-			font-size: 14px;
-			font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
-			line-height: 150%;
-		}
-
-		.more-info li {
-			list-style-type: disc;
-			list-style-position: inside;
-		}
-
+		
 		.more-info code {
 			background: rgba( 0,0,0,0.05 );
 			font-size: 12px;
 			padding: 1px;
-			text-shadow: none;
-			color: #555;
 		}
 
 		.more-info .jp-close {
 			position: absolute;
-			top: 18px;
-			right: 0;
-			background: #888;
-			background: rgba(0,0,0,0.4);
+			top: 11px;
+			right: 11px;
+			background: #ccc;
+			background: rgba( 0,0,0,0.4);
 			color: #fff;
 			font-size: 14px !important;
 			height: 22px;
 			line-height: 20px;
-			padding: 0 6px 0 6px;
+			padding: 0 6px;
 			font-weight: bold !important;
 			-moz-border-radius: 3px;
 			-webkit-border-radius: 3px;
 			border-radius: 3px;
-			-moz-border-radius-topright: 0;
-			-moz-border-radius-bottomright: 0;
-			-webkit-border-top-right-radius: 0;
-			-webkit-border-bottom-right-radius: 0;
-			border-top-right-radius: 0;
-			border-bottom-right-radius: 0;
 			cursor: pointer;
-			text-shadow: 0 1px 0 rgba(0,0,0,0.2);
+			text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
 		}
 			.more-info .jp-close:hover {
-				background: #69acce;
+				background: rgba( 255, 255, 255, 0.9 );
+				color: #7a934e;
+				text-shadow: none;
 			}
 
 		.more-info div.jp-info-img {
@@ -337,12 +316,12 @@
 			width: 320px;
 			margin: 0 30px 0 20px;
 		}
-
+		
 		.more-info img.jp-info-img {
 			padding: 3px;
 			background: rgba( 255, 255, 255, 0.65 );
 			border: 5px solid #ddd;
-		}
+		} 
 
 .jetpack-activated {
 	background: #fffff5 url( images/jp-enabled-bg.jpg ) top left repeat-x !important;
@@ -361,7 +340,7 @@
 		font-size: 42px;
 		font-weight: bold;
 		font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",Verdana,"Bitstream Vera Sans",sans-serif;
-		margin: 0;
+		margin: 0
 		padding: 0;
 		background: none;
 		display: block;
@@ -427,9 +406,9 @@ p.jp-help {
 	max-height: 220px;
 	margin: 0 0 15px 15px;
 	border: 1px solid #dedede;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
 	background: #fff;
 	padding: 15px 0 35px 15px;
 	-webkit-box-shadow: inset 0 1px 0 #fff, inset 0 0 20px rgba(0,0,0,0.05), 0 1px 2px rgba( 0,0,0,0.1 );
@@ -453,21 +432,20 @@ p.jp-help {
 		margin: 0 0 5px 10px;
 		background: #cbe0a1;
 		width: 84px;
-		-webkit-border-top-left-radius: 2px;
-		-moz-border-radius-topleft: 2px;
-		border-top-left-radius: 2px;
-		-webkit-border-bottom-left-radius: 2px;
-		-moz-border-radius-bottomleft: 2px;
-		border-bottom-left-radius: 2px;
+		-webkit-border-top-left-radius: 5px;
+		-moz-border-radius-topleft: 5px;
+		border-top-left-radius: 5px;
+		-webkit-border-bottom-left-radius: 5px;
+		-moz-border-radius-bottomleft: 5px;
+		border-bottom-left-radius: 5px;
 	}
 		.jetpack-module div.module-image img {
 			padding: 6px;
 		}
-
+		
 		.jetpack-module div.module-image p {
-			background-color: #b4d278;
+			background: #b4d278;
 			color: #fff;
-			text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
 			text-align: center;
 			margin: 0;
 			padding: 0;
@@ -475,35 +453,9 @@ p.jp-help {
 			font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",Verdana,"Bitstream Vera Sans",sans-serif;
 			font-weight: bold;
 			-webkit-font-smoothing: antialiased;
-			-webkit-border-bottom-left-radius: 2px;
-			-moz-border-radius-bottomleft: 2px;
-			border-bottom-left-radius: 2px;
-		}
-
-		.jetpack-new-module div.module-image p {
-			background-color: #f5bd4d;
-		}
-
-		.jetpack-updated-module div.module-image p {
-			background-color: #6aafcf;
-		}
-
-		.jetpack-new-module:hover div.module-image p {
-			background-color: #b4d278;
-		}
-
-		.jetpack-updated-module:hover div.module-image p {
-			background-color: #b4d278;
-		}
-
-		.jetpack-new-module:hover div.module-image span.module-image-free,
-		.jetpack-updated-module:hover div.module-image span.module-image-free {
-			display: inline !important;
-		}
-
-		.jetpack-new-module:hover div.module-image span.module-image-badge,
-		.jetpack-updated-module:hover div.module-image span.module-image-badge {
-			display: none;
+			-webkit-border-bottom-left-radius: 5px;
+			-moz-border-radius-bottomleft: 5px;
+			border-bottom-left-radius: 5px;
 		}
 
 	.jetpack-toggle {
@@ -529,6 +481,10 @@ p.jp-help {
 		color: #000;
 		font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",Verdana,"Bitstream Vera Sans",sans-serif;
 	}
+	
+	.jetpack-module h3 img {
+		margin: -6px -4px 0 0;
+	}
 
 	.jetpack-module-description p {
 		line-height: 150%;
@@ -537,6 +493,10 @@ p.jp-help {
 		margin-bottom: 20px;
 		color: #666;
 	}
+	
+		.jetpack-module-description .price {
+			color: #3b8b63;
+		}
 
 	.jetpack-module .jetpack-module-actions {
 		position: absolute;
@@ -602,7 +562,7 @@ p.jp-help {
 			margin-right: 15px;
 			box-shadow: none;
 		}
-
+		
 #jp-settings-screen {
 	margin: 0 25px;
 }
@@ -619,7 +579,7 @@ p#news-sub {
 }
 
 #jp-footer {
-	background: url( images/footer-clouds-20110719.png ) top center no-repeat;
+	background: url( images/footer-clouds.png ) top center no-repeat;
 	margin: 30px 0;
 	padding-top: 60px;
 	text-align: center;
@@ -653,7 +613,7 @@ p#news-sub {
 		font-size: 11px;
 		color: #ccc;
 	}
-
+	
 		#jp-footer .small a {
 			text-decoration: none;
 		}
@@ -662,10 +622,6 @@ p#news-sub {
 			text-decoration: underline;
 		}
 
-#jetpack-configuration code {
-	font-size: 14px;
-}
-
 .clear {
 	clear: both;
 }
@@ -673,8 +629,8 @@ p#news-sub {
 .error, .updated { position: relative; z-index: 100; }
 
 .toplevel_page_jetpack .wrap {
-	max-width: 983px;
-	min-width: 741px;
+	max-width: 980px;
+	min-width: 800px;
 	margin-top: 15px;
 }
 
@@ -699,149 +655,7 @@ p#news-sub {
 #jetpack-settings .button:hover {
 	color: #298cba !important;
 	border-color: #69acce !important;
-	-moz-box-shadow: 0 0 2px rgba(105,172,206,1);
-	-webkit-box-shadow: 0 0 2px rgba(105,172,206,1);
-	box-shadow: 0 0 2px rgba(105,172,206,1);
-	-webkit-transition-duration: .3s;
-	-moz-transition-duration: .3s;
-}
-
-.jp-survey {
-	position: relative;
-	z-index: 100;
-	border: 1px solid #ccc !important;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
-	background-color: #efefef !important;
-	-webkit-box-shadow: inset 0 0 15px rgba( 0,0,0,0.04 );
-	-moz-box-shadow: inset 0 0 15px rgba( 0,0,0,0.04 );
-	box-shadow: inset 0 0 15px rgba( 0,0,0,0.04 );
-	padding: 18px 90px 8px 15px !important;
-	overflow: hidden;
-	line-height: 180%;
-}
-
-#jetpack-settings > .jp-survey { margin: 10px 13px 40px 15px }
-
-.jp-survey h4 {
-	margin: 0;
-	font-size: 18px;
-	font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",Verdana,"Bitstream Vera Sans",sans-serif;
-	font-weight: normal;
-	color: #333;
-	text-shadow: 0 1px 0 #fff;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-	display: block;
-	float: left;
-}
-
-.jp-survey p {
-	float: right;
-	margin: -1px 0 0 0 !important;
-	padding: 0;
-	display: block;
-}
-
-.jp-survey a {
-	color: #000;
-	text-decoration: underline;
-	-webkit-transition-duration: .3s;
-	-moz-transition-duration: .3s;
-	-o-transition-duration: .3s;
-	-ms-transition-duration: .3s;
-	transition-duration: .3s;
-}
-
-.jp-survey a:hover {
-	color: #555;
-	text-decoration: none;
-}
-
-#jetpack-settings .jp-survey p a.button-primary {
-	font-size: 16px !important;
-	display: inline-block;
-	padding: 8px 15px;
-	color: #fff!important;
-	text-align: center;
-	font-size: 20px;
-	text-decoration: none;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-	border: 1px solid #2A8CBA;
-	background: #6AAFCF;
-	-moz-box-shadow: inset 0 0 2px rgba( 255,255,255,1), 0 1px 1px rgba( 0,0,0,0.1 );
-	-webkit-box-shadow: inset 0 0 2px rgba( 255,255,255,1), 0 1px 1px rgba( 0,0,0,0.1 );
-	box-shadow: inset 0 0 2px rgba( 255,255,255,1), 0 1px 1px rgba( 0,0,0,0.1 );
-	text-shadow: 0px -1px 0px rgba( 0,0,0,0.3);
-	-webkit-transition-duration: .3s;
-	-moz-transition-duration: .3s;
-	-o-transition-duration: .3s;
-	-ms-transition-duration: .3s;
-	transition-duration: .3s;
-	cursor: pointer;
-	font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",Verdana,"Bitstream Vera Sans",sans-serif;
-}
-
-#jetpack-settings .jp-survey p a.button-primary:hover, #jetpack-settings .jp-survey p a.button-primary:active {
-	background-color: #f0a000;
-	border-color: #c87800;
-	-webkit-transition-duration: .3s;
-	outline: none;
-}
-
-.jp-survey p a.button-secondary {
-	font-size: 16px !important;
-	display: inline-block;
-	padding: 8px 15px;
-	color: #fff;
-	text-align: center;
-	font-size: 20px;
-	text-decoration: none;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-	border: 1px solid #8caa46;
-	background: #b4d278;
-	-moz-box-shadow: inset 0 0 2px rgba( 255,255,255,1), 0 1px 1px rgba( 0,0,0,0.1 );
-	-webkit-box-shadow: inset 0 0 2px rgba( 255,255,255,1), 0 1px 1px rgba( 0,0,0,0.1 );
-	box-shadow: inset 0 0 2px rgba( 255,255,255,1), 0 1px 1px rgba( 0,0,0,0.1 );
-	text-shadow: 0px -1px 0px rgba( 0,0,0,0.3);
-	-webkit-transition-duration: .3s;
-	-moz-transition-duration: .3s;
-	-o-transition-duration: .3s;
-	-ms-transition-duration: .3s;
-	transition-duration: .3s;
-	cursor: pointer;
-	font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",Verdana,"Bitstream Vera Sans",sans-serif;
-}
-
-.jp-survey p a.button-secondary:hover, .jp-survey p a.button-secondary:active {
-	background-color: #f0a000;
-	border-color: #c87800;
-	-webkit-transition-duration: .3s;
-	-moz-transition-duration: .3s;
-	-o-transition-duration: .3s;
-	-ms-transition-duration: .3s;
-	transition-duration: .3s;
-	outline: none;
-}
-
-.jp-survey-container {
-	overflow: hidden;
-	padding: 0 20px 8px 0;
-}
-
-.jp-survey-text {
-	float: left;
-	width: 68.421053%; /* 390px / 570px */
-}
-
-.jp-survey-button-container {
-	position: absolute;
-	top: 28px;
-	right: 15px;
+	-webkit-box-shadow: inset 0 0 1px #69acce;
+	-mox-box-shadow: inset 0 0 1px #69acce;
+	box-shadow: inset 0 0 1px #69acce;
 }

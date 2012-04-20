@@ -1,8 +1,4 @@
 <?php
-/**
- * @package INove
- */
-/*
 /*
 Template Name: Page without sidebar
 */

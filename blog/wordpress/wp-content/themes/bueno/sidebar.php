@@ -5,7 +5,6 @@
  */
 ?>
 <div id="sidebar" class="col-right">
-	<?php do_action( 'before_sidebar' ); ?>
 		
 	<!-- Widgetized Sidebar -->	
 	<?php if ( ! dynamic_sidebar(1) ) : // begin primary widget area ?>

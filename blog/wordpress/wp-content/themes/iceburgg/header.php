@@ -14,7 +14,7 @@ if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
 wp_head();
 ?>
 </head>
-<body <?php body_class(); ?>>
+<body>
 <div id="wrap">
 <div id="top"></div>
 <div id="logo">

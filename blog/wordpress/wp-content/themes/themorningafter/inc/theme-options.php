@@ -36,9 +36,9 @@ function morningafter_get_default_theme_options() {
 		'show_feed_link' => 0,
 		'show_full_home' => 0,
 		'show_full_archive' => 0,
+		'ignore_sticky' => 0,
 		'featured_heading' => __( 'Featured Posts', 'woothemes' ),
 		'featured_thumb' => 65,
-		'aside_heading' => '',
 		'home' => $home,
 		'about' => '',
 		'archives' => '',
@@ -62,7 +62,7 @@ function morningafter_get_default_theme_options() {
  * Returns the current morning after theme options
  */
 function morningafter_get_theme_options() {	
-	$morningafter_options = get_option( 'theme_morningafter_options', morningafter_get_default_theme_options() );
+	$morningafter_options = get_option( 'theme_morningafter_options', $defaults);
 	return $morningafter_options;
 }
 
@@ -136,7 +136,8 @@ function morningafter_admin_options_page() {
 /**
  * Separating Settings Per Tab
  */
-if ( isset( $_GET['page'] ) && 'theme_options' == $_GET['page'] ) :
+global $pagenow;
+if ( 'themes.php' == $pagenow && isset( $_GET['page'] ) && 'theme_options' == $_GET['page'] ) :
 	if ( isset ( $_GET['tab'] ) ) :
 		$tab = $_GET['tab'];
 	else:
@@ -188,13 +189,13 @@ function morningafter_options_validate( $input ) {
 		$valid_input['show_full_home'] = $defaults['show_full_home'];
 		$valid_input['show_full_archive'] = $defaults['show_full_archive'];
 	} elseif ( $submit_homepage ) { // if Homepage Settings Submit
+		$valid_input['ignore_sticky'] = ( $input['ignore_sticky'] == 1 ? 1 : 0 );
 		$valid_input['featured_heading'] = wp_filter_nohtml_kses( $input['featured_heading'] );
 		$valid_input['featured_thumb'] = wp_filter_nohtml_kses( $input['featured_thumb'] );
-		$valid_input['aside_heading'] = wp_filter_nohtml_kses( $input['aside_heading'] );
 	} elseif ( $reset_homepage ) { // if Homepage Settings Reset Defaults
+		$valid_input['ignore_sticky'] = $defaults['ignore_sticky'];
 		$valid_input['featured_heading'] = $defaults['featured_heading'];
-		$valid_input['featured_thumb'] = $defaults['featured_thumb'];
-		$valid_input['aside_heading'] = $defaults['aside_heading'];		
+		$valid_input['featured_thumb'] = $defaults['featured_thumb'];		
 	} elseif ( $submit_header_links ) { // if Header Links Settings Submit
 		$valid_input['home'] = wp_filter_nohtml_kses( $input['home'] );
 		$valid_input['about'] = wp_filter_nohtml_kses( $input['about'] );

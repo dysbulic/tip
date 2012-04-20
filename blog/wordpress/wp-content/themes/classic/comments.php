@@ -8,10 +8,27 @@ if ( post_password_required() ) {
 	return;
 }
 
+
+function classic_comment($comment, $args, $depth) {
+	$GLOBALS['comment'] = $comment;
+	extract($args, EXTR_SKIP);
+?>
+<li id="comment-<?php comment_ID() ?>" <?php comment_class(); ?>>
+	<div id="div-comment-<?php comment_ID() ?>" class="vcard">
+	<?php echo get_avatar( $comment, 32 ); ?>
+	<?php comment_text() ?>
+	<p><cite><?php comment_type(__('Comment','classic'), __('Trackback','classic'), __('Pingback','classic')); ?> <?php _e('by','classic'); ?> <span class="fn"><?php comment_author_link() ?></span> &#8212; <?php comment_date() ?> @ <a href="#comment-<?php comment_ID() ?>"><?php comment_time() ?></a></cite> <?php edit_comment_link(__('Edit This','classic'), ' | '); ?></p>
+	<div class="reply">
+		<?php comment_reply_link(array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
+	</div>
+	</div>
+<?php
+}
+
 if (have_comments() || comments_open()) : ?>
 <h2 id="comments"><?php comments_number(__('Leave a Comment','classic'), __('1 Comment','classic'), __('% Comments','classic')); ?> 
 <?php if ( comments_open() ) : ?>
-	<a href="#postcomment" title="<?php esc_attr_e( 'Leave a comment', 'classic' ); ?>">&raquo;</a>
+	<a href="#postcomment" title="<?php _e('Leave a comment','classic'); ?>">&raquo;</a>
 <?php endif; ?>
 </h2>
 <?php endif; ?>

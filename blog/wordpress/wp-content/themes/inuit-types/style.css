@@ -11,6 +11,7 @@ Author URI: http://bizzartic.com/
 
 body, input, textarea {	font-family:Georgia, "Times New Roman", Times, serif; font-size:13px; }
 body{ margin:0; padding:10px 0 0; background-repeat: repeat-x; background-position: top }
+body.logged-in { background-position: 0 28px; } /* reposition the background image for the WPCOM bar */
 body, img, p, h1, h2, h3, h4, h5, ul, ol, li, form, blockquote { margin: 0; padding: 0 }
 h1, h2, h3, h4, h5 { padding: 10px 0 }
 a, h1, h2, h3, h4, h5, h6  { color:#222222 }
@@ -42,17 +43,7 @@ img.fll, .entry img{ background:#F4F4F4; border:1px solid #DDDDDD; padding:5px; 
 .border-bottom{ border-bottom:1px solid #CCC6B7 }
 .alpha{ margin-left:0 }.omega{ margin-right:0 }
 .wp-caption { background:#F4F4F4; margin:0 0 6px 6px }
-.wp-caption .wp-caption-text {
-	font-size: 11px;
-	text-align: center;
-	margin: 0;
-	padding: 0 0 6px 0
-}
-.widget .wp-caption,
-.widget .wp-caption img {
-	height: auto;
-	max-width: 100%;
-}
+.wp-caption .wp-caption-text { font-size:11px; text-align:center; margin:0; padding:0 0 6px 0 }
 img.alignleft{ margin:0 10px 0 0 }
 h1{font-size:30px; line-height:30px; font-weight:700; letter-spacing:-1px}
 h2,h3,h4,h5{ font-family: "Trebuchet MS", Arial, Helvetica, sans-serif; font-weight:700; margin:0 }
@@ -225,7 +216,7 @@ body.page #header-about h1 { float: none; }
 .entry ul li { list-style: disc; padding: 3px 0 }
 .entry ul li ul li { list-style: circle }
 .entry ol { padding-left: 50px }
-.entry ol li { list-style: decimal; padding: 3px 0 }
+.entry ol li { list-style: decimal inside; padding: 3px 0 }
 .entry ul ul, .entry ol ol { padding-bottom: 0; }
 .entry h2, .entry h3 { font-weight:normal }
 .entry h2 { font-size: 24px }
@@ -339,6 +330,7 @@ p.form-allowed-tags {
 .widget_calendar tbody a { text-decoration: underline; }
 .widget_calendar tfoot td {	padding: 10px 0 0 0; }
 .widget_calendar #next { text-align: right; }
+.widget_authors img.avatar { display: block; margin: 0 0 10px 0; }
 .widget_authors strong { text-decoration: underline; }
 .widget_authors ul ul { margin-left: -25px; }
 #flickr_badge_uber_wrapper { margin: -10px 0 0 -20px; }
@@ -346,16 +338,3 @@ p.form-allowed-tags {
 #flickr_badge_wrapper img {	max-width: 224px;}
 .widget .menu li { float: none; line-height: inherit; }
 .widget .menu li a { padding-left: 0; padding-right: 0; }
-
-
-/* =Responsive Structure
------------------------------------------------ */
-
-@media (max-width: 1024px) {
-/* Add left margin for narrow screen widths to prevent left column from butting against the edge of the screen. */
-	.content_left,
-	.footer_left,
-	.fl{
-		margin-left: 15px;
-	}
-}

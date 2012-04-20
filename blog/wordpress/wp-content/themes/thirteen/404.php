@@ -6,7 +6,7 @@
 	
 	<p><?php _e('Sorry, but the page you requested cannot be found.'); ?></p>
 			
-	<?php get_search_form(); ?>
+	<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 
 </div>
 

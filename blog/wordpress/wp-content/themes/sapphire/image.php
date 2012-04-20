@@ -18,25 +18,25 @@
 
 				<p class="postmetadata alt">
 					<small>
-						<?php printf( __( "You can subscribe via <a href='%s'>RSS</a> feed to this post&rsquo;s comments.", "sapphire"), get_post_comments_feed_link()); ?>
+						You can subscribe via <?php post_comments_feed_link( 'RSS' ); ?> feed to this post's comments. 
 												
-						<?php if ( ( 'open' == $post->comment_status ) && ( 'open' == $post->ping_status ) ) {
+						<?php if (('open' == $post-> comment_status) && ('open' == $post->ping_status)) {
 							// Both Comments and Pings are open ?>
-							<?php printf( __( 'You can <a href="#respond">comment below</a>, or <a href="%s" rel="trackback">link to this permanent URL</a> from your own site.', 'sapphire' ), trackback_url( false ) ); ?>
+							You can <a href="#respond">comment below</a>, or <a href="<?php trackback_url(display); ?>">link to this permanent URL</a> from your own site. 
 						
-						<?php } elseif ( ! ( 'open' == $post->comment_status ) && ( 'open' == $post->ping_status) ) {
+						<?php } elseif (!('open' == $post-> comment_status) && ('open' == $post->ping_status)) {
 							// Only Pings are Open ?>
-							<?php printf( __( 'Responses are currently closed, but you can <a href="%s" rel="trackback">trackback</a> from your own site.', 'sapphire' ), trackback_url( false ) ); ?>
+							Responses are currently closed, but you can <a href="<?php trackback_url(display); ?> ">trackback</a> from your own site.
 						
-						<?php } elseif ( ( 'open' == $post->comment_status ) && ! ( 'open' == $post->ping_status ) ) {
+						<?php } elseif (('open' == $post-> comment_status) && !('open' == $post->ping_status)) {
 							// Comments are open, Pings are not ?>
-							<?php _e( 'You can skip to the end and leave a response. Pinging is currently not allowed.', 'sapphire' ); ?>
+							You can skip to the end and leave a response. Pinging is currently not allowed.
 			
-						<?php } elseif ( ! ( 'open' == $post->comment_status ) && ! ( 'open' == $post->ping_status ) ) {
+						<?php } elseif (!('open' == $post-> comment_status) && !('open' == $post->ping_status)) {
 							// Neither Comments, nor Pings are open ?>
-							<?php _e( 'Both comments and pings are currently closed.', 'sapphire' ); ?>
+							Both comments and pings are currently closed.			
 						
-						<?php } edit_post_link( __( 'Edit this entry', 'sapphire' ), '', '.' ); ?>
+						<?php } edit_post_link('Edit this entry.','',''); ?>
 						
 					</small>
 				</p>

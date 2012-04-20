@@ -36,7 +36,7 @@
 
 		<h2 class="center"><?php _e('Not Found','contempt'); ?></h2>
 		<p class="center"><?php _e("Sorry, but you are looking for something that isn't here.","contempt"); ?></p>
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . "/searchform.php"); ?>
 
 	<?php endif; ?>
 

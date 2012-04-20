@@ -28,7 +28,7 @@ update_option('wp_andreas09_ImageColour', $wp_andreas09_ImageColour);
 
 </head>
 
-<body <?php body_class(); ?>>
+<body>
 
 <div id="container">
 	<div id="sitename">

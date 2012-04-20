@@ -50,6 +50,21 @@ function elegant_grunge_layouts() {
 	return $theme_layouts;
 }
 
+
+/**
+ * Set default options
+ */
+function elegant_grunge_default_options() {
+	$options = get_option( 'elegant_grunge_theme_options' );
+
+	if ( ! isset( $options['theme_layout'] ) ) {
+		$options['theme_layout'] = 'content-sidebar';
+		update_option( 'elegant_grunge_theme_options', $options );
+	}
+}
+add_action( 'init', 'elegant_grunge_default_options' );
+
+
 /**
  * Adding the theme-options page
  */
@@ -71,7 +86,7 @@ function elegant_grunge_theme_options_do_page() {
 	<form method="post" action="options.php">
 		<?php 
 			settings_fields( 'elegant-grunge_options' );
-			$options = elegant_grunge_get_theme_options();
+			$options = get_option( 'elegant_grunge_theme_options' );
 		?>
 		<table class="form-table">
 				<?php
@@ -112,7 +127,7 @@ function elegant_grunge_theme_options_do_page() {
 				</tr>
 		</table>
 		<p class="submit">
-			<input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes', 'elegant-grunge' ); ?>" />
+			<input type="submit" name="Submit" class="button-primary" value="<?php _e( 'Save Changes', 'elegant-grunge' ); ?>" />
 		</p>
 	</form>
 </div>
@@ -130,9 +145,9 @@ function theme_options_validate( $input ) {
 	
 	// Our radio option must actually be in our array of radio options
 	if ( ! isset( $input['theme_layout'] ) )
-		$input['theme_layout'] = 'content-sidebar';
+		$input['theme_layout'] = null;
 	if ( ! array_key_exists( $input['theme_layout'], elegant_grunge_layouts() ) )
-		$input['theme_layout'] = 'content-sidebar';
+		$input['theme_layout'] = null;
 		
 	return $input;
 }

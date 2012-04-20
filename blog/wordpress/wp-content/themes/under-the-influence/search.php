@@ -21,10 +21,10 @@ get_header(); ?>
 			<?php while (have_posts()) : the_post(); ?>
 				<div <?php post_class() ?> id="post-<?php the_ID(); ?>">
 					<div class="date">
-						<?php the_time( get_option( 'date_format' ) ); ?>
+						<?php the_time('F jS, Y') ?>
 					</div>
 					<h2>
-						<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php esc_attr_e( 'Permalink to', 'uti_theme'); echo ' '; the_title_attribute(); ?>">
+						<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php _e('Permalink to ', 'uti_theme'); the_title_attribute(); ?>">
 							<?php the_title(); ?>
 						</a>
 					</h2>
@@ -32,7 +32,7 @@ get_header(); ?>
 						/* If author is shown */
 						if ($author == "on"){
 					?>
-						<span class="author"><?php _e( 'by', 'uti_theme' ); echo ' '; the_author(); ?></span>
+						<span class="author"><?php _e('by ', 'uti_theme'); the_author() ?></span>
 					<?php
 						}
 					?>
@@ -40,12 +40,12 @@ get_header(); ?>
 						<?php the_content(__('<div class="read_more">read more &raquo;</div>', 'uti_theme')); ?>
 					</div><!--.entry-->
 					<p class="postmetadata">
-						<?php _e( 'Posted in', 'uti_theme' ); echo ' '; the_category( ', ' ); ?> |
+						<?php _e('Posted in  ', 'uti_theme'); the_category(', '); ?> |
 						<?php edit_post_link(__('Edit', 'uti_theme'), '', ' | '); ?>
 						<?php comments_popup_link(__('Leave a Comment &#187;', 'uti_theme'), __('1 Comment &#187;', 'uti_theme'), __('% Comments &#187;', 'uti_theme')); ?>
 					</p>
 					<div class="tags">
-						<?php the_tags( __( 'Tags:', 'uti_theme' ) . ' ', ', ', '<br />' ); ?>
+						<?php the_tags(__('Tags: ', 'uti_theme'), ', ', '<br />'); ?>
 					</div>
 				</div><!--post-->
 			<?php endwhile; ?>

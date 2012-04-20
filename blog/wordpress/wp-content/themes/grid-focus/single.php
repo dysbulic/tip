@@ -10,7 +10,7 @@ get_header();
 		<div id="paginateIndex" class="fix">
 			<p><span class="left"><?php next_post_link( '%link', __( '&laquo; Newer', 'grid-focus' ) ); ?></span> <span class="right"><?php previous_post_link( '%link', __( 'Older &raquo;', 'grid-focus' ) ); ?></span></p>
 		</div>
-
+		
 		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<div class="postMeta fix">
@@ -18,8 +18,8 @@ get_header();
 					<span class="date"><?php the_date(); echo ' &bull; '; the_time() ?><?php edit_post_link( __( ' (Edit)', 'grid-focus' ), '', '' ); ?></span>
 				</p>
 			</div>
-
-			<h2 class="entry-title"><?php the_title() ?></h2>
+			
+			<h2><a href="<?php the_permalink() ?>" title="<?php the_title_attribute(); ?>"><?php the_title() ?></a></h2>
 			<div class="entry">
 				<?php the_content(); ?>
 				<?php wp_link_pages(); ?>

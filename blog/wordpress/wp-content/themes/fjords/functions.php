@@ -1,9 +1,4 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Fjords
- */
-
 if ( function_exists( 'register_sidebars' ) )
     register_sidebars( 3 );
 
@@ -19,14 +14,10 @@ add_theme_support( 'automatic-feed-links' );
 $themecolors = array(
 	'bg' => 'ffffff',
 	'text' => '888888',
-	'link' => '8ab459',
-	'border' => 'dee4da',
-	'url' => '63b4cd',
+	'link' => '8AB459'
 );
 
 $content_width = 270;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 define( 'HEADER_TEXTCOLOR', 'ffffff' );
 define( 'HEADER_IMAGE', '%s/imagenes_qwilm/beach.jpg' ); // %s is theme dir uri
@@ -105,23 +96,3 @@ font-family: "Lucida Grande",Tahoma,Arial,sans-serif;
 add_custom_image_header( 'header_style', 'admin_header_style' );
 
 add_custom_background();
-
-function fjords_comment( $comment, $args, $depth ) {
-	$GLOBALS[ 'comment' ] = $comment;
-	extract( $args, EXTR_SKIP );
-?>
-<div <?php comment_class( empty( $args[ 'has_children' ] ) ? '' : 'parent' ); ?> id="comment-<?php comment_ID(); ?>">
-	<div id="div-comment-<?php comment_ID(); ?>">
-	<div class="comentarios">
-		<span class="comment-author vcard"><?php if ( $args[ 'avatar_size' ] != 0 ) echo get_avatar( $comment, $args[ 'avatar_size' ] ); ?>&nbsp;
-		<span class="fn"><a href="<?php comment_author_url(); ?>">
-		<?php printf ( __( '%1$s wrote @ %2$s at %3$s' ), comment_author() . '</a></span>' , '<span class="comment-meta commentmetadata">' . get_comment_date(), get_comment_time().'</span>' ) ?>
-		</span>
-	</div>
-	<?php comment_text(); ?>
-	<div class="reply">
-		<?php comment_reply_link( array_merge( $args, array( 'add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args[ 'max_depth' ] ) ) ); ?>
-	</div>
-	</div>
-<?php
-}

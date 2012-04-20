@@ -1,11 +1,11 @@
 /*
 Theme Name: The Morning After
 Theme URI: http://www.woothemes.com
-Version: 3.2.4-wpcom
-Description: A classic magazine theme featuring a custom menu, header and background. The Morning After supports up to three widget areas on the home page, featured images for latest post and featured posts on the home page, and special style for Aside post format. It includes style for the Visual Editor, and has an optional full-width page template that removes the sidebar.
+Version: 3.2.4-wp.com
+Description: A classic magazine theme featuring a custom menu, header and background. The Morning After supports up to 3 widget areas on the home page and featured images for latest post (thumbnails for sticky posts) on the home page). It includes style for the Visual Editor, and has an optional full-width page template that removes the sidebar.
 Author: WooThemes
 Author URI: http://www.woothemes.com
-Tags: white, gray, light, one-column, two-columns, three-columns, right-sidebar, fixed-width, theme-options, custom-background, custom-header, custom-menu, sticky-post, full-width-template, featured-images, post-formats, editor-style, rtl-language-support, translation-ready, magazine, news, professional, clean
+Tags: white, gray, light, one-column, two-columns, three-columns, right-sidebar, fixed-width, theme-options, custom-background, custom-header, custom-menu, sticky-post, threaded-comments, full-width-template, featured-images, editor-style, rtl-language-support, translation-ready, magazine, news, professional, clean
 
 Copyright: (c) 2009 WooThemes.
 License: GNU General Public License v2.0
@@ -269,20 +269,25 @@ body {
 .last {
 	margin-right: 0;
 }
-.primary-sidebar,
-.archive-info {
+.span-3 {
 	width: 190px;
 }
-.secondary-sidebar {
+.span-4 {
 	width: 260px;
 }
-.mid-column {
+.span-6 {
+	width: 400px;
+}
+.span-7 {
+	width: 470px;
+}
+.span-8 {
 	width: 540px;
 }
-.primary-content {
+.span-11 {
 	width: 750px;
 }
-.full-width {
+.span-14 {
 	margin: 0;
 	width: 960px;
 }
@@ -311,6 +316,10 @@ body {
 img {
 	margin: 0 0 1.5em 0;
 }
+.push-0 {
+	float: right;
+	margin: 0 0 0 1.5em;
+}
 /* buttons.css */
 a.button,
 button {
@@ -331,7 +340,7 @@ button {
 }
 button {
 	overflow: visible;
-	padding: 4px 10px 3px 7px;
+	padding: 4px 10px 3px 7px
 	width: auto;
 }
 button[type] {
@@ -339,11 +348,11 @@ button[type] {
 	padding: 5px 10px 5px 7px;
 }
 *:first-child+html button[type] {
-	padding: 4px 10px 3px 7px;
+	padding: 4px 10px 3px 7px
 }
 button img,a.button img {
 	border: none;
-	height: 16px;
+	height: 16px
 	margin: 0 3px -3px 0 !important;
 	padding: 0;
 	width: 16px;
@@ -352,12 +361,39 @@ button:hover,
 a.button:hover {
 	background-color: #dff4ff;
 	border: 0.1em solid #c2e1ef;
-	color: #336699;
+	color: #336699
 }
 a.button:active {
 	background-color: #6299c5;
 	border: 1px solid #6299c5;
-	color: #fff;
+	color: #fff
+}
+.positive {
+	color: #529214
+}
+a.positive:hover,
+button.positive:hover {
+	background-color: #E6EFC2;
+	border: 0.1em solid #C6D880;
+	color: #529214
+}
+a.positive:active {
+	background-color: #529214;
+	border: 0.1em solid #529214;
+	color: #fff
+}
+.negative {
+	color: #d12f19
+}
+a.negative:hover,
+button.negative:hover {
+	background: #fbe3e4;
+	border: 0.1em solid #fbc2c4
+}
+a.negative:active {
+	background-color: #d12f19;
+	border: 0.1em solid #d12f19;
+	color: #fff
 }
 
 
@@ -441,10 +477,7 @@ h2 {
 -------------------------------------------------------------- */
 
 #header #search_menu {
-	float: right;
 	height: 90px;
-	margin: 0 0 0 0.7em;
-	width: 400px;
 }
 #header #search_menu #search {
 	padding: 0 0 0 5px;
@@ -495,11 +528,21 @@ h2 {
 }
 
 
-/* Top banner
+/* Top banner with rotating images
 -------------------------------------------------------------- */
 
 #topbanner {
 	border: solid #dadada;
+	border-width: 1px 0;
+	height: 70px;
+}
+#topbanner_arch {
+	border: solid #dadada;
+	border-width: 1px 0;
+	height: 70px;
+}
+#topbanner_single {
+	border-bottom: solid #dadada;
 	border-width: 1px 0;
 	height: 70px;
 }
@@ -520,7 +563,7 @@ h2 {
 	font: 700 2em arial, sans-serif;
 	letter-spacing: -0.036em;
 	margin: 20px 0 0 0;
-	padding: 1px 5px;
+	padding: 1px 5px 1px 5px;
 	text-transform: lowercase;
 }
 
@@ -528,10 +571,6 @@ h2 {
 /* Home page columns
 -------------------------------------------------------------- */
 
-#home_left,
-#home_right{
-	width: 470px;
-}
 #home_content {
 	margin: 1.5em 0;
 }
@@ -567,10 +606,12 @@ h2 {
 /* featured post */
 #home_featured {
 	background: #f2f2f2 url(images/bg/dot.png) repeat-x bottom left;
+	float: left;
 	margin: 0 0 1.1em 0;
 	width: 100%;
 }
 .feat_content {
+	float: left;
 	padding: 0 0.7em 0.4em 0.7em;
 	width: 453px;
 }
@@ -595,24 +636,6 @@ h2 {
 }
 .feat_exc a {
 	color:#3A6999;
-}
-/* asides */
-ul.arrow {
-	list-style: none;
-	margin: 0;
-}
-ul.arrow li {
-	border-bottom: 1px solid #dadada;
-	border-left: 5px solid #dadada;
-	margin: 0 0 0.5em 0;
-	padding: 0.3em 0 0.4em 12px;
-}
-ul.arrow li a {
-	color: #3a6999;
-}
-ul.arrow li a:hover {
-	background: #eee;
-	color: #000;
 }
 /* about */
 #feature {
@@ -760,7 +783,6 @@ ul.arrow li a:hover {
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	word-wrap: break-word;
 }
 .widget .children,
 .widget .sub-menu {
@@ -859,10 +881,10 @@ table#wp-calendar td a {
 	height: auto;
 	width: auto;
 }
-.primary-sidebar .widget_flickr img {	
+.span-3 .widget_flickr img {	
 	max-width: 190px;	
 }
-.secondary-sidebar .widget_flickr img {
+.span-4 .widget_flickr img {
 	max-width: 260px;
 }
 #post_content .widget_flickr tr,
@@ -1006,28 +1028,21 @@ td.recentcommentstextend {
     font-size: 9px;
 }
 .post_text blockquote {
+	clear: both;
 	color: #000;
+	float: right;
 	font-style: italic;
 	font: bold 1.3em georgia, serif;
 	letter-spacing: -0.048em;
 	margin: 0 0 0 1.5em;
+	width: 260px;
 }
 .post_text blockquote p {
 	line-height: 1.5em;
+	text-align: right;
 }
-/*
-Resize images to fit the main content area.
-- Applies only to images uploaded via WordPress by targeting size-* classes.
-- Other images will be left alone. Use "size-auto" class to apply to other images.
-*/
-.post_text img.size-auto,
-.post_text img.size-full,
-.post_text img.size-large,
-.post_text img.size-medium,
-.post_text .attachment img {
-	max-width: 100%; /* When images are too wide for containing element, force them to fit. */
-	width: auto; /* Necessary for IE8 to resize images correctly. */
-	height: auto; /* Override height to match resized width for correct aspect ratio. */
+#post_content p img {
+	max-width: 750px;
 }
 #post_content img.posttag {
 	margin: 0 0.3em 0 0;
@@ -1045,38 +1060,37 @@ Resize images to fit the main content area.
 	color: #000;
 	text-decoration: underline;
 }
-.primary-content table,
-.mid-column table {
+.span-11 table,
+.span-8 table {
 	margin: 0 0 22px 0;
 	text-align: left;
 	width: 100%;
 }
-.primary-content tr th,
-.primary-content thead th,
-.mid-column tr th,
-.mid-column thead th {
+.span-11 tr th,
+.span-11 thead th,
+.span-8 tr th,
+.span-8 thead th {
 	font-size: 12px;
 	font-weight: bold;
 	line-height: 18px;
 	padding: 9px 24px;
 }
-.primary-content tr td,
-.mid-column tr td {
+.span-11 tr td,
+.span-8 tr td {
 	padding: 6px 24px;
-	vertical-align: middle;
 }
-.primary-content dd,
-.mid-column dd {
+.span-11 dd,
+.span-8 dd {
     margin: 0 0 1em;
 }
-.primary-content ul ul,
-.primary-content ul ul ul,
-.primary-content ol ol,
-.primary-content ol ol ol,
-.mid-column ul ul,
-.mid-column ul ul ul,
-.mid-column ol ol,
-.mid-column ol ol ol  {
+.span-11 ul ul,
+.span-11 ul ul ul,
+.span-11 ol ol,
+.span-11 ol ol ol,
+.span-8 ul ul,
+.span-8 ul ul ul,
+.span-8 ol ol,
+.span-8 ol ol ol  {
 	margin:0 0 0 1.5em;
 }
 #entry-author-info {
@@ -1125,8 +1139,7 @@ Resize images to fit the main content area.
 #commenthead {
 	margin-bottom: 1em;
 }
-ol#commentlist,
-ol#pinglist {
+ol#commentlist,ol#pinglist {
 	list-style-type: none;
 	margin: 0;
 	padding: 0 0 12px 0;
@@ -1225,13 +1238,6 @@ a#cancel-comment-reply-link {
 	padding: 0.2em 0.3em;
 	text-transform: uppercase;
 }
-/* Target all Firefox to fix line-height issue */
-@-moz-document url-prefix() {
-	.reply a,
-	a#cancel-comment-reply-link {
-		padding: 0.3em 0.3em 0;
-	}
-}
 .reply a:hover,
 a#cancel-comment-reply-link:hover {
 	background: #000;
@@ -1253,14 +1259,17 @@ h3#reply-title {
 	padding: 1em 0 0 0;
 }
 /* Pings */
-ol#pinglist .pingback a {
+ol#pinglist .pingcontent {
+	display: block;
+}
+ol#pinglist .ping_meta a {
 	color: #3a6999;
 }
-ol#pinglist .pingback a:hover {
+ol#pinglist .ping_meta a:hover {
 	color: #000;
 	text-decoration: underline;
 }
-ol#pinglist .pingback {
+ol#pinglist .ping_meta {
 	color: #818181;
 	font-size: 0.8em;
 	font-style: normal;
@@ -1376,17 +1385,13 @@ ul.wp-tag-cloud li a:hover {
 #footer p,
 #footer img {
 	float: none;
-	margin: 0px;
+	margin: 0px
 }
 #footer img {
-	vertical-align: top;
+	vertical-align: top
 }
 #footer #credit p {
-	text-align: right;
-}
-#copyright,
-#credit{
-	width: 470px;
+	text-align: right
 }
 
 
@@ -1413,9 +1418,6 @@ input.submit_input {
 	margin: 0 0 0 5px;
 	padding: 0;
 	width: 65px;
-}
-input.submit_input:hover {
-	cursor: pointer;
 }
 
 
@@ -1483,6 +1485,9 @@ h3.latest_post_title a:hover {
 	background: #000;
 	color: #fff;
 }
+.sticky .latest_post_date {
+	display:none;
+}
 h3.home_featured {
 	background: url(images/bg/dot.png) repeat-x top left;
 	color: #5f9410;
@@ -1490,7 +1495,7 @@ h3.home_featured {
 	font-weight: bold;
 	letter-spacing: 0.1em;
 	line-height: 1.8em;
-	padding: 1em 0.7em 0.9em 0.7em;
+	padding: 0.7em 0.7em 0.9em 0.7em;
 	text-transform: uppercase;
 }
 h3.mast {
@@ -1594,12 +1599,6 @@ input.buttonem {
 	padding: 0.1em 0.4em;
 	text-transform: uppercase;
 }
-/* Target all Firefox to fix line-height issue */
-@-moz-document url-prefix() {
-	.filedunder {
-		padding: 0.3em 0.3em 0;
-	}
-}
 .fright {
 	float: right;
 	margin: 0 0 0.3em 0.7em;
@@ -1672,13 +1671,11 @@ div.aligncenter {
 	background-color: #f3f3f3;
 	border-radius: 3px;
 	border: 1px solid #ddd;
-	max-width: 100%;
 	padding-top: 4px;
 	text-align: center;
 }
 .wp-caption img {
 	border: 0 none;
-	height: auto;
 	margin: 0;
 	max-width: 98%;
 	padding: 0;
@@ -1742,7 +1739,6 @@ dd.gallery-caption {
 }
 .entry-content-wrapper {
 	padding: 1.5em 0 0 0;
-	width: 940px;
 }
 .entry-attachment .attachment img {/* single attachment images should be centered */
 	display: block;
@@ -1784,14 +1780,6 @@ dd.gallery-caption {
 
 p.attachment img {
 	margin: 0;
-}
-
-
-/* =WP.com
------------------------------------------------ */
-
-.sharing {
-	clear: both;
 }
 
 
@@ -1848,10 +1836,4 @@ p.attachment img {
 #ie7 .post_text ol ol,
 #ie7 .post_text ol ol ol {
 	margin: 0 0 0 2em;
-}
-#ie7 .commentcont {
-	height: 1%;
-}
-#ie7 .avatar {
-	margin: 0;
 }

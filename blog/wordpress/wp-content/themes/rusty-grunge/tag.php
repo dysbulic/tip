@@ -17,6 +17,8 @@ get_header(); ?>
 			</div>
 			<?php endif; ?>
 
+				<?php the_post(); ?>
+
 				<header class="page-header">
 					<h1 class="page-title"><?php
 						printf( __( 'Tag Archives: %s', 'rusty-grunge' ), '<span>' . single_tag_title( '', false ) . '</span>' );

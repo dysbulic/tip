@@ -1,10 +1,10 @@
 jQuery(document).ready( function($) {
-	$('#link_rel').prop('readonly', true);
+	$('#link_rel').attr('readonly', 'readonly');
 	$('#linkxfndiv input').bind('click keyup', function() {
 		var isMe = $('#me').is(':checked'), inputs = '';
 		$('input.valinp').each( function() {
 			if (isMe) {
-				$(this).prop('disabled', true).parent().addClass('disabled');
+				$(this).attr('disabled', 'disabled').parent().addClass('disabled');
 			} else {
 				$(this).removeAttr('disabled').parent().removeClass('disabled');
 				if ( $(this).is(':checked') && $(this).val() != '')

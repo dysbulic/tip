@@ -18,14 +18,14 @@
 <?php wp_enqueue_script( 'jquery' ); ?>
 
 <?php
-	if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
-	wp_head();
+if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
+wp_head();
 ?>
 
 <script type="text/javascript">
 /*<![CDATA[ */
 //set title font size
-jQuery(window).load(function() {
+jQuery(document).ready(function() {
 
 	function resize(selector, max) {
 		jQuery(selector).each(function() {
@@ -51,52 +51,42 @@ jQuery(window).load(function() {
 	$title_length = strlen( get_bloginfo( 'name' ) );
 	if ( 0 != $title_length ) { // avoid empty title
 ?>
-<style type="text/css" media="screen">
-<?php
-	if ( $title_length >= 30 )
-		$title_length = 40;
+<style type="text/css" media="screen"><?php
+	if ( $title_length >= 30 ) $title_length = 40;
 		$font_size = ( 1000 / $title_length ) * 2;
-
-	if ( $font_size > 120 )
-		$font_size = 120;
-
-	if ( preg_match( '/.*\s.*/', $title ) === false && ( $title > 20 ) )
-		$font_size = 72;
-		$font_size = round( $font_size, 2 ); // round to two decimals
-?>
-	#container h1.sitename {
-		font-size: <?php echo $font_size; ?>px;
-	}
+	if ( $font_size > 120 ) $font_size = 120;
+	if ( preg_match( '/.*\s.*/', $title ) === false && ( $title > 20 ) ) $font_size = 72;
+	$font_size = round( $font_size, 2 ); // round to two decimals ?>
+	#container h1.sitename { font-size: <?php echo $font_size; ?>px; }
 </style>
 <?php } ?>
 </head>
-<body<?php if ( ( is_front_page() or is_home() ) && ! is_page() ) { echo ' id="home"'; } ?> <?php body_class(); ?>>
+<body<?php if( ( is_front_page() or is_home() ) && !is_page() ) { echo ' id="home"'; } ?> <?php body_class(); ?>>
 <div id="page">
 
 <h1 class="name"><a href="<?php echo home_url( '/' ); ?>" title="<?php bloginfo( 'description' ); ?>"><span>
-<?php
-	if ( get_option( 'depo-author-name' ) )
-		echo get_option( 'depo-author-name' );
-
-	else {
+	<?php
 		$my_query = new WP_Query( 'showposts=1' );
-		while ( $my_query->have_posts() ) {
-			$my_query->the_post();
-			$title = get_userdata( $post->post_author );
-		}
-		echo $title->display_name;
-	}
-?>
-</span></a></h1>
+		while ( $my_query->have_posts() && $count < 1 ) : $my_query->the_post();
+		  $do_not_duplicate = $post->ID;
+	?>
+	<?php
+		$count++;
+		$title = get_userdata( $post->post_author );
+		$title = $title->display_name;
+	?>
+	<?php endwhile; ?>
+	<?php echo ( get_option( 'depo-author-name' ) ) ? get_option( 'depo-author-name' ) : $title; ?></span>
+</a></h1>
 
 <div id="container">
 	<div class="sleeve">
 
 		<div id="header">
 			<h1 class="sitename">
-			<?php if ( ! is_front_page() ) { ?><a href="<?php echo home_url(); ?>" title="<?php bloginfo( 'description' ); ?>"><?php } ?>
+			<?php if( !is_front_page() ) { ?><a href="<?php echo home_url(); ?>" title="<?php bloginfo( 'description' ); ?>"><?php } ?>
 			<?php bloginfo( 'name' ); ?>
-			<?php if ( ! is_front_page() ) { ?></a><?php } ?>
+			<?php if( !is_front_page() ) { ?></a><?php } ?>
 			</h1>
 
 			<div id="menu">

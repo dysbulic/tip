@@ -1,44 +1,47 @@
+
 <!-- begin sidebar -->
-	<div id="sidebar">
-		<?php do_action( 'before_sidebar' ); ?>
-		<ul>
-		<?php if ( ! function_exists( 'dynamic_sidebar' ) || ! dynamic_sidebar() ) : ?>
-			<div id="categories">
-				<h3><?php _e( 'Categories:', 'pool' ); ?></h3>
-				<ul>
-					<?php wp_list_cats( 'sort_column=name&optioncount=1&feed=rss' ); ?>
-				</ul>
-			</div><!-- #categories -->
+		<div id="sidebar">
+			<ul>
+<?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar() ) : ?>
 
-			<div id="archives">
-				<h3><?php _e( 'Archives:', 'pool' ); ?></h3>
+			
+			<div id="categories">			
+			<h3><?php _e('Categories:'); ?></h3>
 				<ul>
-					<?php wp_get_archives( 'type=monthly&show_post_count=1' ); ?>
+				<?php wp_list_cats('sort_column=name&optioncount=1&feed=rss'); ?>
 				</ul>
-			</div><!-- #archives -->
-
+			</div>
+			
+			<div id="archives">			
+			<h3><?php _e('Archives:'); ?></h3>
+				<ul>
+				<?php wp_get_archives('type=monthly&show_post_count=1'); ?>
+				</ul>
+			</div>
+			
 			<div id="blogroll">
-				<h3><?php _e( 'Blogroll', 'pool' ); ?></h3>
+			<h3>Blogroll</h3>
 				<ul>
-					<?php wp_list_bookmarks( 'title_li=&categorize=0' ); ?>
+				<?php get_links(-1, '<li>', '</li>', ' - '); ?>
 				</ul>
-			</div><!-- #blogroll -->
+			</div>
 
 			<div id="meta">
-				<h3><?php _e( 'Meta:', 'pool' ); ?></h3>
+				<h3><?php _e('Meta:'); ?></h3>
 				<ul>
-					<?php wp_register(); ?>
-					<li><?php wp_loginout(); ?></li>
-					<li><a href="http://gmpg.org/xfn/"><abbr title="XHTML Friends Network"><?php _e( 'XFN', 'pool' ); ?></abbr></a></li>
-					<li><a href="http://wordpress.com/"><?php _e( 'Get a blog at WordPress.com', 'pool' ); ?></a></li>
-					<?php wp_meta(); ?>
+				<?php wp_register(); ?>
+				<li><?php wp_loginout(); ?></li>
+				<li><a href="http://gmpg.org/xfn/"><abbr title="XHTML Friends Network">XFN</abbr></a></li>
+				<li><a href="http://wordpress.com/">Get a blog at WordPress.com</a></li>
+				<?php wp_meta(); ?>
 				</ul>
-			</div><!-- #meta -->
-		<?php endif; ?>
-		</ul>
-	</div><!-- #sidebar -->
+			</div>
+<?php endif; ?>		
+			</ul>
+		</div>
+			
+<div class="both"></div>
+			
+</div>
 
-	<div class="both"></div>
-
-</div><!-- #bloque -->
 <!-- end sidebar -->

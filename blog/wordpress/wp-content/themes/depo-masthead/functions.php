@@ -22,17 +22,6 @@ if ( ! isset( $content_width ) )
 	$content_width = 604;
 
 /**
- * Set $themecolors array.
- */
-$themecolors = array(
-	'bg' => 'FFFFFF',
-	'text' => '000000',
-	'link' => '990000',
-	'border' => 'CCCCCC',
-	'url' => 'CC0000',
-);
-
-/**
  * Feeds.
  */
 add_theme_support( 'automatic-feed-links' );
@@ -121,6 +110,11 @@ add_action( 'widgets_init', 'depo_widgets_init' );
 require_once( get_template_directory() . '/lib/widgets.php' );
 
 /**
+ * Include Next/Previous Archive Date.
+ */
+require_once( get_template_directory() . '/lib/archive-date.php' );
+
+/**
  * Admin Theme Page.
  */
 add_action( 'admin_menu', 'depo_add_theme_page' );
@@ -150,7 +144,7 @@ function depo_theme_page() {
 	<form method="post" action="<?php echo esc_url( $_SERVER['REQUEST_URI'] ); ?>">
 		<?php wp_nonce_field( 'depo-name' ); ?>
 		<p><label for="author-name"><?php _e( 'Author Box Text:', 'depo-masthead' ); ?></label> <input type="text" name="author-name" value="<?php echo get_option( 'depo-author-name' ); ?>" id="author-name" /> <small><?php _e( 'Leaving this field blank will insert the blog author\'s name.', 'depo-masthead' ); ?></small></p>
-		<p><input type="hidden" name="action" value="save" /> <input class="button-primary" type="submit" name="submit" value="<?php esc_attr_e( 'Save Option',  'depo-masthead' ); ?>" id="submit" /></p>
+		<p><input type="hidden" name="action" value="save" /> <input type="submit" name="submit" value="<?php esc_attr_e( 'Submit',  'depo-masthead' ); ?>" id="submit" /></p>
 
 	</form>
 	</div>
@@ -166,31 +160,3 @@ function depomasthead_page_menu() { ?>
 		<li><a href="<?php bloginfo( 'rss2_url' ); ?>"><?php _e( 'RSS Feed', 'depo-masthead' ); ?></a></li>
 	</ul>
 <?php }
-
-function depo_masthead_comment( $comment, $args, $depth ) {
-	$GLOBALS['comment'] = $comment;
-	extract( $args, EXTR_SKIP );
-?>
-	<li <?php comment_class( empty( $args['has_children'] ) ? '' : 'parent' ); ?> id="comment-<?php comment_ID(); ?>">
-	<div id="div-comment-<?php comment_ID(); ?>">
-		<div class="comments_text">
-		<?php comment_text(); ?>
-		<?php if ( $comment->comment_approved == '0' ) : ?>
-			<em><?php _e( 'Your comment is awaiting moderation.', 'depo-masthead' ); ?></em>
-		<?php endif; ?>
-
-		<div class="reply">
-			<?php comment_reply_link( array_merge( $args, array( 'add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
-		</div>
-		</div>
-
-		<div class="comment-meta commentmetadata">
-			<div class="gravatar"><?php if ( $args['avatar_size'] != 0 ) echo get_avatar( $comment, $args['avatar_size'] ); ?></div>
-			<div class="cite comment-author vcard">
-			<cite class="fn"><?php comment_author_link(); ?></cite>
-			<small><a href="#comment-<?php comment_ID(); ?>" title=""><strong><?php comment_date( 'j F Y' ); ?></strong> at <strong><?php comment_time( 'ga' ); ?></strong></a> <?php edit_comment_link( 'edit', '&nbsp;&nbsp;', '' ); ?></small>
-			</div>
-		</div>
-	</div>
-<?php
-}

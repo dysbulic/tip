@@ -22,7 +22,7 @@ class WP_Theme_Install_List_Table extends WP_List_Table {
 
 		$paged = $this->get_pagenum();
 
-		$per_page = 36;
+		$per_page = 30;
 
 		// These are the tabs which are shown on the page,
 		$tabs = array();
@@ -130,7 +130,7 @@ class WP_Theme_Install_List_Table extends WP_List_Table {
 
 		// wp_nonce_field( "fetch-list-" . get_class( $this ), '_ajax_fetch_list_nonce' );
 ?>
-		<div class="tablenav top themes">
+		<div class="tablenav top">
 			<div class="alignleft actions">
 				<?php do_action( 'install_themes_table_header' ); ?>
 			</div>
@@ -139,11 +139,13 @@ class WP_Theme_Install_List_Table extends WP_List_Table {
 			<br class="clear" />
 		</div>
 
-		<div id="availablethemes">
-			<?php $this->display_rows_or_placeholder(); ?>
-		</div>
+		<table id="availablethemes" cellspacing="0" cellpadding="0">
+			<tbody id="the-list" class="list:themes">
+				<?php $this->display_rows_or_placeholder(); ?>
+			</tbody>
+		</table>
 
-		<div class="tablenav bottom themes">
+		<div class="tablenav bottom">
 			<?php $this->pagination( 'bottom' ); ?>
 			<img src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" class="ajax-loading list-ajax-loading" alt="" />
 			<br class="clear" />
@@ -153,16 +155,30 @@ class WP_Theme_Install_List_Table extends WP_List_Table {
 
 	function display_rows() {
 		$themes = $this->items;
-		$theme_names = array_keys( $themes );
 
-		foreach ( $theme_names as $theme_name ) {
+		$rows = ceil( count( $themes ) / 3 );
+		$table = array();
+		$theme_keys = array_keys( $themes );
+		for ( $row = 1; $row <= $rows; $row++ )
+			for ( $col = 1; $col <= 3; $col++ )
+				$table[$row][$col] = array_shift( $theme_keys );
+
+		foreach ( $table as $row => $cols ) {
+			echo "\t<tr>\n";
+			foreach ( $cols as $col => $theme_index ) {
 				$class = array( 'available-theme' );
+				if ( $row == 1 ) $class[] = 'top';
+				if ( $col == 1 ) $class[] = 'left';
+				if ( $row == $rows ) $class[] = 'bottom';
+				if ( $col == 3 ) $class[] = 'right';
 				?>
-				<div class="<?php echo join( ' ', $class ); ?>"><?php
-					if ( isset( $themes[$theme_name] ) )
-						display_theme( $themes[$theme_name] );
-				?></div>
-		<?php } // end foreach $theme_names
+				<td class="<?php echo join( ' ', $class ); ?>"><?php
+					if ( isset( $themes[$theme_index] ) )
+						display_theme( $themes[$theme_index] );
+				?></td>
+			<?php } // end foreach $cols
+			echo "\t</tr>\n";
+		} // end foreach $table
 	}
 }
 

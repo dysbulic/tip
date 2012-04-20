@@ -10,7 +10,7 @@ if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
 wp_head();
 ?>
 </head>
-<body <?php body_class(); ?>>
+<body>
 <div id="page">
 <div id="header" onclick="location.href='<?php bloginfo('url');?>';" style="cursor:pointer;">
 	<h1><a href="<?php echo home_url( '/' ); ?>"><?php bloginfo('name'); ?></a></h1>

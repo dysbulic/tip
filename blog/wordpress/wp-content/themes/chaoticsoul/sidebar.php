@@ -2,7 +2,7 @@
 	
 	<?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar() ) : ?>
 	
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 		
 		<?php if (is_single()) { ?>
 			

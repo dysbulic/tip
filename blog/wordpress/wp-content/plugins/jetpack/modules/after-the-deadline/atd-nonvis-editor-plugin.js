@@ -1,4 +1,5 @@
-var AtD_qtbutton;
+edButtons[edButtons.length] = new edButton('ed_AtD', 'AtD', '', '', '');
+
 /* convienence method to restore the text area from the preview div */
 function AtD_restore_text_area()
 {
@@ -19,31 +20,39 @@ function AtD_restore_text_area()
 	jQuery('#content').height(AtD.height); 
 
 	/* change the link text back to its original label */
-	jQuery(AtD_qtbutton).val( AtD.getLang('button_proofread', 'proofread') );
-	jQuery(AtD_qtbutton).css({ 'color' : '#464646' });
+	jQuery('#ed_AtD').val( AtD.getLang('button_proofread', 'proofread') );
+	jQuery('#ed_AtD').css({ 'color' : '#464646' });
 
 	/* enable the toolbar buttons */
-	jQuery( AtD_qtbutton ).siblings('input').andSelf().attr( 'disabled', false );
+	for (var z = 0; z < edButtons.length; z++)
+		if ( edButtons[z].id != 'ed_AtD' )
+			jQuery( '#' + edButtons[z].id ).attr('disabled', false);
+
+	jQuery( '#ed_spell' ).attr( 'disabled', false );
+	jQuery( '#ed_close' ).attr( 'disabled', false );
 
 	/* restore autosave */
 	if (AtD.autosave != undefined)
 		autosave = AtD.autosave;
 };
 
-// add the AtD button properly to quicktags
-if ( typeof(QTags) != 'undefined' && QTags.addButton ) {
-	jQuery(document).ready(function($){
-		QTags.addButton( 'AtD', AtD_l10n_r0ar.button_proofread, AtD_check );
-	});
-} else {
-	edButtons[edButtons.length] = new edButton('ed_AtD', 'AtD', '', '', '');
-	jQuery(document).ready(function($){
-		$('#ed_AtD').replaceWith('<input type="button" id="ed_AtD" accesskey="" class="ed_button" onclick="AtD_check(this);" value="' + AtD_l10n_r0ar.button_proofread + '" />');
-	});
+/* javascript does some lazy evaluation of function names, have to do the function swap
+   this way to make it work as expected */
+function AtD_replace_show_function( foo ) {
+	var old_button = foo;
+	edShowButton = function(button, i) {
+		if (button.id == 'ed_AtD') {
+			document.write('<input type="button" id="' + button.id + '" accesskey="' + button.access + '" class="ed_button" onclick="AtD_check();" value="' + AtD_l10n_r0ar.button_proofread + '" />');
+		} else {
+			old_button(button, i);
+		}
+	}
 }
 
+AtD_replace_show_function( edShowButton );
+
 function AtD_restore_if_proofreading() {
-	if (jQuery(AtD_qtbutton).val() == AtD.getLang('button_edit_text', 'edit text')) 
+	if (jQuery('#ed_AtD').val() == AtD.getLang('button_edit_text', 'edit text')) 
 		AtD_restore_text_area();
 }
 
@@ -60,36 +69,14 @@ function AtD_bind_proofreader_listeners() {
 }
 
 /* where the magic happens, checks the spelling or restores the form */
-function AtD_check(button) {
-	var callback;
-	if ( jQuery.isFunction( button ) ) {
-		callback = button;
-
-		if ( !AtD_qtbutton ) {
-			AtD_qtbutton = jQuery( '#qt_content_AtD, #ed_AtD' ).get( 0 );
-		}
-	} else {
-		if ( !button.id )
-			button = button[0];
-
-		AtD_qtbutton = button;
-	}
-
-	if ( !jQuery('#content').size() ) {
-		if ( 'undefined' !== typeof callback ) {
-			callback( 0 );
-		}
-		AtD_restore_if_proofreading();
-		return;
-	}
+function AtD_check(callback) {
 
 	/* If the text of the link says edit comment, then restore the textarea so the user can edit the text */
-
-	if ( jQuery(AtD_qtbutton).val() == AtD.getLang('button_edit_text', 'edit text') ) {                               
+	if (jQuery('#ed_AtD').val() == AtD.getLang('button_edit_text', 'edit text')) {                               
 		AtD_restore_text_area(); 
 	} else {
 		/* initialize some of the stuff related to this plugin */
-		if ( !AtD.height ) {
+		if (AtD.height == undefined) {
 
 			AtD.height = jQuery('#content').height();
 			AtD_bind_proofreader_listeners();
@@ -110,9 +97,12 @@ function AtD_check(button) {
 		}
 
 		/* set the spell check link to a link that lets the user edit the text */
+		jQuery('#ed_AtD').val(AtD.getLang('button_edit_text', 'edit text'));
+		jQuery('#ed_AtD').css({ 'color' : 'red' });
+
 		/* disable the button to prevent a race condition where content is deleted if proofread is clicked with a check
 		   in progress. */
-		jQuery(AtD_qtbutton).css({ 'color' : 'red' }).val( AtD.getLang('button_edit_text', 'edit text') ).attr('disabled', true);
+		jQuery('#ed_AtD').attr('disabled', true); 
 
 		/* replace the div */
 		var text = jQuery('#content').val().replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
@@ -132,30 +122,35 @@ function AtD_check(button) {
 		autosave = function() { };
 
 		/* disable the toolbar buttons */
-		jQuery( AtD_qtbutton ).siblings('input').andSelf().attr( 'disabled', true ); // using .arrt instead of .prop so it's compat with older WP and jQuery
+		for (var z = 0; z < edButtons.length; z++)
+			if ( edButtons[z].id != 'ed_AtD' )
+				jQuery( '#' + edButtons[z].id ).attr( 'disabled', true );
+
+		jQuery( '#ed_spell' ).attr( 'disabled', true );
+		jQuery( '#ed_close' ).attr( 'disabled', true );
 
 		/* check the writing in the textarea */
 		AtD.check('content', {
 			success: function(errorCount) {
-				if ( errorCount == 0 && typeof callback !== 'function' )
+				if (errorCount == 0 && typeof callback === 'undefined')
 					alert( AtD.getLang('message_no_errors_found', 'No writing errors were found') );
 				AtD_restore_if_proofreading();
 			},
 
 			ready: function(errorCount) {
-				jQuery(AtD_qtbutton).attr('disabled', false);
+				jQuery('#ed_AtD').attr('disabled', false);
 
-				if ( typeof callback === 'function' ) 
+				if( typeof callback !== 'undefined') 
 					callback( errorCount );
 			},
 
 			error: function(reason) {
-				jQuery(AtD_qtbutton).attr('disabled', false);
+				jQuery('#ed_AtD').attr('disabled', false);
 
-				if ( typeof callback === 'function' ) 
+				if( typeof callback !== 'undefined') 
 					callback( -1 );
 				else 
-					alert( AtD.getLang('message_server_error', 'There was a problem communicating with the Proofreading service. Try again in one minute.') );
+					alert( AtD.getLang('message_server_error', 'There was a problem communicating with the After the Deadline service. Try again in one minute.') );
 
 				AtD_restore_if_proofreading();
 			},
@@ -163,7 +158,7 @@ function AtD_check(button) {
 			editSelection: function(element) {
 				var text = prompt( AtD.getLang('dialog_replace_selection', 'Replace selection with:'), element.text() );
 
-				if ( text != null )
+				if (text != null)
 					element.replaceWith( text );
 			}, 
 
@@ -179,7 +174,7 @@ function AtD_check(button) {
 					url : AtD.rpc_ignore + encodeURI( word ).replace( /&/g, '%26'),
 					format : 'raw',
 					error : function(XHR, status, error) {
-						if ( AtD.callback_f != undefined && AtD.callback_f.error != undefined )
+						if (AtD.callback_f != undefined && AtD.callback_f.error != undefined)
 							AtD.callback_f.error(status + ": " + error);
 					}
 				});

@@ -1,11 +1,10 @@
 <?php
-/**
- * @package INove
- */
 /*
 Template Name: Archives
 */
-get_header(); ?>
+?>
+
+<?php get_header(); ?>
 
 <?php if (have_posts()) : the_post(); ?>
 

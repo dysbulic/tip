@@ -6,8 +6,6 @@
  * @subpackage Administration
  */
 
-define('DOING_AJAX', true);
-
 /** Load WordPress Bootstrap */
 require_once( './admin.php' );
 
@@ -20,19 +18,23 @@ send_nosniff_header();
 switch ( $_GET['jax'] ) {
 
 case 'dashboard_incoming_links' :
-	wp_dashboard_incoming_links();
+	wp_dashboard_incoming_links_output();
 	break;
 
 case 'dashboard_primary' :
-	wp_dashboard_primary();
+	wp_dashboard_rss_output( 'dashboard_primary' );
 	break;
 
 case 'dashboard_secondary' :
-	wp_dashboard_secondary();
+	wp_dashboard_secondary_output();
 	break;
 
 case 'dashboard_plugins' :
-	wp_dashboard_plugins();
+	wp_dashboard_plugins_output();
+	break;
+
+case 'dashboard_quick_press' :
+	wp_dashboard_quick_press_output();
 	break;
 
 }

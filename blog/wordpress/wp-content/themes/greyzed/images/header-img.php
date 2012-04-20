@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Greyzed
+ * @package WordPress
+ * @subpackage Default_Theme
  */
 
 /** @ignore */

@@ -1,15 +1,11 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Dark Wood
- */
 
 $themecolors = array(
 	'bg' => '301e07',
-	'border' => 'CC9752',
+	'border' => '330000',
 	'text' => 'cccc9a',
 	'link' => 'ff99cc',
-	'url' => '21B6A8',
+	'url' => 'ff99cc'
 );
 $content_width = 570; // pixels
 

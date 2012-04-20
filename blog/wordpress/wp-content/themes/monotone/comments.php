@@ -1,45 +1,65 @@
-<?php
-/**
- * @package WordPress
- * @subpackage Monotone
- */
-if ( post_password_required() ) : ?>
-	<p class="nocomments"><?php _e( 'This post is password protected. Enter the password to view comments.', 'monotone' ); ?></p>
+<?php // Do not delete these lines
+
+if (!empty($_SERVER['SCRIPT_FILENAME']) && 'comments.php' == basename($_SERVER['SCRIPT_FILENAME']))
+	die ('Please do not load this page directly. Thanks!');
+if ( post_password_required() ) {
+?>
+<p class="nocomments"><?php _e("This post is password protected. Enter the password to view comments."); ?></p>
 <?php
 	return;
-endif;
+}
+
+
+function monotone_comment($comment, $args, $depth) {
+	$GLOBALS['comment'] = $comment;
+	extract($args, EXTR_SKIP);
 ?>
+<li <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="comment-<?php comment_ID() ?>">
+	<div id="div-comment-<?php comment_ID() ?>">
+		<div class="comment-author vcard">
+		<div class="gravatar"><?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?></div>
+		<div class="comment-meta commentmetadata metadata">
+			<a href="#comment-<?php comment_ID() ?>" title=""><?php comment_date('j M Y') ?> at <?php comment_time() ?></a>
+			<cite class="fn"><?php comment_author_link() ?></cite>
+			<?php edit_comment_link('edit','<br />',''); ?>
+			<div class="reply">
+				<?php comment_reply_link( array_merge( $args, array( 'reply_text' => 'reply', 'add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
+			</div>
+		</div>
+		</div>	
+		<div class="content">
+			
+			<?php if ($comment->comment_approved == '0') : ?>
+			<p><em>Your comment is awaiting moderation.</em></p>
+			<?php endif; ?>
+			<?php comment_text() ?>
+		</div>
+		<div class="clear"></div>
+	</div>
+<?php
+}
 
-<?php // You can start editing here -- including this comment! ?>
-
-<?php if ( have_comments() ) : ?>
-	<h3 id="comments">
-		<?php
-			printf( _n( 'One Response to &#8220;%2$s&#8221;', '%1$s Responses to &#8220;%2$s&#8221', get_comments_number(), 'monotone' ),
-				number_format_i18n( get_comments_number() ),
-				get_the_title()
-			);
-		?>
-	</h3>
+if (have_comments()) : ?>
+	<h3 id="comments"><?php comments_number('No Responses Yet', 'One Response', '% Responses' );?> to &#8220;<?php the_title(); ?>&#8221;</h3>
 
 	<ol class="commentlist">
-		<?php wp_list_comments( array( 'callback' => 'monotone_comment' ) ); ?>
+	<?php wp_list_comments(array('callback'=>'monotone_comment')); ?>
 	</ol>
+	<div class="comment-navigation">
+		<div class="alignleft"><?php previous_comments_link() ?></div>
+		<div class="alignright"><?php next_comments_link() ?></div>
+	</div>
+	
+	<br />
 
-	<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) : // are there comments to navigate through ?>
-		<div class="comment-navigation clearfix">
-			<div class="alignleft"><?php previous_comments_link( __( '&laquo; Older Comments', 'monotone' ) ); ?></div>
-			<div class="alignright"><?php next_comments_link( __( 'Newer Comments &raquo;', 'monotone' ) ); ?></div>
-		</div>
-	<?php endif; // check for comment navigation ?>
-
-<?php
-	/* If comments are closed, let's leave a little note, shall we?
-	 * But we don't want the note on pages or no comments at all.
-	 */
-	elseif ( ! comments_open() && ! is_page() && '0' != get_comments_number() ) :
-?>
-	<p class="nocomments"><?php _e( 'Comments are closed.', 'monotone' ); ?></p>
+	<?php if (!comments_open()) : ?>
+		<p class="nocomments">Comments are closed.</p>
+	<?php endif; ?>
 <?php endif; ?>
 
+
+<?php if (comments_open()) : ?>
+
 <?php comment_form(); ?>
+
+<?php endif; // if you delete this the sky will fall on your head ?>

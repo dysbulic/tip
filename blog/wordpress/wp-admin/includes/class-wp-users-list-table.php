@@ -12,14 +12,14 @@ class WP_Users_List_Table extends WP_List_Table {
 	var $site_id;
 	var $is_site_users;
 
-	function __construct() {
+	function WP_Users_List_Table() {
 		$screen = get_current_screen();
 		$this->is_site_users = 'site-users-network' == $screen->id;
 
 		if ( $this->is_site_users )
 			$this->site_id = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
 
-		parent::__construct( array(
+		parent::WP_List_Table( array(
 			'singular' => 'user',
 			'plural'   => 'users'
 		) );
@@ -52,8 +52,7 @@ class WP_Users_List_Table extends WP_List_Table {
 			'fields' => 'all_with_meta'
 		);
 
-		if ( '' !== $args['search'] )
-			$args['search'] = '*' . $args['search'] . '*';
+		$args['search'] = '*' . $args['search'] . '*';
 
 		if ( $this->is_site_users )
 			$args['blog_id'] = $this->site_id;
@@ -112,8 +111,8 @@ class WP_Users_List_Table extends WP_List_Table {
 
 			$name = translate_user_role( $name );
 			/* translators: User role name with count */
-			$name = sprintf( __('%1$s <span class="count">(%2$s)</span>'), $name, number_format_i18n( $avail_roles[$this_role] ) );
-			$role_links[$this_role] = "<a href='" . esc_url( add_query_arg( 'role', $this_role, $url ) ) . "'$class>$name</a>";
+			$name = sprintf( __('%1$s <span class="count">(%2$s)</span>'), $name, $avail_roles[$this_role] );
+			$role_links[$this_role] = "<a href='" . add_query_arg( 'role', $this_role, $url ) . "'$class>$name</a>";
 		}
 
 		return $role_links;
@@ -219,7 +218,7 @@ class WP_Users_List_Table extends WP_List_Table {
 
 		if ( !( is_object( $user_object ) && is_a( $user_object, 'WP_User' ) ) )
 			$user_object = new WP_User( (int) $user_object );
-		$user_object->filter = 'display';
+		$user_object = sanitize_user_object( $user_object, 'display' );
 		$email = $user_object->user_email;
 
 		if ( $this->is_site_users )

@@ -1,7 +1,6 @@
 <?php global $freshy_options; ?>
 	
 	<div id="sidebar">
-		<?php do_action( 'before_sidebar' ); ?>
 		<div>
 		<?php if ( !function_exists('dynamic_sidebar')
         || !dynamic_sidebar() ) : ?>
@@ -16,7 +15,7 @@
 		endif; ?>
 				
 			<h2><?php _e('Search',TEMPLATE_DOMAIN); ?></h2>
-			<?php get_search_form(); ?>
+			<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 
 			<h2><?php _e('Links',TEMPLATE_DOMAIN); ?></h2>
 			<ul>

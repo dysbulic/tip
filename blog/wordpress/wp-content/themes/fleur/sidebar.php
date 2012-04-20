@@ -24,6 +24,6 @@
 <h2><?php _e('RSS Feeds:'); ?></h2>
 	<ul>
 		<li>
-			<a title="<?php esc_attr_e( 'RSS2 Feed for Posts' ); ?>" href="<?php bloginfo('rss2_url'); ?>"><?php _e('Posts'); ?></a> | <a title="<?php esc_attr_e( 'RSS2 Feed for Comments' ); ?>" href="<?php bloginfo('comments_rss2_url'); ?>">Comments</a></li>	
+			<a title="<?php _e('RSS2 Feed for Posts'); ?>" href="<?php bloginfo('rss2_url'); ?>"><?php _e('Posts'); ?></a> | <a title="<?php _e('RSS2 Feed for Comments'); ?>" href="<?php bloginfo('comments_rss2_url'); ?>">Comments</a></li>	
 	</ul>	
 <?php endif; ?>

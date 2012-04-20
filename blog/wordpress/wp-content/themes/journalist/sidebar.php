@@ -1,5 +1,4 @@
 <div id="sidebar">
-<?php do_action( 'before_sidebar' ); ?>
 <?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar() ) : ?>
 
 <div id="pages">
@@ -15,8 +14,8 @@
 <div id="search_area">
     <form id="searchform" method="get" action="<?php echo home_url( '/' ); ?>">
     <div>
-        <input class="searchfield" type="text" name="s" id="s" value="" title="<?php esc_attr_e( 'Enter keyword to search', 'journalist' ); ?>" />
-        <input class="submit" type="submit" value="<?php esc_attr_e( 'search', 'journalist' ); ?>" />
+        <input class="searchfield" type="text" name="s" id="s" value="" title="<?php _e('Enter keyword to search','journalist'); ?>" />
+        <input class="submit" type="submit" value="<?php _e('search','journalist'); ?>" />
     </div>
     </form>
 </div>
@@ -41,9 +40,9 @@
 <ul>
     <li><?php // wp_register(); ?></li>
     <li><?php wp_loginout(); ?></li>
-    <li><a href="feed:<?php bloginfo('rss2_url'); ?>" title="<?php esc_attr_e( 'Syndicate this site using RSS', 'journalist' ); ?>"><?php _e('Site Feed','journalist'); ?></a></li>
-    <li><a href="feed:<?php bloginfo('comments_rss2_url'); ?>" title="<?php esc_attr_e( 'The latest comments to all posts in RSS', 'journalist' ); ?>"><?php _e('Comments Feed','journalist'); ?></a></li>
-    <li><a href="#content" title="<?php esc_attr_e( 'Back to top', 'journalist' ); ?>"><?php _e('Back to top','journalist'); ?></a></li>
+    <li><a href="feed:<?php bloginfo('rss2_url'); ?>" title="<?php _e('Syndicate this site using RSS','journalist'); ?>"><?php _e('Site Feed','journalist'); ?></a></li>
+    <li><a href="feed:<?php bloginfo('comments_rss2_url'); ?>" title="<?php _e('The latest comments to all posts in RSS','journalist'); ?>"><?php _e('Comments Feed','journalist'); ?></a></li>
+    <li><a href="#content" title="<?php _e('Back to top','journalist'); ?>"><?php _e('Back to top','journalist'); ?></a></li>
     <?php wp_meta(); ?>
 </ul>
 <?php endif; ?>

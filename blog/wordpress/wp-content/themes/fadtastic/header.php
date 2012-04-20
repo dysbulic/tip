@@ -13,7 +13,7 @@ wp_head();
 ?>
 </head>
 
-<body <?php body_class(); ?>>
+<body>
 
 <div id="wrapper">
 	<div class="content_padding">

@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Greyzed
+ * @package WordPress
+ * @subpackage Greyzed
  */
 get_header(); ?>
 <div id="container">
@@ -18,22 +19,13 @@ get_header(); ?>
 			<?php $postcount++; // post counter ?>
 			<div <?php post_class() ?>>
 				<div class="posttitle">
-					<h2 class="pagetitle"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php esc_attr_e( 'Permanent Link to ', 'greyzed' ); the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+					<h2 class="pagetitle"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php _e( 'Permanent Link to ', 'greyzed' ); the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 					<small>
-						<?php
-							if ( is_multi_author() ) {
-								printf( __( 'Posted: %1$s by <strong>%2$s</strong> in %3$s', 'greyzed' ),
-									get_the_date( get_option( 'date_format' ) ),
-									get_the_author(),
-									get_the_category_list( ', ' )
-								);
-							} else {
-								printf( __( 'Posted: %1$s in %2$s', 'greyzed' ),
-									get_the_date( get_option( 'date_format' ) ),
-									get_the_category_list( ', ' )
-								);
-							}
-						?>
+						<?php printf( __( 'Posted: %1$s by <strong>%2$s</strong> in %3$s', 'greyzed' ),
+							get_the_date( get_option( 'date_format' ) ),
+							get_the_author(),
+							get_the_category_list( ', ' )
+							); ?>
 						<br />
 						<?php the_tags( __( 'Tags: ', 'greyzed' ), ', ', ''); ?>
 					</small>
@@ -73,6 +65,6 @@ get_header(); ?>
 				<div class="rightnav"><?php previous_posts_link( __( 'Newer Entries', 'greyzed' ) ) ?></div>
 			<?php } ?>
 		</div>
-	</div>
+		</div>
 </div>
 <?php get_footer(); ?>

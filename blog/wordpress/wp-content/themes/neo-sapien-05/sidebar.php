@@ -19,6 +19,7 @@
 <ul>
 <?php wp_register(); ?>
 <li><?php wp_loginout(); ?></li>
+<li><a href="http://validator.w3.org/check?uri=referer"><?php _e('Valid xhtml'); ?></a></li>
 <?php wp_meta(); ?>
 </ul>
 </li>

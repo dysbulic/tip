@@ -3,7 +3,7 @@
 			<?php 	/* Widgetized sidebar, if you have the plugin installed. */
 					if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar() ) : ?>
 			<li>
-				<?php get_search_form(); ?>
+				<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 			</li>
 
 			<!-- Author information is disabled per default. Uncomment and fill in your details if you want to use it.
@@ -56,8 +56,9 @@
 				<ul>
 					<?php wp_register(); ?>
 					<li><?php wp_loginout(); ?></li>
-					<li><a href="http://gmpg.org/xfn/"><abbr title="<?php esc_attr_e( 'XHTML Friends Network', 'kubrick' ); ?>"><?php _e('XFN', 'kubrick'); ?></abbr></a></li>
-					<li><a href="http://wordpress.com/" title="<?php esc_attr_e( 'Powered by WordPress, state-of-the-art semantic personal publishing platform.', 'kubrick' ); ?>">WordPress</a></li>
+					<li><a href="http://validator.w3.org/check/referer" title="<?php _e('This page validates as XHTML 1.0 Transitional', 'kubrick'); ?>"><?php _e('Valid <abbr title="eXtensible HyperText Markup Language">XHTML</abbr>', 'kubrick'); ?></a></li>
+					<li><a href="http://gmpg.org/xfn/"><abbr title="<?php _e('XHTML Friends Network', 'kubrick'); ?>"><?php _e('XFN', 'kubrick'); ?></abbr></a></li>
+					<li><a href="http://wordpress.com/" title="<?php _e('Powered by WordPress, state-of-the-art semantic personal publishing platform.', 'kubrick'); ?>">WordPress</a></li>
 					<?php wp_meta(); ?>
 				</ul>
 				</li>

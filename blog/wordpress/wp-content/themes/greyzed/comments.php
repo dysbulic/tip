@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Greyzed
+ * @package WordPress
+ * @subpackage Greyzed
  */
 
 // Do not delete these lines
@@ -8,7 +9,7 @@
 		die ('Please do not load this page directly. Thanks!');
 
 	if ( post_password_required() ) { ?>
-		<p class="nocomments"><?php _e( 'This post is password protected. Enter the password to view comments.', 'greyzed' ); ?></p>
+		<p class="nocomments">This post is password protected. Enter the password to view comments.</p>
 	<?php
 		return;
 	}
@@ -28,7 +29,7 @@
 		<!-- If comments are open, but there are no comments. -->
 	<?php else : // comments are closed ?>
 		<!-- If comments are closed. -->
-		<p class="nocomments"><?php _e( 'Comments are closed.', 'greyzed' ); ?></p>
+		<p class="nocomments">Comments are closed.</p>
 	<?php endif; ?>
 <?php endif; ?>
 

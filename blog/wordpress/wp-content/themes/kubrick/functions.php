@@ -1,29 +1,4 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Kubrick
- */
-
-/**
- * Temporary addition to catch cases of old default theme option values.
- * These blogs need to be migrated to use pub/kubrick. See #2383-wpcom.
- *
- */
-function kubrick_migrate_old_theme_option( $option ) {
-	if ( 'default' == $option ) {
-		global $blog_id;
-		switch_theme( 'pub/kubrick', 'pub/kubrick' );
-		// Log error report and bump stats
-		error_log( "Default theme migration for $blog_id from theme_functions_file" );
-		bump_stats_extras( 'kubrick_migrate_old_theme_option', 'theme_functions_file' );
-	}
-	
-	return $option;
-}
-add_filter( 'template', 'kubrick_migrate_old_theme_option', 1 );
-
-add_filter( 'body_class', '__return_empty_array', 1 );
-
 function comment_head_code() {
 	if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
 }
@@ -35,14 +10,6 @@ define('HEADER_IMAGE_WIDTH', 740);
 define('HEADER_IMAGE_HEIGHT', 192);
 
 $content_width = 450;
-
-$themecolors = array(
-	'bg' => 'ffffff',
-	'text' => '333333',
-	'link' => '0066cc',
-	'border' => 'f9f9f9',
-	'url' => '114477',
-);
 
 add_theme_support( 'automatic-feed-links' );
 
@@ -67,7 +34,7 @@ function kubrick_css() {
 ?>
 
 body { background: url("<?php bloginfo('stylesheet_directory'); ?>/images/kubrickbgcolor.gif"); }
-<?php /* Checks to see whether it needs a sidebar or not */ if (! is_single()) { ?>
+<?php /* Checks to see whether it needs a sidebar or not */ if ((! $withcomments) && (! is_single())) { ?>
 #page { background: url("<?php bloginfo('stylesheet_directory'); ?>/images/kubrickbg.gif") repeat-y top; border: none; }
 <?php } else { // No sidebar ?>
 #page { background: url("<?php bloginfo('stylesheet_directory'); ?>/images/kubrickbgwide.gif") repeat-y top !important; border: none; }
@@ -619,7 +586,7 @@ function kubrick_comment($comment, $args, $depth) {
 	$GLOBALS['comment'] = $comment;
 ?>
 			<li <?php comment_class() ?> id="comment-<?php comment_ID() ?>">
-			<?php echo get_avatar( $comment, 32 ); ?>
+			<?php echo avatar_by_id( $comment->user_id, 32 ); ?>
 			<?php printf(__('<cite>%s</cite> Says:', 'kubrick'), get_comment_author_link()); ?>
 			<?php if ($comment->comment_approved == '0') : ?>
 			<em><?php _e('Your comment is awaiting moderation.', 'kubrick'); ?></em>
@@ -628,20 +595,5 @@ function kubrick_comment($comment, $args, $depth) {
 
 			<small class="commentmetadata"><a href="#comment-<?php comment_ID() ?>" title=""><?php printf(__('%1$s at %2$s', 'kubrick'), get_comment_date(), get_comment_time()); ?></a><?php echo comment_reply_link(array('depth' => $depth, 'max_depth' => $args['max_depth'], 'before' => ' | ')) ?> <?php edit_comment_link(__('edit', 'kubrick'),'&nbsp;&nbsp;',''); ?></small>
 
-			<?php comment_text();
-}
-
-if ( ! function_exists( 'kubrick_posted_by' ) ) :
-/**
- * Prints HTML with meta information for the current author on multi-author blogs
- */
-function kubrick_posted_by() {
-	if ( is_multi_author() && ! is_author() ) {
-		printf( __( '<span class="by-author"><span class="sep">by</span> <span class="author vcard"><a class="url fn n" href="%1$s" title="%2$s" rel="author">%3$s</a></span> </span>', 'kubrick' ),
-			esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
-			esc_attr( sprintf( __( 'View all posts by %s', 'kubrick' ), get_the_author_meta( 'display_name' ) ) ),
-			esc_attr( get_the_author_meta( 'display_name' ) )
-		);
-	}
-}
-endif;
+			<?php comment_text() ?>
+<?php }

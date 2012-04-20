@@ -6,12 +6,40 @@ if ( post_password_required() ) { ?>
 <?php 
 return;
 }
+
+function almost_spring_callback($comment, $args, $depth) {
+	$GLOBALS['comment'] = $comment;
+	extract($args, EXTR_SKIP);
+?>
+	<li <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="comment-<?php comment_ID() ?>">
+	<div class="comment-author vcard">
+	<?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?>
+	<h3 class="commenttitle"><cite class="fn"><?php comment_author_link(); ?></cite> <span class="says"><?php _e('said','almost-spring'); ?></span></h3>
+	</div>
+<?php if ($comment->comment_approved == '0') : ?>
+	<em><?php _e('Your comment is awaiting moderation.','almost-spring') ?></em>
+	<br />
+<?php endif; ?>
+	
+	<small class="comment-meta commentmetadata commentmeta">
+	<?php comment_date(); ?> @ 
+	<a href="<?php echo htmlspecialchars( get_comment_link( $comment->comment_ID ) ) ?>" 
+	title="<?php _e('Permanent link to this comment','almost-spring'); ?>"><?php comment_time(); ?></a>
+	<?php edit_comment_link(__('Edit','almost-spring'), ' &#183; ', ''); ?></small>
+
+	<?php comment_text(); ?>
+
+	<div class="reply">
+	<?php comment_reply_link(array_merge( $args, array('add_below' => 'comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
+	</div>
+<?php 
+}
 	
 if ( have_comments() ) : ?>
 <div><h2 id="comments">
 <?php comments_number(__('Comments','almost-spring'), __('1 Comment','almost-spring'), __('% Comments','almost-spring'));?>
 <?php if ( comments_open() ) : ?>
-	<a href="#postcomment" title="<?php esc_attr_e( 'Jump to the comments form', 'almost-spring' ); ?>">&raquo;</a>
+	<a href="#postcomment" title="<?php _e('Jump to the comments form','almost-spring'); ?>">&raquo;</a>
 <?php endif; ?>
 </h2>
  

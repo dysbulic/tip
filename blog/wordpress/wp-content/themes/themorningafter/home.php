@@ -11,31 +11,20 @@ get_header(); ?>
 
 <?php $morningafter_options = morningafter_get_theme_options(); ?>
 
-<div id="home_content" class="column full-width">
+<div id="home_content" class="column span-14">
 	
-	<div id="home_left" class="column first">
+	<div id="home_left" class="column span-7 first">
 		
 		<?php
-			// Display the latest post, ignoring Sticky posts and Aside posts
-			$latest_args = array(
-				'posts_per_page' => 1,
-				'post__not_in' => get_option( 'sticky_posts' ),
-				'tax_query' => array(
-					array(
-						'taxonomy' => 'post_format',
-						'terms' => array( 'post-format-aside' ),
-						'field' => 'slug',
-						'operator' => 'NOT IN'
-					)
-				)				
-			);
-			$the_query = new WP_Query( $latest_args ); 
+			$the_query = new WP_Query( array( 'ignore_sticky_posts' => $morningafter_options['ignore_sticky'] ) ); 
 			while ( $the_query->have_posts() ) : $the_query->the_post();
-		?>			
+			$do_not_duplicate = $post->ID; 
+		?>
+			
 			<div id="latest_post" <?php post_class(); ?>>
 				
 				<h3 class="mast"><?php _e( 'Latest Post','woothemes' ); ?></h3>
-			
+
 				<div id="latest_post_image">
 					<?php if ( has_post_thumbnail() ) { ?>
 						<a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink to %s', 'woothemes' ), the_title_attribute( 'echo=0' ) ); ?>">
@@ -43,15 +32,15 @@ get_header(); ?>
 						</a>
 					<?php } ?>
 				</div>
-			
+
 				<h2 class="latest_post_title" id="post-<?php the_ID(); ?>"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink to %s', 'woothemes' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></h2>
 				
 				<div class="post_meta">
-					<?php _e( 'Posted by','woothemes' );?> <?php the_author_posts_link(); ?> <span class="latest_post_date"><span class="dot">&sdot;</span> <?php the_time( get_option( 'date_format' ) ); ?></span>
+					<?php _e( 'By','woothemes' );?> <?php the_author_posts_link(); ?> <span class="latest_post_date"><span class="dot">&sdot;</span> <?php the_time( get_option( 'date_format' ) ); ?></span>
 				</div>
-			
+
 				<?php if ( $morningafter_options['show_full_home'] == "1" ) the_content( __( 'Continue reading <span class="meta-nav">&raquo;</span>', 'woothemes' ) ); else the_excerpt(); ?>
-			
+
 				<div class="latest_post_meta">
 					<span class="latest_read_on"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink to %s', 'woothemes' ), the_title_attribute( 'echo=0' ) ); ?>"><?php _e( 'Continue Reading','woothemes' ); ?></a></span>
 					<span class="latest_comments"><?php comments_popup_link( __( 'Leave a Comment', 'woothemes' ), __( '1 Comment', 'woothemes' ), __( '% Comments', 'woothemes' ) ); ?></span>
@@ -59,48 +48,47 @@ get_header(); ?>
 				</div>
 			
 			</div><!-- end #latest_post -->
-		<?php endwhile; ?>
-				
+		
+		<?php break; endwhile; wp_reset_query(); ?>
+		
+		
+		
 		<?php
-			// Display all featured (sticky) posts, ignoring Aside posts
-			$sticky_posts = get_option( 'sticky_posts' );
-			if ( ! empty ( $sticky_posts ) ) :
-				$sticky_args = array(
-					'post__in' => $sticky_posts,
-					'posts_per_page' => -1,
-					'tax_query' => array(
-						array(
-							'taxonomy' => 'post_format',
-							'terms' => array( 'post-format-aside' ),
-							'field' => 'slug',
-							'operator' => 'NOT IN'
-						)
-					)
-				);
-				$sticky_query = new WP_Query( $sticky_args );
-				if ( $sticky_query->have_posts() ) :
+			$sticky = get_option( 'sticky_posts' );
+			$the_query = new WP_Query( array( 'post__in' => $sticky ) );
+			if ( $morningafter_options['ignore_sticky'] == "1" ){
+				$sticky_num = 0;
+			}else{
+				$sticky_num = 1;
+			}
+			if ( $sticky[$sticky_num] ) : 
 		?>
 		
-			<div id="home_featured" class="clear-fix">
+			<div id="home_featured">
 				
 				<h3 class="home_featured">
-					<?php echo esc_html( stripslashes ( $morningafter_options['featured_heading'] ) ); ?>
+					<?php 
+						echo esc_html( stripslashes ( $morningafter_options['featured_heading'] ) );
+					?>
 				</h3>
 				
-				<?php while ( $sticky_query->have_posts() ) : $sticky_query->the_post(); ?>
+				<?php
+					while ( $the_query->have_posts() ) : $the_query->the_post();
+					if( $post->ID == $do_not_duplicate ) continue;
+				?>
 		
-					<div class="feat_content clear-fix">
+					<div class="feat_content">
 						
 						<?php if ( has_post_thumbnail() ) { ?>
 							<a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink to %s', 'woothemes' ), the_title_attribute( 'echo=0' ) ); ?>">
 								<?php the_post_thumbnail( 'featured_thumbnail', array( 'alt' => get_the_title(), 'title' => get_the_title() ) ); ?>
 							</a>
 						<?php } ?>
-						
+	
 						<div class="feat_title"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink to %s', 'woothemes' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></div>
 							
 						<div class="post_meta">
-							<?php _e( 'Posted by','woothemes' );?> <?php the_author_posts_link(); ?> <span class="dot">&sdot;</span> <?php the_time( get_option( 'date_format' ) ); ?> <span class="dot">&sdot;</span> <?php comments_popup_link( __( 'Leave a Comment', 'woothemes' ), __( '1 Comment', 'woothemes' ), __( '% Comments', 'woothemes' ) ); ?>
+							<?php _e( 'By','woothemes' );?> <?php the_author_posts_link(); ?> <span class="dot">&sdot;</span> <?php the_time( get_option( 'date_format' ) ); ?> <span class="dot">&sdot;</span> <?php comments_popup_link( __( 'Leave a Comment', 'woothemes' ), __( '1 Comment', 'woothemes' ), __( '% Comments', 'woothemes' ) ); ?>
 						</div>
 						
 						<div class="feat_exc">
@@ -110,49 +98,14 @@ get_header(); ?>
 					</div><!-- end .feat_content -->
 	
 				<?php endwhile; ?>
+	
 			</div><!-- end #home_featured -->
-			<?php endif; ?>
 		
 		<?php endif; ?>
 		
-		<?php
-			// Display all Aside posts
-			$args = array(
-				'posts_per_page' => -1,
-				'tax_query' => array(
-					array(
-						'taxonomy' => 'post_format',
-						'field' => 'slug',
-						'terms' => array( 'post-format-aside' )
-					)
-				)	
-			);
-			$aside_query = new WP_Query( $args );
-			if ( $aside_query->have_posts() ) :
-		?>
-		
-		<div id="home_asides">
-		
-			<?php 
-				$aside_heading = esc_html( stripslashes( $morningafter_options['aside_heading'] ) );
-				if ( $aside_heading ) {
-					echo '<h3 class="mast">' . $aside_heading . '</h3>';
-				}				
-			?>
-			
-			<ul class="arrow">
-				<?php while ( $aside_query->have_posts() ) : $aside_query->the_post();?>
-					<li><?php echo strip_shortcodes( strip_tags( get_the_content(), '<a>') ); ?></li>
-				<?php endwhile; ?>
-			</ul>
-		
-		</div><!-- end #home_aside -->
-		
-		<?php endif; ?>		
-		
 	</div><!-- end #home_left -->
 
-	<div id="home_right" class="column last">
+	<div id="home_right" class="column span-7 last">
 		
 		<?php if ( is_active_sidebar( 'feature-widget-area' ) ) : ?>
 			<div id="feature">
@@ -160,7 +113,7 @@ get_header(); ?>
 			</div>
 		<?php endif; ?>
 
-		<div class="column secondary-sidebar first">
+		<div class="column span-4 first">
 			<?php if ( !dynamic_sidebar( 'secondary-sidebar' ) ) : ?>
 				<div class="widget widget_recent_entries">
 					<h3 class="mast"><?php _e( 'Recent Posts', 'woothemes' ); ?></h3>
@@ -182,7 +135,7 @@ get_header(); ?>
 				</div>
 
 			<?php endif; ?>
-		</div><!-- end .secondary-sidebar -->
+		</div><!-- end .span-4 -->
 		
 		<?php get_sidebar(); ?>
 	

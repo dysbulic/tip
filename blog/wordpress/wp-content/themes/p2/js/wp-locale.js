@@ -1,5 +1,15 @@
 if (typeof wp == 'undefined') wp = {};
-wp.locale = function( translations ) {
+wp.locale = function(translations) {
+	this._parseLameDict = function(prefix, lameDict, internalVar) {
+		if (!internalVar) internalVar = prefix;
+		this[internalVar] = [];
+		for(var key in lameDict) {
+			if ('string' != typeof lameDict[key]) continue;
+			if (key.substr(0, prefix.length + 1) != prefix + '_') continue;
+			this[internalVar].push(lameDict[key]);
+		}
+	}
+	
 	this.date = function(format, date) {
 		if ('undefined' == typeof date) date = new Date();
 		var returnStr = '';
@@ -15,13 +25,13 @@ wp.locale = function( translations ) {
 				}
 				continue;
 			}
-
+			
 			if (replace[curChar] && 0 == backslashCount) {
 				returnStr += replace[curChar].call(date);
 			} else {
 				returnStr += curChar;
 			}
-
+			
 			if (curChar != '\\') backslashCount = 0;
 		}
 		return returnStr;
@@ -33,7 +43,7 @@ wp.locale = function( translations ) {
 		var matches = iso8601.match(new RegExp(regexp));
 		if (!matches) return null;
 		var offset = 0;
-
+		
 		var date = new Date();
 
 		date.setUTCDate(1);
@@ -52,12 +62,12 @@ wp.locale = function( translations ) {
 		}
 		return date;
 	};
-
-	var key;
-	for ( key in translations ) {
-		this[ key ] = translations[ key ];
-	}
-
+	
+	this._parseLameDict('month', translations);
+	this._parseLameDict('monthabbrev', translations);
+	this._parseLameDict('weekday', translations);
+	this._parseLameDict('weekdayabbrev', translations);
+	
 	shortMonths = this.monthabbrev;
 	longMonths = this.month;
 	shortDays = this.weekdayabbrev;
@@ -78,7 +88,7 @@ wp.locale = function( translations ) {
 		W: function() { return "Not Yet Supported"; },
 		// Month
 		F: function() { return longMonths[this.getMonth()]; },
-		m: function() { return (this.getMonth() < 9 ? '0' : '') + (this.getMonth() + 1); },
+		m: function() { return (this.getMonth() < 09 ? '0' : '') + (this.getMonth() + 1); },
 		M: function() { return shortMonths[this.getMonth()]; },
 		n: function() { return this.getMonth() + 1; },
 		t: function() { return "Not Yet Supported"; },

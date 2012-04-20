@@ -10,7 +10,7 @@
 				}
 
 
-			} elseif( is_tag() ) {
+			} elseif( is_tag() ) { 
 				printf(__("Posts Tagged '%s'"), single_tag_title('', false) );
 
 			} elseif (is_day()) {
@@ -28,13 +28,13 @@
 			} elseif (function_exists('is_tag') and is_tag()) {
 				printf(__('Tag Archive for \'%s\'','k2_domain'), get_query_var('tag') );
 
-			} elseif (is_paged() and ($paged > 1)) {
+			} elseif (is_paged() and ($paged > 1)) { 
 				 printf(__('Archive Page %s','k2_domain'), $paged );
 			} ?>
 		</h2>
 	<?php } ?>
 
-	<?php if (!is_single() and !is_home() and is_paged()) include (TEMPLATEPATH . '/navigation.php'); ?>
+	<?php if (!is_single() and !is_home() and is_paged()) include (TEMPLATEPATH . '/navigation.php'); ?> 
 
 	<?php is_tag(); ?>
 	<?php /* Check if there are posts */
@@ -61,33 +61,27 @@
 
 		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<div class="entry-head">
-				<h3 class="entry-title">
-				<?php if ( ! is_single() ) : ?>
-					<a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'k2_domain' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a>
-				<?php else : ?>
-					<?php the_title(); ?>
-				<?php endif; ?>
-				</h3>
+				<h3 class="entry-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php echo esc_attr( sprintf( __( 'Permanent link to %s', 'k2_domain' ), the_title_attribute( 'echo=0' ) ) ); ?>"><?php the_title(); ?></a></h3>
 
 				<small class="entry-meta">
 					<span class="chronodata">
 						<?php /* Date & Author */
 							printf(	__('Published %1$s','k2_domain'),
 								'<abbr class="published" title="'. get_the_time('Y-m-d\TH:i:sO') . '">' .
- 								get_the_time(get_option('date_format'))
+ 								get_the_time(get_option('date_format')) 
  								. '</abbr>'
- 								);
+ 								); 
  						?>
 					</span>
 
 					<span class="entry-category"> <?php the_category(' , '); ?></span>
 
 					<?php /* Comments */ comments_popup_link(__('Leave a&nbsp;<span>Comment</span>','k2_domain'), __('1&nbsp;<span>Comment</span>','k2_domain'), __('%&nbsp;<span>Comments</span>','k2_domain'), 'commentslink', '<span class="commentslink">'.__('Closed','k2_domain').'</span>'); ?>
-
+				
 					<?php /* Edit Link */ edit_post_link(__('Edit','k2_domain'), '<span class="entry-edit">','</span>'); ?>
 
 					<br /><?php the_tags(__('Tags: '), ', ', '<br />'); ?>
-
+				
 				</small> <!-- .entry-meta -->
 			</div> <!-- .entry-head -->
 

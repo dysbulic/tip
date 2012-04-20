@@ -9,7 +9,7 @@
 		<div class="alignright"><?php next_post_link('%link &raquo;') ?></div>
 	</div>
 	<div <?php post_class(); ?> id="post-<?php the_ID(); ?>">
-		<h2><?php the_title(); ?></h2>
+<h2><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php echo esc_attr( sprintf( __( 'Permanent link to %s' ), the_title_attribute( 'echo=0' ) ) ); ?>"><?php the_title(); ?></a></h2>
 
 		<p class="date"><?php _e('Posted by','andreas09'); ?> <?php if (get_the_author_url()) { ?><a href="<?php the_author_url(); ?>"><?php the_author(); ?></a><?php } else { the_author(); } ?> <?php _e('on','andreas09'); ?> <?php the_time(get_option("date_format")); ?></p>
 

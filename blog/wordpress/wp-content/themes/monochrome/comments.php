@@ -38,7 +38,7 @@ if (function_exists('post_password_required'))
 <?php if(comments_open()) ://if comment is open ?>
    <li id="add_comment"><a href="#respond"><?php _e('Write comment','monochrome'); ?></a></li>
 <?php endif; ?>
-   <li id="comment_feed"><a href="<?php bloginfo('comments_rss2_url'); ?>" title="<?php esc_attr_e( 'Comments RSS', 'monochrome' ); ?>"><?php _e('Comments RSS','monochrome'); ?></a></li>
+   <li id="comment_feed"><a href="<?php bloginfo('comments_rss2_url'); ?>" title="<?php _e('Comments RSS','monochrome'); ?>"><?php _e('Comments RSS','monochrome'); ?></a></li>
   </ul>
 
   <ul id="comment_header_right">
@@ -90,7 +90,7 @@ if (function_exists('post_password_required'))
 <input type="text" name="trackback_url" id="trackback_url" size="60" value="<?php trackback_url() ?>" readonly="readonly" onfocus="this.select()" />
 </div>
 
-<ol class="trackbacklist">
+<ol class="commentlist">
 
 <?php if ($trackbacks) : $trackbackcount = 0; ?>
 

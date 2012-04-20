@@ -36,14 +36,15 @@
 				<ul>
 					<?php wp_register(); ?>
 					<li><?php wp_loginout(); ?></li>
+					<li><a href="http://validator.w3.org/check/referer" title="<?php _e('This page validates as XHTML 1.0 Transitional','whiteasmilk'); ?>"><?php _e('Valid <abbr title="eXtensible HyperText Markup Language">XHTML</abbr>','whiteasmilk'); ?></a></li>
 					<li><?php _e('<a href="http://gmpg.org/xfn/"><abbr title="XHTML Friends Network">XFN</abbr></a>','whiteasmilk'); ?></li>
-					<li><a href="http://<?php _e('wordpress.com','whiteasmilk'); ?>/" title="<?php esc_attr_e( 'Powered by WordPress, state-of-the-art semantic personal publishing platform.','whiteasmilk' ); ?>"><?php _e('WordPress.com','whiteasmilk'); ?></a></li>
+					<li><a href="http://<?php _e('wordpress.com','whiteasmilk'); ?>/" title="<?php _e('Powered by WordPress, state-of-the-art semantic personal publishing platform.','whiteasmilk'); ?>"><?php _e('WordPress.com','whiteasmilk'); ?></a></li>
 					<?php wp_meta(); ?>
 				</ul>
 				</li>
 			
 			<li>
-				<?php get_search_form(); ?>
+				<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 			</li>			
 		</ul>
 	</div>

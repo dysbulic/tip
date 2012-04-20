@@ -5,13 +5,13 @@
 <?php /* WordPress Widget Support */ if (function_exists('dynamic_sidebar') and dynamic_sidebar()) { } else { ?>
 
 	<div id="search"><h2><?php _e('Search','k2_domain'); ?></h2>
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 	</div>
 
 	<?php /* Latest Entries */ if ( (is_home()) or (is_search() or (is_404()) or ($notfound == '1')) or (function_exists('is_tag') and is_tag()) or ( (is_archive()) and (!is_author()) ) ) { ?>
 	<div class="sb-latest">
 		<h2><?php _e('Latest','k2_domain'); ?></h2>
-		<span class="metalink"><a href="<?php bloginfo('rss2_url'); ?>" title="<?php esc_attr_e( 'RSS Feed for Blog Entries', 'k2_domain' ); ?>" class="feedlink"><img src="<?php bloginfo('template_directory'); ?>/images/feed.png" alt="RSS" /></a></span>
+		<span class="metalink"><a href="<?php bloginfo('rss2_url'); ?>" title="<?php _e('RSS Feed for Blog Entries','k2_domain'); ?>" class="feedlink"><img src="<?php bloginfo('template_directory'); ?>/images/feed.png" alt="RSS" /></a></span>
 
 		<ul>
 			<?php wp_get_archives('type=postbypost&limit=10'); ?>

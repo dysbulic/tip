@@ -1,20 +1,7 @@
 <?php
-/**
- * @package WordPress
- * @subpackage DePo Square
- */
-
 global $depo_post_types;
 
 $content_width = 650;
-
-$themecolors = array(
-	'bg' => 'FFFFFF',
-	'text' => '000000',
-	'link' => '006699',
-	'border' => 'E5E5E5',
-	'url' => 'AED4E7',
-);
 
 add_theme_support( 'automatic-feed-links' );
 
@@ -80,7 +67,7 @@ function depo_square_status_widget() {
 			?>
 			<?php if( is_user_logged_in() ) :?>
 			<h3>Status</h3>
-			<p><a href="<?php echo admin_url( 'themes.php?page=theme_options' ); ?>">Setup your post type categories</a> to have your latest status message appear here.</p>
+			<p><a href="<?php bloginfo('wpurl'); ?>/wp-admin/themes.php?page=depo-square">Setup your post type categories</a> to have your latest status message appear here.</p>
 			<?php endif;?>
 			<?php endif;?>
 <?php }
@@ -268,7 +255,7 @@ if( is_admin() ) {
 		</table>
 	
 		<p class="submit">
-			<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
+			<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
 		</p>
 	</form>
 	</div>	
@@ -358,23 +345,4 @@ class Widget_DePoFlickr extends WP_Widget {
 		';
 	}
 
-}
-
-function depo_squared_comment($comment, $args, $depth) {
-	$GLOBALS['comment'] = $comment;
-?>
-			<li <?php comment_class() ?> id="comment-<?php comment_ID() ?>">
-			<?php echo get_avatar( $comment, 32 ); ?>
-			<div class="commentmetadata">
-			<?php printf(__('<cite>%s</cite>', 'depo-squared'), get_comment_author_link()); ?>
-			<?php if ($comment->comment_approved == '0') : ?>
-			<em><?php _e('Your comment is awaiting moderation.', 'depo-squared'); ?></em>
-			<?php endif; ?>
-
-			<small><a href="#comment-<?php comment_ID() ?>" title=""><?php printf(__('%1$s at %2$s', 'depo-squared'), get_comment_date(), get_comment_time()); ?></a><?php echo comment_reply_link(array('depth' => $depth, 'max_depth' => $args['max_depth'], 'before' => ' | ')) ?> <?php edit_comment_link(__('edit', 'depo-squared'),'&nbsp;&nbsp;',''); ?></small>
-			</div>
-			<div class="comment-text">
-				<?php comment_text() ?>
-			</div>
-<?php 
 }

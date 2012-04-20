@@ -51,7 +51,7 @@ if (!class_exists('ThemeToolkit')) {
 				if ((basename($file)) == $_GET['page']) $this->infos['debug'] = 1;
 				unset($array['debug']);
 			}
-			if ( isset( $_GET['page'] ) && ( basename( $file ) ) == $_GET['page'] ) {
+			if ((basename($file)) == $_GET['page']){
 				$this->infos['menu_options'] = $array;
 				$this->infos['classname'] = $theme;
 			}
@@ -223,7 +223,7 @@ if (!class_exists('ThemeToolkit')) {
 							$v=array_shift($items);
 							$t=array_shift($items);
 							$checked='';
-							if ( isset( $this->option[$key] ) && $v == $this->option[$key] ) $checked='checked';
+							if ($v == $this->option[$key]) $checked='checked';
 							print "<label for='${key}${v}'><input type='radio' id='${key}${v}' name='$key' value='$v' $checked /> $t</label>";
 							if (@$items) print "<br />\n";
 						}

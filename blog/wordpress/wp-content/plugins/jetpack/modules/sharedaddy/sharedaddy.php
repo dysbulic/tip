@@ -39,7 +39,7 @@ function sharing_meta_box_save( $post_id ) {
 		return $post_id;
 
 	// Record sharing disable
-	if ( isset( $_POST['post_type'] ) && ( 'post' == $_POST['post_type'] || 'page' == $_POST['post_type'] ) ) {
+	if ( 'post' == $_POST['post_type'] || 'page' == $_POST['post_type'] ) {
 		if ( current_user_can( 'edit_post', $post_id ) ) {
 			if ( isset( $_POST['sharing_status_hidden'] ) ) {
 				if ( !isset( $_POST['enable_post_sharing'] ) )
@@ -94,7 +94,7 @@ function sharing_global_resources() {
 <tr valign="top">
 	<th scope="row"><label for="disable_css"><?php _e( 'Disable CSS and JS', 'jetpack' ); ?></label></th>
 	<td>
-		<input id="disable_css" type="checkbox" name="disable_resourcse" <?php if ( $disable == 1 ) echo ' checked="checked"'; ?>/>  <small><em><?php _e( 'Advanced.  If this option is checked, you must include these files in your theme manually for the sharing links to work.', 'jetpack' ); ?></em></small>
+		<input id="disable_css" type="checkbox" name="disable_resourcse" <?php if ( $disable == 1 ) echo ' checked="checked"'; ?>/>  <small><em><?php _e( 'Advanced - you must include these in your theme for Sharedaddy to work', 'jetpack' ); ?></em></small>
 	</td>
 </tr>
 <?php

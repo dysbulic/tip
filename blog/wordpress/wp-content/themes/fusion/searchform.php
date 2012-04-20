@@ -5,7 +5,7 @@
  */
 ?>
 
-<form method="get" id="searchform" action="<?php echo home_url( '/' ); ?>">
+<form method="get" id="searchform" action="<?php bloginfo( 'url' ); ?>/">
 	<input type="text" name="s" size="40" id="searchbox" class="searchfield" />
-	<input type="submit" value="<?php esc_attr_e( 'Search', 'fusion' ); ?>" class="searchbutton" />
+	<input type="submit" value="<?php _e( 'Search', 'fusion' ); ?>" class="searchbutton" />
 </form>

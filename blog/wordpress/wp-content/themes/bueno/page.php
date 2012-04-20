@@ -12,7 +12,7 @@ get_header();
             <?php if (have_posts()) : $count = 0; ?>
             <?php while (have_posts()) : the_post(); $count++; ?>
                                                                         
-		<div class="post">
+                <div class="post">
 
                     <h1 class="title"><?php the_title(); ?></h1>
                     

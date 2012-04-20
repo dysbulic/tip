@@ -38,16 +38,6 @@ function scossdl_off_exclude_match($match, $excludes) {
 	return false;
 }
 
- /**
- * Compute string modulo, based on SHA1 hash
- */
-function scossdl_string_mod($s, $mod) {
-	/* The full SHA1 is too large for PHP integer types. This should be
-	 * enough for our purpose */
-	$n = hexdec(substr(sha1($s), 0, 5));
-	return $n % $mod;
-}
-
 /**
  * Rewriter of URLs, used as replace-callback.
  *
@@ -55,12 +45,14 @@ function scossdl_string_mod($s, $mod) {
  */
 function scossdl_off_rewriter($match) {
 	global $ossdl_off_blog_url, $ossdl_off_cdn_url, $arr_of_excludes, $arr_of_cnames, $ossdl_https;
-
-	if ( $ossdl_off_cdn_url == '' )
-		return $match[0];
+	static $offset = -1;
+	static $rewritten_urls = array();
 
 	if ( $ossdl_https && substr( $match[0], 0, 5 ) == 'https' )
 		return $match[0];
+
+	if ( isset( $rewritten_urls[ $match[ 0 ] ] ) )
+		return $rewritten_urls[ $match[ 0 ] ];
 
 	if ( false == in_array( $ossdl_off_cdn_url, $arr_of_cnames ) )
 		$arr_of_cnames[] = $ossdl_off_cdn_url;
@@ -70,8 +62,13 @@ function scossdl_off_rewriter($match) {
 	} else {
 		$include_dirs = scossdl_off_additional_directories();
 		if ( preg_match( '/' . $include_dirs . '/', $match[0] ) ) {
-			$offset = scossdl_string_mod($match[1], count($arr_of_cnames));
-			return str_replace($ossdl_off_blog_url, $arr_of_cnames[$offset], $match[0]);
+			$offset++;
+   			$offset %= count($arr_of_cnames);
+			$url = str_replace($ossdl_off_blog_url, $arr_of_cnames[$offset], $match[0]);
+			if ( count( $rewritten_urls ) < 30 ) // don't use too much memory please
+				$rewritten_urls[ $match[ 0 ] ] = $url;
+
+			return $url;
 		} else {
 			return $match[0];
 		}

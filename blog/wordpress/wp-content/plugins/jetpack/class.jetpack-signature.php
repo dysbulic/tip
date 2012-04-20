@@ -7,14 +7,13 @@ class Jetpack_Signature {
 	var $token;
 	var $secret;
 
-	function Jetpack_Signature( $access_token, $time_diff = 0 ) {
+	function Jetpack_Signature( $access_token ) {
 		$secret = explode( '.', $access_token );
 		if ( 2 != count( $secret ) )
 			return;
 
 		$this->token  = $secret[0];
 		$this->secret = $secret[1];
-		$this->time_diff = $time_diff;
 	}
 
 	function sign_current_request( $override = null ) {
@@ -113,8 +112,7 @@ class Jetpack_Signature {
 			return new Jetpack_Error( 'invalid_signature', sprintf( 'The required "%s" parameter is malformed.', 'timestamp' ) );
 		}
 
-		$local_time = $timestamp - $this->time_diff;
-		if ( $local_time < time() - 600 || $local_time > time() + 300 ) {
+		if ( $timestamp < time() - 60 ) {
 			return new Jetpack_Error( 'invalid_signature', 'The timestamp is too old.' );
 		}
 
@@ -151,10 +149,10 @@ class Jetpack_Signature {
 		$names  = array_keys( $array );
 		$values = array_values( $array );
 
-		$names  = array_map( array( &$this, 'encode_3986' ), $names  );
-		$values = array_map( array( &$this, 'encode_3986' ), $values );
+		$names  = array_map( array( $this, 'encode_3986' ), $names  );
+		$values = array_map( array( $this, 'encode_3986' ), $values );
 
-		$pairs  = array_map( array( &$this, 'join_with_equal_sign' ), $names, $values );
+		$pairs  = array_map( array( $this, 'join_with_equal_sign' ), $names, $values );
 
 		sort( $pairs );
 

@@ -32,7 +32,7 @@
 
 	<?php if ( comments_open() ) : ?>
 
-		<?php comment_form(); ?>
+		<?php comment_form( array( 'title_reply' => '<span>' . __( 'Leave a Reply', 'neutra' ) . '</span>' ) ); ?>
 
 		<?php if ( !empty( $comments_by_type['pings'] ) ) : ?>
 			<div id="trackbacks">

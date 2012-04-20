@@ -36,7 +36,7 @@
 		<h2><?php _e('Not Found'); ?></h2>
 		</div>
 		<p class="center"><?php _e('Sorry, but you are looking for something that isn\'t here.'); ?></p>
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . "/searchform.php"); ?>
 
 	<?php endif; ?>
 	

@@ -28,7 +28,7 @@ function custom_comment($comment, $args, $depth) {
 	        	
 	        		<span class="date"><?php echo get_comment_date($GLOBALS['woodate']) ?> <?php _e('at', 'woothemes'); ?> <?php echo get_comment_time(); ?></span>
 	        		<span class="edit"><?php edit_comment_link('Edit', '', ''); ?></span>
-	        		<span class="perma"><a href="<?php echo esc_url( get_comment_link() ); ?>" title="<?php esc_attr_e( 'Direct link to this comment', 'woothemes' ); ?>">#</a></span>
+	        		<span class="perma"><a href="<?php echo get_comment_link(); ?>" title="<?php _e('Direct link to this comment', 'woothemes'); ?>">#</a></span>
 	        	
 	        	<?php }?>
 	        	
@@ -74,6 +74,9 @@ function the_commenter_link() {
 }
 
 function the_commenter_avatar($args) {
-    $avatar = str_replace( "class='avatar", "class='photo avatar", get_avatar( $GLOBALS['comment'],  $args['avatar_size']) );
+    $email = get_comment_author_email();
+    $avatar = str_replace( "class='avatar", "class='photo avatar", get_avatar( "$email",  $args['avatar_size']) );
     echo $avatar;
 }
+
+?>

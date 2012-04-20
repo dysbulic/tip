@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Motion
+ * @package WordPress
+ * @subpackage Motion
  */
 ?>
 

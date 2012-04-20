@@ -42,8 +42,8 @@
 		<!--meta-->
 		<p class="side_title"><?php _e('Feeds', 'supposedly-clean'); ?></p>
 			<ul class="nonnavigational">
-			<li><a href="<?php bloginfo('rss2_url'); ?>" title="<?php esc_attr_e( 'Syndicate this site using RSS', 'supposedly-clean' ); ?>"><?php _e('<abbr title="Really Simple Syndication">RSS</abbr>', 'supposedly-clean'); ?></a></li>
-			<li><a href="<?php bloginfo('comments_rss2_url'); ?>" title="<?php esc_attr_e( 'The latest comments to all posts in RSS', 'supposedly-clean' ); ?>"><?php _e('Comments <abbr title="Really Simple Syndication">RSS</abbr>', 'supposedly-clean'); ?></a></li>
+			<li><a href="<?php bloginfo('rss2_url'); ?>" title="<?php _e('Syndicate this site using RSS', 'supposedly-clean'); ?>"><?php _e('<abbr title="Really Simple Syndication">RSS</abbr>', 'supposedly-clean'); ?></a></li>
+			<li><a href="<?php bloginfo('comments_rss2_url'); ?>" title="<?php _e('The latest comments to all posts in RSS', 'supposedly-clean'); ?>"><?php _e('Comments <abbr title="Really Simple Syndication">RSS</abbr>', 'supposedly-clean'); ?></a></li>
 			</ul>								
 	<?php } ?>			
 	</div><!--close dooncha sidebar-->

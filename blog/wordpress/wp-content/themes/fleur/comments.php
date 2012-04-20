@@ -39,11 +39,12 @@ number_format_i18n( get_comments_number() ), '<em>' . get_the_title() . '</em>' 
 </div><!-- .navigation -->
 <?php endif; // check for comment navigation ?>
 
-<?php else :
-		/* If there are no comments and comments are closed, let's leave a little note, shall we?
-		 * But we don't want the note on pages or post types that do not support comments.
-		 */
-if ( ! comments_open() && ! is_page() && '0' != get_comments_number() ) :
+<?php else : // or, if we don't have comments:
+
+/* If there are no comments and comments are closed,
+* let's leave a little note, shall we?
+*/
+if ( ! comments_open() ) :
 ?>
 <p class="nocomments"><?php _e( 'Comments are closed.', 'fleur' ); ?></p>
 <?php endif; // end ! comments_open() ?>

@@ -1,24 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Fauna
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'text' => '565654',
-	'link' => '1177aa',
-	'border' => 'f5f5ef',
-	'url' => '66bbdd',
+	'text' => '000000',
+	'link' => '1177aa'
 );
 
 $content_width = 500;
-
-function fauna_body_class( $classes, $class ) {
-	return $class;
-}
-
-add_filter( 'body_class', 'fauna_body_class', 1, 2 );
 
 register_sidebar( array(
 	'name'          => __('Sidebar'),

@@ -23,37 +23,35 @@ License:
 		var $settings = array();
 
 		// Global hardcoded settings
-		var $podcasttag_regexp = "/\[podcast:([^]]+)]/";
-		var $podcasttag = '[display_podcast]';
-		var $podtrac_url = 'http://www.podtrac.com/pts/redirect.mp3?';
-		var $blubrry_url = 'http://media.blubrry.com/';
-		var $requiredadminrights = 'manage_categories';//'level_7';
-		var $realm = 'Premium Subscribers Content';
-		var $justposted = false;
-		var $uploadurl = '';
-		var $uploadpath = '';
-		var $tempfilesystempath = '';
-		var $tempfileurlpath = '';
-		var $tempcontentaddedto = array();
-		var $podangoapi;
-		var $isexcerpt = FALSE;
-		
+		var $podcastTag_regexp   = "/\[podcast:([^]]+)]/";
+		var $podcastTag          = '[display_podcast]';
+		var $podtrac_url         = 'http://www.podtrac.com/pts/redirect.mp3?';
+		var $blubrry_url         = 'http://media.blubrry.com/';
+		var $requiredAdminRights = 'manage_categories';//'level_7';
+		var $realm               = 'Premium Subscribers Content';
+		var $justposted          = false;
+		var $uploadPath  = '';
+		var $tempFileSystemPath  = '';
+		var $tempFileURLPath     = '';
+		var $tempContentAddedTo  = array();
+		var $podangoAPI;
+
 		/*************************************************************/
 		/* Load up the plugin values and get ready to action         */
 		/*************************************************************/
 		
 		function podPress_class() {
 			//$this->feed_getCategory();
-			// this is not workin in WP 3.0: //$this->uploadpath = get_option('upload_path');  
+			// this is not workin in WP 3.0: //$this->uploadPath = get_option('upload_path');  
 			
 			$wp_upload_dir = wp_upload_dir(); // since WP 2.0.0 but the return values were different back than
 			if (FALSE == isset($wp_upload_dir['basedir']) OR FALSE == isset($wp_upload_dir['baseurl'])) {
 				$wp_upload_dir = $this->upload_dir();
 			}
-			$this->uploadpath = $wp_upload_dir['basedir'];
-			$this->uploadurl = $wp_upload_dir['baseurl'];
-			$this->tempfilesystempath = $this->uploadpath.'/podpress_temp';
-			$this->tempfileurlpath = $wp_upload_dir['baseurl'].'/podpress_temp';
+			$this->uploadPath = $wp_upload_dir['basedir'];
+			$this->uploadURL = $wp_upload_dir['baseurl'];
+			$this->tempFileSystemPath = $this->uploadPath.'/podpress_temp';
+			$this->tempFileURLPath = $wp_upload_dir['baseurl'].'/podpress_temp';
 			
 			// load up podPress general config
 			$this->settings = podPress_get_option('podPress_config');
@@ -149,30 +147,6 @@ License:
 				}
 			}
 			
-			$this->createstatistictables();
-
-			if(function_exists('wp_cache_flush')) {
-				wp_cache_flush();
-			}
-
-			$current = get_option('podPress_version');
-			if ( FALSE === $current ) {
-				$current = constant('PODPRESS_VERSION');
-				update_option('podPress_version', $current);
-			}
-
-			//$this->checkSettings();
-		}
-
-		/**
-		* createstatistictables - creates the db tables for the statistics
-		*
-		* @package podPress
-		* @since 8.8.10.3 beta 5
-		*
-		*/
-		function createstatistictables() {
-			GLOBAL $wpdb;
 			// ntm: create the table with the collation or db_charset (since 8.8.5 beta 4)
 			if ( TRUE == defined('DB_COLLATE') AND '' !== DB_COLLATE ) {
 				$db_charset = ' COLLATE ' . DB_COLLATE;
@@ -190,7 +164,7 @@ License:
 			                "feed int(11) default '0',".
 			                "web int(11) default '0',".
 			                "play int(11) default '0',".
-			                "PRIMARY KEY (media)) " . $db_charset;
+			                "PRIMARY KEY (media)) TYPE=MyISAM" . $db_charset;
 			podPress_maybe_create_table($wpdb->prefix."podpress_statcounts", $create_table);
 			
 			// Create stats table
@@ -211,11 +185,22 @@ License:
 			                "version varchar(15) NOT NULL default '',".
 			                "dt int(10) unsigned NOT NULL default '0',".
 					"completed TINYINT(1) UNSIGNED DEFAULT '0',".
-			                "UNIQUE KEY id (id)) " . $db_charset;
+			                "UNIQUE KEY id (id)) TYPE=MyISAM" . $db_charset;
 			podPress_maybe_create_table($wpdb->prefix."podpress_stats", $create_table);
+
+			if(function_exists('wp_cache_flush')) {
+				wp_cache_flush();
+			}
+
+			$current = get_option('podPress_version');
+			if ( FALSE === $current ) {
+				$current = constant('PODPRESS_VERSION');
+				update_option('podPress_version', $current);
+			}
+
+			//$this->checkSettings();
 		}
-		
-		
+
 		/**
 		* checkLocalPathToMediaFiles - checks whether the "Local path to media files directory" exists or not. (This procedure is simply taken from the checkSettings() function earlier versions.)
 		*
@@ -229,9 +214,9 @@ License:
 			$mediaFilePath = stripslashes($this->settings['mediaFilePath']);
 			
 			if ( FALSE == isset($this->settings['mediaFilePath']) OR FALSE == file_exists( $mediaFilePath ) ) {
-				$this->settings['autoDetectedMediaFilePath'] = $this->uploadpath;
+				$this->settings['autoDetectedMediaFilePath'] = $this->uploadPath;
 				if (!file_exists($this->settings['autoDetectedMediaFilePath'])) {
-					$this->settings['autoDetectedMediaFilePath'] .= ' ('.__('Auto Detection Failed.', 'podpress').') '.strval($this->uploadpath);
+					$this->settings['autoDetectedMediaFilePath'] .= ' ('.__('Auto Detection Failed.', 'podpress').') '.strval($this->uploadPath);
 				} 
 			}
 		}
@@ -297,7 +282,7 @@ License:
 
 			if(!$this->settings['statLogging'] || empty($this->settings['statLogging']))
 			{
-				$this->settings['statLogging'] = 'Counts';
+				$this->settings['statLogging'] = 'Full';
 			}
 
 			if(empty($this->settings['enable3rdPartyStats'])) {
@@ -354,7 +339,7 @@ License:
 			}
 
 			if ( FALSE == isset($this->settings['mediaWebPath']) OR TRUE == empty($this->settings['mediaWebPath']) ) {
-				$this->settings['mediaWebPath'] = $this->uploadurl;
+				$this->settings['mediaWebPath'] = $this->uploadURL;
 			}
 			
 			$this->checkLocalPathToMediaFiles();
@@ -435,9 +420,13 @@ License:
 					$this->settings['contentAutoDisplayPlayer'] = true;
 				}
 			}
-			
-			if ( FALSE == is_bool($this->settings['enableFooter']) ) {
-				$this->settings['enableFooter'] = false;
+
+			if(!is_bool($this->settings['enableFooter'])) {
+				if($this->settings['enableFooter']== 'false') {
+					$this->settings['enableFooter'] = false;
+				} else {
+					$this->settings['enableFooter'] = true;
+				}
 			}
 			
 			if ( FALSE == isset($this->settings['mp3Player']) ) {
@@ -543,7 +532,7 @@ License:
 						'use_headerlink' => FALSE
 					);
 					$this->settings['podpress_feeds'][1] = array(
-						'use' => FALSE, 
+						'use' => TRUE, 
 						'premium' => FALSE,
 						'name' => __('Enhanced Podcast Feed', 'podpress'),
 						'slug' => 'enhancedpodcast',
@@ -574,7 +563,7 @@ License:
 						'use_headerlink' => FALSE
 					);
 					$this->settings['podpress_feeds'][2] = array(
-						'use' => FALSE, 
+						'use' => TRUE, 
 						'premium' => FALSE,
 						'name' => __('Torrent Feed', 'podpress'),
 						'slug' => 'torrent',
@@ -607,7 +596,7 @@ License:
 					
 					if ( FALSE == defined('PODPRESS_DEACTIVATE_PREMIUM') OR FALSE === constant('PODPRESS_DEACTIVATE_PREMIUM') ) {
 						$this->settings['podpress_feeds'][3] = array(
-							'use' => FALSE, 
+							'use' => TRUE, 
 							'premium' => TRUE,
 							'name' => __('Premium Feed', 'podpress'),
 							'slug' => 'premium',
@@ -810,7 +799,7 @@ License:
 		*/
 		function TryToFindAbsFileName($url = '') {
 			if (FALSE == empty($url)) {
-				$uploadpath = $this->uploadpath;
+				$uploadpath = $this->uploadPath;
 				// remove drive letter
 				$uploadpath_WL = end(explode(':', $uploadpath));
 				// remove doubled backslashes
@@ -847,8 +836,8 @@ License:
 		*/
 		function checkWritableTempFileDir($returnMessages = FALSE) {
 			$siteurl = get_option('siteurl');
-			if (file_exists($this->tempfilesystempath)) {
-				if(is_writable($this->tempfilesystempath)) {
+			if (file_exists($this->tempFileSystemPath)) {
+				if(is_writable($this->tempFileSystemPath)) {
 					if ($returnMessages) {
 						return __('(The folder is writeable.)', 'podpress');
 					} else {
@@ -856,28 +845,28 @@ License:
 					}
 				} else {
 					if ($returnMessages) {
-						return '<p class="message error">'.sprintf(__('Your uploads/podpress_temp directory is not writable. Please set permissions as needed, and make sure <a href="%1$s/wp-admin/options-misc.php">configuration</a> is correct.', 'podpress'), $siteurl).'<br />'.__('Currently set to:', 'podpress').'<code>'.$this->tempfilesystempath."</code></p>\n";
+						return '<p class="message error">'.sprintf(__('Your uploads/podpress_temp directory is not writable. Please set permissions as needed, and make sure <a href="%1$s/wp-admin/options-misc.php">configuration</a> is correct.', 'podpress'), $siteurl).'<br />'.__('Currently set to:', 'podpress').'<code>'.$this->tempFileSystemPath."</code></p>\n";
 					} else {
 						return false;
 					}
 				}
-			} elseif (!file_exists($this->uploadpath)) {
+			} elseif (!file_exists($this->uploadPath)) {
 				if ($returnMessages) {
-					return '<p class="message error">'.sprintf(__('Your WordPress upload directory does not exist. Please create it and make sure <a href="%1$s/wp-admin/options-misc.php">configuration</a> is correct.', 'podpress'), $siteurl).'<br />'.__('Currently set to:', 'podpress').'<code>'.$this->uploadpath."</code></p>\n";
+					return '<p class="message error">'.sprintf(__('Your WordPress upload directory does not exist. Please create it and make sure <a href="%1$s/wp-admin/options-misc.php">configuration</a> is correct.', 'podpress'), $siteurl).'<br />'.__('Currently set to:', 'podpress').'<code>'.$this->uploadPath."</code></p>\n";
 				} else {
 					return false;
 				}
-			} elseif (!is_writable($this->uploadpath)) {
+			} elseif (!is_writable($this->uploadPath)) {
 				if ($returnMessages) {
-					return '<p class="message error">'.sprintf(__('Your WordPress upload directory is not writable. Please set permissions as needed, and make sure <a href="%1$s/wp-admin/options-misc.php">configuration</a> is correct.', 'podpress'), $siteurl).'<br />'.__('Currently set to:', 'podpress').'<code>'.$this->uploadpath."</code></p>\n";
+					return '<p class="message error">'.sprintf(__('Your WordPress upload directory is not writable. Please set permissions as needed, and make sure <a href="%1$s/wp-admin/options-misc.php">configuration</a> is correct.', 'podpress'), $siteurl).'<br />'.__('Currently set to:', 'podpress').'<code>'.$this->uploadPath."</code></p>\n";
 				} else {
 					return false;
 				}
 			} else {
-				$mkdir = @mkdir($this->tempfilesystempath);
+				$mkdir = @mkdir($this->tempFileSystemPath);
 				if (!$mkdir) {
 					if ($returnMessages) {
-						return '<p class="message error">'.__('Could not create uploads/podpress_temp directory. Please set permission of the following directory to 755 or 777:', 'podpress').'<br /><code>'.$this->tempfilesystempath."</code></p>\n";
+						return '<p class="message error">'.__('Could not create uploads/podpress_temp directory. Please set permission of the following directory to 755 or 777:', 'podpress').'<br /><code>'.$this->tempFileSystemPath."</code></p>\n";
 					} else {
 						return false;
 					}
@@ -1030,51 +1019,51 @@ License:
 
 		function insert_the_excerpt($content = '') {
 			GLOBAL $post;
-			if ( FALSE == !empty($post->post_excerpt) ) {
-				$this->tempcontentaddedto[$post->ID] = true;
-			}
-			$this->isexcerpt = true;
+			$this->tempContentAddedTo[$post->ID] = true;
 			return $content;
 		}
 
 		function insert_the_excerptplayer($content = '') {
 			GLOBAL $post;
-			$this->isexcerpt = true;
+			unset($this->tempContentAddedTo[$post->ID]);
 			$content = $this->insert_content($content, TRUE);
+			unset($this->tempContentAddedTo[$post->ID]);
 			return $content;
 		}
 
-		function insert_content($content = '', $is_the_excerpt = FALSE) {
+		function insert_content($content = '', $is_excerpt = FALSE) {
 			GLOBAL $post, $podPressTemplateData, $podPressTemplateUnauthorizedData, $wpdb;
 			if ( !empty($post->post_password) ) { // if there's a password
 				if ( stripslashes($_COOKIE['wp-postpass_'.COOKIEHASH]) != $post->post_password ) {	// and it doesn't match the cookie
 					return $content;
 				}
 			}
-			
-			if ( $this->isexcerpt === $is_the_excerpt  ) {
-				unset($this->tempcontentaddedto[$post->ID]);
-			}
-			$this->isexcerpt = FALSE;
-			if ( isset($this->tempcontentaddedto[$post->ID]) ) {
-				if ( is_feed() ) {
-					return str_replace($this->podcasttag,'',$content);
-				} else {
+			if(isset($this->tempContentAddedTo[$post->ID])) {
+				if(is_feed()) {
+					return str_replace($this->podcastTag,'',$content);
+				}
+				if ( FALSE === is_single() AND FALSE === is_page() ) {
 					return $content;
 				}
 			} else {
-				$this->tempcontentaddedto[$post->ID] = true;
+				$this->tempContentAddedTo[$post->ID] = true;
 			}
-			
-			if ( is_feed() ) {
-				return str_replace($this->podcasttag, '', $content);
+
+			if(is_feed()) {
+				if($this->settings['protectFeed'] == 'Yes' && get_bloginfo('charset') == 'UTF-8') {
+					$content = podPress_feedSafeContent($content);
+				}
+				if($this->settings['rss_showlinks'] != 'yes') {
+					return str_replace($this->podcastTag,'',$content);
+				}
 			}
 
 			if(!is_array($post->podPressMedia)) {
-				return str_replace($this->podcasttag,'',$content);
+				return str_replace($this->podcastTag,'',$content);
 			}
 
-			if ( FALSE === stristr($content, $this->podcasttag) ) {
+			$hasLocationDefined = (bool)strstr($content, $this->podcastTag);
+			if(!$hasLocationDefined) {
 				if($this->settings['contentBeforeMore'] == 'no') {
 					if (is_home() or is_archive()) {
 						if ( FALSE !== strpos($post->post_content, '<!--more-->') ) {
@@ -1083,17 +1072,18 @@ License:
 					}
 				}
 				if($this->settings['contentLocation'] == 'start') {
-					$content = $this->podcasttag.$content;
+					$content = $this->podcastTag.$content;
 				} else {
-					$content .= $this->podcasttag;
+					$content .= $this->podcastTag;
 				}
 			}
-		
-			$podpressTag_in_the_content = '<p>'.$this->podcasttag.'</p>';
+			
+			
+			$podpressTag_in_the_content = '<p>'.$this->podcastTag.'</p>';
 			
 			// add the player and the other elements not if the related setting has been set 
 			if ( TRUE == isset($this->settings['incontentandexcerpt']) ) {
-				if ( $is_the_excerpt === TRUE ) {
+				if ( $is_excerpt === TRUE ) {
 					switch ( $this->settings['incontentandexcerpt'] ) {
 						default :
 						case 'in_content_and_excerpt' :
@@ -1103,10 +1093,11 @@ License:
 							if ( FALSE !== stripos($content, $podpressTag_in_the_content) ) {
 								return str_replace($podpressTag_in_the_content, '', $content);
 							} else {
-								return str_replace($this->podcasttag,'',$content);
+								return str_replace($this->podcastTag,'',$content);
 							}
 						break;
 					}
+					//~ $content = "\n<!-- is excerpt -->\n" . $content;
 				} else {
 					switch ( $this->settings['incontentandexcerpt'] ) {
 						default :
@@ -1117,14 +1108,15 @@ License:
 							if ( FALSE !== stripos($content, $podpressTag_in_the_content) ) {
 								return str_replace($podpressTag_in_the_content, '', $content);
 							} else {
-								return str_replace($this->podcasttag,'',$content);
+								return str_replace($this->podcastTag,'',$content);
 							}
 						break;
 					}
+					//~ $content = "\n<!-- is content -->\n" . $content;
 				}
 			}
 
-			//~ $podPressRSSContent = '';
+			$podPressRSSContent = '';
 			$showmp3player = false;
 			$showvideopreview = false;
 			$showvideoplayer = false;
@@ -1162,7 +1154,7 @@ License:
 					$filename = substr($post->podPressMedia[$key]['URI'], $pos);
 					if($this->settings['statLogging'] == 'Full' || $this->settings['statLogging'] == 'FullPlus') {
 						$where = $this->wherestr_to_exclude_bots('', 'AND');
-						$query_string="SELECT method, COUNT(DISTINCT id) as downloads FROM ".$wpdb->prefix."podpress_stats WHERE postID='".$post->ID."' AND media='".rawurlencode($filename)."' ".$where."GROUP BY method ORDER BY method ASC";
+						$query_string="SELECT method, COUNT(DISTINCT id) as downloads FROM ".$wpdb->prefix."podpress_stats WHERE postID='".$post->ID."' AND media='".urlencode($filename)."' ".$where."GROUP BY method ORDER BY method ASC";
 						$stats = $wpdb->get_results($query_string);
 						if (0 < count($stats)) {
 							$feed = intval($stats[0]->downloads);
@@ -1171,7 +1163,7 @@ License:
 							$post->podPressMedia[$key]['stats'] = array('feed'=>$feed, 'web'=>$web, 'play'=>$play, 'total'=>($feed+$play+$web));
 						}
 					} else {
-						$sql = "SELECT * FROM ".$wpdb->prefix."podpress_statcounts WHERE media = '".rawurlencode($filename)."'";
+						$sql = "SELECT * FROM ".$wpdb->prefix."podpress_statcounts WHERE media = '".urlencode($filename)."'";
 						$stats = $wpdb->get_results($sql);
 						if($stats) {
 							$post->podPressMedia[$key]['stats'] = array('feed'=>intval($stats[0]->feed), 'web'=>intval($stats[0]->web), 'play'=>intval($stats[0]->play), 'total'=>intval($stats[0]->total));
@@ -1216,7 +1208,7 @@ License:
 						$post->podPressMedia[$key]['enableTorrentDownload'] = false;
 					} else {
 						$post->podPressMedia[$key]['enableDownload'] = true;
-						//~ $podPressRSSContent .= '<a href="'.$post->podPressMedia[$key]['URI'].'">'.__('Download', 'podpress').' '.__($post->podPressMedia[$key]['title'], 'podpress').'</a><br/>';
+						$podPressRSSContent .= '<a href="'.$post->podPressMedia[$key]['URI'].'">'.__('Download', 'podpress').' '.__($post->podPressMedia[$key]['title'], 'podpress').'</a><br/>';
 						if($this->settings['enableTorrentCasting'] && !empty($post->podPressMedia[$key]['URI_torrent'])) {
 							$post->podPressMedia[$key]['enableTorrentDownload'] = true;
 						}
@@ -1294,7 +1286,7 @@ License:
 						}
 					}
 				}
-				if ( TRUE == isset($post->podPressMedia[$key]['disablePlayer']) AND (TRUE === $post->podPressMedia[$key]['disablePlayer'] OR 'on' == $post->podPressMedia[$key]['disablePlayer'])) {
+				if( TRUE == isset($post->podPressMedia[$key]['disablePlayer']) AND TRUE === $post->podPressMedia[$key]['disablePlayer']) {
 					$post->podPressMedia[$key]['enablePlayer'] = false;
 					$post->podPressMedia[$key]['enablePopup'] = false;
 				} 
@@ -1302,6 +1294,10 @@ License:
 				$podPressTemplateData['files'][] = $post->podPressMedia[$key];
 				$post->podPressMedia[$key]['URI'] = $post->podPressMedia[$key]['URI_orig'];
 				unset($post->podPressMedia[$key]['URI_orig']);
+			}
+
+			if(is_feed()) {
+				return str_replace($this->podcastTag, '<br/>'.$podPressRSSContent, $content);
 			}
 
 			if(!$this->settings['compatibilityChecks']['wp_head']) {
@@ -1316,22 +1312,8 @@ License:
 			if ( FALSE !== stripos($content, $podpressTag_in_the_content) ) {
 				return str_replace($podpressTag_in_the_content, $podPressContent, $content);
 			} else {
-				return str_replace($this->podcasttag, $podPressContent, $content);
+				return str_replace($this->podcastTag, $podPressContent, $content);
 			}
-		}
-		
-		/**
-		* feed_excerpt_filter - a function to filter the excerpt content (mainly to remove the podPress shortcode which is not desired in feed elements)
-		*
-		* @package podPress
-		* @since 8.8.10.7
-		*
-		* @param str $content - text which may contain the podPress shortcode to determine the position of the player at the blog page
-		*
-		* @return str the content without the podPress shortcode 
-		*/
-		function feed_excerpt_filter($content) {
-			return str_replace($this->podcasttag, '', $content);
 		}
 
 		function xmlrpc_post_addMedia($input) {
@@ -1432,30 +1414,25 @@ License:
 		*
 		* @param str $rawstring - The raw input string.
 		* @param str $blog_charset [optional] - should be a PHP conform charset string like UTF-8 
-		* @param bool $do_htmlspecialchars [optional] - do htmlspecialchars or not (since 8.8.10.7)
 		*
 		* @return str clean keyword string
 		*/
-		function cleanup_itunes_keywords($rawstring='', $blog_charset='', $do_htmlspecialchars = TRUE) {
+		function cleanup_itunes_keywords($rawstring='', $blog_charset='') {
 			if ( FALSE === empty($rawstring) ) {
 				$tmpstring = strip_tags(trim($rawstring));
 				$tmpstring_parts = preg_split("/(\,)|(\s+)/", $tmpstring, -1, PREG_SPLIT_NO_EMPTY);
 				$i=0;
 				foreach ($tmpstring_parts as $tmpstring_part) {
 					$string_parts[] = $tmpstring_part;
-					if ( 11 == $i ) { // max 12 keywords
+					if ( 7 == $i ) {
 						break;
 					}
 					$i++;
-				}
-				if ( TRUE === $do_htmlspecialchars ) {
-					if ( FALSE === empty($blog_charset) ) {
-						return htmlspecialchars(implode(', ', $string_parts), ENT_QUOTES, $blog_charset);
-					} else {
-						return htmlspecialchars(implode(', ', $string_parts), ENT_QUOTES);
-					}
+				}				
+				if ( FALSE === empty($blog_charset) ) {
+					return htmlspecialchars(implode(', ', $string_parts), ENT_QUOTES, $blog_charset);
 				} else {
-					return implode(', ', $string_parts);
+					return htmlspecialchars(implode(', ', $string_parts), ENT_QUOTES);
 				}
 			} else {
 				return '';

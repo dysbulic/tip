@@ -28,7 +28,7 @@
 			</li>
 
 			<li class="widget widget_search">
-				<?php get_search_form(); ?>
+				<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 			</li>
 
 		<?php endif; ?>

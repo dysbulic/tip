@@ -27,7 +27,7 @@
 	<h3><?php comments_number( __( 'Leave a reply' ), __( 'One Comment' ), __( '% Comments' ) ); ?> on &#8220;<?php the_title(); ?>&#8221;</h3>
 
 	<div class="navigation">
-		<?php paginate_comments_links(); ?>
+		<?php paginate_comments_links(); ?> 
 	</div>
 
 	<ol class="commentlist">
@@ -35,17 +35,18 @@
 	</ol>
 
 	<div class="navigation">
-		<?php paginate_comments_links(); ?>
+		<?php paginate_comments_links(); ?> 
 	</div>
 
-	<?php
-		/* If there are no comments and comments are closed, let's leave a little note, shall we?
-		 * But we don't want the note on pages or post types that do not support comments.
-		 */
-		elseif ( ! comments_open() && ! is_page() && '0' != get_comments_number() ) :
-	?>
+ <?php else : // this is displayed if there are no comments so far ?>
+
+	<?php if ( 'open' == $post->comment_status) : ?>
+
+	 <?php else : // comments are closed ?>
 		<p class="nocomments"><?php _e( 'Comments are closed.', 'cleanhome' ); ?></p>
+
 	<?php endif; ?>
+<?php endif; ?>
 
 
 <?php if ( 'open' == $post->comment_status ) : ?>

@@ -28,7 +28,7 @@
 					<form id="searchform" class="blog-search" method="get" action="<?php echo home_url(); ?>">
 						<div>
 							<input id="s" name="s" type="text" class="text" value="<?php the_search_query(); ?>" size="10" tabindex="1" />
-							<input type="submit" class="button" value="<?php esc_attr_e( 'Find', 'notesil' ); ?>" tabindex="2" />
+							<input type="submit" class="button" value="<?php _e( 'Find', 'notesil' ); ?>" tabindex="2" />
 						</div>
 					</form>
 				</li>

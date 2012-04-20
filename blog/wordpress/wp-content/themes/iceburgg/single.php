@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 get_header();
 
@@ -7,7 +7,9 @@ get_header();
 <div id="maincontent">
   <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
   <div <?php post_class(); ?>>
-    <h2><?php the_title(); ?></h2>
+    <h2><a href="<?php the_permalink() ?>" rel="bookmark">
+      <?php the_title(); ?>
+      </a></h2>
     <div style="clear: both"></div>
     <div class="pb"><b class="postbitmed"> <b class="postbitmed1"><b></b></b> <b class="postbitmed2"><b></b></b> <b class="postbitmed3"></b> <b class="postbitmed4"></b> <b class="postbitmed5"></b> </b>
       <div class="postbitmed_content">

@@ -12,7 +12,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 	var $site_id;
 	var $is_site_themes;
 
-	function __construct() {
+	function WP_MS_Themes_List_Table() {
 		global $status, $page;
 
 		$default_status = get_user_option( 'themes_last_view' );
@@ -32,7 +32,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 		if ( $this->is_site_themes )
 			$this->site_id = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
 
-		parent::__construct( array(
+		parent::WP_List_Table( array(
 			'plural' => 'themes'
 		) );
 	}

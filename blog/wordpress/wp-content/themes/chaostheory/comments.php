@@ -16,6 +16,54 @@
 <?php
 		return;
 	endif;
+
+
+function chaostheory_comment($comment, $args, $depth) {
+	$GLOBALS['comment'] = $comment;
+	extract($args, EXTR_SKIP);
+?>
+<li id="comment-<?php comment_ID(); ?>" <?php comment_class(); ?>>
+	<div id="div-comment-<?php comment_ID(); ?>">
+	<ul class="comment-meta">
+		<li class="comment-author vcard">
+		<div class="comment-avatar"><?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?></div>
+		<span class="fn"><?php comment_author_link(); ?></span></li>
+		<?php printf( __( '<li>Posted %1$s at %2$s</li> <li><a href="%3$s" title="Permalink to this comment">Permalink</a></li>', 'chaostheory' ),
+			get_comment_date(),
+			get_comment_time(),
+			'#comment-' . get_comment_ID() );
+			?> <li><?php edit_comment_link( __( '(Edit)', 'chaostheory' ), ' ', '' ); ?> <?php comment_reply_link(array_merge( $args, array( 'add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth'])) ); ?></li>
+	</ul>
+	<div class="comment-content">
+		<?php if ($comment->comment_approved == '0' ) : ?><span class="unapproved"><?php _e( 'Your comment is awaiting moderation.', 'chaostheory' ); ?></span><?php endif; ?>
+		<?php comment_text(); ?>
+	</div>
+	</div>
+<?php
+}
+
+function chaostheory_ping($comment, $args, $depth) {
+	$GLOBALS['comment'] = $comment;
+	extract($args, EXTR_SKIP);
+?>
+<li id="comment-<?php comment_ID(); ?>" <?php comment_class(); ?>>
+	<div id="div-comment-<?php comment_ID(); ?>">
+	<div class="comment-meta">
+		<?php printf( __( 'By %1$s on %2$s at %3$s', 'chaostheory' ),
+			get_comment_author_link(),
+			get_comment_date( 'd M Y' ),
+			get_comment_time( 'g:i a' ));
+		?>
+		<?php edit_comment_link( __( '(Edit)', 'chaostheory' ), ' ', '' ); ?>
+	</div>
+	<div class="trackback-content">
+	<div class="comment-mod"><?php if ($comment->comment_approved == '0' ) _e( '<em>Your trackback/pingback is awaiting moderation.</em>', 'chaostheory' ); ?></div>
+	<?php comment_text(); ?>
+	</div>
+	</div>
+<?php
+}
+
 ?>
 
 <?php if ( have_comments() ) : ?>

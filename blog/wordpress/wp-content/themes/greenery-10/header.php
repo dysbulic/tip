@@ -15,7 +15,7 @@
 	?>
 </head>
 
-<body <?php body_class(); ?>>
+<body>
 <div id="wrapper">
 
 <div id="header">

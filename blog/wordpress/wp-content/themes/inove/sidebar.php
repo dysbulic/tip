@@ -1,9 +1,4 @@
 <?php
-/**
- * @package INove
- */
-?>
-<?php
 	$options = get_option('inove_options');
 ?>
 
@@ -17,7 +12,7 @@
 	<div class="widget widget_feeds">
 		<div class="content">
 			<div id="subscribe">
-				<a rel="external nofollow" id="feedrss" title="<?php esc_attr_e( 'Subscribe to this blog...', 'inove' ); ?>" href="<?php bloginfo('rss2_url'); ?>"><?php _e('<abbr title="Really Simple Syndication">RSS</abbr> feed', 'inove'); ?></a>
+				<a rel="external nofollow" id="feedrss" title="<?php _e('Subscribe to this blog...', 'inove'); ?>" href="<?php bloginfo('rss2_url'); ?>"><?php _e('<abbr title="Really Simple Syndication">RSS</abbr> feed', 'inove'); ?></a>
 				<?php if($options['feed_readers']) : ?>
 					<ul id="feed_readers">
 						<li id="google_reader"><a rel="external nofollow" class="reader" title="<?php esc_attr_e( __( 'Subscribe with', 'inove' ) . ' ' . __( 'Google', 'inove' ) ); ?>" href="http://fusion.google.com/add?feedurl=<?php bloginfo( 'rss2_url' ); ?>"><span><?php _e( 'Google', 'inove' ); ?></span></a></li>
@@ -34,7 +29,7 @@
 
 			<!-- twitter -->
 			<?php if($options['twitter'] && $options['twitter_username']) : ?>
-				<a id="followme" title="<?php esc_attr_e ( 'Follow me!', 'inove' ); ?>" href="http://twitter.com/<?php echo $options['twitter_username']; ?>/"><?php _e('Twitter', 'inove'); ?></a>
+				<a id="followme" title="<?php _e('Follow me!', 'inove'); ?>" href="http://twitter.com/<?php echo $options['twitter_username']; ?>/"><?php _e('Twitter', 'inove'); ?></a>
 			<?php endif; ?>
 
 			<div class="fixed"></div>

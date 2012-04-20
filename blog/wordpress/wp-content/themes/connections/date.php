@@ -25,6 +25,17 @@
 		<?php } ?>			
 	</div>
 	<div id="sidebar">
+		<?php /* If this is a daily archive */ if (isset($_GET['day']) && !empty($_GET['day'])) { ?>
+			<h2><?php _e('Currently Browsing') ?></h2><ul><li><p>You are currently browsing the <a href="<?php bloginfo('url'); ?>"><?php echo bloginfo('name'); ?></a> weblog archives for the day <?php the_time(get_option('date_format')); ?>.</p></li></ul>
+			
+			<?php /* If this is a monthly archive */ } elseif ((isset($_GET['m']) && !empty($_GET['m'])) or (isset($_GET['monthnum']) && ! empty($_GET['monthnum']))) { ?>
+			<h2><?php _e('Currently Browsing') ?></h2><ul><li><p>You are currently browsing the <a href="<?php bloginfo('url'); ?>"><?php echo bloginfo('name'); ?></a> weblog archives
+			for <?php echo date_i18n(__('F, Y', 'connections'), get_the_time('U')); ?>.</p></li></ul>
+
+			<?php /* If this is a yearly archive */ } elseif (isset($_GET['year']) && !empty($_GET['year'])) { ?>
+			<h2><?php _e('Currently Browsing') ?></h2><ul><li><p>You are currently browsing the <a href="<?php bloginfo('url'); ?>"><?php echo bloginfo('name'); ?></a> weblog archives
+			for the year <?php the_time('Y'); ?>.</p></li></ul>
+			<?php } ?>			
 	
 	<?php get_sidebar(); ?>
 	</div>

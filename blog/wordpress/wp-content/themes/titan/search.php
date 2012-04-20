@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Titan
+ * @package WordPress
+ * @subpackage Titan
  */
 ?>
 <?php get_header(); ?>
@@ -11,9 +12,7 @@
 			<div class="post-header">
 				<div class="date"><?php the_time( get_option( 'date_format' ) ); ?></div>
 				<h2><a href="<?php the_permalink(); ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
-				<div class="author">
-					<?php titan_posted_by(); ?>
-				</div>
+				<div class="author"><?php printf( __( 'by %s', 'titan' ), get_the_author() ); ?></div>
 			</div><!--end post header-->
 			<div class="entry clear">
 				<?php the_excerpt( __( 'Read more...', 'titan' ) ); ?>

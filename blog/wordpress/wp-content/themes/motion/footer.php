@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Motion
+ * @package WordPress
+ * @subpackage Motion
  */
 ?>
 
@@ -48,7 +49,7 @@
 </div><!-- /footer -->
 
 <div id="credits">
-	<div id="creditsleft"><a href="http://wordpress.com/" rel="generator">Get a free blog at WordPress.com</a> | <?php printf( __( 'Theme: %1$s by %2$s.' ), 'Motion', '<a href="http://www.webdesigncompany.net/motion/" rel="designer">volcanic</a>' ); ?></div>
+	<div id="creditsleft"><a href="http://wordpress.com/" rel="generator">Get a free blog at WordPress.com</a> | <?php printf( __( 'Theme: %1$s by %2$s.' ), 'Motion', '<a href="http://85ideas.com/" rel="designer">85ideas</a>' ); ?></div>
 	<div id="creditsright"><a href="#top">[ <?php _e( 'Back to top' ); ?> ]</a></div>
 </div><!-- /credits -->
 

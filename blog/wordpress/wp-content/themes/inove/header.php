@@ -1,14 +1,11 @@
 <?php
-/**
- * @package INove
- */
-global $inove_nosidebar, $home_menu;
-$options = get_option('inove_options');
-if (is_home()) {
-	$home_menu = 'current_page_item';
-} else {
-	$home_menu = 'page_item';
-}
+	global $inove_nosidebar;
+	$options = get_option('inove_options');
+	if (is_home()) {
+		$home_menu = 'current_page_item';
+	} else {
+		$home_menu = 'page_item';
+	}
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
 <head profile="http://gmpg.org/xfn/11">
@@ -23,15 +20,15 @@ if (is_home()) {
 
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 <?php if ( is_singular() ) {
-	wp_enqueue_script( 'comment-reply' );
-	wp_enqueue_script( 'jquery' );
+	wp_enqueue_script( 'comment-reply' ); 
+	wp_enqueue_script( 'jquery' ); 
 	}
 ?>
 <?php wp_head(); ?>
 </head>
 <?php flush(); ?>
 
-<body <?php body_class( is_user_logged_in() ? 'loggedin' : '' ); ?>>
+<body<?php if( is_user_logged_in() ) echo ' class="loggedin"'; ?>>
 <!-- wrap START -->
 <div id="wrap">
 
@@ -43,8 +40,8 @@ if (is_home()) {
 
 	<!-- banner START -->
 	<?php if( $options['banner_content'] && (
-		($options['banner_registered'] && $user_ID) ||
-		($options['banner_commentator'] && !$user_ID && isset($_COOKIE['comment_author_'.COOKIEHASH])) ||
+		($options['banner_registered'] && $user_ID) || 
+		($options['banner_commentator'] && !$user_ID && isset($_COOKIE['comment_author_'.COOKIEHASH])) || 
 		($options['banner_visitor'] && !$user_ID && !isset($_COOKIE['comment_author_'.COOKIEHASH]))
 	) ) : ?>
 		<div class="banner">

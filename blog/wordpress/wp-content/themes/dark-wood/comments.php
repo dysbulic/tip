@@ -60,7 +60,7 @@ else:
 <?php if ($comments) : ?>
 	<div class="clr">&nbsp;</div>
 	<h3 id="comments" class="block"><?php comments_number( __('No responses to'), __('One response to'), __('% responses to') );?>
- &#8220;<?php the_title(); ?>&#8221; <a href="<?php bloginfo('comments_rss2_url'); ?>" title="RSS link"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/ico/rss.gif" alt="<?php esc_attr_e( 'RSS icon' ); ?>" /></a></h3>
+ &#8220;<?php the_title(); ?>&#8221; <a href="<?php bloginfo('comments_rss2_url'); ?>" title="RSS link"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/ico/rss.gif" alt="<?php _e('RSS icon'); ?>" /></a></h3>
 	<ul class="list-4">
 
 	<?php foreach ($comments as $comment) : ?>

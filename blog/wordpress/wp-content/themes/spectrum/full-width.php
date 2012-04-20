@@ -1,7 +1,8 @@
 <?php
 /**
  * Template Name: Full-width, no sidebar
- * @package Spectrum
+ * @package WordPress
+ * @subpackage Spectrum
  */
 
 get_header(); ?>
@@ -11,6 +12,11 @@ get_header(); ?>
 		<div <?php post_class(); ?> id="post-<?php the_ID(); ?>">
 			<div class="main-title">
 				<h3><?php the_title(); ?></h3>
+				<div class="postDate">
+					<span class="month"><?php the_time( 'm' ); ?></span>
+					<span class="day"><?php the_time( 'd' ); ?></span>
+					<span class="year"><?php the_time( 'y' ); ?></span>
+				</div>
 			</div>
 			<div class="entry">
 				<?php the_content( 'Read the rest of this entry &raquo;' ); ?>

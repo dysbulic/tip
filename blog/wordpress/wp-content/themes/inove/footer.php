@@ -1,8 +1,3 @@
-<?php
-/**
- * @package INove
- */
-?>
 	</div>
 	<!-- main END -->
 

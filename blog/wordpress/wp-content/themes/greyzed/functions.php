@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Greyzed
+ * @package WordPress
+ * @subpackage Greyzed Theme
  */
 
 // Make theme available for translation
@@ -15,11 +16,11 @@ if ( is_readable( $locale_file ) )
 // Theme colors and content width
 $themecolors = array(
 	'bg' => 'f9f9f9',
-	'border' => 'bcc5c1',
+	'border' => '575B59',
 	'text' => '333333',
 	'link' => 'CC0000',
-	'url' => '575b59',
-);
+	'url' => 'CC0000'
+);		
 $content_width = 614; // pixels
 
 // Add Posts and Comments feeds to theme
@@ -69,6 +70,6 @@ function greyzed_widgets_init() {
 		'after_widget' => '</li>',
 		'before_title' => '<h4 class="footerwidget">',
 		'after_title' => '</h4>',
-	));
+	));	
 }
 add_action( 'widgets_init', 'greyzed_widgets_init' );

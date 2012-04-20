@@ -3,7 +3,9 @@
 <head profile="http://gmpg.org/xfn/11">
 	<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 	<title><?php wp_title(); ?> <?php bloginfo('name'); ?></title>
-	<link rel="stylesheet" type="text/css" media="screen" href="<?php echo get_stylesheet_uri(); ?>" />
+	<style type="text/css" media="screen">
+		@import url( <?php bloginfo('stylesheet_url'); ?>?1 );
+	</style>
 	<link rel="stylesheet" type="text/css" media="print" href="<?php bloginfo('template_url'); ?>/css/print.css" />
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 	<?php 
@@ -12,7 +14,7 @@
 	?>
 </head>
 
-<body <?php body_class(); ?>>
+<body>
 <div id="page">
 	<div id="header">
 		<h1><a href="<?php echo home_url( '/' ); ?>"><?php bloginfo('name'); ?></a></h1>

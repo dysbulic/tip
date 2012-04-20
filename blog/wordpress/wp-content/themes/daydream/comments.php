@@ -8,6 +8,30 @@ if ( post_password_required() ) {
 	return;
 }
 
+
+function daydream_comment($comment, $args, $depth) {
+	$GLOBALS['comment'] = $comment;
+	extract($args, EXTR_SKIP);
+?>
+<li <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="comment-<?php comment_ID() ?>">
+	<div id="div-comment-<?php comment_ID() ?>">
+	<?php if ($comment->comment_approved == '0') : ?>
+	<p class="await_mod"><?php _e('Your comment is awaiting moderation.','daydream'); ?></p>
+	<?php endif; ?>
+
+	<?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?>
+	
+	<?php comment_text(); ?>
+	
+	<div class="comment-author vcard cmntmeta comment-meta commentmetadata"><span class="fn"><?php comment_author_link() ?></span> - <?php comment_date() ?> <?php _e('at','daydream'); ?> <?php comment_time() ?></a> <?php edit_comment_link('e','',''); ?></div>
+	
+	<div class="reply">
+		<?php comment_reply_link(array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
+	</div>
+	</div>
+<?php
+}
+
 if (have_comments()) : ?>
 
 	<h4 id="comments"><?php comments_number(__('No Responses Yet','daydream'), __('One Response','daydream'), __('% Responses','daydream') );?></h4>

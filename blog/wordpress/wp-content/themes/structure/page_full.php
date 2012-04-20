@@ -14,36 +14,32 @@ Template Name: Full Width
 <div id="content">
 
 	<div id="contentwide">
-
+    
         <div class="postarea">
-
+    
             <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-
-            <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-
-            	<div class="posttitle">
-            		<h3><?php the_title(); ?></h3>
-            	</div>
-
-            	<?php the_content(__('Read More'));?>
-            	<?php wp_link_pages( 'before=<div class="page-link">' . __( 'Pages:', 'theme' ) . '&after=</div>'); ?>
-            	<div style="clear:both;"></div>
-				<?php edit_post_link('(Edit)', '', ''); ?>
-
-			</div>
-
+            
+            <div class="posttitle">
+            	<h3><?php the_title(); ?></h3>
+            </div>
+            
+            <?php the_content(__('Read More'));?>
+            <?php wp_link_pages( 'before=<div class="page-link">' . __( 'Pages:', 'theme' ) . '&after=</div>'); ?>
+            <div style="clear:both;"></div>
+			<?php edit_post_link('(Edit)', '', ''); ?>
+            
             <?php endwhile; else: ?>
-
+            
             <p><?php _e('Sorry, no posts matched your criteria.'); ?></p><?php endif; ?>
-
+            
         </div>
 
 		<div class="postcomments">
 			<?php comments_template('',true); ?>
-		</div>
-
+		</div>        
+		
 	</div>
-
+			
 </div>
 
 <!-- The main column ends  -->

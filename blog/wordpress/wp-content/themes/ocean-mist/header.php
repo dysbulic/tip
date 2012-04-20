@@ -6,27 +6,16 @@
 <link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>" type="text/css" media="screen" />
 <!--[if IE 6]> 	<link rel="stylesheet" href="<?php bloginfo('stylesheet_directory'); ?>/ie6.css" type="text/css" media="screen" /> <![endif]-->
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
-<?php
+<?php 
 if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
 wp_head(); ?>
 </head>
-<body <?php body_class(); ?>>
+<body>
 
 <div id="page">
   <div id="header">
     <h1><a href="<?php echo home_url( '/' ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
     <div class="description"><?php bloginfo( 'description' ); ?>&nbsp;</div>
-    <div id="mainpic">
-    	<a href="<?php echo esc_url( home_url( '/' ) ); ?>">
-		<?php
-			if ( is_singular() &&
-				has_post_thumbnail( $post->ID ) &&
-				( $image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), array( HEADER_IMAGE_WIDTH, HEADER_IMAGE_WIDTH ) ) ) &&
-				$image[1] >= HEADER_IMAGE_WIDTH ) :
-				echo get_the_post_thumbnail( $post->ID, 'post-thumbnail' );
-			endif;
-		?>
-    	</a>
-    </div>
+    <div id="mainpic"></div>
 	  <?php wp_nav_menu( array( 'container' => false, 'menu_class' => 'pagetabs', 'theme_location' => 'primary', 'fallback_cb' => 'oceanmist_page_menu' ) ); ?>
   </div>

@@ -1,22 +1,12 @@
 <?php
-/**
- * @package INove
- */
-
 $themecolors = array(
 	'bg' => 'ffffff',
-	'border' => 'eeeeee',
-	'text' => '555555',
+	'border' => '000000',
+	'text' => '000000',
 	'link' => '2970A6',
-	'url' => 'c8c7c7'
+	'url' => '2970A6'
 );
 $content_width = 600;
-
-function inove_body_class( $classes, $class ) {
-	return $class;
-}
-
-add_filter( 'body_class', 'inove_body_class', 1, 2 );
 
 add_theme_support( 'automatic-feed-links' );
 
@@ -64,7 +54,7 @@ class iNoveOptions {
 			$options['ctrlentry'] = false;
 			$options['feed_readers'] = true;
 			$options['twitter'] = false;
-			$options['twitter_username'] = '';
+			$options['twitter_username'] = '';			
 			update_option('inove_options', $options);
 		}
 		return $options;
@@ -166,14 +156,14 @@ class iNoveOptions {
 			} else {
 				$options['feed_readers'] = (bool)true;
 			}
-
+			
 			// twitter
 			if ($_POST['twitter']) {
 				$options['twitter'] = (bool)true;
 			} else {
 				$options['twitter'] = (bool)false;
 			}
-			$options['twitter_username'] = wp_kses(stripslashes($_POST['twitter_username']), '');
+			$options['twitter_username'] = wp_kses(stripslashes($_POST['twitter_username']), '');			
 
 			update_option('inove_options', $options);
 
@@ -373,7 +363,7 @@ class iNoveOptions {
 				</tr>
 			</tbody>
 		</table>
-
+		
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
@@ -390,10 +380,10 @@ class iNoveOptions {
 				</tr>
 			</tbody>
 		</table>
-
+		
 
 		<p class="submit">
-			<input class="button-primary" type="submit" name="inove_save" value="<?php esc_attr_e( 'Save Changes', 'inove' ); ?>" />
+			<input class="button-primary" type="submit" name="inove_save" value="<?php _e('Save Changes', 'inove'); ?>" />
 		</p>
 	</div>
 </form>
@@ -430,7 +420,7 @@ register_nav_menus( array(
 function inove_home_link( $menuitems, $args ) {
 	// inove needs a cool home link
 	$homemenu = '<li><a class="home" href="' . home_url( '/' ) . '" title="Home">Home</a></li>';
-
+	
 	// but only in the primary menu--we don't want it showing up in widgets
 	if ( $args->theme_location == 'primary' ) {
 		$menuitems = $homemenu . $menuitems;
@@ -441,15 +431,13 @@ function inove_home_link( $menuitems, $args ) {
 
 add_filter( 'wp_nav_menu_items', 'inove_home_link', 10, 2 );
 
-function inove_page_menu() { // fallback for primary navigation
-	global $home_menu;
-?>
+function inove_page_menu() { // fallback for primary navigation ?>
 <ul id="menus">
-	<li class="<?php echo( $home_menu ); ?>"><a class="home" title="<?php esc_attr_e( 'Home', 'inove' ); ?>" href="<?php echo home_url( '/' ); ?>"><?php _e( 'Home', 'inove' ); ?></a></li>
+	<li class="<?php echo( $home_menu ); ?>"><a class="home" title="<?php _e( 'Home', 'inove' ); ?>" href="<?php echo home_url( '/' ); ?>"><?php _e( 'Home', 'inove' ); ?></a></li>
 	<?php
 		global $inove_nosidebar;
 		$options = get_option('inove_options');
-
+		
 		if( $options['menu_type'] == 'categories' ) {
 			wp_list_categories( 'title_li=0&orderby=name&show_count=0' );
 		} else {
@@ -478,7 +466,7 @@ function custom_comments($comment, $args, $depth) {
 		$commentcount = 0;
 	}
 ?>
-	<li <?php comment_class( get_the_author_email() == $comment->comment_author_email ? 'admincomment' : 'regularcomment' ); ?> id="comment-<?php comment_ID() ?>">
+	<li class="comment <?php if($comment->comment_author_email == get_the_author_email()) {echo 'admincomment';} else {echo 'regularcomment';} ?>" id="comment-<?php comment_ID() ?>">
 		<div class="author">
 			<div class="pic">
 				<?php echo get_avatar($comment, 32); ?>

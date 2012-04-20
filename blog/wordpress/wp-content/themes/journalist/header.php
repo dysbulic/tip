@@ -17,7 +17,6 @@ wp_head();
 
 <body <?php body_class(); ?>>
 <div id="container" class="group">
-<?php do_action( 'before' ); ?>
 
 <h1><a href="<?php bloginfo('url'); ?>/"><?php bloginfo('name'); ?></a></h1>
 <?php if(get_bloginfo('description') != '') { ?>

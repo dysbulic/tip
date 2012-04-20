@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Greyzed
+ * @package WordPress
+ * @subpackage Greyzed
  */
 
 get_header(); ?>
@@ -14,20 +15,12 @@ get_header(); ?>
 		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<div class="posttitle">
 				<h2 class="pagetitle"><a href="<?php echo get_permalink($post->post_parent); ?>" rev="attachment"><?php echo get_the_title($post->post_parent); ?></a> &raquo; <?php the_title(); ?></h2>
-
+			
 				<small>
-					<?php
-					if ( is_multi_author() ) {
-						printf( __( 'Posted: %1$s by <strong>%2$s</strong>', 'greyzed' ),
-							get_the_date( get_option( 'date_format' ) ),
-							get_the_author()
-						);
-					} else {
-						printf( __( 'Posted: %1$s', 'greyzed' ),
-							get_the_date( get_option( 'date_format' ) )
-						);
-					}
-					?>
+					<?php printf( __( 'Posted: %1$s by <strong>%2$s</strong>', 'greyzed' ),
+						get_the_date( get_option( 'date_format' ) ),
+						get_the_author()
+						); ?>
 					<span class="meta-sep">|</span>
 					<?php $metadata = wp_get_attachment_metadata();
 					printf( __( 'Full size is %s pixels', 'greyzed'),
@@ -63,37 +56,37 @@ else
 						<?php echo wp_get_attachment_image( $post->ID, array( 648, 9999 ) ); ?>
 					</a>
 				</p>
-
+				
 				<div class="caption">
 					<?php if ( !empty($post->post_excerpt) ) the_excerpt(); // this is the "caption" ?>
 				</div>
-
+				
 				<?php the_content('<p class="serif">Read the rest of this entry &raquo;</p>'); ?>
-
+				
 				<div class="navigation">
 					<div class="alignleft leftnav"><?php previous_image_link( false, __( 'Previous image', 'greyzed' ) ) ?></div>
 					<div class="alignright rightnav"><?php next_image_link( false, __( 'Next image', 'greyzed' ) ) ?></div>
 				</div>
-
+				
 				<br class="clear" />
-
+				
 				<p class="postmetadata alt">
 					<small>
 						<?php if ( comments_open() && pings_open() ) {
 							// Both Comments and Pings are open ?>
-							<?php printf( __( 'You can <a href="#respond">leave a response</a>, or <a href="%s" rel="trackback">trackback</a> from your own site.', 'greyzed' ), trackback_url( false ) ); ?>
+							You can <a href="#respond">leave a response</a>, or <a href="<?php trackback_url(); ?>" rel="trackback">trackback</a> from your own site.
 
-						<?php } elseif ( ! comments_open() && pings_open() ) {
+						<?php } elseif ( !comments_open() && pings_open() ) {
 							// Only Pings are Open ?>
-							<?php printf( __( 'Responses are currently closed, but you can <a href="%s" rel="trackback">trackback</a> from your own site.', 'greyzed' ), trackback_url( false ) ); ?>
+							Responses are currently closed, but you can <a href="<?php trackback_url(); ?> " rel="trackback">trackback</a> from your own site.
 
-						<?php } elseif ( comments_open() && ! pings_open() ) {
+						<?php } elseif ( comments_open() && !pings_open() ) {
 							// Comments are open, Pings are not ?>
-							<?php _e( 'You can skip to the end and leave a response. Pinging is currently not allowed.', 'greyzed' ); ?>
+							You can skip to the end and leave a response. Pinging is currently not allowed.
 
-						<?php } elseif ( ! comments_open() && !pings_open() ) {
+						<?php } elseif ( !comments_open() && !pings_open() ) {
 							// Neither Comments, nor Pings are open ?>
-							<?php _e( 'Both comments and pings are currently closed.', 'greyzed' ); ?>
+							Both comments and pings are currently closed.
 
 						<?php } ?>
 					</small>

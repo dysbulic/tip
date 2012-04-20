@@ -22,11 +22,11 @@
 	?>
 </head>
 
-<body <?php body_class(); ?>>
+<body>
 
 	<div id="container">
 		<div id="matt">
-		<h1><a href="<?php bloginfo('url'); ?>" title="<?php esc_attr_e( 'home', 'supposedly-clean' ); ?>"><?php echo get_bloginfo('name'); ?></a></h1> <!-- make sure to give your blog a name-->
+		<h1><a href="<?php bloginfo('url'); ?>" title="<?php _e('home', 'supposedly-clean'); ?>"><?php echo get_bloginfo('name'); ?></a></h1> <!-- make sure to give your blog a name-->
 		<div id="boren_head"></div><!-- close boren head-->
 
 

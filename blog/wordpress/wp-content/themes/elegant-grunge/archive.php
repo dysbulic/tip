@@ -33,7 +33,7 @@ get_header();
 				//show author bio on author archives case has bio/description
 				if ( is_author() && get_the_author_meta( 'description' ) ) : ?>
 					<div id="entry-author-info" class="clearfix">
-						<h2><?php esc_html( printf( __( 'About %s', 'elegant-grunge' ), get_the_author() ) ); ?></h2>
+						<h2><?php printf( esc_attr__( 'About %s', 'elegant-grunge' ), get_the_author() ); ?></h2>
 						<div id="author-avatar">
 							<?php echo get_avatar ( get_the_author_meta( 'user_email' ), 60 ); ?>
 						</div>
@@ -59,7 +59,7 @@ get_header();
 					<?php
 						printf(	__( '<span class="author vcard">By <a class="url fn n" href="%1$s" title="%2$s">%3$s</a></span>', 'elegant-grunge' ),
 							get_author_posts_url( get_the_author_meta( 'ID' ) ),
-							esc_attr( sprintf( __( 'View all posts by %s', 'elegant-grunge' ), get_the_author() ) ), get_the_author() );
+							sprintf( esc_attr__( 'View all posts by %s', 'elegant-grunge' ), get_the_author() ), get_the_author() );
 					?>
 				</div>
 				<div class="entry">

@@ -10,8 +10,8 @@ array(  "name" => "Social Links for Posts?",
         "desc" => "",
         "id" => $shortname."_theme_social",
         "type" => "checkbox",
-        "std" => ""),
-
+        "std" => ""), 	
+		
 array(    "name" => "Social Groups",
         "type" => "title"),
 
@@ -46,18 +46,18 @@ array(    "name" => "Linked In:",
         "id" => $shortname."_linkedin",
         "std" => "",
         "type" => "texter"),
-
+		
 array(    "name" => "Last.fm:",
         "desc" => "",
         "id" => $shortname."_lastfm",
         "std" => "",
         "type" => "texter"),
-
+		
 array(    "name" => "YouTube:",
         "desc" => "",
         "id" => $shortname."_youtube",
         "std" => "",
-        "type" => "texter"),
+        "type" => "texter"),				
 
 
 

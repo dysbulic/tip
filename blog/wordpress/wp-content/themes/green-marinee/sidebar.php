@@ -42,11 +42,11 @@
 				<ul>
 					<!-- <li><?php // wp_register(); ?></li> -->
 					<li><?php wp_loginout(); ?></li>
-					<li><a href="http://<?php _e('wordpress.com','greenmarinee'); ?>/" title="<?php esc_attr_e( 'Powered by WordPress, state-of-the-art semantic personal publishing platform.', 'greenmarinee' ); ?>"><abbr title="WordPress"><?php _e('WP.com','greenmarinee'); ?></abbr></a></li>
+					<li><a href="http://<?php _e('wordpress.com','greenmarinee'); ?>/" title="<?php _e('Powered by WordPress, state-of-the-art semantic personal publishing platform.','greenmarinee'); ?>"><abbr title="WordPress"><?php _e('WP.com','greenmarinee'); ?></abbr></a></li>
 					<li><a href="http://gmpg.org/xfn/"><abbr title="XHTML Friends Network">XFN</abbr></a></li>
-					<li><a href="<?php bloginfo('rss2_url'); ?>" title="<?php esc_attr_e( 'Syndicate this site using RSS', 'greenmarinee' ); ?>"><?php _e('<abbr title="Really Simple Syndication">RSS</abbr>','greenmarinee'); ?></a></li>
-					<li><a href="<?php bloginfo('comments_rss2_url'); ?>" title="<?php esc_attr_e( 'The latest comments to all posts in RSS', 'greenmarinee' ); ?>"><?php _e('Comments <abbr title="Really Simple Syndication">RSS</abbr>','greenmarinee'); ?></a></li>
-					<li><a href="#content" title="<?php esc_attr_e( 'Back to top', 'greenmarinee' ); ?>"><?php _e('Back to top','greenmarinee'); ?></a></li>
+					<li><a href="<?php bloginfo('rss2_url'); ?>" title="<?php _e('Syndicate this site using RSS','greenmarinee'); ?>"><?php _e('<abbr title="Really Simple Syndication">RSS</abbr>','greenmarinee'); ?></a></li>
+					<li><a href="<?php bloginfo('comments_rss2_url'); ?>" title="<?php _e('The latest comments to all posts in RSS','greenmarinee'); ?>"><?php _e('Comments <abbr title="Really Simple Syndication">RSS</abbr>','greenmarinee'); ?></a></li>
+					<li><a href="#content" title="<?php _e('Back to top','greenmarinee'); ?>"><?php _e('Back to top','greenmarinee'); ?></a></li>
 					<?php wp_meta(); ?>
 				</ul>
 

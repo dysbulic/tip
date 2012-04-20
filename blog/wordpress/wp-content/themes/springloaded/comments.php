@@ -10,6 +10,26 @@
 ?>
 
 <!-- You can start editing here. -->
+<?php function springloaded_comment($comment, $args, $depth) {
+    $GLOBALS['comment'] = $comment;
+?>
+<li <?php comment_class(); ?> id="comment-<?php comment_ID() ?>">
+			<div class="comment-gravatar">
+				<?php echo get_avatar( $comment, 30 ); ?>
+			</div>
+			<div class="comment-body">
+				<div class="comment-head">
+					<p><?php printf(__('Posted by %1$s on <a href="#comment-%2$s">%3$s at %4$s</a>'), get_comment_author_link(), get_comment_ID(), get_comment_date(), get_comment_time()); ?><?php edit_comment_link('edit','&nbsp;&nbsp;',''); ?></p>
+					<?php if ($comment->comment_approved == '0') : ?>
+						<p><em><?php _e('Your comment is awaiting moderation.'); ?></em></p>
+					<?php endif; ?>
+				</div>
+				<div class="comment-text">
+					<?php comment_text() ?>
+					<p><?php echo comment_reply_link(array('depth' => $depth, 'max_depth' => $args['max_depth'], 'before' => '')) ?></p>
+				</div>
+			</div>
+<?php } ?>
 <div class="comments-show">
 
 

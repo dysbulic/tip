@@ -38,9 +38,9 @@
 
 <?php // Sections ?>
 <?php if (is_home()) { ?>
-<body <?php body_class( 'bg' ); ?> id="index">
+<body class="bg" id="index">
 <?php } else { ?>
-<body <?php body_class( 'bg' ); ?>>
+<body class="bg">
 <?php } ?>
 
 <a id="top"></a>

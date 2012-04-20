@@ -1,6 +1,6 @@
 <?php
 /**
- * User Profile Administration Screen.
+ * User Profile Administration Panel.
  *
  * @package WordPress
  * @subpackage Administration

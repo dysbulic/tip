@@ -54,7 +54,35 @@
 			return;
 		}
 	}
+if( !function_exists( 'depo_masthead_comment' ) ) {
+	function depo_masthead_comment( $comment, $args, $depth ) {
+		$GLOBALS['comment'] = $comment;
+		extract( $args, EXTR_SKIP );
+	?>
+		<li <?php comment_class( empty( $args['has_children'] ) ? '' : 'parent' ); ?> id="comment-<?php comment_ID(); ?>">
+		<div id="div-comment-<?php comment_ID(); ?>">
+			<div class="comments_text">
+			<?php comment_text(); ?>
+			<?php if ( $comment->comment_approved == '0' ) : ?>
+				<em><?php _e( 'Your comment is awaiting moderation.', 'depo-masthead' ); ?></em>
+			<?php endif; ?>
 
+			<div class="reply">
+				<?php comment_reply_link( array_merge( $args, array( 'add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
+			</div>
+			</div>
+
+			<div class="comment-meta commentmetadata">
+				<div class="gravatar"><?php if ( $args['avatar_size'] != 0 ) echo get_avatar( $comment, $args['avatar_size'] ); ?></div>
+				<div class="cite comment-author vcard">
+				<cite class="fn"><?php comment_author_link(); ?></cite>
+				<small><a href="#comment-<?php comment_ID(); ?>" title=""><strong><?php comment_date( 'j F Y' ); ?></strong> at <strong><?php comment_time( 'ga' ); ?></strong></a> <?php edit_comment_link( 'edit', '&nbsp;&nbsp;', '' ); ?></small>
+				</div>
+			</div>
+		</div>
+	<?php
+	}
+}
 if ( have_comments() ) : ?>
 
 	<ol class="commentlist">

@@ -35,7 +35,7 @@
 		<div class="post">
 			<div class="entry">
 		<p><?php _e('Sorry, but you are looking for something that isn\'t here.'); ?></p>
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . "/searchform.php"); ?>
 		</div></div>
 	</div>
 

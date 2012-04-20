@@ -3,7 +3,7 @@
 	<div id="container">
 		<div id="content">
 
-			<?php while ( have_posts() ) : the_post(); ?>
+<?php the_post(); ?>
 
 			<h2 class="page-title"><a href="<?php echo get_permalink( $post->post_parent ); ?>" title="<?php echo esc_attr( sprintf( __( 'Return to %s', 'notesil' ), get_the_title( $post->post_parent ) ) ); ?>" rev="attachment"><?php echo get_the_title( $post->post_parent ); ?></a></h2>
 
@@ -36,8 +36,6 @@
 			</div><!-- .post -->
 
 			<?php comments_template(); ?>
-
-			<?php endwhile; // end of the loop. ?>
 
 		</div><!-- #content -->
 		<?php get_sidebar(); ?>

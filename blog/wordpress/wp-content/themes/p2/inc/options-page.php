@@ -1,13 +1,13 @@
 <?php
 
-add_action( 'admin_menu', array( 'P2_Options', 'init' ) );
+add_action( 'admin_menu', array( 'P2Options', 'init' ) );
 
-class P2_Options {
+class P2Options {
 
 	function init() {
 		global $plugin_page;
 
-		add_theme_page( __( 'Theme Options', 'p2' ), __( 'Theme Options', 'p2' ), 'edit_theme_options', 'p2-options-page', array( 'P2_Options', 'page' ) );
+		add_theme_page( __( 'Theme Options', 'p2' ), __( 'Theme Options', 'p2' ), 'edit_theme_options', 'p2-options-page', array( 'P2Options', 'page' ) );
 
 		if ( 'p2-options-page' == $plugin_page ) {
 			wp_enqueue_script( 'farbtastic' );
@@ -18,6 +18,7 @@ class P2_Options {
 	}
 
 	function page() {
+
 		register_setting( 'p2ops', 'prologue_show_titles' );
 		register_setting( 'p2ops', 'p2_allow_users_publish' );
 		register_setting( 'p2ops', 'p2_prompt_text' );
@@ -29,13 +30,12 @@ class P2_Options {
 		$prologue_show_titles_val    = get_option( 'prologue_show_titles' );
 		$p2_allow_users_publish_val  = get_option( 'p2_allow_users_publish' );
 		$p2_prompt_text_val          = get_option( 'p2_prompt_text' );
-		$p2_hide_sidebar             = get_option( 'p2_hide_sidebar' );
-		$p2_background_color         = get_option( 'p2_background_color' );
-		$p2_background_image         = get_option( 'p2_background_image' );
-		$p2_hide_threads             = get_option( 'p2_hide_threads' );
+		$p2_hide_sidebar           	 = get_option( 'p2_hide_sidebar' );
+		$p2_background_color      	 = get_option( 'p2_background_color' );
+		$p2_background_image      	 = get_option( 'p2_background_image' );
+		$p2_hide_threads    	  	 = get_option( 'p2_hide_threads' );
 
 		if ( isset( $_POST[ 'action' ] ) && esc_attr( $_POST[ 'action' ] ) == 'update' ) {
-			check_admin_referer( 'p2ops-options' );
 
 			if ( isset( $_POST[ 'prologue_show_titles' ] ) )
 				$prologue_show_titles_val = intval( $_POST[ 'prologue_show_titles' ] );
@@ -47,17 +47,8 @@ class P2_Options {
 			else
 				$p2_allow_users_publish_val = 0;
 
-			if ( isset( $_POST[ 'p2_background_color_hex' ] ) ) {
-				// color value must be 3 or 6 hexadecimal characters
-				if ( preg_match( '/^#?([a-f0-9]{3}){1,2}$/i', $_POST['p2_background_color_hex'] ) ) {
-					$p2_background_color = $_POST['p2_background_color_hex'];
-					// if color value doesn't have a preceding hash, add it
-					if ( false === strpos( $p2_background_color, '#' ) )
-						$p2_background_color = '#' . $p2_background_color;
-				} else {
-					$p2_background_color = '';
-				}
-			}
+			if ( isset( $_POST[ 'p2_background_color_hex' ] ) )
+				$p2_background_color = $_POST[ 'p2_background_color_hex' ];
 
 			if ( esc_attr( $_POST[ 'p2_prompt_text' ] ) != __( "Whatcha' up to?" ) )
 				$p2_prompt_text_val = esc_attr( $_POST[ 'p2_prompt_text' ] );
@@ -143,7 +134,7 @@ class P2_Options {
 					<tr valign="top">
 						<th scope="row"><?php _e( 'Custom Background Color:', 'p2' ); ?></th>
 						<td>
-							<input id="pickcolor" type="button" class="button" name="pickcolor" value="<?php esc_attr_e( 'Pick a Color', 'p2' ); ?> "/>
+							<input id="pickcolor" type="button" class="button" name="pickcolor" value="<?php _e( 'Pick a Color', 'p2' ); ?> "/>
 							<input name="p2_background_color_hex" id="p2_background_color_hex" type="text" value="<?php esc_attr_e( $p2_background_color ); ?>" />
 							<div id="colorPickerDiv" style="z-index: 100;background:#eee;border:1px solid #ccc;position:absolute;display:none;"> </div>
 						</td>
@@ -156,8 +147,7 @@ class P2_Options {
 							<input type="radio" id="bi_polka" name="p2_background_image" value="dots"<?php if ( 'dots' == $p2_background_image ) : ?> checked="checked" <?php endif; ?>/> <label for="bi_polka"><?php _e( 'Polka Dots', 'p2' ); ?></label><br />
 							<input type="radio" id="bi_squares" name="p2_background_image" value="squares"<?php if ( 'squares' == $p2_background_image ) : ?> checked="checked" <?php endif; ?>/> <label for="bi_squares"><?php _e( 'Squares', 'p2' ); ?></label><br />
 							<input type="radio" id="bi_plaid" name="p2_background_image" value="plaid"<?php if ( 'plaid' == $p2_background_image ) : ?> checked="checked" <?php endif; ?>/> <label for="bi_plaid"><?php _e( 'Plaid', 'p2' ); ?></label><br />
-							<input type="radio" id="bi_stripes" name="p2_background_image" value="stripes"<?php if ( 'stripes' == $p2_background_image ) : ?> checked="checked" <?php endif; ?>/> <label for="bi_stripes"><?php _e( 'Stripes', 'p2' ); ?></label><br />
-							<input type="radio" id="bi_santa" name="p2_background_image" value="santa"<?php if ( 'santa' == $p2_background_image ) : ?> checked="checked" <?php endif; ?>/> <label for="bi_stripes"><?php _e( 'Santa', 'p2' ); ?></label>
+							<input type="radio" id="bi_stripes" name="p2_background_image" value="stripes"<?php if ( 'stripes' == $p2_background_image ) : ?> checked="checked" <?php endif; ?>/> <label for="bi_stripes"><?php _e( 'Stripes', 'p2' ); ?></label>
 						</td>
 					</tr>
 					<tr valign="top">

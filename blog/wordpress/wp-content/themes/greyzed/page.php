@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Greyzed
+ * @package WordPress
+ * @subpackage Greyzed
  */
 get_header(); ?>
 	<div id="container">
@@ -11,6 +12,7 @@ get_header(); ?>
 		<div class="post" id="post-<?php the_ID(); ?>">
 			<div class="posttitle">
 				<h2 class="pagetitle"><?php the_title(); ?></h2>
+				<small><?php echo sprintf( __( 'By %s' ), '<strong>' . get_the_author() . '</strong>' ) ; ?></small>
 			</div>
 			<?php if ( ( comments_open() ) && ( ! post_password_required() ) ) : ?>
 			<div class="postcomments"><?php comments_popup_link( '0', '1', '%' ); ?></div>
@@ -22,7 +24,7 @@ get_header(); ?>
 			</div>
 	<?php if ( comments_open() ) { comments_template(); } ?>
 		</div>
-		<?php endwhile; endif; ?>
+		<?php endwhile; endif; ?>	
 	</div>
 	</div>
 <?php get_footer(); ?>

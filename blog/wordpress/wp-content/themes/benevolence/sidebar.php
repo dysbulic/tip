@@ -15,7 +15,7 @@
 
 <li>
 	<h2><?php _e('Categories', 'benevolence'); ?></h2>
-<?php wp_list_categories( 'title_li=' ); ?>
+<?php wp_list_cats('list=0'); ?>
 </li>
 
 <li>
@@ -25,8 +25,7 @@
 
 <li>
 	<h2 class="title"><?php _e('Links', 'benevolence'); ?></h2>
-<?php wp_list_bookmarks( 'title_li=&categorize=0' ); ?>
-
+<?php get_links('-1', '', '<br />', '<br />', 0, 'name', 0, 0, -1, 0); ?> 
 </li>
 </ul>
 </div>

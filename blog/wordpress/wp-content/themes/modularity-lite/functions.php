@@ -4,38 +4,22 @@
  * @subpackage Modularity
  */
 
-
-// WP.com: Check the current color scheme and set the correct themecolors array
-if ( ! isset( $themecolors ) ) {
-	$options = get_option( 'modularity_theme_options' );
-	$color_scheme = $options['color_scheme'];
-	switch ( $color_scheme ) {
-		case 'light':
-			$themecolors = array(
-				'bg' => 'ffffff',
-				'border' => 'e6e6e6',
-				'text' => '333333',
-				'link' => '428ce7',
-				'url' => '428ce7',
-			);
-			break;
-		default:
-			$themecolors = array(
-				'bg' => '111111',
-				'border' => '515151',
-				'text' => 'eeeeee',
-				'link' => '428ce7',
-				'url' => '428ce7',
-			);
-			break;
-	}
-}
+$themecolors = array(
+	'bg' => '111111',
+	'border' => '111111',
+	'text' => 'eeeeee',
+	'link' => '428CE7',
+	'url' => '428CE7'
+);
 
 // A variable content width determined by the theme options
 $content_width = 950; // 950px width if we're not using a sidebar
 $options = get_option( 'modularity_theme_options' );
 if ( 1 == $options['sidebar'] )
 	$content_width = 590; // 590px width if we're using a sidebar
+
+// Grab the theme options page
+require_once ( get_template_directory() . '/theme-options.php' );
 
 // Add default posts and comments RSS feed links to head
 add_theme_support( 'automatic-feed-links' );
@@ -70,34 +54,10 @@ function modularity_custom_background_color() {
 		body {
 			background-image: none;
 		}
-		</style>
+		</style>			
 	<?php }
 }
 add_action( 'wp_head', 'modularity_custom_background_color' );
-
-// Load up the theme options
-require( dirname( __FILE__ ) . '/theme-options.php' );
-
-// Get Modularity-Lite Options
-function modularity_get_options() {
-	$defaults = array(
-		'color_scheme' => 'dark',
-	);
-	$options = get_option( 'modularity_theme_options', $defaults );
-	return $options;
-}
-
-// Register our color schemes and add them to the style queue
-function modularity_color_registrar() {
-	$options = modularity_get_options();
-	$color_scheme = $options['color_scheme'];
-
-	if ( ! empty( $color_scheme ) && $color_scheme != 'dark' ) {
-		wp_register_style( $color_scheme, get_template_directory_uri() . '/' . $color_scheme . '.css', null, null );
-		wp_enqueue_style( $color_scheme );
-	}
-}
-add_action( 'wp_enqueue_scripts', 'modularity_color_registrar' );
 
 // To use a sidebar, or not to use a sidebar, that is the question. This generates the appropriate class.
 function modularity_sidebar_class() {
@@ -110,7 +70,7 @@ function modularity_sidebar_class() {
 	// If we're not using a sidebar ...
 	else {
 		echo "24 last";
-	}
+	}	
 }
 
 // The header business begins here:
@@ -170,7 +130,7 @@ function modularity_comment( $comment, $args, $depth ) {
 				</p>
 				<div class="reply">
 					<?php comment_reply_link( array_merge( $args, array( 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
-				</div><!-- .reply -->
+				</div><!-- .reply -->				
 			</div>
 	</div><!-- #comment-##  -->
 
@@ -189,9 +149,9 @@ function modularity_comment( $comment, $args, $depth ) {
 // The Sidebar business
 $options = get_option( 'modularity_theme_options' );
 if ( $options['sidebar'] == 0 ) {
-	$optional_description = __( 'The optional Modularity Lite sidebar is currently deactivated but can be activated from Appearance > Theme Options', 'modularity' );
+	$optional_description = __( 'The optional Modularity Lite sidebar is currently deactivated but can be activated from Appearance > Theme Options', 'modularity' );	
 } else {
-	$optional_description = '';
+	$optional_description = '';	
 }
 
 if ( function_exists('register_sidebar') ) {
@@ -213,7 +173,7 @@ if ( function_exists('register_sidebar') ) {
 		'before_title' => '<h3 class="sub">',
 		'after_title' => '</h3>',
 	));
-
+	
 	register_sidebar(array(
 		'name' => 'Footer 2',
 		'id' => 'footer-2',
@@ -222,7 +182,7 @@ if ( function_exists('register_sidebar') ) {
 		'before_title' => '<h3 class="sub">',
 		'after_title' => '</h3>',
 	));
-
+	
 	register_sidebar(array(
 		'name' => 'Footer 3',
 		'id' => 'footer-3',
@@ -239,14 +199,18 @@ if ( function_exists('register_sidebar') ) {
 		'after_widget' => '</div>',
 		'before_title' => '<h3 class="sub">',
 		'after_title' => '</h3>'
-	));
+	));	
 }
 
 // Load Base Javascripts
 if (!is_admin()) add_action( 'init', 'load_base_js' );
 function load_base_js( ) {
+
 	wp_enqueue_script('jquery');
+	//wp_enqueue_script('jquerynav', get_bloginfo('template_directory').'/js/nav.js', array('jquery'));
 	wp_enqueue_script('cycle', get_bloginfo('template_directory').'/js/jquery.cycle.js', array('jquery'));
+	//wp_enqueue_script('search', get_bloginfo('template_directory').'/js/search.js', array( 'jquery' ) );
+
 }
 
 // Load Dom Ready Javascripts

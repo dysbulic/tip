@@ -8,7 +8,7 @@
 
 	<?php if (!function_exists('dynamic_sidebar') || !dynamic_sidebar('footer-widgets')) :  // Footer widgets ?>
 
-		<?php if (!is_search()) { get_search_form(); } ?>
+		<?php if (!is_search()) { include ( get_template_directory() . "/searchform.php"); } ?>
 
 	<?php endif; // end widgets if ?>
 	

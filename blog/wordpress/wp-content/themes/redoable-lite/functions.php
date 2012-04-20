@@ -1,9 +1,4 @@
 <?php 
-/**
- * @package WordPress
- * @subpackage Redoable Lite
- */
-
 /* Current version of Redoable */
 $current = '1.2';
 
@@ -86,10 +81,9 @@ add_custom_image_header('redo_header_style', 'redo_admin_header_style');
 
 $themecolors = array(
 	'bg' => '333333',
-	'border' => '444444',
+	'border' => '111111',
 	'text' => 'eeeeee',
-	'link' => 'cccccc',
-	'url' => 'ee0000',
+	'link' => 'cccccc'
 );
 $content_width = 655; // pixels
 
@@ -265,83 +259,4 @@ if(function_exists('register_sidebars')) {
 	register_sidebars(1, array('before_widget' => '<div id="%1$s" class="module %2$s">','after_widget' => '</div>'));
 }
 
-// this ends the admin page
-
-function redoable_lite_comment($comment, $args, $depth) {
-	$GLOBALS['comment'] = $comment;
-	global $comment_count;
-	$comment_count++;
-	extract($args, EXTR_SKIP);
-?>
-<li id="comment-<?php comment_ID(); ?>" <?php comment_class(redo_comment_class($comment_count, false)); ?>>
-	<div id="div-comment-<?php comment_ID() ?>">
-	<div class="vcard">
-	<?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?>
-	<a href="#comment-<?php comment_ID(); ?>" class="counter" title="<?php esc_attr_e( 'Permanent Link to this Comment', 'redo_domain' ); ?>"><?php echo $comment_count; ?></a>
-	<span class="commentauthor fn"><?php comment_author_link(); ?></span>
-	</div>
-
-	<small class="comment-meta">
-	<?php
-		printf('<a href="#comment-%1$s" title="%2$s">%3$s</a>', 
-			get_comment_ID(),
-			(function_exists('time_since')?
-				sprintf(__('%s ago.','redo_domain'),
-					time_since(abs(strtotime($comment->comment_date_gmt . " GMT")), time())
-				):
-				__('Permanent Link to this Comment','redo_domain')
-			),
-			sprintf(__('%1$s at %2$s','redo_domain'),
-				get_comment_date(get_option('date_format')),
-				get_comment_time()
-			)
-		);
-	?>
-	</small>
-
-	<div class="comment-content">
-		<?php comment_text(); ?> 
-	</div>
-	<div class="reply">
-		<?php comment_reply_link(array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
-	</div>
-
-	<?php if ('0' == $comment->comment_approved) { ?><p class="alert"><strong><?php _e('Your comment is awaiting moderation.','redo_domain'); ?></strong></p><?php } ?>
-	</div>
-<?php 
-}
-
-function redoable_lite_ping($comment, $args, $depth) {
-	$GLOBALS['comment'] = $comment;
-	global $ping_count;
-	$ping_count++;
-	extract($args, EXTR_SKIP);
-?>
-<li id="comment-<?php comment_ID(); ?>" <?php comment_class(redo_comment_class($ping_count, false)); ?>>
-	<div id="div-comment-<?php comment_ID() ?>">
-	<a href="#comment-<?php comment_ID() ?>" title="<?php esc_attr_e( 'Permanent Link to this Comment', 'redo_domain' ); ?>" class="counter"><?php echo $ping_index; ?></a>
-	<span class="commentauthor"><?php comment_author_link(); ?></span>
-	<small class="comment-meta">				
-	<?php
-		printf(__('%1$s on %2$s','redo_domain'), 
-			'<span class="pingtype">' . get_redo_ping_type(__('Trackback','redo_domain'), __('Pingback','redo_domain')) . '</span>',
-			sprintf('<a href="#comment-%1$s" title="%2$s">%3$s</a>',
-				get_comment_ID(),	
-				(function_exists('time_since')?
-					sprintf(__('%s ago.','redo_domain'),
-						time_since(abs(strtotime($comment->comment_date_gmt . " GMT")), time())
-					):
-					__('Permanent Link to this Comment','redo_domain')
-				),
-				sprintf(__('%1$s at %2$s','redo_domain'),
-					get_comment_date(__('M jS, Y','redo_domain')),
-					get_comment_time()
-				)			
-			)
-		);
-	?>				
-	<?php if ($user_ID) { edit_comment_link(__('Edit','redo_domain'),'<span class="comment-edit">','</span>'); } ?>
-	</small>
-	</div>
-<?php 
-}
+// this ends the admin page ?>

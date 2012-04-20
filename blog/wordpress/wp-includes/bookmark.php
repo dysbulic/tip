@@ -213,35 +213,22 @@ function get_bookmarks($args = '') {
 
 	$orderby = strtolower($orderby);
 	$length = '';
-	switch ( $orderby ) {
+	switch ($orderby) {
 		case 'length':
 			$length = ", CHAR_LENGTH(link_name) AS length";
 			break;
 		case 'rand':
 			$orderby = 'rand()';
 			break;
-		case 'link_id':
-			$orderby = "$wpdb->links.link_id";
-			break;
 		default:
 			$orderparams = array();
-			foreach ( explode(',', $orderby) as $ordparam ) {
-				$ordparam = trim($ordparam);
-				$keys = array( 'link_id', 'link_name', 'link_url', 'link_visible', 'link_rating', 'link_owner', 'link_updated', 'link_notes' );
-				if ( in_array( 'link_' . $ordparam, $keys ) )
-					$orderparams[] = 'link_' . $ordparam;
-				elseif ( in_array( $ordparam, $keys ) )
-					$orderparams[] = $ordparam;
-			}
+			foreach ( explode(',', $orderby) as $ordparam )
+				$orderparams[] = 'link_' . trim($ordparam);
 			$orderby = implode(',', $orderparams);
 	}
 
-	if ( empty( $orderby ) )
-		$orderby = 'link_name';
-
-	$order = strtoupper( $order );
-	if ( '' !== $order && !in_array( $order, array( 'ASC', 'DESC' ) ) )
-		$order = 'ASC';
+	if ( 'link_id' == $orderby )
+		$orderby = "$wpdb->links.link_id";
 
 	$visible = '';
 	if ( $hide_invisible )

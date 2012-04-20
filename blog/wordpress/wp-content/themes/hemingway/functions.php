@@ -1,23 +1,16 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Hemingway
- */
 
 load_theme_textdomain( 'hemingway' );
 
 $themecolors = array(
 	'bg' => '000000',
-	'text' => '808080',
+	'text' => 'bfbfbf',
 	'link' => 'ffffff',
-	'border' => '272727',
-	'url' => 'bfbfbf',
-);
+	'border' => '000000'
+	);
 
 // this varies but the single page content width seems to be 607px max
 $content_width = 600;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 // Sidebars
 register_sidebar( array(
@@ -84,28 +77,3 @@ function hem_custom_background() {
 	<?php }
 }
 add_action( 'wp_head', 'hem_custom_background' );
-
-function hemingway_comment($comment, $args, $depth) {
-	$GLOBALS['comment'] = $comment;
-	extract($args, EXTR_SKIP);
-?>
-<li <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="comment-<?php comment_ID() ?>">
-	<div id="div-comment-<?php comment_ID() ?>">
-		<cite class="comment-author vcard comment-meta commentmetadata">
-              		<span class="avatarspan"><?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?></span>
-			<span class="author fn"><?php comment_author_link() ?></span>
-			<span class="date"><?php comment_date('n.j.y') ?> / <?php comment_date('ga') ?></span>
-		</cite>
-		<div class="content">
-			<?php if ($comment->comment_approved == '0') : ?>
-			<em><?php _e('Your comment is awaiting moderation.', 'hemingway'); ?></em>
-			<?php endif; ?>
-			<?php comment_text() ?>
-		</div>
-		<div class="reply">
-			<?php comment_reply_link(array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
-		</div>
-		<div class="clear"></div>
-	</div>
-<?php
-}

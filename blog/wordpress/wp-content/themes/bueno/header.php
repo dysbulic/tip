@@ -45,8 +45,7 @@
         </div><!-- /.col-full -->
         
 	</div><!-- /#navigation -->
-
-	<?php do_action( 'before' ); ?>
+        
 	<div id="header" class="col-full">
    
 		<div id="logo" class="fl">
@@ -65,13 +64,9 @@
 	    	
 	    </div><!-- /#pagenav -->	
 
-		<?php
-			// Check for a header image
-			$header_image = get_header_image();
-			if ( ! empty( $header_image ) ) :
-		?>
+    	<?php if ( get_theme_mod( 'header_image' ) ) : ?>	    
 	    <div id="header-image">
-		    <img src="<?php echo $header_image; ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" />	    
+		    <img src="<?php header_image(); ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" />	    
 	    </div>
    	    <?php endif; ?>
        

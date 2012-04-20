@@ -1,19 +1,4 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Rounded
- */
-
-$themecolors = array(
-	'bg' => 'ffffff',
-	'text' => '4f402a',
-	'link' => '97c000',
-	'border' => '503f2b',
-	'url' => '346ba4',
-);
-
-add_filter( 'body_class', '__return_empty_array', 1 );
-
 if ( function_exists('register_sidebar') ) {
 	$a = get_bloginfo('template_directory');
 
@@ -81,7 +66,7 @@ function rounded_comment($comment, $args, $depth) {
 	<em><?php _e( 'Your comment is awaiting moderation.' ); ?></em>
 	<?php endif; ?>
 
-	<span class="comment-meta commentmetadata"><a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>" title=""><?php comment_date() ?> at <?php comment_time() ?></a> <?php edit_comment_link('e','',''); ?></span>
+	<span class="comment-meta commentmetadata"><a href="<?php echo htmlspecialchars( get_comment_link( $comment->comment_ID ) ) ?>" title=""><?php comment_date() ?> at <?php comment_time() ?></a> <?php edit_comment_link('e','',''); ?></span>
 
 	<?php comment_text() ?>
 

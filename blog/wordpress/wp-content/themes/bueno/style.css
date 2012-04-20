@@ -4,7 +4,7 @@ Version: 1.1-wpcom
 Description: A stylish and fun theme with a custom header, custom background, and multiple alternate color schemes. Supports featured images for index and archive pages and in the Bueno featured posts widget.
 Author: WooThemes
 Author URI: http://www.woothemes.com
-Tags: blue, brown, green, silver, purple, red, pink, two-columns, fixed-width, custom-header, custom-background, theme-options, sticky-post, rtl-language-support, translation-ready, custom-menu, full-width-template, featured-images, art, blog, craft, fashion, lifestream, wedding, artistic, colorful, glamorous, playful, textured
+Tags: blue, brown, green, silver, purple, red, pink, two-columns, fixed-width, custom-header, custom-background, theme-options, sticky-post, rtl-language-support, translation-ready, custom-menu, full-width-template, featured-images, art, blog, craft, fashion, lifestream, wedding, artistic, colorful, girly, glamorous, playful, textured
 
 Copyright: (c) 2009 WooThemes.
 	License: GNU/GPL Version 2 or later. http://www.gnu.org/licenses/gpl.html
@@ -172,17 +172,13 @@ img#wpstats { position: absolute; bottom: 15px; left: -9999px; }
 #breadcrumb  { font-size: 14px; font-weight: normal; padding: 0; }
 .archive_header .catrss a  { font-size: 14px; text-decoration: none; line-height: 28px; }
 
-.post,
-div.page { position: relative; margin: 0 0 60px 0; padding: 50px 55px; background-color: #fff; border: 5px solid #efefef; }
+.post  { position: relative; margin: 0 0 60px 0; padding: 50px 55px; background-color: #fff; border: 5px solid #efefef; }
 
-.post .title,
-.page .title { width:100%; position:relative; margin: 0 0 30px 0; padding: 0 0 25px 0; color: #000; border-bottom: 1px solid #e7e7e7; font-size: 32px; }
-.post .title a:link, .post .title a:visited,
-.page .title a:link, .page .title a:visited { color: #000; }
-.post .title a:hover,
-.page .title a:hover { text-decoration: none; }
+.post .title  { width:100%; position:relative; margin: 0 0 30px 0; padding: 0 0 25px 0; color: #000; border-bottom: 1px solid #e7e7e7; font-size: 32px; }
+.post .title a:link, .post .title a:visited  { color: #000; }
+.post .title a:hover  { text-decoration: none; }
 
-.post .date  { position: absolute; top: 30px; left: -40px; width: 71px; height: 60px; padding: 10px 0 0 0; text-align: center; color: #fff; text-decoration: none; }
+.post .date  { position: absolute; top: 30px; left: -40px; width: 71px; height: 60px; padding: 10px 0 0 0; text-align: center; color: #fff; }
 .home .sticky .date { display: none; }
 
 .post .date .day  { display: block; font-size: 36px; line-height: 32px; }
@@ -191,16 +187,8 @@ div.page { position: relative; margin: 0 0 60px 0; padding: 50px 55px; backgroun
 .post-meta  { margin: 30px 0 0 0; font-size: 11px; color: #9F9F9F; border-top: 1px solid #c4c4c4; border-bottom: 1px solid #c4c4c4; }
 
 .post-meta li  { float: left; width: 154px; padding: 10px 0 7px 10px; }
-.post-meta .single-author-meta li { width: 239px; }
-.post-meta li + li {
-	border-left: 1px solid #e7e7e7;
-}
-.post-meta li.categories {
-	border-right: 1px solid #e7e7e7;
-}
-.post-meta .single-author-meta li.categories { border-right: none; }
+.post-meta li.categories  { border-left: 1px solid #e7e7e7; border-right: 1px solid #e7e7e7; }
 .attachment .post-meta li.author  { border-left: 1px solid #e7e7e7; border-right: 1px solid #e7e7e7; }
-.attachment .single-author-image-meta li.comments { border-right: 1px solid #e7e7e7; }
 .attachment .post-meta li.parent  { border-right: 1px solid #e7e7e7; }
 .post-meta li span  { display: block; }
 .post-meta li .head  { font-size: 10px; text-transform: uppercase; font-weight: bold; font-family: Helvetica, Arial, sans-serif; color: #000; }
@@ -232,81 +220,16 @@ blockquote  { padding: 10px 30px; color: #666; font-style: italic; font-size: 16
 .entry table th, .entry table td { padding: 10px; text-align: left; }
 .entry table th { color:#000; font-family:Helvetica,Arial,sans-serif; font-size:10px; font-weight:bold;	text-transform:uppercase; }
 
-/* =Aside
------------------------------------------------ */
-
-.format-aside {
-	padding-bottom: 20px;
-	padding-top: 50px;
-}
-.format-aside .title {
-	display: none;
-}
-.format-aside .date {
-	background-image: none !important;
-	color: #444;
-	height: auto;
-	left: 55px;
-	padding-top: 0;
-	top: 20px;
-	width: auto;
-}
-.format-aside .date:hover {
-	text-decoration: underline;
-}
-.format-aside .date .day,
-.format-aside .date .month {
-	font-size: 13px;
-	display: inline;
-}
-.format-aside .date .month {
-	font-size: 11px;
-}
-.format-aside .entry {
-	font-size: 13px;
-}
-.format-aside .post-meta {
-	display: none;
-	margin-top: 10px;
-}
-.single .format-aside .post-meta {
-	display: block;
-}
-
-
 /* 3.2 Images */
 img.wp-smiley  { padding: 0 !important; border: none !important; margin: 0 !important; }
 
-.entry img, .wp-caption {
-	margin-bottom: 15px;
-	max-width: 100%;
-	height: auto;
-}
-.fullwidth .entry img, .fullwidth .wp-caption {
-	max-width: 100%;
-}
-.entry img.size-full,
-.entry img.size-large {
-	width: auto; /* Prevent stretching of full-size and large-size images with height and width attributes in IE8 */
-}
+.entry img, .wp-caption { margin-bottom: 15px; max-width:490px; height: auto; }
+.fullwidth .entry img, .fullwidth .wp-caption { max-width:100%;}
 
+.entry .alignleft  { float: left; margin: 10px 15px 10px 0; }
+.entry .alignright  { float: right; margin: 10px 0 10px 15px; }
+.entry .aligncenter  { display: block; text-align: center; margin: 10px auto; }
 
-.entry .alignleft,
-.widget .alignleft { 
-	float: left; 
-	margin: 10px 15px 10px 0; 
-}
-.entry .alignright,
-.widget .alignright { 
-	float: right; 
-	margin: 10px 0 10px 15px; 
-}
-.entry .aligncenter,
-.widget .aligncenter { 
-	display: block; 
-	text-align: center; 
-	margin: 10px auto; 
-}
 .entry .wp-caption { padding: 1px; text-align:center; background:#F8F8F4; border: solid 1px #e6e6e6; }
 .entry .wp-caption img{ margin:0; padding:4px 0; background:none; border:0; }
 .entry .wp-caption-text { margin:0; padding:0; font-size:11px; text-align:center; }

@@ -1,20 +1,14 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Albeo
- */
- 
+
 $content_width = 480;
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'text' => '666666',
-	'link' => '4779AC',
-	'border' => 'F8F8F2',
+	'text' => '8E8778',
+	'link' => 'BBD1D8',
+	'border' => 'ffffff',
 	'url' => 'BBD1D8'
 );
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 add_theme_support( 'automatic-feed-links' );
 
@@ -129,37 +123,6 @@ function albeo_page_menu() { // fallback for primary navigation ?>
 	$pages = str_replace( '</a>','</span></a>', $pages );
 	echo $pages; ?>
 </ul>
-	<?php unset( $pages );
-}
+	<?php unset( $pages ); ?>
 
-function albeo_comment_start( $comment, $args, $depth ) {
-	$GLOBALS['comment'] = $comment;
-	extract( $args, EXTR_SKIP );
-	?>
-
-	<div <?php comment_class( 'com-entry' ); ?> id="comment-<?php comment_ID(); ?>">
-	<div class="com-entry-bot">
-		<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/com-top.png" width="100%" height="10" />
-		<div class="com-con">
-			<p class="commentmetadata">
-				<?php if ( $args['avatar_size'] != 0 ) echo '<span class="avatar">'.get_avatar( $comment, $args['avatar_size'] ).'</span>'; ?>
-				<span class="com-name"><?php if ( 0 == $comment->comment_parent || !get_option( 'thread_comments' ) ) { global $commentNumber; $commentNumber++; echo $commentNumber; ?> | <?php } comment_author_link(); ?></span><br />
-				<span class="com-date"><a href="#comment-<?php comment_ID() ?>"><?php comment_date() ?> <?php _e( 'at', 'albeo' ); ?> <?php comment_time() ?></a>  <?php edit_comment_link( __( 'edit', 'albeo' ), '|&nbsp;', '' ); ?></span>
-			</p>
-	
-			<?php if ( $comment->comment_approved == '0' ) : ?>
-				<p><em><?php _e( 'Your comment is awaiting moderation.', 'albeo' ); ?></em></p>
-			<?php endif; ?>									
-			<?php comment_text(); ?>
-			<div class="reply" id="comment-reply-<?php comment_ID(); ?>">
-			<?php comment_reply_link( array_merge( $args, array( 'add_below' => 'comment-reply', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
-			</div>
-<?php }
-
-function albeo_comment_end() { ?>
-		</div>
-		<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/com-bot.png" width="100%" height="10" />
-	</div>
-	</div>
-<?php 
-}
+<?php } ?>

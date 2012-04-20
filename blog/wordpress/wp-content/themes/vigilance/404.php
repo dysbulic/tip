@@ -1,8 +1,3 @@
-<?php
-/**
- * @package Vigilance
- */
-?>
 <?php get_header(); ?>
 	<h1 class="pagetitle"><?php _e('404: Page Not Found', 'vigilance'); ?></h1>
 	<div class="entry page">

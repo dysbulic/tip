@@ -42,7 +42,7 @@
 			</li>
 			
 			<li>
-				<?php get_search_form(); ?>
+				<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 			</li>
 
 				<?php wp_list_bookmarks(); ?>
@@ -51,7 +51,7 @@
 				<ul>
 					<?php wp_register(); ?>
 					<li><?php wp_loginout(); ?></li>
-					<li><a href="http://wordpress.com/" title="<?php esc_attr_e( 'Powered by WordPress, state-of-the-art semantic personal publishing platform.' ); ?>">WordPress.com</a></li>
+					<li><a href="http://wordpress.com/" title="<?php _e('Powered by WordPress, state-of-the-art semantic personal publishing platform.'); ?>">WordPress.com</a></li>
 					<?php wp_meta(); ?>
 				</ul>
 				</li>

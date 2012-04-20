@@ -1,9 +1,9 @@
 <?php get_header(); ?>
 
 	<div id="content" class="widecolumn">
-
-	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-
+				
+  <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+	
 		<div <?php post_class(); ?> id="post-<?php the_ID(); ?>">
 			<h2><a href="<?php echo get_permalink($post->post_parent); ?>" rev="attachment"><?php echo get_the_title($post->post_parent); ?></a> &raquo; <?php the_title(); ?></h2>
 			<div class="entrytext">
@@ -15,46 +15,43 @@
 					<div class="alignleft"><?php previous_image_link() ?></div>
 					<div class="alignright"><?php next_image_link() ?></div>
 				</div>
-
+	
 				<p class="postmetadata alt">
 					<small>
-						<?php
-							printf( __( 'You can follow any responses to this entry through the %1$s feed.', 'sunburn' ),
-								'<a href=""' . get_post_comments_feed_link( 'RSS' ) . '">RSS</a>'
-							);
-						?>
+						You can follow any responses to this entry through the <?php post_comments_feed_link( 'RSS' ); ?> feed. 
+						
 						<?php if (('open' == $post-> comment_status) && ('open' == $post->ping_status)) {
 							// Both Comments and Pings are open ?>
-							<?php printf( __( 'You can <a href="#respond">leave a response</a>, or <a href="%s" rel="trackback">trackback</a> from your own site.', 'sunburn' ), trackback_url( false ) ); ?>
-
+							You can <a href="#respond">leave a response</a>, or <a href="<?php trackback_url(true); ?>" rel="trackback">trackback</a> from your own site.
+						
 						<?php } elseif (!('open' == $post-> comment_status) && ('open' == $post->ping_status)) {
 							// Only Pings are Open ?>
-							<?php printf( __( 'Responses are currently closed, but you can <a href="%s" rel="trackback">trackback</a> from your own site.', 'sunburn' ), trackback_url( false ) ); ?>
-
+							Responses are currently closed, but you can <a href="<?php trackback_url(true); ?> " rel="trackback">trackback</a> from your own site.
+						
 						<?php } elseif (('open' == $post-> comment_status) && !('open' == $post->ping_status)) {
 							// Comments are open, Pings are not ?>
-							<?php _e('You can skip to the end and leave a response. Pinging is currently not allowed.', 'sunburn'); ?>
-
+							You can skip to the end and leave a response. Pinging is currently not allowed.
+			
 						<?php } elseif (!('open' == $post-> comment_status) && !('open' == $post->ping_status)) {
 							// Neither Comments, nor Pings are open ?>
-							<?php _e('Both comments and pings are currently closed.', 'sunburn'); ?>
-
-							<?php } edit_post_link( __( 'Edit this entry.', 'sunburn' ), '', '' ); ?>
-
+							Both comments and pings are currently closed.			
+						
+						<?php } edit_post_link('Edit this entry.','',''); ?>
+						
 					</small>
 				</p>
-
+	
 			</div>
 		</div>
-
+		
 	<?php comments_template(); ?>
-
+	
 	<?php endwhile; else: ?>
-
-		<p><?php _e( 'Sorry, no attachments matched your criteria.', 'sunburn' ); ?></p>
-
+	
+		<p>Sorry, no attachments matched your criteria.</p>
+	
 <?php endif; ?>
-
+	
 	</div>
 
 <?php get_footer(); ?>

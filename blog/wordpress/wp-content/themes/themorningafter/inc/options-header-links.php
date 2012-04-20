@@ -29,7 +29,7 @@ add_action( 'admin_init', 'morningafter_theme_form_setting_init' );
 function morningafter_settings_header_links_section_text() { ?>
 	<p><?php _e( 'Manage Header Links options for the Morning After Theme.', 'woothemes' ); ?></p>
 	<div class="example" style="width: 420px">
-		<img src="<?php echo get_template_directory_uri() . '/inc/images/header_links.jpg'; ?>" alt="<?php esc_attr_e( 'Header Links Example.', 'woothemes' ); ?>" />
+		<img src="<?php echo get_template_directory_uri() . '/inc/images/header_links.jpg'; ?>" alt="<?php _e( 'Header Links Example.', 'woothemes' ); ?>" />
 		<p class="example-text"><?php _e( 'Header Links Example.', 'woothemes' ); ?></p>
 	</div>
 <?php }
@@ -38,7 +38,7 @@ function morningafter_settings_header_links_section_text() { ?>
 // Display Home Link Setting
 function morningafter_setting_home_link() {
 	$morningafter_options = morningafter_get_theme_options(); ?>
-	<input name="theme_morningafter_options[home]" type="text" value="<?php echo esc_url( $morningafter_options['home'] ); ?>" size="30">
+	<input name="theme_morningafter_options[home]" type="text" value="<?php echo $morningafter_options['home']; ?>" size="30">
 	<span class="description"><?php _e( 'Leave empty to hide this link.', 'woothemes' ); ?></span>
 <?php }
 
@@ -46,7 +46,7 @@ function morningafter_setting_home_link() {
 // Display About Link Setting
 function morningafter_setting_about_link() {
 	$morningafter_options = morningafter_get_theme_options(); ?>
-	<input name="theme_morningafter_options[about]" type="text" value="<?php echo esc_url( $morningafter_options['about'] ); ?>" size="30">
+	<input name="theme_morningafter_options[about]" type="text" value="<?php echo $morningafter_options['about']; ?>" size="30">
 	<span class="description"><?php _e( 'Leave empty to hide this link.', 'woothemes' ); ?></span>
 <?php }
 
@@ -54,7 +54,7 @@ function morningafter_setting_about_link() {
 // Display Archives link Setting
 function morningafter_setting_archives_link() {
 	$morningafter_options = morningafter_get_theme_options(); ?>
-	<input name="theme_morningafter_options[archives]" type="text" value="<?php echo esc_url( $morningafter_options['archives'] ); ?>" size="30">
+	<input name="theme_morningafter_options[archives]" type="text" value="<?php echo $morningafter_options['archives']; ?>" size="30">
 	<span class="description"><?php _e( 'Leave empty to hide this link.', 'woothemes' ); ?></span>
 <?php }
 
@@ -62,7 +62,7 @@ function morningafter_setting_archives_link() {
 // Display Subscribe link Setting
 function morningafter_setting_subscribe_link() {
 	$morningafter_options = morningafter_get_theme_options(); ?>
-	<input name="theme_morningafter_options[subscribe]" type="text" value="<?php echo esc_url( $morningafter_options['subscribe'] ); ?>" size="30">
+	<input name="theme_morningafter_options[subscribe]" type="text" value="<?php echo $morningafter_options['subscribe']; ?>" size="30">
 	<span class="description"><?php _e( 'Leave empty to hide this link.', 'woothemes' ); ?></span>
 <?php }
 
@@ -70,6 +70,6 @@ function morningafter_setting_subscribe_link() {
 // Display Contact link Setting
 function morningafter_setting_contact_link() {
 	$morningafter_options = morningafter_get_theme_options(); ?>
-	<input name="theme_morningafter_options[contact]" type="text" value="<?php echo esc_url( $morningafter_options['contact'] ); ?>" size="30">
+	<input name="theme_morningafter_options[contact]" type="text" value="<?php echo $morningafter_options['contact']; ?>" size="30">
 	<span class="description"><?php _e( 'Leave empty to hide this link.', 'woothemes' ); ?></span>
 <?php }

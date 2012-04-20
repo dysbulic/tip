@@ -9,6 +9,7 @@ if ( 0 == get_option( 'id_revertMobile' ) && id_is_mobile() ) :
 else :
 	$bits = parse_url( WP_PLUGIN_URL );
 	$xd_base = $bits['path'];
+	id_auto_login();
 ?>
 	<div id='idc-container'></div>
 	<div id="idc-noscript">

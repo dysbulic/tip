@@ -7,13 +7,7 @@
 			<?php $postCount++; ?>
 	<div id="post-<?php the_ID(); ?>" <?php post_class( "entry entry-$postCount" ); ?>>
 		<div class="entrytitle">
-			<h2>
-				<?php if ( ! is_single() ) : ?>
-					<a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'jentri' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a>
-				<?php else : ?>
-					<?php the_title(); ?>
-				<?php endif; ?>
-			</h2>
+			<h2><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php echo esc_attr( sprintf( __( 'Permanent Link to %s' ), the_title_attribute( 'echo=0' ) ) ); ?>"><?php the_title(); ?></a></h2>
 			<?php if ( ! is_page() ) : ?>
 			<h3><?php the_time( get_option( 'date_format' ) ); ?></h3>
 			<?php endif; ?>

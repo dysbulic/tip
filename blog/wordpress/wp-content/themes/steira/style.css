@@ -2,7 +2,7 @@
 Theme Name: Steira
 Theme URI: http://wordpress.org/extend/themes/steira
 Description: A minimal theme full of character, bursting at the seams with detail and functionality
-Version: 1.1-wpcom
+Version: 1.0.1-wpcom
 Author: Made by Elephant and Automattic
 Author URI: http://www.madebyelephant.com/
 License: GNU General Public License
@@ -171,15 +171,14 @@ h2.page-title {
 
 h2.haslink,
 h2.post-title {
-	color: #333;
-	font-weight: bold;
-	padding: 10px 20px 10px 20px;
-	min-height: 37px;
+	padding: 0 0 1px 0;
+	min-height: 57px;
 }
 h2.haslink a,
 h2.post-title span.wrap {
 	color: #333;
 	font-weight: bold;
+	padding: 10px 20px;
 	display: block;
 }
 h2.haslink a span.new {
@@ -200,7 +199,6 @@ h2.haslink a:focus span.new,
 h2.haslink a:active span.new {
 	background-color: #c96;
 }
-h2.haslink span.posted,
 h2.haslink a span.posted,
 h2.post-title span.wrap span.posted {
 	font-weight: normal;
@@ -538,9 +536,9 @@ ul#navigation li.current-menu-item > a {
 	padding: 0 20px;
 }
 #content .contentblock legend {
-	color: #666;
-	font-family: "Arial Narrow","Helvetica Neue",sans-serif;
-	text-transform: uppercase;
+	color:#666;
+	font-family:"Arial Narrow","Helvetica Neue",sans-serif;
+	text-transform:uppercase;
 	font-size: 18px;
 	font-weight: bold;
 	padding: 0 20px 20px 20px;
@@ -555,14 +553,14 @@ ul#navigation li.current-menu-item > a {
 	margin: 0;
 }
 #content .contentblock input {
-	border: 1px solid #CCCCCC;
-	color: #999999;
-	font-family: "Arial Narrow","Helvetica Neue",sans-serif;
-	font-size: 18px;
-	line-height: 21px;
+	border:1px solid #CCCCCC;
+	color:#999999;
+	font-family:"Arial Narrow","Helvetica Neue",sans-serif;
+	font-size:18px;
+	line-height:21px;
 	margin: 0 20px 15px 20px;
-	padding: 5px 9px;
-	text-transform: uppercase;
+	padding:5px 9px;
+	text-transform:uppercase;
 }
 #content .contentblock input[type="submit"] {
 	background-color: #eee;
@@ -588,8 +586,7 @@ ul#navigation li.current-menu-item > a {
 	top: 1px;
 }
 .sharing,
-.pd-rating,
-.sharedaddy {
+.pd-rating {
 	margin-left: 20px;
 }
 #sidebar #wpl-likebox {
@@ -623,17 +620,17 @@ ul#navigation li.current-menu-item > a {
 }
 #content .page-link {
 	clear: both;
-	word-spacing: 0.5em;
+    word-spacing:0.5em;
 }
 #content .page-link a:link,
 #content .page-link a:visited {
-	border: 1px solid #ccc;
-	padding: 0.5em 1em;
-	text-decoration: none;
+    border:  1px solid #ccc;
+    padding:0.5em 1em;
+    text-decoration:none;
 }
 #content .page-link a:active,
 #content .page-link a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 #content .contentblock table {
 	width: 470px;
@@ -683,15 +680,14 @@ ul#navigation li.current-menu-item > a {
 }
 #content .contentblock ul {
 	padding: 0 20px;
-	margin: 15px 0 0 25px;
+	margin: 15px 0;
 	font-family: "Arial Narrow", "Helvetica Neue", sans-serif;
 	text-transform: uppercase;
 	color: #666;
 }
 #content .contentblock ul li {
-	list-style: square;
 	margin-bottom: 10px;
-	padding: 0 20px 0 0;
+	padding: 0 20px 0 25px;
 	background: url(img/li.gif) no-repeat 0 8px;
 }
 #content .contentblock blockquote {
@@ -776,13 +772,13 @@ ul#navigation li.current-menu-item > a {
 }
 .widget form input,
 .widget textarea {
-	border: 1px solid #CCCCCC;
-	color: #999999;
-	font-family: "Arial Narrow","Helvetica Neue",sans-serif;
-	font-size: 18px;
-	line-height: 21px;
-	padding: 5px 9px;
-	text-transform: uppercase;
+	border:1px solid #CCCCCC;
+	color:#999999;
+	font-family:"Arial Narrow","Helvetica Neue",sans-serif;
+	font-size:18px;
+	line-height:21px;
+	padding:5px 9px;
+	text-transform:uppercase;
 }
 #akismetwrap a {
 	color: #fff;
@@ -1216,8 +1212,6 @@ p.nocomments {
 .children .comment h4 img {
 	top: 5px;
 }
-.bypostauthor {
-}
 
 
 /* =Navigation
@@ -1242,7 +1236,7 @@ p.nocomments {
 .nav-next {
 	float: right;
 	width: 50%;
-	text-align: right;
+	text-align:right;
 }
 #nav-above {
 	display: none;
@@ -1293,7 +1287,7 @@ img.aligncenter {
 }
 .wp-smiley {
 	max-height: 1em;
-	margin: 0 !important;
+	margin:0 !important;
 }
 .gallery {
 	width: 470px;
@@ -1393,7 +1387,7 @@ img.aligncenter {
 #content .contentblock .contact-form input.pushbutton-wide:focus {
 	border-color: #aaa;
 }
-#content .contentblock .contact-form input.pushbutton-wide:active {
+#content .contentblock  .contact-form input.pushbutton-wide:active {
 	background-color: #aaa;
 }
 
@@ -1435,9 +1429,9 @@ img.aligncenter {
 	margin-right: -10px;
 }
 .ie6 #body {
-	background: url("img/wrapper.gif") repeat-y scroll 509px 0 #FFFFFF;
+	background:url("img/wrapper.gif") repeat-y scroll 509px 0 #FFFFFF;
 }
-.ie6 hr {
+.ie6 hr  {
 	width: 470px;
 }
 .ie6 #sidebar {
@@ -1492,9 +1486,9 @@ img.aligncenter {
 	zoom: 1;
 }
 .ie7 #body {
-	background: url("img/wrapper.gif") repeat-y scroll 509px 0 #FFFFFF;
+	background:url("img/wrapper.gif") repeat-y scroll 509px 0 #FFFFFF;
 }
-.ie7 hr {
+.ie7 hr  {
 	width: 470px;
 }
 .ie7 #content form {
@@ -1536,3 +1530,4 @@ img.aligncenter {
 .ie8 h4 a.permlink .permlink-text {
 	display: inline;
 }
+

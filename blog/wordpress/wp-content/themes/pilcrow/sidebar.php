@@ -18,7 +18,7 @@
 		$options = pilcrow_get_theme_options();
 		$current_layout = $options['theme_layout'];
 		$feature_widget_area_layouts = array( 'content-sidebar-sidebar', 'sidebar-sidebar-content' );
-
+		
 		if ( 'no-sidebar' == $current_layout )
 			return;
 
@@ -62,7 +62,7 @@
 				$after_title = '</h3>';
 				the_widget( 'RSS_Links_Widget',
 							"title=$title&display=posts&format=text-image&imagesize=medium&imagecolor=orange",
-							"before_widget=$before_widget&after_widget=$after_widget&before_title=$before_title&after_title=$after_title" );
+							"before_widget=$before_widget&after_widget=$after_widget&before_title=$before_title&after_title=$after_title" );				
 			?>
 
 			<li class="widget widget_recent_entries">

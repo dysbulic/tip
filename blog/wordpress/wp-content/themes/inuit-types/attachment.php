@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Inuit Types
+ * @package WordPress
+ * @subpackage Inuit Types
  */
 ?>
 <?php get_header(); ?>
@@ -26,17 +27,15 @@
 
 					    <em><?php _e( 'Posted on ', 'it' ); ?> <?php the_time( get_option( "date_format" ) ); ?></em>
 
-					    <?php if ( is_multi_author() ) {
-						    _e( 'by ', 'it' ); ?><em><?php the_author_posts_link(); ?></em>
-					    <?php } ?>
+					    <?php _e( 'by ', 'it' ); ?><em><?php the_author_posts_link(); ?></em>
 
 						<?php
 						if ( wp_attachment_is_image() ) :
-							$metadata = wp_get_attachment_metadata();
+							$metadata = wp_get_attachment_metadata(); 
 						?>
-						&rarr;
-
-						<a title="<?php esc_attr_e( 'Permalink to full-size image', 'it' ); ?>" href="<?php echo wp_get_attachment_url(); ?>">
+						&rarr; 
+						
+						<a title="<?php _e( 'Permalink to full-size image', 'it' ); ?>" href="<?php echo wp_get_attachment_url(); ?>">
 							<?php echo $metadata['width'] . ' &times; ' . $metadata['height']; ?>
 						</a>
 						<?php endif; ?>

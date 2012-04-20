@@ -1,10 +1,8 @@
 <?php get_header(); ?>
-
 <div class="content">
 	<div class="primary">
-		<?php get_template_part( 'theloop' ); ?>
+		<?php include (TEMPLATEPATH . '/theloop.php'); ?>
 	</div>
 	<?php get_sidebar(); ?>
 	</div>
-
-<?php get_footer(); ?>
+	<?php get_footer(); ?>

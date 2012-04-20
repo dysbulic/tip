@@ -1,8 +1,3 @@
-<?php
-/**
- * @package Vigilance
- */
-?>
 <?php get_header(); ?>
 		<?php if (have_posts()) : ?>
 		<?php /* If this is a category archive */ if (is_category()) { ?>
@@ -20,7 +15,7 @@
 		<?php /* If this is a paged archive */ } elseif (isset($_GET['paged']) && !empty($_GET['paged'])) { ?>
 		<h1 class="pagetitle"><?php _e('Blog Archives', 'vigilance'); ?></h1>
 		<?php } ?>
-		<img class="archive-comment" src="<?php bloginfo('template_url'); ?>/images/comments-bubble-archive.gif" width="17" height="14" alt="<?php esc_attr_e( 'comment', 'vigilance' ); ?>"/>
+		<img class="archive-comment" src="<?php bloginfo('template_url'); ?>/images/comments-bubble-archive.gif" width="17" height="14" alt="<?php _e('comment', 'vigilance'); ?>"/>
 		<?php while (have_posts()) : the_post(); ?>
 		<div class="entries">
 			<ul>

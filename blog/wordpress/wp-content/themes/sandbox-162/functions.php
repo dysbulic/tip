@@ -289,8 +289,9 @@ function sandbox_commenter_link() {
 	} else {
 		$commenter = ereg_replace( '(<a )/', '\\1class="url "' , $commenter );
 	}
+	$avatar_email = get_comment_author_email();
 	$avatar_size = apply_filters( 'avatar_size', '32' ); // Available filter: avatar_size
-	$avatar = str_replace( "class='avatar", "class='photo avatar", get_avatar( $GLOBALS['comment'], $avatar_size ) );
+	$avatar = str_replace( "class='avatar", "class='photo avatar", get_avatar( $avatar_email, $avatar_size ) );
 	echo $avatar . ' <span class="fn n">' . $commenter . '</span>';
 }
 
@@ -371,7 +372,7 @@ function widget_sandbox_search($args) {
 ?>
 			<?php echo $before_widget ?>
 				<?php echo $before_title ?><label for="s"><?php echo $title ?></label><?php echo $after_title ?>
-				<form id="searchform" class="blog-search" method="get" action="<?php echo home_url( '/' ); ?>">
+				<form id="searchform" class="blog-search" method="get" action="<?php bloginfo('url') ?>">
 					<div>
 						<input id="s" name="s" type="text" class="text" value="<?php the_search_query() ?>" size="10" tabindex="1" />
 						<input type="submit" class="button" value="<?php echo $button ?>" tabindex="2" />
@@ -513,34 +514,4 @@ add_theme_support( 'automatic-feed-links' );
 
 add_custom_background();
 
-function sandbox_comments($comment, $args, $depth) {
-	$GLOBALS['comment'] = $comment;
-	extract($args, EXTR_SKIP);
-	global $sandbox_comment_alt; 
-	?>
-						<li id="comment-<?php comment_ID() ?>" class="<?php sandbox_comment_class() ?>">
-							<div class="comment-author vcard"><?php sandbox_commenter_link() ?></div>
-							<div class="comment-meta"><?php printf(__('Posted %1$s at %2$s <span class="meta-sep">|</span> <a href="%3$s" title="Permalink to this comment">Permalink</a>', 'sandbox'),
-										get_comment_date(),
-										get_comment_time(),
-										'#comment-' . get_comment_ID() );
-										echo comment_reply_link(array('depth' => $depth, 'max_depth' => $args['max_depth'], 'before' => ' | ')); 
-										edit_comment_link(__('Edit', 'sandbox'), ' <span class="meta-sep">|</span> <span class="edit-link">', '</span>'); ?></div>
-<?php if ($comment->comment_approved == '0') _e("\t\t\t\t\t<span class='unapproved'>Your comment is awaiting moderation.</span>\n", 'sandbox');
-comment_text();
-} 
-function sandbox_trackbacks($comment, $args, $depth) {
-	$GLOBALS['comment'] = $comment;
-	extract($args, EXTR_SKIP);
-	global $sandbox_comment_alt; 
-	?>
-    <li id="comment-<?php comment_ID() ?>" class="<?php sandbox_comment_class() ?>">
-    	<div class="comment-author"><?php printf(__('By %1$s on %2$s at %3$s', 'sandbox'),
-    			get_comment_author_link(),
-    			get_comment_date(),
-    			get_comment_time() );
-    			edit_comment_link(__('Edit', 'sandbox'), ' <span class="meta-sep">|</span> <span class="edit-link">', '</span>'); ?></div>
-    	<?php if ($comment->comment_approved == '0') _e('\t\t\t\t\t<span class="unapproved">Your trackback is awaiting moderation.</span>\n', 'sandbox');
-comment_text();
-}
 // Remember: the Sandbox is for play.

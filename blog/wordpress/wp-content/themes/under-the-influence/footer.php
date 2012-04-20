@@ -90,7 +90,7 @@
 	?>
 	<div id="externalFooterLinks">
 		<a href="http://wordpress.com/" rel="generator">Get a free blog at WordPress.com</a> | 
-		<?php printf( __( 'Theme: %1$s by %2$s.', 'uti' ), 'Under the Influence', '<a href="http://www.spaceperson.net" rel="designer">spaceperson</a>' ); ?>
+		<?php printf( __( 'Theme: %1$s by %2$s.', 'uti' ), 'Under the Influence', '<a rel="designer" href="http://www.spaceperson.net">spaceperson</a>' ); ?>
 	</div>
 </div><!--#footer-->
 </div><!--#page-->

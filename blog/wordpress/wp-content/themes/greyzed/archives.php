@@ -1,13 +1,14 @@
 <?php
 /**
- * @package Greyzed
+ * @package WordPress
+ * @subpackage Greyzed
  */
 /*
 Template Name: Archives
 */
 get_header(); ?>
-	<div id="container">
-<?php get_sidebar(); ?>
+	<div id="container">	
+<?php get_sidebar(); ?>	
 	<div id="content" role="main">
 	<div class="column">
 			<div class="posttitle">

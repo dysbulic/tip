@@ -9,7 +9,7 @@ if ( post_password_required() ) {
 }
 
 if (have_comments()) : ?>
-	<h3 id="comments"><?php comments_number(__('No Responses Yet', 'connections'), __('One Response', 'connections'), __('% Responses', 'connections'));?> <?php printf(__('to &#8220;%s&#8221;', 'connections'), the_title('', '', false)); ?></h3>
+	<h3 id="comments"><?php comments_number(__('No Responses Yet'), __('One Response'), __('% Responses'));?> to &#8220;<?php the_title(); ?>&#8221;</h3> 
 
 	<ol class="commentlist">
 	<?php wp_list_comments(array(

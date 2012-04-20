@@ -1,10 +1,4 @@
-<?php
-/**
- * @package Vigilance
- */
-?>
 	<div id="sidebar">
-		<?php do_action( 'before_sidebar' ); ?>
 		<?php if (is_active_sidebar('sidebar-1')) echo '<ul>';?>
 			<?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('sidebar-1') ) : endif; ?>
 		<?php if (is_active_sidebar('sidebar-1')) echo '</ul>'; ?>

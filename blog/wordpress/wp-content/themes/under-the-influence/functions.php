@@ -4,37 +4,9 @@
  * @subpackage Under_the_Influence
  */
 
-/**
- * Set the default theme colors based on the current color scheme
- */
-
-
-if ( ! isset( $themecolors ) ) {
-
-	$uti_accent_color = get_option( 'uti_accent_color' );
-	if ( ! empty( $uti_accent_color ) )
-		$uti_accent_color = substr( get_option( 'uti_accent_color' ), 1 );
-	else
-		$uti_accent_color = '9bbc57'; // default accent color
-
-	$uti_muted_color = get_option( 'uti_muted_accent' );
-	if ( ! empty( $uti_muted_color ) )
-		$uti_muted_color = substr( get_option( 'uti_muted_accent' ), 1 );
-	else
-		$uti_muted_color = '619500'; // default muted color
-
-	$themecolors = array(
-		'bg' => 'ffffff',
-		'text' => '333333',
-		'link' => $uti_muted_color,
-		'border' => $uti_accent_color,
-		'url' => $uti_muted_color,
-	);
-}
-
 function uti_content_width() {
 	$width_option = get_option( 'uti_column_width' );
-
+	
 	if ( ! empty( $width_option ) )
 		$content_width = (int) $width_option;
 	else
@@ -211,7 +183,7 @@ function header_style() {
 	?><style type="text/css">
 	<?php if ( '' != get_header_image() ) { ?>
 	#header {
-		background: url(<?php header_image(); ?>) no-repeat center;
+		background: url(<?php header_image(); ?>) no-repeat;
 		width: <?php echo HEADER_IMAGE_WIDTH; ?>px;
 		height: 140px;
 	}
@@ -235,7 +207,7 @@ function header_style() {
 	}
 	.rtl #header h1 {
 		direction: ltr;
-	}
+	}	
 	#header h1 {
 		padding-top: 0;
 		text-indent: -9999px;
@@ -248,16 +220,6 @@ function header_style() {
 		width: <?php echo HEADER_IMAGE_WIDTH; ?>px;
 		height: <?php echo HEADER_IMAGE_HEIGHT; ?>px;
 		padding-top: 0 !important;
-	}
-	<?php }
-	if ( '' != get_background_color() || '' != get_background_image() ) {
-	?>
-	#navigation,
-	.ornament,
-	#footer h2,
-	#wp-calendar caption,
-	.commentmetadata {
-		background-image: none;
 	}
 	<?php } ?>
 	</style><?php
@@ -305,8 +267,6 @@ function admin_header_style() {
 
 add_custom_image_header('header_style', 'admin_header_style');
 
-add_custom_background();
-
 function uti_custom_css() {
 	include_once( dirname( __FILE__ ) . '/dynamic-css.php' );
 }
@@ -347,7 +307,7 @@ function uti_comment($comment, $args, $depth) {
 					<?php echo get_comment_author_link() ?>
 				</cite>
 				<br />
-				<a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>">
+				<a href="<?php echo htmlspecialchars( get_comment_link( $comment->comment_ID ) ) ?>">
 					<?php printf(__('%1$s at %2$s', 'uti_theme'), get_comment_date(), get_comment_time()) ?>
 				</a>
 				<?php edit_comment_link(__('(Edit)', 'uti_theme'),'  ','') ?>
@@ -362,12 +322,18 @@ function uti_comment($comment, $args, $depth) {
 <?php
 		}
 function uti_init_method() {
-	if ( ! is_admin() ) {
-		wp_deregister_script( 'jmasonry' );
-		wp_register_script(   'jmasonry', get_bloginfo('template_directory') . '/js/jquery.masonry.js', '1.3.2');
-		wp_deregister_script( 'jinit_mason' );
-		wp_register_script(   'jinit_mason' ,  get_bloginfo('template_directory') . '/js/initializer.js');
-	}
+	if (!is_admin())
+	{
+
+wp_deregister_script( 'jquery' );
+wp_register_script(   'jquery'
+	, get_bloginfo('template_directory') . '/js/jquery-1.4.2.min.js');
+wp_deregister_script( 'jmasonry' );
+wp_register_script(   'jmasonry'
+	, get_bloginfo('template_directory') . '/js/jquery.masonry.min.js');
+wp_deregister_script( 'jinit_mason' );
+wp_register_script(   'jinit_mason' ,  get_bloginfo('template_directory') . '/js/initializer.js');
+}
 }
 add_action('init', 'uti_init_method');
 
@@ -382,7 +348,7 @@ function custom_pings($comment, $args, $depth) {
 			 <br />
 		  <?php endif; ?>
 
-		  <div class="comment-meta commentmetadata"><cite class="fn"><?php echo get_comment_author_link() ?></cite><br /><a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>"><?php printf(__('%1$s at %2$s', 'uti_theme'), get_comment_date(),  get_comment_time()) ?></a><?php edit_comment_link(__('(Edit)', 'uti_theme'),'  ','') ?></div><!--.comment-meta-->
+		  <div class="comment-meta commentmetadata"><cite class="fn"><?php echo get_comment_author_link() ?></cite><br /><a href="<?php echo htmlspecialchars( get_comment_link( $comment->comment_ID ) ) ?>"><?php printf(__('%1$s at %2$s', 'uti_theme'), get_comment_date(),  get_comment_time()) ?></a><?php edit_comment_link(__('(Edit)', 'uti_theme'),'  ','') ?></div><!--.comment-meta-->
 	 </div><!--#comment-<?php comment_ID(); ?>-->
 <?php
 		}
@@ -443,6 +409,7 @@ break;
 
 case 'color':
 ?>
+<script src="<?php bloginfo('template_directory') ?>/js/jquery-1.4.2.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="<?php bloginfo('template_directory') ?>/js/farbtastic.js"></script>
 <link rel="stylesheet" href="<?php bloginfo('template_directory') ?>/js/farbtastic.css" type="text/css" />
 <tr>
@@ -451,8 +418,8 @@ case 'color':
 <tr>
 	<td width="40%" id="colorpicker<?php echo $value['id2']; ?>"></td>
 	<script type="text/javascript">
-	jQuery(document).ready(function() {
-		jQuery('#colorpicker<?php echo $value['id2']; ?>').farbtastic('#<?php echo $value['id']; ?>');
+	$(document).ready(function() {
+		$('#colorpicker<?php echo $value['id2']; ?>').farbtastic('#<?php echo $value['id']; ?>');
 	});
 </script>
 </tr>
@@ -564,13 +531,13 @@ case "checkbox":
 }
 }
 ?><p class="submit">
-<input name="save" type="submit" value="<?php esc_attr_e( 'Save Options', 'uti_theme' ); ?>" />
+<input name="save" type="submit" value="<?php _e('Save Options', 'uti_theme')?>" />
 <input type="hidden" name="action" value="save" />
 </p>
 </form>
 <form method="post">
 <p class="submit">
-<input name="reset" type="submit" value="<?php esc_attr_e( 'Reset', 'uti_theme' ); ?>" />
+<input name="reset" type="submit" value="<?php _e('Reset', 'uti_theme')?>" />
 <label>Reset default values for all Theme Options.</label>
 <input type="hidden" name="action" value="reset" />
 </p>

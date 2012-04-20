@@ -22,7 +22,7 @@ License:
 	function podPress_isAuthorized($needed = '##NOTSET##', $justChecking = false) {
 		GLOBAL $user_level, $podPress;
 		if($needed == '##NOTSET##') {
-			$needed = $podPress->requiredadminrights;
+			$needed = $podPress->requiredAdminRights;
 		}
 		if (function_exists('current_user_can')) {
 			$result = current_user_can($needed);
@@ -669,7 +669,7 @@ License:
 	function podPress_itunesCategoryOptions($current = '') {
 		$cats = array();
 		if ('' == trim($current) AND '##Global##' != $current) {
-			$current = '[ nothing ]';
+			$current='[ '.__('nothing', 'podpress').' ]';
 		}
 		$cats[] = '[ '.__('nothing', 'podpress').' ]';
 
@@ -762,15 +762,15 @@ License:
 		foreach ($cats as $value) {
 			$value = str_replace('&', '&amp;', $value);
 			echo '<option';
-			if ( $value == $current OR ('[ nothing ]' === $current AND '[ '.__('nothing', 'podpress').' ]' === $value) ) {
+			if($value == $current) {
 				$foundit = true;
 				echo ' selected="selected"';
 			}
-			if ( '[ '.__('nothing', 'podpress').' ]' === $value ) {
-				echo ' value="[ nothing ]"';
-			} else {
-				echo ' value="'.attribute_escape($value).'"';
-			}
+			//~ if ( '[ '.__('nothing', 'podpress').' ]' === $value ) {
+				//~ echo ' value="nothing"';
+			//~ }
+			echo ' value="'.attribute_escape($value).'"';
+			
 			echo '>'.$value.'</option>'."\n";
 		}
 		
@@ -1106,16 +1106,16 @@ License:
 			} else {
 				$uriFileName = $mediafile;
 			}
-			$local_uploadURL = $podPress->uploadurl;
+			$local_uploadURL = $podPress->uploadURL;
 			podPress_var_dump('podPress_getID3tags - local_uploadURL: '.$local_uploadURL);
-			podPress_var_dump('podPress_getID3tags - local_uploadpath: '.$podPress->uploadpath);
-			podPress_var_dump('podPress_getID3tags - tempfilesystempath: '.$podPress->tempfilesystempath);
-			podPress_var_dump('podPress_getID3tags - tempfileurlpath: '.$podPress->tempfileurlpath);
+			podPress_var_dump('podPress_getID3tags - local_uploadPath: '.$podPress->uploadPath);
+			podPress_var_dump('podPress_getID3tags - tempFileSystemPath: '.$podPress->tempFileSystemPath);
+			podPress_var_dump('podPress_getID3tags - tempFileURLPath: '.$podPress->tempFileURLPath);
 			podPress_var_dump('podPress_getID3tags - uriFileName: '.$uriFileName);
 			if (FALSE !== $local_uploadURL AND FALSE !== strpos($uriFileName, $local_uploadURL)) { // then it is not a real remote file - it is only an URL to a local file
 				// get the absolute folder of the file from the URL
 				podPress_var_dump('podPress_getID3tags - it is a local file');
-				$uriFileName = $podPress->uploadpath.str_replace($local_uploadURL,'',$uriFileName);
+				$uriFileName = $podPress->uploadPath.str_replace($local_uploadURL,'',$uriFileName);
 				//$uriFileName = str_replace('\\', '/',$uriFileName);
 				podPress_var_dump('podPress_getID3tags - new uriFileName: '.$uriFileName);
 			} else {
@@ -1238,26 +1238,18 @@ License:
 			$result .= '	</tr>'."\n";
 			$result .= '	<tr class="alternate">'."\n";
 			
-			
-			if ( defined('NONCE_KEY') AND is_string(constant('NONCE_KEY')) AND '' != trim(constant('NONCE_KEY')) ) {
-				$nonce = wp_create_nonce(NONCE_KEY);
-			} else {
-				$nonce = wp_create_nonce('Af|F07*wC7g-+OX$;|Z5;R@Pi]ZgoU|Zex8=`?mO-Mdvu+WC6l=6<O^2d~+~U3MM');
-			}
-			
 			// The # + time() in the URL of the covert art should make the server show always the current image and not a cached version.
 			if ( isset($fileinfo['podpress_tmp_download_exists']) AND TRUE === $fileinfo['podpress_tmp_download_exists'] ) {
-				$result .= '		<th>'.__('Cover Art', 'podpress').'</th><td><span id="podPressMedia_'.$randID.'_tagCoverArt"><img src="'.PODPRESS_URL.'/podpress_backend.php?action=id3image&filename='.rawurlencode($fileinfo['filenamepath']).'&tmpdownloadexists=yes&_ajax_nonce=' . $nonce . '#'.time().'" alt="" /></span></td>'."\n";
+				$result .= '		<th>'.__('Cover Art', 'podpress').'</th><td><span id="podPressMedia_'.$randID.'_tagCoverArt"><img src="'.PODPRESS_URL.'/podpress_backend.php?action=id3image&filename='.rawurlencode($fileinfo['filenamepath']).'&tmpdownloadexists=yes#'.time().'" alt="" /></span></td>'."\n";
 				podPress_var_dump('podPress_showID3tags - podpress_tmp_download_exists = TRUE');
 			} else {
-				$result .= '		<th>'.__('Cover Art', 'podpress').'</th><td><span id="podPressMedia_'.$randID.'_tagCoverArt"><img src="'.PODPRESS_URL.'/podpress_backend.php?action=id3image&filename='.rawurlencode($fileinfo['filenamepath']).'&tmpdownloadexists=no&_ajax_nonce=' . $nonce . '#'.time().'" alt="" /></span></td>'."\n";
+				$result .= '		<th>'.__('Cover Art', 'podpress').'</th><td><span id="podPressMedia_'.$randID.'_tagCoverArt"><img src="'.PODPRESS_URL.'/podpress_backend.php?action=id3image&filename='.rawurlencode($fileinfo['filenamepath']).'&tmpdownloadexists=no#'.time().'" alt="" /></span></td>'."\n";
 				podPress_var_dump('podPress_showID3tags - podpress_tmp_download_exists = FALSE');
 			}
 			
-		
 			$result .= '	</tr>'."\n";
 			//~ $result .= '	<tr>'."\n";
-			//~ $result .= '		<th>The getID3() output:</th><td><pre class="podpress_id3tags_error">'.var_export($fileinfo, true).'</pre></td>'."\n";
+			//~ $result .= '		<td colspan="2"><a href="#" onclick="podPressID3ToPost(\''.$randID.'\'); return false;">'.__('Copy contents to post details', 'podpress').'</a></td>'."\n";
 			//~ $result .= '	</tr>'."\n";
 			$result .= '</table>'."\n";
 
@@ -1276,25 +1268,19 @@ License:
 			$fileinfo = podPress_getID3tags($mediafile, TRUE, 500000, TRUE, FALSE);
 		}
 		podPress_var_dump('podPress_getCoverArt - after getid3tags');
-
 		if ( isset($fileinfo['id3v2']['APIC'][0]) ) {
 			$ref = $fileinfo['id3v2']['APIC'][0];
 			if ( (FALSE == isset($ref['image_mime']) OR (isset($ref['image_mime']) AND empty($ref['image_mime']))) AND isset($ref['mime']) ) {
 				$ref['image_mime'] = $ref['mime'];
 			}
 			podPress_var_dump('podPress_getCoverArt - (id3v2 - APIC) '. $ref['image_mime']);
+			podPress_var_dump($ref['mime']);
 		} elseif ( isset($fileinfo['id3v2']['PIC'][0]) ) {
 			$ref = $fileinfo['id3v2']['PIC'][0];
 			if ( (FALSE == isset($ref['image_mime']) OR (isset($ref['image_mime']) AND empty($ref['image_mime']))) AND isset($ref['mime']) ) {
 				$ref['image_mime'] = $ref['mime'];
 			}
 			podPress_var_dump('podPress_getCoverArt - (id3v2 - PIC) '. $ref['image_mime']);
-		} elseif ( isset($fileinfo['comments']['artwork'][0]) ) {
-			$ref['data'] = $fileinfo['comments']['artwork'][0];
-			podPress_var_dump('podPress_getCoverArt - (m4a comments) '. $ref['image_mime']);
-		} elseif ( isset($fileinfo['tags']['quicktime']['artwork'][0]) ) {
-			$ref['data'] = $fileinfo['tags']['quicktime']['artwork'][0];
-			podPress_var_dump('podPress_getCoverArt - (m4a tags) '. $ref['image_mime']);
 		} else {
 			$ref['image_mime'] = 'image/png';
 			$ref['datalength'] = @filesize('images/powered_by_podpress.png');
@@ -1303,12 +1289,8 @@ License:
 		}
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // some day in the past
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT', false, 200);
-		if ( isset($ref['image_mime']) AND FALSE == empty($ref['image_mime']) ) {
-			header('Content-type: '.$ref['image_mime']);
-		}
-		if ( isset($ref['datalength']) AND FALSE == empty($ref['datalength']) ) {
-			header('Content-Length: '.$ref['datalength']);
-		}
+		header('Content-type: '.$ref['image_mime']);
+		header('Content-Length: '.$ref['datalength']);
 		//set_time_limit(0);
 		echo $ref['data'];
 		podPress_var_dump('podPress_getCoverArt - end');
@@ -1342,7 +1324,7 @@ License:
 			podPress_var_dump('podPress_getDuration - playtime_string: '.$fileinfo['playtime_string']);
 			podPress_var_dump('end of the duration retrieval');
 
-			return trim($fileinfo['playtime_string']);
+			return $fileinfo['playtime_string'];
 		} else {
 			return __('UNKNOWN', 'podpress');
 		}
@@ -1469,7 +1451,7 @@ License:
 				if (FALSE == $localtempfilename OR '.'.$ext == $localtempfilename) {
 					// If it is not possible to get the temp folder via tempnam() then try to write into the temp folder of podPress
 					$podPress->checkWritableTempFileDir();
-					$localtempfilename = $podPress->tempfilesystempath.'/podpress_tmp.'.$ext;
+					$localtempfilename = $podPress->tempFileSystemPath.'/podpress_tmp.'.$ext;
 				}
 				if (!$fp_local = @fopen($localtempfilename, 'wb')) {
 					// if it is not possible to open a temp file then return
@@ -1592,7 +1574,7 @@ License:
 					if (FALSE == $localtempfilename OR '.'.$ext == $localtempfilename) {
 						// If it is not possible to get the temp folder via tempnam() then try to write into the temp folder of podPress
 						$podPress->checkWritableTempFileDir();
-						$localtempfilename = $podPress->tempfilesystempath.'/podpress_tmp.'.$ext;
+						$localtempfilename = $podPress->tempFileSystemPath.'/podpress_tmp.'.$ext;
 					}
 					if (!$fp_local = @fopen($localtempfilename, 'wb')) {
 						// if it is not possible to open a temp file then return
@@ -1743,85 +1725,6 @@ License:
 				}
 			}
 			return $returnmsg;
-		}
-	}
-	
-	/** podPress_get_real_url - demasks an URL which is masked with the podPress stats scheme
-	* @package podPress
-	* @since 8.8.10.3 beta 5
-	* @param mixed $url - the masked url
-	* @param mixed $print - print (TRUE) or return the result (FALSE)
-	* @return string - the real URL
-	*/	
-	function podPress_get_real_url($url, $count = TRUE, $print = TRUE) {
-		$requested = parse_url($url);
-		$requested = $requested['path'];
-
-		$realURL = 'false';
-		$pos = 0;
-		if ( $pos = strpos($requested, 'podpress_trac') ) {
-			if ( $pos == 0 ) {
-				$pos = strpos($requested, 'podpress_trac');
-			}
-			$pos = $pos+14;
-			if ( substr($requested, $pos, 1) == '/' ) {
-				$pos = $pos+1;
-			}
-			$requested = substr($requested, $pos);
-			$parts = explode('/', $requested);
-			if ( count($parts) == 4 ) {
-				$postID = $parts[1];
-				$mediaNum = $parts[2];
-				$filename = rawurlencode($parts[3]);
-				$method = $parts[0];
-				
-				$allowedMethods = array('feed', 'play', 'web');
-				$realSysPath = false;
-				$statID = false;
-
-				if ( in_array($method, $allowedMethods) && is_numeric($postID) && is_numeric($mediaNum) ) {
-					$mediaFiles = podPress_get_post_meta($postID, '_podPressMedia', true);
-					if (isset($mediaFiles[$mediaNum]) ) {
-						if ( $mediaFiles[$mediaNum]['URI'] == urldecode($filename) ) {
-							$realURL = $filename;
-						} elseif ( podPress_getFileName($mediaFiles[$mediaNum]['URI']) == urldecode($filename) ) {
-							$realURL = $mediaFiles[$mediaNum]['URI'];
-						} elseif ( podPress_getFileName($mediaFiles[$mediaNum]['URI_torrent']) == urldecode($filename) ) {
-							$realURL = $mediaFiles[$mediaNum]['URI_torrent'];
-						}
-					}
-				}
-				
-				if ( TRUE === $count ) {
-					$badextensions = array('.smi', '.jpg', '.png', '.gif');
-					if ($filename && !in_array(strtolower(substr($filename, -4)), $badextensions)) {
-						global $podPress;
-						podPress_StatCounter($postID, $filename, $method);
-						if ( $podPress->settings['statLogging'] == 'Full' || $podPress->settings['statLogging'] == 'FullPlus' ) {
-							$statID = podPress_StatCollector($postID, $filename, $method);
-						}
-					}
-				}
-				
-				//~ $realSysPath = $podPress->convertPodcastFileNameToSystemPath(str_replace('%20', ' ', $realURL));
-				//~ if (FALSE === $realSysPath) {
-					//~ $realSysPath = $podPress->TryToFindAbsFileName(str_replace('%20', ' ', $realURL));
-				//~ }
-				//~ $realURL = $podPress->convertPodcastFileNameToValidWebPath($realURL);
-			
-				//~ if ($podPress->settings['enable3rdPartyStats'] == 'PodTrac') {
-					//~ $realURL = str_replace(array('ftp://', 'http://', 'https://'), '', $realURL);
-					//~ $realURL = $podPress->podtrac_url.$realURL;
-				//~ } elseif( strtolower($podPress->settings['enable3rdPartyStats']) == 'blubrry' && !empty($podPress->settings['statBluBrryProgramKeyword'])) {
-					//~ $realURL = str_replace('http://', '', $realURL);
-					//~ $realURL = $podPress->blubrry_url.$podPress->settings['statBluBrryProgramKeyword'].'/'.$realURL;
-				//~ }
-			}
-		}
-		if ( TRUE === $print ) {
-			echo $realURL;
-		} else {
-			return $realURL;
 		}
 	}
 ?>

@@ -1,20 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Iceburgg
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'text' => '545454',
-	'link' => '003366',
-	'border' => 'ecf7fd',
-	'url' => '003949',
-);
+	'text' => '000000',
+	'link' => '003366'
+	);
 
 $content_width = 565;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 // Make theme available for translation
 // Translations can be filed in the /languages/ directory
@@ -88,39 +80,3 @@ function iceburgg_page_menu() { ?>
 		<?php wp_list_pages( 'depth=1&title_li=' ); ?>
 	</ul>
 <?php }
-
-/* Function for seperating comments from track- and pingbacks. */
-function comment_type_detection($commenttxt = 'Comment', $trackbacktxt = 'Trackback', $pingbacktxt = 'Pingback') {
-	global $comment;
-	if (preg_match('|trackback|', $comment->comment_type))
-		return $trackbacktxt;
-	elseif (preg_match('|pingback|', $comment->comment_type))
-		return $pingbacktxt;
-	else
-		return $commenttxt;
-}
-
-function iceburgg_comment($comment, $args, $depth) {
-	$GLOBALS['comment'] = $comment;
-	extract($args, EXTR_SKIP);
-?>
- <li <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="comment-<?php comment_ID() ?>">
- <div id="div-comment-<?php comment_ID() ?>">
-      <span class="comment-author vcard">
-      <?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?>
-      <span class="cauthor fn">
-      <?php comment_author_link() ?>
-      </span>
-      </span>
-      <?php if ($comment->comment_approved == '0') : ?>
-      <em><?php _e( 'Your comment is awaiting moderation.', 'iceburgg' ); ?></em>
-      <?php endif; ?>
-      <br />
-      <a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>" class="permalink" title=""></a>
-      <?php comment_text() ?>
-      <div class="reply">
-	<?php comment_reply_link(array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
-      </div>
- </div>
-<?php
-}

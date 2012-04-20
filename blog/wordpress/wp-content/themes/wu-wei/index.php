@@ -9,14 +9,8 @@
 				<div class="post-info">
 
 					<h1><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink to %s', 'wu-wei' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></h1>
-					<?php if ( is_multi_author() ) { ?>
-						<div class="archive-byline">
-							<a href="<?php echo esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ); ?>" title="<?php esc_attr( printf( __( 'View all posts by %s', 'wu-wei' ), get_the_author_meta( 'display_name' ) ) ); ?>">
-								<?php esc_html( printf( __( 'By %1$s', 'wu-wei' ), get_the_author_meta( 'display_name' ) ) ) ?>
-							</a>
-						</div>
-					<?php } ?>
-					<div class="timestamp"><?php the_time( get_option( 'date_format' ) ); ?> //</div> <?php if ( comments_open() ) : ?><div class="comment-bubble"><?php comments_popup_link( '0', '1', '%' ); ?></a></div><?php endif; ?>
+
+					<div class="timestamp"><?php the_time( get_option( 'date_format' ) ); ?> <!-- by <?php the_author(); ?> --> //</div> <?php if ( comments_open() ) : ?><div class="comment-bubble"><?php comments_popup_link( '0', '1', '%' ); ?></a></div><?php endif; ?>
 					<div class="clearboth"><!-- --></div>
 
 					<?php edit_post_link( __( 'Edit this entry', 'wu-wei' ), '<p>', '</p>' ); ?>

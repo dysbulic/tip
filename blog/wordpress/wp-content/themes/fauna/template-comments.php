@@ -32,7 +32,7 @@ function fauna_comment($comment, $args, $depth) {
 				<div class="comment-header">
 					<?php if (function_exists('comment_favicon')) { ?><a href="<?php echo($comment->comment_author_url); ?>" title="Visit <?php echo($comment->comment_author); ?>"><?php comment_favicon($before='<img src="', $after='" alt="" class="comment-avatar" />'); ?></a><?php } ?>
 						<?php echo get_avatar( $comment, 48 ); ?>
-						<em><a href="#comment-<?php echo($comment->comment_ID) ?>" title="<?php esc_attr_e( 'Permanent link to this comment' ); ?>"><?php echo($comment_number) ?></a></em>
+						<em><a href="#comment-<?php echo($comment->comment_ID) ?>" title="<?php _e('Permanent link to this comment') ?>"><?php echo($comment_number) ?></a></em>
 						<strong><?php comment_author_link(); ?></strong> 
 						<?php if ( function_exists(comment_subscription_status) ) { if (comment_subscription_status()) { ?><?php _e('(subscribed to comments)') ?><?php }} ?>
 						<?php _e('says:') ?>

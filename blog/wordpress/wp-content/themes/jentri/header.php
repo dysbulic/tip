@@ -14,7 +14,7 @@ wp_head();
 ?>
 </head>
 <?php $bodyId="";if(is_home()){$bodyId="home";}?>
-<body id="<?php echo $bodyId;?>" <?php body_class(); ?>>
+<body id="<?php echo $bodyId;?>">
 
 <div id="wrap">
 <div id="header"><h1><a href="<?php echo home_url( '/' ); ?>"><?php bloginfo( 'name' ); ?></a></h1>

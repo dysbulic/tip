@@ -7,6 +7,10 @@
 	<?php while (have_posts()) : the_post(); ?>
 
 		<div <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
+			<p class="post-date" title="<?php printf(__('%1$s at %2$s'), get_the_time(get_option('date_format')), get_the_time(get_option('time_format'))); ?>">
+				<span class="date-day"><?php the_time('j') ?></span>
+				<span class="date-month"><?php the_time('M') ?></span>
+			</p>
 			<h2><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php echo esc_attr( sprintf( __( 'Permanent link to %s' ), the_title_attribute( 'echo=0' ) ) ); ?>"><?php the_title(); ?></a></h2>
 			<p class="metadata">
 			<?php printf(__('Posted by %1$s.'), get_the_author()); ?>

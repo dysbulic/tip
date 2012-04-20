@@ -4,39 +4,26 @@
  * @subpackage Spectrum
  */
 
-/**
- * Enqueue the Spectrum scripts.
- */
+// Enqueue the Spectrum scripts
 function spectrum_script_init() {
 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'spectrum-min', get_bloginfo( 'template_directory' ) . '/js/spectrum-min.js', array( 'jquery' ) );
 }
 add_action( 'init', 'spectrum_script_init' );
 
-/**
- * Get the Spectrum theme options
- */
+// Get the Spectrum theme options
 require_once( get_template_directory() . '/theme-options.php' );
 
-/**
- * Theme colors for WP.com
- */
 $themecolors = array(
 	'bg' => 'ffffff',
 	'border' => 'dddddd',
 	'text' => '444444',
-	'link' => 'ac6c13',
-	'url' => '6ab32e',
+	'link' => 'AC6C13',
+	'url' => 'AC6C13'
 );
 
-/**
- * Set content_width
- */
 $content_width = 540;
 
-/**
- * Register widget areas.
- */
 function spectrum_widgets_init() {
 	register_sidebar( array(
 		'name' => __( 'Primary Widget Area', 'spectrum' ),
@@ -53,11 +40,6 @@ add_action( 'widgets_init', 'spectrum_widgets_init' );
 
 add_theme_support( 'automatic-feed-links' );
 
-add_theme_support( 'post-formats', array( 'aside', 'gallery', 'link', 'quote', 'status' ) );
-
-/**
- * Add Custom Menu support
- */
 register_nav_menus( array(
 	'primary' => __( 'Primary Navigation' ),
 ) );
@@ -69,9 +51,6 @@ function spectrum_page_menu() { // fallback for primary navigation ?>
 
 <?php }
 
-/**
- * Add Cusotm Backgorund support
- */
 add_custom_background();
 
 // Allow custom colors to clear the background image
@@ -86,9 +65,6 @@ function spectrum_custom_background_color() {
 }
 add_action( 'wp_head', 'spectrum_custom_background_color' );
 
-/**
- * Add Custom Header Image support
- */
 define( 'HEADER_IMAGE', '' );
 define( 'HEADER_IMAGE_WIDTH', 938 );
 define( 'HEADER_IMAGE_HEIGHT', 150 );
@@ -106,9 +82,9 @@ function admin_header_style() {
 
 add_custom_image_header( '', 'admin_header_style' );
 
-/**
- * Tag Cloud
- */
+
+// Tag Cloud
+
 function spectrum_tag_cloud( $tags ) {
 	$tags = preg_replace_callback( "|(class='tag-link-[0-9]+)('.*?)(style='font-size: )([0-9]+)(px;')|",
 		create_function(
@@ -121,42 +97,6 @@ function spectrum_tag_cloud( $tags ) {
 
 add_action( 'wp_tag_cloud', 'spectrum_tag_cloud' );
 
-/**
- *  Returns the current Spectrum theme options, with default values as fallback.
- */
-function spectrum_get_theme_options() {
-	$defaults = array(
-		'ribbon_color' => 'green',
-	);
-	$options = get_option( 'spectrum_theme_options', $defaults );
-
-	return $options;
-}
-
-/**
- *  Returns the current Spectrum color scheme as selected in the theme options.
- */
-function spectrum_current_ribbon_color() {
-	$options = spectrum_get_theme_options();
-	return $options['ribbon_color'];
-}
-
-/**
- * Register our color scheme and add them to the queue.
- */
-function spectrum_color_registrar() {
-	$ribbon_color = spectrum_current_ribbon_color();
-
-	if ( 'green' == $ribbon_color )
-		return;
-
-	wp_enqueue_style( $ribbon_color, get_template_directory_uri() . '/colors/' . $ribbon_color . '.css', null, null );
-}
-add_action( 'wp_enqueue_scripts', 'spectrum_color_registrar' );
-
-/**
- * Date formats for Spectrum's title banner.
- */
 function spectrum_date() {
 	$date_format = get_option( 'date_format' );
 	if ( 'd/m/Y' == $date_format ) : ?>

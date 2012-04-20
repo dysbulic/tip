@@ -23,10 +23,6 @@
 			<small><?php bloginfo( 'description' ); ?></small>
 		<?php endif; ?>
 		<a class="secondary" href="<?php echo home_url( '/' ); ?>"></a>
-		
-		<?php if ( current_user_can( 'publish_posts' ) ) : ?>
-			<a href="" id="mobile-post-button" style="display: none;"><?php _e( 'Post' ) ?></a>
-		<?php endif; ?>
 	</div>
 
 </div>

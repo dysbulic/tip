@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Enterprise
+ * @package WordPress
+ * @subpackage Enterprise
  */
 ?>
 <?php if ( is_active_sidebar(2) || is_active_sidebar(3) || is_active_sidebar(4) ) : ?>
@@ -22,7 +23,7 @@
 		<p><a href="http://wordpress.com/" rel="generator">Get a free blog at WordPress.com</a></p>
     </div>
     <div class="footerright">
-	    <?php printf( __( 'Theme: %1$s by %2$s.' ), 'Enterprise', '<a href="http://www.studiopress.com/" rel="designer">StudioPress</a>' ); ?>
+	    <?php printf( __( 'Theme: %1$s by %2$s.' ), 'Enterprise', '<a rel="designer" href="http://www.studiopress.com/">StudioPress</a>' ); ?>
     </div>
 </div>
 

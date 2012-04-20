@@ -7,24 +7,24 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php bloginfo('charset'); ?>" />
 	<style type="text/css" media="screen">
 		@import url( <?php bloginfo('stylesheet_url'); ?> );
-	</style>
+	</style>		
 	<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="<?php bloginfo('rss2_url'); ?>" />
-
+	
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
-	<?php
+	<?php 
 	wp_enqueue_script( 'comment-reply' );
-	wp_head();
-	?>
+	wp_head(); 
+	?>	
 </head>
-<body <?php body_class(); ?>>
+<body>
 <div id="rap">
 	<div id="header"><h1><a href="<?php bloginfo('url'); ?>"><?php bloginfo('name'); ?></a></h1></div>
 	<div id="main">
 		<div id="content">
-			<?php if ($posts) : foreach ($posts as $post) : the_post(); ?>
+			<?php if ($posts) : foreach ($posts as $post) : the_post(); ?>			
 				<div <?php post_class(); ?>>
 	<h2 class="post-title">
-		<em><span><?php the_title(); ?></span></em>
+		<em><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php echo esc_attr( sprintf( __( 'Permanent Link: %s' ), the_title_attribute( 'echo=0' ) ) ); ?>"><?php the_title(); ?></a></em>
 		<?php the_time('l, M j Y'); ?>&nbsp;</h2>
 	<p class="post-info">
 		<span class="pcat"><?php the_category(' and ') ?></span>
@@ -44,7 +44,7 @@
 			<?php endif; ?>
 	</div></div>
 	<div id="sidebar">
-		<?php get_sidebar(); ?>
+		<?php get_sidebar(); ?>	
 	</div>
 
 <?php get_footer(); ?>

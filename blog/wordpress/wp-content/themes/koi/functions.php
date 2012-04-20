@@ -6,10 +6,10 @@
 
 $themecolors = array(
 	'bg' => 'f4d0a8',
-	'border' => 'f799f6',
+	'border' => 'f4d0a8',
 	'text' => '453320',
 	'link' => '000000',
-	'url' => 'e50000'
+	'url' => '000000'
 );
 $content_width = 535;
 

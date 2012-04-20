@@ -24,10 +24,6 @@ function wp_initial_constants( ) {
 		}
 	}
 
-	if ( ! defined( 'WP_MAX_MEMORY_LIMIT' ) ) {
-		define( 'WP_MAX_MEMORY_LIMIT', '256M' );
-	}
-
 	/**
 	 * The $blog_id global, which you can change in the config allows you to create a simple
 	 * multiple blog installation using just one WordPress and changing $blog_id around.
@@ -49,8 +45,7 @@ function wp_initial_constants( ) {
 	if ( !defined('WP_DEBUG') )
 		define( 'WP_DEBUG', false );
 
-	// Add define('WP_DEBUG_DISPLAY', null); to wp-config.php use the globally configured setting for
-	// display_errors and not force errors to be displayed. Use false to force display_errors off.
+	// Add define('WP_DEBUG_DISPLAY', false); to wp-config.php use the globally configured setting for display_errors and not force errors to be displayed.
 	if ( !defined('WP_DEBUG_DISPLAY') )
 		define( 'WP_DEBUG_DISPLAY', true );
 
@@ -268,12 +263,6 @@ function wp_functionality_constants( ) {
 
 	if ( !defined('WP_POST_REVISIONS') )
 		define('WP_POST_REVISIONS', true);
-
-	/**
-	 * @since 3.3.0
-	 */
-	if ( !defined( 'WP_CRON_LOCK_TIMEOUT' ) )
-		define('WP_CRON_LOCK_TIMEOUT', 60);  // In seconds
 }
 
 /**
@@ -283,13 +272,13 @@ function wp_functionality_constants( ) {
  */
 function wp_templating_constants( ) {
 	/**
-	 * Filesystem path to the current active template directory
+	 * Web Path to the current active template directory
 	 * @since 1.5.0
 	 */
 	define('TEMPLATEPATH', get_template_directory());
 
 	/**
-	 * Filesystem path to the current active template stylesheet directory
+	 * Web Path to the current active template stylesheet directory
 	 * @since 2.1.0
 	 */
 	define('STYLESHEETPATH', get_stylesheet_directory());
@@ -301,7 +290,7 @@ function wp_templating_constants( ) {
 	 * @since 3.0.0
 	 */
 	if ( !defined('WP_DEFAULT_THEME') )
-		define( 'WP_DEFAULT_THEME', 'twentyeleven' );
+		define( 'WP_DEFAULT_THEME', 'twentyten' );
 
 }
 

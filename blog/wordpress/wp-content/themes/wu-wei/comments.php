@@ -20,7 +20,7 @@
 <!-- You can start editing here. -->
 
 <div id="comment-wrapper">
-
+	
 	<h3 id="comments">
 		<span class="comment-number"><?php comments_number( __( 'No comments', 'wu-wei' ), __( '1 comment', 'wu-wei' ), __( '% comments', 'wu-wei' ) ); ?></span>
 		<span class="comment-message">
@@ -62,7 +62,7 @@
 
 
 	<?php if ('open' == $post->comment_status) : ?>
-
+		
 	<?php comment_form(); ?>
 
 <?php endif; // if you delete this the sky will fall on your head ?>

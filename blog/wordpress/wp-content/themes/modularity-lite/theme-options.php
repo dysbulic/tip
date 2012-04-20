@@ -7,14 +7,6 @@
 add_action( 'admin_init', 'theme_options_init' );
 add_action( 'admin_menu', 'theme_options_add_page' );
 
-function modularity_admin_enqueue_scripts( $hook_suffix ) {
-	wp_enqueue_style( 'modularity-theme-options', get_template_directory_uri() . '/library/styles/theme-options.css', false, '2011-11-15' );
-	if ( is_rtl() ) {
-		wp_enqueue_style( 'modularity-theme-options-rtl', get_template_directory_uri() . '/library/styles/theme-options-rtl.css', false, '2011-11-15' );
-	}
-}
-add_action( 'admin_print_styles-appearance_page_theme_options', 'modularity_admin_enqueue_scripts' );
-
 /**
  * Init plugin options to white list our options
  */
@@ -27,24 +19,6 @@ function theme_options_init(){
  */
 function theme_options_add_page() {
 	add_theme_page( __( 'Theme Options' ), __( 'Theme Options' ), 'edit_theme_options', 'theme_options', 'theme_options_do_page' );
-}
-
-/**
- * Return array for our color schemes
- */
-function modularity_color_schemes() {
-	$color_schemes = array(
-		'dark' => array(
-			'value' =>	'dark',
-			'label' => __( 'Dark (Default)', 'modularity' )
-		),
-		'light' => array(
-			'value' =>	'light',
-			'label' => __( 'Light', 'modularity' )
-		),
-	);
-
-	return $color_schemes;
 }
 
 /**
@@ -67,50 +41,12 @@ function theme_options_do_page() {
 		<form method="post" action="options.php">
 			<?php settings_fields( 'modularity_options' ); ?>
 			<?php $options = get_option( 'modularity_theme_options' ); ?>
-
-			<h3><?php _e( 'Color Schemes, Optional Sidebar and Slideshow', 'modularity' ); ?></h3>
-			<p><?php _e( 'A dark or light color scheme? A one-column layout or a two-column layout with sidebar? How about a home page slideshow featuring 950px by 425px image attachments from your most recent posts? The choice is yours.', 'modularity' ); ?></p>
+			
+			<h3><?php _e( 'Optional Sidebar and Slideshow', 'modularity' ); ?></h3>
+			<p><?php _e( 'A one-column layout or a two-column layout with sidebar? How about a home page slideshow featuring 950px by 425px image attachments from your most recent posts? The choice is yours.', 'modularity' ); ?></p>			
 
 			<table class="form-table">
-
-				<?php
-				/**
-				 * Color Scheme Option
-				 */
-				?>
-				<tr valign="top" id="modularity-colors"><th scope="row"><?php _e( 'Color Scheme', 'modularity' ); ?></th>
-					<td>
-						<fieldset><legend class="screen-reader-text"><span><?php _e( 'Color Scheme', 'modularity' ); ?></span></legend>
-						<?php
-							if ( ! isset( $checked ) )
-								$checked = '';
-							foreach ( modularity_color_schemes() as $option ) {
-								$radio_setting = $options['color_scheme'];
-
-								if ( '' != $radio_setting ) {
-									if ( $options['color_scheme'] == $option['value'] ) {
-										$checked = "checked=\"checked\"";
-									} else {
-										$checked = '';
-									}
-								}
-								?>
-								<div class="layout">
-								<label class="description">
-									<input type="radio" name="modularity_theme_options[color_scheme]" value="<?php echo esc_attr( $option['value'] ); ?>" <?php echo $checked; ?> />
-									<span>
-										<img src="<?php echo get_template_directory_uri(); ?>/images/<?php echo $option['value']; ?>.png"/>
-										<?php echo $option['label']; ?>
-									</span>
-								</label>
-								</div>
-								<?php
-							}
-						?>
-						</fieldset>
-					</td>
-				</tr>
-
+				
 				<?php
 				/**
 				 * Sidebar option
@@ -121,7 +57,7 @@ function theme_options_do_page() {
 						<input id="modularity_theme_options[sidebar]" name="modularity_theme_options[sidebar]" type="checkbox" value="1" <?php checked( '1', $options['sidebar'] ); ?> />
 						<label class="description" for="modularity_theme_options[sidebar]"><?php _e( 'Yes! I&rsquo;d like to enable the optional sidebar', 'modularity' ); ?></label>
 					</td>
-				</tr>
+				</tr>		
 
 				<?php
 				/**
@@ -133,15 +69,16 @@ function theme_options_do_page() {
 						<input id="modularity_theme_options[slideshow]" name="modularity_theme_options[slideshow]" type="checkbox" value="1" <?php checked( '1', $options['slideshow'] ); ?> />
 						<label class="description" for="modularity_theme_options[slideshow]"><?php _e( 'Yes! I&rsquo;d like to enable the optional home page slideshow', 'modularity' ); ?></label>
 					</td>
-				</tr>
-
+				</tr>		
+				
+				
 			</table>
-
+				
 			<h3><?php _e( 'Welcome Message', 'modularity' ); ?></h3>
 			<p><?php _e( 'Fill out the following Title and Content fields to enable a Welcome Message on the home page of your site.', 'modularity' ); ?></p>
-
+			
 			<table class="form-table">
-
+				
 				<?php
 				/**
 				 * Welcome box title
@@ -162,12 +99,12 @@ function theme_options_do_page() {
 					<td>
 						<textarea id="modularity_theme_options[welcome_content]" class="large-text" cols="50" rows="10" name="modularity_theme_options[welcome_content]"><?php echo esc_textarea( $options['welcome_content'] ); ?></textarea>
 					</td>
-				</tr>
+				</tr>														
 
 			</table>
 
 			<p class="submit">
-				<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Options', 'modularity' ); ?>" />
+				<input type="submit" class="button-primary" value="<?php _e( 'Save Options' ); ?>" />
 			</p>
 		</form>
 	</div>
@@ -194,16 +131,13 @@ function theme_options_validate( $input ) {
 	if ( ! isset( $input['welcome_box'] ) )
 		$input['welcome_box'] = null;
 	$input['welcome_box'] = ( $input['welcome_box'] == 1 ? 1 : 0 );
-
+	
 	// Say our text option must be safe text with no HTML tags
 	$input['welcome_title'] = wp_filter_nohtml_kses( $input['welcome_title'] );
-
+	
 	// Say our textarea option must be safe text with the allowed tags for posts
-	$input['welcome_content'] = wp_filter_post_kses( $input['welcome_content'] );
-
-	if ( ! array_key_exists( $input['color_scheme'], modularity_color_schemes() ) )
-		$input['color_scheme'] = 'dark';
-
+	$input['welcome_content'] = wp_filter_post_kses( $input['welcome_content'] );	
+		
 	return $input;
 }
 

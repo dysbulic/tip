@@ -20,7 +20,7 @@
 
 			<ul id="postlist">
 			<?php while ( have_posts() ) : the_post(); ?>
-				<?php p2_load_entry(); ?>
+				<?php p2_load_entry(); // loads entry.php ?>
 			<?php endwhile; ?>
 			</ul>
 

@@ -4,6 +4,8 @@
 
 				<div id="content">
 
+<?php the_post(); ?>
+
 					<h2 class="page-title author"><?php printf( __( 'Author Archives: <strong class="vcard">%s</strong>', 'steira' ), '<a class="url fn n" href="' . esc_url( $authordata->user_url ) . '" title="' . esc_attr( $authordata->display_name ) . '" rel="me">' . esc_html( $authordata->display_name ) .'</a> '); ?></h2>
 
 <?php rewind_posts(); ?>

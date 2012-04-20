@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Spectrum
+ * @package WordPress
+ * @subpackage Spectrum
  */
 
 get_header(); ?>
@@ -15,9 +16,7 @@ get_header(); ?>
 				</div>
 			</div>
 			<div class="post-meta post-author-and-comments">
-				<?php if ( ! is_multi_author() ) { ?>
-					<p class="post-author"><?php printf( __( 'Published by <strong>%1$s</strong>', 'spectrum' ), get_the_author() ); ?></p>
-				<?php } ?>
+				<p class="post-author"><?php printf( __( 'Published by <strong>%1$s</strong>', 'spectrum' ), get_the_author() ); ?></p>
 				<p class="comment-number"><?php comments_popup_link( __( 'Leave a comment', 'spectrum' ), __( '<strong>1</strong> Comment', 'spectrum' ), __( '<strong>%</strong> Comments', 'spectrum' ) ); ?></p>
 			</div>
 			<div class="entry">
@@ -60,7 +59,7 @@ get_header(); ?>
 	<?php comments_template(); ?>
 
 	<?php endwhile; else: ?>
-
+	
 	<h3><?php _e( 'Not Found', 'spectrum' ); ?></h3>
 	<p><?php _e( 'Sorry, no posts matched your criteria.', 'spectrum' ); ?></p>
 

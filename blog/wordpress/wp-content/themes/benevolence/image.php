@@ -18,7 +18,7 @@ if (have_posts()) {
 		<div class="alignleft"><?php previous_image_link() ?></div>
 		<div class="alignright"><?php next_image_link() ?></div>
 	</div>
-
+	
     <div class="sep"></div>
 
 <?php comments_template(); // Get wp-comments.php template ?>

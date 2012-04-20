@@ -32,31 +32,11 @@ function coraline_color_schemes() {
 	$color_schemes = array(
 		'light' => array(
 			'value' =>	'light',
-			'label' => __( 'White', 'coraline' )
+			'label' => __( 'Light', 'coraline' )
 		),
 		'dark' => array(
 			'value' =>	'dark',
-			'label' => __( 'Black', 'coraline' )
-		),
-		'pink' => array(
-			'value' =>	'pink',
-			'label' => __( 'Pink', 'coraline' )
-		),
-		'blue' => array(
-			'value' =>	'blue',
-			'label' => __( 'Blue', 'coraline' )
-		),
-		'purple' => array(
-			'value' =>	'purple',
-			'label' => __( 'Purple', 'coraline' )
-		),
-		'red' => array(
-			'value' =>	'red',
-			'label' => __( 'Red', 'coraline' )
-		),
-		'brown' => array(
-			'value' =>	'brown',
-			'label' => __( 'Brown', 'coraline' )
+			'label' => __( 'Dark', 'coraline' )
 		),
 	);
 
@@ -88,14 +68,28 @@ function coraline_layouts() {
 			'value' => 'sidebar-content-sidebar',
 			'label' => __( 'Sidebar-Content-Sidebar', 'coraline' )
 		),
-		'no-sidebars' => array(
-			'value' => 'no-sidebars',
-			'label' => __( 'Full Width (No Sidebars)', 'coraline' )
-		),
 	);
 
 	return $theme_layouts;
 }
+
+/**
+ * Set default options
+ */
+function coraline_default_options() {
+	$options = get_option( 'coraline_theme_options' );
+
+	if ( ! isset( $options['color_scheme'] ) ) {
+		$options['color_scheme'] = 'light';
+		update_option( 'coraline_theme_options', $options );
+	}
+
+	if ( ! isset( $options['theme_layout'] ) ) {
+		$options['theme_layout'] = 'content-sidebar';
+		update_option( 'coraline_theme_options', $options );
+	}
+}
+add_action( 'init', 'coraline_default_options' );
 
 /**
  * Create the options page
@@ -116,7 +110,7 @@ function coraline_theme_options_do_page() {
 
 		<form method="post" action="options.php">
 			<?php settings_fields( 'coraline_options' ); ?>
-			<?php $options = coraline_get_theme_options(); ?>
+			<?php $options = get_option( 'coraline_theme_options' ); ?>
 
 			<table class="form-table">
 
@@ -191,7 +185,7 @@ function coraline_theme_options_do_page() {
 				 * Coraline Aside Category
 				 */
 
-				$selected_aside_category = ( isset( $options['aside_category'] ) ) ? $options['aside_category'] : null;
+				$selected_aside_category = $options['aside_category'];
 				if ( ! empty( $selected_aside_category ) ) :
 				?>
 
@@ -223,7 +217,7 @@ function coraline_theme_options_do_page() {
 				/**
 				 * Coraline Gallery Category
 				 */
-				$selected_gallery_category = ( isset( $options['gallery_category'] ) ) ? $options['gallery_category'] : null;
+				$selected_gallery_category = $options['gallery_category'];
 				if ( ! empty( $selected_gallery_category ) ) :
 				?>
 				<tr valign="top"><th scope="row"><?php _e( 'Gallery Category', 'coraline' ); ?></th>
@@ -253,7 +247,7 @@ function coraline_theme_options_do_page() {
 			</table>
 
 			<p class="submit">
-				<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Options', 'coraline' ); ?>" />
+				<input type="submit" class="button-primary" value="<?php _e( 'Save Options', 'coraline' ); ?>" />
 			</p>
 		</form>
 	</div>
@@ -276,11 +270,11 @@ function coraline_theme_options_validate( $input ) {
 		$input['theme_layout'] = null;
 
 	// Our aside category option must actually be in our array of categories
-	if ( isset( $input['aside_category'] ) && array_search( $input['aside_category'], get_categories() ) != 0 )
+	if ( array_search( $input['aside_category'], get_categories() ) != 0 )
 		$input['aside_category'] = null;
 
 	// Our gallery category option must actually be in our array of categories
-	if ( isset( $input['gallery_category'] ) && array_search( $input['gallery_category'], get_categories() ) != 0 )
+	if ( array_search( $input['gallery_category'], get_categories() ) != 0 )
 		$input['gallery_category'] = null;
 
 	return $input;

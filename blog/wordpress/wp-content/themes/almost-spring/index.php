@@ -45,7 +45,6 @@
 					<?php the_excerpt() ?>
 				<?php } else { ?>
 					<?php the_content(__('Read the rest of this entry &raquo;','almost-spring')); ?>
-					<?php wp_link_pages( __( 'Pages:', 'almost-spring' ) ); ?>
 				<?php } ?>
 				</div>
 			
@@ -68,7 +67,7 @@
 		
 		<h3><?php _e('Search','almost-spring'); ?></h3>
 		
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 
 	<?php endif; ?>
 

@@ -1,29 +1,5 @@
 /* podpress_admin.js | podPress - JS scripts for the Admin Site */
 /* some functions rely on function in podpres.js that makes it necessary to enqueue in Admin Site always both files */
-if (!self.getHTTPObject) {
-	function getHTTPObject() {
-		var xmlhttp;
-		var container;
-		if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
-			try {
-				xmlhttp = new XMLHttpRequest();
-			} catch (e) {
-				xmlhttp = false;
-			}
-		} else {
-			try {
-				xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-			} catch (e) {
-				try {
-					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-				} catch (E) {
-					xmlhttp = false;
-				}
-			}
-		}		
-		return xmlhttp;
-	}
-}
 var podPressHttp_TestStats = getHTTPObject();
 
 var podPressLoadedMP3Info = '';
@@ -144,7 +120,7 @@ function podPress_getfileinfo(rqtype, VarNum) {
 		var old_cell_content = '';
 		podpress_http_request.open('POST', url, true);
 		podpress_http_request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		podpress_http_request.send( 'action=' + rqtype + '&filename=' + encodeURIComponent(params) + '&_ajax_nonce=' + document.getElementById( 'podPress_AJAX_sec' ).value );
+		podpress_http_request.send( 'action=' + rqtype + '&filename=' + encodeURIComponent(params) );
 		podpress_http_request.onreadystatechange = function() { podPress_getfileinfo_result( rqtype, old_cell_content, id_base, VarNum ); }
 	}
 }
@@ -173,7 +149,7 @@ function podPress_getfileinfo_result( rqtype, old_cell_content, resultcell_id, V
 						}
 						document.getElementById( resultcell_id + '_loadimg').style.display = 'none';
 						document.getElementById( resultcell_id + '_detectbutton').style.display = 'inline';	
-						document.getElementById( resultcell_id ).value = podPress_trim(podPressMediaFiles[VarNum][rqtype]);
+						document.getElementById( resultcell_id ).value = podPressMediaFiles[VarNum][rqtype];
 					break;
 				}
 			} else {
@@ -213,19 +189,11 @@ function podPressID3ToPost(VarNum) {
 
 function podPress_sanitizeURL(rawurl) {
 	var clUrl = rawurl.replace(/<\S[^><]*>/g, '');
-	clUrl = podPress_trim(clUrl);
+	var ltrim = /\s+$/; // one blank or blanks at the begin of the string
+	var rtrim = /^\s+/; // one blank or blanks at the end of the string
+	clUrl = clUrl.replace(ltrim, '');
+	clUrl = clUrl.replace(rtrim, '');
 	return clUrl;
-}
-function podPress_trim(unsanitized_str) {
-	if ( typeof unsanitized_str != 'string' ) {
-		return unsanitized_str;
-	} else {
-		var ltrim = /\s+$/; // one blank or blanks at the begin of the string
-		var rtrim = /^\s+/; // one blank or blanks at the end of the string
-		sanitized_str = unsanitized_str.replace(ltrim, '');
-		sanitized_str = sanitized_str.replace(rtrim, '');
-		return sanitized_str;
-	}
 }
 
 /**
@@ -300,7 +268,7 @@ function podpress_check_method_requirements(selectedvalue) {
 	}
 }
 function podpress_showhide_adv(id, switchtext, text_id) {
-	if ( typeof switchtext != 'boolean' ) {
+	if ( typeof switchtext != 'boolean') {
 		var switchtext = false;
 	}
 	if (true == switchtext) {
@@ -499,7 +467,7 @@ function podPress_updateCategoryCasting(main_wp_version) {
 	if(document.getElementById('blognameChoice').value == 'Global') { 
 		podPress_set_blognamePreview(document.getElementById('global_blogname').value);
 	} else if(document.getElementById('blognameChoice').value == 'Append') { 
-		podPress_set_blognamePreview(document.getElementById('global_blogname').value+' &raquo; '+cat_name.value);
+		podPress_set_blognamePreview(document.getElementById('global_blogname').value+' : '+cat_name.value);
 	} else {
 		podPress_set_blognamePreview(cat_name.value);
 	}
@@ -755,7 +723,10 @@ function podPressShowPreviewImage(VarNum) {
 
 function podPressPreviewImageOnChange(VarNum, imageUrl) {
 	imageUrl = imageUrl.replace(/<\S[^><]*>/g, '');
-	imageUrl = podPress_trim(imageUrl);
+	var ltrim = /\s+$/; // one blank or blanks at the begin of the string
+	var rtrim = /^\s+/; // one blank or blanks at the end of the string
+	imageUrl = imageUrl.replace(ltrim, '');
+	imageUrl = imageUrl.replace(rtrim, '');
 	var data = new Array();
 	if (podPressMediaFiles[VarNum] == undefined) {
 		data = newMediaDefaults;
@@ -764,7 +735,6 @@ function podPressPreviewImageOnChange(VarNum, imageUrl) {
 	}
 	data['previewImage'] = imageUrl;
 	try {
-		document.getElementById('podPressMedia_'+VarNum+'_previewImage').value = imageUrl;
 		document.getElementById('podPress_previewImageIMG_'+VarNum).src = imageUrl;
 	} catch (e) {
 		//alert('preview player without preview image');

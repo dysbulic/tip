@@ -4,14 +4,16 @@ Theme URI: http://85ideas.com/public-releases/wordpress-theme-motion/
 Description: Dark and colorful theme with sweet transparency characteristics. Drop-down categories menu, 2-column layout and widget-ready footer and sidebar.
 Author: Sam @ 85ideas
 Author URI: http://85ideas.com/
-Version: 1.1.6-wpcom
-Tags: black, blue, green, dark, two-columns, sticky-post, custom-menu, fixed-width, right-sidebar, custom-background, translation-ready, rtl-language-support, blog, artistic, colorful, dark
+Version: 1.0.3-wpcom
+Tags: black, blue, green, dark, two-columns, sticky-post, custom-menu, fixed-width, right-sidebar, custom-background, translation-ready, blog, artistic, colorful, dark
 
-This theme was designed and built for the WordPress CMS and is copyright 85ideas.com.
-Modify, adapt, and customize for your own site at will!
+	Adapted for WordPress.com by Automattic, January 2010
 
-The CSS, XHTML and design of this theme are released under GPL:
-http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+	This theme was designed and built for the WordPress CMS and is copyright 85ideas.com.
+	Modify, adapt, and customize for your own site at will!
+
+	The CSS, XHTML and design of this theme are released under GPL:
+	http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
 
 
@@ -212,7 +214,7 @@ form label.subscribe-label {
 	float: left;
 	margin: 0;
 	z-index: 99999;
-	list-style-type: none;
+	list-style-type: none;	
 	width: 164px;
 	-moz-box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
 	-webkit-box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
@@ -328,12 +330,12 @@ form label.subscribe-label {
 	background: url(images/blacktrans.png);
 }
 #catnav {
-	background: url(images/blacktrans.png);
 	width: 980px;
+	background: url(images/blacktrans.png);
 }
 #nav li {
-	background: url(images/blacktrans.png);
 	float: left;
+	background: url(images/blacktrans.png);
 	line-height: 2em;
 	margin: 5px 0 5px 5px;
 }
@@ -341,58 +343,48 @@ form label.subscribe-label {
 	background: url(images/blacktrans2.png);
 }
 #nav li a {
-	color: #fff;
 	display: block;
-	font-size: 0.8em;
 	margin: 0;
+	font-size: 0.8em;
+	color: #fff;
 	padding: 0 13px;
 }
 #nav li a:hover {
 	color: #afdaff;
 	text-decoration: none;
+	display: block;
 }
 #nav li ul {
-	margin: 0;
-	padding-top: 5px;
 	position: absolute;
-	left: -999em;
 	width: 180px;
+	left: -999em;
+	padding-top: 5px;
+	margin: 0;
 }
-#nav li:hover > ul,
-#nav li.sfhover > ul {
+#nav li:hover ul,#nav li.sfhover ul {
 	left: auto;
 }
-#nav li li ul {
-	display: none;
-}
-#nav li li:hover > ul,
-#nav li li.sfhover > ul {
-	display: block;
-	left: 100%;
-	margin: 0;
-	padding: 0;
-}
 #nav li li {
-	line-height: 1.5em;
-	margin: 0;
 	padding: 0;
+	margin: 0;
 	width: 180px;
+	line-height: 1.5em;
 }
 #nav li li a {
-	background: url(images/blacktrans3.png);
 	color: #fff;
-	float: left;
 	margin: 0;
 	padding: 7px 13px;
-	width: 154px;
+	background: url(images/blacktrans3.png);
+}
+#nav li li ul li {
+	margin-left: 13px;
 }
 #nav li li a:hover {
 	color: #afdaff;
 }
 #nav li:hover,#nav li.sfhover {
-	position: static; /* prevents IE7 drop-down menu bug (focus on a page element prevents nested menus from disappearing) */
+	position:static; /* prevents IE7 drop-down menu bug (focus on a page element prevents nested menus from disappearing) */
 }
-
 
 /************************************************
 * Content *
@@ -428,12 +420,9 @@ h2#contentdesc span {
 	background: url(images/blacktrans.png);
 	padding: 10px;
 }
-.posttop h2.posttitle {
-	color: #afdaff;
-	font-size: 1.4em;
-}
 .posttop h2.posttitle a {
 	color: #afdaff;
+	font-size: 1.4em;
 }
 .posttop h2.posttitle a:hover {
 	color: #a8ef9d;

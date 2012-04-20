@@ -1,28 +1,11 @@
 // send html to the post editor
-
-var wpActiveEditor;
-
 function send_to_editor(h) {
-	var ed, mce = typeof(tinymce) != 'undefined', qt = typeof(QTags) != 'undefined';
+	var ed;
 
-	if ( !wpActiveEditor ) {
-		if ( mce && tinymce.activeEditor ) {
-			ed = tinymce.activeEditor;
-			wpActiveEditor = ed.id;
-		} else if ( !qt ) {
-			return false;
-		}
-	} else if ( mce ) {
-		if ( tinymce.activeEditor && (tinymce.activeEditor.id == 'mce_fullscreen' || tinymce.activeEditor.id == 'wp_mce_fullscreen') )
-			ed = tinymce.activeEditor;
-		else
-			ed = tinymce.get(wpActiveEditor);
-	}
-
-	if ( ed && !ed.isHidden() ) {
-		// restore caret position on IE
-		if ( tinymce.isIE && ed.windowManager.insertimagebookmark )
-			ed.selection.moveToBookmark(ed.windowManager.insertimagebookmark);
+	if ( typeof tinyMCE != 'undefined' && ( ed = tinyMCE.activeEditor ) && !ed.isHidden() ) {
+		ed.focus();
+		if ( tinymce.isIE )
+			ed.selection.moveToBookmark(tinymce.EditorManager.activeEditor.windowManager.bookmark);
 
 		if ( h.indexOf('[caption') === 0 ) {
 			if ( ed.plugins.wpeditimage )
@@ -36,13 +19,14 @@ function send_to_editor(h) {
 		}
 
 		ed.execCommand('mceInsertContent', false, h);
-	} else if ( qt ) {
-		QTags.insertContent(h);
+
+	} else if ( typeof edInsertContent == 'function' ) {
+		edInsertContent(edCanvas, h);
 	} else {
-		document.getElementById(wpActiveEditor).value += h;
+		jQuery( edCanvas ).val( jQuery( edCanvas ).val() + h );
 	}
 
-	try{tb_remove();}catch(e){};
+	tb_remove();
 }
 
 // thickbox settings
@@ -73,16 +57,13 @@ var tb_position;
 
 	$(window).resize(function(){ tb_position(); });
 
-	// store caret position in IE
-	$(document).ready(function($){
-		$('a.thickbox').click(function(){
-			var ed;
-
-			if ( typeof(tinymce) != 'undefined' && tinymce.isIE && ( ed = tinymce.get(wpActiveEditor) ) && !ed.isHidden() ) {
-				ed.focus();
-				ed.windowManager.insertimagebookmark = ed.selection.getBookmark();
-			}
-		});
-	});
-
 })(jQuery);
+
+jQuery(document).ready(function($){
+	$('a.thickbox').click(function(){
+		if ( typeof tinyMCE != 'undefined' && tinyMCE.activeEditor ) {
+			tinyMCE.get('content').focus();
+			tinyMCE.activeEditor.windowManager.bookmark = tinyMCE.activeEditor.selection.getBookmark('simple');
+		}
+	});
+});

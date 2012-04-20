@@ -2,7 +2,7 @@
 Theme Name: DePo Masthead
 Theme URI: http://wordpress.org/extend/themes/depo-masthead/
 Description: A classy template that draws on classic magazine design for a simple, bold style.
-Version: 1.0.2-wpcom
+Version: 1.0.1-wpcom
 Author: Automattic
 Author URI: http://automattic.com/
 License: GNU General Public License
@@ -264,11 +264,7 @@ h1.name a:visited {
 	padding: 2px 4px;
 }
 #menu ul li a:hover,
-#menu ul li a:active,
-#menu ul li.current-menu-item > a,
-#menu ul li.current-menu-ancestor > a,
-#menu ul li.current_page_item > a,
-#menu ul li.current_page_ancestor > a {
+#menu ul li a:active {
 	background-color: #900;
 	color: #fff;
 }
@@ -441,7 +437,6 @@ h2 a:hover {
 	top: -15px;
 	left: 100%;
 	padding: 0 5px;
-	white-space: nowrap;
 }
 #content .readmore a:hover,
 #content .readmore a:active {
@@ -933,21 +928,6 @@ img.centered {
 	text-align: right
 }
 
-/*
-Resize images to fit the main content area.
-- Applies only to images uploaded via WordPress by targeting size-* classes.
-- Other images will be left alone. Use "size-auto" class to apply to other images.
-*/
-img.size-auto,
-img.size-full,
-img.size-large,
-img.size-medium,
-.attachment img,
-.widget-area img {
-	max-width: 100%; /* When images are too wide for containing element, force them to fit. */
-	height: auto; /* Override height to match resized width for correct aspect ratio. */
-}
-
 
 /* Utility */
 .group:after {
@@ -1013,19 +993,6 @@ blockquote em {
 #home object,
 #home embed {
 	width: 100%
-}
-html body.blog .video-player {
-	max-width: 302px;
-	max-height: 226px !important;
-}
-html body.blog .video-player object {
-	max-width: 302px;
-	max-height: 226px !important;
-}
-html body.blog .videopress-placeholder,
-html body.blog .video-player img {
-	max-width: 100% !important;
-	max-height: 226px !important;
 }
 #content #wpl-likebox {
 	margin-left: auto !important;

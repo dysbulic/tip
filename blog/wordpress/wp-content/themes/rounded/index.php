@@ -8,14 +8,7 @@
 <img src="<?php bloginfo('template_directory'); ?>/img/tl.gif" alt="" width="15" height="15" class="corner" style="display: none" />
 </div>
 
-<h3 class="storytitle" id="post-<?php the_ID(); ?>">
-	<?php if ( ! is_single() ) : ?>
-		<a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'rounded' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a>
-	<?php else : ?>
-		<?php the_title(); ?>
-	<?php endif; ?>
-	<?php unset($previousday); the_date('','<span class="date">','</span>'); ?>
-</h3>
+<h3 class="storytitle" id="post-<?php the_ID(); ?>"><a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title(); ?></a> <?php unset($previousday); the_date('','<span class="date">','</span>'); ?></h3>
 <div class="meta"><?php _e("Filed under:"); ?> <?php the_category(',') ?> &#8212; <?php the_author() ?> @ <?php the_time() ?> <?php edit_post_link(__('Edit This')); ?>
 <br /> <?php the_tags('Tags: ', ', ', '<br />'); ?>
 </div><!-- end META -->

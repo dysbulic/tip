@@ -25,6 +25,9 @@ class WP_Upgrader {
 	var $skin = null;
 	var $result = array();
 
+	function WP_Upgrader($skin = null) {
+		return $this->__construct($skin);
+	}
 	function __construct($skin = null) {
 		if ( null == $skin )
 			$this->skin = new WP_Upgrader_Skin();
@@ -52,7 +55,7 @@ class WP_Upgrader {
 		$this->strings['installing_package'] = __('Installing the latest version&#8230;');
 		$this->strings['folder_exists'] = __('Destination folder already exists.');
 		$this->strings['mkdir_failed'] = __('Could not create directory.');
-		$this->strings['incompatible_archive'] = __('The package could not be installed.');
+		$this->strings['bad_package'] = __('Incompatible Archive.');
 
 		$this->strings['maintenance_start'] = __('Enabling Maintenance mode&#8230;');
 		$this->strings['maintenance_end'] = __('Disabling Maintenance mode&#8230;');
@@ -153,9 +156,6 @@ class WP_Upgrader {
 
 		if ( is_wp_error($result) ) {
 			$wp_filesystem->delete($working_dir, true);
-			if ( 'incompatible_archive' == $result->get_error_code() ) {
-				return new WP_Error( 'incompatible_archive', $this->strings['incompatible_archive'], $result->get_error_data() );
-			}
 			return $result;
 		}
 
@@ -193,9 +193,8 @@ class WP_Upgrader {
 		if ( 1 == count($source_files) && $wp_filesystem->is_dir( trailingslashit($source) . $source_files[0] . '/') ) //Only one folder? Then we want its contents.
 			$source = trailingslashit($source) . trailingslashit($source_files[0]);
 		elseif ( count($source_files) == 0 )
-			return new WP_Error( 'incompatible_archive', $this->strings['incompatible_archive'], __( 'The plugin contains no files.' ) ); //There are no files?
-		else //Its only a single file, The upgrader will use the foldername of this file as the destination folder. foldername is based on zip filename.
-			$source = trailingslashit($source);
+			return new WP_Error('bad_package', $this->strings['bad_package']); //There are no files?
+		//else //Its only a single file, The upgrader will use the foldername of this file as the destination folder. foldername is based on zip filename.
 
 		//Hook ability to change the source file location..
 		$source = apply_filters('upgrader_source_selection', $source, $remote_source, $this);
@@ -212,25 +211,25 @@ class WP_Upgrader {
 			$destination = trailingslashit($destination) . trailingslashit(basename($source));
 		}
 
-		if ( $clear_destination ) {
-			//We're going to clear the destination if there's something there
-			$this->skin->feedback('remove_old');
-			$removed = true;
-			if ( $wp_filesystem->exists($remote_destination) )
+		if ( $wp_filesystem->exists($remote_destination) ) {
+			if ( $clear_destination ) {
+				//We're going to clear the destination if theres something there
+				$this->skin->feedback('remove_old');
 				$removed = $wp_filesystem->delete($remote_destination, true);
-			$removed = apply_filters('upgrader_clear_destination', $removed, $local_destination, $remote_destination, $hook_extra);
+				$removed = apply_filters('upgrader_clear_destination', $removed, $local_destination, $remote_destination, $hook_extra);
 
-			if ( is_wp_error($removed) )
-				return $removed;
-			else if ( ! $removed )
-				return new WP_Error('remove_old_failed', $this->strings['remove_old_failed']);
-		} elseif ( $wp_filesystem->exists($remote_destination) ) {
-			//If we're not clearing the destination folder and something exists there already, Bail.
-			//But first check to see if there are actually any files in the folder.
-			$_files = $wp_filesystem->dirlist($remote_destination);
-			if ( ! empty($_files) ) {
-				$wp_filesystem->delete($remote_source, true); //Clear out the source files.
-				return new WP_Error('folder_exists', $this->strings['folder_exists'], $remote_destination );
+				if ( is_wp_error($removed) )
+					return $removed;
+				else if ( ! $removed )
+					return new WP_Error('remove_old_failed', $this->strings['remove_old_failed']);
+			} else {
+				//If we're not clearing the destination folder and something exists there allready, Bail.
+				//But first check to see if there are actually any files in the folder.
+				$_files = $wp_filesystem->dirlist($remote_destination);
+				if ( ! empty($_files) ) {
+					$wp_filesystem->delete($remote_source, true); //Clear out the source files.
+					return new WP_Error('folder_exists', $this->strings['folder_exists'], $remote_destination );
+				}
 			}
 		}
 
@@ -303,10 +302,8 @@ class WP_Upgrader {
 			return $download;
 		}
 
-		$delete_package = ($download != $package); // Do not delete a "local" file
-
-		//Unzips the file into a temporary directory
-		$working_dir = $this->unpack_package( $download, $delete_package );
+		//Unzip's the file into a temporary directory
+		$working_dir = $this->unpack_package( $download );
 		if ( is_wp_error($working_dir) ) {
 			$this->skin->error($working_dir);
 			$this->skin->after();
@@ -326,7 +323,7 @@ class WP_Upgrader {
 			$this->skin->error($result);
 			$this->skin->feedback('process_failed');
 		} else {
-			//Install Succeeded
+			//Install Suceeded
 			$this->skin->feedback('process_success');
 		}
 		$this->skin->after();
@@ -395,8 +392,6 @@ class Plugin_Upgrader extends WP_Upgrader {
 		$this->init();
 		$this->install_strings();
 
-		add_filter('upgrader_source_selection', array(&$this, 'check_package') );
-
 		$this->run(array(
 					'package' => $package,
 					'destination' => WP_PLUGIN_DIR,
@@ -405,15 +400,9 @@ class Plugin_Upgrader extends WP_Upgrader {
 					'hook_extra' => array()
 					));
 
-		remove_filter('upgrader_source_selection', array(&$this, 'check_package') );
-
-		if ( ! $this->result || is_wp_error($this->result) )
-			return $this->result;
-
 		// Force refresh of plugin update information
 		delete_site_transient('update_plugins');
 
-		return true;
 	}
 
 	function upgrade($plugin) {
@@ -435,7 +424,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 
 		add_filter('upgrader_pre_install', array(&$this, 'deactivate_plugin_before_upgrade'), 10, 2);
 		add_filter('upgrader_clear_destination', array(&$this, 'delete_old_plugin'), 10, 4);
-		//'source_selection' => array(&$this, 'source_selection'), //there's a trac ticket to move up the directory for zip's which are made a bit differently, useful for non-.org plugins.
+		//'source_selection' => array(&$this, 'source_selection'), //theres a track ticket to move up the directory for zip's which are made a bit differently, useful for non-.org plugins.
 
 		$this->run(array(
 					'package' => $r->package,
@@ -447,7 +436,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 					)
 				));
 
-		// Cleanup our hooks, in case something else does a upgrade on this connection.
+		// Cleanup our hooks, incase something else does a upgrade on this connection.
 		remove_filter('upgrader_pre_install', array(&$this, 'deactivate_plugin_before_upgrade'));
 		remove_filter('upgrader_clear_destination', array(&$this, 'delete_old_plugin'));
 
@@ -532,39 +521,13 @@ class Plugin_Upgrader extends WP_Upgrader {
 
 		$this->skin->footer();
 
-		// Cleanup our hooks, in case something else does a upgrade on this connection.
+		// Cleanup our hooks, incase something else does a upgrade on this connection.
 		remove_filter('upgrader_clear_destination', array(&$this, 'delete_old_plugin'));
 
 		// Force refresh of plugin update information
 		delete_site_transient('update_plugins');
 
 		return $results;
-	}
-
-	function check_package($source) {
-		global $wp_filesystem;
-
-		if ( is_wp_error($source) )
-			return $source;
-
-		$working_directory = str_replace( $wp_filesystem->wp_content_dir(), trailingslashit(WP_CONTENT_DIR), $source);
-		if ( ! is_dir($working_directory) ) // Sanity check, if the above fails, lets not prevent installation.
-			return $source;
-
-		// Check the folder contains at least 1 valid plugin.
-		$plugins_found = false;
-		foreach ( glob( $working_directory . '*.php' ) as $file ) {
-			$info = get_plugin_data($file, false, false);
-			if ( !empty( $info['Name'] ) ) {
-				$plugins_found = true;
-				break;
-			}
-		}
-
-		if ( ! $plugins_found )
-			return new WP_Error( 'incompatible_archive', $this->strings['incompatible_archive'], __('No valid plugins were found.') );
-
-		return $source;
 	}
 
 	//return plugin info.
@@ -618,7 +581,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 			return $removed;
 
 		// If plugin is in its own directory, recursively delete the directory.
-		if ( strpos($plugin, '/') && $this_plugin_dir != $plugins_dir ) //base check on if plugin includes directory separator AND that its not the root plugin folder
+		if ( strpos($plugin, '/') && $this_plugin_dir != $plugins_dir ) //base check on if plugin includes directory seperator AND that its not the root plugin folder
 			$deleted = $wp_filesystem->delete($this_plugin_dir, true);
 		else
 			$deleted = $wp_filesystem->delete($plugins_dir . $plugin);
@@ -626,7 +589,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 		if ( ! $deleted )
 			return new WP_Error('remove_old_failed', $this->strings['remove_old_failed']);
 
-		return true;
+		return $removed;
 	}
 }
 
@@ -642,7 +605,6 @@ class Plugin_Upgrader extends WP_Upgrader {
 class Theme_Upgrader extends WP_Upgrader {
 
 	var $result;
-	var $bulk = false;
 
 	function upgrade_strings() {
 		$this->strings['up_to_date'] = __('The theme is at the latest version.');
@@ -669,8 +631,6 @@ class Theme_Upgrader extends WP_Upgrader {
 		$this->init();
 		$this->install_strings();
 
-		add_filter('upgrader_source_selection', array(&$this, 'check_package') );
-
 		$options = array(
 						'package' => $package,
 						'destination' => WP_CONTENT_DIR . '/themes',
@@ -680,15 +640,16 @@ class Theme_Upgrader extends WP_Upgrader {
 
 		$this->run($options);
 
-		remove_filter('upgrader_source_selection', array(&$this, 'check_package') );
-
 		if ( ! $this->result || is_wp_error($this->result) )
 			return $this->result;
 
 		// Force refresh of theme update information
 		delete_site_transient('update_themes');
 
-		return true;
+		if ( empty($result['destination_name']) )
+			return false;
+		else
+			return $result['destination_name'];
 	}
 
 	function upgrade($theme) {
@@ -723,10 +684,6 @@ class Theme_Upgrader extends WP_Upgrader {
 						);
 
 		$this->run($options);
-
-		remove_filter('upgrader_pre_install', array(&$this, 'current_before'), 10, 2);
-		remove_filter('upgrader_post_install', array(&$this, 'current_after'), 10, 2);
-		remove_filter('upgrader_clear_destination', array(&$this, 'delete_old_theme'), 10, 4);
 
 		if ( ! $this->result || is_wp_error($this->result) )
 			return $this->result;
@@ -813,7 +770,7 @@ class Theme_Upgrader extends WP_Upgrader {
 
 		$this->skin->footer();
 
-		// Cleanup our hooks, in case something else does a upgrade on this connection.
+		// Cleanup our hooks, incase something else does a upgrade on this connection.
 		remove_filter('upgrader_pre_install', array(&$this, 'current_before'), 10, 2);
 		remove_filter('upgrader_post_install', array(&$this, 'current_after'), 10, 2);
 		remove_filter('upgrader_clear_destination', array(&$this, 'delete_old_theme'), 10, 4);
@@ -822,30 +779,6 @@ class Theme_Upgrader extends WP_Upgrader {
 		delete_site_transient('update_themes');
 
 		return $results;
-	}
-
-	function check_package($source) {
-		global $wp_filesystem;
-
-		if ( is_wp_error($source) )
-			return $source;
-
-		// Check the folder contains a valid theme
-		$working_directory = str_replace( $wp_filesystem->wp_content_dir(), trailingslashit(WP_CONTENT_DIR), $source);
-		if ( ! is_dir($working_directory) ) // Sanity check, if the above fails, lets not prevent installation.
-			return $source;
-
-		if ( ! file_exists( $working_directory . 'style.css' ) ) // A proper archive should have a style.css file in the single subdirectory
-			return new WP_Error( 'incompatible_archive', $this->strings['incompatible_archive'], __('The theme is missing the <code>style.css</code> stylesheet.') );
-
-		$info = get_theme_data( $working_directory . 'style.css' );
-		if ( empty($info['Name']) )
-			return new WP_Error( 'incompatible_archive', $this->strings['incompatible_archive'], __("The <code>style.css</code> stylesheet doesn't contain a valid theme header.") );
-
-		if ( empty($info['Template']) && ! file_exists( $working_directory . 'index.php' ) ) // If no template is set, it must have at least an index.php to be legit.
-			return new WP_Error( 'incompatible_archive', $this->strings['incompatible_archive'], __('The theme is missing the <code>index.php</code> file.') );
-
-		return $source;
 	}
 
 	function current_before($return, $theme) {
@@ -863,7 +796,6 @@ class Theme_Upgrader extends WP_Upgrader {
 
 		return $return;
 	}
-
 	function current_after($return, $theme) {
 		if ( is_wp_error($return) )
 			return $return;
@@ -874,7 +806,7 @@ class Theme_Upgrader extends WP_Upgrader {
 			return $return;
 
 		//Ensure stylesheet name hasnt changed after the upgrade:
-		// @TODO: Note, This doesn't handle the Template changing, or the Template name changing.
+		// @TODO: Note, This doesnt handle the Template changing, or the Template name changing.
 		if ( $theme == get_stylesheet() && $theme != $this->result['destination_name'] ) {
 			$theme_info = $this->theme_info();
 			$stylesheet = $this->result['destination_name'];
@@ -917,7 +849,7 @@ class Theme_Upgrader extends WP_Upgrader {
 }
 
 /**
- * Core Upgrader class for WordPress. It allows for WordPress to upgrade itself in combination with the wp-admin/includes/update-core.php file
+ * Core Upgrader class for WordPress. It allows for WordPress to upgrade itself in combiantion with the wp-admin/includes/update-core.php file
  *
  * @TODO More Detailed docs, for methods as well.
  *
@@ -936,7 +868,7 @@ class Core_Upgrader extends WP_Upgrader {
 	}
 
 	function upgrade($current) {
-		global $wp_filesystem, $wp_version;
+		global $wp_filesystem;
 
 		$this->init();
 		$this->upgrade_strings();
@@ -954,21 +886,7 @@ class Core_Upgrader extends WP_Upgrader {
 
 		$wp_dir = trailingslashit($wp_filesystem->abspath());
 
-		// If partial update is returned from the API, use that, unless we're doing a reinstall.
-		// If we cross the new_bundled version number, then use the new_bundled zip.
-		// Don't though if the constant is set to skip bundled items.
-		// If the API returns a no_content zip, go with it. Finally, default to the full zip.
-		if ( $current->packages->partial && 'reinstall' != $current->response && $wp_version == $current->partial_version )
-			$to_download = 'partial';
-		elseif ( $current->packages->new_bundled && version_compare( $wp_version, $current->new_bundled, '<' )
-			&& ( ! defined( 'CORE_UPGRADE_SKIP_NEW_BUNDLED' ) || ! CORE_UPGRADE_SKIP_NEW_BUNDLED ) )
-			$to_download = 'new_bundled';
-		elseif ( $current->packages->no_content )
-			$to_download = 'no_content';
-		else
-			$to_download = 'full';
-
-		$download = $this->download_package( $current->packages->$to_download );
+		$download = $this->download_package( $current->package );
 		if ( is_wp_error($download) )
 			return $download;
 
@@ -1005,6 +923,9 @@ class WP_Upgrader_Skin {
 	var $done_header = false;
 	var $result = false;
 
+	function WP_Upgrader_Skin($args = array()) {
+		return $this->__construct($args);
+	}
 	function __construct($args = array()) {
 		$defaults = array( 'url' => '', 'nonce' => '', 'title' => '', 'context' => false );
 		$this->options = wp_parse_args($args, $defaults);
@@ -1091,6 +1012,10 @@ class Plugin_Upgrader_Skin extends WP_Upgrader_Skin {
 	var $plugin_active = false;
 	var $plugin_network_active = false;
 
+	function Plugin_Upgrader_Skin($args = array()) {
+		return $this->__construct($args);
+	}
+
 	function __construct($args = array()) {
 		$defaults = array( 'url' => '', 'plugin' => '', 'nonce' => '', 'title' => __('Update Plugin') );
 		$args = wp_parse_args($args, $defaults);
@@ -1142,6 +1067,10 @@ class Plugin_Upgrader_Skin extends WP_Upgrader_Skin {
 class Bulk_Upgrader_Skin extends WP_Upgrader_Skin {
 	var $in_loop = false;
 	var $error = false;
+
+	function Bulk_Upgrader_Skin($args = array()) {
+		return $this->__construct($args);
+	}
 
 	function __construct($args = array()) {
 		$defaults = array( 'url' => '', 'nonce' => '' );
@@ -1247,8 +1176,7 @@ class Bulk_Upgrader_Skin extends WP_Upgrader_Skin {
 
 class Bulk_Plugin_Upgrader_Skin extends Bulk_Upgrader_Skin {
 	var $plugin_info = array(); // Plugin_Upgrader::bulk() will fill this in.
-
-	function __construct($args = array()) {
+	function Plugin_Upgrader_Skin($args = array()) {
 		parent::__construct($args);
 	}
 
@@ -1279,8 +1207,7 @@ class Bulk_Plugin_Upgrader_Skin extends Bulk_Upgrader_Skin {
 
 class Bulk_Theme_Upgrader_Skin extends Bulk_Upgrader_Skin {
 	var $theme_info = array(); // Theme_Upgrader::bulk() will fill this in.
-
-	function __construct($args = array()) {
+	function Theme_Upgrader_Skin($args = array()) {
 		parent::__construct($args);
 	}
 
@@ -1321,6 +1248,10 @@ class Bulk_Theme_Upgrader_Skin extends Bulk_Upgrader_Skin {
 class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 	var $api;
 	var $type;
+
+	function Plugin_Installer_Skin($args = array()) {
+		return $this->__construct($args);
+	}
 
 	function __construct($args = array()) {
 		$defaults = array( 'type' => 'web', 'url' => '', 'plugin' => '', 'nonce' => '', 'title' => '' );
@@ -1386,6 +1317,10 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 	var $api;
 	var $type;
 
+	function Theme_Installer_Skin($args = array()) {
+		return $this->__construct($args);
+	}
+
 	function __construct($args = array()) {
 		$defaults = array( 'type' => 'web', 'url' => '', 'theme' => '', 'nonce' => '', 'title' => '' );
 		$args = wp_parse_args($args, $defaults);
@@ -1422,9 +1357,6 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 			'activate' => '<a href="' . $activate_link .  '" class="activatelink" title="' . esc_attr( sprintf( __('Activate &#8220;%s&#8221;'), $name ) ) . '">' . __('Activate') . '</a>'
 							);
 
-		if ( is_network_admin() && current_user_can( 'manage_network_themes' ) )
-			$install_actions['network_enable'] = '<a href="' . esc_url( wp_nonce_url( 'themes.php?action=enable&amp;theme=' . $template, 'enable-theme_' . $template ) ) . '" title="' . esc_attr__( 'Enable this theme for all sites in this network' ) . '" target="_parent">' . __( 'Network Enable' ) . '</a>';
-
 		if ( $this->type == 'web' )
 			$install_actions['themes_page'] = '<a href="' . self_admin_url('theme-install.php') . '" title="' . esc_attr__('Return to Theme Installer') . '" target="_parent">' . __('Return to Theme Installer') . '</a>';
 		else
@@ -1450,6 +1382,10 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
  */
 class Theme_Upgrader_Skin extends WP_Upgrader_Skin {
 	var $theme = '';
+
+	function Theme_Upgrader_Skin($args = array()) {
+		return $this->__construct($args);
+	}
 
 	function __construct($args = array()) {
 		$defaults = array( 'url' => '', 'theme' => '', 'nonce' => '', 'title' => __('Update Theme') );
@@ -1501,66 +1437,32 @@ class Theme_Upgrader_Skin extends WP_Upgrader_Skin {
 class File_Upload_Upgrader {
 	var $package;
 	var $filename;
-	var $id = 0;
 
+	function File_Upload_Upgrader($form, $urlholder) {
+		return $this->__construct($form, $urlholder);
+	}
 	function __construct($form, $urlholder) {
+		if ( ! ( ( $uploads = wp_upload_dir() ) && false === $uploads['error'] ) )
+			wp_die($uploads['error']);
 
 		if ( empty($_FILES[$form]['name']) && empty($_GET[$urlholder]) )
 			wp_die(__('Please select a file'));
 
-		//Handle a newly uploaded file, Else assume its already been uploaded
-		if ( ! empty($_FILES) ) {
-			$overrides = array( 'test_form' => false, 'test_type' => false );
-			$file = wp_handle_upload( $_FILES[$form], $overrides );
-
-			if ( isset( $file['error'] ) )
-				wp_die( $file['error'] );
-
+		if ( !empty($_FILES) )
 			$this->filename = $_FILES[$form]['name'];
-			$this->package = $file['file'];
-
-			// Construct the object array
-			$object = array(
-				'post_title' => $this->filename,
-				'post_content' => $file['url'],
-				'post_mime_type' => $file['type'],
-				'guid' => $file['url'],
-				'context' => 'upgrader',
-				'post_status' => 'private'
-			);
-
-			// Save the data
-			$this->id = wp_insert_attachment( $object, $file['file'] );
-
-			// schedule a cleanup for 2 hours from now in case of failed install
-			wp_schedule_single_event( time() + 7200, 'upgrader_scheduled_cleanup', array( $this->id ) );
-
-		} elseif ( is_numeric( $_GET[$urlholder] ) ) {
-			// Numeric Package = previously uploaded file, see above.
-			$this->id = (int) $_GET[$urlholder];
-			$attachment = get_post( $this->id );
-			if ( empty($attachment) )
-				wp_die(__('Please select a file'));
-
-			$this->filename = $attachment->post_title;
-			$this->package = get_attached_file( $attachment->ID );
-		} else {
-			// Else, It's set to something, Back compat for plugins using the old (pre-3.3) File_Uploader handler.
-			if ( ! ( ( $uploads = wp_upload_dir() ) && false === $uploads['error'] ) )
-				wp_die( $uploads['error'] );
-
+		else if ( isset($_GET[$urlholder]) )
 			$this->filename = $_GET[$urlholder];
+
+		//Handle a newly uploaded file, Else assume its already been uploaded
+		if ( !empty($_FILES) ) {
+			$this->filename = wp_unique_filename( $uploads['basedir'], $this->filename );
+			$this->package = $uploads['basedir'] . '/' . $this->filename;
+
+			// Move the file to the uploads dir
+			if ( false === @ move_uploaded_file( $_FILES[$form]['tmp_name'], $this->package) )
+				wp_die( sprintf( __('The uploaded file could not be moved to %s.' ), $uploads['path']));
+		} else {
 			$this->package = $uploads['basedir'] . '/' . $this->filename;
 		}
-	}
-
-	function cleanup() {
-		if ( $this->id )
-			wp_delete_attachment( $this->id );
-
-		elseif ( file_exists( $this->package ) )
-			return @unlink( $this->package );
-
-		return true;
 	}
 }

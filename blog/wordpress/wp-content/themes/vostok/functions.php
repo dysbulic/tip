@@ -1,45 +1,18 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Vostok
- */
-
 // Vostok is a child theme for Twenty Ten, the default WordPress theme
 // This file overrides the default parent theme functions
 
-// Set the theme colors based on the current color scheme.
-$color_scheme = vostok_get_color_scheme();
-if ( 'light' == $color_scheme ) {
-	$themecolors = array(
-		'bg' => 'f3f3f3',
-		'border' => 'ddd',
-		'text' => '666',
-		'link' => '0087c1',
-		'url' => '0087c1',
-	);
-} else {
-	$themecolors = array(
-		'bg' => '3c3c3c',
-		'border' => '2f2f2f',
-		'text' => '999999',
-		'link' => 'ff9900',
-		'url' => '0099cc',
-	);
-}
+// Colors for WordPress.com
+$themecolors = array(
+	'bg' => '2F2F2F',
+	'border' => '3C3C3C',
+	'text' => '999999',
+	'link' => 'F90',
+	'url' => 'F90'
+);
 
 // Set the content width
 $content_width = 520;
-
-// Get current theme options with defaults as fallback
-function vostok_get_theme_options() {
-	$defaults = array(
-		'color_scheme' => 'dark',
-		'show-header-image' => 0,
-		'show-header-nav' => 0,
-	);
-	$options = get_option( 'vostok_theme_options', $defaults );
-	return $options;
-}
 
 function twentyten_setup() {
 	// This theme styles the visual editor with editor-style.css to match the theme style.
@@ -48,8 +21,8 @@ function twentyten_setup() {
 	// This theme uses post thumbnails
 	add_theme_support( 'post-thumbnails' );
 
-	// This theme uses wp_nav_menu() in one location.
-	register_nav_menus( array(
+	// This theme uses wp_nav_menu() in one location. 
+	register_nav_menus( array( 
 		'primary' => __( 'Primary Navigation', 'twentyten' ),
 		'footer' => __( 'Footer Navigation', 'twentyten' ),
 	) );
@@ -69,9 +42,14 @@ function twentyten_setup() {
 	// This theme allows users to set a custom background
 	add_custom_background();
 
-	$options = vostok_get_theme_options();
+	$options = get_option('vostok_theme_options');
 
-	if ( $options['show-header-image'] ) {
+	// Load color stylesheet (if enabled in theme options)
+	// wp_register_style( 'vostok-white', get_bloginfo( 'stylesheet_directory' ) . '/css/white.css', '', '' );
+	// if ( isset( $options['color_scheme'] ) && 'light' == $options['color_scheme'] )
+	// 	wp_enqueue_style( 'vostok-white' );
+
+	if ( 1 == $options['show-header-image'] ) {
 		// Your changeable header business starts here
 		define( 'HEADER_TEXTCOLOR', '' );
 		// No CSS, just IMG call. The %s is a placeholder for the theme template directory URI.
@@ -93,7 +71,7 @@ function twentyten_setup() {
 		// custom headers. See twentyten_admin_header_style(), below.
 		add_custom_image_header( '', 'twentyten_admin_header_style' );
 
-		// ... and thus ends the changeable header business.
+		// ... and thus ends the changeable header business.		
 
 		// Default custom headers packaged with the theme. %s is a placeholder for the theme template directory URI.
 		register_default_headers( array(
@@ -172,21 +150,6 @@ function vostok_setup() {
 	add_action( 'widgets_init', 'vostok_widgets_init' );
 }
 add_action( 'after_setup_theme', 'vostok_setup' );
-
-// Register the light color scheme
-function vostok_color_registrar() {
-	$color_scheme = vostok_get_color_scheme();
-
-	if ( isset( $color_scheme ) && 'light' == $color_scheme )
-		wp_enqueue_style( 'vostok-white', get_stylesheet_directory_uri() . '/css/white.css', null, null );
-}
-add_action( 'wp_enqueue_scripts', 'vostok_color_registrar' );
-
-// Return current color scheme
-function vostok_get_color_scheme() {
-	$options = vostok_get_theme_options();
-	return $options['color_scheme'];
-}
 
 // We loves us some Theme Options =]
 require_once( dirname( __FILE__ ) . '/inc/theme-options.php' );

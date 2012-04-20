@@ -15,15 +15,9 @@
 		<?php ($post->post_excerpt != "")? the_excerpt() : BX_shift_down_headlines( get_the_content() ); ?>
 
 		<p class="info"><?php if ($post->post_excerpt != "") { ?><a href="<?php the_permalink(); ?>" class="more"><?php _e( 'Continue Reading', 'blix' ); ?></a><?php } ?>
-   		<?php if ( 'post' == get_post_type() ) : ?>
-   			<?php blix_posted_on(); ?>
-   		<?php endif; ?>
-   		<?php blix_posted_by(); ?>
-		<?php if ( comments_open() || ( '0' != get_comments_number() && ! comments_open() ) ) : ?>
-			<em class="comments-popup">
-			<?php comments_popup_link( __( 'Leave a comment' ), __( '1 comment' ), __( '% comments' ), __( 'commentlink', 'blix' ), '' ); ?>
-			</em>
-		<?php endif; ?>
+   		<?php comments_popup_link( __( 'Add comment', 'blix' ), __( '1 comment', 'blix' ), __( '% comments', 'blix' ), __( 'commentlink', 'blix' ), ''); ?>
+   		<em class="date"><?php the_time( get_option( 'date_format' ) ); ?><!-- at <?php the_time();  ?>--></em>
+   		<!--<em class="author"><?php the_author(); ?></em>-->
    		<?php edit_post_link( 'Edit', '<span class="editlink">', '</span>' ); ?>
    		</p>
 
