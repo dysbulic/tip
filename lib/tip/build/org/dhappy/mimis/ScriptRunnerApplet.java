@@ -88,7 +88,7 @@ public class ScriptRunnerApplet extends JApplet {
                         log.info( "ScriptRunnerApplet/guidClicked: " + callback );
                         return js.eval( callback );
                     } catch( ScriptException se ) {
-                        log.log( Level.WARNING, se.getMessage(), se );
+                        log.warning( se.getMessage() );
                     }
                     return null;
                 }

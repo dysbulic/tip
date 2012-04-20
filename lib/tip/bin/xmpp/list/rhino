@@ -15,8 +15,21 @@ var clickHandler = function() {
     var XMPPConnection = Packages.org.jivesoftware.smack.XMPPConnection
     var SASLAuthentication = Packages.org.jivesoftware.smack.SASLAuthentication
     var Presence = Packages.org.jivesoftware.smack.packet.Presence
+
+    var config = {
+        'Google Login': {
+            server: 'talk.google.com',
+            port: 5222,
+            extension: 'gmail.com',
+        },
+        'Facebook Login': {
+            server: 'chat.facebook.com',
+            port: 5222,
+            extension: 'chat.facebook.com',
+        },
+    }[ $(this).attr( 'value' ) ]
     
-    var connConfig = new ConnectionConfiguration( "talk.google.com", 5222, "gmail.com" )
+    var connConfig = new ConnectionConfiguration( config.server, config.port, config.extension )
     var connection = new XMPPConnection( connConfig )
     
     try {
@@ -31,8 +44,9 @@ var clickHandler = function() {
         
         var username = $username.val()
         if( username.indexOf( '@' ) < 0 ) {
-            username +=  "@gmail.com"
+            username +=  "@" + config.extension
         }
+
         connection.login( username,
                           $password.val(),
                           'mimis/bot/' )
