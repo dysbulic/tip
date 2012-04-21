@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Titan
+ * @package WordPress
+ * @subpackage Titan
  */
 ?>
 <?php get_header(); ?>

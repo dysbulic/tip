@@ -1,5 +1,4 @@
 	<div id="sidebar">
-		<?php do_action( 'before_sidebar' ); ?>
 		<ul>
 
 		<?php if ( is_404() || is_category() || is_day() || is_month() ||
@@ -54,6 +53,9 @@
 				<ul>
 					<?php wp_register(); ?>
 					<li><?php wp_loginout(); ?></li>
+					<li><a href="http://validator.w3.org/check/referer" title="<?php _e('This page validates as XHTML 1.0 Transitional','contempt'); ?>"><?php _e('Valid <abbr title="eXtensible HyperText Markup Language">XHTML</abbr>','contempt'); ?></a></li>
+					<li><a href="http://gmpg.org/xfn/"><abbr title="XHTML Friends Network">XFN</abbr></a></li>
+					<li><a href="http://<?php _e('wordpress.com','contempt'); ?>/" title="<?php _e('Powered by WordPress, state-of-the-art semantic personal publishing platform.','contempt'); ?>"><?php _e('WordPress.com','contempt'); ?></a></li>
 					<?php wp_meta(); ?>
 				</ul>
 				</li>

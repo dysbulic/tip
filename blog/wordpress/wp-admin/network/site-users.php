@@ -157,10 +157,7 @@ if ( isset( $_GET['action'] ) && 'update-site' == $_GET['action'] ) {
 
 add_screen_option( 'per_page', array( 'label' => _x( 'Users', 'users per page (screen options)' ) ) );
 
-$site_url_no_http = preg_replace( '#^http(s)?://#', '', get_blogaddress_by_id( $id ) );
-$title_site_url_linked = sprintf( __('Edit Site: <a href="%1$s">%2$s</a>'), get_blogaddress_by_id( $id ), $site_url_no_http );
-$title = sprintf( __('Edit Site: %s'), $site_url_no_http );
-
+$title = sprintf( __('Edit Site: %s'), get_blogaddress_by_id($id));
 $parent_file = 'sites.php';
 $submenu_file = 'sites.php';
 
@@ -168,7 +165,7 @@ require('../admin-header.php'); ?>
 
 <div class="wrap">
 <?php screen_icon('ms-admin'); ?>
-<h2 id="edit-site"><?php echo $title_site_url_linked ?></h2>
+<h2 id="edit-site"><?php echo $title ?></h2>
 <h3 class="nav-tab-wrapper">
 <?php
 $tabs = array(
@@ -267,7 +264,7 @@ endif; ?>
 		</tr>
 	</table>
 	<?php wp_nonce_field( 'add-user', '_wpnonce_add-user' ) ?>
-	<?php submit_button( __('Add User'), 'primary', 'add-user', false, array( 'id' => 'submit-add-existing-user' ) ); ?>
+	<?php submit_button( __('Add User'), 'primary', 'add-user' ); ?>
 </form>
 <?php endif; ?>
 
@@ -303,7 +300,7 @@ endif; ?>
 		</tr>
 	</table>
 	<?php wp_nonce_field( 'add-user', '_wpnonce_add-new-user' ) ?>
-	<?php submit_button( __('Add New User'), 'primary', 'add-user', false, array( 'id' => 'submit-add-user' ) ); ?>
+	<?php submit_button( __('Add New User'), 'primary', 'add-user' ); ?>
 </form>
 <?php endif; ?>
 </div>

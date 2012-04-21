@@ -13,13 +13,7 @@
 			<div class="post-info">
 
 				<h1><?php the_title(); ?></h1>
-				<?php if ( is_multi_author() ) { ?>
-					<div class="archive-byline">
-						<a href="<?php echo esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ); ?>" title="<?php esc_attr( printf( __( 'View all posts by %s', 'wu-wei' ), get_the_author_meta( 'display_name' ) ) ); ?>">
-							<?php esc_html( printf( __( 'By %1$s', 'wu-wei' ), get_the_author_meta( 'display_name' ) ) ) ?>
-						</a>
-					</div>
-				<?php } ?>
+
 				<div class="timestamp"><?php the_time( get_option( 'date_format' ) ); ?> <!-- by <?php the_author() ?> --> //</div> <?php if ( comments_open() ) : ?><div class="comment-bubble"><a href="#comments"><?php comments_number('0', '1', '%'); ?></a></div><?php endif; ?>
 				<div class="clearboth"><!-- --></div>
 
@@ -30,7 +24,7 @@
 
 			<div class="post-content">
 				<?php the_content( __( 'Read the rest of this entry &raquo;', 'wu-wei' ) ); ?>
-
+				
 				<?php wp_link_pages( array('before' => '<p><strong>' . __( 'Pages:', 'wu-wei' ) . '</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>
 
 			</div>

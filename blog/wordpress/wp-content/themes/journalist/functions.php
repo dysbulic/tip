@@ -1,9 +1,4 @@
 <?php
-/**
- * @package WordPress
- * @subpackage The Journalist
- */
-
 $content_width = 700;
 
 if ( function_exists('register_sidebar') )
@@ -15,11 +10,10 @@ if ( function_exists('register_sidebar') )
 		));
 
 $themecolors = array(
-	'bg' => 'ffffff',
-	'border' => 'f3f3f3',
+	'bg' => 'fff',
+	'border' => '777',
 	'text' => '1c1c1c',
 	'link' => '004276',
-	'url' => 'cc0000',
 );
 
 add_theme_support( 'automatic-feed-links' );

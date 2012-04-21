@@ -71,7 +71,7 @@
 		<?php else : ?>
 
 			<h2><?php _e('No Data Found', 'daydream'); ?></h2>
-			<?php get_search_form(); ?>
+			<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 
 		<?php endif; ?>
 		

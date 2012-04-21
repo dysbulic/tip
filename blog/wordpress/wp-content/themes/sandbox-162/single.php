@@ -3,7 +3,7 @@
 	<div id="container">
 		<div id="content">
 
-<?php while ( have_posts() ) : the_post(); ?>
+<?php the_post() ?>
 
 			<div id="nav-above" class="navigation">
 				<div class="nav-previous"><?php previous_post_link( '%link', '<span class="meta-nav">&laquo;</span> %title' ) ?></div>
@@ -50,8 +50,6 @@
 			</div>
 
 <?php comments_template() ?>
-
-<?php endwhile; // end of the loop. ?>
 
 		</div><!-- #content -->
 	</div><!-- #container -->

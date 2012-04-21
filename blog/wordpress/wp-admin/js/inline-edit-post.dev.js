@@ -32,12 +32,12 @@ inlineEditPost = {
 			return inlineEditPost.revert();
 		});
 
-		$('#inline-edit .inline-edit-private input[value="private"]').click( function(){
+		$('#inline-edit .inline-edit-private input[value=private]').click( function(){
 			var pw = $('input.inline-edit-password-input');
-			if ( $(this).prop('checked') ) {
-				pw.val('').prop('disabled', true);
+			if ( $(this).attr('checked') ) {
+				pw.val('').attr('disabled', 'disabled');
 			} else {
-				pw.prop('disabled', false);
+				pw.attr('disabled', '');
 			}
 		});
 
@@ -74,9 +74,9 @@ inlineEditPost = {
 			}
 		});
 
-		$('#post-query-submit').mousedown(function(e){
-			t.revert();
-			$('select[name^="action"]').val('-1');
+		$('#post-query-submit').click(function(e){
+			if ( $('form#posts-filter tr.inline-editor').length > 0 )
+				t.revert();
 		});
 	},
 
@@ -94,7 +94,7 @@ inlineEditPost = {
 		$('#bulk-edit').addClass('inline-editor').show();
 
 		$('tbody th.check-column input[type="checkbox"]').each(function(i){
-			if ( $(this).prop('checked') ) {
+			if ( $(this).attr('checked') ) {
 				c = false;
 				var id = $(this).val(), theTitle;
 				theTitle = $('#inline_'+id+' .post_title').text() || inlineEditL10n.notitle;
@@ -109,7 +109,7 @@ inlineEditPost = {
 		$('#bulk-titles a').click(function(){
 			var id = $(this).attr('id').substr(1);
 
-			$('table.widefat input[value="' + id + '"]').prop('checked', false);
+			$('table.widefat input[value="'+id+'"]').attr('checked', '');
 			$('#ttle'+id).remove();
 		});
 
@@ -119,7 +119,6 @@ inlineEditPost = {
 			tax = 'post_tag';
 			$('tr.inline-editor textarea[name="tags_input"]').suggest( 'admin-ajax.php?action=ajax-tag-search&tax='+tax, { delay: 500, minchars: 2, multiple: true, multipleSep: ", " } );
 		}
-		$('html, body').animate( { scrollTop: 0 }, 'fast' );
 	},
 
 	edit : function(id) {
@@ -143,7 +142,7 @@ inlineEditPost = {
 
 		// populate the data
 		rowData = $('#inline_'+id);
-		if ( !$(':input[name="post_author"] option[value="' + $('.post_author', rowData).text() + '"]', editRow).val() ) {
+		if ( !$(':input[name="post_author"] option[value=' + $('.post_author', rowData).text() + ']', editRow).val() ) {
 			// author no longer has edit caps, so we need to add them to the list of authors
 			$(':input[name="post_author"]', editRow).prepend('<option value="' + $('.post_author', rowData).text() + '">' + $('#' + t.type + '-' + id + ' .author').text() + '</option>');
 		}
@@ -152,15 +151,15 @@ inlineEditPost = {
 		}
 
 		for ( var f = 0; f < fields.length; f++ ) {
-			$(':input[name="' + fields[f] + '"]', editRow).val( $('.'+fields[f], rowData).text() );
+			$(':input[name="'+fields[f]+'"]', editRow).val( $('.'+fields[f], rowData).text() );
 		}
 
 		if ( $('.comment_status', rowData).text() == 'open' )
-			$('input[name="comment_status"]', editRow).prop("checked", true);
+			$('input[name="comment_status"]', editRow).attr("checked", "checked");
 		if ( $('.ping_status', rowData).text() == 'open' )
-			$('input[name="ping_status"]', editRow).prop("checked", true);
+			$('input[name="ping_status"]', editRow).attr("checked", "checked");
 		if ( $('.sticky', rowData).text() == 'sticky' )
-			$('input[name="sticky"]', editRow).prop("checked", true);
+			$('input[name="sticky"]', editRow).attr("checked", "checked");
 
 		// hierarchical taxonomies
 		$('.post_category', rowData).each(function(){
@@ -189,12 +188,12 @@ inlineEditPost = {
 			$('select[name="_status"] option[value="future"]', editRow).remove();
 
 		if ( 'private' == status ) {
-			$('input[name="keep_private"]', editRow).prop("checked", true);
-			$('input.inline-edit-password-input').val('').prop('disabled', true);
+			$('input[name="keep_private"]', editRow).attr("checked", "checked");
+			$('input.inline-edit-password-input').val('').attr('disabled', 'disabled');
 		}
 
 		// remove the current page and children from the parent dropdown
-		pageOpt = $('select[name="post_parent"] option[value="' + id + '"]', editRow);
+		pageOpt = $('select[name="post_parent"] option[value="'+id+'"]', editRow);
 		if ( pageOpt.length > 0 ) {
 			pageLevel = pageOpt[0].className.split('-')[1];
 			nextPage = pageOpt;
@@ -249,10 +248,10 @@ inlineEditPost = {
 						$(inlineEditPost.what+id).hide().fadeIn();
 					} else {
 						r = r.replace( /<.[^<>]*?>/g, '' );
-						$('#edit-'+id+' .inline-edit-save .error').html(r).show();
+						$('#edit-'+id+' .inline-edit-save').append('<span class="error">'+r+'</span>');
 					}
 				} else {
-					$('#edit-'+id+' .inline-edit-save .error').html(inlineEditL10n.error).show();
+					$('#edit-'+id+' .inline-edit-save').append('<span class="error">'+inlineEditL10n.error+'</span>');
 				}
 			}
 		, 'html');

@@ -5,8 +5,6 @@
  *
  * Allows for some configuration in wp-config.php (see default-constants.php)
  *
- * @internal This file must be parsable by PHP4.
- *
  * @package WordPress
  */
 
@@ -22,11 +20,8 @@ require( ABSPATH . WPINC . '/load.php' );
 require( ABSPATH . WPINC . '/default-constants.php' );
 require( ABSPATH . WPINC . '/version.php' );
 
-// Set initial default constants including WP_MEMORY_LIMIT, WP_MAX_MEMORY_LIMIT, WP_DEBUG, WP_CONTENT_DIR and WP_CACHE.
+// Set initial default constants including WP_MEMORY_LIMIT, WP_DEBUG, WP_CONTENT_DIR and WP_CACHE.
 wp_initial_constants( );
-
-// Check for the required PHP version and for the MySQL extension or a database drop-in.
-wp_check_php_mysql_versions();
 
 // Disable magic quotes at runtime. Magic quotes are added using wpdb later in wp-settings.php.
 set_magic_quotes_runtime( 0 );
@@ -45,7 +40,10 @@ unset( $wp_filter, $cache_lastcommentmodified );
 // Standardize $_SERVER variables across setups.
 wp_fix_server_vars();
 
-// Check if we have received a request due to missing favicon.ico
+// Check for the required PHP version and for the MySQL extension or a database drop-in.
+wp_check_php_mysql_versions();
+
+// Check if we have recieved a request due to missing favicon.ico
 wp_favicon_request();
 
 // Check if we're in maintenance mode.
@@ -218,7 +216,7 @@ do_action( 'sanitize_comment_cookies' );
  * @global object $wp_the_query
  * @since 2.0.0
  */
-$wp_the_query = new WP_Query();
+$wp_the_query =& new WP_Query();
 
 /**
  * Holds the reference to @see $wp_the_query
@@ -233,21 +231,21 @@ $wp_query =& $wp_the_query;
  * @global object $wp_rewrite
  * @since 1.5.0
  */
-$wp_rewrite = new WP_Rewrite();
+$wp_rewrite =& new WP_Rewrite();
 
 /**
  * WordPress Object
  * @global object $wp
  * @since 2.0.0
  */
-$wp = new WP();
+$wp =& new WP();
 
 /**
  * WordPress Widget Factory Object
  * @global object $wp_widget_factory
  * @since 2.8.0
  */
-$wp_widget_factory = new WP_Widget_Factory();
+$wp_widget_factory =& new WP_Widget_Factory();
 
 do_action( 'setup_theme' );
 
@@ -260,7 +258,7 @@ load_default_textdomain();
 // Find the blog locale.
 $locale = get_locale();
 $locale_file = WP_LANG_DIR . "/$locale.php";
-if ( ( 0 === validate_file( $locale ) ) && is_readable( $locale_file ) )
+if ( is_readable( $locale_file ) )
 	require( $locale_file );
 unset($locale_file);
 
@@ -272,15 +270,13 @@ require( ABSPATH . WPINC . '/locale.php' );
  * @global object $wp_locale
  * @since 2.1.0
  */
-$wp_locale = new WP_Locale();
+$wp_locale =& new WP_Locale();
 
 // Load the functions for the active theme, for both parent and child theme if applicable.
-if ( ! defined( 'WP_INSTALLING' ) || 'wp-activate.php' === $pagenow ) {
-	if ( TEMPLATEPATH !== STYLESHEETPATH && file_exists( STYLESHEETPATH . '/functions.php' ) )
-		include( STYLESHEETPATH . '/functions.php' );
-	if ( file_exists( TEMPLATEPATH . '/functions.php' ) )
-		include( TEMPLATEPATH . '/functions.php' );
-}
+if ( TEMPLATEPATH !== STYLESHEETPATH && file_exists( STYLESHEETPATH . '/functions.php' ) )
+	include( STYLESHEETPATH . '/functions.php' );
+if ( file_exists( TEMPLATEPATH . '/functions.php' ) )
+	include( TEMPLATEPATH . '/functions.php' );
 
 do_action( 'after_setup_theme' );
 

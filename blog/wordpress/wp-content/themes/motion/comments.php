@@ -24,7 +24,7 @@ if ( have_comments() ) : ?>
 		<?php if ( ! empty($comments_by_type['comment']) ) :
 			$count = count($comments_by_type['comment']);
 			($count !== 1) ? $txt = "Comments: " : $txt = "Comment:"; ?>
-
+			
 			<h3><?php echo $count . " " . $txt; ?></h3>
 			<ul class="commentlist">
 				<?php wp_list_comments( 'type=comment&callback=motiontheme_comment' ); ?>
@@ -39,13 +39,13 @@ if ( have_comments() ) : ?>
 		<?php if ( ! empty($comments_by_type['pings']) ) :
 			$countp = count($comments_by_type['pings']);
 			($countp !== 1) ? $txtp = "Trackbacks / Pingbacks for this entry:" : $txtp = "Trackback or Pingback for this entry:"; ?>
-
+			
 			<h3 id="trackbacktitle"><?php echo $countp . " " . $txtp; ?></h3>
 			<ul class="trackback">
 			<?php wp_list_comments( 'type=pings&callback=motiontheme_ping' ); ?>
 			</ul>
 		<?php endif; ?>
-	<hr />
+	<hr />	
 
 	<?php
 		else : // this is displayed if there are no comments so far

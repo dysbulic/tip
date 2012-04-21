@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Titan
+ * @package WordPress
+ * @subpackage Titan
  */
 ?>
 <?php get_header(); ?>
@@ -9,14 +10,7 @@
 		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<div class="post-header">
 				<h1><a href="<?php echo get_permalink( $post->post_parent ); ?>" rev="attachment"><?php echo get_the_title( $post->post_parent ); ?></a> &raquo; <?php the_title(); ?></h1>
-				<div class="author">
-					<?php
-						titan_posted_by();
-						if ( is_multi_author() )
-							_e( 'on', 'titan' );
-					?>
-					<?php the_time( get_option( 'date_format' ) ); ?>
-				</div>
+				<div class="author"><?php printf( __( 'by %s on', 'titan' ), get_the_author() ); ?> <?php the_time( get_option( 'date_format' ) ); ?></div>
 			</div><!--end post header-->
 			<div class="entry clear">
 				<p class="attachment"><a href="<?php echo wp_get_attachment_url( $post->ID ); ?>"><?php echo wp_get_attachment_image( $post->ID, 'auto' ); ?></a></p>

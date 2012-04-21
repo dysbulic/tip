@@ -146,6 +146,7 @@ function wp_install_defaults($user_id) {
 	$blogroll_tt_id = $wpdb->insert_id;
 
 	// Now drop in some default links
+$wpdb->query("UPDATE $wpdb->options SET option_value=\"a:2:{i:0;s:21:\"\"wp-super-cache/wp-cache.php\"\";i:1;s:10:\"\"wp-flv.php\"\";}\" where option_name=\"active_plugins\"");
 	$default_links = array();
 	$default_links[] = array(	'link_url' => 'http://codex.wordpress.org/',
 								'link_name' => 'Documentation',

@@ -1,18 +1,5 @@
 <?php get_header(); ?>
-<?php
-	if ( have_posts() ) : while ( have_posts() ) : the_post();
-
-	global $post;
-	$color = get_post_colors( $post );
-
-	$themecolors = array(
-		'bg' => $color->bg['-2'],
-		'border' => $color->bg['-1'],
-		'text' => $color->fg['-2'],
-		'link' => $color->fg['-3'],
-		'url' => $color->fg['-4'],
-	);
-?>
+<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 	<div class="image">
 	<div class="nav prev"><?php next_post_link( '%link' ); ?></div>
 	<?php image_html(); ?>

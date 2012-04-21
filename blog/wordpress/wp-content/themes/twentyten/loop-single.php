@@ -27,7 +27,6 @@
 
 					<div class="entry-meta">
 						<?php twentyten_posted_on(); ?>
-						<?php twentyten_posted_by(); ?>
 					</div><!-- .entry-meta -->
 
 					<div class="entry-content">
@@ -41,7 +40,7 @@
 							<?php echo get_avatar( get_the_author_meta( 'user_email' ), apply_filters( 'twentyten_author_bio_avatar_size', 60 ) ); ?>
 						</div><!-- #author-avatar -->
 						<div id="author-description">
-							<h2><?php esc_html( printf( __( 'About %s', 'twentyten' ), get_the_author() ) ); ?></h2>
+							<h2><?php printf( esc_attr__( 'About %s', 'twentyten' ), get_the_author() ); ?></h2>
 							<?php the_author_meta( 'description' ); ?>
 							<div id="author-link">
 								<a href="<?php echo get_author_posts_url( get_the_author_meta( 'ID' ) ); ?>">

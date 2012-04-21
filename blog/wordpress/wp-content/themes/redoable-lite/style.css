@@ -5,7 +5,7 @@ Description: A slimmed-down version of Dean Robinson's Redoable theme.
 Version: 1.2-wpcom
 Author: Dean Robinson
 Author URI: http://www.deanjrobinson.com
-Tags: dark, black, red, two-columns, custom-header, right-sidebar, sticky-post, fixed-width, rtl-language-support, custom-menu, translation-ready, blog, gaming, clean, dark, tech
+Tags: dark, black, red, two-columns, custom-header, right-sidebar, sticky-post, fixed-width, rtl-language-support, custom-menu, translation-ready, blog, gaming, boyish, clean, dark, tech
 
 CSS Documentation: http://k2.stikipad.com/docs/show/CSS+Overview
 */
@@ -15,7 +15,7 @@ CSS Documentation: http://k2.stikipad.com/docs/show/CSS+Overview
 /* @group General */
 html { /* Force Vertical Scrollbar */
 	/* IE */
-	overflow-y: scroll;
+	overflow-y: scroll; 
 	/* Moz */
 	height: 100%;
 	filter: expression(document.execCommand("BackgroundImageCache", false, true));
@@ -47,7 +47,7 @@ a img, :link img, :visited img { border: none }
 /* @group H1,H2,H3,H4 */
 h1 { /* H1 is the title in the header */
 	color: #FFFFFF;
-	font-family: "Century Gothic", "Lucida Grande", Verdana, Arial;
+	font-family: "Century Gothic", "Lucida Grande", Verdana, Arial !important;
 	font-size: 5em;
 	font-weight: normal;
 	margin: 0px;
@@ -60,7 +60,7 @@ h1, h1 a, h1 a:hover, h1 a:visited,
 	text-decoration: none;
 }
 
-h1 a:hover { text-decoration: underline; }
+h1 a:hover { text-decoration: underline; }	
 
 h2, h3, h4 { font-family: 'Trebuchet MS', Verdana, Sans-Serif; }
 
@@ -76,9 +76,9 @@ h2 { /* H2 is what kind of page you are on. Eg. 'Monthly Archive'. */
 }
 
 #primary h3, #primary h4, .single #primary .redo-asides h3,
-#primaryFirst h3, #primaryFirst h4, .single #primaryFirst .redo-asides h3 {
+#primaryFirst h3, #primaryFirst h4, .single #primaryFirst .redo-asides h3 { 
 	/* H3 is entry headlines. H4 is comments and replyform headlines */
-	font-size: 2.4em;
+	font-size: 2em;
 	font-weight: normal;
 	letter-spacing: -1px;
 }
@@ -122,7 +122,7 @@ body.page .entry-content h4 {
 	font-size: 1.5em;
 	padding: 0px;
 }
-
+	
 h2, h2 a, h2 a:visited { color: #CCC; }
 
 h3, h3 a, h3 a:visited,
@@ -137,20 +137,17 @@ h2 a:hover, h2 span a:hover {
 	color: #E00 !important;
 	text-decoration: none !important;
 }
-
-h3.entry-title {
-	color: #eee;
-	display: inline;
-	font-family: Helvetica, Arial, sans-serif;
-	font-size: 24px;
-	font-weight: bold !important;
-	letter-spacing: -1px;
-	text-transform: lowercase;
-}
+	
+h3.entry-title { display: inline; }
 
 h3.entry-title a {
 	border-bottom: none !important;
-	color: #eee !important;
+	color: #EEE !important;
+	font-family: Helvetica, Arial, Sans-Serif !important;
+	font-weight: bold;
+	font-size: 24px;
+	letter-spacing: -1px;
+	text-transform: lowercase;
 }
 
 h3.entry-title a:hover {
@@ -164,7 +161,7 @@ h3.entry-title a:hover {
 	font-size: 1em;
 	margin: 0 40px;
 }
-
+	
 #header {
 	background: #111;
 	height: 180px;
@@ -180,7 +177,7 @@ h3.entry-title a:hover {
     margin: 0px !important;
 	position: relative;
 }
-
+	
 #header_middle {
 	height: 180px;
 	margin: 0px 0px 0px 10px;
@@ -201,7 +198,7 @@ h3.entry-title a:hover {
 #header_content .current_page_item a { background: #333; }
 
 #header_content .current_page_item a:hover { background: #393939; }
-
+	
 #header_content #title a { background: none; }
 /* @end */
 
@@ -283,7 +280,7 @@ ul.menu li.current_page_item a:hover {
 	text-align: left;
 	width: 225px;
 }
-
+	
 #menu a:hover {
 	border-left: 10px solid #700;
 	border-right: 10px solid #292929;
@@ -474,12 +471,12 @@ ul.menu li.current_page_item a:hover {
 	position: relative;
 	text-align: left;
 	width: 750px;
-}
+}	
 
 #primary.primaryPage {
 	white-space: normal;
 	width: 840px;
-}
+}	
 /* @end */
 
 /* @group Secondary/Tertiary */
@@ -506,12 +503,12 @@ ul.menu li.current_page_item a:hover {
 	border-bottom: 1px dotted #CCC;
 	color: #CCC;
 	display: block;
-	font-size: 1.5em;
-	font-weight: normal;
+	font-size: 1.5em !important;
+	font-weight: normal !important;
 	padding: 0px 0px 3px 0px !important;
 	margin: 0px;
 	text-align: left;
-	text-transform: lowercase;
+	text-transform: lowercase;    
 	width: 100%;
 }
 
@@ -537,7 +534,7 @@ ul.menu li.current_page_item a:hover {
 
 .secondary div.module { margin-bottom: 1em; }
 
-.secondary div#sidenotes.module, .tertiary div#sidenotes.module { margin: 0px !important; }
+.secondary div#sidenotes.module, .tertiary div#sidenotes.module { margin: 0px !important; } 
 
 .secondary ul, .tertiary ul { padding-top: 5px; }
 
@@ -638,7 +635,7 @@ ul.menu li.current_page_item a:hover {
 
 /* @group Meta Links */
 /* The Metalink class takes care of the comments, edit, rss and trackback links next to the titles */
-#primary .metalink a, #primary .metalink a:visited,
+#primary .metalink a, #primary .metalink a:visited, 
 #primaryFirst .metalink a, #primaryFirst .metalink a:visited,
 .secondary .metalink a, .secondary .metalink a:visited,
 .secondary span a, .secondary span a:visited,
@@ -675,7 +672,7 @@ body.page .entry-edit {
 	margin-left: 1em;
 	padding: 2px 2px 2px 23px;
 }
-
+	
 .entry-category {
 	background: url('images/folder.png') left center no-repeat;
 	display: inline;
@@ -835,7 +832,7 @@ body.page .entry-edit {
 }
 /* @end */
 
-/* @group Pinglist */
+/* @group Pinglist */ 
 #pinglist {
 	background: #363636;
 	border: 1px dotted #606060;
@@ -987,7 +984,7 @@ input[type=text]:focus, textarea:focus {
 #ie7 #respond #submit {
 	margin-left: -15px;
 }
-
+	
 .commentsrsslink {
 	background: url('images/feedicon16px.png') left top no-repeat;
 	height: 16px;
@@ -1101,7 +1098,7 @@ li.bypostauthor {
 }
 
 li.bypostauthor blockquote {
-	background: #eee url('images/quote.png') no-repeat 10px 0;
+	background: #eee url('images/quote.png') no-repeat 10px 0;              
 	color: #333;
 }
 /* @end */
@@ -1130,7 +1127,7 @@ li.bypostauthor blockquote {
 	color: #e9e9e9;
 	text-decoration: underline !important;
 }
-
+	
 #copyright p {
 	display: block;
 	line-height: 30px;
@@ -1177,7 +1174,7 @@ li.bypostauthor blockquote {
     margin: 0px !important;
 	position: relative;
 }
-
+	
 #footer_middle {
 	height: 50px;
 	margin: 0px;
@@ -1203,7 +1200,7 @@ a:hover {
 
 .entry-content a { border-bottom: 1px dotted #CCC; }
 
-.entry-content a:hover {
+.entry-content a:hover { 
 	border-bottom: 1px dotted #D00;
 	text-decoration: none !important;
 }
@@ -1227,7 +1224,7 @@ a:hover {
 .center { text-align: center; }
 
 .alignright { float: right; }
-
+	
 .alignleft { float: left; }
 
 img.centered, img.aligncenter, img.center, img[align="center"] {
@@ -1235,7 +1232,7 @@ img.centered, img.aligncenter, img.center, img[align="center"] {
 	margin-left: auto;
 	margin-right: auto;
 }
-
+	
 div.alignright, img.alignright, img[align="right"] {
 	display: inline;
 	margin: 0px 0px 2px 7px;
@@ -1247,7 +1244,7 @@ div.alignleft, img.alignleft, img[align="left"] {
 	margin: 0px 7px 2px 0px;
 	padding: 4px;
 }
-
+	
 img.noborder { border: none !important; }
 img.nopadding { border: none !important; padding: 0px !important;}
 
@@ -1368,7 +1365,7 @@ blockquote p {
 	letter-spacing: -1px;
 	padding: 5px 15px 5px 15px;
 	text-align: left;
-	text-transform: lowercase;
+	text-transform: lowercase;	
 }
 
 .page-nav a { color: #999; }
@@ -1413,7 +1410,7 @@ blockquote p {
 	margin: 0px;
 	padding: 1px 0px;
 }
-
+	
 .secondary ul li, .tertiary ul li {
 	list-style-image: none;
 	list-style-type: none;
@@ -1592,7 +1589,7 @@ div#brians-latest-comments small {
 /* @group Touched */
 /*	WordPress: Touched
 	http://twilightuniverse.com/2005/03/wordpress-touched/
-
+	
 	No support for Touched 0.6 in the rest of K2.
 	Seems a bit flaky just now. Waiting for new version.
 */
@@ -1600,7 +1597,7 @@ div#brians-latest-comments small {
 #poststuff fieldset { border: none; }
 
 #poststuff #title, #poststuff #excerpt, #poststuff #tags { width: 470px; }
-
+	
 #poststuff #title { font-size: 2em; }
 /* @end */
 
@@ -1612,28 +1609,28 @@ div#brians-latest-comments small {
 /* @group Contact Form */
 .contactform {
 	position: relative;
-	width: 100%;
+	width: 100%; 
 }
 
 .contactleft {
-	clear: both;
-	display: inline;
-	float: left;
-	margin: 5px 0px;
-	padding: 4px;
+	clear: both; 
+	display: inline; 
+	float: left; 
+	margin: 5px 0px; 
+	padding: 4px; 
 	text-align: right;
-	width: 15%;
+	width: 15%; 
 }
 
 .contactright {
-	display: inline;
-	float: right;
-	margin: 5px 0px;
-	padding: 4px;
+	display: inline; 
+	float: right; 
+	margin: 5px 0px; 
+	padding: 4px; 
 	text-align: left;
-	width: 70%;
+	width: 70%; 
 }
-
+	
 .contacterror { border: 1px solid #ff0000; }
 /* @end */
 
@@ -1695,7 +1692,7 @@ div#brians-latest-comments small {
 	border-top: 2px solid #383 !important;
 	border-bottom: 2px solid #383 !important;
 	border-left: 0px none !important;
-	border-right: 0px none !important;
+	border-right: 0px none !important;	
 }
 .imp-download-error {
 	background-color: #533 !important;
@@ -1703,7 +1700,7 @@ div#brians-latest-comments small {
 	border-top: 2px solid #F33 !important;
 	border-bottom: 2px solid #F33 !important;
 	border-left: 0px none !important;
-	border-right: 0px none !important;
+	border-right: 0px none !important;		
 }
 .imp-download a:hover, .imp-download-error a:hover {
 	border-bottom: 2px dotted #3C3 !important;
@@ -1724,7 +1721,7 @@ div#brians-latest-comments small {
 	font-size: 1em !important;
 	font-weight: normal !important;
 }
-.imp-download small, .imp-download-error small {
+.imp-download small, .imp-download-error small { 
 	color: #EEEEEE !important;
 	display: block !important;
 	font-size: 0.9em;
@@ -1815,7 +1812,7 @@ dl.information dd {
 	border-top: 2px solid #AAA;
 	font-family: 'Courier New', Courier, Fixed;
 }
-
+	
 .alert {
 	background-color: #533;
 	background-image: url('images/exclamation.png');
@@ -1887,9 +1884,9 @@ dl.information dd {
     border-right: 10px solid #191919;
     color: #666 !important;
     display: block;
-    font: 1em 'Lucida Grande', Verdana, Arial, Sans-Serif;
+    font: 1em 'Lucida Grande', Verdana, Arial, Sans-Serif; 
     line-height: 1.5em;
-    margin: 0px;
+    margin: 0px; 
     padding: 10px 0px 10px 0px !important;
     text-align: left;
     clear: both;
@@ -1905,7 +1902,7 @@ dl.information dd {
 	margin: 0px;
 	padding: 0px 0px 3px 0px !important;
 	text-align: left;
-	text-transform: lowercase;
+	text-transform: lowercase;    
 	width: 100%;
 }
 .comment-content a {
@@ -1969,7 +1966,7 @@ dl.information dd {
 .sb-listen ul { margin-top: 5px; }
 /* @end */
 
-/* @group Watch SBM */
+/* @group Watch SBM */        
 .sb-watch { clear: both; }
 
 .sb-watch li{
@@ -2020,10 +2017,10 @@ dl.information dd {
 .sb-comments { text-transform: none!important; }
 
 .sb-comments a { color: #EEE; }
-
+       
 .sb-comments ul { margin-top: 5px; }
 /* @end */
-
+        
 /* @group Meta SBM */
 .sb-meta li {
     list-style-type: none !important;
@@ -2086,7 +2083,7 @@ dl.information dd {
 	border: 1px dotted #555;
 	height: 26px;
 	padding: 5px 6px 4px 6px;
-	width: 88px;
+	width: 88px; 
 }
 
 .sb-badge ul.fb_badges li.fb_count a:hover img {
@@ -2223,7 +2220,7 @@ dl.information dd {
 	text-align: left;
 }
 
-#wp-calendar caption {
+#wp-calendar caption {	
 	border-bottom: 1px dotted #ccc;
 	color: #CCC;
 	font-size: 1.5em !important;
@@ -2232,7 +2229,7 @@ dl.information dd {
 	margin-bottom: 5px;
 	padding: 0px 0px 3px 0px !important;
 	text-align: left;
-	text-transform: lowercase;
+	text-transform: lowercase;    
 }
 
 #wp-calendar table { border: 0px; }
@@ -2491,7 +2488,7 @@ div.widget { margin-top: 10px !important; }
 	margin: 0px 10px 5px 10px !important;
 	padding: 0px !important;
 	text-align: left;
-	text-transform: lowercase;
+	text-transform: lowercase;   
 }
 /* @end */
 

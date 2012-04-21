@@ -1,5 +1,4 @@
 	<div class="sidebar">
-	<?php do_action( 'before_sidebar' ); ?>
 <ul>
 
 <?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar(2) ) : else : ?>

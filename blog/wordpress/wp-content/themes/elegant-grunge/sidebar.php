@@ -9,7 +9,7 @@
 /**
  * Check layout option and display sidebars as needed
  */
-	$options = elegant_grunge_get_theme_options();
+	$options = get_option( 'elegant_grunge_theme_options' );
 	$current_layout = $options['theme_layout'];
 
 	if ( 'no-sidebar' == $current_layout )

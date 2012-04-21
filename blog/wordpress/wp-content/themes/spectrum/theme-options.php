@@ -18,28 +18,10 @@ function theme_options_add_page() {
 }
 
 /**
- * Create array for our radio option
- */
-$ribbon_color_options = array(
-	'green' => array(
-		'value' => 'green',
-		'label' => __( 'Green', 'spectrum' )
-	),
-	'dark' => array(
-		'value' => 'dark',
-		'label' => __( 'Dark', 'spectrum' )
-	),
-	'blue' => array(
-		'value' => 'blue',
-		'label' => __( 'Blue', 'spectrum' )
-	),
-);
-
-/**
  * Create the options page
  */
 function theme_options_do_page() {
-	global $select_options, $radio_options, $ribbon_color_options;
+	global $select_options, $radio_options;
 
 	if ( ! isset( $_REQUEST['settings-updated'] ) )
 		$_REQUEST['settings-updated'] = false;
@@ -70,44 +52,10 @@ function theme_options_do_page() {
 					</td>
 				</tr>
 
-				<?php
-				/**
-				 * Ribbon Color Options
-				 */
-				?>
-				<tr valign="top" class="image-radio-option ribbon-color"><th scope="row"><?php _e( 'Ribbon Color', 'spectrum' ); ?></th>
-					<td>
-						<fieldset><legend class="screen-reader-text"><span><?php _e( 'Choose a color for the post title ribbon', 'spectrum' ); ?></span></legend>
-						<?php
-							if ( ! isset( $checked ) )
-								$checked = '';
-							foreach ( $ribbon_color_options as $option ) {
-								$radio_setting = $options['ribbon_color'];
-
-								if ( '' != $radio_setting ) {
-									if ( $options['ribbon_color'] == $option['value'] ) {
-										$checked = "checked=\"checked\"";
-									} else {
-										$checked = '';
-									}
-								}
-								?>
-								<div class="layout">
-								<label class="description">
-									<input type="radio" name="spectrum_theme_options[ribbon_color]" value="<?php esc_attr_e( $option['value'] ); ?>" <?php echo $checked; ?> /> <?php echo $option['label']; ?>
-								</label>
-								</div>
-								<?php
-							}
-						?>
-						</fieldset>
-					</td>
-				</tr>
-
 			</table>
 
 			<p class="submit">
-				<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Options' ); ?>" />
+				<input type="submit" class="button-primary" value="<?php _e( 'Save Options' ); ?>" />
 			</p>
 		</form>
 	</div>
@@ -118,18 +66,12 @@ function theme_options_do_page() {
  * Sanitize and validate input. Accepts an array, return a sanitized array.
  */
 function theme_options_validate( $input ) {
-	global $select_options, $radio_options, $ribbon_color_options;
+	global $select_options, $radio_options;
 
 	// Our checkbox value is either 0 or 1
 	if ( ! isset( $input['spectrumtagcloud'] ) )
 		$input['spectrumtagcloud'] = null;
 	$input['spectrumtagcloud'] = ( $input['spectrumtagcloud'] == 1 ? 1 : 0 );
-
-	// Our radio option must actually be in our array of radio options
-	if ( ! isset( $input['ribbon_color'] ) )
-		$input['ribbon_color'] = null;
-	if ( ! array_key_exists( $input['ribbon_color'], $ribbon_color_options ) )
-		$input['ribbon_color'] = null;
 
 	return $input;
 }

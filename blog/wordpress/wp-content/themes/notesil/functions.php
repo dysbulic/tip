@@ -1,9 +1,4 @@
 <?php
-/**
- * @package WordPress
- * @subpackage NotesIL
- */
-
 /*
 This file is part of SANDBOX.
 
@@ -17,11 +12,11 @@ You should have received a copy of the GNU General Public License along with SAN
 $content_width = 530;
 
 $themecolors = array(
-	'bg' => 'ffffff',
-	'border' => 'bc0404',
+	'bg' => 'fff',
+	'border' => 'BC0404',
 	'text' => '000000',
-	'link' => 'bc0404',
-	'url' => '00447c',
+	'link' => 'BC0404',
+	'url' => 'D5A8A8'
 );
 
 function notes_comments( $comment, $args, $depth ) {
@@ -335,8 +330,9 @@ function notesil_commenter_link() {
 	} else {
 		$commenter = ereg_replace( '(<a )/', '\\1class="url "' , $commenter );
 	}
+	$avatar_email = get_comment_author_email();
 	$avatar_size = apply_filters( 'avatar_size', '32' ); // Available filter: avatar_size
-	$avatar = str_replace( "class='avatar", "class='photo avatar", get_avatar( $GLOBALS['comment'], $avatar_size ) );
+	$avatar = str_replace( "class='avatar", "class='photo avatar", get_avatar( $avatar_email, $avatar_size ) );
 	echo $avatar . ' <span class="fn n">' . $commenter . '</span>';
 }
 
@@ -454,11 +450,11 @@ function notes_theme_page() {
 ?>
 <div class="wrap">
  <h2><?php _e( 'Color selection', 'notesil' ); ?></h2>
- <p><?php _e( 'Please select the primary color of your blog theme', 'notesil' ); ?></p>
+ <p><?php _e( 'Please select the primary color of your blog theme' ); ?></p>
   <form method="post">
   <table class="optiontable"><tbody>
 <?php notes_color_radios(); ?>
-  <tr><td> </td><td align="left"><p class="submit left"><input type="submit" name="Submit" value="<?php esc_attr_e( 'Apply Color &raquo;', 'notesil' ); ?>" /></p></td></tr>
+  <tr><td> </td><td align="left"><p class="submit left"><input type="submit" name="Submit" value="<?php _e( 'Apply Color &raquo;', 'notesil' ); ?>" /></p></td></tr>
   </tbody></table>
   <input type="hidden" name="action" value="notes_update" />
   </form>
@@ -472,7 +468,7 @@ class Notes_Author_Widget extends WP_Widget {
 
 	function Notes_Author_Widget() {
 		$widget_ops = array( 'classname' => 'widget_notes_author', 'description' => __( 'The author Name, Gravatar, and description', 'notesil' ) );
-		$this->WP_Widget( 'notes_author', __( 'Notes Author', 'notesil' ), $widget_ops);
+		$this->WP_Widget( 'notes_author', __( 'Notes Author' ), $widget_ops);
 	}
 
 	function widget( $args, $instance ) {

@@ -5,7 +5,7 @@
   <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
 		<div <?php post_class(); ?> id="post-<?php the_ID(); ?>">
-		<h2 class="title"><?php the_title(); ?></h2>
+		<h2 class="title"><a href="<?php echo get_permalink() ?>" rel="bookmark" title="<?php echo esc_attr( sprintf( __( 'Permanent Link to %s', 'chaoticsoul'  ), the_title_attribute( 'echo=0' ) ) ); ?>"><?php the_title(); ?></a></h2>
 
 			<div class="entrytext">
 				<?php the_content('<p class="serif">'.__('Read the rest of this entry &raquo;', 'chaoticsoul').'</p>'); ?>

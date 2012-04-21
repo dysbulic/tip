@@ -12,7 +12,7 @@
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 <?php if ( is_singular() && get_option( 'thread_comments' ) ) wp_enqueue_script( 'comment-reply' ); ?>
 <?php wp_head(); ?>
-<?php $options = andrea_get_theme_options(); ?>
+<?php $options = get_option( 'andrea_theme_options' ); ?>
 </head>
 <body <?php body_class( $options['layout_choice'] ); ?>>
 <div id="wrap" class="group">
@@ -23,6 +23,6 @@
 		<h1><a href="<?php bloginfo( 'url' ); ?>/"><?php bloginfo( 'name' ); ?></a> &nbsp; <?php bloginfo( 'description' ); ?></h1>
 	</div>
 	<div id="nav" class="group">
-		<?php wp_nav_menu( array( 'container' => false, 'theme_location' => 'primary' ) ); ?>
+		<?php wp_nav_menu( array( 'container' => false, 'theme_location' => 'primary', 'fallback_cb' => 'andrea_page_menu' ) ); ?>
 		<div id="feed"><a href="<?php bloginfo( 'rss2_url' ); ?>"><?php _e( 'RSS Feed', 'andrea' ); ?></a></div>
 	</div>

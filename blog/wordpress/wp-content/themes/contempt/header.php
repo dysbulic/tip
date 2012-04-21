@@ -12,10 +12,9 @@
 <?php if ( is_singular() && get_option( 'thread_comments' ) ) wp_enqueue_script( 'comment-reply' ); ?>
 <?php wp_head(); ?>
 </head>
-<body <?php body_class(); ?>>
+<body>
 
 <div id="page">
-<?php do_action( 'before' ); ?>
 
 <div id="header">
 	<div id="headerimg" onclick="location.href='<?php bloginfo('url'); ?>';" style="cursor: pointer;">

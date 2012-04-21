@@ -23,23 +23,23 @@
 	<?php the_tags( '<li>' . __( 'Tags' ) . ': ', ', ', '</li>'); ?>
 	<?php } ?>
 	<li><?php _e('<strong>Do More :</strong>') ?></li>
-	<li><?php if ( ( 'open' == $post-> comment_status ) && ( 'open' == $post->ping_status ) ) {
+	<li><?php if (('open' == $post-> comment_status) && ('open' == $post->ping_status)) {
 							// Both Comments and Pings are open ?>
-							<?php printf( __( 'You can <a href="#respond">leave a response</a>, or <a href="%s" rel="trackback">trackback</a> from your own site.', 'connections' ), trackback_url( false ) ); ?>
+							You can <a href="#respond">leave a response</a>, or <a href="<?php trackback_url(display); ?>">trackback</a> from your own site.
 						
-						<?php } elseif ( ! ( 'open' == $post->comment_status ) && ( 'open' == $post->ping_status ) ) {
+						<?php } elseif (!('open' == $post-> comment_status) && ('open' == $post->ping_status)) {
 							// Only Pings are Open ?>
-							<?php printf( __( 'Responses are currently closed, but you can <a href="%s" rel="trackback">trackback</a> from your own site.', 'connections' ), trackback_url( false ) ); ?>
+							Responses are currently closed, but you can <a href="<?php trackback_url(display); ?> ">trackback</a> from your own site.
 						
-						<?php } elseif ( ( 'open' == $post->comment_status ) && ! ( 'open' == $post->ping_status ) ) {
+						<?php } elseif (('open' == $post-> comment_status) && !('open' == $post->ping_status)) {
 							// Comments are open, Pings are not ?>
-							<?php _e( 'You can skip to the end and leave a response. Pinging is currently not allowed.', 'connections' ); ?>
+							<?php _e('You can skip to the end and leave a response. Pinging is currently not allowed.') ?>
 			
-						<?php } elseif ( ! ( 'open' == $post->comment_status ) && ! ( 'open' == $post->ping_status ) ) {
+						<?php } elseif (!('open' == $post-> comment_status) && !('open' == $post->ping_status)) {
 							// Neither Comments, nor Pings are open ?>
-							<?php _e( 'Both comments and pings are currently closed.', 'connections' ); ?>
+							<?php _e('Both comments and pings are currently closed.') ?>			
 						
-						<?php } edit_post_link( __( 'Edit this entry', 'connections' ), '', '.' ); ?></li>
+						<?php } edit_post_link(__('Edit this entry.'),'',''); ?></li>
 	</ul>
 	<?php }; ?>	
 	</div>

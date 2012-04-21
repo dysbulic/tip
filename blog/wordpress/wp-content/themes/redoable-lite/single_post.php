@@ -16,7 +16,7 @@
 			. '</div>'
 			);
 		?>
-		<h3 class="entry-title"><?php the_title(); ?></h3>
+		<h3 class="entry-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php echo esc_attr( sprintf( __( 'Permanent link to %s', 'redo_domain' ), the_title_attribute( 'echo=0' ) ) ); ?>"><?php the_title(); ?></a></h3>
 		<?php /* Edit Link */ edit_post_link(__('Edit','redo_domain'), '<span class="editLink">','</span>'); ?>
 
 		<div class="entry-meta">

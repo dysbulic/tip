@@ -32,8 +32,7 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>'; ?>
 			<name><?php the_author() ?></name>
 			<?php $author_url = get_the_author_meta('url'); if ( !empty($author_url) ) : ?>
 			<uri><?php the_author_meta('url')?></uri>
-			<?php endif;
-			do_action('atom_author'); ?>
+			<?php endif; ?>
 		</author>
 		<title type="<?php html_type_rss(); ?>"><![CDATA[<?php the_title_rss() ?>]]></title>
 		<link rel="alternate" type="text/html" href="<?php the_permalink_rss() ?>" />

@@ -25,9 +25,13 @@
 
 				<div class="footermeta">
 
-					<span class="rss"><a href="<?php bloginfo('rss2_url'); ?>" title="<?php esc_attr_e( 'Syndicate this site using RSS' ); ?>"><?php _e('<abbr title="Really Simple Syndication">RSS</abbr>'); ?></a></span>
-						<a href="<?php bloginfo('comments_rss2_url'); ?>" title="<?php esc_attr_e( 'The latest comments to all posts in RSS' ); ?>"><?php _e('Comments <abbr title="Really Simple Syndication">RSS</abbr>'); ?></a>
-						<a href="http://wordpress.com/" title="<?php esc_attr_e( 'Powered by WordPress, state-of-the-art semantic personal publishing platform.' ); ?>"><abbr title="WordPress">WP</abbr></a>
+					<span class="rss"><a href="<?php bloginfo('rss2_url'); ?>" title="<?php _e('Syndicate this site using RSS'); ?>"><?php _e('<abbr title="Really Simple Syndication">RSS</abbr>'); ?></a></span>
+						<a href="<?php bloginfo('comments_rss2_url'); ?>" title="<?php _e('The latest comments to all posts in RSS'); ?>"><?php _e('Comments <abbr title="Really Simple Syndication">RSS</abbr>'); ?></a>
+					
+						
+
+						<a href="http://gmpg.org/xfn/"><abbr title="XHTML Friends Network">XFN</abbr></a>
+						<a href="http://wordpress.com/" title="<?php _e('Powered by WordPress, state-of-the-art semantic personal publishing platform.'); ?>"><abbr title="WordPress">WP</abbr></a>
 						<?php wp_meta(); ?>
 						
 					</div>

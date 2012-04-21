@@ -1,22 +1,13 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Blix
- */
-
 include (TEMPLATEPATH . '/BX_functions.php');
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'text' => '414141',
-	'link' => '6C8C37',
-	'border' => 'EDE8E2',
-	'url' => '009193',
-);
+	'text' => '000000',
+	'link' => '6C8C37'
+	);
 
 $content_width = 455;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 add_theme_support( 'automatic-feed-links' );
 
@@ -167,59 +158,3 @@ function blix_page_menu() { // fallback for primary navigation ?>
 	<?php wp_list_pages('depth=1&title_li=' ); ?>
 </ul>
 <?php }
-
-global $commentcount;
-$commentcount = 1;
-
-function blix_callback( $comment, $args, $depth ) {
-	$GLOBALS['comment'] = $comment;
-	extract($args, EXTR_SKIP);
-	global $comment_alt, $commentcount;
-	if ( $comment_alt % 2 ) $commentalt = ' alt';
-?>
-<li id="comment-<?php comment_ID(); ?>" <?php comment_class(); ?>>
-	<div id="div-comment-<?php comment_ID(); ?>">
-	<div class="comment-author vcard">
-		<p class="header<?php echo $commentalt; ?>"><strong><?php echo $commentcount ?>.</strong>
-
-		<?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?>
-
-		<span class="fn"><?php if ($comment->comment_type == "comment") comment_author_link();
-			  else {
-			  		strlen($comment->comment_author) > 25 ? $author = substr($comment->comment_author,0,25) . "&hellip" : $author=substr($comment->comment_author,0,25);
-			  		echo get_comment_author_link();
-
-			  }
-		?></span> &nbsp;|&nbsp; <?php printf( __( '%1$s at %2$s', 'blix' ), get_comment_date(), get_comment_time() ); ?></p>
-	</div>
-	<?php if ($comment->comment_approved == '0') : ?><p><em><?php _e( 'Your comment is awaiting moderation.', 'blix' ); ?></em></p><?php endif; ?>
-	<?php comment_text(); ?>
-	<?php edit_comment_link( __( 'Edit Comment', 'blix' ), '<span class="editlink">', '</span>' ); ?>
-	<span class="reply">
-	<?php comment_reply_link(array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
-	</span>
-	</div>
-
-<?php
-	$commentcount++;
-}
-
-function blix_posted_on() {
-	printf( __( '<em class="date">%1$s</em>', 'blix' ),
-		sprintf( '<a href="%1$s" title="%2$s" rel="bookmark">%3$s at %2$s</a>',
-			get_permalink(),
-			esc_attr( get_the_time() ),
-			get_the_date()
-		)
-	);
-}
-
-function blix_posted_by() {
-	if ( is_multi_author() && ! is_author() ) {
-		printf( __( '<em class="author"><a class="url fn n" href="%1$s" title="%2$s" rel="author">%3$s</a></em>', 'blix' ),
-			esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
-			esc_attr( sprintf( __( 'View all posts by %s', 'blix' ), get_the_author_meta( 'display_name' ) ) ),
-			esc_attr( get_the_author_meta( 'display_name' ) )
-		);
-	}
-}

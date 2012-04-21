@@ -1,20 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Contempt
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
 	'text' => '333333',
-	'link' => '0066cc',
-	'border' => '5581C0',
-	'url' => '114477',
-);
+	'link' => '0066cc'
+	);
 
 $content_width = 450;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 add_theme_support( 'automatic-feed-links' );
 

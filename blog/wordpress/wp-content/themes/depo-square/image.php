@@ -25,7 +25,7 @@
 			</div>
 		<?php endwhile; ?>
 			
-		<?php if( !is_home() && !is_front_page() ): ?><div class="navigation_to_home"><a href="<?php echo home_url( '/' ); ?>"><?php _e('&laquo; Back to Home'); ?></div><?php endif; ?>
+		<?php if( !is_home() && !is_front_page() ): ?><div class="navigation_to_home"><a href="<?php bloginfo('wpurl'); ?>"><?php _e('&laquo; Back to Home'); ?></div><?php endif; ?>
 
 	<?php else : ?>
 		<div class="post">

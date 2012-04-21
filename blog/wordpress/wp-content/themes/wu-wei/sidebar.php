@@ -20,4 +20,4 @@
 		<?php dynamic_sidebar( 'widget-area-3' ); ?>
 	</ul>
 	<?php endif ?>
-</div>
+</div>	

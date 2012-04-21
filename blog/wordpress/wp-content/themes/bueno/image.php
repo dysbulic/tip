@@ -37,17 +37,15 @@ get_header();
                     
                     <div class="post-meta">
                     
-                    	<ul <?php if ( ! is_multi_author() ) echo 'class="single-author-image-meta"';?>>
+                    	<ul>
                     		<li class="comments">
                     			<span class="head"><?php _e('Comments', 'woothemes') ?></span>
                     			<span class="body"><?php comments_popup_link(__('Leave a Comment', 'woothemes'), __('1 Comment', 'woothemes'), __('% Comments', 'woothemes')); ?></span>
                     		</li>
-                    		<?php if ( is_multi_author() ) { ?>
-		                		<li class="author">
-		                			<span class="head"><?php _e('Author', 'woothemes') ?></span>
-		                			<span class="body"><?php the_author_posts_link(); ?></span>
-		                		</li>
-                    		<?php } ?>
+                    		<li class="author">
+                    			<span class="head"><?php _e('Author', 'woothemes') ?></span>
+                    			<span class="body"><?php the_author_posts_link(); ?></span>
+                    		</li>
 							<li class="parent">
 								<span class="head"><?php _e('Posted in', 'woothemes') ?></span>
 								<span class="body"><a href="<?php echo get_permalink( $post->post_parent ); ?>" title="<?php printf( esc_attr__( 'Return to %s', 'twentyten' ), esc_html( get_the_title( $post->post_parent ), 1 ) ); ?>" rel="gallery"><?php echo get_the_title( $post->post_parent ); ?></a>
@@ -55,7 +53,7 @@ get_header();
 							</li>                    									
 							<li class="imagelink">
 								<span class="head"><?php _e('Full-size', 'woothemes') ?></span>
-								<span class="body"><a title="<?php esc_attr_e( 'Permalink to full-size image', 'woothemes' ); ?>" href="<?php echo wp_get_attachment_url(); ?>"><?php $size = getimagesize( wp_get_attachment_url() ); echo $size[0] . ' &times; ' . $size[1]; ?></a>
+								<span class="body"><a title="<?php _e( 'Permalink to full-size image', 'woothemes' ); ?>" href="<?php echo wp_get_attachment_url(); ?>"><?php $size = getimagesize( wp_get_attachment_url() ); echo $size[0] . ' &times; ' . $size[1]; ?></a>
 								</span>
 							</li>                    		
                     	</ul>              	                    	

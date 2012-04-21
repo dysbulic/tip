@@ -22,6 +22,7 @@
 	<link rel="stylesheet" href="<?php bloginfo('stylesheet_directory'); ?>/library/styles/print.css" type="text/css" media="print" />
 	<!--[if lte IE 8]><link rel="stylesheet" href="<?php bloginfo('stylesheet_directory'); ?>/library/styles/ie.css" type="text/css" media="screen, projection" /><![endif]-->
 	<!--[if lte IE 7]><link type="text/css" href="<?php bloginfo('stylesheet_directory'); ?>/library/styles/ie-nav.css" rel="stylesheet" media="all" /><![endif]-->
+
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 
 <?php if ( is_singular() && get_option( 'thread_comments' ) )
@@ -36,7 +37,7 @@
 
 <!-- Begin Masthead -->
 <div id="masthead">
- <h4 class="left"><a href="<?php echo home_url( '/' ); ?>" title="<?php esc_attr_e( 'Home', 'modularity' ); ?>" class="logo"><?php bloginfo( 'name' ); ?></a> <span class="description"><?php bloginfo( 'description' ); ?></span></h4>
+ <h4 class="left"><a href="<?php echo home_url( '/' ); ?>" title="<?php _e( 'Home', 'modularity' ); ?>" class="logo"><?php bloginfo( 'name' ); ?></a> <span class="description"><?php bloginfo( 'description' ); ?></span></h4>
 </div>
 
 	<?php wp_nav_menu( array( 'theme_location' => 'primary', 'container_class' => 'main-nav' ) ); ?>
@@ -46,13 +47,9 @@
 
 <div class="container">
 <div class="container-inner">
-
-	<?php
-		// Check for a header image
-		$header_image = get_header_image();
-		if ( ! empty( $header_image ) ) :
-	?>
+	
+	<?php if ( get_theme_mod( 'header_image' ) ) : ?>	    
 	<div id="header-image">
-		<img src="<?php echo $header_image; ?>" width="950" height="200" alt="" />
+	<img src="<?php header_image() ?>" width="950" height="200" alt="" />
 	</div>
 	<?php endif; ?>

@@ -1,13 +1,6 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Chaotic Soul
- */
-
-register_nav_menu( 'primary', __( 'Primary Menu', 'chaoticsoul' ) );
-
-function chaoticsoul_comment($comment, $args, $depth) {
-$GLOBALS['comment'] = $comment;
+function chaoticsoul_comment($comment, $args, $depth) { 
+$GLOBALS['comment'] = $comment;	
 	?>
 	<li <?php comment_class(); ?> id="comment-<?php comment_ID() ?>">
 			<?php comment_text() ?>
@@ -27,18 +20,17 @@ $themecolors = array(
 	'bg' => '161410',
 	'text' => '999999',
 	'link' => 'd8d7d3',
-	'border' => '35302A',
-	'url' => 'BD934F',
-);
+	'border' => '161410'
+	);
 
 $content_width = 497;
 
 // Widgets FTW!
 function widget_chaoticsoul_links() {
 	wp_list_bookmarks(array(
-		'title_before' => '<h3>',
+		'title_before' => '<h3>', 
 		'title_after' => '</h3>',
-		'category_before' => '',
+		'category_before' => '', 
 	));
 }
 

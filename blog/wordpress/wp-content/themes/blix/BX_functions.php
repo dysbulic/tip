@@ -81,7 +81,7 @@ function BX_shift_down_headlines($text)
 	$text = preg_replace("/h5>/","h6>",$text);
 	$text = preg_replace("/h4>/","h5>",$text);
 	$text = preg_replace("/h3>/","h4>",$text);
-	return $text;
+	echo $text;
 }
 
 

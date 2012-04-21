@@ -37,13 +37,6 @@
 			<div class="post-info">
 
 				<h1 id="post-<?php the_ID(); ?>"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink to %s', 'wu-wei' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></h1>
-				<?php if ( is_multi_author() ) { ?>
-					<div class="archive-byline">
-						<a href="<?php echo esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ); ?>" title="<?php esc_attr( printf( __( 'View all posts by %s', 'wu-wei' ), get_the_author_meta( 'display_name' ) ) ); ?>">
-							<?php esc_html( printf( __( 'By %1$s', 'wu-wei' ), get_the_author_meta( 'display_name' ) ) ) ?>
-						</a>
-					</div>
-				<?php } ?>
 				<div class="timestamp"><?php the_time( get_option( 'date_format' ) ); ?> <!-- by <?php the_author(); ?> --> //</div> <?php if ( comments_open() ) : ?><div class="comment-bubble"><?php comments_popup_link( '0', '1', '%' ); ?></div><?php endif; ?>
 				<div class="clearboth"><!-- --></div>
 
@@ -58,10 +51,10 @@
 			</div>
 
 			<div class="clearboth"><!-- --></div>
-
+			
 			<?php the_tags( '<div class="post-meta-data">' . __( 'Tags', 'wu-wei' ) . ' <span>', ', ', '</span></div>' ); ?>
 
-			<div class="post-meta-data"><?php _e( 'Categories', 'wu-wei' ); ?> <span><?php the_category(', '); ?></span></div>
+			<div class="post-meta-data"><?php _e( 'Categories', 'wu-wei' ); ?> <span><?php the_category(', '); ?></span></div>			
 
 		</div>
 
@@ -74,7 +67,7 @@
 			</div>
 
 	<?php else :
-
+		
 		if ( is_category() ) { // If this is a category archive
 			printf( __( '<h2 class="center">Sorry, but there aren&#8217;t any posts in the %1$s category yet.</h2>', 'wu-wei' ), single_cat_title('',false) );
 		} else if ( is_date() ) { // If this is a date archive

@@ -6,7 +6,7 @@
 <?php /* WordPress Widget Support */ if (function_exists('dynamic_sidebar') and dynamic_sidebar('main-sidebar')) { } else { ?>
 
 	<li id="search"><h2><?php _e('Search','unsleepable'); ?></h2>
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 	</li>
 
 

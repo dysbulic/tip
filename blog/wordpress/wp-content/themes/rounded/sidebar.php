@@ -112,10 +112,10 @@
 				<div class="sideitemcontent">
 				<h2>Searching</h2>
 			<!--   <label for="s"><?php _e('Enter keywords'); ?></label>	-->
-			   <form id="searchform" method="get" action="<?php echo home_url( '/' ); ?>">
+			   <form id="searchform" method="get" action="<?php bloginfo('url'); ?>/">
 				<div>
 					<input type="text" name="s" id="s" size="15" />
-					<input type="submit" value="<?php esc_attr_e( 'Search' ); ?>" />
+					<input type="submit" value="<?php _e('Search'); ?>" />
 				</div>
 				</form>
 				</div>

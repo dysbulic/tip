@@ -1,15 +1,9 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Green Marinee
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'text' => '3f3f3f',
-	'link' => '7da721',
-	'border' => 'fcfef4',
-	'url' => 'ace149',
+	'text' => '000000',
+	'link' => '78a515'
 );
 
 $content_width = 475;

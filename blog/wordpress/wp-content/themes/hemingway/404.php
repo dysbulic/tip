@@ -7,7 +7,7 @@
 			<p><?php _e("It looks like there's a problem with the page you're trying to get to. If you're looking for something in particular, try using the search form below, or by browsing the archives.", 'hemingway'); ?></p>
 			
 			<h2><?php _e('Search this site:', 'hemingway'); ?></h2>
-			<?php get_search_form(); ?>
+			<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 			
 			<h2><?php _e('Archives by month:', 'hemingway'); ?></h2>
 			<ul>

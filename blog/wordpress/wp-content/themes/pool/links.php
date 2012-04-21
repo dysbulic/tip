@@ -9,11 +9,11 @@ Template Name: Links
 <div id="bloque">
 	<div id="noticias">
 		<div class="entrada">
-			<h2><?php _e( 'Links:', 'pool' ); ?></h2>
+			<h2>Links:</h2>
 			<ul>
-				<?php wp_list_bookmarks(); ?>
+			<?php get_links(-1, '<li>', '</li>', ''); ?>
 			</ul>
-		</div><!-- #noticias -->
-	</div><!-- #bloque -->
+		</div>
+	</div>	
 
 <?php get_footer(); ?>

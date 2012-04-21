@@ -1,20 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Day Dream
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'text' => '222222',
-	'link' => '006699',
-	'border' => 'CCCCCC',
-	'url' => '0099CC',
+	'text' => '000000',
+	'link' => '006699'
 );
 
 $content_width = 426;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 add_theme_support( 'automatic-feed-links' );
 
@@ -100,7 +92,7 @@ add_custom_image_header('', 'daydream_admin_header_style');
 
 function dd_add_admin() {
 
-	if ( isset( $_POST['dd_action'] ) && 'save' == $_POST['dd_action'] ) {
+	if ( 'save' == $_POST['dd_action'] ) {
 		// Update Options
 		$dd_colour_scheme = preg_replace( '|[^a-z]|i', '', esc_attr($_POST['dd_colour_scheme']) );
 		$dd_title = preg_replace( '|[^a-z]|i', '', esc_attr($_POST['dd_title']) );
@@ -140,7 +132,7 @@ function dd_admin() {
 				<label><input type="radio" name="dd_colour_scheme" value="Grey" <?php if (get_theme_mod('dd_colour_scheme') == "Grey") { echo "checked='checked'"; } ?> /> Grey <img src="<?php bloginfo('template_directory'); ?>/images/option_grey.jpg" alt="Grey" /></label>
 				</p>
 		<input type="hidden" name="dd_action" value="save" />
-	<p class="submit" style="clear: both"><input name="save" id="save" type="submit" value="<?php esc_attr_e( 'Save Options &raquo;', 'daydream' ); ?>" /></p>
+	<p class="submit" style="clear: both"><input name="save" id="save" type="submit" value="<?php _e('Save Options &raquo;', 'daydream'); ?>" /></p>
 	</form>
 
 </div>
@@ -202,26 +194,3 @@ function daydream_page_menu() { ?>
 		<?php wp_list_pages( 'sort_column=menu_order&depth=1&title_li=' ); ?>
 	</ul>
 <?php }
-
-function daydream_comment($comment, $args, $depth) {
-	$GLOBALS['comment'] = $comment;
-	extract($args, EXTR_SKIP);
-?>
-<li <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="comment-<?php comment_ID() ?>">
-	<div id="div-comment-<?php comment_ID() ?>">
-	<?php if ($comment->comment_approved == '0') : ?>
-	<p class="await_mod"><?php _e('Your comment is awaiting moderation.','daydream'); ?></p>
-	<?php endif; ?>
-
-	<?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?>
-	
-	<?php comment_text(); ?>
-	
-	<div class="comment-author vcard cmntmeta comment-meta commentmetadata"><span class="fn"><?php comment_author_link() ?></span> - <?php comment_date() ?> <?php _e('at','daydream'); ?> <?php comment_time() ?></a> <?php edit_comment_link('e','',''); ?></div>
-	
-	<div class="reply">
-		<?php comment_reply_link(array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
-	</div>
-	</div>
-<?php
-}

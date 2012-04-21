@@ -6,12 +6,13 @@
 
 get_header(); ?>
 
-	<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+	<?php if ( have_posts() ) : while ( have_posts() ) : the_post();
+		if( $post->ID == $do_not_duplicate ) continue; update_post_caches( $posts );  ?>
 
-					<div <?php post_class(); ?> id="post-<?php the_ID(); ?>">
+					<div <?php post_class() ?> id="post-<?php the_ID(); ?>">
 						<p class="postmetadata"><?php the_tags( '', ', ', '<br />' ); ?></p>
 						<h2><?php the_title(); ?></h2>
-						<small><?php printf( __( 'In %1$s on %2$s at %3$s', 'depo-masthead' ), get_the_category_list( __( ', ', 'depo-masthead' ) ), '<strong>' . get_the_time( get_option( 'date_format' ) ) . '</strong>', '<strong>' . get_the_time() . '</strong>' ); ?></small>
+				<small><?php printf( __( 'In %1$s on %2$s at %3$s', 'depo-masthead' ), get_the_category_list( __( ', ', 'depo-masthead' ) ), '<strong>' . get_the_time( get_option( 'date_format' ) ) . '</strong>', '<strong>' . get_the_time() . '</strong>' ); ?></small>
 
 						<div class="entry">
 							<?php the_content( __( 'Read the rest of this entry &raquo;', 'depo-masthead' ) ); ?>
@@ -26,6 +27,7 @@ get_header(); ?>
 						<div class="previous">
 								<?php previous_post_link( '%link', '<span class="arrow">&laquo;</span> <span class="link"> <span class="before">' . __( 'Before', 'depo-masthead' ) . '</span> <span class="title">%title</span> <span class="date">%date</span> </span>' ); ?>
 						</div>
+
 						<div class="next">
 								<?php next_post_link( '%link', '<span class="link"> <span class="after">' . __( 'After', 'depo-masthead' ) . '</span><span class="title">%title</span> <span class="date">%date</span></span> <span class="arrow">&raquo;</span>' ); ?>
 						</div>
@@ -35,6 +37,6 @@ get_header(); ?>
 
 		<p><?php _e( 'Sorry, no posts matched your criteria.', 'depo-masthead' ); ?></p>
 
-	<?php endif; ?>
+<?php endif; ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

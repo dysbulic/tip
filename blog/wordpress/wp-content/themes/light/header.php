@@ -14,7 +14,7 @@ wp_head();
 ?>
 </head>
 
-<body id="home" <?php body_class( 'log' ); ?>>
+<body id="home" class="log">
 <div id="header">
   <div id="logo">
     <h1 id="blogname"><a href="<?php bloginfo( 'url' ); ?>">

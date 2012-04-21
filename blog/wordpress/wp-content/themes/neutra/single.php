@@ -12,11 +12,11 @@ get_header(); ?>
 		<?php if ( have_posts() ) : ?>
 		<?php while ( have_posts() ) : the_post(); ?>
 			<div <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
-				<h2 class="title"><?php the_title(); ?></h2>
+				<h2 class="title"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 				<div class="postcontent">
-					<?php the_content( __( 'Read more&#8230;', 'neutra' ) ); ?>
-					<?php wp_link_pages( 'before=<p class="link-pages">' . __( 'Pages:', 'neutra' ) . ' &after=</p>' ); ?>
-					<p class="edit-post"><?php edit_post_link( __( '(Edit this entry)', 'neutra' ) ); ?></p>
+					<?php the_content( 'Read more&#8230;' ); ?>
+					<?php wp_link_pages( 'before=<p class="link-pages">Pages: &after=</p>' ); ?>
+					<p class="edit-post"><?php edit_post_link( __( '(Edit this entry)' ) ); ?></p>
 
 					<div class="postmetadata">
 						<div class="floatleft">
@@ -25,7 +25,7 @@ get_header(); ?>
 						</div><!-- /floatleft -->
 						<div class="floatright">
 							<p><span class="date"><?php the_time( get_option( 'date_format' ) ); ?></span></p>
-							<p><span class="comments"><?php comments_popup_link( __( 'Leave a comment', 'neutra' ), __( '1 Comment', 'neutra' ), __( '% Comments', 'neutra' ) ) ?></span></p>
+							<p><span class="comments"><?php comments_popup_link( __( 'Leave a comment' ), __( '1 Comment' ), __( '% Comments' ) ) ?></span></p>
 						</div><!-- /floatright -->
 					</div><!-- /postmetadata -->
 
@@ -44,9 +44,9 @@ get_header(); ?>
 			<?php else : ?>
 
 			<div class="post">
-				<h2 class="title"><?php _e( 'I&rsquo;m sorry, I couldn&rsquo;t find the article!', 'neutra' ); ?></h2>
+				<h2 class="title">I'm sorry, I couldn't find the article!</h2>
 				<div class="postcontent">
-					<p><?php _e( 'Don&rsquo;t worry, you can always search the <strong>archives</strong> or browse the <strong>categories</strong>.', 'neutra' ); ?></p>
+					<p>Don't worry, you can always search the <strong>archives</strong> or browse the <strong>categories</strong>.</p>
 				</div>
 			</div><!-- /post -->
 

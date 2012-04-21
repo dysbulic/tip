@@ -6,7 +6,6 @@
  * @since Coraline 1.0
  */
 
-coraline_set_full_content_width();
 get_header(); ?>
 
 		<div id="content-container" class="full-width">

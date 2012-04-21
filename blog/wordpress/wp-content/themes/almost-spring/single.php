@@ -4,7 +4,7 @@
 		
 		<div <?php post_class(); ?>>
 	
-			<h2 class="posttitle" id="post-<?php the_ID(); ?>"><span><?php the_title(); ?></span></h2>
+			<h2 class="posttitle" id="post-<?php the_ID(); ?>"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php echo esc_attr( sprintf( __( 'Permanent link to %s', 'almost-spring' ), the_title_attribute( 'echo=0' ) ) ); ?>"><?php the_title(); ?></a></h2>
 			
 			<p class="postmeta"> 
 			<?php the_time(get_option("date_format")); ?> <?php _e('at','almost-spring'); ?> <?php the_time() ?> 
@@ -15,7 +15,7 @@
 		
 			<div class="postentry">
 			<?php the_content(__('Read the rest of this entry &raquo;','almost-spring')); ?>
-			<?php wp_link_pages( __( 'Pages:', 'almost-spring' ) ); ?>
+			<?php wp_link_pages(); ?>
 			</div>
 
 			<p class="postfeedback">
@@ -34,7 +34,7 @@
 		
 		<h3><?php _e('Search','almost-spring'); ?></h3>
 		
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 
 	<?php endif; ?>
 

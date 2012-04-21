@@ -31,7 +31,7 @@ get_header(); ?>
 			<div class="post">
 				<h2 class="title"><?php _e( 'I&rsquo;m sorry, there&rsquo;s no category!', 'neutra' ); ?></h2>
 				<div class="postcontent">
-					<p><?php _e( 'Don&rsquo;t worry, you can always <strong>search the blog</strong> or browse the <strong>categories</strong>.', 'neutra' ); ?></p>
+					<p><?php _e( 'Don&rsquo;t worry, you can always <strong>search the blog</strong> or browse the <strong>categories</strong>.' ); ?></p>
 				</div>
 			</div><!-- /post -->
 

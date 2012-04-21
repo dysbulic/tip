@@ -6,12 +6,13 @@
 
 get_header(); ?>
 
-	<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+	<?php if ( have_posts() ) : while ( have_posts() ) : the_post();
+		if( $post->ID == $do_not_duplicate ) continue; update_post_caches( $posts );  ?>
 
 					<div <?php post_class(); ?> id="post-<?php the_ID(); ?>">
 						<p class="postmetadata"><?php the_tags( '', ', ', '<br />' ); ?></p>
 						<h2><a href="<?php echo get_permalink( $post->post_parent ); ?>" rev="attachment"><?php echo get_the_title( $post->post_parent ); ?></a> &raquo; <?php the_title(); ?></h2>
-						<small><?php printf( __( 'On <strong>%1s</strong> at <strong>%2s</strong>', 'depo-masthead' ), get_the_time( get_option( 'date_format' ) ), get_the_time() ); ?></small>
+						<small>On <strong><?php the_time( get_option( 'date_format' ) ); ?></strong> at <strong><?php the_time(); ?></strong></small>
 
 						<div class="entry">
 							<p class="attachment"><a href="<?php echo wp_get_attachment_url( $post->ID ); ?>"><?php echo wp_get_attachment_image( $post->ID, 'auto' ); ?></a></p>

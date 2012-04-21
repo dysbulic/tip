@@ -21,7 +21,7 @@ class WP_Comments_List_Table extends WP_List_Table {
 
 	var $pending_count = array();
 
-	function __construct() {
+	function WP_Comments_List_Table() {
 		global $post_id;
 
 		$post_id = isset( $_REQUEST['p'] ) ? absint( $_REQUEST['p'] ) : 0;
@@ -29,7 +29,7 @@ class WP_Comments_List_Table extends WP_List_Table {
 		if ( get_option('show_avatars') )
 			add_filter( 'comment_author', 'floated_admin_avatar' );
 
-		parent::__construct( array(
+		parent::WP_List_Table( array(
 			'plural' => 'comments',
 			'singular' => 'comment',
 			'ajax' => true,
@@ -109,8 +109,6 @@ class WP_Comments_List_Table extends WP_List_Table {
 		foreach ( $_comments as $_c ) {
 			$_comment_post_ids[] = $_c->comment_post_ID;
 		}
-
-		$_comment_post_ids = array_unique( $_comment_post_ids );
 
 		$this->pending_count = get_pending_comments_num( $_comment_post_ids );
 

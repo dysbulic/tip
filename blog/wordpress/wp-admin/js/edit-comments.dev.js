@@ -1,31 +1,20 @@
-var theList, theExtraList, toggleWithKeyboard = false, getCount, updateCount, updatePending, dashboardTotals;
+var theList, theExtraList, toggleWithKeyboard = false;
 (function($) {
 
 setCommentsList = function() {
-	var totalInput, perPageInput, pageInput, lastConfidentTime = 0, dimAfter, delBefore, updateTotalCount, delAfter, refillTheExtraList;
+	var totalInput, perPageInput, pageInput, lastConfidentTime = 0, dimAfter, delBefore, updateTotalCount, delAfter;
 
 	totalInput = $('input[name="_total"]', '#comments-form');
 	perPageInput = $('input[name="_per_page"]', '#comments-form');
 	pageInput = $('input[name="_page"]', '#comments-form');
 
 	dimAfter = function( r, settings ) {
-		var c = $('#' + settings.element), editRow, replyID, replyButton;
+		var c = $('#' + settings.element);
 
-		editRow = $('#replyrow');
-		replyID = $('#comment_ID', editRow).val();
-		replyButton = $('#replybtn', editRow);
-
-		if ( c.is('.unapproved') ) {
-			if ( settings.data.id == replyID )
-				replyButton.text(adminCommentsL10n.replyApprove);
-
-			c.find('div.comment_status').html('0');
-		} else {
-			if ( settings.data.id == replyID )
-				replyButton.text(adminCommentsL10n.reply);
-
-			c.find('div.comment_status').html('1');
-		}
+		if ( c.is('.unapproved') )
+			c.find('div.comment_status').html('0')
+		else
+			c.find('div.comment_status').html('1')
 
 		$('span.pending-count').each( function() {
 			var a = $(this), n, dif;
@@ -35,7 +24,7 @@ setCommentsList = function() {
 			dif = $('#' + settings.element).is('.' + settings.dimClass) ? 1 : -1;
 			n = n + dif;
 			if ( n < 0 ) { n = 0; }
-			a.closest('.awaiting-mod')[ 0 == n ? 'addClass' : 'removeClass' ]('count-0');
+			a.closest('#awaiting-mod')[ 0 == n ? 'addClass' : 'removeClass' ]('count-0');
 			updateCount(a, n);
 			dashboardTotals();
 		});
@@ -43,13 +32,13 @@ setCommentsList = function() {
 
 	// Send current total, page, per_page and url
 	delBefore = function( settings, list ) {
-		var cl = $(settings.target).attr('class'), id, el, n, h, a, author, action = false;
+		var cl = $(settings.target).attr('className'), id, el, n, h, a, author, action = false;
 
 		settings.data._total = totalInput.val() || 0;
 		settings.data._per_page = perPageInput.val() || 0;
 		settings.data._page = pageInput.val() || 0;
 		settings.data._url = document.location.href;
-		settings.data.comment_status = $('input[name="comment_status"]', '#comments-form').val();
+		settings.data.comment_status = $('input[name=comment_status]', '#comments-form').val();
 
 		if ( cl.indexOf(':trash=1') != -1 )
 			action = 'trash';
@@ -61,7 +50,7 @@ setCommentsList = function() {
 			el = $('#comment-' + id);
 			note = $('#' + action + '-undo-holder').html();
 
-			el.find('.check-column :checkbox').prop('checked', false); // Uncheck the row so as not to be affected by Bulk Edits.
+			el.find('.check-column :checkbox').attr('checked', ''); // Uncheck the row so as not to be affected by Bulk Edits.
 
 			if ( el.siblings('#replyrow').length && commentReply.cid == id )
 				commentReply.close();
@@ -80,7 +69,7 @@ setCommentsList = function() {
 			$('strong', '#undo-' + id).text(author + ' ');
 			a = $('.undo a', '#undo-' + id);
 			a.attr('href', 'comment.php?action=un' + action + 'comment&c=' + id + '&_wpnonce=' + settings.data._ajax_nonce);
-			a.attr('class', 'delete:the-comment-list:comment-' + id + '::un' + action + '=1 vim-z vim-destructive');
+			a.attr('className', 'delete:the-comment-list:comment-' + id + '::un' + action + '=1 vim-z vim-destructive');
 			$('.avatar', el).clone().prependTo('#undo-' + id + ' .' + action + '-undo-inside');
 
 			a.click(function(){
@@ -110,7 +99,7 @@ setCommentsList = function() {
 		});
 	};
 
-	dashboardTotals = function(n) {
+	function dashboardTotals(n) {
 		var dash = $('#dashboard_right_now'), total, appr, totalN, apprN;
 
 		n = n || 0;
@@ -126,16 +115,16 @@ setCommentsList = function() {
 		updateCount(total, totalN);
 		updateCount(appr, apprN);
 
-	};
+	}
 
-	getCount = function(el) {
+	function getCount(el) {
 		var n = parseInt( el.html().replace(/[^0-9]+/g, ''), 10 );
 		if ( isNaN(n) )
 			return 0;
 		return n;
-	};
+	}
 
-	updateCount = function(el, n) {
+	function updateCount(el, n) {
 		var n1 = '';
 		if ( isNaN(n) )
 			return;
@@ -148,26 +137,11 @@ setCommentsList = function() {
 			n = n + n1;
 		}
 		el.html(n);
-	};
-
-	updatePending = function(n) {
-		$('span.pending-count').each( function() {
-			var a = $(this);
-
-			if ( n < 0 )
-				n = 0;
-
-			a.closest('.awaiting-mod')[ 0 == n ? 'addClass' : 'removeClass' ]('count-0');
-			updateCount(a, n);
-			dashboardTotals();
-		});
-	};
+	}
 
 	// In admin-ajax.php, we send back the unix time stamp instead of 1 on success
 	delAfter = function( r, settings ) {
-		var total, N, untrash = $(settings.target).parent().is('span.untrash'),
-			unspam = $(settings.target).parent().is('span.unspam'), spam, trash, pending,
-			unapproved = $('#' + settings.element).is('.unapproved');
+		var total, pageLinks, N, untrash = $(settings.target).parent().is('span.untrash'), unspam = $(settings.target).parent().is('span.unspam'), spam, trash;
 
 		function getUpdate(s) {
 			if ( $(settings.target).parent().is('span.' + s) )
@@ -177,7 +151,6 @@ setCommentsList = function() {
 
 			return 0;
 		}
-
 		spam = getUpdate('spam');
 		trash = getUpdate('trash');
 
@@ -186,15 +159,19 @@ setCommentsList = function() {
 		if ( unspam )
 			spam = -1;
 
-		pending = getCount( $('span.pending-count').eq(0) );
+		$('span.pending-count').each( function() {
+			var a = $(this), n = getCount(a), unapproved = $('#' + settings.element).is('.unapproved');
 
-		if ( $(settings.target).parent().is('span.unapprove') || ( ( untrash || unspam ) && unapproved ) ) { // we "deleted" an approved comment from the approved list by clicking "Unapprove"
-			pending = pending + 1;
-		} else if ( unapproved ) { // we deleted a formerly unapproved comment
-			pending = pending - 1;
-		}
-
-		updatePending(pending);
+			if ( $(settings.target).parent().is('span.unapprove') || ( ( untrash || unspam ) && unapproved ) ) { // we "deleted" an approved comment from the approved list by clicking "Unapprove"
+				n = n + 1;
+			} else if ( unapproved ) { // we deleted a formerly unapproved comment
+				n = n - 1;
+			}
+			if ( n < 0 ) { n = 0; }
+			a.closest('#awaiting-mod')[ 0 == n ? 'addClass' : 'removeClass' ]('count-0');
+			updateCount(a, n);
+			dashboardTotals();
+		});
 
 		$('span.spam-count').each( function() {
 			var a = $(this), n = getCount(a) + spam;
@@ -238,8 +215,9 @@ setCommentsList = function() {
 		refillTheExtraList();
 	};
 
-	refillTheExtraList = function(ev) {
-		var args = $.query.get(), total_pages = $('.total-pages').text(), per_page = $('input[name="_per_page"]', '#comments-form').val();
+	var refillTheExtraList = function(ev) {
+		// var args = $.query.get(), total_pages = listTable.get_total_pages(), per_page = $('input[name=_per_page]', '#comments-form').val(), r;
+		var args = $.query.get(), total_pages = $('.total-pages').text(), per_page = $('input[name=_per_page]', '#comments-form').val(), r;
 
 		if (! args.paged)
 			args.paged = 1;
@@ -289,6 +267,7 @@ setCommentsList = function() {
 			if ( s.target.className.indexOf(':trash=1') != -1 || s.target.className.indexOf(':spam=1') != -1 )
 				$('#undo-' + id).fadeIn(300, function(){ $(this).show() });
 		});
+	// $(listTable).bind('changePage', refillTheExtraList);
 };
 
 commentReply = {
@@ -376,8 +355,7 @@ commentReply = {
 	},
 
 	open : function(id, p, a) {
-		var t = this, editRow, rowData, act, h, c = $('#comment-' + id), replyButton;
-
+		var t = this, editRow, rowData, act, h, c = $('#comment-' + id);
 		t.close();
 		t.cid = id;
 
@@ -409,19 +387,21 @@ commentReply = {
 				$('#replyrow').fadeIn(300, function(){ $(this).show() });
 			});
 		} else {
-			replyButton = $('#replybtn', editRow);
 			$('#edithead, #savebtn', editRow).hide();
 			$('#replyhead, #replybtn', editRow).show();
 			c.after(editRow);
-
-			if ( c.hasClass('unapproved') ) {
-				replyButton.text(adminCommentsL10n.replyApprove);
-			} else {
-				replyButton.text(adminCommentsL10n.reply);
-			}
-
 			$('#replyrow').fadeIn(300, function(){ $(this).show() });
 		}
+
+		if ( ! $.browser.msie )
+			$('#replycontainer').resizable({
+				handles : 's',
+				axis : 'y',
+				minHeight : 80,
+				stop : function() {
+					$('#replycontainer').width('auto');
+				}
+			});
 
 		setTimeout(function() {
 			var rtop, rbottom, scrollTop, vp, scrollBottom;
@@ -452,17 +432,14 @@ commentReply = {
 		$('#replysubmit .error').hide();
 		$('#replysubmit .waiting').show();
 
-		$('#replyrow input').not(':button').each(function() {
+		$('#replyrow input').each(function() {
 			post[ $(this).attr('name') ] = $(this).val();
 		});
 
 		post.content = $('#replycontent').val();
 		post.id = post.comment_post_ID;
 		post.comments_listing = this.comments_listing;
-		post.p = $('[name="p"]').val();
-
-		if ( $('#comment-' + $('#comment_ID').val()).hasClass('unapproved') )
-			post.approve_parent = 1;
+		post.p = $('[name=p]').val();
 
 		$.ajax({
 			type : 'POST',
@@ -476,55 +453,37 @@ commentReply = {
 	},
 
 	show : function(xml) {
-		var t = this, r, c, id, bg, pid;
-
-		t.revert();
+		var r, c, id, bg;
 
 		if ( typeof(xml) == 'string' ) {
-			t.error({'responseText': xml});
+			this.error({'responseText': xml});
 			return false;
 		}
 
 		r = wpAjax.parseAjaxResponse(xml);
 		if ( r.errors ) {
-			t.error({'responseText': wpAjax.broken});
+			this.error({'responseText': wpAjax.broken});
 			return false;
 		}
 
 		r = r.responses[0];
 		c = r.data;
 		id = '#comment-' + r.id;
-		if ( 'edit-comment' == t.act )
+		if ( 'edit-comment' == this.act )
 			$(id).remove();
-
-		if ( r.supplemental.parent_approved ) {
-			pid = $('#comment-' + r.supplemental.parent_approved);
-			updatePending( getCount( $('span.pending-count').eq(0) ) - 1 );
-
-			if ( this.comments_listing == 'moderated' ) {
-				pid.animate( { 'backgroundColor':'#CCEEBB' }, 400, function(){
-					pid.fadeOut();
-				});
-				return;
-			}
-		}
 
 		$(c).hide()
 		$('#replyrow').after(c);
-		id = $(id);
-		t.addEvents(id);
-		bg = id.hasClass('unapproved') ? '#FFFFE0' : id.closest('.widefat').css('backgroundColor');
 
-		id.animate( { 'backgroundColor':'#CCEEBB' }, 300 )
-			.animate( { 'backgroundColor': bg }, 300, function() {
-				if ( pid && pid.length ) {
-					pid.animate( { 'backgroundColor':'#CCEEBB' }, 300 )
-						.animate( { 'backgroundColor': bg }, 300 )
-						.removeClass('unapproved').addClass('approved')
-						.find('div.comment_status').html('1');
-				}
-			});
+		this.revert();
+		this.addEvents($(id));
+		bg = $(id).hasClass('unapproved') ? '#ffffe0' : '#fff';
 
+		$(id)
+			.animate( { 'backgroundColor':'#CCEEBB' }, 600 )
+			.animate( { 'backgroundColor': bg }, 600 );
+
+		// $.fn.wpList.process($(id));
 	},
 
 	error : function(r) {
@@ -549,7 +508,7 @@ $(document).ready(function(){
 	$(document).delegate('span.delete a.delete', 'click', function(){return false;});
 
 	if ( typeof QTags != 'undefined' )
-		ed_reply = new QTags('ed_reply', 'replycontent', 'replycontainer', 'more,fullscreen');
+		ed_reply = new QTags('ed_reply', 'replycontent', 'replycontainer', 'more');
 
 	if ( typeof $.table_hotkeys != 'undefined' ) {
 		make_hotkeys_redirect = function(which) {
@@ -569,14 +528,14 @@ $(document).ready(function(){
 
 		toggle_all = function() {
 			toggleWithKeyboard = true;
-			$('input:checkbox', '#cb').click().prop('checked', false);
+			$('input:checkbox', '#cb').click().attr('checked', '');
 			toggleWithKeyboard = false;
 		};
 
 		make_bulk = function(value) {
 			return function() {
 				var scope = $('select[name="action"]');
-				$('option[value="' + value + '"]', scope).prop('selected', true);
+				$('option[value='+value+']', scope).attr('selected', 'selected');
 				$('#doaction').click();
 			}
 		};

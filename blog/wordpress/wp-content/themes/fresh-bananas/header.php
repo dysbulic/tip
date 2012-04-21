@@ -21,7 +21,7 @@
 
 </head>
 
-<body <?php body_class(); ?>>
+<body>
 <div id="header">
 	<?php // This is the top box ?>
 	<a href="<?php bloginfo('url'); ?>" title="<?php bloginfo('description'); ?>"><?php bloginfo('name'); ?></a>

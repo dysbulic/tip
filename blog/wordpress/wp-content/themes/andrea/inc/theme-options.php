@@ -8,6 +8,11 @@ add_action( 'admin_menu', 'andrea_theme_options_add_page' );
  */
 function andrea_theme_options_init(){
 	register_setting( 'andrea_options', 'andrea_theme_options', 'andrea_theme_options_validate' );
+
+	// set up default option values
+	$defaults = array( 'layout_choice' => 'flexible-width' );
+	if ( false === get_option( 'andrea_theme_options' ) )
+		update_option( 'andrea_theme_options', $defaults );
 }
 
 /**
@@ -52,7 +57,7 @@ function andrea_theme_options_do_page() {
 
 		<form method="post" action="options.php">
 			<?php settings_fields( 'andrea_options' ); ?>
-			<?php $options = andrea_get_theme_options(); ?>
+			<?php $options = get_option( 'andrea_theme_options' ); ?>
 
 			<table class="form-table form-wrap">
 
@@ -65,12 +70,14 @@ function andrea_theme_options_do_page() {
 							foreach ( $layout_options as $option ) {
 								$layout_setting = $options['layout_choice'];
 
-								if ( $options['layout_choice'] == $option['value'] ) {
-									$checked = "checked=\"checked\"";
-								} else {
-									$checked = '';
+								if ( '' != $layout_setting ) {
+									if ( $options['layout_choice'] == $option['value'] ) {
+										$checked = "checked=\"checked\"";
+									} else {
+										$checked = '';
+									}
 								}
-						?>
+								?>
 								<label class="description"><input type="radio" name="andrea_theme_options[layout_choice]" value="<?php esc_attr_e( $option['value'] ); ?>" <?php echo $checked; ?> /> <strong><?php echo $option['label']; ?></strong> &mdash; <span class="description"><?php echo $option['description']; ?></span></label>
 								<?php
 							}
@@ -82,7 +89,7 @@ function andrea_theme_options_do_page() {
 			</table>
 
 			<p class="submit">
-				<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Options' ); ?>" />
+				<input type="submit" class="button-primary" value="<?php _e( 'Save Options' ); ?>" />
 			</p>
 		</form>
 	</div>
@@ -97,9 +104,11 @@ function andrea_theme_options_validate( $input ) {
 
 	// Layout option must be in our array of options
 	if ( ! isset( $input['layout_choice'] ) )
-		$input['layout_choice'] = 'flexible-width';
+		$input['layout_choice'] = null;
 	if ( ! array_key_exists( $input['layout_choice'], $layout_options ) )
-		$input['layout_choice'] = 'flexible-width';
+		$input['layout_choice'] = null;
 
 	return $input;
 }
+
+// adapted from http://planetozh.com/blog/2009/05/handling-plugins-options-in-wordpress-28-with-register_setting/

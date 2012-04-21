@@ -1,9 +1,10 @@
 <?php
 /**
- * @package Spectrum
+ * @package WordPress
+ * @subpackage Spectrum
  */
 
-?>
+get_header(); ?>
 
 <form method="get" id="searchform" action="<?php echo home_url( '/' ); ?>" >
 	<p>

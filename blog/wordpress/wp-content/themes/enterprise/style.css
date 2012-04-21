@@ -230,12 +230,7 @@ a:focus, a:hover, a:active {
 	display:block;
 	}
 
-.nav ul li a:hover,
-.nav ul li a.selected,
-.nav ul li.current-menu-item > a,
-.nav ul li.current-menu-ancestor > a,
-.nav ul li.current_page_item > a,
-.nav ul li.current_page_ancestor > a {
+.nav ul li a:hover, .nav ul li a.selected {
 	background: #333 url(images/navhov.png) top;
 	color: #EEEEEE;
 	}
@@ -335,13 +330,7 @@ a:focus, a:hover, a:active {
 	text-shadow: #000000 1px 1px;
 	}
 
-.subnav ul li a:hover,
-.subnav ul li a.selected,
-.subnav ul li.current-cat a,
-.subnav ul li.current-menu-item > a,
-.subnav ul li.current-menu-ancestor > a,
-.subnav ul li.current_page_item > a,
-.subnav ul li.current_page_ancestor > a {
+.subnav ul li a:hover, .subnav ul li a.selected {
 	background: url(images/subnavhov.png);
 	color: #FFFFFF;
 	}
@@ -401,10 +390,9 @@ a:focus, a:hover, a:active {
 	width: 920px;
 	}
 
-#content .entry img,
-#content .entry p img {
+#content .post img, #content .post p img {
 	max-width: 100%;
-}
+	}
 	
 #content a img {
 	border: none;
@@ -453,42 +441,42 @@ a:focus, a:hover, a:active {
 	padding: 0 0 15px 0;
 	}
 	
-.entry ul {
+.post ul {
 	list-style-type: square;
 	margin: 0;
 	padding: 0 0 15px 0;
 	}
 	
-.entry ul li {
+.post ul li {
 	list-style-type: square;
 	margin: 0 0 0 20px;
 	padding: 0;
 	}
 	
-.entry ul ul {
+.post ul ul {
 	list-style-type: square;
 	margin: 0;
 	padding: 0 0 0 0;
 	}
 	
-.entry ol {
+.post ol {
 	margin: 0;
 	padding: 0 0 15px 0;
 	}
 	
-.entry ol li {
+.post ol li {
 	margin: 0 0 0 20px;
 	padding: 0;
 	}
 	
-.entry table {
+.post table {
 	border: 1px solid #e6e6e6;
 	margin: 0 0 15px 0;
 	width: 100%;
 }
 
-.entry th,
-.entry td {
+.post th,
+.post td {
 	border: 1px solid #e6e6e6;
 	padding: .25em 1em;
 	text-align: left;
@@ -804,8 +792,10 @@ img.alignleft {
 	
 #sidebar a img, #sidebar a:hover img {
 	border: none;
+	margin: 0;
 	padding: 0;
 	}
+
 #sidebar ul {
 	list-style-type: none;
 	margin: 5px 0 0 0;
@@ -1081,6 +1071,7 @@ img#wpstats {
 
 #commentform input {
 	background: #F5F5F5 !important;
+	width: 250px !important;
 	color: #555555;
 	font-family: Arial, Tahoma, Verdana;
 	font-size: 12px;
@@ -1112,7 +1103,7 @@ img#wpstats {
 	font-weight: bold;
 	text-decoration: none;
 	text-transform: uppercase;
-	margin: 0;
+    margin: 0;
 	padding: 2px 5px 2px 5px;
 	border: 1px solid #666666 !important;
 	-moz-border-radius: 3px;
@@ -1156,7 +1147,7 @@ img#wpstats {
 	}
 
 #commentform input {
-	min-width: 170px;
+	width: 170px;
 	padding: 2px;
 	margin: 5px 5px 1px 0;
 	}

@@ -1,10 +1,12 @@
-<?php
-	$default_search_text = __( 'Search...', 'unsleepable' );
-	$search_query = get_search_query();
+<?php if (!is_search()) {
+		$search_text = __( 'Search...', 'unsleepable' );
+	} else {
+		$search_text = "$s";
+	}
 ?>
-<form method="get" id="searchform" action="<?php echo home_url( '/' ); ?>">
-	<div>
-		<input type="text" value="<?php echo esc_attr( !empty( $search_query ) ? $search_query : $default_search_text ); ?>" onfocus="if (this.value == '<?php echo esc_attr( $default_search_text ); ?>' ) { this.value = ''; }" onblur="if (this.value == '') { this.value = '<?php echo esc_attr( $default_search_text ); ?>';}" name="s" id="s" size="15" />
-		<input type="submit" id="searchsubmit" value="<?php esc_attr_e( 'Go', 'unsleepable' ); ?>" />
-	</div>
-</form>
+
+
+		<form method="get" id="searchform" action="/">
+			<input type="text" value="<?php echo esc_attr( $search_text ); ?>" name="s" id="s" onfocus="if (this.value == 'type and wait to search') {this.value = '';}" onblur="if (this.value == '') {this.value = 'type and wait to search';}" />
+			<input type="submit" id="searchsubmit" value="go" />
+		</form>

@@ -14,7 +14,7 @@ get_header();
 					<span class="date"><?php edit_post_link( __( ' (Edit)', 'grid-focus' ), '', ''); ?></span>
 				</p>
 			</div>
-			<h2 class="entry-title"><a href="<?php echo get_permalink($post->post_parent); ?>" rev="attachment"><?php echo get_the_title($post->post_parent); ?></a> &raquo; <?php the_title(); ?></h2>
+			<h2><a href="<?php echo get_permalink($post->post_parent); ?>" rev="attachment"><?php echo get_the_title($post->post_parent); ?></a> &raquo; <?php the_title(); ?></h2>
 			<div class="entry">
 				<p class="attachment"><a href="<?php echo wp_get_attachment_url($post->ID); ?>"><?php echo wp_get_attachment_image( $post->ID, 'auto' ); ?></a></p>
 				<div class="caption"><?php if ( !empty($post->post_excerpt) ) the_excerpt(); ?></div>

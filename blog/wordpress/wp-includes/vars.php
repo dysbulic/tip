@@ -47,13 +47,7 @@ if ( isset($_SERVER['HTTP_USER_AGENT']) ) {
 	if ( strpos($_SERVER['HTTP_USER_AGENT'], 'Lynx') !== false ) {
 		$is_lynx = true;
 	} elseif ( stripos($_SERVER['HTTP_USER_AGENT'], 'chrome') !== false ) {
-		if ( stripos( $_SERVER['HTTP_USER_AGENT'], 'chromeframe' ) !== false ) {
-			if ( $is_chrome = apply_filters( 'use_google_chrome_frame', is_admin() ) )
-				header( 'X-UA-Compatible: chrome=1' );
-			$is_winIE = ! $is_chrome;
-		} else {
-			$is_chrome = true;
-		}
+		$is_chrome = true;
 	} elseif ( stripos($_SERVER['HTTP_USER_AGENT'], 'safari') !== false ) {
 		$is_safari = true;
 	} elseif ( strpos($_SERVER['HTTP_USER_AGENT'], 'Gecko') !== false ) {

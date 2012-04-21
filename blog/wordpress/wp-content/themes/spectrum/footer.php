@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Spectrum
+ * @package WordPress
+ * @subpackage Spectrum
  */
 ?>
 
@@ -35,10 +36,9 @@
 
 		<div id="copyright">
 			<p><a href="http://wordpress.org/" rel="generator">Proudly powered by WordPress</a> | <?php printf( __( 'Theme: %1$s by %2$s.' ), 'Spectrum', '<a href="http://www.ignacioricci.com/" rel="designer">Ignacio Ricci</a>' ); ?></p>
+			<?php wp_footer(); ?>
 		</div>
 	</div>
-
-<?php wp_footer(); ?>
 
 </body>
 </html>

@@ -6,10 +6,10 @@
 */
 
 if ( typeof tb_pathToImage != 'string' ) {
-	var tb_pathToImage = thickboxL10n.loadingAnimation;
+	var tb_pathToImage = "../wp-includes/js/thickbox/loadingAnimation.gif";
 }
 if ( typeof tb_closeImage != 'string' ) {
-	var tb_closeImage = thickboxL10n.closeImage;
+	var tb_closeImage = "../wp-includes/js/thickbox/tb-close.png";
 }
 
 /*!!!!!!!!!!!!!!!!! edit below this line at your own risk !!!!!!!!!!!!!!!!!!!!!!!*/
@@ -158,26 +158,26 @@ function tb_show(caption, url, imageGroup) {//function called when the user clic
 
 			}
 
-			jQuery(document).bind('keydown.thickbox', function(e){
-				e.stopImmediatePropagation();
-
-				if ( e.which == 27 ){ // close
-					if ( ! jQuery(document).triggerHandler( 'wp_CloseOnEscape', [{ event: e, what: 'thickbox', cb: tb_remove }] ) )
-						tb_remove();
-
-				} else if ( e.which == 190 ){ // display previous image
+			document.onkeydown = function(e){
+				if (e == null) { // ie
+					keycode = event.keyCode;
+				} else { // mozilla
+					keycode = e.which;
+				}
+				if(keycode == 27){ // close
+					tb_remove();
+				} else if(keycode == 190){ // display previous image
 					if(!(TB_NextHTML == "")){
-						jQuery(document).unbind('thickbox');
+						document.onkeydown = "";
 						goNext();
 					}
-				} else if ( e.which == 188 ){ // display next image
+				} else if(keycode == 188){ // display next image
 					if(!(TB_PrevHTML == "")){
-						jQuery(document).unbind('thickbox');
+						document.onkeydown = "";
 						goPrev();
 					}
 				}
-				return false;
-			});
+			};
 
 			tb_position();
 			jQuery("#TB_load").remove();
@@ -249,16 +249,16 @@ function tb_show(caption, url, imageGroup) {//function called when the user clic
 		}
 
 		if(!params['modal']){
-			jQuery(document).bind('keyup.thickbox', function(e){
-
-				if ( e.which == 27 ){ // close
-					e.stopImmediatePropagation();
-					if ( ! jQuery(document).triggerHandler( 'wp_CloseOnEscape', [{ event: e, what: 'thickbox', cb: tb_remove }] ) )
-						tb_remove();
-
-					return false;
+			document.onkeyup = function(e){
+				if (e == null) { // ie
+					keycode = event.keyCode;
+				} else { // mozilla
+					keycode = e.which;
 				}
-			});
+				if(keycode == 27){ // close
+					tb_remove();
+				}
+			};
 		}
 
 	} catch(e) {
@@ -281,7 +281,8 @@ function tb_remove() {
 		jQuery("body","html").css({height: "auto", width: "auto"});
 		jQuery("html").css("overflow","");
 	}
-	jQuery(document).unbind('.thickbox');
+	document.onkeydown = "";
+	document.onkeyup = "";
 	return false;
 }
 

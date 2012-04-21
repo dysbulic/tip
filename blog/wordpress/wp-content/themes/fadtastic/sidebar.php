@@ -17,7 +17,8 @@
 				<li><a href="http://www.google.com/reader/preview/*/feed/<?php bloginfo( 'rss2_url' ); ?>" title="Subscribe in Google Reader"><img src="<?php bloginfo( 'template_directory' ); ?>/images/subscribe/googleread2.jpg" alt="Subscribe in Google Reader" width="91" height="17" /></a></li>
 				<li><a href="http://add.my.yahoo.com/rss?url=<?php bloginfo( 'rss2_url' ); ?>" title="Add to My Yahoo!" target="subscriptions"><img src="http://us.i1.yimg.com/us.yimg.com/i/us/my/addtomyyahoo4.gif" alt="Add to My Yahoo!" /></a></li>
 				<li><a href="http://www.newsgator.com/ngs/subscriber/subext.aspx?url=<?php bloginfo( 'rss2_url' ); ?>" title="Subscribe in NewsGator Online" target="subscriptions"><img src="http://www.newsgator.com/images/ngsub1.gif" alt="Subscribe in NewsGator Online" width="91" /></a></li>
-				<li><a href="http://feeds.my.aol.com/add.jsp?url=<?php bloginfo( 'rss2_url' ); ?>" title="Subscribe in your AOL" target="subscriptions"><img src="<?php bloginfo( 'template_directory' ); ?>/images/subscribe/addtomyaol.gif" alt="<?php esc_attr_e( 'The latest comments to all posts in RSS' ); ?>" /></a></li>
+				<li><a href="http://feeds.my.aol.com/add.jsp?url=<?php bloginfo( 'rss2_url' ); ?>" title="Subscribe in your AOL" target="subscriptions"><img src="<?php bloginfo( 'template_directory' ); ?>/images/subscribe/addtomyaol.gif" alt="<?php _e( 'The latest comments to all posts in RSS' ); ?>" /></a></li>
+				<li><a href="http://www.rojo.com/add-subscription?resource=<?php bloginfo( 'rss2_url' ); ?>" target="subscriptions"><img src="http://www.rojo.com/skins/static/images/add-to-rojo.gif" alt="Subscribe in Rojo" width="52" height="17" /></a></li>
 			</ul>
 
 			<h3><?php _e( 'Meta', 'fadtastic' ); ?></h3>

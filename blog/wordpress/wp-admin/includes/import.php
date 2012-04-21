@@ -80,16 +80,11 @@ function wp_import_handle_upload() {
 	$object = array( 'post_title' => $filename,
 		'post_content' => $url,
 		'post_mime_type' => $type,
-		'guid' => $url,
-		'context' => 'import',
-		'post_status' => 'private'
+		'guid' => $url
 	);
 
 	// Save the data
 	$id = wp_insert_attachment( $object, $file );
-
-	// schedule a cleanup for one day from now in case of failed import or missing wp_import_cleanup() call
-	wp_schedule_single_event( time() + 86400, 'importer_scheduled_cleanup', array( $id ) );
 
 	return array( 'file' => $file, 'id' => $id );
 }

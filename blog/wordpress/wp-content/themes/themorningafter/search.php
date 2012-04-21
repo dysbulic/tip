@@ -11,30 +11,25 @@ get_header(); ?>
 
 <?php $content_width = 540; // to override $content_width for the narrower column ?>
 
-<div id="arch_content" class="column full-width">
+<div id="arch_content" class="column span-14">
 	
 	<?php if ( have_posts() ) : ?>
 
-		<div class="column archive-info first">
+		<div class="column span-3 first">
 			
 			<h2 class="archive_name"><?php _e( 'Search Results','woothemes' );?></h2>
 
 			<div class="archive_meta">
 
 				<div class="archive_number">
-					<?php
-						printf( __( 'You searched for "%1$s". Your search returned %2$s results.', 'woothemes' ),
-							get_search_query(),
-							$NumResults = $wp_query->found_posts
-						);
-					?>					
+					<?php _e( 'You searched for','woothemes' );?> '<?php the_search_query(); ?>'. <?php _e( 'Your search returned','woothemes' );?> <?php $NumResults = $wp_query->found_posts; echo $NumResults; ?> <?php _e( 'results','woothemes' );?>.
 				</div>
 
 			</div>
 		
-		</div><!-- end .archive-info -->
+		</div><!-- end .span-3 -->
 		
-		<div class="column mid-column">
+		<div class="column span-8">
 			
 			<?php while ( have_posts() ) : the_post(); ?>
 
@@ -42,7 +37,7 @@ get_header(); ?>
 				
 					<h3 class="archive_title" id="post-<?php the_ID(); ?>"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink to %s', 'woothemes' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></h3>
 
-					<div class="archive_post_meta"><?php _e( 'Posted by','woothemes' );?> <?php the_author_posts_link(); ?> <span class="dot">&sdot;</span> <?php the_time( get_option( 'date_format' ) ); ?> <span class="dot">&sdot;</span> <?php comments_popup_link( __( 'Leave a Comment', 'woothemes' ), __( '1 Comment', 'woothemes' ), __( '% Comments', 'woothemes' ) ); ?></div>
+					<div class="archive_post_meta"><?php _e( 'By','woothemes' );?> <?php the_author_posts_link(); ?> <span class="dot">&sdot;</span> <?php the_time( get_option( 'date_format' ) ); ?> <span class="dot">&sdot;</span> <?php comments_popup_link( __( 'Leave a Comment', 'woothemes' ), __( '1 Comment', 'woothemes' ), __( '% Comments', 'woothemes' ) ); ?></div>
 
 					<?php the_excerpt(); ?>
 				</div>
@@ -56,34 +51,29 @@ get_header(); ?>
 				</div>
 			<?php endif; ?>
 
-		</div><!-- end .mid-column -->
+		</div><!-- end .span-8 -->
 
 		<?php get_sidebar(); ?>
 
 	<?php else : ?>
 			
-		<div class="column archive-info first">
+		<div class="column span-3 first">
 			
 			<h2 class="archive_name"><?php _e( 'Search Results','woothemes' );?></h2>
 
 			<div class="archive_meta">
 			
 				<div class="archive_number">
-					<?php
-						printf( __( 'You searched for "%1$s". Your search returned %2$s results.', 'woothemes' ),
-							get_search_query(),
-							$NumResults = $wp_query->found_posts
-						);
-					?>	
+					<?php _e( 'You searched for','woothemes' );?> '<?php the_search_query(); ?>'. <?php _e( 'Your search returned','woothemes' );?> <?php $NumResults = $wp_query->found_posts; echo $NumResults; ?> <?php _e( 'results','woothemes' );?>.
 				</div>
 
 			</div>
 		
-		</div><!-- end .archive-info -->
+		</div><!-- end .span-3 -->
 		
-		<div class="column mid-column">		
+		<div class="column span-8">		
 			<h3><?php _e( 'Sorry, no posts matched your criteria.', 'woothemes' ); ?></h3>
-		</div><!-- end .mid-column -->
+		</div><!-- end .span-8 -->
 
 		<?php get_sidebar(); ?>
 

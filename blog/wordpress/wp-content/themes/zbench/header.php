@@ -11,9 +11,8 @@
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>" />
 	<title><?php wp_title(); ?> <?php bloginfo( 'name' ); ?></title>
-	<link rel="profile" href="http://gmpg.org/xfn/11" />
-	<link rel="stylesheet" type="text/css" media="all" href="<?php echo esc_url( get_stylesheet_uri() ); ?>" />
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
+	<link rel="profile" href="http://gmpg.org/xfn/11" />
 <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
@@ -33,9 +32,9 @@
 			)
 		);
 		/* Search */ ?>
-		<form id="search-form" role="search" method="get" action="<?php echo home_url( '/' ); ?>">
-			<input type="text" value="<?php esc_attr_e( 'Search: type, hit enter', 'zbench' ); ?>" onfocus="if (this.value == '<?php esc_attr_e( 'Search: type, hit enter', 'zbench' ); ?>' ) {this.value = '';}" onblur="if (this.value == '' ) {this.value = '<?php esc_attr_e( 'Search: type, hit enter', 'zbench' ); ?>';}" name="s" id="s" />
-			<input type="submit" id="search-submit" value="<?php esc_attr_e( 'Search', 'zbench' ); ?>" />
+		<form id="search-form" role="search" method="get" action="<?php bloginfo( 'url' ); ?>">
+			<input type="text" value="<?php _e( 'Search: type, hit enter', 'zbench' ); ?>" onfocus="if (this.value == '<?php _e( 'Search: type, hit enter', 'zbench' ); ?>' ) {this.value = '';}" onblur="if (this.value == '' ) {this.value = '<?php _e( 'Search: type, hit enter', 'zbench' ); ?>';}" name="s" id="s" />
+			<input type="submit" id="search-submit" value="<?php _e( 'Search', 'zbench' ); ?>" />
 		</form>
 	</div>
 </div>

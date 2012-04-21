@@ -33,10 +33,10 @@
 <?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar(2) ) : // begin secondary sidebar widgets ?>
 			<li id="search">
 				<h3><label for="s"><?php _e( 'Search', 'sandbox' ) ?></label></h3>
-				<form id="searchform" class="blog-search" method="get" action="<?php echo home_url( '/' ); ?>">
+				<form id="searchform" class="blog-search" method="get" action="<?php bloginfo('url') ?>">
 					<div>
 						<input id="s" name="s" type="text" class="text" value="<?php the_search_query() ?>" size="10" tabindex="1" />
-						<input type="submit" class="button" value="<?php esc_attr_e( 'Find', 'sandbox' ); ?>" tabindex="2" />
+						<input type="submit" class="button" value="<?php _e( 'Find', 'sandbox' ) ?>" tabindex="2" />
 					</div>
 				</form>
 			</li>

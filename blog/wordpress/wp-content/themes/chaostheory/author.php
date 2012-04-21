@@ -9,6 +9,8 @@
 	<div id="container">
 		<div id="content" class="hfeed">
 
+			<?php the_post(); ?>
+
 			<h2 class="page-title"><?php printf( __( 'Author Archives: %s', 'chaostheory' ), "<a class='url fn' href='$authordata->user_url' title='$authordata->display_name'>$authordata->display_name</a>"); ?></h2>
 			<?php if ( $authordata->user_description ) { ?><div class="archive-meta"><?php echo apply_filters( 'archive_meta', $authordata->user_description); ?></div><?php } ?>
 
@@ -25,7 +27,7 @@
 					<ul>
 						<li class="entry-date"><a href="<?php the_permalink(); ?>"><?php printf( __( '%1$s &#8211; %2$s', 'chaostheory' ), the_date( '', '', '', false ), get_the_time() ); ?></a></li>
 						<li class="entry-category"><?php printf( __( 'Posted in %s', 'chaostheory' ), get_the_category_list( ', ' ) ); ?></li>
-						<?php the_tags( '<li class="entry-tags">' . __( 'Tagged', 'chaostheory' ) . ' ', ", ", "</li>"); ?>
+						<?php the_tags( '<li class="entry-tags">' . __( 'Tagged' ) . ' ', ", ", "</li>"); ?>
 <?php edit_post_link( __( 'Edit', 'chaostheory' ), '<li class="entry-editlink">', '</li>'); ?>
 						<li class="entry-commentlink"><?php comments_popup_link( __( 'Leave a Comment', 'chaostheory' ), __( 'Comments (1)', 'chaostheory' ), __( 'Comments (%)', 'chaostheory' ) ); ?></li>
 					</ul>

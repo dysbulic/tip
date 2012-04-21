@@ -1,11 +1,11 @@
 <?php
 /**
- * @package Enterprise
+ * @package WordPress
+ * @subpackage Enterprise
  */
 ?>
 <div id="sidebar">
-<?php do_action( 'before_sidebar' ); ?>
-
+    	
 	<?php if ( !dynamic_sidebar(1) ) : ?>
 
         <div class="widget widget_categories">
@@ -20,31 +20,31 @@
                     }
                 }
                 dropdown.onchange = onCatChange;
-            /* ]]> */
-            </script>
+            /* ]]> */            
+            </script> 
         </div>
-
+                    
 		<div class="widget widget_recent_entries">
             <h4><?php _e("Recent Posts", 'enterprise'); ?></h4>
                 <ul>
-                    <?php wp_get_archives('type=postbypost&limit=5'); ?>
+                    <?php wp_get_archives('type=postbypost&limit=5'); ?> 
                 </ul>
-		</div>
-
+		</div>	
+        
 		<div class="widget widget_archive">
             <h4><?php _e("Archives", 'enterprise'); ?></h4>
                 <ul>
                     <?php wp_get_archives('type=monthly'); ?>
                 </ul>
 		</div>
-
+        
 		<div class="widget widget_links">
             <h4><?php _e("Blogroll", 'enterprise'); ?></h4>
                 <ul>
                     <?php wp_list_bookmarks('title_li=&categorize=0'); ?>
                 </ul>
 		</div>
-
+	
 		<div class="widget widget_meta">
             <h4><?php _e("Meta", 'enterprise'); ?></h4>
                 <ul>
@@ -55,7 +55,7 @@
                     <li><a href="http://validator.w3.org/check?uri=referer">XHTML</a></li>
                 </ul>
 		</div>
-
+                        		
 	<?php endif; ?>
-
+		
 </div>

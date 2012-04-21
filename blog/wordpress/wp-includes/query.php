@@ -849,15 +849,6 @@ class WP_Query {
 	var $tax_query;
 
 	/**
-	 * Metadata query container
-	 *
-	 * @since 3.2.0
-	 * @access public
-	 * @var object WP_Meta_Query
-	 */
-	var $meta_query = false;
-
-	/**
 	 * Holds the data for a single object that is queried.
 	 *
 	 * Holds the contents of a post, page, category, attachment.
@@ -1258,15 +1249,6 @@ class WP_Query {
 	var $query_vars_changed = true;
 
 	/**
-	 * Set if post thumbnails are cached
-	 *
-	 * @since 3.2.0
-	 * @access public
-	 * @var bool
-	 */
-	 var $thumbnails_cached = false;
-
-	/**
 	 * Resets query flags to false.
 	 *
 	 * The query flags are what page info WordPress was able to figure out.
@@ -1543,6 +1525,8 @@ class WP_Query {
 			}
 			unset( $tax_query );
 
+			_parse_meta_query( $qv );
+
 			if ( empty($qv['author']) || ($qv['author'] == '0') ) {
 				$this->is_author = false;
 			} else {
@@ -1641,12 +1625,8 @@ class WP_Query {
 				$qv['post_type'] = sanitize_key($qv['post_type']);
 		}
 
-		if ( ! empty( $qv['post_status'] ) ) {
-			if ( is_array( $qv['post_status'] ) )
-				$qv['post_status'] = array_map('sanitize_key', $qv['post_status']);
-			else
-				$qv['post_status'] = preg_replace('|[^a-z0-9_,-]|', '', $qv['post_status']);
-		}
+		if ( !empty($qv['post_status']) )
+			$qv['post_status'] = preg_replace('|[^a-z0-9_,-]|', '', $qv['post_status']);
 
 		if ( $this->is_posts_page && ( ! isset($qv['withcomments']) || ! $qv['withcomments'] ) )
 			$this->is_comment_feed = false;
@@ -1916,10 +1896,6 @@ class WP_Query {
 		// Fill again in case pre_get_posts unset some vars.
 		$q = $this->fill_query_vars($q);
 
-		// Parse meta query
-		$this->meta_query = new WP_Meta_Query();
-		$this->meta_query->parse_query_vars( $q );
-
 		// Set a flag if a pre_get_posts hook changed the query vars.
 		$hash = md5( serialize( $this->query_vars ) );
 		if ( $hash != $this->query_vars_hash ) {
@@ -2179,6 +2155,9 @@ class WP_Query {
 				$search .= "{$searchand}(($wpdb->posts.post_title LIKE '{$n}{$term}{$n}') OR ($wpdb->posts.post_content LIKE '{$n}{$term}{$n}'))";
 				$searchand = ' AND ';
 			}
+			$term = esc_sql( like_escape( $q['s'] ) );
+			if ( empty($q['sentence']) && count($q['search_terms']) > 1 && $q['search_terms'][0] != $q['s'] )
+				$search .= " OR ($wpdb->posts.post_title LIKE '{$n}{$term}{$n}') OR ($wpdb->posts.post_content LIKE '{$n}{$term}{$n}')";
 
 			if ( !empty($search) ) {
 				$search = " AND ({$search}) ";
@@ -2252,7 +2231,7 @@ class WP_Query {
 			}
 		}
 
-		if ( !empty( $this->tax_query->queries ) || !empty( $this->meta_query->queries ) ) {
+		if ( !empty( $this->tax_query->queries ) || !empty( $q['meta_key'] ) ) {
 			$groupby = "{$wpdb->posts}.ID";
 		}
 
@@ -2312,9 +2291,9 @@ class WP_Query {
 
 		// Order by
 		if ( empty($q['orderby']) ) {
-			$orderby = "$wpdb->posts.post_date " . $q['order'];
+			$q['orderby'] = "$wpdb->posts.post_date " . $q['order'];
 		} elseif ( 'none' == $q['orderby'] ) {
-			$orderby = '';
+			$q['orderby'] = '';
 		} else {
 			// Used to filter values
 			$allowed_keys = array('author', 'date', 'title', 'modified', 'menu_order', 'parent', 'ID', 'rand', 'comment_count');
@@ -2325,9 +2304,10 @@ class WP_Query {
 			}
 			$q['orderby'] = urldecode($q['orderby']);
 			$q['orderby'] = addslashes_gpc($q['orderby']);
+			$orderby_array = explode(' ', $q['orderby']);
+			$q['orderby'] = '';
 
-			$orderby_array = array();
-			foreach ( explode( ' ', $q['orderby'] ) as $i => $orderby ) {
+			foreach ( $orderby_array as $i => $orderby ) {
 				// Only allow certain values for safety
 				if ( ! in_array($orderby, $allowed_keys) )
 					continue;
@@ -2355,14 +2335,15 @@ class WP_Query {
 						$orderby = "$wpdb->posts.post_" . $orderby;
 				}
 
-				$orderby_array[] = $orderby;
+				$q['orderby'] .= (($i == 0) ? '' : ',') . $orderby;
 			}
-			$orderby = implode( ',', $orderby_array );
 
-			if ( empty( $orderby ) )
-				$orderby = "$wpdb->posts.post_date ".$q['order'];
-			else
-				$orderby .= " {$q['order']}";
+			// append ASC or DESC at the end
+			if ( !empty($q['orderby']))
+				$q['orderby'] .= " {$q['order']}";
+
+			if ( empty($q['orderby']) )
+				$q['orderby'] = "$wpdb->posts.post_date ".$q['order'];
 		}
 
 		if ( is_array( $post_type ) ) {
@@ -2408,15 +2389,13 @@ class WP_Query {
 			$read_private_cap = 'read_private_' . $post_type_cap . 's';
 		}
 
-		if ( ! empty( $q['post_status'] ) ) {
+		if ( isset($q['post_status']) && '' != $q['post_status'] ) {
 			$statuswheres = array();
-			$q_status = $q['post_status'];
-			if ( ! is_array( $q_status ) )
-				$q_status = explode(',', $q_status);
+			$q_status = explode(',', $q['post_status']);
 			$r_status = array();
 			$p_status = array();
 			$e_status = array();
-			if ( in_array('any', $q_status) ) {
+			if ( $q['post_status'] == 'any' ) {
 				foreach ( get_post_stati( array('exclude_from_search' => true) ) as $status )
 					$e_status[] = "$wpdb->posts.post_status <> '$status'";
 			} else {
@@ -2485,8 +2464,18 @@ class WP_Query {
 			$where .= ')';
 		}
 
-		if ( !empty( $this->meta_query->queries ) ) {
-			$clauses = $this->meta_query->get_sql( 'post', $wpdb->posts, 'ID', $this );
+		// Parse the meta query again if query vars have changed.
+		if ( $this->query_vars_changed ) {
+			$meta_query_hash = md5( serialize( $q['meta_query'] ) );
+			$_meta_query = $q['meta_query'];
+			unset( $q['meta_query'] );
+			_parse_meta_query( $q );
+			if ( md5( serialize( $q['meta_query'] ) ) != $meta_query_hash && is_array( $_meta_query ) )
+				$q['meta_query'] = array_merge( $_meta_query, $q['meta_query'] );
+		}
+
+		if ( !empty( $q['meta_query'] ) ) {
+			$clauses = call_user_func_array( '_get_meta_sql', array( $q['meta_query'], 'post', $wpdb->posts, 'ID', &$this) );
 			$join .= $clauses['join'];
 			$where .= $clauses['where'];
 		}
@@ -2552,6 +2541,8 @@ class WP_Query {
 			else
 				$where = "AND 0";
 		}
+
+		$orderby = $q['orderby'];
 
 		$pieces = array( 'where', 'groupby', 'join', 'orderby', 'distinct', 'fields', 'limits' );
 
@@ -2976,7 +2967,7 @@ class WP_Query {
 	}
 
 	/**
-	 * Constructor.
+	 * PHP4 type constructor.
 	 *
 	 * Sets up the WordPress query, if parameter is not empty.
 	 *
@@ -2986,7 +2977,7 @@ class WP_Query {
 	 * @param string $query URL query string.
 	 * @return WP_Query
 	 */
-	function __construct($query = '') {
+	function WP_Query($query = '') {
 		if ( ! empty($query) ) {
 			$this->query($query);
 		}
@@ -3493,12 +3484,6 @@ function wp_old_slug_redirect() {
 		else
 			$post_type = 'post';
 
-		if ( is_array( $post_type ) ) {
-			if ( count( $post_type ) > 1 )
-				return;
-			$post_type = array_shift( $post_type );
-		}
-
 		// Do not attempt redirect for hierarchical post types
 		if ( is_post_type_hierarchical( $post_type ) )
 			return;
@@ -3524,7 +3509,7 @@ function wp_old_slug_redirect() {
 		if ( !$link )
 			return;
 
-		wp_redirect( $link, 301 ); // Permanent redirect
+		wp_redirect($link, '301'); // Permanent redirect
 		exit;
 	endif;
 }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Enterprise
+ * @package WordPress
+ * @subpackage Enterprise
  */
 ?>
 <div id="comments">
@@ -23,7 +24,7 @@
 		sprintf( __( 'No Responses to %s', 'enterprise' ), '<em>' . get_the_title() . '</em>' ),
 		sprintf( __( 'One Response to %s', 'enterprise' ), '<em>' . get_the_title() . '</em>' ),
 		sprintf( __( '%% Responses to %s', 'enterprise' ), '<em>' . get_the_title() . '</em>' )
-		); ?>
+		); ?> 
 	</h3>
 
 <?php if ( get_comment_pages_count() > 1 ) : // are there comments to navigate through ?>

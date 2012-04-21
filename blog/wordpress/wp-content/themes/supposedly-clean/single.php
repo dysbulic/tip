@@ -1,21 +1,21 @@
-<?php
+<?php 
 get_header();
 ?>
 <div id="mike_content">
 <?php is_tag(); ?>
 <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 		 <div <?php post_class(); ?> id="post-<?php the_ID(); ?>">
-		 <h2 class="entry-title"><?php the_title(); ?> <span>| <?php the_time(get_option('date_format')); ?></span></h2>
-
+		 <h2><a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title(); ?></a> <span>| <?php the_time(get_option('date_format')); ?></span></h2>
+		
 			<?php the_content(); ?>
 
             <?php wp_link_pages(); ?>
-
-
+        
+	
 		 <hr class="post_line" />
 	<div class="category"><?php printf(__('Posted in %s', 'supposedly-clean'), get_the_category_list(__(', ', 'supposedly-clean'))); ?><br /><?php the_tags('Tags: ', ', ', '<br />'); ?></div>
 		 </div><!--close post, WP-loop-->
-
+		
 
 <?php comments_template(); // Get wp-comments.php template ?>
 

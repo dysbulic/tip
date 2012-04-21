@@ -17,7 +17,7 @@ CUSTOMIZATION
 Adding items to the top Menu:
 - The top menu features two links: Home and About
 - To add more links, use a text editor (i.e: Notepad) to open the header.php file and copy and paste:
-	<li><a href="<?php echo get_permalink(2); ?>" title="<?php esc_attr_e( 'About' ); ?>"><?php _e('About'); ?></a></li>
+	<li><a href="<?php echo get_permalink(2); ?>" title="<?php _e('About'); ?>"><?php _e('About'); ?></a></li>
 - Remember to edit your link title and the destination of your link within href=" ".
 
 Different Header Background:

@@ -1,25 +1,13 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Light
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'text' => '656565',
-	'link' => '707070',
-	'border' => 'c9d9e6',
-	'url' => '516f86',
+	'text' => 'e5e5e5',
+	'link' => 'aac8e0'
 );
 
 // actually 483px
 $content_width = 480;
-
-function light_body_class( $classes, $class ) {
-	return $class;
-}
-
-add_filter( 'body_class', 'light_body_class', 1, 2 );
 
 if ( function_exists( 'register_sidebars' ) )
 	register_sidebars( 1 );

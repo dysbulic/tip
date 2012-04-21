@@ -1,15 +1,11 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Wu Wei
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'border' => 'd1d9dc',
+	'border' => 'D1D9DC',
 	'text' => '516064',
-	'link' => 'ff8a00',
-	'url' => 'feb925',
+	'link' => 'FF8A00',
+	'url' => 'FF8A00'
 );
 $content_width = 460; // pixels
 
@@ -93,7 +89,7 @@ function header_style() {
 if ( 'blank' == get_header_textcolor() && get_header_image() != '' ) { ?>
 	#header img {
 		margin: -<?php echo HEADER_IMAGE_HEIGHT; ?>px 0 0 0;
-	}
+	}	
 	.blog-name a {
 		display: block;
 		text-indent: -9000px;
@@ -110,7 +106,7 @@ if ( 'blank' == get_header_textcolor() && get_header_image() != '' ) { ?>
 .blog-name a, .description {
 	position: absolute;
 	left: -9999px;
-}
+}	
 <?php } elseif ( get_header_textcolor() != HEADER_TEXTCOLOR ) {
 // If the user has set a custom color for the text use that
 ?>

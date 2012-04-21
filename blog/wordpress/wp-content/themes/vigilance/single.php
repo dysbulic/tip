@@ -8,9 +8,7 @@
 			</div><!--end post header-->
 			<div class="meta clear">
 				<div class="tags"><?php the_tags('tags: ', ', ', ''); ?></div>
-				<div class="author">
-					<?php vigilance_posted_by(); ?>
-				</div>
+				<div class="author"><?php printf(__('by %s', 'vigilance'), get_the_author()); ?></div>
 			</div><!--end meta-->
 			<div class="entry clear">
 				<?php if ( function_exists( 'add_theme_support' ) ) the_post_thumbnail( array(250,9999), array('class' => 'alignleft') ); ?>

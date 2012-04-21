@@ -1,11 +1,11 @@
 /*
 Theme Name: K2-lite
 Theme URI: http://getk2.com/
-Description: A clean two column blue theme with widgets and custom header. Choose either a left-sidebar, right-sidebar, or full-width layout. Also includes three optional widget areas in the footer.
+Description: A clean two column blue theme with widgets and custom header.
 Version: 0.9.1-wpcom
 Author: Various Artists
 Author URI: http://binarybonsai.com
-Tags: custom-header, two-columns, one-column, blue, fixed-width, white, light, sticky-post, left-sidebar, right-sidebar, rtl-language-support, theme-options, translation-ready, custom-menu, custom-background, blog, business, clean, faded, light, minimal
+Tags: custom-header, two-columns, blue, fixed-width, white, light, sticky-post, right-sidebar, rtl-language-support, translation-ready, custom-menu, custom-background, blog, business, clean, faded, light, minimal
 */
 
 
@@ -58,6 +58,7 @@ body {
 	background: #3371A3;
 	z-index: 9999;
 	}
+
 #primary {
 	width: 500px;
 	float: left;
@@ -66,6 +67,7 @@ body {
 	display: inline;
 	overflow: hidden;
 	}
+
 .secondary {
 	font-size: 1em;
 	line-height: 1.5em;
@@ -83,24 +85,6 @@ body {
 	position: relative;
 	clear: both;
 	}
-	
-/* Full-width Layout */
-body.full-width #primary {
-	margin: 0 30px;
- 	width: 720px;
-}
-body.full-width .secondary {
-	display: none;
-}
-
-/* Sidebar-Content Layout */
-body.sidebar-content #primary {
-	float: right;
-	margin: 0 30px 0 10px;
-}
-body.sidebar-content .secondary {
-	margin: 0 0 20px 4%;
-}
 
 /*- Main Menu in Header */
 
@@ -272,8 +256,7 @@ h2 { /* H2 is what kind of page you are on. Eg. 'Monthly Archive'. */
 	letter-spacing: -1px;
 	}
 
-.secondary h2,
-#supplementary .widget-title { /* Secondary H2 is sidebar headlines */
+.secondary h2 { /* Secondary H2 is sidebar headlines */
 	font-size: 1.5em !important;
 	font-weight: normal !important;
 	padding: 0 !important;
@@ -969,49 +952,9 @@ ol li {
 	margin-top: 5px;
 	}
 
-.secondary li.linkcat ul ul li, .sb-links ul ul li {
+.seconadry li.linkcat ul ul li, .sb-links ul ul li {
 	margin-top: 0;
 	}
-	
-/*- Footer Widgets */
-#supplementary {
-	border-top: 1px solid #dedede;
-	margin: 10px auto;
-	padding: 10px 0 20px;
-	width: 720px;
-}
-#supplementary:after {
-	clear: both;
-	content: ".";
-	display: block;
-	height: 0;
-	visibility: hidden;
-}
-#supplementary .widget {
-	margin: 0;
-	padding: 20px 20px 0;
-}
-#supplementary .widget-title {
-	border-top: 0;
-}
-/* One Footer Widget Areas */
-#supplementary.one .widget-area {
-	float: none;
-	margin: 0;
-	width: 100%;
-}
-/* Two Footer Widget Areas */
-#supplementary.two .widget-area {
-	float: left;
-	margin: 0;
-	width: 50%;
-}
-/* Three Footer Widget Areas */
-#supplementary.three .widget-area {
-	float: left;
-	margin: 0;
-	width: 33.3%;
-}
 
 /*- Search Form and Livesearch */
 

@@ -6,7 +6,7 @@
 
 <h3><?php _e('Search', 'almost-spring'); ?></h3>
 
-<?php get_search_form(); ?>
+<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 
 <?php get_sidebar(); ?>
 

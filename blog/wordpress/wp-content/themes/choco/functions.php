@@ -1,8 +1,5 @@
 <?php
 /**
- * @package WordPress
- * @subpackage Choco
- *
  * Set the content width based on the theme's design and stylesheet.
  *
  * Used to set the width of images and content. Should be equal to the width the theme
@@ -15,9 +12,7 @@ if ( ! isset( $content_width ) )
 $themecolors = array(
 	'bg' => 'ffffff',
 	'text' => '444444',
-	'link' => 'cd4517',
-	'border' => '2F2019',
-	'url' => 'AD92C3',
+	'link' => 'cd4517'
 );
 
 /** Tell WordPress to run choco_setup() when the 'after_setup_theme' hook is run. */
@@ -168,9 +163,9 @@ function choco_print_comment( $comment, $args, $depth ) {
 // Add the default Choco gravatar
 function choco_avatar ( $avatar_defaults ) {
 		$myavatar = get_stylesheet_directory_uri() . '/images/avatar.gif';
-
+		
 		$avatar_defaults[$myavatar] = "Choco";
-
+		
 		return $avatar_defaults;
 }
 add_filter( 'avatar_defaults', 'choco_avatar' );
@@ -207,4 +202,5 @@ function choco_color_registrar() {
 
 	}
 }
-add_action( 'wp_enqueue_scripts', 'choco_color_registrar' );
+if ( ! is_admin() )
+	add_action( 'wp_print_styles', 'choco_color_registrar' );

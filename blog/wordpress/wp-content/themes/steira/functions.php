@@ -1,19 +1,4 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Steira
- */
-
-/**
- * Set theme colors for WordPress.com.
- */
-$themecolors = array(
-	'bg' => 'ffffff',
-	'text' => '333333',
-	'link' => '6699cc',
-	'border' => 'cccccc',
-	'url' => 'cc9966',
-);
 
 /**
  * Get our feed links
@@ -82,12 +67,12 @@ class Steira_About_Text extends WP_Widget {
 		$title = strip_tags($instance['title']);
 		$text = format_to_edit($instance['text']);
 ?>
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:', 'steira' ); ?></label>
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></p>
 
 		<textarea class="widefat" rows="16" cols="20" id="<?php echo $this->get_field_id('text'); ?>" name="<?php echo $this->get_field_name('text'); ?>"><?php echo esc_textarea( $text ); ?></textarea>
 
-		<p><input id="<?php echo $this->get_field_id('filter'); ?>" name="<?php echo $this->get_field_name('filter'); ?>" type="checkbox" <?php checked(isset($instance['filter']) ? $instance['filter'] : 0); ?> />&nbsp;<label for="<?php echo $this->get_field_id('filter'); ?>"><?php _e( 'Automatically add paragraphs.', 'steira' ); ?></label></p>
+		<p><input id="<?php echo $this->get_field_id('filter'); ?>" name="<?php echo $this->get_field_name('filter'); ?>" type="checkbox" <?php checked(isset($instance['filter']) ? $instance['filter'] : 0); ?> />&nbsp;<label for="<?php echo $this->get_field_id('filter'); ?>"><?php _e('Automatically add paragraphs.'); ?></label></p>
 <?php
 	}
 }
@@ -141,8 +126,8 @@ register_widget('Steira_Categories');
 class Steira_Recent_Comments extends WP_Widget {
 
 	function Steira_Recent_Comments() {
-		$widget_ops = array('classname' => 'widget_steira_recent_comments', 'description' => __( 'The most recent comments in the Steira style', 'steira' ) );
-		$this->WP_Widget('steira-recent-comments', __( 'Steira Recent Comments', 'steira' ), $widget_ops);
+		$widget_ops = array('classname' => 'widget_steira_recent_comments', 'description' => __( 'The most recent comments in the Steira style' ) );
+		$this->WP_Widget('steira-recent-comments', __('Steira Recent Comments'), $widget_ops);
 		$this->alt_option_name = 'widget_steira_recent_comments';
 
 		if ( is_active_widget(false, false, $this->id_base) )
@@ -207,12 +192,12 @@ class Steira_Recent_Comments extends WP_Widget {
 		$title = isset($instance['title']) ? esc_attr($instance['title']) : '';
 		$number = isset($instance['number']) ? absint($instance['number']) : 5;
 ?>
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:', 'steira' ); ?></label>
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
 
-		<p><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e( 'Number of comments to show:', 'steira' ); ?></label>
+		<p><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of comments to show:'); ?></label>
 		<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" /><br />
-		<small><?php _e( '(at most 15)', 'steira' ); ?></small></p>
+		<small><?php _e('(at most 15)'); ?></small></p>
 <?php
 	}
 }
@@ -247,7 +232,7 @@ class Steira_Recent_Posts extends WP_Widget {
 		ob_start();
 		extract($args);
 
-		$title = apply_filters('widget_title', empty($instance['title']) ? __( 'Recent Posts', 'steira' ) : $instance['title']);
+		$title = apply_filters('widget_title', empty($instance['title']) ? __('Recent Posts') : $instance['title']);
 		if ( !$number = (int) $instance['number'] )
 			$number = 10;
 		else if ( $number < 1 )
@@ -296,12 +281,12 @@ class Steira_Recent_Posts extends WP_Widget {
 		if ( !isset($instance['number']) || !$number = (int) $instance['number'] )
 			$number = 5;
 ?>
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:', 'steira' ); ?></label>
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
 
-		<p><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e( 'Number of posts to show:', 'steira' ); ?></label>
+		<p><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:'); ?></label>
 		<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" /><br />
-		<small><?php _e( '(at most 15)', 'steira' ); ?></small></p>
+		<small><?php _e('(at most 15)'); ?></small></p>
 <?php
 	}
 }
@@ -325,7 +310,7 @@ function steira_comments($comment, $args, $depth) {
 	<li <?php comment_class(); ?> id="li-comment-<?php comment_ID() ?>">
 		<div id="comment-<?php comment_ID(); ?>">
 			<h4>
-				<a class="permlink" title="<?php printf( __( '%1$s - %2$s', 'steira' ), get_comment_date('d/m/y'), get_comment_time('g:iA')) ?>" href="#li-comment-<?php comment_ID() ?>"><span class="permlink-text">Permalink </span><span class="hash">#</span></a>
+				<a class="permlink" title="<?php printf(__('%1$s - %2$s'), get_comment_date('d/m/y'), get_comment_time('g:iA')) ?>" href="#li-comment-<?php comment_ID() ?>"><span class="permlink-text">Permalink </span><span class="hash">#</span></a>
 				<span class="name">
 					<a href="#">
 						<?php echo get_avatar($comment, $size='50'); ?>
@@ -337,11 +322,11 @@ function steira_comments($comment, $args, $depth) {
 			</h4>
 
 			<?php if ($comment->comment_approved == '0') : ?>
-			<p><em><?php _e( 'Your comment is awaiting moderation.', 'steira' ) ?></em></p>
+			<p><em><?php _e('Your comment is awaiting moderation.') ?></em></p>
 			<?php endif; ?>
 
 			<?php comment_text() ?>
-
+		
 			<p class="reply">
 			<?php comment_reply_link(array_merge( $args, array('depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
 			</p>
@@ -352,8 +337,8 @@ function steira_comments($comment, $args, $depth) {
 /**
  * Add the default Steira gravatar
  */
-function newgravatar ( $avatar_defaults ) {
-		$myavatar = get_template_directory_uri() . '/img/gravatar.gif';
+function newgravatar ($avatar_defaults) {
+		$myavatar = get_bloginfo('template_directory') . '/img/gravatar.gif';
 		$avatar_defaults[$myavatar] = "Steira";
 		return $avatar_defaults;
 }
@@ -394,9 +379,9 @@ add_filter('get_search_form', 'steira_search_form');
  * 	Make this theme available for translation
  *	Translations can be filed in the /languages/ directory
  */
-load_theme_textdomain( 'steira', get_template_directory() . '/languages' );
+load_theme_textdomain( 'steira', TEMPLATEPATH . '/languages' );
 
 $locale = get_locale();
-$locale_file = get_template_directory() . "/languages/$locale.php";
+$locale_file = TEMPLATEPATH . "/languages/$locale.php";
 if ( is_readable($locale_file) )
 	require_once($locale_file);

@@ -1,15 +1,11 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Elegant Grunge
- */
 
 $themecolors = array(
-	'bg' => 'f9fbf9',
+	'bg' => 'bebcad',
 	'border' => 'bebcad',
-	'text' => '666666',
-	'link' => '5f5f5f',
-	'url' => '9f9f9f',
+	'text' => '000000',
+	'link' => '5785a4',
+	'url' => '5785a4'
 );
 
 $content_width = 490;
@@ -129,21 +125,10 @@ function elegant_grunge_page_menu_args( $args ) {
 add_filter( 'wp_page_menu_args', 'elegant_grunge_page_menu_args' );
 
 /**
- * Get current theme options with defaults as fallback
- */
-function elegant_grunge_get_theme_options() {
-	$defaults = array(
-		'theme_layout' => 'content-sidebar',
-	);
-	$options = get_option( 'elegant_grunge_theme_options', $defaults );
-	return $options;
-}
-
-/**
  * Returns the current layout as selected in the theme options
  */
 function elegant_grunge_current_layout() {
-	$options = elegant_grunge_get_theme_options();
+	$options = get_option( 'elegant_grunge_theme_options' );
 	$current_layout = $options['theme_layout'];
 
 	if ( is_attachment() || is_page_template( 'no-sidebar-page.php') )

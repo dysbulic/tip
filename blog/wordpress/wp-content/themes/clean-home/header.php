@@ -33,7 +33,7 @@
 		
 		<?php if ( '' != get_header_image() ) : ?>
 		<div id="header-image">
-			<a href="<?php echo home_url(); ?>"><img src="<?php header_image(); ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" /></a>
+			<img src="<?php header_image(); ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" />
 		</div>
 		<?php endif; ?>
 	</div>

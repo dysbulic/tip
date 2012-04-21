@@ -19,7 +19,7 @@ class WP_Filesystem_ftpsockets extends WP_Filesystem_Base {
 	var $errors = null;
 	var $options = array();
 
-	function __construct($opt = '') {
+	function WP_Filesystem_ftpsockets($opt = '') {
 		$this->method = 'ftpsockets';
 		$this->errors = new WP_Error();
 
@@ -193,7 +193,7 @@ class WP_Filesystem_ftpsockets extends WP_Filesystem_Base {
 		return $dir[$file]['group'];
 	}
 
-	function copy($source, $destination, $overwrite = false, $mode = false) {
+	function copy($source, $destination, $overwrite = false ) {
 		if ( ! $overwrite && $this->exists($destination) )
 			return false;
 
@@ -201,17 +201,17 @@ class WP_Filesystem_ftpsockets extends WP_Filesystem_Base {
 		if ( false === $content )
 			return false;
 
-		return $this->put_contents($destination, $content, $mode);
+		return $this->put_contents($destination, $content);
 	}
 
 	function move($source, $destination, $overwrite = false ) {
 		return $this->ftp->rename($source, $destination);
 	}
 
-	function delete($file, $recursive = false, $type = false) {
+	function delete($file, $recursive = false ) {
 		if ( empty($file) )
 			return false;
-		if ( 'f' == $type || $this->is_file($file) )
+		if ( $this->is_file($file) )
 			return $this->ftp->delete($file);
 		if ( !$recursive )
 			return $this->ftp->rmdir($file);

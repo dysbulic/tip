@@ -1,12 +1,7 @@
 <?php
 /**
- * The template for displaying posts in the Aside Post Format on index and archive pages
- *
- * Learn more: http://codex.wordpress.org/Post_Formats
- *
  * @package WordPress
  * @subpackage Toolbox
- * @since Toolbox 1.0
  */
 ?>
 
@@ -17,7 +12,7 @@
 
 	<?php if ( is_search() ) : // Only display Excerpts for search pages ?>
 	<div class="entry-summary">
-		<?php the_excerpt(); ?>
+		<?php the_excerpt( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'toolbox' ) ); ?>
 	</div><!-- .entry-summary -->
 	<?php else : ?>
 	<div class="entry-content">
@@ -27,11 +22,20 @@
 	<?php endif; ?>
 
 	<footer class="entry-meta">
-		<?php toolbox_posted_on(); ?>
-		<?php if ( comments_open() || ( '0' != get_comments_number() && ! comments_open() ) ) : ?>
+		<?php
+			printf( __( '<span class="sep">Posted on </span><a href="%1$s" rel="bookmark"><time class="entry-date" datetime="%2$s" pubdate>%3$s</time></a> <span class="sep"> by </span> <span class="author vcard"><a class="url fn n" href="%4$s" title="%5$s">%6$s</a></span>', 'toolbox' ),
+				get_permalink(),
+				get_the_date( 'c' ),
+				get_the_date(),
+				get_author_posts_url( get_the_author_meta( 'ID' ) ),
+				sprintf( esc_attr__( 'View all posts by %s', 'toolbox' ), get_the_author() ),
+				get_the_author()
+			);
+		?>
+		<?php if ( comments_open() ) : ?>
 		<span class="sep"> | </span>
 		<span class="comments-link"><?php comments_popup_link( __( 'Leave a comment', 'toolbox' ), __( '1 Comment', 'toolbox' ), __( '% Comments', 'toolbox' ) ); ?></span>
 		<?php endif; ?>
-		<?php edit_post_link( __( 'Edit', 'toolbox' ), '<span class="sep"> | </span><span class="edit-link">', '</span>' ); ?>
+		<?php edit_post_link( __( 'Edit', 'toolbox' ), '<span class="edit-link">', '</span>' ); ?>
 	</footer><!-- #entry-meta -->
 </article><!-- #post-<?php the_ID(); ?> -->

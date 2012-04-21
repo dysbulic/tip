@@ -1,20 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Greenery
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'text' => 'a6b79b',
-	'link' => '95c725',
-	'border' => '89bcc2',
-	'url' => 'cbad57',
+	'text' => '556b38',
+	'link' => '95c725'
 );
 
 $content_width = 470;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 if ( function_exists('register_sidebars') )
 	register_sidebars(1);
@@ -101,36 +93,3 @@ function greenery_page_menu() { ?>
 		<?php wp_list_pages( 'sort_column=id&depth=1&title_li=' ); ?>
 	</ul>
 <?php }
-
-function greenery_10_comment($comment, $args, $depth) {
-	global $relax_comment_count;
-	$GLOBALS['comment'] = $comment;
-	extract($args, EXTR_SKIP);
-?>
-	<li <?php comment_class(empty( $args['has_children'] ) ? 'item' : 'item parent') ?> id="comment-<?php comment_ID() ?>" >
-		<div id="div-comment-<?php comment_ID() ?>">
-		<div class="commentcounter"><?php echo $relax_comment_count; ?></div>
-		
-			<div class="comment-author vcard">
-				<div class="commentgravatar">
-					<?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?>
-				</div>
-			
-				<h3 class="commenttitle"><span class="fn"><?php comment_author_link() ?></span> <?php _e('said'); ?>,</h3>
-			</div>
-			<p class="commentmeta comment-meta commentmetadata">
-				<a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>">
-					<?php comment_date() ?> @ <?php comment_time() ?>
-				</a>
-				<?php if (function_exists('quoter_comment')) { quoter_comment(); } ?>
-				<?php edit_comment_link(__("Edit"), ' &#183; ', ''); ?>
-	
-			</p>
-			<?php comment_text() ?>
-			<div class="reply">
-				<?php comment_reply_link(array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
-			</div>
-		</div>		
-	<?php $relax_comment_count++; ?>
-<?php
-}

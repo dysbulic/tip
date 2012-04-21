@@ -1,10 +1,11 @@
 <?php
 /**
- * @package Greyzed
+ * @package WordPress
+ * @subpackage Greyzed
  */
 get_header(); ?>
 <div id="container">
-
+	
 <?php get_sidebar(); ?>
 
 	<div id="content" role="main">
@@ -20,22 +21,13 @@ get_header(); ?>
 
 				<div <?php post_class() ?> id="post-<?php the_ID(); ?>">
 					<div class="posttitle">
-						<h2 class="pagetitle"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php esc_attr_e( 'Permanent Link to ', 'greyzed' ); the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+						<h2 class="pagetitle"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php _e( 'Permanent Link to ', 'greyzed' ); the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 						<small>
-							<?php
-								if ( is_multi_author() ) {
-									printf( __( 'Posted: %1$s by <strong>%2$s</strong> in %3$s', 'greyzed' ),
-										get_the_date( get_option( 'date_format' ) ),
-										get_the_author(),
-										get_the_category_list( ', ' )
-									);
-								} else {
-									printf( __( 'Posted: %1$s in %2$s', 'greyzed' ),
-										get_the_date( get_option( 'date_format' ) ),
-										get_the_category_list( ', ' )
-									);
-								}
-							?>
+							<?php printf( __( 'Posted: %1$s by <strong>%2$s</strong> in %3$s', 'greyzed' ),
+								get_the_date( get_option( 'date_format' ) ),
+								get_the_author(),
+								get_the_category_list( ', ' )
+								); ?>
 							<br />
 							<?php the_tags( __( 'Tags: ', 'greyzed' ), ', ', ''); ?>
 						</small>
@@ -49,7 +41,7 @@ get_header(); ?>
 						<?php wp_link_pages(array('before' => '<p><strong>'. __( 'Pages:', 'greyzed') . '</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>
 						<?php edit_post_link( __( 'Edit this entry.', 'greyzed' ), '<p>', '</p>' ); ?>
 				</div>
-
+			
 			<?php endwhile; ?>
 
 		<?php
@@ -62,7 +54,7 @@ get_header(); ?>
 		?>
 
 	</div>
-
+	
 	<div id="nav-post">
 		<div class="navigation-bott">
 			<?php if ( $endvar == 0 || $postcount == $endvar ) { } else { ?>

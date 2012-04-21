@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Greyzed
+ * @package WordPress
+ * @subpackage Greyzed
  */
 
 get_header(); ?>
@@ -9,6 +10,8 @@ get_header(); ?>
 	<div id="content" role="main">
 	<div class="column">
 		<?php if (have_posts()) : ?>
+
+		<?php the_post(); ?>
 
 		<h2 class="archivetitle">
 		<?php
@@ -21,7 +24,7 @@ get_header(); ?>
 			} elseif ( is_month() ) {
 				printf( __( 'Archive for %s', 'greyzed' ), get_the_date( 'F, Y' ) );
 			} elseif ( is_year() ) {
-				printf( __( 'Archive for %s', 'greyzed' ), get_the_date( 'Y' ) );
+				printf( __( 'Archive for %s', 'greyzed' ), get_the_date( 'Y' ) );				
 			} elseif (is_author()) {
 				_e( 'Author Archive', 'greyzed' );
 			} elseif (isset($_GET['paged']) && !empty($_GET['paged'])) {
@@ -38,22 +41,13 @@ get_header(); ?>
 		<?php $postcount++; // post counter ?>
 		<div <?php post_class() ?>>
 				<div class="posttitle">
-					<h2 class="pagetitle"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute( array( 'before' => __( 'Permanent link to', 'greyzed' ) . ' ' ) ); ?>"><?php the_title(); ?></a></h2>
+					<h2 class="pagetitle"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 					<small>
-						<?php
-							if ( is_multi_author() ) {
-								printf( __( 'Posted: %1$s by <strong>%2$s</strong> in %3$s', 'greyzed' ),
-									get_the_date( get_option( 'date_format' ) ),
-									get_the_author(),
-									get_the_category_list( ', ' )
-								);
-							} else {
-								printf( __( 'Posted: %1$s in %2$s', 'greyzed' ),
-									get_the_date( get_option( 'date_format' ) ),
-									get_the_category_list( ', ' )
-								);
-							}
-						?>
+						<?php printf( __( 'Posted: %1$s by <strong>%2$s</strong> in %3$s', 'greyzed' ),
+							get_the_date( get_option( 'date_format' ) ),
+							get_the_author(),
+							get_the_category_list( ', ' )
+							); ?>
 						<br />
 						<?php the_tags( __( 'Tags: ', 'greyzed' ), ', ', ''); ?>
 					</small>

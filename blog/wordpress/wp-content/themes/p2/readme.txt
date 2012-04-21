@@ -25,49 +25,10 @@ http://en.blog.wordpress.com/2009/03/11/p2-the-new-prologue/
 
 == Changelog ==
 
-= 1.3.4 =
-* Updated FR translation from ms-studio
-
-= 1.3.3 - Oct 4 2011 =
-* Hide the actions bar when using inline editing tool for post or page
-* Before adding links to mention names, make sure the name only appears in the list once; this fixes the case where names mentioned more than once in a post were getting additional anchors added
-* When you have the tag list open, hitting Return shouldn't submit the post, it should do nothing
-* Set svn:eol-style on JS and TXT files
-* Escape get_comment_link() properly
-* Escape translatable attribute values with esc_attr_e()
-* Allow toggling comment threads on tag archives, props westi
-* Improve mentions.php for backcompat with older versions of WP (< 3.1).
-* Updates to Italian translation by daxeel@gmail.com
-* Added Kurdish translation by brwa.osman
-
-= 1.3.2 - Jul 21 2011 =
-* Resubmit to WP.org because Theme Check didn't allow 'comment-reply' being enqueued as a dependency
-
-= 1.3.1 - Jul 12 2011 =
-* Change sticky post color to blue, and place new posts after sticky posts
-* Reset the height of the new post textearea after a successful post
-* Do not confuse logged out with offline: better logged out/offline error handling
-* Add author template so P2 can catch 404 request to non-existent authors on current blog
-* Use user_nicename for @-name mention hint, since that is what mentions uses
-
-= 1.3.1-alpha - Jun 21 2011 =
-* Refactor P2 into components
-* Improve mentions and autocomplete
-* Fix malformed dates in Chrome
-* Fix the_author underlining bug
-* JS locale improvements
-* Fix Recent Comments widget to clear cache on comment delete
-* Validate custom background input for proper format; add missing # if not in color value
-* Take use_ssl user option into account when deciding to display media buttons
-* Take domain mapping into account when generating the Ajax URL
-* Change 'Cancel reply' hotkey to shift+esc and add an 'are you sure' dialog
-* Add 'p2_found_mentions' filter to allow plugins to alter which mentions are attached to a post/comment
-
-= 1.2.3 - Mar 1 2011 =
+= 1.2.3 =
 * Add two new action hooks: p2_post_form and p2_action_links
 * Add p2_excerpted_title to provide titles with only whole words
 * Run make_clickable later to avoid shortcode conflicts
-* Authors widget style fixes
 * Allow image upload from front-end regardless of domain and HTTPS setting
 * Change include to include_once to avoid conflicts with plugins and clean up require and include calls
 * Fix page navigation float clearing and pingback spacing

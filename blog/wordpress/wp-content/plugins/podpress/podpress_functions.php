@@ -137,28 +137,15 @@ License:
 	function podPress_stringLimiter($str, $len, $snipMiddle = false)
 	{
 		if (strlen($str) > $len) {
-			if ( function_exists('mb_substr') ) {
-				if($snipMiddle) {
-					$startlen = $len / 3;
-					$startlen = $startlen - 1;
-					$endlen = $startlen * 2;
-					$endlen = $endlen - $endlen - $endlen;
-					return mb_substr($str, 0, $startlen).'...'.mb_substr($str, $endlen);
-				} else {
-					$len = $len - 3;
-					return mb_substr($str, 0, $len).'...';
-				}
+			if($snipMiddle) {
+				$startlen = $len / 3;
+				$startlen = $startlen - 1;
+				$endlen = $startlen * 2;
+				$endlen = $endlen - $endlen - $endlen;
+				return substr($str, 0, $startlen).'...'.substr($str, $endlen);
 			} else {
-				if ($snipMiddle) {
-					$startlen = $len / 3;
-					$startlen = $startlen - 1;
-					$endlen = $startlen * 2;
-					$endlen = $endlen - $endlen - $endlen;
-					return substr($str, 0, $startlen).'...'.substr($str, $endlen);
-				} else {
-					$len = $len - 3;
-					return substr($str, 0, $len).'...';
-				}
+				$len = $len - 3;
+				return substr($str, 0, $len).'...';
 			}
 		} else {
 			return $str;
@@ -199,182 +186,8 @@ License:
 		} else {
 			return $phrase;
 		}
-	}
-	
-	/**
-	* podPress_strlimiter_end - if the input phrase is longer then maxlength then cut characters from the end of the phrase
-	*
-	* @package podPress
-	* @since 8.8.10.8
-	*
-	* @param str $phrase input string
-	* @param int $maxlength [optional] - max. length of the output string
-	* @param str $paddingchar [optional] - character(s) which should symbolize the shortend string / placed in the middle of the shortend string
-	* @param bool $respecthtmlentities [optional] - if TRUE then the function will not cut htmlentities in half. It will cut before and after the entity.
-	* @param bool $abbrev [optional] - use the abbr-tag with the original string as the title element
-	* @param str $classname [optional] - name(s) of the CSS class(es) of the abbr-tag
-	*
-	* @return str phrase with max. length
-	*/
-	function podPress_strlimiter_end($phrase, $maxlength = 25, $paddingchar = ' ... ', $respecthtmlentities = FALSE, $abbrev = FALSE, $classname = 'podpress_abbr', $charset = 'UTF-8') {
-		$len = strlen($phrase);
-		$maxlen = ($maxlength-strlen($paddingchar));
-		if ( $len > $maxlen ) {
-			if ( function_exists('mb_substr') AND function_exists('mb_strrpos') ) {
-				$short_phrase = mb_substr($phrase, 0, $maxlen);
-				if ( TRUE === $respecthtmlentities ) {
-					$short_phrase_end = mb_substr($short_phrase, -10);
-					$ampersandpos = mb_strrpos($short_phrase_end, '&');
-					if ( FALSE !== $ampersandpos ) {
-						// if there is an ampersand among the last characters then it might be an entity
-						$semicolonpos = mb_strrpos($short_phrase_end, ';');
-						if ( FALSE === $semicolonpos OR $semicolonpos < $ampersandpos ) {
-							// if no semicolon is following the ampersand OR if the position of the semicolon is smaller than (before the) position of the ampersand then it is most likely an entity which was cut off
-							// cut the string before the entity
-							$short_phrase = mb_substr($phrase, 0, ($maxlen - 10 + $ampersandpos));
-						} 
-					}
-				}
-			} else {
-				$short_phrase = substr($phrase, 0, $maxlen);
-				if ( TRUE === $respecthtmlentities ) {
-					$short_phrase_end = substr($short_phrase, -10);
-					$ampersandpos = strrpos($short_phrase_end, '&');
-					if ( FALSE !== $ampersandpos ) {
-						// if there is an ampersand among the last characters then it might be an entity
-						$semicolonpos = strrpos($short_phrase_end, ';');
-						if ( FALSE === $semicolonpos OR $semicolonpos < $ampersandpos ) {
-							// if no semicolon is following the ampersand OR if the position of the semicolon is smaller than (before the) position of the ampersand then it is most likely an entity which was cut off
-							// cut the string before the entity
-							$short_phrase = substr($phrase, 0, ($maxlen - 10 + $ampersandpos));
-						} 
-					}
-				}
-			}
-			if ($abbrev == TRUE) {
-				if ( Trim($classname) != '' ) {
-					return '<span class="'.$classname.'" title="'.attribute_escape(str_replace('"', '\'', $phrase)).'">' . $short_phrase . $paddingchar . '</span>';
-				} else {
-					return '<span title="'.attribute_escape(str_replace('"', '\'', $phrase)).'">' . $short_phrase . $paddingchar . '</span>';
-				}
-			} else {
-				return $short_phrase . $paddingchar;
-			}
-		} else {
-			return $phrase;
-		}
-	}
-	
-	/**
-	* podPress_strlimiter_middle - if the input phrase is longer then maxlength then cut characters from the center of the phrase
-	*
-	* @package podPress
-	* @since 8.8.10.8
-	*
-	* @param str $phrase input string
-	* @param int $maxlength [optional] - max. length of the output string
-	* @param str $paddingchar [optional] - character(s) which should symbolize the shortend string / placed in the middle of the shortend string
-	* @param bool $respecthtmlentities [optional] - if TRUE then the function will not cut htmlentities in half. It will cut before and after the entity.
-	* @param bool $abbrev [optional] - use the abbr-tag with the original string as the title element
-	* @param str $classname [optional] - name(s) of the CSS class(es) of the abbr-tag
-	*
-	* @return str phrase with max. length
-	*/
-	function podPress_strlimiter_middle($phrase, $maxlength = 25, $paddingchar = ' ... ', $respecthtmlentities = FALSE, $abbrev = FALSE, $classname = 'podpress_abbr') {
-		$len = strlen($phrase);
-		$paddinglen = strlen($paddingchar);
-		$maxlen = ($maxlength-$paddinglen);
-		if ( $len > $maxlen ) {
-			if ( function_exists('mb_substr') AND function_exists('mb_strrpos') AND function_exists('mb_strpos') ) {
-				$part1_len = floor($maxlen/2);
-				$part1 = mb_substr($phrase, 0,  $part1_len);
-				$part2_len = ceil($maxlen/2);
-				$part2 = mb_substr($phrase, -$part2_len, $len);
-				
-				if ( TRUE === $respecthtmlentities ) {
-					$part1_end = mb_substr($part1, -10);
-					$ampersandpos_part1 = mb_strrpos($part1_end, '&');
-					if ( FALSE !== $ampersandpos_part1 ) {
-						// if there is an ampersand among the last characters of part1 then it might be an entity
-						$semicolonpos_part1 = mb_strrpos($part1_end, ';');
-						if ( FALSE === $semicolonpos_part1 OR $semicolonpos_part1 < $ampersandpos_part1 ) {
-							// if no semicolon is following the ampersand then it is most likely an entity which was cut off
-							// cut the 1. part phrase before the entity
-							$part1 = mb_substr($part1, 0, ($part1_len - 10 + $ampersandpos_part1));
-						}
-					}
-				
-					$part2_start = mb_substr($part2, 0, 10);
-					$semicolonpos_part2 = mb_strpos($part2_start, ';');
-					if ( FALSE !== $semicolonpos_part2 ) {
-						// if there is a semicolon among the first characters of part2 then check whether there is an ampersand before that semicolon
-						$ampersandpos_part2 = mb_strrpos($part2_start, '&');
-						if ( FALSE === $ampersandpos_part2 OR $ampersandpos_part2 > $semicolonpos_part2 ) {
-							// if there is no ampersand among the first characters of part2 which comes before the semicolon then look for it in the 10 characters before the semicolon
-							$part2_long_start = mb_substr($phrase, (-$part2_len+$semicolonpos_part2-10), 10); // a certain number of characters before the semicolon (this might include characters from part1 depending on the $paddinglen)
-							$ampersandpos_part2_long = mb_strrpos($part2_long_start, '&');
-							$semicolonpos_part2_long = mb_strrpos($part2_long_start, ';');
-							if ( (FALSE !== $ampersandpos_part2_long AND FALSE === $semicolonpos_part2_long) OR (FALSE !== $ampersandpos_part2_long AND FALSE !== $semicolonpos_part2_long AND $semicolonpos_part2_long < $ampersandpos_part2_long) ) {
-								// if there is an ampersand and no further semicolon OR if there is an ampersand and further semicolon which comes before the ampersand then this semicolon is most likely a semicolon of an entity
-								// cut the 2. part phrase after the semicolon
-								$part2 = mb_substr($part2, (-$part2_len+$semicolonpos_part2+1), $len);
-							}
-						}
-					}
-				}
-			} else {
-				$part1_len = floor($maxlen/2);
-				$part1 = substr($phrase, 0,  $part1_len);
-				$part2_len = ceil($maxlen/2);
-				$part2 = substr($phrase, -$part2_len, $len);
-				
-				if ( TRUE === $respecthtmlentities ) {
-					$part1_end = substr($part1, -10);
-					$ampersandpos_part1 = strrpos($part1_end, '&');
-					if ( FALSE !== $ampersandpos_part1 ) {
-						// if there is an ampersand among the last characters of part1 then it might be an entity
-						$semicolonpos_part1 = strrpos($part1_end, ';');
-						if ( FALSE === $semicolonpos_part1 OR $semicolonpos_part1 < $ampersandpos_part1 ) {
-							// if no semicolon is following the ampersand then it is most likely an entity which was cut off
-							// cut the 1. part phrase before the entity
-							$part1 = substr($part1, 0, ($part1_len - 10 + $ampersandpos_part1));
-						}
-					}
-				
-					$part2_start = substr($part2, 0, 10);
-					$semicolonpos_part2 = strpos($part2_start, ';');
-					if ( FALSE !== $semicolonpos_part2 ) {
-						// if there is a semicolon among the first characters of part2 then check whether there is an ampersand before that semicolon
-						$ampersandpos_part2 = strrpos($part2_start, '&');
-						if ( FALSE === $ampersandpos_part2 OR $ampersandpos_part2 > $semicolonpos_part2 ) {
-							// if there is no ampersand among the first characters of part2 which comes before the semicolon then look for it in the 10 characters before the semicolon
-							$part2_long_start = substr($phrase, (-$part2_len+$semicolonpos_part2-10), 10); // a certain number of characters before the semicolon (this might include characters from part1 depending on the $paddinglen)
-							$ampersandpos_part2_long = strrpos($part2_long_start, '&');
-							$semicolonpos_part2_long = strrpos($part2_long_start, ';');
-							if ( (FALSE !== $ampersandpos_part2_long AND FALSE === $semicolonpos_part2_long) OR (FALSE !== $ampersandpos_part2_long AND FALSE !== $semicolonpos_part2_long AND $semicolonpos_part2_long < $ampersandpos_part2_long) ) {
-								// if there is an ampersand and no further semicolon OR if there is an ampersand and further semicolon which comes before the ampersand then this semicolon is most likely a semicolon of an entity
-								// cut the 2. part phrase after the semicolon
-								$part2 = substr($part2, (-$part2_len+$semicolonpos_part2+1), $len);
-							}
-						}
-					}
-				}
-			}
-			
-			if ($abbrev == TRUE) {
-				if ( Trim($classname) != '' ) {
-					return '<span class="'.$classname.'" title="'.attribute_escape(str_replace('"', '\'', $phrase)).'">' . $part1 . $paddingchar . $part2 . '</span>';
-				} else {
-					return '<span title="'.attribute_escape(str_replace('"', '\'', $phrase)).'">' . $part1 . $paddingchar . $part2 . '</span>';
-				}
-			} else {
-				return $part1 . $paddingchar. $part2;
-			}
-		} else {
-			return $phrase;
-		}
-	}
-
+	}	
+		
 	if(!function_exists('html_print_r')) {
 		function html_print_r($v, $n = '', $ret = false) {
 			if($ret) {
@@ -631,7 +444,7 @@ License:
 			$options['comments-atom'] = false;
 		}
 		if(!isset($options['itunes'])) {
-			$options['itunes'] = false;
+			$options['itunes'] = true;
 		}
 		if (!isset($options['iprot'])) {
 			$options['iprot'] = false;
@@ -1556,7 +1369,7 @@ License:
 					$instance['comments-atom'] = false;
 				}
 				if (!isset($instance['itunes'])) {
-					$instance['itunes'] = false;
+					$instance['itunes'] = true;
 				}
 				if (!isset($instance['iprot'])) {
 					$instance['iprot'] = false;
@@ -2038,20 +1851,20 @@ License:
 	function podPress_StatCollector($postID, $media, $method) {
 		global $wpdb;
 
-		$media = addslashes($media);
-		$method = addslashes($method);
+		$media	= addslashes($media);
+		$method	= addslashes($method);
 
-		$ip = addslashes($_SERVER['REMOTE_ADDR']);
-		//$cntry = addslashes(podPress_determineCountry($ip));
-		$cntry = addslashes('');
-		$lang = addslashes(podPress_determineLanguage());
-		$ref = addslashes($_SERVER['HTTP_REFERER']);
-		$url = parse_url($ref);
-		$domain = addslashes(eregi_replace('^www.','',$url['host']));
-		//$res = $_SERVER['REQUEST_URI'];
-		$ua = addslashes($_SERVER['HTTP_USER_AGENT']);
-		$br = podPress_parseUserAgent($_SERVER['HTTP_USER_AGENT']);
-		$dt = time();
+		$ip		= addslashes($_SERVER['REMOTE_ADDR']);
+		//$cntry	= addslashes(podPress_determineCountry($ip));
+		$cntry	= addslashes('');
+		$lang	= addslashes(podPress_determineLanguage());
+		$ref	= addslashes($_SERVER['HTTP_REFERER']);
+		$url 	= parse_url($ref);
+		$domain	= addslashes(eregi_replace('^www.','',$url['host']));
+		//$res	= $_SERVER['REQUEST_URI'];
+		$ua   = addslashes($_SERVER['HTTP_USER_AGENT']);
+		$br		= podPress_parseUserAgent($_SERVER['HTTP_USER_AGENT']);
+		$dt		= time();
 	
 		$query = "INSERT INTO ".$wpdb->prefix."podpress_stats (postID, media, method, remote_ip, country, language, domain, referer, user_agent, platform, browser, version, dt) VALUES ('$postID', '$media', '$method', '".$ip."', '$cntry', '$lang', '$domain', '$ref', '$ua', '".addslashes($br['platform'])."', '".addslashes($br['browser'])."', '".addslashes($br['version'])."', $dt)";
 		$result = $wpdb->query($query);
@@ -2273,10 +2086,10 @@ License:
 		}
 		$realURL = $podPress->convertPodcastFileNameToValidWebPath($realURL);
 	
-		if ($podPress->settings['enable3rdPartyStats'] == 'PodTrac') {
+		if($podPress->settings['enable3rdPartyStats'] == 'PodTrac') {
 			$realURL = str_replace(array('ftp://', 'http://', 'https://'), '', $realURL);
 			$realURL = $podPress->podtrac_url.$realURL;
-		} elseif ( strtolower($podPress->settings['enable3rdPartyStats']) == 'blubrry' && !empty($podPress->settings['statBluBrryProgramKeyword'])) {
+		} elseif( strtolower($podPress->settings['enable3rdPartyStats']) == 'blubrry' && !empty($podPress->settings['statBluBrryProgramKeyword'])) {
 			$realURL = str_replace('http://', '', $realURL);
 			$realURL = $podPress->blubrry_url.$podPress->settings['statBluBrryProgramKeyword'].'/'.$realURL;
 		} elseif ($podPress->settings['statLogging'] == 'FullPlus' && $realSysPath !== false) {

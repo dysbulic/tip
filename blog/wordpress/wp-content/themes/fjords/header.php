@@ -23,14 +23,13 @@
 
 </head>
 
-<body <?php body_class(); ?>>
+<body>
 
 <div id="wrapper">
-		<a href="<?php echo home_url( '/' ); ?>" class="header-link"></a>
 
 	<div id="content">
 
-		<div id="hode">
-		<h4><a href="<?php echo home_url( '/' ); ?>"><?php bloginfo( 'title' ); ?></a></h4>
-		<span><?php bloginfo( 'description' ); ?></span>
-		</div>
+<div id="hode">
+<h4><a href="<?php echo home_url( '/' ); ?>"><?php bloginfo( 'title' ); ?></a></h4>
+<span><?php bloginfo( 'description' ); ?></span>
+</div>

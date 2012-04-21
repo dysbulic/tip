@@ -62,18 +62,17 @@
 			</div><!-- .navigation -->
 <?php endif; // check for comment navigation ?>
 
-<?php endif; // end have_comments() ?>
+<?php else : // or, if we don't have comments:
 
-<?php
-/* If there are no comments and comments are closed, let's leave a little note, shall we?
- * But we only want the note on posts and pages that had comments in the first place.
- * It's just the polite thing to do!
- */
-if ( ! comments_open() && '0' != get_comments_number() ) :
+	/* If there are no comments and comments are closed,
+	 * let's leave a little note, shall we?
+	 */
+	if ( ! comments_open() ) :
 ?>
-	<!-- If comments are closed. -->
-	<p class="nocomments"><?php _e( 'Comments are closed.' , 'twentyten' ) ?></p>
-<?php endif; ?>
+	<p class="nocomments"><?php _e( 'Comments are closed.', 'twentyten' ); ?></p>
+<?php endif; // end ! comments_open() ?>
+
+<?php endif; // end have_comments() ?>
 
 <?php comment_form(); ?>
 

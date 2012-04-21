@@ -13,7 +13,7 @@
 	?>
 </head>
 
-<body <?php body_class(); ?>>
+<body>
 <div id="container"<?php if ( is_page() && !is_page( "archives" ) ) echo " class=\"singlecol\""; ?>>
 
 <div id="header">

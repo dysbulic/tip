@@ -5,7 +5,7 @@
 
 			<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
-				<h1 id="post-<?php the_ID(); ?>"><?php the_title(); ?></h1>
+				<h1 id="post-<?php the_ID(); ?>" ><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php echo esc_attr( sprintf( __( 'Permanent link to %s' ), the_title_attribute( 'echo=0' ) ) ); ?>"><?php the_title(); ?></a></h1>
 				<p class="author" ><?php _e( 'Posted on' ); ?> <em><?php the_time( get_option( 'date_format' ) ); ?></em>. <?php _e( 'Filed under:', 'fadtastic' ); ?> <?php the_category( ', ' ); ?> | <?php the_tags( __( 'Tags: ' ), ', ', ' | ' ); ?> <?php edit_post_link( __( 'Edit This' ) ); ?></p>
 
 				<?php the_content(); ?>

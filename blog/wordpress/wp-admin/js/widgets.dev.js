@@ -4,8 +4,7 @@ var wpWidgets;
 wpWidgets = {
 
 	init : function() {
-		var rem, sidebars = $('div.widgets-sortables'), isRTL = !! ( 'undefined' != typeof isRtl && isRtl ),
-			margin = ( isRtl ? 'marginRight' : 'marginLeft' );
+		var rem, sidebars = $('div.widgets-sortables');
 
 		$('#widgets-right').children('.widgets-holder-wrap').children('.sidebar-name').click(function(){
 			var c = $(this).siblings('.widgets-sortables'), p = $(this).parent();
@@ -35,14 +34,14 @@ wpWidgets = {
 				if ( w > 250 && inside.closest('div.widgets-sortables').length ) {
 					css['width'] = w + 30 + 'px';
 					if ( inside.closest('div.widget-liquid-right').length )
-						css[margin] = 235 - w + 'px';
+						css['marginLeft'] = 235 - w + 'px';
 					widget.css(css);
 				}
 				wpWidgets.fixLabels(widget);
 				inside.slideDown('fast');
 			} else {
 				inside.slideUp('fast', function() {
-					widget.css({'width':'', margin:''});
+					widget.css({'width':'','marginLeft':''});
 				});
 			}
 			return false;
@@ -98,7 +97,7 @@ wpWidgets = {
 			start: function(e,ui) {
 				wpWidgets.fixWebkit(1);
 				ui.item.children('.widget-inside').hide();
-				ui.item.css({margin:'', 'width':''});
+				ui.item.css({'marginLeft':'','width':''});
 			},
 			stop: function(e,ui) {
 				if ( ui.item.hasClass('ui-draggable') && ui.item.data('draggable') )
@@ -115,7 +114,7 @@ wpWidgets = {
 					id = ui.item.attr('id'),
 					sb = $(this).attr('id');
 
-				ui.item.css({margin:'', 'width':''});
+				ui.item.css({'marginLeft':'','width':''});
 				wpWidgets.fixWebkit();
 				if ( add ) {
 					if ( 'multi' == add ) {
@@ -272,7 +271,7 @@ wpWidgets = {
 
     close : function(widget) {
 		widget.children('.widget-inside').slideUp('fast', function(){
-			widget.css({'width':'', margin:''});
+			widget.css({'width':'','marginLeft':''});
 		});
 	}
 };

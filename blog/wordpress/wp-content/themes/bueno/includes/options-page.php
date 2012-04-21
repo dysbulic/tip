@@ -31,7 +31,7 @@ function theme_options_do_page() {
 	<div class="wrap">
 	    <?php screen_icon(); echo "<h2>" . get_current_theme() . __( ' Theme Options' ) . "</h2>"; ?>
 	    
-		<?php if ( isset( $_REQUEST['settings-updated'] ) && $_REQUEST['settings-updated'] == 'true' ) : ?>
+		<?php if( $_REQUEST['settings-updated'] == 'true' ) : ?>
 		<div class="updated fade"><p><strong><?php _e( 'Options saved' ); ?></strong></p></div>
 		<?php endif; ?>
 		
@@ -95,7 +95,7 @@ function theme_options_do_page() {
 			</table>
 			
 			<p class="submit">
-				<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
+				<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
 			</p>
 		</form>
 	</div>

@@ -1,8 +1,3 @@
-<?php
-/**
- * @package Vigilance
- */
-?>
 <?php $content_width = 920; // allow wider image ?>
 <?php get_header(); ?>
 		<?php if (have_posts()) : ?>

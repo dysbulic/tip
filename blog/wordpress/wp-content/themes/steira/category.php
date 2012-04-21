@@ -4,6 +4,8 @@
 
 				<div id="content">
 
+<?php the_post(); ?>
+
 				<h2 class="page-title"><?php _e( 'Category Archives:', 'steira' ) ?> <strong><?php single_cat_title() ?></strong></h2>
 
 <?php rewind_posts(); ?>

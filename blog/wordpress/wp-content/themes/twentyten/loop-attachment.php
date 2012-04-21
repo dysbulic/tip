@@ -18,7 +18,7 @@
 <?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
 
 				<?php if ( ! empty( $post->post_parent ) ) : ?>
-					<p class="page-title"><a href="<?php echo get_permalink( $post->post_parent ); ?>" title="<?php echo esc_attr( sprintf( __( 'Return to %s', 'twentyten' ), strip_tags( get_the_title( $post->post_parent ) ) ) ); ?>" rel="gallery"><?php
+					<p class="page-title"><a href="<?php echo get_permalink( $post->post_parent ); ?>" title="<?php esc_attr( printf( __( 'Return to %s', 'twentyten' ), get_the_title( $post->post_parent ) ) ); ?>" rel="gallery"><?php
 						/* translators: %s - title of parent post */
 						printf( __( '<span class="meta-nav">&larr;</span> %s', 'twentyten' ), get_the_title( $post->post_parent ) );
 					?></a></p>
@@ -33,7 +33,7 @@
 								'meta-prep meta-prep-author',
 								sprintf( '<span class="author vcard"><a class="url fn n" href="%1$s" title="%2$s">%3$s</a></span>',
 									get_author_posts_url( get_the_author_meta( 'ID' ) ),
-									esc_attr( sprintf( __( 'View all posts by %s', 'twentyten' ), get_the_author() ) ),
+									sprintf( esc_attr__( 'View all posts by %s', 'twentyten' ), get_the_author() ),
 									get_the_author()
 								)
 							);

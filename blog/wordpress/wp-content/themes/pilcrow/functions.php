@@ -52,10 +52,10 @@ function pilcrow_setup() {
 
 	// Make theme available for translation
 	// Translations can be filed in the /languages/ directory
-	load_theme_textdomain( 'pilcrow', get_template_directory() . '/languages' );
+	load_theme_textdomain( 'pilcrow', TEMPLATEPATH . '/languages' );
 
 	$locale = get_locale();
-	$locale_file = get_template_directory() . "/languages/$locale.php";
+	$locale_file = TEMPLATEPATH . "/languages/$locale.php";
 	if ( is_readable( $locale_file ) )
 		require_once( $locale_file );
 
@@ -221,7 +221,7 @@ function pilcrow_admin_header_image() { ?>
 			else
 				$style = ' style="color:#' . get_theme_mod( 'header_textcolor', HEADER_TEXTCOLOR ) . ';"';
 			?>
-			<h1 id="site-title"><a id="name"<?php echo $style; ?> onclick="return false;" href="<?php echo home_url( '/' ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
+			<h1 id="site-title"><a id="name"<?php echo $style; ?> onclick="return false;" href="<?php bloginfo( 'url' ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
 			<img src="<?php esc_url ( header_image() ); ?>" alt="" />
 	</div>
 <?php }
@@ -497,7 +497,7 @@ function pilcrow_color_registrar() {
 			break;
 	}
 }
-add_action( 'wp_enqueue_scripts', 'pilcrow_color_registrar' );
+add_action( 'wp_print_styles', 'pilcrow_color_registrar' );
 
 /**
  *  Returns the current pilcrow layout as selected in the theme options

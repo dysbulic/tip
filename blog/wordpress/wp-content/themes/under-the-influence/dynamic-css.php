@@ -17,12 +17,12 @@ foreach ($options as $value) {
 }
 
 if ( ! get_query_var( 'preview' ) ) {
-	header('Content-type: text/css');
+	header('Content-type: text/css');	
 } else {
 	echo '<style type="text/css" media="screen">';
 }
 
-$headerimage = get_header_image();
+$headerimage = get_header_image(); 
 if ($headerimage == ""){
 	$headerstyle = 1;
 	}
@@ -55,7 +55,7 @@ echo '
 #page {
 	border-top: 3px solid '.$accent.';
 	}
-
+	
 a:hover, .postmetadata a:hover, .tags a:hover, .entry a:hover, #credits a:hover, .commentbox cite a:hover, .commentmetadata a:hover,
 a:focus, .postmetadata a:focus, .tags a:focus, .entry a:focus, #credits a:focus, .commentbox cite a:focus, .commentmetadata a:focus {
 	color: '.$accent.';
@@ -65,27 +65,27 @@ a:hover img.centered, a:hover img.alignright, a:hover img.alignleft, a:hover img
 a:focus img.centered, a:focus img.alignright, a:focus img.alignleft, a:focus img, .gallery a:focus img, .wp-caption a:focus img, #wp-calendar #today {
 	border: 1px solid '.$accent.';
 	}
-
+	
 .postmetadata a, .tags a, #credits a, .commentmetadata a, .read_more {
 	color: '.$mutedaccent.';
 	}
-
+	
 #footer {
 	border-top: 2px solid '.$accent.';
 	border-bottom: 1px solid '.$accent.';
 	}
-
+	
 .sticky {
 	border-top: 2px dotted '.$accent.';
 	border-bottom: 1px dotted '.$accent.';
 	}
-
+	
 ';
 
 if ($headerstyle == 1) {
 
-	if ($headerdesign == 2) {
-		echo '
+	if ($headerdesign == 2) {		
+		echo '	
 		/*active when header design 2 is selected and no custom header image is set*/
 		#header h1, #header h1 a, #header h1 a:visited {
 		font-family: Candara, "Trebuchet MS", Calibri, Helvetica, Arial, sans-serif;
@@ -105,7 +105,7 @@ if ($headerstyle == 1) {
 		width: '.$allwidth.'px;
 		margin: 0 auto;}';
 	}
-	else {
+	else {	
 	echo '
 	/*active when header design 1 is selected and no custom header image is set*/
 	#header h1, #header h1 a, #header h1 a:visited {
@@ -122,12 +122,12 @@ if ($headerstyle == 1) {
 	#header {
 		margin: 0 auto;
 		width: '.$allwidth2.'px;
-		padding: 40px 0 40px 20px;
+		padding: 40px 0 40px 20px;	
 	}
 	';
 	}
 } else {
-		echo '
+		echo '	
 		/*active when header is replaced with custom image */
 		#header h1, #header h1 a, #header h1 a:visited {
 		padding-top: 10px;
@@ -185,14 +185,14 @@ echo '
 #sidebar {
 	width: '.$sidebarwidth.'px;
 	}
-
+	
 #content_container, #footer, #page_list {
 	width: '.$allwidth.'px;
 	}
-
+	
 	';
-
-
+	
+	
 	if ($footer == "on") {
 echo '
 	#footer .cell {

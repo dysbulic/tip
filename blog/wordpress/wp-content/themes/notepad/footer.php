@@ -22,7 +22,6 @@
 
 <script type="text/javascript">
 /* <![CDATA[ */
-if(document.getElementById("s")) {
 	document.getElementById("s").onfocus = function() {
 		if (this.value == "<?php _e( 'Search...','notepad-theme' ); ?>")
 			this.value = "";
@@ -31,7 +30,6 @@ if(document.getElementById("s")) {
 		if (this.value == '')
 			this.value = "<?php _e( 'Search...','notepad-theme' ); ?>";
 	}
-}
 /* ]]> */
 </script>
 

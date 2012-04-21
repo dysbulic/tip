@@ -1,24 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Regulus
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'text' => '666666',
-	'link' => '333333',
-	'border' => 'ffcc00',
-	'url' => '6688ff',
+	'text' => '000000',
+	'link' => '333333'
 );
 
 $content_width = 460;
-
-function regulus_body_class( $classes, $class ) {
-	return array_map( 'esc_attr', $class );
-}
-
-add_filter( 'body_class', 'regulus_body_class', 1, 2 );
 
 add_theme_support( 'automatic-feed-links' );
 
@@ -44,10 +32,10 @@ add_action('widgets_init', 'regulus_widgets_init');
 
 function regulus_add_theme_page() {
 
-	if ( isset( $_GET['page'] ) && $_GET['page'] == basename(__FILE__) ) {
+	if ( $_GET['page'] == basename(__FILE__) ) {
 	
 	    // save settings
-		if ( isset( $_REQUEST['action'] ) && 'save' == $_REQUEST['action'] ) {
+		if ( 'save' == $_REQUEST['action'] ) {
 
 			update_option( 'regulus_name', $_REQUEST[ 'r_name' ] );
 			update_option( 'regulus_email', $_REQUEST[ 'r_email' ] );
@@ -73,7 +61,7 @@ function regulus_add_theme_page() {
 			die;
 
   		// reset settings
-		} else if ( isset( $_REQUEST['action'] ) && 'reset' == $_REQUEST['action'] ) {
+		} else if( 'reset' == $_REQUEST['action'] ) {
 
 			delete_option( 'regulus_name' );
 			delete_option( 'regulus_email' );
@@ -122,9 +110,9 @@ function regulus_theme_page() {
 	// regulus theme page content
 	// --------------------------
 
-	if ( isset( $_REQUEST['saved'] ) && $_REQUEST['saved'] ) echo '<div id="message" class="updated fade"><p><strong>Options saved.</strong></p></div>';
-	if ( isset( $_REQUEST['reset'] ) && $_REQUEST['reset'] ) echo '<div id="message" class="updated fade"><p><strong>Options reset.</strong></p></div>';
-	if ( isset( $_REQUEST['super'] ) && $_REQUEST['super'] ) $superUser = true; else $superUser = false;
+	if ( $_REQUEST['saved'] ) echo '<div id="message" class="updated fade"><p><strong>Options saved.</strong></p></div>';
+	if ( $_REQUEST['reset'] ) echo '<div id="message" class="updated fade"><p><strong>Options reset.</strong></p></div>';
+	if ( $_REQUEST['super'] ) $superUser = true; else $superUser = false;
 	
 ?>
 
@@ -208,14 +196,14 @@ function defaultImage() {
 <table width="100%" cellspacing="2" cellpadding="5" class="editform">
 
 <?php
-	$disabled = false;
+
 
 	regulus_th( "Header Image URL" );
 		regulus_input( "r_headerImageURL", "text", "", get_settings( 'regulus_headerImageURL' ), "", "updateHeaderImageSelect( this.form )" );
 	regulus_cth();
 
 	$value = get_settings( 'regulus_headerImage' );
-
+	
 	if ( get_settings( 'regulus_headerImageURL' ) != "" ) {
 	
 	    $disabled = true;
@@ -405,7 +393,6 @@ add_action('admin_menu', 'regulus_add_theme_page');
 
 function regulus_input( $var, $type, $description = "", $value = "", $selected="", $onchange="" ) {
 
-	$extra = '';
 	// ------------------------
 	// add a form input control
 	// ------------------------
@@ -796,7 +783,7 @@ function regulus_comment($comment, $args, $depth) {
 		$commentCount++; 
 	} ?>
 	<?php comment_author_link() ?> - 
-	<a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>"><?php comment_date(); ?></a> 
+	<a href="<?php echo htmlspecialchars( get_comment_link( $comment->comment_ID ) ) ?>"><?php comment_date(); ?></a> 
 	<?php edit_comment_link( "[Edit]" ); ?>
 	</dt>
 	<dd <?php comment_class($class) ?>>

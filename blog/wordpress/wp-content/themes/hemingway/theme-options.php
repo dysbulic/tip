@@ -247,7 +247,7 @@ function hemingway_theme_options() {
 			<?php _e( 'Black', 'hemingway' ); ?></label></p>
 			<p><label><input name="custom_styles" type="radio" value="white.css" <?php if ( 'white.css' == $hemingway->style ) echo 'checked="checked"'; ?> /> <?php _e( 'White', 'hemingway' ); ?></label></p>
 
-			<input type="submit" value="<?php esc_attr_e( 'Update Color &raquo;', 'hemingway' ); ?>" />
+			<input type="submit" value="<?php _e( 'Update Color &raquo;', 'hemingway' ); ?>" />
 		</form>
 
 		<h3><?php _e("Hemingway's Bottombar&trade;", 'hemingway' ); ?></h3>
@@ -418,7 +418,7 @@ function hemingway_theme_options() {
 						<?php wp_nonce_field( 'block_ref' ); ?>
 						<input type="hidden" name="block_ref" value="<?php echo $block_ref; ?>" />
 						<?php echo $block_ref; ?> : <input type="text" name="display_name" />
-						<input type="submit" value="<?php esc_attr_e( 'Save', 'hemingway' ); ?>" />
+						<input type="submit" value="<?php _e( 'Save', 'hemingway' ); ?>" />
 					</form>
 					<?
 					}

@@ -425,7 +425,7 @@ function list_meta( $meta ) {
 <table id="list-table" style="display: none;">
 	<thead>
 	<tr>
-		<th class="left">' . _x( 'Name', 'meta name' ) . '</th>
+		<th class="left">' . __( 'Name' ) . '</th>
 		<th>' . __( 'Value' ) . '</th>
 	</tr>
 	</thead>
@@ -440,7 +440,7 @@ function list_meta( $meta ) {
 <table id="list-table">
 	<thead>
 	<tr>
-		<th class="left"><?php _ex( 'Name', 'meta name' ) ?></th>
+		<th class="left"><?php _e( 'Name' ) ?></th>
 		<th><?php _e( 'Value' ) ?></th>
 	</tr>
 	</thead>
@@ -465,10 +465,6 @@ function list_meta( $meta ) {
  */
 function _list_meta_row( $entry, &$count ) {
 	static $update_nonce = false;
-
-	if ( is_protected_meta( $entry['meta_key'] ) )
-		return;
-
 	if ( !$update_nonce )
 		$update_nonce = wp_create_nonce( 'add-meta' );
 
@@ -535,7 +531,7 @@ function meta_form() {
 <table id="newmeta">
 <thead>
 <tr>
-<th class="left"><label for="metakeyselect"><?php _ex( 'Name', 'meta name' ) ?></label></th>
+<th class="left"><label for="metakeyselect"><?php _e( 'Name' ) ?></label></th>
 <th><label for="metavalue"><?php _e( 'Value' ) ?></label></th>
 </tr>
 </thead>
@@ -942,12 +938,10 @@ function do_meta_boxes($page, $context, $object) {
 	do {
 		// Grab the ones the user has manually sorted. Pull them out of their previous context/priority and into the one the user chose
 		if ( !$already_sorted && $sorted = get_user_option( "meta-box-order_$page" ) ) {
-			foreach ( $sorted as $box_context => $ids ) {
-				foreach ( explode(',', $ids ) as $id ) {
-					if ( $id && 'dashboard_browser_nag' !== $id )
+			foreach ( $sorted as $box_context => $ids )
+				foreach ( explode(',', $ids) as $id )
+					if ( $id )
 						add_meta_box( $id, null, null, $page, $box_context, 'sorted' );
-				}
-			}
 		}
 		$already_sorted = true;
 
@@ -963,8 +957,7 @@ function do_meta_boxes($page, $context, $object) {
 					$style = '';
 					$hidden_class = in_array($box['id'], $hidden) ? ' hide-if-js' : '';
 					echo '<div id="' . $box['id'] . '" class="postbox ' . postbox_classes($box['id'], $page) . $hidden_class . '" ' . '>' . "\n";
-					if ( 'dashboard_browser_nag' != $box['id'] )
-						echo '<div class="handlediv" title="' . esc_attr__('Click to toggle') . '"><br /></div>';
+					echo '<div class="handlediv" title="' . esc_attr__('Click to toggle') . '"><br /></div>';
 					echo "<h3 class='hndle'><span>{$box['title']}</span></h3>\n";
 					echo '<div class="inside">' . "\n";
 					call_user_func($box['callback'], $object, $box);
@@ -1630,16 +1623,16 @@ function _post_states($post) {
 		$post_status = '';
 
 	if ( !empty($post->post_password) )
-		$post_states['protected'] = __('Password protected');
+		$post_states[] = __('Password protected');
 	if ( 'private' == $post->post_status && 'private' != $post_status )
-		$post_states['private'] = __('Private');
+		$post_states[] = __('Private');
 	if ( 'draft' == $post->post_status && 'draft' != $post_status )
-		$post_states['draft'] = __('Draft');
+		$post_states[] = __('Draft');
 	if ( 'pending' == $post->post_status && 'pending' != $post_status )
 		/* translators: post state */
-		$post_states['pending'] = _x('Pending', 'post state');
+		$post_states[] = _x('Pending', 'post state');
 	if ( is_sticky($post->ID) )
-		$post_states['sticky'] = __('Sticky');
+		$post_states[] = __('Sticky');
 
 	$post_states = apply_filters( 'display_post_states', $post_states );
 
@@ -1656,36 +1649,6 @@ function _post_states($post) {
 
 	if ( get_post_format( $post->ID ) )
 		echo ' - <span class="post-state-format">' . get_post_format_string( get_post_format( $post->ID ) ) . '</span>';
-}
-
-function _media_states( $post ) {
-	$media_states = array();
-	$stylesheet = get_option('stylesheet');
-
-	if ( current_theme_supports( 'custom-header') ) {
-		$meta_header = get_post_meta($post->ID, '_wp_attachment_is_custom_header', true );
-		if ( ! empty( $meta_header ) && $meta_header == $stylesheet )
-			$media_states[] = __( 'Header Image' );
-	}
-
-	if ( current_theme_supports( 'custom-background') ) {
-		$meta_background = get_post_meta($post->ID, '_wp_attachment_is_custom_background', true );
-		if ( ! empty( $meta_background ) && $meta_background == $stylesheet )
-			$media_states[] = __( 'Background Image' );
-	}
-
-	$media_states = apply_filters( 'display_media_states', $media_states );
-
-	if ( ! empty( $media_states ) ) {
-		$state_count = count( $media_states );
-		$i = 0;
-		echo ' - ';
-		foreach ( $media_states as $state ) {
-			++$i;
-			( $i == $state_count ) ? $sep = '' : $sep = ', ';
-			echo "<span class='post-state'>$state$sep</span>";
-		}
-	}
 }
 
 /**
@@ -1749,8 +1712,6 @@ function screen_meta($screen) {
 
 	if ( !empty($wp_current_screen_options) )
 		$show_screen = true;
-
-	$show_screen = apply_filters('screen_options_show_screen', $show_screen, $screen);
 
 ?>
 <div id="screen-meta">
@@ -1957,11 +1918,7 @@ function screen_options($screen) {
 	return $return;
 }
 
-function screen_icon( $screen = '' ) {
-	echo get_screen_icon( $screen );
-}
-
-function get_screen_icon( $screen = '' ) {
+function screen_icon($screen = '') {
 	global $current_screen, $typenow;
 
 	if ( empty($screen) )
@@ -1989,7 +1946,9 @@ function get_screen_icon( $screen = '' ) {
 			$class .= ' ' . sanitize_html_class( 'icon32-posts-' . $post_type );
 	}
 
-	return '<div id="icon-' . esc_attr( $name ) . '" class="' . $class . '"><br /></div>';
+?>
+	<div id="icon-<?php echo $name; ?>" class="<?php echo $class; ?>"><br /></div>
+<?php
 }
 
 /**
@@ -2226,3 +2185,4 @@ function get_submit_button( $text = NULL, $type = 'primary', $name = 'submit', $
 
 	return $button;
 }
+

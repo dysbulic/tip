@@ -1,8 +1,4 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Black Letterhead
- */
 
 /* Widgets */
 if ( function_exists('register_sidebar') )
@@ -12,12 +8,9 @@ $themecolors = array(
 	'bg' => '000000',
 	'border' => '959596',
 	'text' => 'B0B0B0',
-	'link' => 'FD5A1E',
-	'url' => 'E4D3A6',
+	'link' => 'FD5A1E'
 );
 $content_width = 450; // pixels
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 add_theme_support( 'automatic-feed-links' );
 
@@ -136,7 +129,7 @@ function black_letterhead_comments($comment, $args, $depth) {
 	<?php endif; ?>
 	<br />
 
-	<small class="comment-meta commentmetadata"><a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>" title=""><?php comment_date(); ?> <?php _e('at', 'black-letterhead'); ?> <?php comment_time(); ?></a> <?php edit_comment_link('e','',''); ?></small>
+	<small class="comment-meta commentmetadata"><a href="<?php echo htmlspecialchars( get_comment_link( $comment->comment_ID ) ) ?>" title=""><?php comment_date(); ?> <?php _e('at', 'black-letterhead'); ?> <?php comment_time(); ?></a> <?php edit_comment_link('e','',''); ?></small>
 	</div>
 	<?php comment_text(); ?>
 	

@@ -1,20 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Fresh Bananas
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'text' => '333333',
-	'link' => '637677',
-	'border' => 'dceeee',
-	'url' => 'e5a1a1',
+	'text' => '000000',
+	'link' => '637677'
 );
 
 $content_width = 490;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 if ( function_exists('register_sidebars') )
 	register_sidebars(1);

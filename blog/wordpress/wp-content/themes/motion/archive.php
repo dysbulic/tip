@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Motion
+ * @package WordPress
+ * @subpackage Motion
  */
 get_header(); ?>
 
@@ -40,7 +41,10 @@ get_header(); ?>
 				<h2 class="posttitle"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink to %s' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></h2>
 				<div class="postmetatop">
 					<div class="categs">
-						<?php motion_post_meta(); ?>
+						<?php printf( __( 'Filed under: %1$s by %2$s &mdash; ' ),
+						get_the_category_list(', '),
+						get_the_author_meta( 'display_name' )
+						); ?>
 						<?php comments_popup_link( __( 'Leave a comment' ), __( '1 Comment' ), __( '% Comments' ) ) ?>
 					</div>
 					<div class="date"><span><?php the_time( get_option( 'date_format' ) ); ?></span></div>
@@ -65,7 +69,7 @@ get_header(); ?>
 						if (!$moretag && !$postpaged)
 							$full = true;
 						else {
-							$full = false;
+							$full = false;						
 							if (!$moretag)
 								$next = '2/';
 							else
@@ -77,7 +81,7 @@ get_header(); ?>
 						<?php } elseif(!$full && $post->comment_status == 'open') { ?>
 							<a href="<?php the_permalink(); echo $next; ?>" title="<?php printf(__('Continue reading %s and comment'), the_title_attribute()); ?>"><?php _e('Read&nbsp;More&nbsp;&amp;&nbsp;Comment'); ?></a>
 						<?php } elseif(!$full && $post->comment_status == 'closed') { ?>
-							<a href="<?php the_permalink(); echo $next; ?>" title="<?php esc_attr_e( 'Continue reading' ); the_title_attribute(); ?>"><?php _e('Read&nbsp;More'); ?></a>
+							<a href="<?php the_permalink(); echo $next; ?>" title="<?php _e('Continue reading'); the_title_attribute(); ?>"><?php _e('Read&nbsp;More'); ?></a>
 						<?php } else { ?>
 							<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php printf(__('Permanent Link to %s'), the_title_attribute()); ?>"><?php _e('Permalink'); ?> </a>
 						<?php } ?>

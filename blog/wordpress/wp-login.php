@@ -59,8 +59,8 @@ function login_header($title = 'Log In', $message = '', $wp_error = '') {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
 <head>
-	<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 	<title><?php bloginfo('name'); ?> &rsaquo; <?php echo $title; ?></title>
+	<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 <?php
 	wp_admin_css( 'login', true );
 	wp_admin_css( 'colors-fresh', true );
@@ -92,7 +92,7 @@ function login_header($title = 'Log In', $message = '', $wp_error = '') {
 	$message = apply_filters('login_message', $message);
 	if ( !empty( $message ) ) echo $message . "\n";
 
-	// In case a plugin uses $error rather than the $wp_errors object
+	// Incase a plugin uses $error rather than the $errors object
 	if ( !empty( $error ) ) {
 		$wp_error->add('error', $error);
 		unset($error);
@@ -123,17 +123,18 @@ function login_header($title = 'Log In', $message = '', $wp_error = '') {
  * @param string $input_id Which input to auto-focus
  */
 function login_footer($input_id = '') {
-	?>
-	<p id="backtoblog"><a href="<?php bloginfo('url'); ?>/" title="<?php esc_attr_e('Are you lost?') ?>"><?php printf(__('&larr; Back to %s'), get_bloginfo('title', 'display' )); ?></a></p>
-	</div>
+	echo "</div>\n";
 
-<?php if ( !empty($input_id) ) : ?>
+	if ( !empty($input_id) ) {
+?>
 <script type="text/javascript">
 try{document.getElementById('<?php echo $input_id; ?>').focus();}catch(e){}
 if(typeof wpOnload=='function')wpOnload();
 </script>
-<?php endif; ?>
-
+<?php
+	}
+?>
+<p id="backtoblog"><a href="<?php bloginfo('url'); ?>/" title="<?php esc_attr_e('Are you lost?') ?>"><?php printf(__('&larr; Back to %s'), get_bloginfo('title', 'display' )); ?></a></p>
 <?php do_action('login_footer'); ?>
 </body>
 </html>
@@ -367,8 +368,7 @@ if ( SITECOOKIEPATH != COOKIEPATH )
 	setcookie(TEST_COOKIE, 'WP Cookie check', 0, SITECOOKIEPATH, COOKIE_DOMAIN);
 
 // allow plugins to override the default actions, and to add extra actions if they want
-do_action( 'login_init' );
-do_action( 'login_form_' . $action );
+do_action('login_form_' . $action);
 
 $http_post = ('POST' == $_SERVER['REQUEST_METHOD']);
 switch ($action) {
@@ -586,7 +586,7 @@ default:
 
 		if ( ( empty( $redirect_to ) || $redirect_to == 'wp-admin/' || $redirect_to == admin_url() ) ) {
 			// If the user doesn't belong to a blog, send them to user admin. If the user can't edit posts, send them to their profile.
-			if ( is_multisite() && !get_active_blog_for_user($user->id) && !is_super_admin( $user->id ) )
+			if ( is_multisite() && !get_active_blog_for_user($user->id) )
 				$redirect_to = user_admin_url();
 			elseif ( is_multisite() && !$user->has_cap('read') )
 				$redirect_to = get_dashboard_url( $user->id );
@@ -663,6 +663,10 @@ default:
 <a href="<?php echo site_url('wp-login.php?action=lostpassword', 'login') ?>" title="<?php _e('Password Lost and Found') ?>"><?php _e('Lost your password?') ?></a>
 <?php endif; ?>
 </p>
+</div>
+<p id="backtoblog"><a href="<?php bloginfo('url'); ?>/" title="<?php esc_attr_e('Are you lost?') ?>"><?php printf(__('&larr; Back to %s'), get_bloginfo('title', 'display' )); ?></a></p>
+<?php } else { ?>
+</div>
 <?php } ?>
 
 <script type="text/javascript">
@@ -690,9 +694,11 @@ wp_attempt_focus();
 <?php } ?>
 if(typeof wpOnload=='function')wpOnload();
 </script>
-
+<?php do_action( 'login_footer' ); ?>
+</body>
+</html>
 <?php
-login_footer();
+
 break;
 } // end action switch
 ?>

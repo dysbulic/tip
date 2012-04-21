@@ -1,18 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Andreas04
- */
 
 $themecolors = array(
 	'bg' => 'e6e6e6',
-	'text' => '333333',
+	'text' => '000000',
 	'link' => '226699',
-	'border' => 'AABBBB',
-	'url' => '649DC9'
+	'border' => 'e6e6e6',
+	'url' => '226699'
 );
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 if ( function_exists('register_sidebars') )
 	register_sidebars(2);
@@ -70,10 +64,3 @@ function andreas04_comment($comment, $args, $depth) {
 	</div>
 <?php
 }
-
-function andreas04_comment_form_defaults( $args ) {
-	$args['title_reply'] = __( 'Leave a Comment', 'andreas04' );
-	return $args;
-}
-
-add_filter( 'comment_form_defaults', 'andreas04_comment_form_defaults' );

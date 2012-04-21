@@ -4,6 +4,8 @@
 
 				<div id="content">
 
+<?php the_post(); ?>
+
 				<h2 class="page-title"><?php _e( 'Tag Archives:', 'your-theme' ) ?> <strong><?php single_tag_title() ?></strong></h2>
 
 <?php rewind_posts(); ?>

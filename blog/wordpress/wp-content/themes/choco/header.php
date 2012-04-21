@@ -26,7 +26,6 @@
 <body <?php body_class(); ?>>
 
 <div id="page">
-<?php do_action( 'before' ); ?>
 	<div id="header" class="clear-fix">
 		<div id="logo">
 			<?php $heading_tag = ( is_home() || is_front_page() ) ? 'h1' : 'h3'; ?>

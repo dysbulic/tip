@@ -32,7 +32,7 @@
 				</<?php echo $heading_tag; ?>>
 				<div id="site-description"><?php bloginfo( 'description' ); ?></div>
 
-				<?php $vostok_options = vostok_get_theme_options(); ?>
+				<?php $vostok_options = get_option('vostok_theme_options'); ?>
 				<?php if ( $vostok_options['show-header-image'] ) :
 					// Check if this is a post or page, if it has a thumbnail, and if it's a big one
 					if ( is_singular() &&

@@ -40,10 +40,10 @@
 
 				<li>
 				<div class="widget widget_search">
-					<form method="get" id="searchform" action="<?php echo home_url( '/' ); ?>">
+					<form method="get" id="searchform" action="<?php bloginfo( 'url' ); ?>/">
 						<fieldset>
 						<input type="text" name="s" id="searchbox" class="searchfield" />
-						<input type="submit" value="<?php esc_attr_e( 'Search', 'fusion' ); ?>" class="searchbutton" />
+						<input type="submit" value="<?php _e( 'Search', 'fusion' ); ?>" class="searchbutton" />
 						</fieldset>
 					</form>
 				</div>
@@ -82,7 +82,7 @@
 <!-- /sidebar -->
 
 		<?php
-			$options = fusion_get_theme_options();
+			$options = get_option( 'fusion_theme_options' );
 			$current_layout = $options[ 'theme_layout' ];
 
 			$secondary_widget_area_layouts = array( 'content-sidebar-sidebar', 'sidebar-sidebar-content' );

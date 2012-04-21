@@ -6,17 +6,17 @@
 
 			<div class="post-info">
 
-				<p class="page-title"><a href="<?php echo get_permalink( $post->post_parent ); ?>" title="<?php echo esc_attr( sprintf( __( 'Return to %s', 'wu-wei' ), strip_tags( get_the_title( $post->post_parent ) ) ) ); ?>" rel="gallery"><?php
+				<p class="page-title"><a href="<?php echo get_permalink( $post->post_parent ); ?>" title="<?php esc_attr( printf( __( 'Return to %s', 'wu-wei' ), get_the_title( $post->post_parent ) ) ); ?>" rel="gallery"><?php
 					/* translators: %s - title of parent post */
 					printf( __( '&laquo; %s', 'wu-wei' ), get_the_title( $post->post_parent ) );
 				?></a></p>
-
+				
 				<h1><?php the_title(); ?></h1>
-
+				
 				<?php $metadata = wp_get_attachment_metadata(); ?>
 				<div class="timestamp"><?php the_time( get_option( 'date_format' ) ); ?>  //<br />
-					<a href="<?php echo wp_get_attachment_url(); ?>" title="<?php esc_attr_e( 'Permalink to full-size image'); ?>"><?php echo $metadata['width']; ?> &times; <?php echo $metadata['height']; ?></a>
-				</div>
+					<a href="<?php echo wp_get_attachment_url(); ?>" title="<?php _e( 'Permalink to full-size image'); ?>"><?php echo $metadata['width']; ?> &times; <?php echo $metadata['height']; ?></a>
+				</div> 
 				<?php if ( comments_open() ) : ?><div class="comment-bubble"><a href="#comments"><?php comments_number('0', '1', '%'); ?></a></div><?php endif; ?>
 				<div class="clearboth"><!-- --></div>
 
@@ -55,13 +55,13 @@
 						<?php echo wp_get_attachment_image( $post->ID, array( 460, 9999 ) ); ?>
 					</a></p>
 				</div>
-
+				
 				<?php if ( !empty( $post->post_excerpt ) ) : ?>
 				<div class="entry-caption">
 					<?php the_excerpt(); ?>
 				</div>
 				<?php endif; ?>
-
+								
 				<?php the_content(); ?>
 
 				<?php wp_link_pages( array('before' => '<p><strong>' . __( 'Pages:', 'wu-wei' ) . '</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>
@@ -69,7 +69,7 @@
 					<div class="alignleft"><?php previous_image_link( false ); ?></div>
 					<div class="alignright"><?php next_image_link( false ); ?></div>
 					<div class="clearboth"><!-- --></div>
-				</div>
+				</div>				
 
 			</div>
 

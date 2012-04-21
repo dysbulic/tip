@@ -9,7 +9,6 @@
 ?>
 
 		<div id="primary" class="widget-area" role="complementary">
-			<?php do_action( 'before_sidebar' ); ?>
 			<ul class="xoxo">
 
 <?php

@@ -15,7 +15,7 @@
 		<?php while (have_posts()) : the_post(); ?>
 				
 			<div <?php post_class(); ?>>
-				<h3 id="post-<?php the_ID(); ?>"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php esc_attr_e( 'Permanent Link to', 'sapphire' ); ?> <?php the_title(); ?>"><?php the_title(); ?></a></h3>
+				<h3 id="post-<?php the_ID(); ?>"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php _e('Permanent Link to', 'sapphire'); ?> <?php the_title(); ?>"><?php the_title(); ?></a></h3>
 				<small><?php the_time(get_option('date_format')) ?></small>
 				
 				<div class="entry">
@@ -36,7 +36,7 @@
 	<?php else : ?>
 
 		<h2 class="center"><?php _e('Not Found', 'sapphire'); ?></h2>
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 
 	<?php endif; ?>
 		

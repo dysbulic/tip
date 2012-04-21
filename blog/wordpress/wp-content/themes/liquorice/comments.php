@@ -25,7 +25,7 @@
 	<?php if ( have_comments() ) : ?>
 		<h3 id="comments-title"><?php printf( _n( 'One Response', '%1$s Responses', get_comments_number(), 'liquorice' ), number_format_i18n( get_comments_number() ), '<span>' . get_the_title() . '</span>' ); ?>
 			<?php if ( comments_open() ) : ?>
-				<a href="#postcomment" title="<?php esc_attr_e( 'Leave a comment', 'liquorice' ); ?>"><?php _e( '&raquo;', 'liquorice' ); ?></a>
+				<a href="#postcomment" title="<?php _e( 'Leave a comment', 'liquorice' ); ?>"><?php _e( '&raquo;', 'liquorice' ); ?></a>
 			<?php endif; ?>
 		</h3>
 

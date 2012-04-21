@@ -2,18 +2,20 @@
 /**
  * mail_fetch/setup.php
  *
- * Copyright (c) 1999-2011 CDI (cdi@thewebmasters.net) All Rights Reserved
- * Modified by Philippe Mingo 2001-2009 mingo@rotedic.com
+ * @package SquirrelMail
+ *
+ * @copyright (c) 1999-2006 The SquirrelMail Project Team
+ *
+ * @copyright (c) 1999 CDI (cdi@thewebmasters.net) All Rights Reserved
+ * Modified by Philippe Mingo 2001 mingo@rotedic.com
  * An RFC 1939 compliant wrapper class for the POP3 protocol.
  *
  * Licensed under the GNU GPL. For full terms see the file COPYING.
+ * @license http://opensource.org/licenses/gpl-license.php GNU General Public License
  *
- * POP3 class
+ * pop3 class
  *
- * @copyright 1999-2011 The SquirrelMail Project Team
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @package plugins
- * @subpackage mail_fetch
+ * $Id: class-pop3.php 17436 2011-02-09 17:36:23Z ryan $
  */
 
 class POP3 {
@@ -74,7 +76,7 @@ class POP3 {
 
         // If MAILSERVER is set, override $server with it's value
 
-    if (!isset($port) || !$port) {$port = 110;}
+	if (!isset($port) || !$port) {$port = 110;}
         if(!empty($this->MAILSERVER))
             $server = $this->MAILSERVER;
 
@@ -251,7 +253,7 @@ class POP3 {
         $MsgArray = array();
 
         $line = fgets($fp,$buffer);
-        while ( !preg_match('/^\.\r\n/',$line))
+        while ( !ereg("^\.\r\n",$line))
         {
             $MsgArray[$count] = $line;
             $count++;
@@ -318,7 +320,7 @@ class POP3 {
             if($msgC > $Total) { break; }
             $line = fgets($fp,$this->BUFFER);
             $line = $this->strip_clf($line);
-            if(strpos($line, '.') === 0)
+            if(ereg("^\.",$line))
             {
                 $this->ERROR = "POP3 pop_list: " . _("Premature end of list");
                 return false;
@@ -364,9 +366,9 @@ class POP3 {
         $MsgArray = array();
 
         $line = fgets($fp,$buffer);
-        while ( !preg_match('/^\.\r\n/',$line))
+        while ( !ereg("^\.\r\n",$line))
         {
-            if ( $line{0} == '.' ) { $line = substr($line,1); }
+            if ( $line[0] == '.' ) { $line = substr($line,1); }
             $MsgArray[$count] = $line;
             $count++;
             $line = fgets($fp,$buffer);
@@ -552,7 +554,10 @@ class POP3 {
             $line = "";
             $count = 1;
             $line = fgets($fp,$buffer);
-            while ( !preg_match('/^\.\r\n/',$line)) {
+            while ( !ereg("^\.\r\n",$line)) {
+                if(ereg("^\.\r\n",$line)) {
+                    break;
+                }
                 list ($msg,$msgUidl) = preg_split('/\s+/',$line);
                 $msgUidl = $this->strip_clf($msgUidl);
                 if($count == $msg) {
@@ -602,7 +607,7 @@ class POP3 {
         if( empty($cmd) )
             return false;
         else
-            return( stripos($cmd, '+OK') !== false );
+            return( ereg ("^\+OK", $cmd ) );
     }
 
     function strip_clf ($text = "") {
@@ -611,7 +616,8 @@ class POP3 {
         if(empty($text))
             return $text;
         else {
-            $stripped = str_replace(array("\r","\n"),'',$text);
+            $stripped = str_replace("\r",'',$text);
+            $stripped = str_replace("\n",'',$stripped);
             return $stripped;
         }
     }
@@ -643,10 +649,4 @@ class POP3 {
     }
 
 }   // End class
-
-// For php4 compatibility
-if (!function_exists("stripos")) {
-    function stripos($haystack, $needle){
-        return strpos($haystack, stristr( $haystack, $needle ));
-    }
-}
+?>

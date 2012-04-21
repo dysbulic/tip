@@ -1,20 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Unsleepable
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'text' => '333333',
-	'link' => 'da1071',
-	'border' => 'cccccc',
-	'url' => '0d78b6',
+	'text' => '000000',
+	'link' => 'da1071'
 );
 
 $content_width = 500; // actually 503
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 // Make theme available for translation
 // Translations can be filed in the /languages/ directory

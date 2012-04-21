@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Inuit Types
+ * @package WordPress
+ * @subpackage Inuit Types
  */
 ?>
 <?php // Do not delete these lines

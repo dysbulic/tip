@@ -17,22 +17,26 @@
 	<div id="content" class="singlepage">
 	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 		<div <?php post_class() ?> id="post-<?php the_ID(); ?>">
-			<h2><?php the_title(); ?></h2>
+			<h2>
+				<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php _e('Permalink to ', 'uti_theme'); the_title_attribute(); ?>">
+					<?php the_title(); ?>
+				</a>
+			</h2>
 			<?php
 				/* If author is shown */
 				if ($author == "on"){
 			?>
-			<span class="author"><?php _e( 'by', 'uti_theme' ); echo ' '; the_author(); ?></span>
+			<span class="author"><?php _e('by ', 'uti_theme'); the_author() ?></span>
 			<?php
 				}
 			?>
 			<div class="entry">
 				<?php the_content(__('<div class="read_more">read more &raquo;</div>', 'uti_theme')); ?>
-				<?php wp_link_pages( array( 'before' => __( '<div class="navigation"><p>Pages:', 'uti_theme' ) . ' ', 'after' => '</p></div>', 'next_or_number' => 'number' ) ); ?>
+				<?php wp_link_pages(array('before' => __('<div class="navigation"><p>Pages: ', 'uti_theme'), 'after' => '</p></div>', 'next_or_number' => 'number')); ?>
 
 				<p class="postmetadata">
 					<small>
-						<?php printf( __( 'Posted on %1$s at %2$s in', 'uti_theme' ), get_the_date(), get_the_time() ); echo ' '; the_category( ', ' ); ?>
+						<?php printf(__('Posted on %1$s at %2$s in ', 'uti_theme'), get_the_time('l, F jS, Y'), get_the_time()); the_category(', ') ?>
 						&nbsp;&nbsp;&#124;&nbsp;&nbsp;<?php post_comments_feed_link(__('RSS feed', 'uti_theme')); ?>
 
 						<?php if ( comments_open() && pings_open() ) {
@@ -54,9 +58,9 @@
 
 						<?php } elseif ( comments_open() && !pings_open() ) {
 							// Comments are open, Pings are not ?>
-							<?php _e( 'You can skip to the end and leave a', 'uti_theme' ); ?>&nbsp;
+							<?php _e('You can skip to the end and leave a ', 'uti_theme')?>
 							<a href="#respond">
-								<?php _e( 'response.', 'uti_theme' ); ?>
+								<?php _e('response.','uti_theme')?>
 							</a>
 
 						<?php }
@@ -66,7 +70,7 @@
 				</p>
 
 				<div class="tags">
-					<small><?php the_tags( __( 'Tags:', 'uti_theme' ) . ' ', ', ', '<br />' ); ?></small>
+					<small><?php the_tags(__('Tags: ', 'uti_theme'), ', ', '<br />'); ?></small>
 				</div><!--.tags-->
 			</div><!--.entry-->
 			<?php comments_template(); ?>

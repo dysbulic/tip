@@ -1,6 +1,6 @@
 <?php
 /**
- * Upload new media Administration Screen.
+ * Upload new media Administration Panel.
  *
  * @package WordPress
  * @subpackage Administration

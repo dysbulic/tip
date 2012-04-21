@@ -41,8 +41,10 @@ License:
 				wp_cache_flush();
 			}
 			
+			//~ $firsttime = FALSE;
 			if ( '0' == $current ) { // if no version number was in the db or if something is wrong with it.
 				$this->activate();
+				//~ $firsttime = TRUE;
 			}
 
 			// upgrade from a podPress version which is older than 8.8 to podPress v8.8
@@ -55,9 +57,15 @@ License:
 			$create_table = "ALTER TABLE ".$wpdb->prefix."podpress_stats ADD COLUMN completed TINYINT(1) UNSIGNED DEFAULT 0";
 			podPress_maybe_add_column($wpdb->prefix.'podpress_stats', 'completed', $create_table);
 			
+			
 			// rename the post specific settings and the media meta keys. 
-			$wpdb->query( $wpdb->prepare( "UPDATE ".$wpdb->prefix."postmeta SET meta_key = '_podPressPostSpecific' WHERE meta_key = 'podPressPostSpecific'" ) );
-			$wpdb->query( $wpdb->prepare( "UPDATE ".$wpdb->prefix."postmeta SET meta_key = '_podPressMedia' WHERE meta_key = 'podPressMedia'" ) );
+			$query_string = "UPDATE ".$wpdb->prefix."postmeta SET meta_key = '_podPressPostSpecific' WHERE meta_key = 'podPressPostSpecific'";
+			$wpdb->query($query_string);
+			//~ printphpnotices_var_dump($query_string);
+			$query_string = "UPDATE ".$wpdb->prefix."postmeta SET meta_key = '_podPressMedia' WHERE meta_key = 'podPressMedia'";
+			$wpdb->query($query_string);
+			//~ printphpnotices_var_dump($query_string);
+
 			
 			if ( TRUE === version_compare('8.8.8', $current, '>') ) {
 				// remove the portectedMediaFile setting because it was and it is not in use and the option has been removed from the podPress general options in 8.8.8 (again) 
@@ -66,21 +74,11 @@ License:
 					unset($settings['protectedMediaFilePath']);
 					podPress_update_option('podPress_config', $settings);
 				}
-			}
-			if ( TRUE === version_compare('8.8.10.8', $current, '>') ) {
-				$settings = podPress_get_option('podPress_config');
-				if ( FALSE !== $settings ) {
 				
-					unset( $settings['protectFeed'] ); // is obsolete podPress will produce specification complaint RSS/ATOM feed without the option "Aggressively Protect the news feeds"
-					
-					unset( $settings['rss_showlinks'] );	// remove the rss_showlinks setting because this option is hidden since 8.8.5 and will be removed in 8.8.10.8 (the purpose of it was to show download links for the media files of a post in the feed element with encoded content -> <description> .
-					
-					if ( (FALSE === isset($settings['blognameChoice'])) OR (isset($settings['blognameChoice']) AND $settings['blognameChoice'] == 'Global') ) {
-						$settings['blognameChoice'] = 'Append'; // Append is (like) the default setting for category feeds in WP (Site Title >> Category Name). The setting 'Global' stay for 'Use the  Site Title'
-					}
-					
-					podPress_update_option('podPress_config', $settings);
-				}
+				// also if the previous version is older than 8.8.8 and it is no first time installation then take over the Feed Settings for all podPress Feeds
+				//~ if (FALSE === $firsttime) {
+					//~ define('PODPRESS_TAKEOVER_OLD_SETTINGS', TRUE);
+				//~ }
 			}
 			
 			// update the version number in the db
@@ -104,7 +102,7 @@ License:
 						$posts = $wpdb->get_results("SELECT ID, post_content FROM ".$wpdb->posts);
 						if($posts) {
 							foreach ($posts as $post) {
-								if(preg_match($this->podcasttag_regexp, $post->post_content, $matches)) {
+								if(preg_match($this->podcastTag_regexp, $post->post_content, $matches)) {
 									$podcastTagFileName = $matches[1];
 								} else {
 									$podcastTagFileName = false;
@@ -115,8 +113,8 @@ License:
 							}
 							reset($posts_that_need_upgrades);
 							foreach($posts_that_need_upgrades as $key => $value){
-								$wpdb->query("UPDATE ".$wpdb->posts." SET post_content = '".preg_replace($this->podcasttag_regexp, '', $value)."' WHERE ID=".$key);
-								if(preg_match($this->podcasttag_regexp, $content, $matches)) {
+								$wpdb->query("UPDATE ".$wpdb->posts." SET post_content = '".preg_replace($this->podcastTag_regexp, '', $value)."' WHERE ID=".$key);
+								if(preg_match($this->podcastTag_regexp, $content, $matches)) {
 									$podcastTagFileName = $matches[1];
 								} else {
 									$podcastTagFileName = false;

@@ -1,12 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Toni
- */
+
+$themecolors = array(
+	'bg' => 'ffffff',
+	'text' => '000000',
+	'link' => '52759a'
+);
 
 $content_width = 500;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 if ( ! function_exists('get_option') )
 	die("This isn't what you're looking for. Try <a href=\"/\" title=\"Site Root\">this</a>.");
@@ -114,63 +114,3 @@ if ( function_exists('register_sidebars') )
 	register_sidebars(1);
 
 add_theme_support( 'automatic-feed-links' );
-
-/**
- * Set the default theme colors based on the current color scheme
- */
-$color_scheme = get_toni_color();
-
-switch ( $color_scheme ) {
-	case 'gray':
-		$themecolors = array(
-			'bg' => 'ffffff',
-			'border' => 'cccccc',
-			'text' => '666666',
-			'link' => '767676',
-			'url' => '999999'
-		);
-		break;
-
-	case 'green':
-		$themecolors = array(
-			'bg' => 'ffffff',
-			'border' => 'e7fbc8',
-			'text' => '666666',
-			'link' => '728d49',
-			'url' => '728d49'
-		);
-		break;
-
-	case 'purple':
-		$themecolors = array(
-			'bg' => 'ffffff',
-			'border' => 'e2c6e3',
-			'text' => '666666',
-			'link' => '996699',
-			'url' => '996699'
-		);
-		break;
-
-	default:
-		$themecolors = array(
-			'bg' => 'ffffff',
-			'text' => '333333',
-			'link' => '52759a',
-			'border' => 'c0d3e2',
-			'url' => '52759a',
-		);
-		break;
-}
-
-function toni_comment($comment, $args, $depth) {
-	$GLOBALS['comment'] = $comment;
-	extract($args, EXTR_SKIP);
-?>
-<li <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="comment-<?php comment_ID() ?>">
-	<div id="div-comment-<?php comment_ID() ?>" class="vcard">
-	<?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?>
-	<?php comment_text() ?>
-	<p><cite><?php comment_type(__('Comment'), __('Trackback'), __('Pingback')); ?> <?php _e('by'); ?> <span class="fn"><?php comment_author_link() ?></span> &#8212; <?php comment_date() ?> @ <a href="#comment-<?php comment_ID() ?>"><?php comment_time() ?></a></cite> <?php edit_comment_link(__("Edit This"), ' |'); ?><?php comment_reply_link(array_merge( $args, array('add_below' => 'div-comment', 'before'=>'|', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?></p>
-	</div>
-<?php
-}

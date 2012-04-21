@@ -13,7 +13,7 @@
 			<?php
 				printf( __( 'Posted by <span class="author vcard"><a class="url fn n" href="%1$s" title="%2$s">%3$s</a></span> in', 'fruit-shake' ),
 					get_author_posts_url( get_the_author_meta( 'ID' ) ),
-					esc_attr( sprintf( __( 'View all posts by %s', 'fruit-shake' ), get_the_author() ) ),
+					sprintf( esc_attr__( 'View all posts by %s', 'fruit-shake' ), get_the_author() ),
 					get_the_author()
 				 );
 			?>

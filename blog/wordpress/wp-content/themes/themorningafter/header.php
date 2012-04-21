@@ -10,14 +10,14 @@
 <!--[if IE 7]>
 <html id="ie7" <?php language_attributes(); ?>>
 <![endif]-->
-<!--[if (gt IE 7) | (!IE)]><!-->
+<!--[if (!IE 7)]><!-->
 <html <?php language_attributes(); ?>>
 <!--<![endif]-->
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
 <title><?php wp_title(); ?> <?php bloginfo( 'name' ); ?></title>
 <link rel="profile" href="http://gmpg.org/xfn/11" />
-<link rel="stylesheet" href="<?php echo get_stylesheet_uri(); ?>" type="text/css" media="screen" />
+<link rel="stylesheet" href="<?php echo get_stylesheet_uri(); ?>" type="text/css" media="screen, projection" />
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
 <?php if ( is_singular() && get_option( 'thread_comments' ) ) wp_enqueue_script( 'comment-reply' ); ?>
 <?php $morningafter_options = morningafter_get_theme_options();  ?>
@@ -28,7 +28,7 @@
 	
 	<div class="container">
 		
-		<div id="header" class="column full-width clear-fix">
+		<div id="header" class="column span-14 clear-fix">
 
 			<div id="logo" class="column first">
 				<div class="title">
@@ -40,7 +40,7 @@
 				</div>
 			</div><!-- end logo -->
 
-			<div id="search_menu" class="column border_left last">
+			<div id="search_menu" class="column span-6 border_left last push-0">
 				<div id="search" class="column first">
 					<h3 class="mast4"><?php _e( 'Search','woothemes' ); ?></h3>
 
@@ -70,7 +70,7 @@
 		
 		</div><!-- end #header -->
 
-		<div id="navigation" class="clear-fix">
+		<div id="navigation" class="col-full clear-fix">
 			<?php wp_nav_menu( array( 'depth' => 6, 'menu_class' => 'nav fl', 'theme_location' => 'primary' ) ); ?>
 			<?php if ( $morningafter_options['show_feed_link'] == "1" ) { ?>
 				<ul class="rss fr">

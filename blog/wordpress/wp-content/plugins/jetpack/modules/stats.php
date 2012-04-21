@@ -3,7 +3,6 @@
  * Module Name: WordPress.com Stats
  * Module Description: Simple, concise site stats with no additional load on your server.
  * Sort Order: 1
- * First Introduced: 1.1
  */
 
 if ( defined( 'STATS_VERSION' ) ) {
@@ -11,20 +10,18 @@ if ( defined( 'STATS_VERSION' ) ) {
 }
 
 define( 'STATS_VERSION', '7' );
-defined( 'STATS_DASHBOARD_SERVER' ) or define( 'STATS_DASHBOARD_SERVER', 'dashboard.wordpress.com' );
+define( 'STATS_DASHBOARD_SERVER', 'dashboard.wordpress.com' );
 
 add_action( 'jetpack_modules_loaded', 'stats_load' );
 
 function stats_load() {
-	global $wp_roles;
-
 	Jetpack::enable_module_configurable( __FILE__ );
 	Jetpack::module_configuration_load( __FILE__, 'stats_configuration_load' );
 	Jetpack::module_configuration_head( __FILE__, 'stats_configuration_head' );
 	Jetpack::module_configuration_screen( __FILE__, 'stats_configuration_screen' );
 
 	// Generate the tracking code after wp() has queried for posts.
-	add_action( 'template_redirect', 'stats_template_redirect', 1 );
+	add_action( 'template_redirect', 'stats_template_redirect', 101 );
 
 	add_action( 'wp_head', 'stats_admin_bar_head', 100 );
 
@@ -40,40 +37,16 @@ function stats_load() {
 	add_action( 'update_option_timezone_string', 'stats_update_blog' );
 	add_action( 'add_option_timezone_string', 'stats_update_blog' );
 	add_action( 'update_option_gmt_offset', 'stats_update_blog' );
-	add_action( 'update_option_page_on_front', 'stats_update_blog' );
-	add_action( 'update_option_permalink_structure', 'stats_update_blog' );
-	add_action( 'update_option_category_base', 'stats_update_blog' );
-	add_action( 'update_option_tag_base', 'stats_update_blog' );
 
 	// Tell HQ about changed posts
 	add_action( 'save_post', 'stats_update_post', 10, 1 );
 
 	add_filter( 'jetpack_xmlrpc_methods', 'stats_xmlrpc_methods' );
 
-	// Map stats caps
-	add_filter( 'map_meta_cap', 'stats_map_meta_caps', 10, 4 );
-}
-
-/**
- * Maps view_stats cap to read cap as needed
- *
- * @return array Possibly mapped capabilities for meta capability
- */
-function stats_map_meta_caps( $caps, $cap, $user_id, $args ) {
-
-	// Map view_stats to exists
-	if ( 'view_stats' == $cap ) {
-		$user        = new WP_User( $user_id );
-		$user_role   = array_shift( $user->roles );
-		$stats_roles = stats_get_option( 'roles' );
-
-		// Is the users role in the available stats roles?
-		if ( in_array( $user_role, $stats_roles ) ) {
-			$caps = array( 'read' );
-		}
+	foreach ( stats_get_option( 'roles' ) as $role ) {
+		$role = get_role( $role );
+		$role->add_cap( 'view_stats' );
 	}
-
-	return $caps;
 }
 
 function stats_template_redirect() {
@@ -83,8 +56,6 @@ function stats_template_redirect() {
 		return;
 
 	$options = stats_get_options();
-	// Ensure this is always setup for the check below
-	$options['reg_users'] = empty( $options['reg_users'] ) ? false : true;
 
 	if ( !$options['reg_users'] && !empty( $current_user->ID ) )
 		return;
@@ -92,9 +63,9 @@ function stats_template_redirect() {
 	add_action( 'wp_footer', 'stats_footer', 101 );
 	add_action( 'wp_head', 'stats_add_shutdown_action' );
 
-	$blog = Jetpack::get_option( 'id' );
+	$blog = get_option( 'jetpack_id' );
 	$v = 'ext';
-	$j = sprintf( '%s:%s', JETPACK__API_VERSION, JETPACK__VERSION );
+	$j = JETPACK__API_VERSION;
 	if ( $wp_the_query->is_single || $wp_the_query->is_page || $wp_the_query->is_posts_page )
 		$post = $wp_the_query->get_queried_object_id();
 	else
@@ -115,9 +86,6 @@ function stats_template_redirect() {
 	else load_cmc();
 	</script>
 END;
-	if ( isset( $options['hide_smile'] ) && $options['hide_smile'] ) {
-		$stats_footer .= "\n<style type='text/css'>img#wpstats{display:none}</style>";
-	}
 }
 
 function stats_add_shutdown_action() {
@@ -144,7 +112,7 @@ function stats_get_option( $option ) {
 	$options = stats_get_options();
 
 	if ( $option == 'blog_id' )
-		return Jetpack::get_option( 'id' );
+		return get_option( 'jetpack_id' );
 
 	if ( isset( $options[$option] ) )
 		return $options[$option];
@@ -168,9 +136,8 @@ function stats_upgrade_options( $options ) {
 	$defaults = array(
 		'admin_bar'    => true,
 		'roles'        => array( 'administrator' ),
-		'blog_id'      => Jetpack::get_option( 'id' ),
+		'blog_id'      => get_option( 'jetpack_id' ),
 		'do_not_track' => true, // @todo
-		'hide_smile'   => false,
 	);
 
 	if ( is_array( $options ) && !empty( $options ) )
@@ -205,7 +172,7 @@ function stats_admin_menu() {
 	// Don't even bother with caps, menu_page_url(), etc.  Just do it.
 	if ( 'index.php' == $pagenow && isset( $_GET['page'] ) && 'stats' == $_GET['page'] ) {
 		$redirect_url =	str_replace( array( '/wp-admin/index.php?', '/wp-admin/?' ), '/wp-admin/admin.php?', $_SERVER['REQUEST_URI'] );
-		$relative_pos = strpos(	$redirect_url, '/wp-admin/' );
+		$relative_pos = strpos(	$redirect_url, '/wp-admin/' );               
 		if ( false !== $relative_pos ) {
 			wp_safe_redirect( admin_url( substr( $redirect_url, $relative_pos + 10 ) ) );
 			exit;
@@ -223,89 +190,11 @@ function stats_admin_path() {
 function stats_reports_load() {
 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'postbox' );
-
-	add_action( 'admin_print_styles', 'stats_reports_css' );
-
-	if ( isset( $_GET['nojs'] ) && $_GET['nojs'] ) {
-		$parsed = parse_url( admin_url() );
-		// Remember user doesn't want JS
-		setcookie( 'stnojs', '1', time() + 172800, $parsed['path'] ); // 2 days
-	}
-
-	if ( isset( $_COOKIE['stnojs'] ) && $_COOKIE['stnojs'] ) {
-		// Detect if JS is on.  If so, remove cookie so next page load is via JS
-		add_action( 'admin_print_footer_scripts', 'stats_js_remove_stnojs_cookie' );
-	} else if ( !isset( $_GET['noheader'] ) && empty( $_GET['nojs'] ) ) {
-		// Normal page load.  Load page content via JS.
-		add_action( 'admin_print_footer_scripts', 'stats_js_load_page_via_ajax' );
-	}
-}
-
-function stats_reports_css() {
-?>
-<style type="text/css">
-#stats-loading-wrap p {
-	text-align: center;
-	font-size: 2em;
-	margin: 7.5em 15px 0 0;
-	height: 64px;
-	line-height: 64px;
-}
-</style>
-<?php
-}
-
-// Detect if JS is on.  If so, remove cookie so next page load is via JS.
-function stats_js_remove_stnojs_cookie() {
-	$parsed = parse_url( admin_url() );
-?>
-<script type="text/javascript">
-/* <![CDATA[ */
-document.cookie = 'stnojs=0; expires=Wed, 9 Mar 2011 16:55:50 UTC; path=<?php echo esc_js( $parsed['path'] ); ?>';
-/* ]]> */
-</script>
-<?php
-}
-
-// Normal page load.  Load page content via JS.
-function stats_js_load_page_via_ajax() {
-?>
-<script type="text/javascript">
-/* <![CDATA[ */
-if ( -1 == document.location.href.indexOf( 'noheader' ) ) {
-	jQuery( function( $ ) {
-		$.get( document.location.href + '&noheader', function( responseText ) {
-			$( '#stats-loading-wrap' ).replaceWith( responseText );
-		} );
-	} );
-}
-/* ]]> */
-</script>
-<?php
 }
 
 function stats_reports_page() {
 	if ( isset( $_GET['dashboard'] ) )
 		return stats_dashboard_widget_content();
-
-	if ( !isset( $_GET['noheader'] ) && empty( $_GET['nojs'] ) && empty( $_COOKIE['stnojs'] ) ) {
-		$nojs_url = add_query_arg( 'nojs', '1' );
-		if ( 'classic' != $color = get_user_option( 'admin_color' ) ) {
-			$color = 'fresh';
-		}
-		$http = is_ssl() ? 'https' : 'http';
-		// Loading message
-		// No JS fallback message
-?>
-<div id="stats-loading-wrap" class="wrap">
-<p class="hide-if-no-js"><img alt="<?php esc_attr_e( 'Loading&hellip;', 'jetpack' ); ?>" src="<?php echo esc_url( "$http://" . STATS_DASHBOARD_SERVER . "/i/loading/$color-64.gif" ); ?>" /></p>
-<p class="hide-if-js"><?php esc_html_e( 'Your Site Stats work better with Javascript enabled.', 'jetpack' ); ?><br />
-<a href="<?php echo esc_url( $nojs_url ); ?>"><?php esc_html_e( 'View Site Stats without Javascript', 'jetpack' ); ?></a>.</p>
-</div>
-<?php
-		return;
-	}
-
 	$blog_id = stats_get_option( 'blog_id' );
 	$day = isset( $_GET['day'] ) && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $_GET['day'] ) ? $_GET['day'] : false;
 	$q = array(
@@ -317,7 +206,7 @@ function stats_reports_page() {
 		'charset' => get_option( 'blog_charset' ),
 		'color' => get_user_option( 'admin_color' ),
 		'ssl' => is_ssl(),
-		'j' => sprintf( '%s:%s', JETPACK__API_VERSION, JETPACK__VERSION ),
+		'j' => JETPACK__API_VERSION,
 	);
 	$args = array(
 		'view' => array( 'referrers', 'postviews', 'searchterms', 'clicks', 'post', 'table' ),
@@ -331,9 +220,6 @@ function stats_reports_page() {
 		'width' => 'int',
 		'height' => 'int',
 		'data' => 'data',
-		'blog_subscribers' => 'int',
-		'comment_subscribers' => null,
-		'type' => array( 'email', 'pending' ),
 	);
 	foreach ( $args as $var => $vals ) {
 		if ( !isset( $_REQUEST[$var] ) )
@@ -363,19 +249,13 @@ function stats_reports_page() {
 
 	$url = add_query_arg( $q, $url );
 	$method = 'GET';
-	$timeout = 90;
+	$timeout = 30;
 	$user_id = 1; // means send the wp.com user_id, not 1
 
 	$get = Jetpack_Client::remote_request( compact( 'url', 'method', 'timeout', 'user_id' ) );
-	$get_code = wp_remote_retrieve_response_code( $get );
-	$get_code_type = intval( $get_code / 100 );
-	if ( is_wp_error( $get ) || ( 2 != $get_code_type && 304 != $get_code ) ) {
+	if ( is_wp_error( $get ) ) {
 		// @todo nicer looking error
-		if ( 3 == $get_code_type ) {
-			echo '<p>' . __( 'We were unable to get your stats just now (too many redirects). Please try again.', 'jetpack' ) . '</p>';
-		} else {
-			echo '<p>' . __( 'We were unable to get your stats just now. Please try again.', 'jetpack' ) . '</p>';
-		}
+		echo '<p>' . __( 'We were unable to get your stats just now. Please try again.', 'jetpack' ) . '</p>';
 	} else {
 		if ( !empty( $get['headers']['content-type'] ) ) {
 			$type = $get['headers']['content-type'];
@@ -436,9 +316,8 @@ function stats_convert_post_title( $matches ) {
 function stats_configuration_load() {
 	if ( isset( $_POST['action'] ) && $_POST['action'] == 'save_options' && $_POST['_wpnonce'] == wp_create_nonce( 'stats' ) ) {
 		$options = stats_get_options();
-		$options['admin_bar']  = isset( $_POST['admin_bar']  ) && $_POST['admin_bar'];
-		$options['reg_users']  = isset( $_POST['reg_users']  ) && $_POST['reg_users'];
-		$options['hide_smile'] = isset( $_POST['hide_smile'] ) && $_POST['hide_smile'];
+		$options['admin_bar'] = isset( $_POST['admin_bar'] ) && $_POST['admin_bar'];
+		$options['reg_users'] = isset( $_POST['reg_users'] ) && $_POST['reg_users'];
 
 		$options['roles'] = array( 'administrator' );
 		foreach ( get_editable_roles() as $role => $details )
@@ -448,7 +327,7 @@ function stats_configuration_load() {
 		stats_set_options( $options );
 		stats_update_blog();
 		Jetpack::state( 'message', 'module_configured' );
-		wp_safe_redirect( Jetpack::module_configuration_url( 'stats' ) );
+		wp_redirect( Jetpack::module_configuration_url( 'stats' ) );
 		exit;
 	}
 }
@@ -460,9 +339,6 @@ function stats_configuration_head() {
 			border: 1px solid #766;
 			background-color: #d22;
 			padding: 1em 3em;
-		}
-		.stats-smiley {
-			vertical-align: 1px;
 		}
 	</style>
 	<?php
@@ -483,10 +359,8 @@ function stats_configuration_screen() {
 		<tr valign="top"><th scope="row"><label for="admin_bar"><?php _e( 'Admin bar' , 'jetpack' ); ?></label></th>
 		<td><label><input type='checkbox'<?php checked( $options['admin_bar'] ); ?> name='admin_bar' id='admin_bar' /> <?php _e( "Put a chart showing 48 hours of views in the admin bar.", 'jetpack' ); ?></label></td></tr>
 	<?php endif; ?>
-		<tr valign="top"><th scope="row"><label for="reg_users"><?php _e( 'Registered users', 'jetpack' ); ?></label></th>
+		<tr valign="top"><th scope="row"><label for="reg_users"><?php _e( 'Registered users' , 'jetpack'); ?></label></th>
 		<td><label><input type='checkbox'<?php checked( $options['reg_users'] ); ?> name='reg_users' id='reg_users' /> <?php _e( "Count the page views of registered users who are logged in.", 'jetpack' ); ?></label></td></tr>
-		<tr valign="top"><th scope="row"><?php _e( 'Smiley' , 'jetpack' ); ?></th>
-		<td><label><input type='checkbox'<?php checked( isset( $options['hide_smile'] ) && $options['hide_smile'] ); ?> name='hide_smile' id='hide_smile' /> <?php _e( 'Hide the stats smiley face image.', 'jetpack' ); ?></label><br /> <span class="description"><?php _e( 'The image helps collect stats and <strong>makes the world a better place</strong> but should still work when hidden', 'jetpack' ); ?> <img class="stats-smiley" alt="<?php esc_attr_e( 'Smiley face', 'jetpack' ); ?>" src="<?php echo esc_url( plugins_url( '_inc/images/stats-smiley.gif', dirname( __FILE__ ) ) ); ?>" width="6" height="5" /></span></td></tr>
 		<tr valign="top"><th scope="row"><?php _e( 'Report visibility' , 'jetpack' ); ?></th>
 		<td>
 			<?php _e( 'Select the roles that will be able to view stats reports.', 'jetpack' ); ?><br/>
@@ -512,10 +386,6 @@ function stats_admin_bar_head() {
 
 	if ( !current_user_can( 'view_stats' ) )
 		return;
-
-	if ( function_exists( 'is_admin_bar_showing' ) && !is_admin_bar_showing() ) {
-		return;
-	}
 
 	add_action( 'admin_bar_menu', 'stats_admin_bar_menu', 100 );
 	?>
@@ -547,31 +417,27 @@ function stats_update_blog() {
 }
 
 function stats_update_post( $post ) {
-	if ( !$stats_post = stats_get_post( $post ) )
+	$post = get_post( $post );
+	if ( !in_array( $post->post_type, array( 'post', 'page', 'attachment' ) ) )
 		return;
 
-	$jetpack = Jetpack::init();
-	$jetpack->sync->post( $stats_post->ID, array_keys( get_object_vars( $stats_post ) ) );
+	Jetpack::xmlrpc_async_call( 'jetpack.updatePost', stats_get_post( $post ) );
 }
 
 function stats_get_blog() {
 	$home = parse_url( trailingslashit( get_option( 'home' ) ) );
 	$blog = array(
-		'host'                => $home['host'],
-		'path'                => $home['path'],
-		'blogname'            => get_option( 'blogname' ),
-		'blogdescription'     => get_option( 'blogdescription' ),
-		'siteurl'             => get_option( 'siteurl' ),
-		'gmt_offset'          => get_option( 'gmt_offset' ),
-		'timezone_string'     => get_option( 'timezone_string' ),
-		'stats_version'       => STATS_VERSION,
-		'stats_api'           => 'jetpack',
-		'page_on_front'       => get_option( 'page_on_front' ),
-		'permalink_structure' => get_option( 'permalink_structure' ),
-		'category_base'       => get_option( 'category_base' ),
-		'tag_base'            => get_option( 'tag_base' ),
+		'host'            => $home['host'],
+		'path'            => $home['path'],
+		'name'            => get_option( 'blogname' ),
+		'description'     => get_option( 'blogdescription' ),
+		'siteurl'         => get_option( 'siteurl' ),
+		'gmt_offset'      => get_option( 'gmt_offset' ),
+		'timezone_string' => get_option( 'timezone_string' ),
+		'version'         => STATS_VERSION,
+		'stats_api'       => 'jetpack',
 	);
-	$blog = array_merge( stats_get_options(), $blog );
+	$blog = array_merge( $blog, stats_get_options() );
 	unset( $blog['roles'], $blog['blog_id'] );
 	return array_map( 'esc_html', $blog );
 }
@@ -579,27 +445,18 @@ function stats_get_blog() {
 function stats_get_posts( $args ) {
 	list( $post_ids ) = $args;
 	$post_ids = array_map( 'intval', (array) $post_ids );
-	$r = array(
-		'include' => $post_ids,
-		'post_type' => array_values( get_post_types( array( 'public' => true ) ) ),
-		'post_status' => array_values( get_post_stati( array( 'public' => true ) ) ),
-	);
+	$r = 'include=' . join( ',', $post_ids );
 	$posts = get_posts( $r );
-	foreach ( $posts as $i => $post )
-		$posts[$i] = stats_get_post( $post );
+	foreach ( $posts as &$post )
+		$post = stats_get_post( $post );
 	return $posts;
 }
 
 function stats_get_post( $post ) {
-	if ( !$post = get_post( $post ) ) {
-		return null;
-	}
-
-	$stats_post = wp_clone( $post );
-	$stats_post->permalink = get_permalink( $post );
-	foreach ( array( 'post_content', 'post_excerpt', 'post_content_filtered', 'post_password' ) as $do_not_want )
-		unset( $stats_post->$do_not_want );
-	return $stats_post;
+	$post = get_post( $post );
+	if ( $post )
+		$post->permalink = get_permalink( $post );
+	return $post;
 }
 
 function stats_xmlrpc_methods( $methods ) {
@@ -712,93 +569,64 @@ function stats_dashboard_widget_control() {
 function stats_dashboard_head() { ?>
 <script type="text/javascript">
 /* <![CDATA[ */
-jQuery(window).load( function() {
-	jQuery( function($) {
-		var dashStats = $( '#dashboard_stats.postbox div.inside' );
+jQuery( function($) {
+	var dashStats = $('#dashboard_stats.postbox div.inside');
+	if ( dashStats.find( '.dashboard-widget-control-form' ).size() ) {
+		return;
+	}
 
-		if ( dashStats.find( '.dashboard-widget-control-form' ).size() ) {
-			return;
-		}
+	if ( !dashStats.size() ) {
+		dashStats = $('#dashboard_stats div.dashboard-widget-content');
+		var h = parseInt( dashStats.parent().height() ) - parseInt( dashStats.prev().height() );
+		var args = 'width=' + dashStats.width() + '&height=' + h.toString();
+	} else {
+		var args = 'width=' + ( dashStats.prev().width() * 2 ).toString();
+	}
 
-		if ( ! dashStats.size() ) {
-			dashStats = $( '#dashboard_stats div.dashboard-widget-content' );
-			var h = parseInt( dashStats.parent().height() ) - parseInt( dashStats.prev().height() );
-			var args = 'width=' + dashStats.width() + '&height=' + h.toString();
-		} else {
-			var args = 'width=' + ( dashStats.prev().width() * 2 ).toString();
-		}
-
-		dashStats.not( '.dashboard-widget-control' ).load( 'admin.php?page=stats&noheader&dashboard&' + args );
-	} );
+	dashStats.not( '.dashboard-widget-control' ).load('admin.php?page=stats&noheader&dashboard&' + args );
 } );
 /* ]]> */
 </script>
 <style type="text/css">
 /* <![CDATA[ */
-#stat-chart {
-	background: none !important;
-}
-#dashboard_stats .inside {
-	margin: 10px 0 0 0 !important;
-}
-#dashboard_stats #stats-graph {
-	margin: 0;
-}
-#stats-info {
-	border-top: 1px solid #dfdfdf;
-	margin: 7px -10px 0 -10px;
-	padding: 10px;
-	background: #fcfcfc;
-	-moz-box-shadow:inset 0 1px 0 #fff;
-	-webkit-box-shadow:inset 0 1px 0 #fff;
-	box-shadow:inset 0 1px 0 #fff;
-	overflow: hidden;
-	border-radius: 0 0 2px 2px;
-	-webkit-border-radius: 0 0 2px 2px;
-	-moz-border-radius: 0 0 2px 2px;
-	-khtml-border-radius: 0 0 2px 2px;
-}
-#stats-info #top-posts, #stats-info #top-search {
-	float: left;
-	width: 50%;
-}
-#top-posts .stats-section-inner p {
-	white-space: nowrap;
-	overflow: hidden;
-}
-#top-posts .stats-section-inner p a {
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-#stats-info div#active {
-	border-top: 1px solid #dfdfdf;
-	margin: 0 -10px;
-	padding: 10px 10px 0 10px;
-	-moz-box-shadow:inset 0 1px 0 #fff;
-	-webkit-box-shadow:inset 0 1px 0 #fff;
-	box-shadow:inset 0 1px 0 #fff;
-	overflow: hidden;
-}
-#top-search p {
-	color: #999;
+#dashboard_stats .dashboard-widget-content {
+	padding-top: 25px;
 }
 #stats-info h4 {
 	font-size: 1em;
-	margin: 0 0 .5em 0 !important;
+	margin: 0 0 .3em;
+}
+#dashboard_stats {
+	overflow-x: hidden;
+}
+#dashboard_stats #stats-chart {
+	margin: 0;
+}
+#stats-info {
+	margin-top: 8px;
+	border-top: 1px solid #ccc;
+}
+#stats-info .stats-section {
+	width: 50%;
+	float: left;
+}
+#stats-info .stats-section-inner {
+	margin: 1em 0;
+}
+#stats-info div#active {
+	border-top: 1px solid #ccc;
 }
 #stats-info p {
 	margin: 0 0 .25em;
-	color: #999;
 }
-#stats-info p.widget-loading {
-	margin: 1em 0 0;
+#stats-info div#top-search p {
 	color: #333;
+}
+#stats-info p.nothing {
+	color: #999 !important;
 }
 #stats-info p a {
 	display: block;
-}
-#stats-info p a.button {
-	display: inline;
 }
 /* ]]> */
 </style>
@@ -809,13 +637,13 @@ function stats_dashboard_widget_content() {
 	if ( !isset( $_GET['width'] ) || ( !$width  = (int) ( $_GET['width'] / 2 ) ) || $width  < 250 )
 		$width  = 370;
 	if ( !isset( $_GET['height'] ) || ( !$height = (int) $_GET['height'] - 36 )   || $height < 230 )
-		$height = 180;
+		$height = 230;
 
 	$_width  = $width  - 5;
 	$_height = $height - ( $GLOBALS['is_winIE'] ? 16 : 5 ); // hack!
 
 	$options = stats_dashboard_widget_options();
-	$blog_id = Jetpack::get_option( 'id' );
+	$blog_id = get_option( 'jetpack_id' );
 
 	$q = array(
 		'noheader' => 'true',
@@ -828,26 +656,20 @@ function stats_dashboard_widget_content() {
 		'width' => $_width,
 		'height' => $_height,
 		'ssl' => is_ssl(),
-		'j' => sprintf( '%s:%s', JETPACK__API_VERSION, JETPACK__VERSION ),
+		'j' => JETPACK__API_VERSION,
 	);
 
 	$url = 'http://' . STATS_DASHBOARD_SERVER . "/wp-admin/index.php";
 
 	$url = add_query_arg( $q, $url );
 	$method = 'GET';
-	$timeout = 90;
+	$timeout = 30;
 	$user_id = 1; // means send the wp.com user_id, not 1
 
 	$get = Jetpack_Client::remote_request( compact( 'url', 'method', 'timeout', 'user_id' ) );
-	$get_code = wp_remote_retrieve_response_code( $get );
-	$get_code_type = intval( $get_code / 100 );
-	if ( is_wp_error( $get ) || ( 2 != $get_code_type && 304 != $get_code ) || empty( $get['body'] ) ) {
+	if ( is_wp_error( $get ) || empty( $get['body'] ) ) {
 		// @todo
-		if ( 3 == $get_code_type ) {
-			echo '<p>' . __( 'We were unable to get your stats just now (too many redirects). Please try again.', 'jetpack' ) . '</p>';
-		} else {
-			echo '<p>' . __( 'We were unable to get your stats just now. Please try again.', 'jetpack' ) . '</p>';
-		}
+		print '<pre>' . htmlspecialchars( print_r( compact( 'url', 'get' ) , 1 ) ) . '</pre>';
 	} else {
 		$body = stats_convert_post_titles($get['body']);
 		$body = stats_convert_chart_urls($body);
@@ -872,7 +694,6 @@ function stats_dashboard_widget_content() {
 		$searches[] = esc_html( $search_term['searchterm'] );
 
 ?>
-<a class="button" href="admin.php?page=stats"><?php _e( 'View All', 'jetpack' ); ?></a>
 <div id="stats-info">
 	<div id="top-posts" class='stats-section'>
 		<div class="stats-section-inner">
@@ -915,7 +736,10 @@ function stats_dashboard_widget_content() {
 		</div>
 	</div>
 </div>
-<div class="clear"></div>
+<br class="clear" />
+<p class="textright">
+	<a class="button" href="admin.php?page=stats"><?php _e( 'View All' , 'jetpack'); ?></a>
+</p>
 <?php
 	exit;
 }
@@ -925,7 +749,7 @@ function stats_get_csv( $table, $args = null ) {
 
 	$args = wp_parse_args( $args, $defaults );
 	$args['table'] = $table;
-	$args['blog_id'] = Jetpack::get_option( 'id' );
+	$args['blog_id'] = get_option( 'jetpack_id' );
 
 	$stats_csv_url = add_query_arg( $args, 'http://stats.wordpress.com/csv.php' );
 
@@ -977,12 +801,11 @@ function stats_get_csv( $table, $args = null ) {
 
 function stats_get_remote_csv( $url ) {
 	$method = 'GET';
-	$timeout = 90;
+	$timeout = 30;
 	$user_id = 1; // means send the wp.com user_id, not 1
 
 	$get = Jetpack_Client::remote_request( compact( 'url', 'method', 'timeout', 'user_id' ) );
-	$get_code = wp_remote_retrieve_response_code( $get );
-	if ( is_wp_error( $get ) || ( 2 != intval( $get_code / 100 ) && 304 != $get_code ) || empty( $get['body'] ) ) {
+	if ( is_wp_error( $get ) || empty( $get['body'] ) ) {
 		return array(); // @todo: return an error?
 	} else {
 		return stats_str_getcsv( $get['body'] );

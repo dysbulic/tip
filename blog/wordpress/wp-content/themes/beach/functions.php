@@ -10,10 +10,10 @@
  * If you're building a theme based on beach, use a find and replace
  * to change 'beach' to the name of your theme in all the template files
  */
-load_theme_textdomain( 'beach', get_template_directory() . '/languages' );
+load_theme_textdomain( 'beach', TEMPLATEPATH . '/languages' );
 
 $locale = get_locale();
-$locale_file = get_template_directory() . "/languages/$locale.php";
+$locale_file = TEMPLATEPATH . "/languages/$locale.php";
 if ( is_readable( $locale_file ) )
 	require_once( $locale_file );
 
@@ -22,17 +22,6 @@ if ( is_readable( $locale_file ) )
  */
 if ( ! isset( $content_width ) )
 	$content_width = 530;
-
-/**
- * Set $themecolors array.
- */
-$themecolors = array(
-	'bg' => 'F1F6F9',
-	'text' => '333333',
-	'link' => 'EE6633',
-	'border' => '296684',
-	'url' => '4499BB',
-);
 
 /**
  * This theme uses wp_nav_menu() in one location.
@@ -82,7 +71,7 @@ add_action( 'init', 'beach_widgets_init' );
  */
 function beach_content_nav($nav_id) {
 	global $wp_query;
-
+	
 	if ( $wp_query->max_num_pages > 1 ) : ?>
 		<nav id="<?php echo $nav_id; ?>">
 			<h1 class="section-heading"><?php _e( 'Post navigation', 'beach' ); ?></h1>
@@ -118,55 +107,6 @@ function beach_custom_excerpt_more( $output ) {
 }
 add_filter( 'get_the_excerpt', 'beach_custom_excerpt_more' );
 
-function beach_comment( $comment, $args, $depth ) {
-	$GLOBALS['comment'] = $comment;
-	switch ( $comment->comment_type ) :
-		case '' :
-	?>
-	<li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
-		<article id="comment-<?php comment_ID(); ?>" class="comment">
-			<footer>
-				<div class="comment-author vcard">
-					<?php echo get_avatar( $comment, 90 ); ?>
-					<?php printf( __( '%s <span class="says">says:</span>', 'beach' ), sprintf( '<cite class="fn">%s</cite>', get_comment_author_link() ) ); ?>
-				</div><!-- .comment-author .vcard -->
-				<?php if ( $comment->comment_approved == '0' ) : ?>
-					<em><?php _e( 'Your comment is awaiting moderation.', 'beach' ); ?></em>
-					<br />
-				<?php endif; ?>
-
-				<div class="comment-meta commentmetadata">
-					<a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>"><time pubdate datetime="<?php comment_time( 'c' ); ?>">
-					<?php
-						/* translators: 1: date, 2: time */
-						printf( __( '%1$s at %2$s', 'beach' ), get_comment_date(),  get_comment_time() ); ?>
-					</time></a>
-					<?php edit_comment_link( __( '(Edit)', 'beach' ), ' ' );
-					?>
-				</div><!-- .comment-meta .commentmetadata -->
-			</footer>
-
-			<div class="comment-content">
-				<?php comment_text(); ?>
-
-				<div class="reply">
-					<?php comment_reply_link( array_merge( $args, array( 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
-				</div><!-- .reply -->
-			</div>
-
-		</article><!-- #comment-##  -->
-
-	<?php
-			break;
-		case 'pingback'  :
-		case 'trackback' :
-	?>
-	<li class="post pingback">
-		<p><?php _e( 'Pingback:', 'beach' ); ?> <?php comment_author_link(); ?><?php edit_comment_link( __('(Edit)', 'beach'), ' ' ); ?></p>
-	<?php
-			break;
-	endswitch;
-}
 /**
  * This theme was built with PHP, Semantic HTML, CSS, love, and a Toolbox.
  */

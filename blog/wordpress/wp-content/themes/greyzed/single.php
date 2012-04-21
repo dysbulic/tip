@@ -1,35 +1,27 @@
 <?php
 /**
- * @package Greyzed
+ * @package WordPress
+ * @subpackage Greyzed
  */
 
 get_header(); ?>
 
-<div id="container">
-<?php get_sidebar(); ?>
+<div id="container">	
+<?php get_sidebar(); ?>	
 	<div id="content" role="main">
 		<div class="column">
-
+		
 		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-
+		
 			<div <?php post_class() ?> id="post-<?php the_ID(); ?>">
 				<div class="posttitle">
 					<h2 class="pagetitle"><?php the_title(); ?></h2>
 					<small>
-						<?php
-							if ( is_multi_author() ) {
-								printf( __( 'Posted: %1$s by <strong>%2$s</strong> in %3$s', 'greyzed' ),
-									get_the_date( get_option( 'date_format' ) ),
-									get_the_author(),
-									get_the_category_list( ', ' )
-								);
-							} else {
-								printf( __( 'Posted: %1$s in %2$s', 'greyzed' ),
-									get_the_date( get_option( 'date_format' ) ),
-									get_the_category_list( ', ' )
-								);
-							}
-						?>
+						<?php printf( __( 'Posted: %1$s by <strong>%2$s</strong> in %3$s', 'greyzed' ),
+							get_the_date( get_option( 'date_format' ) ),
+							get_the_author(),
+							get_the_category_list( ', ' )
+							); ?>
 						<br />
 						<?php the_tags( __( 'Tags: ', 'greyzed' ), ', ', ''); ?>
 					</small>
@@ -44,16 +36,16 @@ get_header(); ?>
 				</div>
 
 		<?php comments_template(); ?>
-
+	
 		<?php endwhile; else: ?>
-
+		
 			<p><?php _e( 'Sorry, no posts matched your criteria.', 'greyzed' ); ?></p>
-
+		
 		<?php endif; ?>
-
+	
 		</div>
 	</div>
-
+	
 	<div id="nav-post">
 		<div class="navigation-bott">
 			<?php previous_post_link( '<div class="leftnav">%link</div>' ); ?>

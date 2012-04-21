@@ -62,7 +62,7 @@
 			<div class="alignleft"><?php next_posts_link(__('&laquo; Older Entries', 'depo-square')) ?></div>
 			<div class="alignright"><?php previous_posts_link(__('Newer Entries &raquo;', 'depo-square')) ?></div>
 		</div>
-		<div class="navigation_to_home"><a href="<?php echo home_url( '/' ); ?>"><?php _e('&laquo; Back to Home', 'depo-square'); ?></div>
+		<div class="navigation_to_home"><a href="<?php bloginfo('wpurl'); ?>"><?php _e('&laquo; Back to Home', 'depo-square'); ?></div>
 
 	<?php else : ?>
 		<div class="post">

@@ -56,7 +56,6 @@ class podPressAdmin_class extends podPress_class
 			} else {
 				echo '	<h2>'.__('Feed/iTunes Settings', 'podpress').'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.mightyseek.com/podpress/#download" target="_new"><img src="http://www.mightyseek.com/podpress_downloads/versioncheck.php?current='.PODPRESS_VERSION.'" alt="'.__('Checking for updates... Failed.', 'podpress').'" border="0" /></a></h2>'."\n";
 			}
-			
 			echo '	<form method="post">'."\n";
 			if ( function_exists('wp_nonce_field') ) { // since WP 2.0.4
 				wp_nonce_field('podPress_feed_settings_nonce');
@@ -156,7 +155,7 @@ class podPressAdmin_class extends podPress_class
 			echo '				</th>'."\n";
 			echo '				<td colspan="2">'."\n";
 			echo '					<textarea name="iTunes[keywords]" id="iTunesKeywords" class="podpress_wide_text_field" rows="4" cols="40">'.stripslashes($this->settings['iTunes']['keywords']).'</textarea>';
-			echo '					<br/>('.__('a list of max. 12 comma separated words', 'podpress').', '.__('max 8', 'podpress').')';
+			echo '					<br/>('.__('Comma seperated list', 'podpress').', '.__('max 8', 'podpress').')';
 			echo '				</td>'."\n";
 			echo '			</tr>'."\n";
 			echo '			<tr>'."\n";
@@ -219,14 +218,7 @@ class podPressAdmin_class extends podPress_class
 			echo '			</tr>'."\n";
 			echo '		</table>'."\n";
 		
-			if ( function_exists('get_admin_url') ) {
-				$adminurl = get_admin_url(); // since WP 3.0
-			} elseif ( function_exists('admin_url') ) {
-				$adminurl = admin_url(); // since WP 2.6
-			} else {
-				$adminurl = get_option( 'siteurl' ) . '/wp-admin';
-			}
-			
+		
 			echo '		<h3>'.__('General Feed Settings', 'podpress').'</h3>'."\n";
 			echo '		<p>'.__('These settings are blog settings.', 'podpress').'</p>'."\n";
 			echo '		<table class="podpress_feed_gensettings">'."\n";
@@ -322,6 +314,15 @@ class podPressAdmin_class extends podPress_class
 			echo '		</table>'."\n";
 			
 			
+			
+			if ( function_exists('get_admin_url') ) {
+				$adminurl = get_admin_url(); // since WP 3.0
+			} elseif ( function_exists('admin_url') ) {
+				$adminurl = admin_url(); // since WP 2.6
+			} else {
+				$adminurl = get_option( 'siteurl' ) . '/wp-admin';
+			}
+			$permalinksettingsurl = trailingslashit($adminurl).'options-permalink.php';
 			echo '		<h3>'.__('Further Feed Settings', 'podpress').'</h3>'."\n";
 			echo '		<table class="podpress_feed_gensettings">'."\n";
 			echo '			<tr>'."\n";
@@ -353,26 +354,24 @@ class podPressAdmin_class extends podPress_class
 			echo '					<p>'.__('Notice: You can set post specific license URLs and names by defining two custom fields per post. One with the name <strong>podcast_episode_license_name</strong> and one custom field with the name <strong>podcast_episode_license_url</strong>. If you want to set post specific values then it is necessary to define at least the custom field with the URL. If the license name is not defined then the name will be the URL.', 'podpress').'</p>';			
 			echo '				</td>'."\n";
 			echo '			</tr>'."\n";
-			
+			echo '			<tr>'."\n";
+			echo '				<th>'."\n";
+			echo '					<label for="protectFeed">'.__('Aggressively Protect the news feeds', 'podpress').'</label>';
+			echo '				</th>'."\n";
+			echo '				<td>'."\n";
+			echo '					<select name="protectFeed" id="protectFeed">'."\n";
+			echo '						<option value="No" '; if($this->settings['protectFeed'] != 'Yes') { echo 'selected="selected"'; } echo '>'.__('No', 'podpress').'</option>'."\n";
+			echo '						<option value="Yes" '; if($this->settings['protectFeed'] == 'Yes') { echo 'selected="selected"'; } echo '>'.__('Yes', 'podpress').'</option>'."\n";
+			echo '					</select>'."\n";
+			echo '				</td>'."\n";
+			echo '				<td>'."\n";
+			echo '					'.__('"No" (default) will convert only ampersand, less-than, greater-than, apostrophe and quotation signs to their numeric character references.', 'podpress')."\n";
+			echo '					<br/>'.__('"Yes" will convert any invalid characters to their numeric character references in the feeds.', 'podpress')."\n";
+			echo '				</td>'."\n";
+			echo '			</tr>'."\n";
 			//~ echo '			<tr>'."\n";
 			//~ echo '				<th>'."\n";
-			//~ echo '					<label for="protectFeed">'.__('Aggressively Protect the news feeds', 'podpress').'</label>';
-			//~ echo '				</th>'."\n";
-			//~ echo '				<td>'."\n";
-			//~ echo '					<select name="protectFeed" id="protectFeed">'."\n";
-			//~ echo '						<option value="No" '; if($this->settings['protectFeed'] != 'Yes') { echo 'selected="selected"'; } echo '>'.__('No', 'podpress').'</option>'."\n";
-			//~ echo '						<option value="Yes" '; if($this->settings['protectFeed'] == 'Yes') { echo 'selected="selected"'; } echo '>'.__('Yes', 'podpress').'</option>'."\n";
-			//~ echo '					</select>'."\n";
-			//~ echo '				</td>'."\n";
-			//~ echo '				<td>'."\n";
-			//~ echo '					'.__('"No" (default) will convert only ampersand, less-than, greater-than, apostrophe and quotation signs to their numeric character references.', 'podpress')."\n";
-			//~ echo '					<br/>'.__('"Yes" will convert any invalid characters to their numeric character references in the feeds.', 'podpress')."\n";
-			//~ echo '				</td>'."\n";
-			//~ echo '			</tr>'."\n";
-			// this section is deactivated since 8.8.5 and since 8.8.10.8 the upgrade_class will remove the value during the upgrade process. (the only encoded content section is the <description> on <item> level and podPress does touch this value)
-			//~ echo '			<tr>'."\n";
-			//~ echo '				<th>'."\n";
-			//~ echo '					<label for="rss_showlinks">'.__('Show Download Links in RSS Encoded Content', 'podpress').'</label>';
+			//~ echo '					<label for="rss_showlinks"><strong>'.__('Show Download Links in RSS Encoded Content', 'podpress').'</strong></label>';
 			//~ echo '				</th>'."\n";
 			//~ echo '				<td>'."\n";
 			//~ echo '					<select name="rss_showlinks" id="rss_showlinks">'."\n";
@@ -389,12 +388,16 @@ class podPressAdmin_class extends podPress_class
 			
 			echo '	<fieldset class="options">'."\n";
 			echo '		<a name="podpressfeeds" id="podpressfeeds"></a><legend>'.__('podPress Feeds', 'podpress').'</legend>'."\n";
-			
-
+			if ( function_exists('get_admin_url') ) {
+				$adminurl = get_admin_url(); // since WP 3.0
+			} elseif ( function_exists('admin_url') ) {
+				$adminurl = admin_url(); // since WP 2.6
+			} else {
+				$adminurl = get_option( 'siteurl' ) . '/wp-admin';
+			}
 			$permalinksettingsurl = trailingslashit($adminurl).'options-permalink.php';
 			$widgetsettingsurl = trailingslashit($adminurl).'widgets.php';
 			$generalsettingspodpressurl = trailingslashit($adminurl).'admin.php?page=podpress/podpress_general.php';
-			
 			echo '		<p>'.sprintf(__('podPress is capable of creating additional Feeds for your blog. These Feeds are RSS or ATOM Feeds. The content of such Feed maybe consist of all posts, posts with podPress attachment, posts of one more categories or posts with podPress attachments of certain file types. For instance you can create a Feed which contains only posts with audio files and one which contains only posts with video files. Furthermore the following section contains diverse options to customize these additional Feeds.<br />It is also possible to activate or deactivate these Feeds separately.<br /><strong>It is necessary to (re-)save the <a href="%1$s">Permalink structure</a> and the podPress Feed Buttons <a href="%2$s">widget settings</a> after the slug name of one of these Feeds has been modified OR after you have (de-)activated one of these Feeds.</strong>', 'podpress'), $permalinksettingsurl, $widgetsettingsurl).'</p>'."\n";			
 			echo '		<p class="podpress_notice">'.__('<strong>Notice:</strong> After an upgrade from podPress v8.8.6.3 or older version to the current version, you need to control the following forms (and fill out empty fields eventually) of the Feeds you like to keep on using. You may copy and paste the meta information from the input fields above. But you could also use the new section below to customize these information for each Feed. The additional Feeds like the one with the slug name "podcast" do not automatically share those meta information any longer with the default Feeds of the blog.', 'podpress').'</p>'."\n";			
 			echo '		<div id="podpress_accordion">'."\n";
@@ -497,7 +500,7 @@ class podPressAdmin_class extends podPress_class
 					echo '					</select>'."\n";
 					echo '				</div>'."\n";
 					echo '				<div class="podpress_feed_settings_right_col">'."\n";
-					echo '					<label for="podpress_feed_'.$i.'_iTunesKeywords">'.__('iTunes:Keywords', 'podpress').'</label><br /><textarea name="podpress_feeds['.$i.'][itunes-keywords]" id="podpress_feed_'.$i.'_iTunesKeywords" class="podpress_feeds_text_field" rows="4" cols="40">'.stripslashes(stripslashes($feed['itunes-keywords'])).'</textarea><br /><span class="podpress_description">'.__('a list of max. 12 comma separated words', 'podpress').'</span>'."\n";
+					echo '					<label for="podpress_feed_'.$i.'_iTunesKeywords">'.__('iTunes:Keywords', 'podpress').'</label><br /><textarea name="podpress_feeds['.$i.'][itunes-keywords]" id="podpress_feed_'.$i.'_iTunesKeywords" class="podpress_feeds_text_field" rows="4" cols="40">'.stripslashes(stripslashes($feed['itunes-keywords'])).'</textarea><br /><span class="podpress_description">'.__('Comma seperated list', 'podpress').'</span>'."\n";
 					echo '				</div>'."\n";
 					echo '				<div class="podpress_feed_settings_left_col">'."\n";
 					echo '					<label for="podpress_feed_'.$i.'_iTunesAuthor">'.__('iTunes:Author/Owner', 'podpress').'</label><br /><input type="text" name="podpress_feeds['.$i.'][itunes-author]" id="podpress_feed_'.$i.'_iTunesAuthor" class="podpress_feeds_text_field" value="'.attribute_escape(stripslashes($feed['itunes-author'])).'" size="40" />'."\n";
@@ -601,8 +604,8 @@ class podPressAdmin_class extends podPress_class
 						$yes_selected = '';
 					}
 					echo '					<select name="podpress_feeds['.$i.'][itunes-block]" id="podpress_feed_'.$i.'_iTunesBlock">'."\n";
-					echo '						<option value="No"'.$no_selected.'>'.__('No', 'podpress').'</option>'."\n";
-					echo '						<option value="Yes"'.$yes_selected.'>'.__('Yes', 'podpress').'</option>'."\n";
+					echo '						<option value="No"'.$disable_selected.'>'.__('No', 'podpress').'</option>'."\n";
+					echo '						<option value="Yes"'.$enable_selected.'>'.__('Yes', 'podpress').'</option>'."\n";
 					echo '					</select>'."\n";
 					echo '				</div>'."\n";
 					echo '				<div class="podpress_feed_settings_right_col">';
@@ -744,7 +747,7 @@ class podPressAdmin_class extends podPress_class
 					echo '					</select>'."\n";
 					echo '				</div>'."\n";
 					echo '				<div class="podpress_feed_settings_right_col">'."\n";
-					echo '					<label for="podpress_feed_'.$j.'_iTunesKeywords">'.__('iTunes:Keywords', 'podpress').'</label><br /><textarea name="podpress_feeds['.$j.'][itunes-keywords]" id="podpress_feed_'.$j.'_iTunesKeywords" class="podpress_feeds_text_field" rows="4" cols="40"></textarea><br /><span class="podpress_description">'.__('a list of max. 12 comma separated words', 'podpress').'</span>'."\n";
+					echo '					<label for="podpress_feed_'.$j.'_iTunesKeywords">'.__('iTunes:Keywords', 'podpress').'</label><br /><textarea name="podpress_feeds['.$j.'][itunes-keywords]" id="podpress_feed_'.$j.'_iTunesKeywords" class="podpress_feeds_text_field" rows="4" cols="40"></textarea><br /><span class="podpress_description">'.__('Comma seperated list', 'podpress').'</span>'."\n";
 					echo '				</div>'."\n";
 					echo '				<div class="podpress_feed_settings_left_col">'."\n";
 					echo '					<label for="podpress_feed_'.$j.'_iTunesAuthor">'.__('iTunes:Author/Owner', 'podpress').'</label><br /><input type="text" name="podpress_feeds['.$j.'][itunes-author]" id="podpress_feed_'.$j.'_iTunesAuthor" class="podpress_feeds_text_field" value="" size="40" />'."\n";
@@ -894,12 +897,12 @@ class podPressAdmin_class extends podPress_class
 				$this->settings['iTunes'] = $iTunesSettings;
 			}
 			
-			//~ if(isset($_POST['blogname'])) { podPress_update_option('blogname', htmlspecialchars(strip_tags(trim($_POST['blogname'])), ENT_QUOTES, $blog_charset)); }
-			//~ if(isset($_POST['blogdescription'])) { podPress_update_option('blogdescription', htmlspecialchars(strip_tags(trim($_POST['blogdescription'])), ENT_QUOTES, $blog_charset)); }
-			//~ if(isset($_POST['admin_email'])) { podPress_update_option('admin_email', htmlspecialchars(strip_tags(trim($_POST['admin_email'])), ENT_QUOTES, $blog_charset)); }
+			if(isset($_POST['blogname'])) { podPress_update_option('blogname', htmlspecialchars(strip_tags(trim($_POST['blogname'])), ENT_QUOTES, $blog_charset)); }
+			if(isset($_POST['blogdescription'])) { podPress_update_option('blogdescription', htmlspecialchars(strip_tags(trim($_POST['blogdescription'])), ENT_QUOTES, $blog_charset)); }
+			if(isset($_POST['admin_email'])) { podPress_update_option('admin_email', htmlspecialchars(strip_tags(trim($_POST['admin_email'])), ENT_QUOTES, $blog_charset)); }
 
-			//~ if(isset($_POST['blog_charset'])) { podPress_update_option('blog_charset', htmlspecialchars(strtoupper(strip_tags(trim($_POST['blog_charset']))), ENT_QUOTES, $blog_charset)); }
-			//~ if(isset($_POST['posts_per_rss'])) { podPress_update_option('posts_per_rss', intval(preg_replace('/[^0-9]/', '', $_POST['posts_per_rss']))); }
+			if(isset($_POST['blog_charset'])) { podPress_update_option('blog_charset', htmlspecialchars(strtoupper(strip_tags(trim($_POST['blog_charset']))), ENT_QUOTES, $blog_charset)); }
+			if(isset($_POST['posts_per_rss'])) { podPress_update_option('posts_per_rss', intval(preg_replace('/[^0-9]/', '', $_POST['posts_per_rss']))); }
 
 			if(isset($_POST['rss_language'])) { podPress_update_option('rss_language', htmlspecialchars(strip_tags(trim($_POST['rss_language'])), ENT_QUOTES, $blog_charset));	}
 			if(isset($_POST['rss_ttl'])) { podPress_update_option('rss_ttl', intval(preg_replace('/[^0-9]/', '', $_POST['rss_ttl'])));	}
@@ -914,16 +917,16 @@ class podPressAdmin_class extends podPress_class
 			if(isset($_POST['rss_license_url'])) {
 				$this->settings['rss_license_url'] = clean_url($_POST['rss_license_url'], array('http', 'https'), 'db');
 			}
-			//~ if( isset($_POST['protectFeed']) AND 'yes' == strtolower($_POST['protectFeed']) ) {
-				//~ $this->settings['protectFeed'] = 'Yes';
-			//~ } else {
-				//~ $this->settings['protectFeed'] = 'No';
-			//~ }
-			//~ if(isset($_POST['rss_showlinks'])) {
-				//~ $this->settings['rss_showlinks'] = $_POST['rss_showlinks'];
-			//~ }
+			if(isset($_POST['rss_showlinks'])) {
+				$this->settings['rss_showlinks'] = $_POST['rss_showlinks'];
+			}
 			if(isset($_POST['podcastFeedURL'])) {
 				$this->settings['podcastFeedURL'] = clean_url($_POST['podcastFeedURL'], array('http', 'https'), 'db');
+			}
+			if( isset($_POST['protectFeed']) AND 'yes' == strtolower($_POST['protectFeed']) ) {
+				$this->settings['protectFeed'] = 'Yes';
+			} else {
+				$this->settings['protectFeed'] = 'No';
 			}
 			if ( isset($_POST['podpress_feeds']) ) {
 				$i = 0;

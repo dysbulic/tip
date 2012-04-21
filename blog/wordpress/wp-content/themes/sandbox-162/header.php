@@ -19,6 +19,6 @@
 	</div><!--  #header -->
 
 	<div id="access">
-		<div class="skip-link"><a href="#content" title="<?php esc_attr_e( 'Skip to content', 'sandbox' ); ?>"><?php _e( 'Skip to content', 'sandbox' ) ?></a></div>
+		<div class="skip-link"><a href="#content" title="<?php _e( 'Skip to content', 'sandbox' ) ?>"><?php _e( 'Skip to content', 'sandbox' ) ?></a></div>
 		<?php wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'main' ) ); ?>
 	</div><!-- #access -->

@@ -4,10 +4,8 @@ Theme URI: http://wordpress.org/extend/themes/coraline/
 Description: A squeaky-clean theme featuring a custom menu, header, background, and layout. Coraline supports 7 widget areas (up to 3 in the sidebar, four in the footer) and featured images (thumbnails for gallery posts and custom header images for posts and pages). It includes styles for print and the Visual Editor, special styles for posts in "Asides" and "Gallery" categories, and has an optional full-width page template that removes the sidebar.
 Author: Automattic
 Author URI: http://automattic.com/
-Version: 1.1-wpcom
-Tags: black, blue, brown, pink, purple, red, white, dark, light, one-column, two-columns, three-columns, left-sidebar, right-sidebar, flexible-width, custom-background, custom-header, custom-menu, editor-style, theme-options, sticky-post, microformats, rtl-language-support, translation-ready, full-width-template, featured-image-header, featured-images, post-formats, blog, business, fashion, lifestream, photography, wedding, clean, conservative, corporate, dark, generic, light, minimal
-License: GNU General Public License
-License URI: license.txt
+Version: 1.0.2-wpcom
+Tags: black, white, dark, light, one-column, two-columns, three-columns, left-sidebar, right-sidebar, flexible-width, custom-background, custom-header, custom-menu, editor-style, theme-options, sticky-post, microformats, rtl-language-support, translation-ready, full-width-template, featured-image-header, featured-images, blog, business, fashion, lifestream, photography, wedding, clean, conservative, corporate, dark, generic, light, minimal
 
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned with others.
@@ -80,16 +78,8 @@ body {
 	clear: both;
 	margin: 0 auto;
 }
-body.no-sidebars #container,
-.full-width #container,
-.attachment #container {
-	max-width: 990px;
-}
 #content-container {
 	width: 100%;
-}
-body.no-sidebars #content-container {
-	overflow: hidden;
 }
 #main-sidebars {
 	max-width: 450px;
@@ -101,9 +91,6 @@ body.no-sidebars #content-container {
 #primary,
 #secondary {
 	overflow: hidden;
-}
-body.no-sidebars #primary {
-	display: none;
 }
 #footer {
 	clear: both;
@@ -228,8 +215,7 @@ body.no-sidebars #primary {
 
 /* Full width content with no sidebar; used for attachment pages */
 .full-width #content,
-.attachment #content,
-body.no-sidebars #content {
+.attachment #content {
 	margin: 0 auto;
 	width: 100%;
 }
@@ -425,8 +411,10 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 	border: 1px solid #000;
 	border-width: 3px 0 1px;
 	max-width: 100%;
+	width: auto;
 	height: auto;
 }
+
 
 /* =Menu
 ----------------------------------------------- */
@@ -498,10 +486,7 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 #access ul li:hover > ul {
 	display: block;
 }
-#access .current-menu-item a,
-#access .current-menu-ancestor a,
-#access .current_page_item a,
-#access .current_page_ancestor a {
+#access .current_page_item a {
 	background: #000;
 	color: #fff;
 }
@@ -554,6 +539,11 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 }
 .entry-meta a:hover {
 	color: #df0000;
+}
+.byline {
+	display: block;
+	position: absolute;
+	left: -9000px;
 }
 .entry-content,
 .entry-summary {
@@ -924,7 +914,6 @@ img.aligncenter {
 .widget_tag_cloud div {
 	line-height: 1.7em;
 	padding: 0.2em 0;
-	word-wrap: break-word;
 }
 
 
@@ -1079,7 +1068,7 @@ img.aligncenter {
 	body, input, textarea {
 		font: 12pt Georgia, "Bitstream Charter", serif;
 		line-height: 1.5;
-	}
+	}	
 	#container {
 		clear: both !important;
 		display: block !important;
@@ -1139,7 +1128,7 @@ img.aligncenter {
 		float: none;
 		margin: 0 0 0 -24.8%;
 	}
-	.sidebar-sidebar-content #content-container {
+	.sidebar-sidebar-content #content-container { 
 		float: none;
 		margin: 0px 0px 0px -49.5%;
 	}
@@ -1150,8 +1139,7 @@ img.aligncenter {
 		width: 100%;
 	}
 	#content,
-	.full-width #content,
-	body.no-sidebars #content {
+	.full-width #content {
 		margin: 24pt 0 0;
 		width: 100%;
 	}
@@ -1216,10 +1204,4 @@ img.aligncenter {
 }
 #ie6 .sidebar-content-sidebar #primary {
 	margin: 0 0 0 -100%;
-}
-#ie8 #branding img {
-	width: auto;
-}
-#ie8 .single #branding img {
-	width: 100%;
 }

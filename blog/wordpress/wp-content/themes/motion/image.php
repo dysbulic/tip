@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Motion
+ * @package WordPress
+ * @subpackage Motion
  */
 get_header(); ?>
 
@@ -18,7 +19,10 @@ get_header(); ?>
 				<h2 class="posttitle"><a href="<?php echo get_permalink( $post->post_parent ); ?>" rev="attachment"><?php echo get_the_title( $post->post_parent ); ?></a> &raquo; <?php the_title(); ?></h2>
 				<div class="postmetatop">
 					<div class="categs">
-						<?php motion_post_meta(); ?>
+						<?php printf( __( 'Filed under: %1$s by %2$s &mdash; ' ),
+						get_the_category_list(', '),
+						get_the_author_meta( 'display_name' )
+						); ?>
 						<?php comments_popup_link( __( 'Leave a comment' ), __( '1 Comment' ), __( '% Comments' ) ) ?>
 					</div>
 					<div class="date"><span><?php the_time( get_option( 'date_format' ) ); ?></span></div>

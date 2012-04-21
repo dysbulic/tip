@@ -9,28 +9,47 @@ get_header(); ?>
 
 <?php get_template_part( 'top-banner' ); ?>
 
-<div id="post_content" class="column full-width first">
+<div id="post_content" class="column span-14">
 	
 	<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 		
-		<div class="column">
+		<div class="column span-11 first">
 		
 			<h1 class="post_name" id="post-<?php the_ID(); ?>"><?php the_title(); ?></h1>
 				
 			<div class="post_meta">
 				<?php
-					$metadata = wp_get_attachment_metadata();
-					printf( __( 'Published on %1$s in <a href="%5$s" title="Return to %6$s" rel="gallery">%6$s</a> <span class="dot">&sdot;</span> Full size is <a href="%2$s" title="Link to full-size image">%3$s &times; %4$s</a> Pixels', 'woothemes' ),
-						get_the_date(),
-						wp_get_attachment_url(),
-						$metadata['width'],
-						$metadata['height'],
-						get_permalink( $post->post_parent ),
-						get_the_title( $post->post_parent )
+					printf( __( 'Published on %1$s', 'woothemes' ),
+						sprintf( '%2$s',
+							esc_attr( get_the_time() ),
+							get_the_date()
+						)
 					);
-				?>				
 
-					<?php edit_post_link( __( 'Edit', 'woothemes' ), ' <span class="dot">&sdot;</span> <span class="edit-link">', '</span>' );
+					// Let's make sure we have a post parent for this image before we try and print a link to it
+					if ( ! empty( $post->post_parent ) ) :
+							printf( __( ' in %1$s', 'woothemes' ),
+								sprintf( '<a href="%1$s" title="%2$s" rel="gallery">%3$s</a>',
+									get_permalink( $post->post_parent ),
+									esc_attr( sprintf( __( 'Return to %s', 'woothemes' ), get_the_title( $post->post_parent ) ) ),
+									get_the_title( $post->post_parent )
+								)
+							);
+					endif; // end the check for the post parent
+
+					echo ' <span class="dot">&sdot;</span> ';
+
+					$metadata = wp_get_attachment_metadata();
+					printf( __( 'Full size is %s pixels', 'woothemes' ),
+						sprintf( '<a href="%1$s" title="%2$s">%3$s &times; %4$s</a>',
+							wp_get_attachment_url(),
+							esc_attr( __( 'Link to full-size image', 'woothemes' ) ),
+							$metadata['width'],
+							$metadata['height']
+						)
+					);
+
+					edit_post_link( __( 'Edit', 'woothemes' ), ' <span class="dot">&sdot;</span> <span class="edit-link">', '</span>' );
 				
 				echo ' <span class="dot">&sdot;</span> '; ?>
 				 
@@ -89,19 +108,19 @@ get_header(); ?>
 
 			</div><!-- end .entry-content-wrapper -->
 				
-			<?php comments_template( '', true); ?>
+				<?php $comm = get_option( 'woo_comments' ); if ( 'open' == $post->comment_status && ( $comm == "post" || $comm == "both" ) ) : ?>
+					<?php comments_template( '', true); ?>
+				<?php endif; ?>
 		
-		</div><!-- end .column -->
+		</div><!-- end .span-11 -->
 	
 	<?php endwhile; else: ?>
 		
-		<?php
-			printf( __( '<p>Lost? Go back to the <a href="%s">home page</a></p>', 'woothemes' ),
-				get_home_url()
-			);
-		?>
+		<p><?php _e( 'Lost? Go back to the','woothemes' );?> <a href="<?php echo home_url(); ?>/"><?php _e( 'home page','woothemes' );?></a>.</p>
 	
 	<?php endif; ?>
+
+	<?php get_sidebar(); ?>
 
 </div><!-- end #post_content -->
 		

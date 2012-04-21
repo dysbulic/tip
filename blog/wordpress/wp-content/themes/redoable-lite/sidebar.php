@@ -18,7 +18,7 @@
 	
 	<div id="search">
 		<h2><?php _e('Search','redo_domain'); ?></h2>
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 	</div>
 	<div class="sb-spacer"></div>
 

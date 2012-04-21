@@ -1,15 +1,11 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Neutra
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
 	'border' => 'f1f1f1',
-	'text' => '555555',
-	'link' => '059bff',
-	'url' => 'e5f2bf',
+	'text' => '444444',
+	'link' => '059BFF',
+	'url' => '059BFF'
 );
 
 $content_width = 575; // pixels
@@ -48,7 +44,7 @@ function neutra_list_comments( $comment, $args, $depth ) {
 		<div class="comment-body">
 			<div class="author"><?php comment_author_link(); ?></div>
 			<div class="comment-text"><?php comment_text(); ?></div>
-			<div class="comment-meta"><a href="<?php echo get_permalink(); ?>#comment-<?php comment_ID(); ?>"><?php _e( 'Permalink', 'neutra' ); ?></a><?php echo comment_reply_link( array( 'depth' => $depth, 'max_depth' => $args['max_depth'], 'before' => ', ' ) ); ?><?php edit_comment_link( __( 'Edit' ), ', ' ); ?></div>
+			<div class="comment-meta"><a href="<?php echo get_permalink(); ?>#comment-<?php comment_ID(); ?>"><?php _e( 'Permalink' ); ?></a><?php echo comment_reply_link( array( 'depth' => $depth, 'max_depth' => $args['max_depth'], 'before' => ', ' ) ); ?><?php edit_comment_link( __("Edit" ), ', ' ); ?></div>
 			<div class="date"><span><?php comment_date(); ?> <a href="#comment-<?php comment_ID(); ?>"><?php comment_time(); ?></a></span></div>
 		</div>
 <?php }
@@ -59,9 +55,3 @@ function neutra_list_pings( $comment, $args, $depth ) {
 ?>
 	<li id="comment-<?php comment_ID(); ?>"><?php comment_author_link(); ?>
 <?php }
-
-function neutra_comment_form_defaults( $args ) {
-	$args['title_reply'] = '<span>' . $args['title_reply'] . '</span>';
-	return $args;
-}
-add_filter( 'comment_form_defaults', 'neutra_comment_form_defaults', 30 );

@@ -15,7 +15,7 @@
  */
 ?>
 
-<?php while ( have_posts() ) : the_post(); ?>
+<?php the_post(); ?>
 
 				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<div class="entry-meta">
@@ -99,5 +99,3 @@
 				</div><!-- #post-## -->
 
 <?php comments_template(); ?>
-
-<?php endwhile; // end of the loop. ?>

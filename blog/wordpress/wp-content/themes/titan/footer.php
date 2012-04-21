@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Titan
+ * @package WordPress
+ * @subpackage Titan
  */
 ?>
 </div><!--end wrapper-->
@@ -47,7 +48,7 @@
 		</div>
 
 		<div id="copyright">
-			<p class="copyright-notice"><a href="http://wordpress.com/" rel="generator">Get a free blog at WordPress.com</a> | <?php printf( __( 'Theme: %1$s by %2$s.', 'titan' ), 'Titan', '<a href="http://thethemefoundry.com/" rel="designer">The Theme Foundry</a>' ); ?></p>
+			<p class="copyright-notice"><a href="http://wordpress.com/" rel="generator">Get a free blog at WordPress.com</a> | <?php printf( __( 'Theme: %1$s by %2$s.', 'titan' ), 'Titan', '<a href="http://thethemefoundry.com/" rel="designer">The Theme Foundry</a>' ); ?>.</p>
 		</div>
 
 	</div><!--end wrapper-->

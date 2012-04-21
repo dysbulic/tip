@@ -33,7 +33,7 @@
 <?php if ( is_singular() && get_option( 'thread_comments' ) ) wp_enqueue_script( 'comment-reply' ); ?>
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
 <!--[if lt IE 9]>
-<script src="<?php bloginfo( 'template_directory' ); ?>/inc/js/html5.js" type="text/javascript"></script>
+<script src="<?php bloginfo( 'template_directory' ); ?>/js/html5.js" type="text/javascript"></script>
 <![endif]-->
 
 <?php wp_head(); ?>
@@ -46,25 +46,11 @@
 				<h1 id="site-title"><span><a href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></span></h1>
 				<h2 id="site-description"><?php bloginfo( 'description' ); ?></h2>
 			</hgroup>
-
+			
 			<div id="site-image">
-				<?php
-					// Let's check and see if we have a custom header image
-					// If we don't, we'll show something that matches the fruity color scheme
-					$header_image = get_header_image();
-
-					if ( ! empty( $header_image ) ) :
-				?>
-
-					<img src="<?php header_image(); ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" />
-
-				<?php else : ?>
-
-					<img src="<?php echo fruit_shake_default_header_image(); ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" />
-
-				<?php endif; ?>
+				<img src="<?php bloginfo( 'template_directory' ); ?>/images/headers/header-banana.png" />
 			</div><!-- #site-image -->
-
+			
 			<?php get_search_form(); ?>
 
 			<?php if ( has_nav_menu( 'primary' ) ) : ?>

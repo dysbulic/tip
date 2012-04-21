@@ -18,23 +18,18 @@
  	  <?php } ?>
 
 		<?php while (have_posts()) : the_post(); ?>
-			<?php
-			if( depo_post_category() == 'type-photo') {
-				include 'type-photo.php';
+			<?php 
+			if( depo_post_category() == 'type-photo') { 
+				include 'type-photo.php'; 
 			} elseif( depo_post_category() == 'type-quote') {
 				include 'type-quote.php';
 			} else { ?>
 			<div <?php post_class(depo_post_category()) ?> id="post-<?php the_ID(); ?>">
 				<?php before_post(); ?>
 				<p class="category"><?php depo_post_category_html(); ?></p>
-				<h2>
-					<?php if ( ! is_single() ) : ?>
-						<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php printf(__('Permanent Link to %s', 'depo-squared'), the_title_attribute('echo=0')); ?>"><?php the_title(); ?></a>
-					<?php else : ?>
-						<?php the_title(); ?>
-					<?php endif; ?>
-				</h2>
-
+				<h2><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php printf(__('Permanent Link to %s', 'depo-square'), the_title_attribute('echo=0')); ?>"><?php the_title(); ?></a></h2>
+				
+				
 				<p class="meta"><?php printf(__('In %1$s on %2$s by %3$s', 'depo-square'), get_the_category_list(', '), get_the_time(get_option('date_format')), get_the_author() );?> <?php the_tags(__('Tagged:', 'depo-square') . ' ', ', ', ''); ?> <?php edit_post_link(__('Edit', 'depo-square'), '', ''); ?></p>
 
 				<div class="entry">
@@ -63,12 +58,12 @@
 			</div>
 			<?php }?>
 		<?php endwhile; ?>
-
+			
 		<div class="navigation">
 			<div class="alignleft"><?php next_posts_link(__('&laquo; Older Entries', 'depo-square')) ?></div>
 			<div class="alignright"><?php previous_posts_link(__('Newer Entries &raquo;', 'depo-square')) ?></div>
 		</div>
-		<?php if( !is_home() && !is_front_page() ): ?><div class="navigation_to_home"><a href="<?php echo home_url( '/' ); ?>"><?php _e('&laquo; Back to Home'); ?></a></div><?php endif; ?>
+		<?php if( !is_home() && !is_front_page() ): ?><div class="navigation_to_home"><a href="<?php bloginfo('wpurl'); ?>"><?php _e('&laquo; Back to Home'); ?></a></div><?php endif; ?>
 
 	<?php else : ?>
 		<div class="post">
@@ -79,5 +74,5 @@
 		</div>
 		</div>
 	<?php endif; ?>
-
+	
 <?php get_footer(); ?>

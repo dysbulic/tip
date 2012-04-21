@@ -14,7 +14,7 @@
 
 		<?php while ( have_posts() ) : the_post(); ?>
 			<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-				<h2><?php the_title(); ?></h2>
+				<h2><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink to %s', 'oulipo' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></h2>
 				<p class="date"><?php the_time( 'F jS, Y' ); ?> <?php comments_popup_link( '&sect; <span class="commentcount">' . __( 'Leave a Comment', 'oulipo' ) . '</span>', '&sect; <span class="commentcount">' . __( '1 Comment', 'oulipo' ) . '</span>', '&sect; <span class="commentcount">' . __( '% Comments', 'oulipo' ) . '</span>' ); ?></p>
 
 				<div class="entry">

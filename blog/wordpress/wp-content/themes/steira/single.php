@@ -4,7 +4,7 @@
 
 				<div id="content">
 
-					<?php while ( have_posts() ) : the_post(); ?>
+<?php the_post(); ?>
 
 					<div id="nav-above" class="navigation">
 						<div class="nav-previous"><?php previous_post_link( '%link', '<span class="meta-nav">&lsaquo;</span> %title' ) ?></div>
@@ -13,8 +13,10 @@
 
 					<div <?php post_class() ?> id="post-<?php the_ID(); ?>">
 						<h2 class="haslink">
-							<span class="posted"><?php the_time(get_option("date_format")); ?></span>
-							<span class="title"><?php the_title(); ?></span>
+							<a href="<?php the_permalink(); ?>">
+								<span class="posted"><?php the_time(get_option("date_format")); ?></span>
+								<span class="title"><?php the_title(); ?></span>
+							</a>
 						</h2>
 
 						<div class="contentblock">
@@ -46,9 +48,6 @@
 						<div class="nav-previous"><?php previous_post_link( '%link', '<span class="meta-nav">&lsaquo;</span> %title' ) ?></div>
 						<div class="nav-next"><?php next_post_link( '%link', '%title <span class="meta-nav">&rsaquo;</span>' ) ?></div>
 					</div><!-- #nav-below -->
-
-					<?php endwhile; // end of the loop. ?>
-
 				</div><!-- content -->
 
 <?php get_sidebar(); ?>

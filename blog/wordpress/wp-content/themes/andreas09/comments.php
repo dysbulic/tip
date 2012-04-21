@@ -27,7 +27,7 @@ endif;
 ?>
 
 <?php if ( comments_open() ) : ?>
-	<?php comment_form(); ?>
+	<?php comment_form( array( 'title_reply' => __( 'Leave a Comment', 'andreas09' ) ) ); ?>
 <?php else: ?>
 	<?php if ( ! is_page() ) : ?>
 	<p><?php _e( 'Sorry, the comment form is closed at this time.', 'andreas09' ); ?></p>

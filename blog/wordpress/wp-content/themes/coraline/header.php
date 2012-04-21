@@ -8,13 +8,9 @@
 <!--[if IE 6]>
 <html id="ie6" <?php language_attributes(); ?>>
 <![endif]-->
-<!--[if IE 8]>
-<html id="ie8" <?php language_attributes(); ?>>
-<![endif]-->
-<!--[if (!IE)]><!-->
+<!--[if (gt IE 6) | (!IE)]><!-->
 <html <?php language_attributes(); ?>>
 <!--<![endif]-->
-
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
 <title><?php

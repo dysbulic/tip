@@ -1,20 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Benevolence
- */
 
 $themecolors = array(
 	'bg' => 'ffffff',
 	'text' => '000000',
-	'link' => 'ff3333',
-	'border' => '000000',
-	'url' => '394651',
+	'link' => 'ff3333'
 	);
 
 $content_width = 420;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 add_theme_support( 'automatic-feed-links' );
 
@@ -44,37 +36,10 @@ function benevolence_search() {
 ?>
 <?php
 
-define( 'HEADER_TEXTCOLOR', '000000' );
-define( 'HEADER_IMAGE', '%s/images/masthead.jpg' ); // %s is theme dir uri
-define( 'HEADER_IMAGE_WIDTH', 700 );
-define( 'HEADER_IMAGE_HEIGHT', 225 );
-
-register_default_headers( array(
-	'masthead' => array(
-		'url' => '%s/images/masthead.jpg',
-		'thumbnail_url' => '%s/images/masthead-thumbnail.jpg',
-		/* translators: header image description */
-		'description' => __( 'Grass', 'benevolence' )
-	),
-	'ice' => array(
-		'url' => '%s/images/ice.jpg',
-		'thumbnail_url' => '%s/images/ice-thumbnail.jpg',
-		/* translators: header image description */
-		'description' => __( 'Ice', 'benevolence' )
-	),
-	'red-soil' => array(
-		'url' => '%s/images/red-soil.jpg',
-		'thumbnail_url' => '%s/images/red-soil-thumbnail.jpg',
-		/* translators: header image description */
-		'description' => __( 'Red Soil', 'benevolence' )
-	),
-	'water-and-rocks' => array(
-		'url' => '%s/images/water-and-rocks.jpg',
-		'thumbnail_url' => '%s/images/water-and-rocks-thumbnail.jpg',
-		/* translators: header image description */
-		'description' => __( 'Water and Rocks', 'benevolence' )
-	)
-) );
+define('HEADER_TEXTCOLOR', '000000');
+define('HEADER_IMAGE', '%s/images/masthead.jpg'); // %s is theme dir uri
+define('HEADER_IMAGE_WIDTH', 700);
+define('HEADER_IMAGE_HEIGHT', 225);
 
 function header_style() {
 ?>
@@ -142,26 +107,3 @@ function benevolence_admin_header_style() {
 }
 
 add_custom_image_header('header_style', 'benevolence_admin_header_style');
-
-function benevolence_callback($comment, $args, $depth) {
-	$GLOBALS['comment'] = $comment;
-	extract($args, EXTR_SKIP);
-?>
-<div <?php comment_class(empty( $args['has_children'] ) ? 'commentBox' : 'commentBox parent') ?> id="comment-<?php comment_ID() ?>">
-	<div id="div-comment-<?php comment_ID() ?>">
-	<?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?>
-	<?php comment_text() ?>
-	<span class="comment-author vcard">
-	<i><?php comment_type(__('Comment','benevolence'), __('Trackback','benevolence'), __('Pingback','benevolence')); ?> <?php _e('by','benevolence'); ?> <cite class="fn"><?php comment_author_link() ?></cite>
-	</span>
-	<span class="comment-meta commentmetadata">
-	<?php comment_date(); ?> @ <a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>"><?php comment_time() ?></a> <?php edit_comment_link(__('Edit This','benevolence'), ' |'); ?></i>
-	</span>
-
-	<div class="reply">
-	<?php comment_reply_link(array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
-	</div>
-	</div>
-	<br />
-<?php
-}

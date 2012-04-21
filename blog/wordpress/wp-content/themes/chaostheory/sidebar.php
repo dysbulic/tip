@@ -14,7 +14,7 @@
 					<h3><a href="<?php echo home_url(); ?>" title="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"><?php _e( '&laquo; Home', 'chaostheory' ); ?></a></h3>
 				</li>
 		<?php } ?>
-				<?php wp_list_pages( 'title_li=<h3>' . __( 'Pages', 'chaostheory' ) . '</h3>' ); ?>
+				<?php wp_list_pages( 'title_li=<h3>' . __( 'Pages' ) . '</h3>' ); ?>
 
 				<li class="category-links">
 					<h3><?php _e( 'Categories', 'chaostheory' ); ?></h3>

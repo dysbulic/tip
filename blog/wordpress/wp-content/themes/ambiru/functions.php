@@ -1,8 +1,4 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Ambiru
- */
 
 define('HEADER_TEXTCOLOR', 'E5F2E9');
 define('HEADER_IMAGE', '%s/images/header.png'); // %s is theme dir uri
@@ -11,15 +7,11 @@ define('HEADER_IMAGE_HEIGHT', 225);
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'text' => '555555',
-	'link' => '557799',
-	'border' => 'C8A799',
-	'url' =>  '8FB1D3'
+	'text' => '000000',
+	'link' => '557799'
 	);
 
 $content_width = 460;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 register_sidebar( array(
 	'name'          => sprintf(__('Bottom 1')),
@@ -124,29 +116,3 @@ function ambiru_page_menu() { // fallback for primary navigation ?>
 add_custom_background();
 
 add_theme_support( 'automatic-feed-links' );
-
-function ambiru_callback($comment, $args, $depth) {
-	$GLOBALS['comment'] = $comment;
-	extract($args, EXTR_SKIP);
-?>
-	<li <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="comment-<?php comment_ID() ?>">
-	<div id="div-comment-<?php comment_ID() ?>">
-	<div class="comment-author vcard">
-	<?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?>
-	<cite class="fn"><?php comment_author_link(); ?></cite> <span class="says"><?php _e('said', 'ambiru'); ?></span>
-	</div>
-<?php if ($comment->comment_approved == '0') : ?>
-	<em><?php _e('Your comment is awaiting moderation.', 'ambiru') ?></em>
-	<br />
-<?php endif; ?>
-
-	<small class="comment-meta commentmetadata"><a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>">
-	<?php comment_date(); ?>  <?php _e('at', 'ambiru'); ?> <?php comment_time(); ?></a> <?php edit_comment_link(__('e', 'ambiru'),'',''); ?></small>
-
-	<?php comment_text(); ?>
-
-	<div class="reply">
-	<?php comment_reply_link(array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
-	</div>
-	</div>
-<?php }

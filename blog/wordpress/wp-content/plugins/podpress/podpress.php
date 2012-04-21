@@ -1,16 +1,16 @@
 <?php
-define('PODPRESS_VERSION', '8.8.10.12');
+define('PODPRESS_VERSION', '8.8.10 RC 18');
 /*
 Info for WordPress:
 ==============================================================================
 Plugin Name: podPress
-Version: 8.8.10.12
+Version: 8.8.10 RC 18
 Plugin URI: http://www.mightyseek.com/podpress/
 Description: The podPress plugin gives you everything you need in one easy plugin to use WordPress for Podcasting. Set it up in <a href="admin.php?page=podpress/podpress_feed.php">'podPress'->Feed/iTunes Settings</a>. If this plugin works for you, send us a comment.
 Author: Dan Kuykendall (Seek3r)
 Author URI: http://www.mightyseek.com/
 Min WP Version: 2.2
-Max WP Version: 3.2.1
+Max WP Version: 3.1
 
 podPress - Podcasting made easy for WordPress
 ==============================================================================
@@ -120,8 +120,8 @@ function podPress_init() {
 	// Variables which you can overwrite with definitions in the podpress_config.php file
 	// to (de-)activate the Podango Integration (default: FALSE) - Leave this feature deactivated because the Podango platform and all coresponding feature are offline for a long time (since end of 2008) now.
 	if ( ! defined( 'PODPRESS_ACTIVATE_PODANGO_INTEGRATION' ) ) { define( 'PODPRESS_ACTIVATE_PODANGO_INTEGRATION', FALSE ); }
-	// to (de-)activate the 3rd party stats feature (default: TRUE)
-	if ( ! defined( 'PODPRESS_ACTIVATE_3RD_PARTY_STATS' ) ) { define( 'PODPRESS_ACTIVATE_3RD_PARTY_STATS', TRUE ); }
+	// to (de-)activate the 3rd party stats "feature" (default: FALSE)
+	if ( ! defined( 'PODPRESS_ACTIVATE_3RD_PARTY_STATS' ) ) { define( 'PODPRESS_ACTIVATE_3RD_PARTY_STATS', FALSE ); }
 
 	// You can log some of the procedures of podPress if you define this constant as true. The log file is podpress_log.dat.
 	if ( ! defined( 'PODPRESS_DEBUG_LOG' ) ) { define( 'PODPRESS_DEBUG_LOG', FALSE ); }
@@ -265,12 +265,12 @@ function podPress_class_init() {
 			if($podPress->settings['enablePodangoIntegration']) {
 				podPress_checkmem('PodangoAPI code loaded', true);
 				require_once(ABSPATH.PLUGINDIR.'/podpress/podango-api.php');
-				$podPress->podangoapi = new PodangoAPI ($podPress->settings['podangoUserKey'], $podPress->settings['podangoPassKey']);
+				$podPress->podangoAPI = new PodangoAPI ($podPress->settings['podangoUserKey'], $podPress->settings['podangoPassKey']);
 				if(!empty($podPress->settings['podangoDefaultPodcast'])) {
-					$podPress->podangoapi->defaultPodcast = $podPress->settings['podangoDefaultPodcast'];
+					$podPress->podangoAPI->defaultPodcast = $podPress->settings['podangoDefaultPodcast'];
 				}
 				if(!empty($podPress->settings['podangoDefaultTranscribe'])) {
-					$podPress->podangoapi->defaultTranscribe = (int)$podPress->settings['podangoDefaultTranscribe'];
+					$podPress->podangoAPI->defaultTranscribe = (int)$podPress->settings['podangoDefaultTranscribe'];
 				}
 				podPress_checkmem('PodangoAPI code loaded');
 			}
@@ -317,7 +317,6 @@ function podPress_class_init() {
 	add_filter('the_content', array(&$podPress, 'insert_content'));
 	add_filter('get_the_excerpt', array(&$podPress, 'insert_the_excerpt'), 1);
 	add_filter('the_excerpt', array(&$podPress, 'insert_the_excerptplayer'));
-	add_filter('the_excerpt_rss', array(&$podPress, 'feed_excerpt_filter'));
 	
 	// ntm: This is deactivated because of the unknown purpose and reported problems (http://wordpress.org/support/topic/podpress_get_attached_file-overwriting-attempts-to-include-thumbnail-in-feed)
 	// The only purpose I can imagine is to prevent WP from adding non-podPress enclosure to Feed items. Since 8.8.5 podPress has a different filter to achieve that (see podPress_dont_print_nonpodpress_enclosures).
@@ -442,7 +441,7 @@ function podPress_class_init() {
 function podPress_add_menu_page() {
 	GLOBAL $podPress, $wp_version;
 	if(podPress_WPVersionCheck('2.0.0')) {
-		$permission_needed = $podPress->requiredadminrights;
+		$permission_needed = $podPress->requiredAdminRights;
 	} else {
 		$permission_needed = 1;
 	}
@@ -620,20 +619,20 @@ function podpress_print_admin_js() { // ntm: some of these scripts are not neces
 	}
 		
 	if ( 'admin.php' == $pagenow AND 'podpress/podpress_feed.php' == $_GET['page'] ) {
-		wp_register_script( 'podpress_jquery_ui',  PODPRESS_URL.'/js/jquery/podpress_jquery_ui_feedssettings.js' );
+		wp_register_script( 'podpress_jquery_ui',  PODPRESS_URL.'/js/jquery/podPress_jQuery_ui_feedssettings.js' );
 	}
 	if ( 'widgets.php' == $pagenow ) {
 		if ( TRUE == version_compare($wp_version, '2.9', '>=') ) {
-			wp_register_script( 'podpress_jquery_ui',  PODPRESS_URL.'/js/jquery/podpress_jquery_ui_widgetssettings.js' );
+			wp_register_script( 'podpress_jquery_ui',  PODPRESS_URL.'/js/jquery/podPress_jQuery_ui_widgetssettings.js' );
 		} elseif ( TRUE == version_compare($wp_version, '2.8', '>=') AND TRUE == version_compare($wp_version, '2.9', '<') ) {
-			wp_register_script( 'podpress_jquery_ui',  PODPRESS_URL.'/js/jquery/podpress_jquery_ui_widgetssettings_wp28.js' );
+			wp_register_script( 'podpress_jquery_ui',  PODPRESS_URL.'/js/jquery/podPress_jQuery_ui_widgetssettings_wp28.js' );
 		} elseif (TRUE == version_compare($wp_version, '2.8', '<')) {
-			wp_register_script( 'podpress_jquery_ui',  PODPRESS_URL.'/js/jquery/podpress_jquery_ui_widgetssettings_pre_wp28.js' );
+			wp_register_script( 'podpress_jquery_ui',  PODPRESS_URL.'/js/jquery/podPress_jQuery_ui_widgetssettings_pre_wp28.js' );
 		}
 	}
 	if ( ('admin.php' == $pagenow AND 'podpress/podpress_feed.php' == $_GET['page']) OR 'widgets.php' == $pagenow ) {
 		wp_register_script( 'podpress-jquery-ui-core',  PODPRESS_URL.'/js/jquery/jquery-1.4.2.min.js' );
-		wp_register_script( 'podpress_jquery_init',  PODPRESS_URL.'/js/jquery/podpress_jquery_init.js' );
+		wp_register_script( 'podpress_jquery_init',  PODPRESS_URL.'/js/jquery/podPress_jQuery_init.js' );
 		wp_register_script( 'jquery-ui-accordion-dialog',  PODPRESS_URL.'/js/jquery/jquery-ui-1.8.5.accordion_dialog.min.js' );
 		wp_enqueue_script( 'podpress-jquery-ui-core' );
 		wp_enqueue_script( 'podpress_jquery_init' );
@@ -685,12 +684,12 @@ function podPress_print_admin_js_and_css_old_wp() {
 	
 	if ( ('admin.php' == $pagenow AND 'podpress/podpress_feed.php' == $_GET['page']) OR 'widgets.php' == $pagenow ) {
 		echo '<script type="text/javascript" src="'.PODPRESS_URL.'/js/jquery/jquery-1.4.2.min.js"></script>'."\n";
-		echo '<script type="text/javascript" src="'.PODPRESS_URL.'/js/jquery/podpress_jquery_init.js"></script>'."\n";
+		echo '<script type="text/javascript" src="'.PODPRESS_URL.'/js/jquery/podPress_jQuery_init.js"></script>'."\n";
 		echo '<script type="text/javascript" src="'.PODPRESS_URL.'/js/jquery/jquery-ui-1.8.5.accordion_dialog.min.js"></script>'."\n";
 		if ( 'widgets.php' == $pagenow ) {
-			echo '<script type="text/javascript" src="'.PODPRESS_URL.'/js/jquery/podpress_jquery_ui_widgetssettings_pre_wp28.js"></script>'."\n";
+			echo '<script type="text/javascript" src="'.PODPRESS_URL.'/js/jquery/podPress_jQuery_ui_widgetssettings_pre_wp28.js"></script>'."\n";
 		} else {
-			echo '<script type="text/javascript" src="'.PODPRESS_URL.'/js/jquery/podpress_jquery_ui_feedssettings.js"></script>'."\n";
+			echo '<script type="text/javascript" src="'.PODPRESS_URL.'/js/jquery/podPress_jQuery_ui_feedssettings.js"></script>'."\n";
 		}
 		echo '<link rel="stylesheet" href="'.PODPRESS_URL.'/js/jquery/css/custom-theme/jquery-ui-1.8.5.custom.css" type="text/css" />'."\n";
 	}
@@ -770,22 +769,6 @@ function podpress_print_js_vars() {
 		echo 'var podPressHTML5 = false;'."\n";
 	} else {
 		echo 'var podPressHTML5 = true;'."\n";
-		if ( TRUE === $podPress->settings['enableStats'] ) {
-			wp_enqueue_script( 'jquery' );
-			
-			if ( defined('NONCE_KEY') AND is_string(constant('NONCE_KEY')) AND '' != trim(constant('NONCE_KEY')) ) {
-				$nonce_key = constant('NONCE_KEY');
-			} else {
-				$nonce_key = 'Af|F07*wC7g-+OX$;|Z5;R@Pi]ZgoU|Zex8=`?mO-Mdvu+WC6l=6<O^2d~+~U3MM';
-			}
-			
-			echo 'var podPressHTML5sec = "'. wp_create_nonce( $nonce_key ) .'";'."\n";
-			if ( $podPress->settings['enable3rdPartyStats'] == 'PodTrac' ) {
-				echo 'var podPressPT = true;'."\n";
-			} elseif ( $podPress->settings['enable3rdPartyStats'] == 'Blubrry' AND FALSE == empty($podPress->settings['statBluBrryProgramKeyword']) ) {
-				echo 'var podPressBK = "'.js_escape($podPress->settings['statBluBrryProgramKeyword']).'";'."\n";
-			}
-		}
 	}
 	if ( TRUE == isset($podPress->settings['showhtml5playersonpageload']) AND TRUE === $podPress->settings['showhtml5playersonpageload'] ) {
 		echo 'var podPressHTML5_showplayersdirectly = true;'."\n";
@@ -891,12 +874,8 @@ function podPress_admin_footer() {
 
 function podPress_wp_footer() {
 	GLOBAL $podPress;
-	if ( isset($podPress->settings['enableFooter']) AND TRUE === $podPress->settings['enableFooter'] ) {
-		if (isset($podPress->settings['disableVersionNumber']) AND TRUE === $podPress->settings['disableVersionNumber'] ) {
-			echo '<div id="podPress_footer">'.__('Podcast powered by', 'podpress').' <a href="http://wordpress.org/extend/plugins/podpress/" title="'.__('podPress, a plugin for podcasting with WordPress', 'podpress').'">podPress</a></div>';
-		} else {
-			echo '<div id="podPress_footer">'.__('Podcast powered by', 'podpress').' <a href="http://wordpress.org/extend/plugins/podpress/" title="'.__('podPress, a plugin for podcasting with WordPress', 'podpress').'">podPress v'.PODPRESS_VERSION.'</a></div>';
-		}
+	if ( $podPress->settings['enableFooter'] ) {
+		echo '<div id="podPress_footer">'.__('Podcast powered by', 'podpress').' <a href="http://wordpress.org/extend/plugins/podpress/" title="'.__('podPress, a plugin for podcasting with WordPress', 'podpress').'"><strong>podPress v'.PODPRESS_VERSION.'</strong></a></div>';
 	}
 }
 
@@ -1028,18 +1007,8 @@ function podPress_feed_content_filtering( $query ) {
 				} else {
 					$cat_id = podPress_get_cat_ID_by_nicename( $query->query_vars['category_name'] );
 				}
-			} else {
-				if ( FALSE === empty($query->query_vars['cat'] ) ) {
-					$cat_id = $query->query_vars['cat'];
-				} elseif ( FALSE === empty($query->query_vars['tag']) ) {
-					$cat_id = $query->query_vars['tag'];
-				}
 			}
-			if ( FALSE === empty($cat_id) ) {
-				$categorysettings = get_option('podPress_category_'.$cat_id);
-			} else {
-				$categorysettings = FALSE;
-			}
+			$categorysettings = get_option('podPress_category_'.$cat_id);
 		}
 		if ( TRUE === $is_podpress_feed ) {
 			// podPress Custom Feeds
@@ -1085,15 +1054,6 @@ function podPress_feed_content_filtering( $query ) {
 			}
 		} elseif ( isset($categorysettings) AND FALSE !== $categorysettings AND isset($categorysettings['categoryCasting']) AND 'true' == $categorysettings['categoryCasting'] ) {
 			// CategoryCasting Feeds
-			
-			// add same data of the current category temporarily to the $podPress->settings
-			$podPress->settings['category_data'] = $categorysettings;
-			$podPress->settings['category_data']['id'] = $cat_id;
-			$category = get_category($cat_id);
-			$podPress->settings['category_data']['cat_name'] = $category->cat_name;
-			$podPress->settings['category_data']['cat_description'] = $category->category_description;
-			$podPress->settings['category_data']['blogname'] = get_bloginfo('name');
-
 			// get the list of allowed file extensions
 			$podpress_allowed_ext = podpress_get_exts_from_filetypes($categorysettings['FileTypes']);
 			if (is_array($podpress_allowed_ext) AND FALSE === empty($podpress_allowed_ext)) {

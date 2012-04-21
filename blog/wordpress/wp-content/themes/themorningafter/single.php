@@ -9,18 +9,18 @@ get_header(); ?>
 
 <?php get_template_part( 'top-banner' ); ?>
 
-<div id="post_content" class="column full-width">
+<div id="post_content" class="column span-14">
 	
 	<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 		
-		<div class="column primary-content first">
+		<div class="column span-11 first">
 		
 			<div class="post_cat"><?php the_category( ', ' ); ?></div>
 						
 			<h1 class="post_name" id="post-<?php the_ID(); ?>"><?php the_title(); ?></h1>
 						
 			<div class="post_meta">			
-				<?php _e( 'Posted by','woothemes' );?> <?php the_author_posts_link(); ?> <span class="dot">&sdot;</span> <?php the_time( get_option( 'date_format' ) ); ?> <span class="dot">&sdot;</span> <?php comments_popup_link( __( 'Leave a Comment', 'woothemes' ), __( '1 Comment', 'woothemes' ), __( '% Comments', 'woothemes' ) ); ?>
+				<?php _e( 'By','woothemes' );?> <?php the_author_posts_link(); ?> <span class="dot">&sdot;</span> <?php the_time( get_option( 'date_format' ) ); ?> <span class="dot">&sdot;</span> <?php comments_popup_link( __( 'Leave a Comment', 'woothemes' ), __( '1 Comment', 'woothemes' ), __( '% Comments', 'woothemes' ) ); ?>
 			</div>
 
 			<div class="post_meta">
@@ -32,9 +32,9 @@ get_header(); ?>
 							
 				<div class="clear"></div>
 							
-				<?php wp_link_pages( array( 'before' => '<div class="page-navigation"><p><strong>'.__( 'Pages','woothemes' ).':</strong> ', 'after' => '</p></div>', 'next_or_number' => 'number' ) ); ?>
+				<?php wp_link_pages(array( 'before' => '<div class="page-navigation"><p><strong>'.__( 'Pages','woothemes' ).':</strong> ', 'after' => '</p></div>', 'next_or_number' => 'number' )); ?>
 				
-				<?php edit_post_link( __( 'Edit this entry.', 'woothemes' ),'<p>','</p>' ); ?>
+				<?php edit_post_link(__( 'Edit this entry.', 'woothemes' ),'<p>','</p>' ); ?>
 			</div><!-- .post_text -->
 			
 			<?php if ( get_the_author_meta( 'description' ) ) : // If a user has filled out their description, show a bio on their entries  ?>
@@ -43,11 +43,11 @@ get_header(); ?>
 					<?php echo get_avatar( get_the_author_meta( 'user_email' ), 60 ); ?>
 				</div><!-- #author-avatar -->
 				<div id="author-description">
-					<h2 id="entry-author-info-heading"><?php esc_html( printf( __( 'About %s', 'woothemes' ), get_the_author() ) ); ?></h2>
+					<h2 id="entry-author-info-heading"><?php printf( esc_attr__( 'About %s', 'choco' ), get_the_author() ); ?></h2>
 					<?php the_author_meta( 'description' ); ?>
 					<div id="author-link">
 						<a href="<?php echo get_author_posts_url( get_the_author_meta( 'ID' ) ); ?>">
-							<?php printf( __( 'View all posts by %s <span class="meta-nav">&raquo;</span>', 'woothemes' ), get_the_author() ); ?>
+							<?php printf( __( 'View all posts by %s <span class="meta-nav">&raquo;</span>', 'choco' ), get_the_author() ); ?>
 						</a>
 					</div><!-- #author-link -->
 				</div><!-- #author-description -->
@@ -61,15 +61,11 @@ get_header(); ?>
 			
 			<?php comments_template( '', true); ?>
 
-		</div><!-- end .primary-content -->
+		</div><!-- end .span-11 -->
 	
 	<?php endwhile; else: ?>
 				
-		<?php
-			printf( __( '<p>Lost? Go back to the <a href="%s">home page</a></p>', 'woothemes' ),
-				get_home_url()
-			);
-		?>
+		<p><?php _e( 'Lost? Go back to the','woothemes' );?> <a href="<?php echo home_url(); ?>/"><?php _e( 'home page','woothemes' );?></a>.</p>
 	
 	<?php endif; ?>
 		

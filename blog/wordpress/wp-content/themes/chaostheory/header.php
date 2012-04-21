@@ -25,22 +25,9 @@ wp_head();
 		<div id="innerheader">
 			<h1 id="blog-title"><a href="<?php echo home_url( '/' ); ?>" title="<?php bloginfo( 'name' ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
 			<div id="blog-description"><?php bloginfo( 'description' ); ?></div>
-
-			<div id="header-image">
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">
-				<?php
-					if ( is_singular() &&
-						has_post_thumbnail( $post->ID ) &&
-						( $image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), array( HEADER_IMAGE_WIDTH, HEADER_IMAGE_WIDTH ) ) ) &&
-						$image[1] >= HEADER_IMAGE_WIDTH ) :
-						echo get_the_post_thumbnail( $post->ID, 'post-thumbnail' );
-					endif;
-				?>
-				</a>
-			</div>
-
 		</div>
 	</div><!--  #header -->
 
 	<p class="access"><a href="#content" title="<?php esc_attr_e( 'Skip navigation to the content', 'chaostheory' ); ?>"><?php _e( 'Skip navigation', 'chaostheory' ); ?></a></p>
+
 	<?php wp_nav_menu( array( 'container' => 'div', 'container_id' => 'globalnav', 'theme_location' => 'primary', 'menu_id' => 'menu', 'fallback_cb' => 'chaostheory_globalnav' ) ); ?>

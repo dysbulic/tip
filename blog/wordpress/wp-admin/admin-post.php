@@ -6,7 +6,7 @@
  * @subpackage Administration
  */
 
-/** We are located in WordPress Administration Screens */
+/** We are located in WordPress Administration Panels */
 define('WP_ADMIN', true);
 
 if ( defined('ABSPATH') )

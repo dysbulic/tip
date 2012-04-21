@@ -19,7 +19,7 @@
 			/* Add Custom CSS & JS */
 			function printAdminScripts () {
 				global $wp_locale;
-				if ( isset( $_GET['page'] ) && $_GET['page'] == basename(__FILE__) ) {
+				if ( $_GET['page'] == basename(__FILE__) ) {
 					wp_enqueue_style( 'jestro', get_bloginfo( 'template_directory' ).'/functions/stylesheets/admin.css' );
 					wp_enqueue_script( 'jestro', get_bloginfo( 'template_directory' ).'/functions/javascripts/admin.js', array( 'jquery' ));
 					if ( isset($wp_locale->text_direction) && 'rtl' == $wp_locale->text_direction )
@@ -32,23 +32,23 @@
 			/* Process Input and Add Options Page*/
 			function addAdminPage() {
 				// global $themename, $shortname, $options;
-				if ( isset( $_GET['page'] ) && $_GET['page'] == basename(__FILE__) ) {
-					if ( isset( $_REQUEST['action'] ) && 'save' == $_REQUEST['action'] ) {
+				if ( $_GET['page'] == basename(__FILE__) ) {
+					if ( 'save' == $_REQUEST['action'] ) {
 						foreach ($this->options as $value) {
-							if ( isset( $value['id'] ) ) {
-								if ( isset( $_REQUEST[ $value['id'] ] ) ) {
-									update_option( $value['id'], $_REQUEST[ $value['id'] ]	);
-								} else {
-									delete_option( $value['id'] );
-								}
+							update_option( $value['id'], $_REQUEST[ $value['id'] ] );
+						}
+						foreach ($this->options as $value) {
+							if ( isset( $_REQUEST[ $value['id'] ] ) ) {
+								update_option( $value['id'], $_REQUEST[ $value['id'] ]	);
+							} else {
+								delete_option( $value['id'] );
 							}
 						}
 						header("Location: themes.php?page=".basename(__FILE__)."&saved=true");
 						die;
-					} else if ( isset( $_REQUEST['action'] ) && 'reset' == $_REQUEST['action'] ) {
+					} else if ( 'reset' == $_REQUEST['action'] ) {
 						foreach ($this->options as $value) {
-							if ( isset( $value['id'] ) )
-								delete_option( $value['id'] );
+							delete_option( $value['id'] );
 						}
 						header("Location: themes.php?page=".basename(__FILE__)."&reset=true");
 						die;
@@ -60,8 +60,8 @@
 			/* Output of the Admin Page */
 			function adminPage () {
 				// global $themename, $shortname, $options;
-				if ( isset( $_REQUEST['saved'] ) && $_REQUEST['saved'] ) echo '<div id="message" class="updated fade"><p><strong>' . $this->themename . __( ' settings saved!', 'titan' ). '</strong></p></div>';
-				if ( isset( $_REQUEST['reset'] ) && $_REQUEST['reset'] ) echo '<div id="message" class="updated fade"><p><strong>' . $this->themename . __( ' settings reset.', 'titan' ). '</strong></p></div>'; ?>
+				if ( $_REQUEST['saved'] ) echo '<div id="message" class="updated fade"><p><strong>' . $this->themename . __( ' settings saved!', 'titan' ). '</strong></p></div>';
+				if ( $_REQUEST['reset'] ) echo '<div id="message" class="updated fade"><p><strong>' . $this->themename . __( ' settings reset.', 'titan' ). '</strong></p></div>'; ?>
 
 <div id="v-options">
 	<div class="v-top clear">
@@ -77,16 +77,16 @@
 							if ($i != 0) { ?>
 		<div class="v-save-button submit">
 			<input type="hidden" name="action" value="save" />
-			<input class="button-primary" type="submit" value="<?php esc_attr_e( 'Save changes', 'titan' ); ?>" name="save"/>
+			<input class="button-primary" type="submit" value="<?php _e( 'Save changes', 'titan' ); ?>" name="save"/>
 		</div><!--end v-save-button-->
 	</div>
 </div><!--end v-option--><?php } ?>
 <div class="v-option">
 	<h3><?php echo $this->options[$i]["name"]; ?></h3>
 	<div class="v-option-body clear">
-		<?php $notice = ( isset( $this->options[$i]["notice"] ) ) ? $this->options[$i]["notice"] : ''; ?>
-		<?php if ( $notice != '' ){ ?>
-			<p class="notice"><?php echo esc_html( $notice ); ?></p>
+		<?php $notice = $this->options[$i]["notice"] ?>
+		<?php if ($notice != '' ){ ?>
+			<p class="notice"><?php echo $notice; ?></p>
 		<?php } ?>
 						<?php
 							break;
@@ -182,18 +182,18 @@
 				endfor;
 			?>
 					<div class="v-save-button submit">
-						<input type="submit" value="<?php esc_attr_e( 'Save changes', 'titan' ); ?>" name="save"/>
+						<input type="submit" value="<?php _e( 'Save changes', 'titan' ); ?>" name="save"/>
 					</div><!--end v-save-button-->
 				</div>
 			</div>
 			<div class="v-saveall-button submit">
-				<input class="button-primary" type="submit" value="<?php esc_attr_e( 'Save all options', 'titan' ); ?>" name="save"/>
+				<input class="button-primary" type="submit" value="<?php _e( 'Save all options', 'titan' ); ?>" name="save"/>
 			</div>
 			</form>
 			<div class="v-reset-button submit">
 				<form method="post">
 					<input type="hidden" name="action" value="reset" />
-					<input class="v-reset" type="submit" value="<?php esc_attr_e( 'Reset all options', 'titan' ); ?>" name="reset"/>
+					<input class="v-reset" type="submit" value="<?php _e( 'Reset all options', 'titan' ); ?>" name="reset"/>
 				</form>
 			</div>
 

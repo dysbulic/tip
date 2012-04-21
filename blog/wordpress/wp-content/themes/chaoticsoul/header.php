@@ -31,12 +31,6 @@
 	<div id="header-image"><img alt="" src="<?php header_image() ?>" /></div>
 </div>
 
-<?php if ( has_nav_menu( 'primary' ) ) : ?>
-	<div id="access">
-		<?php wp_nav_menu( array( 'theme_location' => 'primary', 'menu_class' => 'menu clearfix' ) ); ?>
-	</div>
-<?php else : ?>
-	<div class="hr">&nbsp;</div>
-<?php endif; ?>
+<div class="hr">&nbsp;</div>
 
 <div id="wrapper" class="clearfix">

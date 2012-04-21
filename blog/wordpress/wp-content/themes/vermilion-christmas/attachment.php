@@ -17,25 +17,29 @@
 	  
 	  <p class="postmetadata">
 
-<?php _e( 'Published:', 'theme-slug' ); ?> <?php the_time(get_option('date_format')) ?><br />
+<?php /* This is commented, because it requires a little adjusting sometimes.
+		You'll need to download this plugin, and follow the instructions:
+		http://binarybonsai.com/archives/2004/08/17/time-since-plugin/ */
+		/* $entry_datetime = abs(strtotime($post->post_date) - (60*120)); echo time_since($entry_datetime); echo ' ago'; */ ?> 
+Published: <?php the_time(get_option('date_format')) ?> <!-- at <?php the_time() ?> --> <br />
 
 <?php if (('open' == $post-> comment_status) && ('open' == $post->ping_status)) {
 	// Both Comments and Pings are open ?>
-<a href="#respond"><?php _e( 'Leave a response', 'vermilionchristmas' ); ?></a> | <a href="<?php trackback_url(true); ?>" rel="trackback"><?php _e( 'Trackback', 'vermilionchristmas' ); ?></a>
+<a href="#respond">Leave a response</a> | <a href="<?php trackback_url(true); ?>" rel="trackback">Trackback</a>
 
 <?php } elseif (!('open' == $post-> comment_status) && ('open' == $post->ping_status)) {
 	// Only Pings are Open ?>
-	<?php printf( __( 'Responses are currently closed, but you can <a href="%s" rel="trackback">trackback</a> from your own site.', 'vermilionchristmas'), trackback_url( false ) ); ?>
+Responses are currently closed, but you can <a href="<?php trackback_url(true); ?> " rel="trackback">trackback</a> from your own site.
 
-<?php } elseif ( ( 'open' == $post->comment_status ) && ! ( 'open' == $post->ping_status ) ) {
+<?php } elseif (('open' == $post-> comment_status) && !('open' == $post->ping_status)) {
 	// Comments are open, Pings are not ?>
-	<?php _e( 'You can skip to the end and leave a response. Pinging is currently not allowed.', 'vermilionchristmas' ); ?>
+You can skip to the end and leave a response. Pinging is currently not allowed.
 
-<?php } elseif ( ! ( 'open' == $post->comment_status ) && ! ( 'open' == $post->ping_status ) ) {
+<?php } elseif (!('open' == $post-> comment_status) && !('open' == $post->ping_status)) {
 	// Neither Comments, nor Pings are open ?>
-	<?php _e( 'Both comments and pings are currently closed.', 'vermilionchristmas' ); ?>
+Both comments and pings are currently closed.
 
-<?php } edit_post_link( __( 'Edit this entry.', 'vermilionchristmas' ), '| ', '' ); ?>
+<?php } edit_post_link('Edit this entry.','| ',''); ?>
 
 </p>
 	  
@@ -45,7 +49,7 @@
 
 	<?php endwhile; else: ?>
 
-		<p><?php _e( 'Sorry, no attachments matched your criteria.', 'vermilionchristmas' ); ?></p>
+		<p>Sorry, no attachments matched your criteria.</p>
 
 <?php endif; ?>
 

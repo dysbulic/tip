@@ -1,11 +1,11 @@
-<?php
-/**
- * @package WordPress
- * @subpackage Monotone
- */
-get_header(); ?>
+<?php get_header(); ?>
 
-	<h2 class="center"><?php _e( 'Error 404 - Not Found', 'monotone' ); ?></h2>
-	<p><?php _e( 'It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help.', 'monotone' ); ?></p>
+	<div id="content" class="narrowcolumn">
+
+		<h2 class="center">Error 404 - Not Found</h2>
+
+	</div>
+
+<?php get_sidebar(); ?>
 
 <?php get_footer(); ?>

@@ -4,7 +4,7 @@ Theme URI: http://p2theme.com/
 Author: Automattic
 Author URI: http://automattic.com/
 Description: A group blog theme for short update messages, inspired by Twitter. Featuring: Hassle-free posting from the front page. Perfect for group blogging, or as a liveblog theme. Dynamic page updates. Threaded comment display on the front page. In-line editing for posts and comments. Live tag suggestion based on previously used tags. A show/hide feature for comments, to keep things tidy. Real-time notifications when a new comment or update is posted. Super-handy keyboard shortcuts. Helvetica Neue for you modern font lovers.
-Version: 1.3.3-wpcom
+Version: 1.2.3-wpcom
 Tags: blue, two-columns, fixed-width, rtl-language-support, right-sidebar, white, light, front-page-post-form, translation-ready, blog, business, education, lifestream, productivity, clean, corporate, geometric, light, minimal, modern
 License: GNU General Public License v2.0
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -88,19 +88,18 @@ blockquote + blockquote {
 	-moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 	box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 }
-#header {
+#header, #footer {
 	width: 980px;
 	margin: 0 auto;
 }
 #footer {
+	clear: both;
 	border: solid;
 	border-width: 1px;
-	clear: both;
 	margin: 20px auto 0;
-	width: 978px;
 }
 #footer p {
-	margin: 10px 15px;
+	margin: 10px 16px;
 }
 #wrapper {
 	/* this is #sidebar bg */
@@ -128,9 +127,9 @@ blockquote + blockquote {
 	width: auto;
 }
 #postbox {
-	background: url(i/white-93.png);
 	position: relative;
 	padding: 16px 15px 16px 14px;
+	margin-right: 1px;
 }
 #postbox .avatar {
 	margin-top: 16px;
@@ -152,18 +151,15 @@ blockquote + blockquote {
 .inputarea .selected {
 	display: block;
 }
-#postbox textarea#posttext,
-textarea.posttext {
+#postbox textarea#posttext, textarea.posttext {
+	width: 97.6%;
+	margin-bottom: 6px;
 	border: solid;
 	border-width: 1px;
 	font-size: 13px;
-	margin-bottom: 6px;
 	padding: 5px 7px;
-	width: 97.6%;
-	height: 4em;
 }
-#wrapper form input[type="text"],
-.inlineediting input[type="text"] {
+#wrapper form input[type="text"], .inlineediting input[type="text"] {
 	border: solid;
 	border-width: 1px;
 	padding: 5px 7px;
@@ -205,8 +201,7 @@ form#new_post {
 #media-buttons a img {
 	margin: 0 1px -2px;
 }
-#postbox input#posttitle,
-#postbox input#postcitation {
+#postbox input#posttitle, #postbox input#postcitation {
 	width: 97.6%;
 	margin-bottom: 5px;
 }
@@ -281,7 +276,6 @@ position: static;
 	border-top-width: 1px;
 	display: block;
 }
-
 #main h4 {
 	position: relative;
 }
@@ -290,15 +284,12 @@ position: static;
 	right: 2px;
 	top: 0;
 }
-.single-action-links {
-	display: none;
-}
 .bottom-of-entry {
-	display: block;
-	margin-bottom: 1px;
 	overflow: hidden;
 	width: 100%;
+	margin-bottom: 1px;
 	height: 9px;
+	display: inline-block;
 }
 .page-nav {
 	clear: both;
@@ -801,12 +792,12 @@ li.newupdates, li.newcomment {
 	padding: 0;
 }
 #help dt {
-	width: 25%;
+	width: 15%;
 	padding-right: 5%;
 	clear: left;
 }
 #help dd {
-	width: 70%;
+	width: 80%;
 }
 #userpage  ul {
 	padding-top: 10px;
@@ -900,7 +891,7 @@ div.entry {
 	border-left-width: 1px;
 	border-right-width: 2px;
 	border-bottom-width: 2px;
-	padding: 4px 6px 4px 24px;
+	padding: 4px 6px;
 	border-color: #eee;
 	border-top-color: #f5f5f5;
 	border-left-color: #f5f5f5;
@@ -919,19 +910,21 @@ div.entry {
 #post-types li a.selected {
 	cursor: default;
 }
-#post-types li a {
-	background-image: url(i/post-types.png);
-	background-position: 4px center;
-	background-repeat: no-repeat;
-}
-#post-types #post {
-	background-position: -196px center;
+#post-types #status {
+	background: url(i/statusicon.png) 4px center no-repeat;
+	padding-left: 24px;
 }
 #post-types #quote {
-	background-position: -396px center;
+	background: url(i/quoteicon.png) 4px center no-repeat;
+	padding-left: 24px;
 }
 #post-types #link {
-	background-position: -596px center;
+	background: url(i/linkicon.png) 4px center no-repeat;
+	padding-left: 24px;
+}
+#post-types #post {
+	background: url(i/posticon.png) 4px center no-repeat;
+	padding-left: 24px;
 }
 .discussion p a img {
 	padding: 0 !important;
@@ -1004,9 +997,6 @@ h3 {
 #main #postlist li {
 	border-top-color: #bbb;
 }
-#main #postlist li.inlineediting {
-	border-top: 0;
-}
 #main #postlist .commentlist li {
 	border-top-color: #ddd;
 }
@@ -1038,8 +1028,7 @@ h3 {
 	border-color: #d1d1d1;
 	color: #666;
 }
-#wrapper form input[type="text"],
-.inlineediting input[type="text"] {
+#wrapper form input[type="text"], .inlineediting input[type="text"] {
 	border-color: #d1d1d1;
 	background: #fafafa;
 	color: #666;
@@ -1083,8 +1072,6 @@ h3 {
 }
 #main p img {
 	border-color: #eee;
-	max-width: 98%;
-	height: auto;
 }
 #main p, #main ul, #main ol {
 	color: #555;
@@ -1182,6 +1169,10 @@ li.newupdates, li.newcomment {
 #main {
 	background: #fff;
 }
+#postbox {
+	background: url( i/white-93.png );
+	margin-right: -1px;
+}
 
 /*
 #
@@ -1191,12 +1182,7 @@ li.newupdates, li.newcomment {
 body, form *, #respond #cancel-comment-reply-link, input, textarea {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-h1,
-h2,
-h3,
-#postbox label,
-#help dd,
-.inlineediting input.title {
+h1, h2, h3, #postbox label, #help dd, .inlineediting input.title {
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-weight: 200;
 }
@@ -1268,8 +1254,7 @@ h4, h5, h6 {
 #postbox textarea#posttext, textarea.posttext {
 	font-size: 13px;
 }
-#wrapper form input[type="text"],
-.inlineediting input[type="text"] {
+#wrapper form input[type="text"], .inlineediting input[type="text"] {
 	font-size: 13px;
 	line-height: 16px;
 }
@@ -1304,17 +1289,13 @@ h4, h5, h6 {
 #main h4 span a {
 	font-weight: normal;
 }
-#main .inlineediting h4 {
-	display: none;
-}
 .postcontent h1 {
 	display: block;
 	font-size: 2em;
 	font-weight: 500;
 	padding: 10px 0 5px;
 }
-#main .postcontent h2,
-.inlineediting input.title {
+#main .postcontent h2, .inlineediting input.title {
 	font-size: 1.8em;
 	font-weight: 500;
 }
@@ -1449,25 +1430,6 @@ form.textedit textarea {
 .mention-highlight {
 	background-color: #DEEE66;
 }
-a.mention-current-user {
-	background: #efefef;
-	border: 1px solid #ddd;
-	border-top: none;
-	border-left: none;
-	border-radius: 4px;
-	color: #3478e3;
-	font-weight: bold;
-	margin: 0 2px;
-	padding: 0 3px;
-	text-shadow: 0 1px 0 #fff;
-}
-a.mention-current-user:hover {
-	background: #3478e3;
-	border-color: #3478e3;
-	box-shadow: 0 1px 1px #ddd;
-	color: #fff;
-	text-shadow: 0 1px 0 #333;
-}
 .wp-caption {
 	border: 1px solid #ddd;
 	text-align: center;
@@ -1495,18 +1457,12 @@ div.possibly-related {
 #main #wpl-likebox {
 	padding-left: 60px !important;
 }
-#wpl-must-login {
-	margin-left: -60px !important;
-}
 .sticky {
-	background-color: #e4f2fd;
-	border: 1px solid #d9e1e7 !important;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	-webkit-box-shadow: 0px 1px 3px rgba(85, 88, 90, 0.3);
-	-moz-box-shadow: 0px 1px 3px rgba(85, 88, 90, 0.3);
-	box-shadow: 0px 1px 3px rgba(85, 88, 90, 0.3);
+	background-color: #ffffe0;
+	border: 1px solid #e6db55 !important;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
 	margin: 10px 0;
 	padding: 10px !important;
 }
@@ -1530,80 +1486,3 @@ div.possibly-related {
 	font-weight: normal;
 	margin: 15px 0 0;
 }
-
-/* Santa completeness */
-
-.ui-menu.ui-autocomplete {
-	-moz-border-radius-bottomleft: 4px;
-	-moz-border-radius-bottomright: 4px;
-	-o-border-bottom-left-radius: 4px;
-	-o-border-bottom-right-radius: 4px;
-	-webkit-border-bottom-left-radius: 4px;
-	-webkit-border-bottom-right-radius: 4px;
-	border-radius: 0 0 4px 4px;
-	border-top: none;
-	-moz-box-shadow: 0 1px 3px rgba(0,0,0,.15);
-	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,.15);
-	box-shadow: 0 1px 3px rgba(0,0,0,.15);
-}
-
-.ui-menu.ui-autocomplete .avatar {
-	margin: 0 .3em 0 0;
-	width: 22px;
-	height: 22px;
-	vertical-align: middle;
-}
-
-.ui-menu .ui-menu-item a {
-	padding: 3px 4px !important;   
-	position: relative;
-	background: none !important;
-}
-
-.ui-menu .ui-menu-item:last-child .ui-state-hover,
-.ui-menu .ui-menu-item:last-child {
-	border-radius: 0 0 3px 3px;
-}
-
-.ui-menu li.ui-menu-item {
-	background: none !important; /* Overriding inline nth-child(2n+1) rule */
-}
-
-.ui-menu .ui-menu-item:nth-child(2n+1) a {
-    background: #D9E8FF !important; /* Applies rule again */
-	border-color: #D9E8FF;
-}
-
-.ui-menu .ui-menu-item a.ui-state-hover {
-	padding: 6px 7px !important;
-	margin: -3px;
-	-moz-transition: all .1s ease-in-out;
-	-webkit-transition: all .1s ease-in-out;
-	transition: all .1s ease-in-out;
-	background: #fff;
-	-moz-box-shadow: 0 1px 5px rgba(0,0,0,.45);
-	-webkit-box-shadow: 0 1px 5px rgba(0,0,0,.45);
-	box-shadow: 0 1px 5px rgba(0,0,0,.45);
-	background: #3478E3 !important; /* !important needed - overules previous changes on hover/focus */
-	z-index: 5;
-	color: #fff !important;
-}
-
-.ui-menu-item strong {
-	font-weight: normal;
-	background: #F5E749;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border-radius: 2px;
-	padding: 1px 2px 2px;
-	-moz-transition: all .2s ease-in-out;
-	-webkit-transition: all .2s ease-in-out;
-	transition: all .2s ease-in-out;
-}
-
-.ui-menu .ui-menu-item a.ui-state-hover strong {
-	background: #fff;
-	color: #000;
-}
-
-/* end Santa carnage */

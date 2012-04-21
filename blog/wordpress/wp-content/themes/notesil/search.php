@@ -52,7 +52,7 @@
 				<form id="searchform-no-results" class="blog-search" method="get" action="<?php echo home_url(); ?>">
 					<div>
 						<input id="s-no-results" name="s" class="text" type="text" value="<?php the_search_query(); ?>" size="40" />
-						<input class="button" type="submit" value="<?php esc_attr_e( 'Find', 'notesil' ); ?>" />
+						<input class="button" type="submit" value="<?php _e( 'Find', 'notesil' ); ?>" />
 					</div>
 				</form>
 			</div><!-- .post -->

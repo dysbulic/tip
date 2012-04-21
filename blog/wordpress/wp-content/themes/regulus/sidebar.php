@@ -120,6 +120,8 @@
 			<ul>
 				<?php wp_register(); ?>
 				<li><?php wp_loginout(); ?></li>
+				<li><a href="http://validator.w3.org/check/referer" title="<?php _e('This page validates as XHTML 1.0 Transitional'); ?>"><?php _e('Valid <abbr title="eXtensible HyperText Markup Language">XHTML</abbr>'); ?></a></li>
+				<li><a href="http://gmpg.org/xfn/"><abbr title="XHTML Friends Network">XFN</abbr></a></li>
 				<?php wp_meta(); ?>
 			</ul>
 			</li>

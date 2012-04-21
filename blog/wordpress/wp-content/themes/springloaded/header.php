@@ -12,15 +12,15 @@
 <?php if ( is_single() or is_page() ) wp_enqueue_script( 'comment-reply' ); ?>
 <?php wp_head(); ?>
 </head>
-<body <?php body_class(); ?>>
+<body>
 	
 <div id="header">
 	<div class="sleeve">
 	<h1><a href="<?php echo home_url( '/' ); ?>"><?php bloginfo( 'name' ); ?></a> <span><?php bloginfo( 'description' ) ?></span></h1>
 	
 	<div class="search-bar">
-		<form method="get" id="searchform" action="<?php echo home_url( '/' ); ?>">
-			<p><input type="text" name="s" onblur="this.value=(this.value=='' ) ? '<?php esc_attr_e( 'Search this Blog', 'springloaded' ); ?>' : this.value;" onfocus="this.value=(this.value=='<?php esc_attr_e( 'Search this Blog', 'springloaded' ); ?>' ) ? '' : this.value;" value="<?php esc_attr_e( 'Search this Blog', 'springloaded' ); ?>" id="s" />
+		<form method="get" id="searchform" action="<?php bloginfo( 'url' ); ?>/">
+			<p><input type="text" name="s" onblur="this.value=(this.value=='' ) ? '<?php _e( 'Search this Blog', 'springloaded' ); ?>' : this.value;" onfocus="this.value=(this.value=='<?php _e( 'Search this Blog', 'springloaded' ); ?>' ) ? '' : this.value;" value="<?php _e( 'Search this Blog', 'springloaded' ); ?>" id="s" />
 			<button type="submit" id="top-search-submit"><img src="<?php bloginfo( 'template_url' ); ?>/images/search-btn.gif" alt="Search" /></button></p>
 		</form>
 	</div>

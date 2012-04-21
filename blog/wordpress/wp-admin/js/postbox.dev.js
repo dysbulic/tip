@@ -5,8 +5,6 @@ var postboxes;
 			this.init(page,args);
 			$('.postbox h3, .postbox .handlediv').click( function() {
 				var p = $(this).parent('.postbox'), id = p.attr('id');
-				if ( 'dashboard_browser_nag' == id )
-					return;
 
 				p.toggleClass('closed');
 				postboxes.save_state(page);
@@ -20,15 +18,10 @@ var postboxes;
 			$('.postbox h3 a').click( function(e) {
 				e.stopPropagation();
 			} );
-			$('.postbox a.dismiss').click( function(e) {
-				var hide_id = $(this).parents('.postbox').attr('id') + '-hide';
-				$( '#' + hide_id ).prop('checked', false).triggerHandler('click');
-				return false;
-			} );
 			$('.hide-postbox-tog').click( function() {
 				var box = $(this).val();
 
-				if ( $(this).prop('checked') ) {
+				if ( $(this).attr('checked') ) {
 					$('#' + box).show();
 					if ( $.isFunction( postboxes.pbshow ) )
 						postboxes.pbshow( box );
@@ -100,18 +93,24 @@ var postboxes;
 				forcePlaceholderSize: true,
 				helper: 'clone',
 				opacity: 0.65,
-				stop: function(e,ui) {
-					if ( $(this).find('#dashboard_browser_nag').is(':visible') && 'dashboard_browser_nag' != this.firstChild.id ) {
-						$(this).sortable('cancel');
+				start: function(e,ui) {
+					$('body').css({
+						WebkitUserSelect: 'none',
+						KhtmlUserSelect: 'none'
+					});
+					/*
+					if ( $.browser.msie )
 						return;
-					}
-
+					ui.item.addClass('noclick');
+					*/
+				},
+				stop: function(e,ui) {
 					postboxes.save_order(page);
 					ui.item.parent().removeClass('temp-border');
-				},
-				receive: function(e,ui) {
-					if ( 'dashboard_browser_nag' == ui.item[0].id )
-						$(ui.sender).sortable('cancel');
+					$('body').css({
+						WebkitUserSelect: '',
+						KhtmlUserSelect: ''
+					});
 				}
 			});
 		},

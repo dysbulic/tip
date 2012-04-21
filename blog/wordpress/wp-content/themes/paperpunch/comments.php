@@ -15,7 +15,7 @@
 	<div class="comment-number">
 		<h4><?php comments_number( __( 'Leave a Comment', 'paperpunch' ), __( 'One Comment', 'paperpunch' ), __( '% Comments', 'paperpunch' )); ?></h4>
 		<?php if ( 'open' == $post->comment_status ) : ?>
-			<span><a href="#respond" title="<?php esc_attr_e( 'Leave a Comment', 'paperpunch' ); ?>"><?php _e( 'Leave a Comment', 'paperpunch' ); ?></a></span>
+			<span><a href="#respond" title="<?php _e( 'Leave a Comment', 'paperpunch' ); ?>"><?php _e( 'Leave a Comment', 'paperpunch' ); ?></a></span>
 		<?php endif; ?>
 	</div><!--end comment-number-->
 	<?php if ( ! empty($comments_by_type['comment']) ) : ?>

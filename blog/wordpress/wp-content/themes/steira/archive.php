@@ -4,6 +4,8 @@
 
 				<div id="content">
 
+<?php the_post(); ?>
+
 <?php if ( is_day() ) : ?>
 				<h2 class="page-title"><?php printf( __( 'Daily Archives: <strong>%s</strong>', 'steira' ), get_the_time(get_option('date_format')) ) ?></h2>
 

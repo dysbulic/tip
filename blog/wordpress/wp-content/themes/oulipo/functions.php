@@ -4,7 +4,7 @@
  * @subpackage Oulipo
  */
 
-require_once( dirname( __FILE__ ) . '/inc/theme-options.php' );
+require_once ( get_template_directory() . '/theme-options.php' );
 
 if ( function_exists( 'register_sidebar' ) )
 	register_sidebar();
@@ -12,9 +12,9 @@ if ( function_exists( 'register_sidebar' ) )
 $themecolors = array(
 	'bg' => 'ffffff',
 	'border' => 'eeeeee',
-	'text' => '222222',
+	'text' => '666666',
 	'link' => '000000',
-	'url' => 'ff9900',
+	'url' => 'ff9900'
 );
 
 if ( 'dark' == oulipo_current_color_scheme() ) {
@@ -23,7 +23,7 @@ if ( 'dark' == oulipo_current_color_scheme() ) {
 		'border' => '888888',
 		'text' => 'dddddd',
 		'link' => 'cccccc',
-		'url' => '999999',
+		'url' => '999999'
 	);
 }
 
@@ -53,21 +53,11 @@ function admin_header_style() {
 add_custom_image_header( '', 'admin_header_style' );
 
 /**
- *  Returns the current Oulipo theme options with defaults as fallback
- */
-function oulipo_get_theme_options() {
-	$defaults = array(
-		'color_scheme' => 'light',
-	);
-	$options = get_option( 'oulipo_theme_options', $defaults );
-	return $options;
-}
-
-/**
  *  Returns the current Oulipo color scheme as selected in the theme options
  */
 function oulipo_current_color_scheme() {
-	$options = oulipo_get_theme_options();
+	$options = get_option( 'oulipo_theme_options' );
+
 	return $options['color_scheme'];
 }
 
@@ -80,7 +70,7 @@ function oulipo_color_registrar() {
 		wp_enqueue_style( 'dark' );
 	}
 }
-add_action( 'wp_enqueue_scripts', 'oulipo_color_registrar' );
+add_action( 'wp_print_styles', 'oulipo_color_registrar' );
 
 /**
  * Adjust fallback page menu output to match custom menu output

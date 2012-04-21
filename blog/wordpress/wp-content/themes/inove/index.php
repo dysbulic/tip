@@ -1,8 +1,4 @@
-<?php
-/**
- * @package INove
- */
-get_header(); ?>
+<?php get_header(); ?>
 <?php
 	$options = get_option('inove_options');
 /*	if (function_exists('wp_list_comments')) {

@@ -25,6 +25,13 @@ class WP_Dependencies {
 	var $groups = array();
 	var $group = 0;
 
+	function WP_Dependencies() {
+		$args = func_get_args();
+		call_user_func_array( array(&$this, '__construct'), $args );
+	}
+
+	function __construct() {}
+
 	/**
 	 * Do the dependencies
 	 *
@@ -221,7 +228,7 @@ class _WP_Dependency {
 
 	var $extra = array();
 
-	function __construct() {
+	function _WP_Dependency() {
 		@list($this->handle, $this->src, $this->deps, $this->ver, $this->args) = func_get_args();
 		if ( !is_array($this->deps) )
 			$this->deps = array();

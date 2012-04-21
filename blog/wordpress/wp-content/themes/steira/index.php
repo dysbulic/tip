@@ -16,11 +16,11 @@
 						<h2 class="haslink">
 							<a href="<?php the_permalink(); ?>">
 								<span class="posted"><?php the_time(get_option("date_format")); ?></span>
-
+								
 								<?php if ( $count == 1 && is_home() && !is_paged() ) : ?>
 								<span class="new"><?php _e('New', 'steira'); ?></span>
 								<?php endif; ?>
-
+								
 								<span class="title"><?php the_title(); ?></span>
 							</a>
 						</h2>
@@ -29,7 +29,7 @@
 							<?php the_content('<p class="more">' . __('Continue reading this article &rsaquo;', 'steira') . '</p>'); ?>
 
 							<?php wp_link_pages('before=<p class="page-link">' . __( 'Pages:', 'steira' ) . '&after=</p>') ?>
-
+							
 							<p><?php the_tags(__( 'Tags: ', 'steira' ), ', ', ''); ?></p>
 						</div><!-- contentblock -->
 

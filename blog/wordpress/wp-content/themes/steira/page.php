@@ -2,7 +2,7 @@
 
 			<div id="body">
 				<div id="content">
-					<?php while ( have_posts() ) : the_post(); ?>
+					<?php the_post(); ?>
 
 					<div <?php post_class() ?> id="post-<?php the_ID(); ?>">
 						<h2 class="haslink">
@@ -21,8 +21,6 @@
 							<?php edit_post_link( __( 'Edit', 'steira'), '<p class="edit-post">', '</p>' ); ?>
 						</div><!-- contentblock -->
 					</div><!-- #post-<?php the_ID(); ?> -->
-
-					<?php endwhile; // end of the loop. ?>
 				</div><!-- content -->
 
 <?php get_sidebar(); ?>

@@ -26,7 +26,7 @@
 <li>
 <h2><?php _e('Stay Updated'); ?></h2>
 <ul id="feed">
-<li><a href="<?php bloginfo('rss2_url'); ?>" title="<?php esc_attr_e( 'Syndicate this site using RSS' ); ?>"><?php _e('RSS Articles'); ?></a></li>
+<li><a href="<?php bloginfo('rss2_url'); ?>" title="<?php _e('Syndicate this site using RSS'); ?>"><?php _e('RSS Articles'); ?></a></li>
 </ul>
 </li>
 <?php endif; ?>

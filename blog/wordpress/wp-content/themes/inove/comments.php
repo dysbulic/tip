@@ -1,9 +1,3 @@
-<?php
-/**
- * @package INove
- */
-?>
-
 <script type="text/javascript" src="<?php bloginfo('template_url'); ?>/js/comment.js?1"></script>
 
 <?php if ( !empty($post->post_password) && $_COOKIE['wp-postpass_' . COOKIEHASH] != $post->post_password ) : ?>

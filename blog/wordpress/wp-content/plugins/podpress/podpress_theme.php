@@ -26,19 +26,6 @@ if (!function_exists('podPress_webContent')) {
 		$divider = ' | ';
 		$podPressPlayBlockScripts = '';
 		$podPressContentAll = '';
-		
-		if ( TRUE === defined('PODPRESS_SHOW_SECTION_MARKERS') AND TRUE === constant('PODPRESS_SHOW_SECTION_MARKERS') ) {
-			$podpress_section_begin = "<!-- Begin: podPress -->\n";
-			$podpress_section_end = "\n<!-- End: podPress -->\n";
-			$podpress_downloadlinks_section_begin = "<!-- Begin:  podPress download link line -->\n";
-			$podpress_downloadlinks_section_end = "\n<!-- End:  podPress download link line -->\n";
-		} else {
-			$podpress_section_begin = '';
-			$podpress_section_end = '';
-			$podpress_downloadlinks_section_begin = '';
-			$podpress_downloadlinks_section_end = '';
-		}
-		
 
 		if ( TRUE == isset($podPress->settings['do_not_use_the_target_attribute']) AND TRUE === $podPress->settings['do_not_use_the_target_attribute'] ) {
 			$target_attribute = '';
@@ -59,37 +46,31 @@ if (!function_exists('podPress_webContent')) {
 			$dividerNeeded = false;
 			
 			$podPressEpisodeTitle = stripslashes(htmlspecialchars_decode(__($val['title'], 'podpress'))); // if the title is not given by the author then it will be a defaultTitle (see podPress_defaultTitles)
-
+			
 			if($val['enablePlayer']) {
 				if($podPressContent != '') {			
 					$podPressContent .= "<br />\n";
 				}
-				if ( $podPress->settings['contentAutoDisplayPlayer'] ) {
-					$style = ' style="display:block;" ';
-					$style_wrap_1pixelout = ' display:block;';
-				} else {
-					$style = ' style="display:none;" ';
-					$style_wrap_1pixelout = ' display:none;';
-				}
 				if ( 'audio_mp3' == $val['type'] AND TRUE == isset($podPress->settings['player']['listenWrapper']) AND TRUE == $podPress->settings['player']['listenWrapper'] AND FALSE == $podPress->settings['enablePodangoIntegration'] AND TRUE == isset($podPress->settings['mp3Player']) AND '1pixelout' == $podPress->settings['mp3Player'] ) {
-					$podPressContent .= "\n".'<div class="podpress_listenwrapper_container" id="podpress_lwc_'.$GLOBALS['podPressPlayer'].'" style="background-image:url('.PODPRESS_URL.'/images/listen_wrapper.gif);'.$style_wrap_1pixelout.'"><div class="podpress_mp3_borderleft"></div><div class="podpress_1pixelout_container"><div id="podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'"><!-- podPress --></div></div></div>'."\n";
+					$podPressContent .= "\n".'<div class="podpress_listenwrapper_container" id="podpress_lwc_'.$GLOBALS['podPressPlayer'].'" style="background-image:url('.PODPRESS_URL.'/images/listen_wrapper.gif);"><div class="podpress_mp3_borderleft"></div><div class="podpress_1pixelout_container"><div id="podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'"><!-- podPress --></div></div></div>'."\n";
 				} elseif ( 'audio_mp3' == $val['type'] AND (False == isset($podPress->settings['player']['listenWrapper']) OR FALSE == $podPress->settings['player']['listenWrapper']) AND FALSE == $podPress->settings['enablePodangoIntegration'] AND TRUE == isset($podPress->settings['mp3Player']) AND '1pixelout' == $podPress->settings['mp3Player'] ) {
-					$podPressContent .= "\n".'<div class="podpress_playerspace podpress_mp3player"'.$style.'><div id="podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'"><!-- podPress --></div></div>'."\n";
+					$podPressContent .= "\n".'<div class="podpress_playerspace podpress_mp3player"><div id="podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'"><!-- podPress --></div></div>'."\n";
 				} else {
-					$podPressContent .= "\n".'<div class="podpress_playerspace"><div id="podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'"'.$style.'><!-- podPress --></div></div>'."\n";
+					$podPressContent .= "\n".'<div class="podpress_playerspace" id="podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'"><!-- podPress --></div>'."\n";
 				}
 			}
-			$podPressDownloadlinks .= $podpress_downloadlinks_section_begin.'<div class="podPress_downloadlinks podPress_downloadlinks_'.$val['type'].'">';
+			
+			$podPressDownloadlinks .= '<!-- Begin: podPress download link line -->'."\n".'<div class="podPress_downloadlinks">';
 			
 			if(isset($val['image'])) {
 				if($val['enableDownload'] && !empty($val['URI'])) {
 					if ( 0 === strpos($val['type'], 'embed_') ) {
-						$podPressDownloadlinks .= '<a href="'.$val['URI'].'"'.$target_attribute.' title="'.attribute_escape(sprintf(__('Direct Link to %1$s', 'podpress'), $podPressEpisodeTitle)).'" class="podpress_downloadimglink podpress_downloadimglink_'.$val['type'].'">';
+						$podPressDownloadlinks .= '<a href="'.$val['URI'].'"'.$target_attribute.' title="'.attribute_escape(sprintf(__('Direct Link to %1$s', 'podpress'), $podPressEpisodeTitle)).'">';
 					} else {
-						$podPressDownloadlinks .= '<a href="'.$val['URI'].'"'.$target_attribute.' title="'.attribute_escape(sprintf(__('Download: %1$s', 'podpress'), $podPressEpisodeTitle)).'" class="podpress_downloadimglink podpress_downloadimglink_'.$val['type'].'">';
+						$podPressDownloadlinks .= '<a href="'.$val['URI'].'"'.$target_attribute.' title="'.attribute_escape(sprintf(__('Download: %1$s', 'podpress'), $podPressEpisodeTitle)).'">';
 					}
 				}
-				$podPressDownloadlinks .= '<img src="'.podPress_url().'images/'.$val['image'].'" class="podPress_imgicon podpress_imgicon_'.$val['type'].'" alt="" />';
+				$podPressDownloadlinks .= '<img src="'.podPress_url().'images/'.$val['image'].'" class="podPress_imgicon" alt="" />';
 				if($val['enableDownload'] && !empty($val['URI'])) {
 					$podPressDownloadlinks .= '</a>';
 				}
@@ -111,20 +92,20 @@ if (!function_exists('podPress_webContent')) {
 			}
 
 			$podPressDownloadlinks .= ' ';
-			$podPressDownloadlinks .= '<span class="podpress_mediafile_title podpress_mediafile_title_'.$val['type'].'">'.$podPressEpisodeTitle.'</span>';
+			$podPressDownloadlinks .= '<span class="podpress_mediafile_title">'.$podPressEpisodeTitle.'</span>';
 
 			if ( isset($podPressTemplateData['showDuration']) AND 'disabled' != $podPressTemplateData['showDuration'] AND FALSE == empty($val['duration'])) {
 				if ( empty($podPressTemplateData['showDuration']) OR 'enabled' == $podPressTemplateData['showDuration'] ) {
 					$podPressTemplateData['showDuration'] = 'colon';
 				}
 				if ( isset($podPress->settings['contentDurationdivider']) ) {
-					$podPressDownloadlinks .= ' <span class="podpress_mediafile_dursize podpress_mediafile_dursize_'.$val['type'].'">[ '.$podPress->millisecondstostring($podPress->strtomilliseconds($val['duration']), 'h:m:s:ms', $podPress->settings['contentDurationdivider']);
+					$podPressDownloadlinks .= ' <span class="podpress_mediafile_dursize">[ '.$podPress->millisecondstostring($podPress->strtomilliseconds($val['duration']), 'h:m:s:ms', $podPress->settings['contentDurationdivider']);
 				} else {
-					$podPressDownloadlinks .= ' <span class="podpress_mediafile_dursize podpress_mediafile_dursize_'.$val['type'].'">[ '.$podPress->millisecondstostring($podPress->strtomilliseconds($val['duration']), 'h:m:s:ms');
+					$podPressDownloadlinks .= ' <span class="podpress_mediafile_dursize">[ '.$podPress->millisecondstostring($podPress->strtomilliseconds($val['duration']), 'h:m:s:ms');
 				}
 				$durationfilesizeseparator = ' | ';
 			} else {
-				$durationfilesizeseparator = ' <span class="podpress_mediafile_dursize podpress_mediafile_dursize_'.$val['type'].'">[ ';
+				$durationfilesizeseparator = ' <span class="podpress_mediafile_dursize">[ ';
 			}
 			
 			if ( 'enabled' == $podPressTemplateData['showfilesize'] AND FALSE == empty($val['size']) AND FALSE === stristr($val['type'], 'embed_') ) {
@@ -134,7 +115,7 @@ if (!function_exists('podPress_webContent')) {
 				}
 				$podPressDownloadlinks .= $durationfilesizeseparator.$size_mb.' '.__('MB', 'podpress').' ]</span>';
 			} else {
-				if ( ' <span class="podpress_mediafile_dursize podpress_mediafile_dursize_'.$val['type'].'">[ ' != $durationfilesizeseparator) {
+				if ( ' <span class="podpress_mediafile_dursize">[ ' != $durationfilesizeseparator) {
 					$podPressDownloadlinks .= ' ]</span>';
 				}
 			}
@@ -144,7 +125,7 @@ if (!function_exists('podPress_webContent')) {
 			}
 
 			if(!$val['authorized']) {
-				$podPressDownloadlinks .= ' <a href="'.get_option('siteurl').'/wp-login.php" class="podpress_protected_link">'.__('(Protected Content)', 'podpress').'</a><br/>'."\n";
+				$podPressDownloadlinks .= ' <a href="'.get_option('siteurl').'/wp-login.php">'.__('(Protected Content)', 'podpress').'</a><br/>'."\n";
 			} else {
 				if($val['enablePlayer']) {
 					if ($dividerNeeded) {
@@ -153,35 +134,30 @@ if (!function_exists('podPress_webContent')) {
 						$hideplayerplaynow_divider = '';
 					}
 					
-					if ( (TRUE == isset($val['enableTorrentDownload']) AND TRUE == $val['enableTorrentDownload']) OR (TRUE == isset($val['enableTorrentDownload']) AND 'on' == $val['disablePreview']) ) {
+					if(TRUE == isset($val['enableTorrentDownload']) or 'on' == $val['disablePreview']) {
 						$previewVal = 'nopreview';
 					} else {
 						$previewVal = 'false';
 					}
 					
 					if ($val['enablePlaylink']) {
-						if ($podPress->settings['contentAutoDisplayPlayer']) {
-							$podPressDownloadlinks .= '<a href="#podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'" class="podpress_playlink podpress_playlink_'.$val['type'].'" onclick="javascript:podPressShowHidePlayer(\''.$GLOBALS['podPressPlayer'].'\', \''.js_escape($val['URI_Player']).'\', '.strval(intval($val['dimensionW'])).', '.strval(intval($val['dimensionH'])).', \''.$previewVal.'\', \''.$val['previewImage'].'\', \''.js_escape($val['title']).'\', \''.js_escape($val['artist']).'\'); return false;"><span id="podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'_PlayLink" class="podPress_playerspace_playlink">'.$hideplayerplaynow_divider.__('Play Now', 'podpress').'</span></a>';
-						} else {
-							$podPressDownloadlinks .= '<a href="#podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'" class="podpress_playlink podpress_playlink_'.$val['type'].'" onclick="javascript:podPressShowHidePlayer(\''.$GLOBALS['podPressPlayer'].'\', \''.js_escape($val['URI_Player']).'\', '.strval(intval($val['dimensionW'])).', '.strval(intval($val['dimensionH'])).', \'force\', \''.$val['previewImage'].'\', \''.js_escape($val['title']).'\', \''.js_escape($val['artist']).'\'); return false;"><span id="podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'_PlayLink" class="podPress_playerspace_playlink">'.$hideplayerplaynow_divider.__('Play Now', 'podpress').'</span></a>';
-						}
+						$podPressDownloadlinks .= '<a href="#podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'" onclick="javascript:podPressShowHidePlayer(\''.$GLOBALS['podPressPlayer'].'\', \''.js_escape($val['URI_Player']).'\', '.strval(intval($val['dimensionW'])).', '.strval(intval($val['dimensionH'])).', \'false\', \''.$val['previewImage'].'\', \''.js_escape($val['title']).'\', \''.js_escape($val['artist']).'\'); return false;"><span id="podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'_PlayLink" class="podPress_playerspace_playlink">'.$hideplayerplaynow_divider.__('Play Now', 'podpress').'</span></a>';
 						$dividerNeeded = true;
 					} else {
 						$podPressDownloadlinks .= '<span id="podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'_PlayLink" style="display:none">'.$hideplayerplaynow_divider.__('Play Now', 'podpress').'</span>';
 						$dividerNeeded = false;
 					}
-					$podPressDownloadlinks .= '<input type="hidden" id="podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'_OrigURL" value="'.attribute_escape($podPress->convertPodcastFileNameToValidWebPath($val['URI_orig'])).'" />';
 					
 					if ($podPress->settings['contentAutoDisplayPlayer']) {
-						$podPressPlayBlockScripts .= 'podPressShowHidePlayer(\''.$GLOBALS['podPressPlayer'].'\', \''.js_escape($val['URI_Player']).'\', '.strval(intval($val['dimensionW'])).', '.strval(intval($val['dimensionH'])).', \''.$previewVal.'\', \''.js_escape($val['previewImage']).'\', \''.js_escape($val['title']).'\', \''.js_escape($val['artist']).'\');';
+						$podPressPlayBlockScripts .= "\n".'podPressShowHidePlayer(\''.$GLOBALS['podPressPlayer'].'\', \''.js_escape($val['URI_Player']).'\', '.strval(intval($val['dimensionW'])).', '.strval(intval($val['dimensionH'])).', \''.$previewVal.'\', \''.js_escape($val['previewImage']).'\', \''.js_escape($val['title']).'\', \''.js_escape($val['artist']).'\');';
 					}
 				}
 
-				if ( $val['enablePopup'] AND FALSE === strpos($val['type'], 'ebook_') ) {
+				if($val['enablePopup']) {
 					if($dividerNeeded) {
 						$podPressDownloadlinks .= $divider;
 					}
-					$podPressDownloadlinks .= '<a href="#podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'" class="podpress_playinpopup podpress_playinpopup_'.$val['type'].'" onclick="javascript:podPressPopupPlayer(\''.$GLOBALS['podPressPlayer'].'\', \''.js_escape($val['URI_Player']).'\', '.strval(intval($val['dimensionW'])).', '.strval(intval($val['dimensionH'])).', \''.js_escape(get_bloginfo('name')).'\', \''.$post->ID.'\', \''.js_escape($val['title']).'\', \''.js_escape($val['artist']).'\'); return false;">'.__('Play in Popup', 'podpress').'</a>';
+					$podPressDownloadlinks .= '<a href="#podPressPlayerSpace_'.$GLOBALS['podPressPlayer'].'" onclick="javascript:podPressPopupPlayer(\''.$GLOBALS['podPressPlayer'].'\', \''.js_escape($val['URI_Player']).'\', '.strval(intval($val['dimensionW'])).', '.strval(intval($val['dimensionH'])).', \''.js_escape(get_bloginfo('name')).'\', \''.$post->ID.'\', \''.js_escape($val['title']).'\', \''.js_escape($val['artist']).'\'); return false;">'.__('Play in Popup', 'podpress').'</a>';
 					$dividerNeeded = true;
 				}
 
@@ -190,10 +166,10 @@ if (!function_exists('podPress_webContent')) {
 						$podPressDownloadlinks .= $divider;
 					}
 					if ( 0 === strpos($val['type'], 'embed_') ) {
-						$podPressDownloadlinks .= '<a href="'.$val['URI'].'"'.$target_attribute.' class="podpress_downloadlink podpress_downloadlink_'.$val['type'].'">'.__('Direct Link', 'podpress').'</a>';
+						$podPressDownloadlinks .= '<a href="'.$val['URI'].'"'.$target_attribute.'>'.__('Direct Link', 'podpress').'</a>';
 						$val['stats'] = false;
 					} else {
-						$podPressDownloadlinks .= '<a href="'.$val['URI'].'"'.$target_attribute.' class="podpress_downloadlink podpress_downloadlink_'.$val['type'].'">'.__('Download', 'podpress').'</a>';
+						$podPressDownloadlinks .= '<a href="'.$val['URI'].'"'.$target_attribute.'>'.__('Download', 'podpress').'</a>';
 						if($val['stats'] && $podPressTemplateData['showDownloadStats'] == 'enabled') {
 							$podPressDownloadlinks .= ' ('.$val['stats']['total'].')';
 							$val['stats'] = false;
@@ -206,27 +182,19 @@ if (!function_exists('podPress_webContent')) {
 					if($dividerNeeded) {
 						$podPressDownloadlinks .= $divider;
 					}
-					$podPressDownloadlinks .= ' <span class="podpress_downloadnr podpress_downloadnr_'.$val['type'].'">'.__('Downloads', 'podpress').' '.$val['stats']['total'].'</span>';
+					$podPressDownloadlinks .= ' '.__('Downloads', 'podpress').' '.$val['stats']['total'].'';
 					$dividerNeeded = true;
 				}
 
 			}
 			
-			$podPressDownloadlinks .= '</div>'.$podpress_downloadlinks_section_end;
+			$podPressDownloadlinks .= '</div>'."\n".'<!-- End: podPress download link line -->'."\n";
 			$podPressContentAll .= $podPressContent.apply_filters('podpress_downloadlinks', $podPressDownloadlinks);
 		}
 		if ($podPress->settings['contentAutoDisplayPlayer']) {
-			if ( TRUE === defined('PODPRESS_ADD_CDATA_SECTION_TO_POSTSCRIPT') AND TRUE === constant('PODPRESS_ADD_CDATA_SECTION_TO_POSTSCRIPT') ) {
-				$cdata_section_begin = '/* <![CDATA[ */ ';
-				$cdata_section_end = ' /* ]]> */';
-			} else {
-				$cdata_section_begin = '';
-				$cdata_section_end = '';
-			}
-			$podPressPlayBlockScripts = apply_filters('podpress_post_scriptblock', '<script type="text/javascript">' . $cdata_section_begin . $podPressPlayBlockScripts . $cdata_section_end . '</script>');
+			$podPressPlayBlockScripts = '<script type="text/javascript">'."\n".'<!--'.$podPressPlayBlockScripts."\n".'-->'."\n".'</script>';
 		}
-		
-		return apply_filters('podpress_post_content', $podpress_section_begin.'<div class="podPress_content">'.$podPressContentAll.'</div>'."\n".$podPressPlayBlockScripts.$podpress_section_end);
+		return apply_filters('podpress_post_content', "<!-- Begin: podPress -->\n".'<div class="podPress_content">'.$podPressContentAll.'</div>'."\n".$podPressPlayBlockScripts."\n<!-- End: podPress -->\n");
 	}
 }
 

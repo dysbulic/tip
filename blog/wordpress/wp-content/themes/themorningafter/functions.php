@@ -1,19 +1,14 @@
 <?php
-/**
- * @package WordPress
- * @subpackage The Morning After
- */
-
 // Set the content width based on the Theme CSS
 if ( ! isset( $content_width ) )
 	$content_width = 750;
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'border' => 'ebeff2',
-	'text' => '333333',
-	'link' => '3a6999',
-	'url' => 'a11b1b',
+	'border' => 'dadada',
+	'text' => '000000',
+	'link' => '3A6999',
+	'url' => '3A6999'
 );
 
 /** Tell WordPress to run morningafter_setup() when the 'after_setup_theme' hook is run. */
@@ -34,9 +29,6 @@ function morningafter_setup() {
 	
 	// Add default posts and comments RSS feed links to head
 	add_theme_support( 'automatic-feed-links' );
-	
-	//Add support for the Aside Formats
-	add_theme_support( 'post-formats', array( 'aside' ) );	
 		
 	// Make theme available for translation
 	// Translations can be filed in the /languages/ directory
@@ -137,7 +129,7 @@ add_filter( 'wp_page_menu', 'morningafter_add_menu_class' );
 
 // Register widgetized areas
 function morningafter_widgets_init() {
-	register_sidebar( array(
+	register_sidebar(array(
 		'name'=>__( 'Primary Sidebar', 'woothemes' ),
 		'id' => 'primary-sidebar',
 		'description' => __( 'The primary widget area.', 'woothemes' ),
@@ -145,9 +137,9 @@ function morningafter_widgets_init() {
 		'after_widget' => '</div>',
 		'before_title' => '<h3 class="mast">',
 		'after_title' => '</h3>',
-	) );
+	));
 
-	register_sidebar( array(
+	register_sidebar(array(
 		'name'=>__( 'Secondary Sidebar', 'woothemes' ),
 		'id' => 'secondary-sidebar',
 		'description' => __( 'The widget area only appears on the home page.', 'woothemes' ),
@@ -155,9 +147,9 @@ function morningafter_widgets_init() {
 		'after_widget' => '</div>',
 		'before_title' => '<h3 class="mast">',
 		'after_title' => '</h3>',
-	) );
+	));
 	
-	register_sidebar( array(
+	register_sidebar(array(
 		'name'=>__( 'Home Page Feature Widget Area', 'woothemes' ),
 		'id' => 'feature-widget-area',
 		'description' => __( 'The feature widget area above the sidebars on the home page.', 'woothemes' ),
@@ -165,7 +157,7 @@ function morningafter_widgets_init() {
 		'after_widget' => '</div>',
 		'before_title' => '<h3 class="mast">',
 		'after_title' => '</h3>',
-	) );	
+	));	
 }
 
 add_action( 'init', 'morningafter_widgets_init' );
@@ -241,7 +233,7 @@ function custom_comment( $comment, $args, $depth ) {
 			</p>
 
 			<cite>
-				<?php _e( 'Posted by','woothemes' ); ?> <span class="commentauthor"><?php comment_author_link(); ?></span> | <a href="#comment-<?php comment_ID(); ?>" title=""><?php comment_date( get_option( 'date_format' ) ); ?>, <?php comment_time(); ?></a> <?php edit_comment_link( 'edit','| ','' ); ?>
+				<?php _e( 'Posted by','woothemes' ); ?> <span class="commentauthor"><?php comment_author_link(); ?></span> | <a href="#comment-<?php comment_ID(); ?>" title=""><?php comment_date(get_option( 'date_format' )); ?>, <?php comment_time(); ?></a> <?php edit_comment_link( 'edit','| ','' ); ?>
 			</cite>
 		
 		</div>
@@ -255,9 +247,13 @@ function custom_comment( $comment, $args, $depth ) {
 function list_pings( $comment, $args, $depth ) {
 	$GLOBALS['comment'] = $comment; ?>
 
-	<li id="comment-<?php comment_ID(); ?>" class="post pingback">
-		<p><?php _e( 'Pingback:', 'woothemes' ); ?> <span class="author"><?php comment_author_link(); ?></span> - <span class="date"><?php echo get_comment_date(); ?></span> <span class="edit"><?php edit_comment_link( __( 'Edit', 'woothemes' ), '<span class="edit-link">', '</span>' ); ?></span></p>
+	<li id="comment-<?php comment_ID(); ?>">
 
+		<span class="pingcontent"><?php comment_text(); ?></span>
+		<div class="ping_meta">
+			<span class="author"><?php comment_author_link(); ?></span> -
+			<span class="date"><?php echo get_comment_date( get_option( 'date_format' ) ); ?></span>
+		</div>
 <?php }
 
 /**
@@ -273,12 +269,3 @@ function morningafter_page_menu_args( $args ) {
 	return $args;
 }
 add_filter( 'wp_page_menu_args', 'morningafter_page_menu_args' );
-
-/**
- * Set comment form default parameters
- */
-function morning_after_comment_form_defaults( $args ) {
-	$args['title_reply'] = __( 'Leave a Comment', 'woothemes' );
-	return $args;
-}
-add_filter( 'comment_form_defaults', 'morning_after_comment_form_defaults' );

@@ -62,25 +62,20 @@ table {
 	height: auto;
 	min-height: 100%;
 	width: 100%;
-	position: relative;
 }
 
 #wpcontent {
 	height: 100%;
+	padding-bottom: 50px;
 }
 
-#wpcontent,
-#footer {
-	margin-left: 165px;
+#wpbody {
+	clear: both;
+	margin-left: 175px;
 }
 
-#wpbody-content {
-	padding-bottom: 65px;
-}
-
-.js.folded #wpcontent,
-.js.folded #footer {
-	margin-left: 52px;
+.folded #wpbody {
+	margin-left: 60px;
 }
 
 #wpbody-content {
@@ -88,40 +83,32 @@ table {
 	width: 100%;
 }
 
-#adminmenuback,
-#adminmenuwrap,
-#adminmenu,
-.js.folded #adminmenu .wp-submenu.sub-open,
-.js.folded #adminmenu .wp-submenu-wrap {
-	width: 145px;
-}
-
-#adminmenuback {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	z-index: -1;
-}
-
-#adminmenuwrap {
-	float: left;
-}
-
 #adminmenu {
+	float: left;
 	clear: left;
+	width: 145px;
+	margin-top: 15px;
+	margin-right: 5px;
+	margin-bottom: 15px;
+	margin-left: -160px;
+	position: relative;
 	padding: 0;
 	list-style: none;
 }
 
-.js.folded #adminmenuback,
-.js.folded #adminmenuwrap,
-.js.folded #adminmenu,
-.js.folded #adminmenu li.menu-top {
-	width: 32px;
+.folded #adminmenu {
+	margin-left: -45px;
+}
+
+.folded #adminmenu,
+.folded #adminmenu li.menu-top {
+	width: 28px;
 }
 
 #footer {
+	clear: both;
 	position: relative;
+	width: 100%;
 }
 
 /* inner 2 column liquid layout */
@@ -241,7 +228,7 @@ td,
 textarea,
 input,
 select {
-	font-family: sans-serif;
+	font-family: "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
 	font-size: 13px;
 }
 
@@ -358,7 +345,7 @@ ol.ol-decimal > li {
 	margin: 8px 0 5px;
 	padding: 0;
 	white-space: nowrap;
-	font-size: 12px;
+	font-size: 11px;
 	float: left;
 }
 
@@ -392,10 +379,10 @@ ol.ol-decimal > li {
 	width: 100%;
 	clear: both;
 	margin: 0;
-	-moz-border-radius: 3px;
-	-khtml-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
+	-moz-border-radius: 4px;
+	-khtml-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
 }
 
 .widefat * {
@@ -433,11 +420,9 @@ ol.ol-decimal > li {
 
 .widefat td,
 .widefat th {
-	border-width: 1px 0;
-	border-style: solid;
-}
-.widefat tfoot th {
-	border-bottom: none;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	font-size: 11px;
 }
 
 .widefat .no-items td {
@@ -445,22 +430,20 @@ ol.ol-decimal > li {
 }
 
 .widefat td {
-	font-size: 12px;
-	padding: 4px 7px 2px;
+	padding: 3px 7px;
 	vertical-align: top;
 }
 
 .widefat td p,
 .widefat td ol,
 .widefat td ul {
-	font-size: 12px;
+	font-size: 11px;
 }
 
 .widefat th {
 	padding: 7px 7px 8px;
 	text-align: left;
 	line-height: 1.3em;
-	font-size: 14px;
 }
 
 .widefat th input {
@@ -471,12 +454,13 @@ ol.ol-decimal > li {
 
 .widefat .check-column {
 	width: 2.2em;
-	padding: 11px 0 0;
-	vertical-align: top;
+	padding: 0;
+
 }
 
 .widefat tbody th.check-column {
-	padding: 9px 0 22px;
+	padding: 7px 0 22px;
+	vertical-align: top;
 }
 
 .widefat .num,
@@ -491,7 +475,7 @@ ol.ol-decimal > li {
 }
 
 .wrap {
-	margin: 0 15px 0 0;
+	margin: 0 15px 0 5px;
 }
 
 div.updated,
@@ -517,91 +501,14 @@ div.error p {
 	margin: 5px 0 15px;
 }
 
-.wrap h2,
-.subtitle {
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", sans-serif;
-	font-weight: normal;
-	margin: 0;
-	text-shadow: rgba(255,255,255,1) 0 1px 0;
-}
 .wrap h2 {
-	font-size: 23px;
-	padding: 9px 15px 4px 0;
-	line-height: 29px;
-}
-.subtitle {
-	font-size: 14px;
-	padding-left: 25px;
-}
-.wrap .add-new-h2 {
-	font-family: sans-serif;
-	margin-left: 4px;
-	padding: 3px 8px;
-	position: relative;
-	top: -3px;
-	-moz-border-radius: 3px;
-	-khtml-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
-	text-decoration: none;
-	font-size: 12px;
+	font: italic normal normal 24px/29px Georgia, "Times New Roman", "Bitstream Charter", Times, serif;
+	margin: 0;
+	padding: 14px 15px 3px 0;
+	line-height: 35px;
+	text-shadow: rgba(255,255,255,1) 0 1px 0;
 }
 
 .wrap h2.long-header {
 	padding-right: 0;
-}
-
-
-/* =CSS 3 transitions
--------------------------------------------------------------- */
-.fade-1000 {
-	opacity: 0;
-	-moz-transition-property: opacity;
-	-moz-transition-duration: 1s;
-	-webkit-transition-property: opacity;
-	-webkit-transition-duration: 1s;
-	-o-transition-property: opacity;
-	-o-transition-duration: 1s;
-	transition-property: opacity;
-	transition-duration: 1s;
-}
-
-.fade-600 {
-	opacity: 0;
-	-moz-transition-property: opacity;
-	-moz-transition-duration: 0.6s;
-	-webkit-transition-property: opacity;
-	-webkit-transition-duration: 0.6s;
-	-o-transition-property: opacity;
-	-o-transition-duration: 0.6s;
-	transition-property: opacity;
-	transition-duration: 0.6s;
-}
-
-.fade-400 {
-	opacity: 0;
-	-moz-transition-property: opacity;
-	-moz-transition-duration: 0.4s;
-	-webkit-transition-property: opacity;
-	-webkit-transition-duration: 0.4s;
-	-o-transition-property: opacity;
-	-o-transition-duration: 0.4s;
-	transition-property: opacity;
-	transition-duration: 0.4s;
-}
-
-.fade-300 {
-	opacity: 0;
-	-moz-transition-property: opacity;
-	-moz-transition-duration: 0.3s;
-	-webkit-transition-property: opacity;
-	-webkit-transition-duration: 0.3s;
-	-o-transition-property: opacity;
-	-o-transition-duration: 0.3s;
-	transition-property: opacity;
-	transition-duration: 0.3s;
-}
-
-.fade-trigger {
-	opacity: 1;
 }

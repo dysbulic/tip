@@ -16,14 +16,10 @@
 	<?php } else { ?>
 		<h2 class="center"><?php _e('Not Found') ?></h2>
 		<p><?php _e('Sorry, no posts matched your criteria.'); ?></p>
-		<?php get_search_form(); ?>
 	<?php } ?>		
 	</div>
 	<div id="sidebar">
-		<h2><?php _e('Currently Browsing') ?></h2>
-		<ul>
-			<li><p><?php printf( __( 'You have searched the archives for %1$s. If you are unable to find anything in these search results, you can try one of these links.', 'connections' ), '<strong>' . get_search_query() . '</strong>' ); ?></p></li>
-		</ul>
+		<h2><?php _e('Currently Browsing') ?></h2><ul><li><p>You have searched the archives for <strong>'<?php the_search_query(); ?>'</strong>. If you are unable to find anything in these search results, you can try one of these links.</p></li></ul>
 		<?php get_sidebar(); ?>
 	</div>
 <?php get_footer(); ?>

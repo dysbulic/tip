@@ -44,7 +44,7 @@ function widget_chaostheory_meta($args) {
 function widget_sandbox_homelink($args) {
 	extract($args);
 	$options = get_option( 'widget_sandbox_homelink' );
-	$title = empty($options['title']) ? __( '&laquo; Home', 'chaostheory' ) : $options['title'];
+	$title = empty($options['title']) ? __( '&laquo; Home' ) : $options['title'];
 ?>
 <?php if ( !is_home() || is_paged() ) { ?>
 		<?php echo $before_widget; ?>
@@ -82,7 +82,7 @@ function widget_sandbox_homelink_control() {
 function widget_sandbox_rsslinks($args) {
 	extract($args);
 	$options = get_option( 'widget_sandbox_rsslinks' );
-	$title = empty($options['title']) ? __( 'RSS Links', 'chaostheory' ) : $options['title'];
+	$title = empty($options['title']) ? __( 'RSS Links' ) : $options['title'];
 ?>
 		<?php echo $before_widget; ?>
 			<?php echo $before_title . $title . $after_title; ?>

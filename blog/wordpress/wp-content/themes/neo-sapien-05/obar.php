@@ -30,7 +30,7 @@
 	</li>
 	<li><h2><?php _e('Search'); ?></h2>
 	<ul>
-		<li><?php get_search_form(); ?></li>
+		<li><?php include(TEMPLATEPATH . '/searchform.php'); ?></li>
 	</ul>
 	</li>
 <?php endif; ?>

@@ -35,7 +35,7 @@
 
 		<h4>Not Found</h4>
 		<p class="center"><?php _e("Sorry, but you are looking for something that isn't here.", 'daydream'); ?></p>
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . "/searchform.php"); ?>
 
 	<?php endif; ?>
 

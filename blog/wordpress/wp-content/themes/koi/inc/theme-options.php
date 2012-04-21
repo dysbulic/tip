@@ -25,7 +25,7 @@ function koi_theme_options_do_page() {
 	<div class="wrap">
 	    <?php screen_icon(); echo "<h2>" . get_current_theme() . __( ' Theme Options', 'ndesignthemes' ) . "</h2>"; ?>
 
-		<?php if ( isset( $_REQUEST['settings-updated'] ) && 'true' == $_REQUEST['settings-updated'] ) : ?>
+		<?php if ( 'true' == $_REQUEST['settings-updated'] ) : ?>
 		<div class="updated fade"><p><strong><?php _e( 'Options saved', 'ndesignthemes' ); ?></strong></p></div>
 		<?php endif; ?>
 
@@ -58,6 +58,6 @@ function koi_theme_options_do_page() {
 // Sanitize and validate input. Accepts an array, return a sanitized array.
 function koi_theme_options_validate( $input ) {
 	// Checkbox value should be 0 or 1
-	$input['hide-header-search'] = ( isset( $input['hide-header-search'] ) && $input['hide-header-search'] == 1 ? 1 : 0 );
+	$input['hide-header-search'] = ( $input['hide-header-search'] == 1 ? 1 : 0 );
 	return $input;
 }

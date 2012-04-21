@@ -10,7 +10,7 @@
 		</div>
 	
 		<div <?php post_class(); ?>>
-			<h2 id="post-<?php the_ID(); ?>"><?php the_title(); ?></h2>
+			<h2 id="post-<?php the_ID(); ?>"><a href="<?php echo get_permalink() ?>" rel="bookmark" title="<?php echo esc_attr( sprintf( __( 'Permanent Link: %s', 'black-letterhead' ), the_title_attribute( 'echo=0' ) ) ); ?>"><?php the_title(); ?></a></h2>
 	
 			<div class="entrytext">
 				<?php the_content('<p class="serif">'.__('Read the rest of this entry &raquo;', 'black-letterhead').'</p>'); ?>

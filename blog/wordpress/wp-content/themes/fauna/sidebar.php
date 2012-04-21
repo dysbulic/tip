@@ -83,7 +83,7 @@
 		<h4><?php _e('Category: '); ?><?php single_cat_title('', 'display'); ?></h4>
 		<p><?php echo category_description(); ?></p>
 		<p><?php _e('Also available:') ?>
-		<br /><a rel="nofollow" href="<?php echo get_category_rss_link(0, $cat, $post->cat_name); ?>" title="<?php esc_attr_e( 'RSS 2.0' ); ?>"><?php _e('RSS Feed for entries in this category') ?></a>.</p>
+		<br /><a rel="nofollow" href="<?php echo get_category_rss_link(0, $cat, $post->cat_name); ?>" title="<?php _e('RSS 2.0') ?>"><?php _e('RSS Feed for entries in this category') ?></a>.</p>
 	</div>
 	<?php } ?>
 

@@ -35,7 +35,7 @@
 	<?php else : ?>
 
 		<h2 class="center"><?php _e('Not Found','whiteasmilk'); ?></h2>
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 
 	<?php endif; ?>
 		

@@ -3,7 +3,7 @@
 Plugin Name: IntenseDebate
 Plugin URI: http://intensedebate.com/wordpress
 Description: <a href="http://www.intensedebate.com">IntenseDebate Comments</a> enhance and encourage conversation on your blog or website.  Full comment and account data sync between IntenseDebate and WordPress ensures that you will always have your comments.  Custom integration with your WordPress admin panel makes moderation a piece of cake. Comment threading, reply-by-email, user accounts and reputations, comment voting, along with Twitter and friendfeed integrations enrich your readers' experience and make more of the internet aware of your blog and comments which drives traffic to you!  To get started, please activate the plugin and adjust your  <a href="./options-general.php?page=id_settings">IntenseDebate settings</a> .
-Version: 2.9.2
+Version: 2.9
 Author: IntenseDebate & Automattic
 Author URI: http://intensedebate.com
 */
@@ -11,7 +11,7 @@ Author URI: http://intensedebate.com
 // CONSTANTS
 	
 	// This plugin's version 
-	define( 'ID_PLUGIN_VERSION', '2.9.2' );
+	define( 'ID_PLUGIN_VERSION', '2.9' );
 	
 	// API Endpoints
 	define( 'ID_BASEURL', 'http://intensedebate.com' );
@@ -168,6 +168,10 @@ Author URI: http://intensedebate.com
 			add_action( 'wp_set_comment_status', 'id_comment_status', 10, 2 );
 			add_action( 'trashed_comment', 'id_comment_trashed', 10 );
 			add_action( 'untrashed_comment', 'id_comment_untrashed', 10 );
+
+			// individual registration
+			add_action( 'show_user_profile', 'id_show_user_profile' );
+			add_action( 'profile_update', 'id_profile_update' );
 			
 			// Settings > Discussion sync
 			add_action( 'load-options.php', 'id_discussion_settings_page' );
@@ -366,6 +370,15 @@ Author URI: http://intensedebate.com
 			id_delete_user_meta( $user_id, $name );
 		}
 	}
+	
+	function id_user_connected() {
+		$current_user = wp_get_current_user();
+		$user_id = $current_user->ID;
+		$userID = id_get_user_meta( $user_id, 'id_userID' );
+		$userKey = id_get_user_meta( $user_id, 'id_userKey' );
+		
+		return ( $userID && $userKey );
+	}
 
 	// returns first non-null and non empty argment
 	function id_coalesce() {
@@ -387,6 +400,8 @@ Author URI: http://intensedebate.com
 		return (
 			get_option( 'id_blogID' ) &&
 			get_option( 'id_blogKey' ) &&
+			get_option( 'id_userID' ) &&
+			get_option( 'id_userKey' ) &&
 			get_option( 'id_blogAcct' )
 		);
 	}
@@ -464,7 +479,7 @@ Author URI: http://intensedebate.com
 			
 		$comment = new id_comment( array( 'comment_ID' => $comment_ID ) );
 		$comment->loadFromWP();
-		if ( ! in_array( $comment->comment_approved, apply_filters( 'id_comment_approved_blacklist', array( 'spam' ) ) ) ) {
+		if ( $comment->comment_approved != 'spam' ) {
 			// Don't send the spam
 			$queue = id_get_queue();
 			$queue->add( 'save_comment', $comment->export(), 'id_generic_callback' );
@@ -1087,7 +1102,6 @@ Author URI: http://intensedebate.com
 	}
 	
 	function id_REST_ping() {
-		global $wpmu_version;
 		return array( 'id_plugin_version' => ID_PLUGIN_VERSION, 'wp_version' => ( !empty( $wpmu_version ) ? 'WPMU/' : '' ) . get_bloginfo( 'version' ) );
 	}
 	
@@ -1426,6 +1440,7 @@ Author URI: http://intensedebate.com
 //			optionally provide &post_id= to get count for a specific post only
 	
 	function id_REST_get_approved_comment_count() {
+		include_once ABSPATH . '/wp-admin/includes/template.php';
 		if ( $p = id_param( 'post_id', 0 ) )
 			$result = wp_count_comments( $p );
 		else
@@ -1440,6 +1455,26 @@ Author URI: http://intensedebate.com
 		update_option( 'id_lock_queue', ( time() + $lock ) );
 		return get_option( 'id_lock_queue' );
 	}
+
+// AUTOLOGIN
+	
+	// drops autologin js after user has logged in via profile page, makes it so
+	// user does not need to login to IntenseDebate if they've already logged in here
+	function id_auto_login() {
+		global $userdata;
+		
+		if ( empty( $userdata->ID ) || get_option( 'id_auto_login' ) == 1 )
+			return false;
+
+		$wp_userID = $userdata->ID;			
+		$appKey = ID_APPKEY;
+		$userID = id_get_user_meta( $wp_userID, 'id_userID' );
+		$userKey = id_get_user_meta( $wp_userID, 'id_userKey' );
+		if ( id_user_connected() ) {
+			echo "<script type=\"text/javascript\" src=\"" . ID_BASEURL . "/services/v1/jsLogin.php?appKey={$appKey}&amp;userid={$userID}&amp;userKey={$userKey}\"></script>\n";
+		}
+	}
+	
 	
 // ADMIN BANNERS
 	
@@ -1451,6 +1486,17 @@ Author URI: http://intensedebate.com
 			?>
 			<div class="updated fade-ff0000">
 				<p><strong><?php printf( __( 'The IntenseDebate plugin is enabled but you need to adjust <a href="%s">your settings</a>.', 'intensedebate' ), $settingsurl ); ?></strong></p>
+			</div>
+			<?php
+			return;
+		}
+		
+		// user profile settings prompt
+		if ( !id_user_connected() && !empty( $_GET['page'] ) && $_GET['page'] != 'id_settings' && $_GET['page'] != 'id_registration' ) {
+			$profileurl = get_bloginfo( 'wpurl' ) . '/wp-admin/profile.php#intensedebatelogin';
+			?>
+			<div class="updated fade-ff0000">
+				<p><strong><?php printf( __( 'Connect to your IntenseDebate account. Go to your <a href="%s">WordPress profile</a> to log in or register.', 'intensedebate' ), $profileurl ); ?></strong></p>
 			</div>
 			<?php
 			return;
@@ -1474,6 +1520,138 @@ Author URI: http://intensedebate.com
 		</div>
 		<?php
 	}
+	
+	
+// PROFILE PAGE
+		
+	function id_show_user_profile() {
+		if ( id_user_connected() ) {
+			id_show_user_disconnect();
+			return;
+		}
+
+		global $userdata;
+		$id_username = id_coalesce( $userdata->id_username );
+
+		?>
+		<a name="intensedebatelogin">&nbsp;</a><br/>
+		<h2><img src="<?php echo ID_BASEURL ?>/images/intensedebate.png" alt="IntenseDebate Logo" class="idwp-logo" /> <?php _e( 'User Synchronization', 'intensedebate' ); ?></h2>
+		<table class="form-table">
+			<tbody>
+				<tr>
+					<th><label for="id_username"><?php _e( 'Username', 'intensedebate' ); ?></label></th>
+					<td><input type="text" id="id_username" name="id_username" value="<?php echo $id_username; ?>" /></td>
+				</tr>
+				<tr>
+					<th><label for="id_password"><?php _e( 'Password', 'intensedebate' ); ?></label></th>
+					<td><input type="password" id="id_password" class="required" name="id_password" value="" /></td>
+				</tr>
+			</tbody>
+		</table>
+		<p><?php printf( __( 'Not registered with IntenseDebate yet? <a target="_blank" href="%s">It\'s easy</a>.', 'intensedebate' ), ID_REGISTRATION_PAGE ); ?></p>
+		<?php
+	}
+		
+	function id_profile_update( $wp_userID = 0 ) {
+		// validation
+		if ( !$wp_userID ) {
+			return false;
+		}
+		
+		// Don't clear credentials when they were just being displayed
+		if ( 'true' == id_param( 'id_connected' ) )
+			return;
+		
+		$username = id_param( 'id_username' );
+		$password = id_param( 'id_password' );
+		if ( !$username || !$password ) {
+			id_save_usermeta_array( $wp_userID, array(
+				'id_username' => $username,
+				'id_userID' => null,
+				'id_userKey' => null
+			) );
+			return false;
+		}
+
+		// outgoing fields
+		$fields = array();
+		$fields['username'] = $username;
+		$fields['password'] = $password;
+		$fields['wp_userID'] = $wp_userID;
+		$fields['admin'] = current_user_can( 'manage_options' );
+
+		$queue = id_get_queue();
+		$op = $queue->add( 'user_login', $fields, 'id_profile_update_callback' );
+		$queue->ping( array( $op ) );
+
+		return true;
+	}
+	
+	function id_profile_update_callback( &$result, &$response, &$operation ) {
+		$args = func_get_args();
+		if ( $wp_userID = id_coalesce( @$operation->data['wp_userID'] ) ) {
+			id_save_usermeta_array( $wp_userID, array(
+				'id_username' => id_coalesce( $operation->data['username'] ),
+				'id_userID' => id_coalesce( $response->userID ),
+				'id_userKey' => id_coalesce( $response->userKey )
+			) );
+		}
+		return true;
+	}
+
+	// user disconnect form
+	function id_show_user_disconnect() {
+		$current_user = wp_get_current_user();
+		$user_ID = $current_user->ID;
+		?>
+				<a name="intensedebatelogin">&nbsp;</a><br/>
+				<input type="hidden" name="id_connected" value="true" />
+				<h2><img src="<?php echo ID_BASEURL ?>/images/intensedebate.png" alt="IntenseDebate Logo" class="idwp-logo" /> <?php _e( 'User Synchronization', 'intensedebate' ); ?></h2>
+
+	            <table class="form-table">
+					<tbody>
+						<tr>
+							<td colspan="2">
+	                        	<img src="<?php echo ID_BASEURL ?>/midimages/<?php echo id_get_user_meta( $user_ID, 'id_userID' ); ?>" alt="[Avatar]" class="idwp-avatar" />
+	                            <h3 class="idwp-floatnone"><?php printf( __( 'Synchronizing as %s', 'intensedebate' ), '<a href="' . ID_BASEURL . '/people/' . id_get_user_meta( $user_ID, 'id_username' ) . '">' . id_get_user_meta( $user_ID, 'id_username' ) . '</a>' ); ?></h3>
+	                            <p class="idwp-floatnone"><a href="<?php echo ID_BASEURL ?>/userDash"><?php _e( 'Dashboard', 'intensedebate' ); ?></a> | <a href="<?php echo ID_BASEURL ?>/editprofile"><?php _e( 'Edit profile', 'intensedebate' ); ?></a></p>
+	                            <p><a href="?id_settings_action=user_disconnect" id="id_user_disconnect"><?php _e( 'Disconnect from IntenseDebate', 'intensedebate' ) ?></a></p>
+	                            <span class="idwp-clear"></span>
+	                            <p class="idwp-nomargin"><?php printf( __( 'All WordPress comments are now synchronized with the IntenseDebate account above. <a href="%s">Read more here</a>.', 'intensedebate' ), ID_BASEURL . '/wordpress#userSync' ); ?></p>
+								<p></p>
+	                        </td>
+	                    </tr>
+	               	</tbody>
+	           	</table>				
+		<?php
+	}
+
+	// user disconnect postback
+	function id_SETTINGS_user_disconnect() {
+		$current_user = wp_get_current_user();
+		$user_id = $current_user->ID;
+
+		$fields = array(
+			'userKey' => get_option( 'id_userKey' ),
+			'userid' => get_option( 'id_userID' ),
+		);
+
+		$queue = id_get_queue();
+		$op = $queue->add( 'user_disconnect', $fields, 'id_generic_callback' );
+		$queue->ping( array( $op ) );
+		
+		$meta = array(
+			'id_username'
+			, 'id_displayname'
+			, 'id_email'
+			, 'id_userID'
+			, 'id_userKey'
+		);
+		foreach ( $meta as $key ) {
+			id_save_usermeta( $user_id, $key, null );
+		}
+	}
+	
 
 // DISCUSSION SETTINGS PAGE
 
@@ -1820,9 +1998,9 @@ Author URI: http://intensedebate.com
 			});
 
 		<?php if ( 0 == get_option( 'id_moderationPage' ) ) : ?>
-			jQuery('#adminmenu a[href="edit-comments.php"]').attr('id', "id_moderate_comment_link");
-			jQuery('#adminmenu a[href="edit-comments.php"]').attr('href', "admin.php?page=intensedebate");
-			jQuery('#favorite-actions a[href="edit-comments.php"]').attr('href', "admin.php?page=intensedebate");
+			jQuery('#adminmenu a[href=edit-comments.php]').attr('id', "id_moderate_comment_link");
+			jQuery('#adminmenu a[href=edit-comments.php]').attr('href', "admin.php?page=intensedebate");
+			jQuery('#favorite-actions a[href=edit-comments.php]').attr('href', "admin.php?page=intensedebate");
 		<?php endif; ?>
 		});
 		/* ]]> */
@@ -1847,7 +2025,7 @@ Author URI: http://intensedebate.com
 			<div class="clear"></div>
 			<h2>
 				<?php if ( get_option( 'id_blogID' ) && get_option( 'id_signup_step' ) >= 3 ) : ?>
-					<span class="idwp-logo-more"><?php printf( __( '<strong>Note:</strong> For more customization options please visit your <a href="%s">blog settings</a> page', 'intensedebate' ), ID_BASEURL . '/edit-site-account/' . get_option( 'id_blogID' ) ); ?></span>
+					<span class="idwp-logo-more"><?php printf( __( '<strong>Note:</strong> For more customization options please visit your <a href="%s">blog settings</a> page', 'intensedebate' ), ID_BASEURL . '/editacct/' . get_option( 'id_blogID' ) ); ?></span>
 				<?php endif; ?>
 				<img src="<?php echo ID_BASEURL ?>/images/intensedebate.png" alt="IntenseDebate" class="idwp-logo" /> <?php _e('Settings', 'intensedebate'); ?>
 			</h2>
@@ -2093,6 +2271,7 @@ Author URI: http://intensedebate.com
 									<h4><label for="txtEmail"><?php _e( 'Email/Username', 'intensedebate' ); ?></label></h4>
 									<div class="idwp-input-text-wrap">
 								    	<input id="txtEmail" autocomplete="off" type="text" class="required regular-text" name="id_remote_fields[username]" value="<?php echo $username; ?>" />
+								    	<p class="idwp-fade"><?php _e( 'The email address or username you use for your IntenseDebate.com account.', 'intensedebate' ); ?></p>
 									</div>
 									<h4><label for="txtPassword"><?php _e( 'Password/User Key', 'intensedebate' ); ?></label></h4>
 									<div class="idwp-input-text-wrap" style="margin-bottom: 20px;">
@@ -2141,9 +2320,9 @@ Author URI: http://intensedebate.com
 							<h3 class="idwp-success"><?php _e( 'Success! IntenseDebate is now fully activated on your blog.', 'intensedebate' ); ?> <a href="<?php echo get_option( 'home' ); ?>" target="_blank">&raquo; <?php _e( 'View blog', 'intensedebate' ); ?></a></h3>
 							<h4><?php _e( 'Here are a few other customization options you might want to check out:', 'intensedebate' ); ?></h4>
 							<ul class="idwp-list-arrows">
-								<li><a href="<?php echo ID_BASEURL ?>/edit-site-account/<?php echo get_option( 'id_blogID' ); ?>" target="_blank"><?php _e( 'Edit your blog settings on IntenseDebate.com', 'intensedebate' ); ?></a></li>
-								<li><a href="<?php echo ID_BASEURL ?>/edit-site-layout/<?php echo get_option( 'id_blogID' ); ?>" target="_blank"><?php _e( 'Customize the comment layout', 'intensedebate' ); ?></a></li>
-								<li><a href="<?php echo ID_BASEURL ?>/extras-widgets" target="_blank"><?php _e( 'Grab some comment widgets for your blog.', 'intensedebate' ); ?></a></li>
+								<li><a href="<?php echo ID_BASEURL ?>/editacct/<?php echo get_option( 'id_blogID' ); ?>" target="_blank"><?php _e( 'Edit your blog settings on IntenseDebate.com', 'intensedebate' ); ?></a></li>
+								<li><a href="<?php echo ID_BASEURL ?>/bTheme/<?php echo get_option( 'id_blogID' ); ?>" target="_blank"><?php _e( 'Customize the comment layout', 'intensedebate' ); ?></a></li>
+								<li><a href="<?php echo ID_BASEURL ?>/addOns" target="_blank"><?php _e( 'Grab some comment widgets for your blog.', 'intensedebate' ); ?></a></li>
 							</ul>
 							<form id="id_close_box" action="options-general.php?page=id_settings&hideSettingsTop=true" method="POST">
 							</form>
@@ -2181,7 +2360,7 @@ Author URI: http://intensedebate.com
 								<tr valign="top">
 									<th scope="row" style="white-space: nowrap;" ><?php _e( 'Comment Links', 'intensedebate' ); ?> <span style="cursor:pointer;" onclick="jQuery('#divCommentLinkInfo').slideToggle();"><img src="<?php echo ID_BASEURL ?>/images1/wp-info.png" /></span></th>
 									<td>
-										<input type="radio" name="id_jsCommentLinks" value="0" <?php if ( get_option( 'id_jsCommentLinks' ) == 0 ) echo "checked"; ?> id="id_jsCommentLinks_0"> <label for="id_jsCommentLinks_0"><?php _e( 'IntenseDebate Enhanced Comment Links', 'intensedebate' ); ?></label> (<a href="<?php echo ID_BASEURL ?>//edit-site-misc/<?php echo get_option('id_blogID'); ?>" target="_blank" title="Customize Comment Links"><?php _e( 'Customize Links', 'intensedebate' ); ?></a>)<br />
+										<input type="radio" name="id_jsCommentLinks" value="0" <?php if ( get_option( 'id_jsCommentLinks' ) == 0 ) echo "checked"; ?> id="id_jsCommentLinks_0"> <label for="id_jsCommentLinks_0"><?php _e( 'IntenseDebate Enhanced Comment Links', 'intensedebate' ); ?></label> (<a href="<?php echo ID_BASEURL ?>/editacct/<?php echo get_option('id_blogID'); ?>" target="_blank" title="Customize Comment Links"><?php _e( 'Customize Links', 'intensedebate' ); ?></a>)<br />
 										<input type="radio" name="id_jsCommentLinks" value="1" <?php if ( get_option( 'id_jsCommentLinks' ) == 1 ) echo "checked"; ?> id="id_jsCommentLinks_1"> <label for="id_jsCommentLinks_1"><?php _e( 'WordPress Standard Comment Links', 'intensedebate' ); ?></label>
 										<span class="idwp-clear"></span>                            
 										<p id="divCommentLinkInfo" class="hidden"><?php printf( __( 'Use customized comment link text by enabling IntenseDebate Enhanced Comment Links.  <a href="%s">Learn more</a> about customizing your comment links.', 'intensedebate' ), ID_BASEURL . '/faq#li181' ); ?></p>
@@ -2205,8 +2384,18 @@ Author URI: http://intensedebate.com
 										<p id="divModPageInfo" class="hidden"><?php _e( "Moderate and reply to IntenseDebate comments from your WordPress admin panel using our custom moderation page that mirrors the WordPress page that you're already used to.  The only difference is the extra IntenseDebate zest we've added by including IntenseDebate avatars, reputation points, profile links and all of our other metadata gravy that you'll love.", 'intensedebate' ); ?></p>
 									</td>
 								</tr>
+
+								<tr valign="top">
+									<th scope="row" style="white-space: nowrap;" ><?php _e( 'Auto Login', 'intensedebate' ); ?> <span style="cursor:pointer;" onclick="jQuery('#divAutoLoginInfo').slideToggle();"><img src="<?php echo ID_BASEURL ?>/images1/wp-info.png" /></span></th>
+									<td>
+										<input type="radio" name="id_auto_login" value="0" <?php if ( get_option( 'id_auto_login' ) == 0 ) echo "checked"; ?> id="id_auto_login_0"> <label for="id_auto_login_0"><?php printf( __( 'Automatically log me in to IntenseDebate when possible (<a href="%s">Connect your IntenseDebate account to your WordPress profile</a>)', 'intensedebate' ), 'profile.php#intensedebatelogin' ); ?></label> <br />
+										<input type="radio" name="id_auto_login" value="1" <?php if ( get_option( 'id_auto_login' ) == 1 ) echo "checked"; ?> id="id_auto_login_1"> <label for="id_auto_login_1"><?php _e( "Don't automatically log me in to IntenseDebate", 'intensedebate' ); ?></label>
+										<span class="idwp-clear"></span>                            
+										<p id="divAutoLoginInfo" class="hidden"><?php _e( "This setting will determine if we attempt to log you (or any users that have synced a WordPress account to an IntenseDebate account) in to IntenseDebate automatically when you're signed into your WordPress account.  Note: this might not work in Safari if third party cookies are not enabled.", 'intensedebate' ); ?></p>
+									</td>
+								</tr>
 							</tbody>
-						</table>
+						</table>						
 						
 						<p class="submit">
 							<input type="submit" name="Submit" value="<?php _e( 'Save Changes', 'intensedebate' ) ?>" class="button-primary" /> 
@@ -2403,6 +2592,8 @@ Author URI: http://intensedebate.com
 			&& $response->blogKey 
 			&& $response->blogAcct != ''
 		) {
+			id_save_option( 'id_userID', $response->userID );
+			id_save_option( 'id_userKey', $response->userKey );
 			id_save_option( 'id_blogID', $response->blogID );
 			id_save_option( 'id_blogKey', $response->blogKey );
 			id_save_option( 'id_blogAcct', $response->blogAcct );
@@ -2416,7 +2607,13 @@ Author URI: http://intensedebate.com
 			
 			//Set to go to next step
 			id_save_option( 'id_signup_step', 1 );
-						
+			
+			id_save_usermeta_array( $userdata->ID, array(
+				'id_userID' => $response->userID,
+				'id_userKey' => $response->userKey,
+				'id_username' => $response->username
+			) );
+			
 			// password IntenseDebate uses to request imported comments
 			id_save_option( 'id_import_token', $operation->data['token'] );
 
@@ -2440,7 +2637,10 @@ Author URI: http://intensedebate.com
 	function id_moderate_comments() {
 		global $userdata;
 		$wp_userID = $userdata->ID;
-				
+		
+		$userID = id_get_user_meta( $wp_userID, 'id_userID' );
+		$userKey = id_get_user_meta( $wp_userID, 'id_userKey' );
+		
 		$curSysTime = gmdate( "U" );
 		
 		$iframe_url = ID_COMMENT_MODERATION_PAGE;
@@ -2448,14 +2648,14 @@ Author URI: http://intensedebate.com
 			$iframe_url = str_replace( 'http://', 'https://secure.', $iframe_url );
 		?>
 		
-		<div class="wrap">
-			<?php if ( function_exists( 'screen_icon' ) ) screen_icon( 'edit-comments' ); ?>
-			<h2><?php _e( 'Edit Comments', 'intensedebate' ); ?></h2>
-			<iframe frameborder="0" id="id_iframe_moderation" src="<?php echo $iframe_url . get_option( 'id_blogID' ); ?>" style="width: 100%; height: 500px; border: none;" onload="addScript()" scrolling="auto"></iframe>
-		</div>
+			<div class="wrap">
+				<?php if ( function_exists( 'screen_icon' ) ) screen_icon( 'edit-comments' ); ?>
+				<h2><?php _e( 'Edit Comments', 'intensedebate' ); ?></h2>
+				<iframe frameborder="0" id="id_iframe_moderation" src="<?php echo $iframe_url . get_option( 'id_blogID' ) . "&userid=$userID&time=$curSysTime&authstr=" . md5( $userKey . $curSysTime ); ?>" style="width: 100%; height: 500px; border: none;" onload="addScript()" scrolling="auto"></iframe>
+			</div>
 		
 		<script type="text/javascript">		
-		jQuery('#adminmenu a[href="edit-comments.php"]').addClass('current');
+		jQuery('#adminmenu a[href=edit-comments.php]').addClass('current');				
 		function addScript() {
 			setTimeout("addScript2();", 100);
 		}

@@ -1,20 +1,12 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Neo Sapien 05
- */
 
 $themecolors = array(
 	'bg' => 'eeeeee',
 	'text' => '000000',
-	'link' => 'cc0000',
-	'border' => '000000',
-	'url' => '5e0000',
+	'link' => 'cc0000'
 );
 
 $content_width = 460;
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 add_theme_support( 'automatic-feed-links' );
 

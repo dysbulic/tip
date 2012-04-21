@@ -39,14 +39,6 @@
 					array(  "name" => __('Color Scheme', 'vigilance'),
 									"type" => "subhead"),
 
-					array(  "name" => __( 'Base Color Scheme', 'vigilance' ),
-									"id" => $this->shortname."_base_color_scheme",
-									"desc" => __( 'Choose your base color scheme', 'vigilance' ),
-									"std" => "Light",
-									"type" => "radio",
-									"options" => array( "Light" => __( 'Light', 'vigilance' ),
-																			"Dark"  =>  __( 'Dark', 'vigilance' ) ) ),
-
 					array(  "name" => __('Customize colors', 'vigilance'),
 									"id" => $this->shortname."_background_css",
 									"desc" => __('If enabled your theme will use the colors you choose below.', 'vigilance'),
@@ -141,9 +133,6 @@
 			}
 
 			/* CSS FUNCTIONS */
-			function baseColorScheme() {
-				return get_option( $this->shortname.'_base_color_scheme' );
-			}
 			function backgroundCss() {
 				return get_option( $this->shortname.'_background_css' );
 			}

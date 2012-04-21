@@ -38,7 +38,7 @@ add_action( 'admin_init', 'morningafter_theme_form_setting_init' );
 function morningafter_settings_template_headings_text() { ?>
 	<p><?php _e( 'Manage Template Heading options for the Morning After Theme.', 'woothemes' ); ?></p>
 	<div class="example" style="width: 582px">
-		<img src="<?php echo get_template_directory_uri() . '/inc/images/template_heading.jpg'; ?>" alt="<?php esc_attr_e( 'Template Heading Example.', 'woothemes' ); ?>" />
+		<img src="<?php echo get_template_directory_uri() . '/inc/images/template_heading.jpg'; ?>" alt="<?php _e( 'Template Heading Example.', 'woothemes' ); ?>" />
 		<p class="example-text"><?php _e( 'Template Heading Example.', 'woothemes' ); ?></p>
 	</div>	
 <?php }

@@ -8,14 +8,14 @@ Template Name: Archives
 
 <div id="content" class="widecolumn">
 
-<?php get_search_form(); ?>
+<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 
-<h2><?php _e( 'Archives by Month:', 'sunburn' ); ?></h2>
+<h2>Archives by Month:</h2>
   <ul>
     <?php wp_get_archives('type=monthly'); ?>
   </ul>
 
-<h2><?php _e( 'Archives by Subject:', 'sunburn' ); ?></h2>
+<h2>Archives by Subject:</h2>
   <ul>
      <?php wp_list_cats(); ?>
   </ul>

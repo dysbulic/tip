@@ -1,7 +1,7 @@
 <?php
 
 function p2_body_class( $classes ) {
-	if ( is_tax( P2_MENTIONS_TAXONOMY ) )
+	if ( is_tax( 'mentions' ) )
 		$classes[] = 'mentions';
 
 	return $classes;
@@ -53,9 +53,32 @@ function p2_user_display_name() {
 	echo p2_get_user_display_name();
 }
 	function p2_get_user_display_name() {
-		$current_user = wp_get_current_user();
+		global $current_user;
 
 		return apply_filters( 'p2_get_user_display_name', isset( $current_user->first_name ) && $current_user->first_name ? $current_user->first_name : $current_user->display_name );
+	}
+
+function p2_user_avatar( $args = '' ) {
+	echo p2_get_user_avatar( $args );
+}
+	function p2_get_user_avatar( $args = '' ) {
+		global $current_user;
+
+		$defaults = array(
+			'user_id' => false,
+			'email' => ( isset( $current_user->user_email ) ) ? $current_user->user_email : '',
+			'size' => 48
+		);
+
+		$r = wp_parse_args( $args, $defaults );
+		extract( $r, EXTR_SKIP );
+
+		if ( !$user_id )
+			$avatar = get_avatar( $email, $size );
+		else
+			$avatar = get_avatar( $user_id, $size );
+
+	 	return apply_filters( 'p2_get_user_avatar', $avatar, $r );
 	}
 
 function p2_discussion_links() {
@@ -154,23 +177,20 @@ function p2_page_number() {
 	}
 
 function p2_media_buttons() {
-	// If we're using http and the admin is forced to https, bail.
-	if ( ! is_ssl() && ( force_ssl_admin() || get_user_option( 'use_ssl' ) )  ) {
-		return;
-	}
-
-	include_once( ABSPATH . '/wp-admin/includes/media.php' );
-	ob_start();
-	do_action( 'media_buttons' );
-
-	// Replace any relative paths to media-upload.php
-	echo preg_replace( '/([\'"])media-upload.php/', '${1}' . admin_url( 'media-upload.php' ), ob_get_clean() );
+	echo P2::media_buttons();
 }
 
 function p2_get_hide_sidebar() {
 	return ( '' != get_option( 'p2_hide_sidebar' ) ) ? true : false;
 }
 
+function p2_author_id() {
+	echo p2_get_author_id();
+}
+	function p2_get_author_id() {
+		global $authordata;
+		return apply_filters( 'p2_get_author_id', $authordata->ID );
+	}
 function p2_archive_author() {
 	echo p2_get_archive_author();
 }
@@ -185,6 +205,40 @@ function p2_get_archive_author() {
 	if ( isset( $curauth->display_name ) )
 		return apply_filters( 'p2_get_archive_author', $curauth->display_name );
 }
+
+function p2_author_name() {
+	echo p2_get_author_name();
+}
+	function p2_get_author_name() {
+		global $authordata;
+
+		if ( isset( $authordata->display_name ) )
+			return apply_filters( 'p2_get_author_name', $authordata->display_name );
+	}
+
+function p2_author_nickname() {
+	echo p2_get_author_name();
+}
+	function p2_get_author_nickname() {
+		global $authordata;
+
+		if ( isset( $authordata->nickname ) )
+			return apply_filters( 'p2_get_author_nickname', $authordata->nickname );
+	}
+
+function p2_mention_name() {
+	echo p2_get_mention_name();
+}
+	function p2_get_mention_name() {
+		$name = '';
+		$mention_name = get_query_var( 'term' );
+		$name_map = p2_get_at_name_map();
+
+		if ( isset( $name_map["@$mention_name"] ) )
+			$name = get_userdata( $name_map["@$mention_name"]['id'] )->display_name;
+
+		return apply_filters( 'p2_get_mention_name', $name );
+	}
 
 function p2_author_feed_link() {
 	echo p2_get_author_feed_link();
@@ -208,11 +262,10 @@ function p2_user_identity() {
 		return $user_identity;
 	}
 
-function p2_load_entry( $force_comments = true ) {
+function p2_load_entry() {
 	global $withcomments;
 
-	if ( $force_comments )
-		$withcomments = true;
+	$withcomments = true;
 
 	get_template_part( 'entry' );
 }

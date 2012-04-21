@@ -1,8 +1,4 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Paperpunch
- */
 
 // Comments
 require_once( get_template_directory() . '/functions/comments.php' );
@@ -91,7 +87,7 @@ $content_width = 595;
 $themecolors = array(
 	'bg' => 'ffffff',
 	'border' => 'bebcad',
-	'text' => '444444',
+	'text' => '000000',
 	'link' => '5785a4',
-	'url' => 'e7e6ea',
+	'url' => '5785a4'
 );

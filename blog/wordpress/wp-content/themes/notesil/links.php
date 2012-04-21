@@ -8,7 +8,7 @@ Template Name: Links Page
 	<div id="container">
 		<div id="content">
 
-			<?php while ( have_posts() ) : the_post(); ?>
+<?php the_post(); ?>
 
 			<div id="post-<?php the_ID(); ?>" class="<?php notesil_post_class(); ?>">
 				<h2 class="entry-title"><?php the_title(); ?></h2>
@@ -24,9 +24,7 @@ Template Name: Links Page
 				</div>
 			</div><!-- .post -->
 
-			<?php if ( get_post_custom_values( 'comments' ) ) comments_template() // Add a key/value of "comments" to enable comments on pages! ?>
-
-			<?php endwhile; // end of the loop. ?>
+<?php if ( get_post_custom_values( 'comments' ) ) comments_template() // Add a key/value of "comments" to enable comments on pages! ?>
 
 		</div><!-- #content -->
 

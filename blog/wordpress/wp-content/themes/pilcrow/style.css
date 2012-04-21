@@ -2,11 +2,9 @@
 Theme Name: Pilcrow
 Theme URI: http://wordpress.org/extend/themes/pilcrow/
 Description: Pilcrow&rsquo;s 6 different layouts, with multiple sidebar configurations, four default color schemes, custom header images (using featured images in posts and pages), and a customizable background, make personalizing your blog a snap.
-Version: 1.2-wpcom
+Version: 1.0-wpcom
 Author: Automattic
 Author URI: http://automattic.com/
-License: GNU General Public License
-License URI: license.txt
 Tags: custom-header, custom-background, custom-menu, sticky-post, microformats, rtl-language-support, translation-ready, featured-image-header, featured-images, blog, education, photography, bright, clean, conservative, formal, generic, light, minimal, simple
 */
 
@@ -340,7 +338,6 @@ pre {
 	margin-bottom: 1.7em;
 	overflow-x: auto;
 	padding: 0.75em 1.7em;
-	overflow-x: scroll;
 }
 code, kbd {
 	color: #009900;
@@ -382,7 +379,7 @@ input[type=text] {
 
 /* Links */
 a {
-	color: #1c9bdc;
+	color:#1c9bdc;
 	text-decoration: none;
 }
 a:focus,
@@ -407,7 +404,7 @@ a:hover {
 	margin-bottom: 30px;
 }
 #site-title {
-	text-align: right;
+	text-align: right;	
 }
 #site-title a {
 	color: #000;
@@ -498,7 +495,7 @@ a:hover {
 	color: #000;
 	font-size: 24px;
 	margin-bottom: 30px;
-	padding: 4px 8px;
+	padding: 4px 8px;	
 }
 .page-title span {
 	color: #999;
@@ -628,9 +625,6 @@ a:hover {
 	background: url(images/icons/cabinet.png) no-repeat 0 2px;
 	padding: 0 0 0 24px;
 }
-#author-description {
-	margin: 0 0 10px;
-}
 
 /* Sticky Posts */
 .sticky .entry-meta {
@@ -683,8 +677,8 @@ img.size-auto,
 img.size-large,
 img.size-full,
 img.size-medium,
+img.size-thumbnail,
 .attachment img {
-	height: auto;
 	max-width: 100%;
 }
 .entry img.left_off {
@@ -720,7 +714,6 @@ p img,
 }
 .wp-caption img {
 	border: 0 none;
-	height: auto;
 	margin: 0;
 	max-width: 98%;
 	padding: 0;
@@ -732,6 +725,7 @@ p img,
 	padding: 0 4px 8px 0;
 }
 .gallery-caption {
+	
 }
 
 
@@ -739,7 +733,6 @@ p img,
 -------------------------------------------------------------- */
 
 .navigation {
-	clear: both;
 	overflow: hidden;
 }
 .nav-previous {
@@ -848,45 +841,6 @@ p img,
 	vertical-align: middle;
 }
 
-/* Calendar Widget */
-#wp-calendar {
-	width: 100%;
-}
-#wp-calendar caption {
-	color: #888;
-	font-size: 13px;
-	font-weight: bold;
-	margin: 6px 0;
-	text-align: left;
-	padding: 0 2px 6px;
-}
-#wp-calendar th {
-	color: #888;
-	text-align: center;
-}
-#wp-calendar tbody td {
-	text-align: center;
-}
-#wp-calendar tfoot td {
-	padding-top: .2em;
-}
-#wp-calendar tfoot #next {
-	text-align: right;
-}
-#wp-calendar tbody a {
-	text-decoration: underline;
-}
-#wp-calendar a:visited {
-	color: #0060ff;
-}
-#wp-calendar a:visited:hover {
-	color: #df0000;
-}
-#wp-calendar tbody #today {
-	background: #f5f5f5;
-	border-bottom: 1px solid #ddd;
-	padding: 3px 0;
-}
 
 /* Footer Widgets */
 #footer-widget-area {
@@ -1011,7 +965,7 @@ cite.fn {
 }
 .form-allowed-tags {
 	color: #999;
-	font-size: 12px;
+	font-size: 12px;	
 }
 .form-allowed-tags code {
 	color: #999;
@@ -1101,16 +1055,5 @@ cite.fn {
 	#footer {
 		display: none !important;
 	}
-
 }
 
-
-/* =WP.com
--------------------------------------------------------------- */
-
-body.typekit-enabled #site-info {
-	width: 40%;
-}
-body.typekit-enabled #site-generator {
-	width: 60%;
-}

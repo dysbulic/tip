@@ -16,7 +16,7 @@
 	wp_head(); 
 	?>	
 </head>
-<body <?php body_class(); ?>>
+<body>
 <div id="rap">
 	<div id="header"><h1><a href="<?php bloginfo('url'); ?>"><?php bloginfo('name'); ?></a></h1></div>
 	<div id="main">

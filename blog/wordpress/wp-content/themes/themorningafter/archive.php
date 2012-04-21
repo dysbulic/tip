@@ -13,11 +13,11 @@ get_header(); ?>
 
 <?php $morningafter_options = morningafter_get_theme_options(); ?>
 
-<div id="arch_content" class="column full-width">
+<div id="arch_content" class="column span-14">
 
 	<?php if ( have_posts() ) : ?>
 
-		<div class="column archive-info first">
+		<div class="column span-3 first">
 
 			<?php if ( is_category() ) { ?>
 
@@ -29,22 +29,14 @@ get_header(); ?>
 						<?php 
 							$cat_obj = $wp_query->get_queried_object(); 
 							$cat_id = $cat_obj->term_id;
-							printf( __( '<a href="%s">RSS feed for this section</a>', 'woothemes' ),
-								get_category_feed_link( $cat, '' )
-							); 
+							echo '<a href="'; get_category_feed_link( $cat, '' ); echo '">RSS feed for this section</a>'; 
 						?>
 					</div>
 						
 					<?php $cat_count = $cat_obj->count; ?>
 					
 					<div class="archive_number">
-						<?php
-							if( $cat_count == 1 ){
-								printf( __( 'This category contains %s post', 'woothemes' ), $cat_count );
-							}else{
-								printf( __( 'This category contains %s posts', 'woothemes' ), $cat_count );
-							}
-						?>
+						<?php _e( 'This category contains','woothemes' );?> <?php echo $cat_count . " " . ($cat_count==1? __( 'post','woothemes' ): __( 'posts','woothemes' )); ?>
 					</div>
 
 				</div><!-- end .archive_meta -->
@@ -56,33 +48,25 @@ get_header(); ?>
 				<div class="archive_meta">
 
 					<div class="archive_number">
-						<?php
-							$tag = $wp_query->get_queried_object();
-							$tag_count = $tag->count;
-							if( $tag_count == 1 ){
-								printf( __( 'This tag is associated with %s post', 'woothemes' ), $tag_count );
-							}else{
-								printf( __( 'This tag is associated with %s posts', 'woothemes' ), $tag_count );
-							}
-						?>
+						<?php _e( 'This tag is associated with','woothemes' );?> <?php $tag = $wp_query->get_queried_object(); echo $tag->count; ?> <?php _e( 'posts','woothemes' );?>
 					</div>
 
 				</div>
 
 			<?php } elseif ( is_day() ) { ?>
-				<h1 class="archive_name"><?php _e( 'Archive for','woothemes' ); ?> <?php the_date(); ?></h1>
+				<h1 class="archive_name"><?php _e( 'Archive for','woothemes' ); ?> <?php the_time( get_option( 'date_format' ) ); ?></h1>
 
 			<?php } elseif ( is_month() ) { ?>
-				<h1 class="archive_name"><?php _e( 'Archive for','woothemes' ); ?> <?php the_date( 'F Y' ); ?></h1>
+				<h1 class="archive_name"><?php _e( 'Archive for','woothemes' ); ?> <?php the_time( get_option( 'date_format' ) ); ?></h1>
 
 			<?php } elseif ( is_year() ) { ?>
-				<h1 class="archive_name"><?php _e( 'Archive for','woothemes' ); ?> <?php the_date( 'Y' ); ?></h1>
+				<h1 class="archive_name"><?php _e( 'Archive for','woothemes' ); ?> <?php the_time( get_option( 'date_format' ) ); ?></h1>
 
 			<?php } ?>
 
-		</div><!-- end .archive-info -->
+		</div><!-- end .span-3 -->
 
-		<div class="column mid-column">
+		<div class="column span-8">
 
 			<?php while ( have_posts() ) : the_post(); ?>
 
@@ -90,11 +74,11 @@ get_header(); ?>
 				
 					<h3 class="archive_title" id="post-<?php the_ID(); ?>"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink to %s', 'woothemes' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></h3>
 
-					<div class="archive_post_meta"><?php _e( 'Posted by','woothemes' );?> <?php the_author_posts_link(); ?> <span class="dot">&sdot;</span> <?php the_time( get_option( 'date_format' ) ); ?> <span class="dot">&sdot;</span> <?php comments_popup_link( __( 'Leave a Comment', 'woothemes' ), __( '1 Comment', 'woothemes' ), __( '% Comments', 'woothemes' ) ); ?></div>
+					<div class="archive_post_meta"><?php _e( 'By','woothemes' );?> <?php the_author_posts_link(); ?> <span class="dot">&sdot;</span> <?php the_time( get_option( 'date_format' ) ); ?> <span class="dot">&sdot;</span> <?php comments_popup_link( __( 'Leave a Comment', 'woothemes' ), __( '1 Comment', 'woothemes' ), __( '% Comments', 'woothemes' ) ); ?></div>
 					
 					<?php if ( $morningafter_options['show_full_archive'] == "1" ) the_content( __( 'Continue reading <span class="meta-nav">&raquo;</span>', 'woothemes' ) ); else the_excerpt(); ?>
 					
-					<?php wp_link_pages( array( 'before' => '<div class="page-navigation"><p><strong>'.__( 'Pages','woothemes' ).':</strong> ', 'after' => '</p></div>', 'next_or_number' => 'number' ) ); ?>
+					<?php wp_link_pages(array( 'before' => '<div class="page-navigation"><p><strong>'.__( 'Pages','woothemes' ).':</strong> ', 'after' => '</p></div>', 'next_or_number' => 'number' )); ?>
 					
 				</div><!-- end .archive_post_block -->
 
@@ -107,19 +91,15 @@ get_header(); ?>
 				</div>
 			<?php endif; ?>
 
-		</div><!-- end .mid-column -->
+		</div><!-- end .span-8 -->
 
 		<?php get_sidebar(); ?>
 
 	<?php else : ?>
-		
-		<?php
-			printf( __( '<p>Lost? Go back to the <a href="%s">home page</a></p>', 'woothemes' ),
-				get_home_url()
-			);
-		?>
 
-	<?php endif; ?>
+		<p><?php _e( 'Lost? Go back to the','woothemes' ); ?> <a href="<?php echo home_url(); ?>/"><?php _e( 'home page','woothemes' );?></a>.</p>
+
+	<?php endif; ?>		
 
 </div><!-- end #arch_content -->
 

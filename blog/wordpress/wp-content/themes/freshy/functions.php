@@ -1,12 +1,6 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Freshy
- */
 
 define('TEMPLATE_DOMAIN', 'freshy');
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 if ( function_exists('register_sidebar') ) {
 		register_sidebar(array(
@@ -461,10 +455,9 @@ add_custom_image_header('header_style', 'freshy_admin_header_style');
 
 $themecolors = array(
 	'bg' => 'ffffff',
-	'border' => 'cccccc',
+	'border' => 'ffffff',
 	'text' => '000000',
-	'link' => '515151',
-	'url' => 'f78b0c',
+	'link' => '515151'
 );
 
 $content_width = 510;

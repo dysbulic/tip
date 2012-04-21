@@ -7,7 +7,7 @@
 
 <form method="get" id="searchform" action="/">
 	<input type="text" id="s" name="s" onblur="this.value=(this.value=='') ? '<?php echo $search_text ?>' : this.value;" onfocus="this.value=(this.value=='<?php echo $search_text ?>') ? '' : this.value;" id="supports" name="s" value="<?php echo $search_text; ?>" />
-	<input type="submit" id="searchsubmit" value="<?php esc_attr_e( 'go', 'k2_domain' ); ?>" />
+	<input type="submit" id="searchsubmit" value="<?php _e('go','k2_domain'); ?>" />
 </form>
 
 

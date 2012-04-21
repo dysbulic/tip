@@ -1,7 +1,7 @@
 		</div>
 
 		<div id="bar"></div>
-
+		
 		<div id="footer_bg">
 			<div id="footer">
 				<p>
@@ -11,7 +11,7 @@
 		</div>
 
 	</div>
-
+	
 	<?php wp_footer(); ?>
 
 </body>

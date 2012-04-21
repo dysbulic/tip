@@ -25,7 +25,7 @@
 	
 		<h2 class="posttitle"><?php _e('Not Found'); ?></h2>
 		<p><?php _e('Sorry, but no posts matched your criteria.'); ?></p>
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 	
 	<?php endif; ?>
 	

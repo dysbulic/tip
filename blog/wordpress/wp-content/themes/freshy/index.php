@@ -72,7 +72,7 @@
 		<div <?php post_class(); ?> id="post-none">
 			<h2 class="center"><?php _e('Not found',TEMPLATE_DOMAIN); ?></h2>
 			<p class="center"><?php _e("Sorry, but you are looking for something that is not here",TEMPLATE_DOMAIN); ?></p>
-			<?php get_search_form(); ?>
+			<?php include (TEMPLATEPATH . "/searchform.php"); ?>
 		</div>
 	<?php endif; ?>
 	

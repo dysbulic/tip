@@ -8,22 +8,17 @@
 
 	<div id="post-<?php the_ID(); ?>" <?php post_class( 'entry single' ); ?>>
 
-		<h2><?php the_title(); ?></h2>
+		<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 
 		<p class="info">
-   		<?php blix_posted_on(); ?>
-   		<?php blix_posted_by(); ?>
-		<?php if ( comments_open() || ( '0' != get_comments_number() && ! comments_open() ) ) : ?>
-			<em class="comments-popup">
-			<?php comments_popup_link( __( 'Leave a comment' ), __( '1 comment' ), __( '% comments' ), __( 'commentlink', 'blix' ), '' ); ?>
-			</em>
-		<?php endif; ?>
+		<?php if ( $post->comment_status == "open" ) ?>
+   		<em class="date"><?php the_time( get_option( 'date_format' ) ); ?><!-- at <?php the_time(); ?>--></em>
+   		<!--<em class="author"><?php the_author(); ?></em>-->
    		<?php edit_post_link( __( 'Edit', 'blix' ), '<span class="editlink">', '</span>' ); ?>
    		</p>
 
 		<?php the_content(); ?>
 		<?php wp_link_pages(); ?>
-
 		<p id="filedunder">
 			<?php
 				$tag_list = get_the_tag_list( '', ', ' );

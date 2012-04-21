@@ -77,7 +77,7 @@ function liquorice_options_do_page() {
 			</table>
 
 			<p class="submit">
-				<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Options', 'liquorice' ); ?>" />
+				<input type="submit" class="button-primary" value="<?php _e( 'Save Options', 'liquorice' ); ?>" />
 			</p>
 		</form>
 	</div>

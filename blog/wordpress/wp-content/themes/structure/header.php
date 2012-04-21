@@ -25,79 +25,78 @@
 
 <?php wp_head(); ?>
 
-<script type="text/javascript">
-/* <![CDATA[ */
+<script type="text/javascript"> 
+/* <![CDATA[ */ 
 	var $j = jQuery.noConflict();
-
-	$j(document).ready(function() {
-		$j('ul.ot-menu').superfish();
+	
+	$j(document).ready(function() { 
+		$j('ul.ot-menu').superfish(); 
 	});
-/* ]]> */
+/* ]]> */ 
 </script>
 
 </head>
 
-<body <?php body_class(); ?>>
+<body>
 
 <div id="wrap">
     <div id="header">
-
+    
         <div class="headerleft">
             <h1 id="title"><a href="<?php echo home_url( '/' ); ?>" title="Home"><span id="sitename"><?php bloginfo('name'); ?></span></a></h1>
         </div>
-
-		<?php if ( ! st_option( 'search_and_navicons' ) ) :	?>
-		<div class="headerright">
-            <form id="searchformheader" method="get" action="<?php echo home_url(); ?>">
-	            <input type="text" value="<?php esc_attr_e( 'Type here and press enter to search', 'structuretheme' ); ?>" name="s" id="searchbox" onfocus="if (this.value == '<?php esc_attr_e( 'Type here and press enter to search', 'structuretheme' ); ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php esc_attr_e( 'Type here and press enter to search', 'structuretheme' ); ?>';}" />
+        
+        <div class="headerright">
+            <form id="searchformheader" method="get" action="<?php echo home_url(); ?>">           
+	            <input type="text" value="<?php _e( 'Type here and press enter to search', 'structuretheme' ); ?>" name="s" id="searchbox" onfocus="if (this.value == '<?php _e( 'Type here and press enter to search', 'structuretheme' ); ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php _e( 'Type here and press enter to search', 'structuretheme' ); ?>';}" />
 	            <input type="hidden" id="searchbutton" value="Go" />
 			</form>
-
+            
             <div id="navicons">
-
+            	
         	<?php if ( st_option( 'dark_scheme' ) ) : ?>
-
-				<?php if ( st_option('twitter_url') ) : ?>
+        	
+				<?php if ( st_option('twitter_url') ) : ?>            	            	
 				<a href="<?php echo esc_url( st_option('twitter_url') ); ?>">
 					<img class="navicon" src="<?php bloginfo('template_url'); ?>/images/twitter_icon_black.png" title="Twitter" alt="Twitter" />
 				</a>
 				<?php endif; ?>
-
-				<?php if ( st_option('facebook_url') ) : ?>
+				
+				<?php if ( st_option('facebook_url') ) : ?>            	
 				<a href="<?php echo esc_url( st_option('facebook_url') ); ?>">
 					<img class="navicon" src="<?php bloginfo('template_url'); ?>/images/facebook_icon_black.png" title="Facebook" alt="Facebook" />
-				</a>
+				</a>            	
 				<?php endif; ?>
-
+				
 				<a href="<?php bloginfo( 'rss2_url' ); ?>">
-					<img class="navicon" src="<?php bloginfo('template_url'); ?>/images/rss_icon_black.png" title="<?php esc_attr_e( 'RSS feed', 'structuretheme' ); ?>" alt="RSS" />
-				</a>
-
+					<img class="navicon" src="<?php bloginfo('template_url'); ?>/images/rss_icon_black.png" title="<?php _e( 'RSS feed', 'structuretheme' ); ?>" alt="RSS" />
+				</a>					
+        	
         	<?php else : ?>
-
-				<?php if ( st_option('twitter_url') ) : ?>
+        	
+				<?php if ( st_option('twitter_url') ) : ?>            	            	
 				<a href="<?php echo esc_attr( st_option('twitter_url') ); ?>">
 					<img class="navicon" src="<?php bloginfo('template_url'); ?>/images/twitter_icon.png" title="Twitter" alt="Twitter" />
 				</a>
 				<?php endif; ?>
-
-				<?php if ( st_option('facebook_url') ) : ?>
+				
+				<?php if ( st_option('facebook_url') ) : ?>            	
 				<a href="<?php echo esc_attr( st_option('facebook_url') ); ?>">
 					<img class="navicon" src="<?php bloginfo('template_url'); ?>/images/facebook_icon.png" title="Facebook" alt="Facebook" />
-				</a>
+				</a>            	
 				<?php endif; ?>
-
+				
 				<a href="<?php bloginfo( 'rss2_url' ); ?>">
-					<img class="navicon" src="<?php bloginfo('template_url'); ?>/images/rss_icon.png" title="<?php esc_attr_e( 'RSS feed', 'structuretheme' ); ?>" alt="RSS" />
+					<img class="navicon" src="<?php bloginfo('template_url'); ?>/images/rss_icon.png" title="<?php _e( 'RSS feed', 'structuretheme' ); ?>" alt="RSS" />
 				</a>
-
+				
         	<?php endif; ?>
             </div>
-
-        </div><!-- .headerright -->
-		<?php endif; // check for search_and_navicons ?>
-    </div>
-
+            
+        </div>
+    
+    </div>    
+    
     <?php
     if ( function_exists('wp_nav_menu') ) {
 	    wp_nav_menu( array( 'container_class' => 'navbar', 'menu_class' => 'ot-menu', 'theme_location' => 'primary' ) );
@@ -105,5 +104,5 @@
 	    wp_page_menu();
     }
     ?>
-
+    
     <div style="clear:both;"></div>

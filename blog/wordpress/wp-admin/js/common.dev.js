@@ -1,4 +1,4 @@
-var showNotice, adminMenu, columns, validateForm, screenMeta;
+var showNotice, adminMenu, columns, validateForm;
 (function($){
 // sidebar admin menu
 adminMenu = {
@@ -15,7 +15,7 @@ adminMenu = {
 
 		this.favorites();
 
-		$('#collapse-menu', menu).click(function(){
+		$('.separator', menu).click(function(){
 			if ( $('body').hasClass('folded') ) {
 				adminMenu.fold(1);
 				deleteUserSetting( 'mfold' );
@@ -28,15 +28,26 @@ adminMenu = {
 
 		if ( $('body').hasClass('folded') )
 			this.fold();
+
+		this.restoreMenuState();
 	},
 
 	restoreMenuState : function() {
-		// (perhaps) needed for back-compat
+		$('li.wp-has-submenu', '#adminmenu').each(function(i, e) {
+			var v = getUserSetting( 'm'+i );
+			if ( $(e).hasClass('wp-has-current-submenu') )
+				return true; // leave the current parent open
+
+			if ( 'o' == v )
+				$(e).addClass('wp-menu-open');
+			else if ( 'c' == v )
+				$(e).removeClass('wp-menu-open');
+		});
 	},
 
 	toggle : function(el) {
 		el.slideToggle(150, function() {
-			var id = el.css('display','').parent().toggleClass( 'wp-menu-open' ).attr('id');
+			var id = el.parent().toggleClass( 'wp-menu-open' ).attr('id');
 			if ( id ) {
 				$('li.wp-has-submenu', '#adminmenu').each(function(i, e) {
 					if ( id == e.id ) {
@@ -74,9 +85,7 @@ adminMenu = {
 					}
 					m.addClass('sub-open');
 				},
-				out: function(){
-					$(this).find('.wp-submenu').removeClass('sub-open');
-				},
+				out: function(){ $(this).find('.wp-submenu').removeClass('sub-open').css({'marginTop':''}); },
 				timeout: 220,
 				sensitivity: 8,
 				interval: 100
@@ -116,7 +125,7 @@ columns = {
 		var that = this;
 		$('.hide-column-tog', '#adv-settings').click( function() {
 			var $t = $(this), column = $t.val();
-			if ( $t.prop('checked') )
+			if ( $t.attr('checked') )
 				that.checked(column);
 			else
 				that.unchecked(column);
@@ -173,6 +182,8 @@ validateForm = function( form ) {
 	return !$( form ).find('.form-required').filter( function() { return $('input:visible', this).val() == ''; } ).addClass( 'form-invalid' ).find('input:visible').change( function() { $(this).closest('.form-invalid').removeClass( 'form-invalid' ); } ).size();
 }
 
+})(jQuery);
+
 // stub for doing better warnings
 showNotice = {
 	warn : function() {
@@ -189,72 +200,48 @@ showNotice = {
 	}
 };
 
-screenMeta = {
-	links: {
-		'screen-options-link-wrap': 'screen-options-wrap',
-		'contextual-help-link-wrap': 'contextual-help-wrap'
-	},
-	init: function() {
-		$('.screen-meta-toggle').click( screenMeta.toggleEvent );
-	},
-	toggleEvent: function( e ) {
-		var panel;
-		e.preventDefault();
-
-		// Check to see if we found a panel.
-		if ( ! screenMeta.links[ this.id ] )
-			return;
-
-		panel = $('#' + screenMeta.links[ this.id ]);
-
-		if ( panel.is(':visible') )
-			screenMeta.close( panel, $(this) );
-		else
-			screenMeta.open( panel, $(this) );
-	},
-	open: function( panel, link ) {
-		$('.screen-meta-toggle').not( link ).css('visibility', 'hidden');
-
-		panel.slideDown( 'fast', function() {
-			link.addClass('screen-meta-active');
-		});
-	},
-	close: function( panel, link ) {
-		panel.slideUp( 'fast', function() {
-			link.removeClass('screen-meta-active');
-			$('.screen-meta-toggle').css('visibility', '');
-		});
-	}
-};
-
-$(document).ready( function() {
-	var lastClicked = false, checks, first, last, checked, dropdown,
-		pageInput = $('input[name="paged"]'), currentPage;
+jQuery(document).ready( function($) {
+	var lastClicked = false, checks, first, last, checked, bgx = ( isRtl ? 'left' : 'right' );
 
 	// Move .updated and .error alert boxes. Don't move boxes designed to be inline.
 	$('div.wrap h2:first').nextAll('div.updated, div.error').addClass('below-h2');
 	$('div.updated, div.error').not('.below-h2, .inline').insertAfter( $('div.wrap h2:first') );
 
-	// Init screen meta
-	screenMeta.init();
+	// screen settings tab
+	$('#show-settings-link').click(function () {
+		if ( ! $('#screen-options-wrap').hasClass('screen-options-open') )
+			$('#contextual-help-link-wrap').css('visibility', 'hidden');
 
-	// User info dropdown.
-	dropdown = {
-		doc: $(document),
-		element: $('#user_info'),
-		open: function() {
-			if ( ! dropdown.element.hasClass('active') ) {
-				dropdown.element.addClass('active');
-				dropdown.doc.one( 'click', dropdown.close );
-				return false;
+		$('#screen-options-wrap').slideToggle('fast', function(){
+			if ( $(this).hasClass('screen-options-open') ) {
+				$('#show-settings-link').css({'backgroundPosition':'top '+bgx});
+				$('#contextual-help-link-wrap').css('visibility', '');
+				$(this).removeClass('screen-options-open');
+			} else {
+				$('#show-settings-link').css({'backgroundPosition':'bottom '+bgx});
+				$(this).addClass('screen-options-open');
 			}
-		},
-		close: function() {
-			dropdown.element.removeClass('active');
-		}
-	};
+		});
+		return false;
+	});
 
-	dropdown.element.click( dropdown.open );
+	// help tab
+	$('#contextual-help-link').click(function () {
+		if ( ! $('#contextual-help-wrap').hasClass('contextual-help-open') )
+			$('#screen-options-link-wrap').css('visibility', 'hidden');
+
+		$('#contextual-help-wrap').slideToggle('fast', function() {
+			if ( $(this).hasClass('contextual-help-open') ) {
+				$('#contextual-help-link').css({'backgroundPosition':'top '+bgx});
+				$('#screen-options-link-wrap').css('visibility', '');
+				$(this).removeClass('contextual-help-open');
+			} else {
+				$('#contextual-help-link').css({'backgroundPosition':'bottom '+bgx});
+				$(this).addClass('contextual-help-open');
+			}
+		});
+		return false;
+	});
 
 	// check all checkboxes
 	$('tbody').children().children('.check-column').find(':checkbox').click( function(e) {
@@ -264,13 +251,13 @@ $(document).ready( function() {
 			checks = $( lastClicked ).closest( 'form' ).find( ':checkbox' );
 			first = checks.index( lastClicked );
 			last = checks.index( this );
-			checked = $(this).prop('checked');
+			checked = $(this).attr('checked');
 			if ( 0 < first && 0 < last && first != last ) {
-				checks.slice( first, last ).prop( 'checked', function(){
+				checks.slice( first, last ).attr( 'checked', function(){
 					if ( $(this).closest('tr').is(':visible') )
-						return checked;
+						return checked ? 'checked' : '';
 
-					return false;
+					return '';
 				});
 			}
 		}
@@ -279,30 +266,30 @@ $(document).ready( function() {
 	});
 
 	$('thead, tfoot').find('.check-column :checkbox').click( function(e) {
-		var c = $(this).prop('checked'),
+		var c = $(this).attr('checked'),
 			kbtoggle = 'undefined' == typeof toggleWithKeyboard ? false : toggleWithKeyboard,
 			toggle = e.shiftKey || kbtoggle;
 
 		$(this).closest( 'table' ).children( 'tbody' ).filter(':visible')
 		.children().children('.check-column').find(':checkbox')
-		.prop('checked', function() {
+		.attr('checked', function() {
 			if ( $(this).closest('tr').is(':hidden') )
-				return false;
+				return '';
 			if ( toggle )
-				return $(this).prop( 'checked' );
+				return $(this).attr( 'checked' ) ? '' : 'checked';
 			else if (c)
-				return true;
-			return false;
+				return 'checked';
+			return '';
 		});
 
 		$(this).closest('table').children('thead,  tfoot').filter(':visible')
 		.children().children('.check-column').find(':checkbox')
-		.prop('checked', function() {
+		.attr('checked', function() {
 			if ( toggle )
-				return false;
+				return '';
 			else if (c)
-				return true;
-			return false;
+				return 'checked';
+			return '';
 		});
 	});
 
@@ -313,7 +300,7 @@ $(document).ready( function() {
 	});
 
 	// tab in textareas
-	$('#newcontent').bind('keydown.wpevent_InsertTab', function(e) {
+	$('#newcontent').keydown(function(e) {
 		if ( e.keyCode != 9 )
 			return true;
 
@@ -340,31 +327,8 @@ $(document).ready( function() {
 			e.preventDefault();
 	});
 
-	$('#newcontent').bind('blur.wpevent_InsertTab', function(e) {
+	$('#newcontent').blur(function(e) {
 		if ( this.lastKey && 9 == this.lastKey )
 			this.focus();
 	});
-
-	if ( pageInput.length ) {
-		currentPage = pageInput.val();
-		pageInput.closest('form').submit( function(){
-			// Reset paging var for new filters/searches. See #17685.
-			if ( pageInput.val() == currentPage )
-				pageInput.val('1');
-		});
-	}
-
 });
-
-// internal use
-$(document).bind( 'wp_CloseOnEscape', function( e, data ) {
-	if ( typeof(data.cb) != 'function' )
-		return;
-
-	if ( typeof(data.condition) != 'function' || data.condition() )
-		data.cb();
-
-	return true;
-});
-
-})(jQuery);

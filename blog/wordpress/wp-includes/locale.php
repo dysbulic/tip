@@ -314,7 +314,7 @@ class WP_Locale {
 	}
 
 	/**
-	 * Constructor which calls helper methods to set up object variables
+	 * PHP4 style constructor which calls helper methods to set up object variables
 	 *
 	 * @uses WP_Locale::init()
 	 * @uses WP_Locale::register_globals()
@@ -322,7 +322,7 @@ class WP_Locale {
 	 *
 	 * @return WP_Locale
 	 */
-	function __construct() {
+	function WP_Locale() {
 		$this->init();
 		$this->register_globals();
 	}

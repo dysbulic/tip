@@ -1,20 +1,6 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Ocean Mist
- */
 
 $content_width = 500;
-
-$themecolors = array(
-	'bg' => 'ffffff',
-	'text' => '4b5d67',
-	'link' => '7f1d1d',
-	'border' => 'e7eef6',
-	'url' => '526a74',
-);
-
-add_filter( 'body_class', '__return_empty_array', 1 );
 
 register_sidebar( array(
 	'before_widget' => '<div id="%1$s" class="widget %2$s">',
@@ -49,10 +35,6 @@ define('HEADER_IMAGE_WIDTH', 736);
 define('HEADER_IMAGE_HEIGHT', 229);
 define( 'NO_HEADER_TEXT', true );
 
-add_theme_support( 'post-thumbnails' );
-
-set_post_thumbnail_size( HEADER_IMAGE_WIDTH, HEADER_IMAGE_HEIGHT, true );
-
 function oceanmist_admin_header_style() {
 ?>
 <style type="text/css">
@@ -63,6 +45,7 @@ function oceanmist_admin_header_style() {
 	height: <?php echo HEADER_IMAGE_HEIGHT; ?>px;
 	width: <?php echo HEADER_IMAGE_WIDTH; ?>px;
 }
+
 #headimg h1, #headimg #desc {
 	display: none;
 }

@@ -1,18 +1,6 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Monochrome
- */
 
 $content_width = 510;
-
-$themecolors = array(
-	'bg' => 'ffffff',
-	'text' => '666666',
-	'link' => '2089cc',
-	'border' => '282828',
-	'url' => 'e2415b',
-);
 
 add_theme_support( 'automatic-feed-links' );
 
@@ -218,7 +206,7 @@ class monochrome_options {
 <br />
 <br />
 
-<p><input class="button-primary" type="submit" name="pb_save" value="<?php esc_attr_e( 'Save Changes', 'monochrome' ); ?>" /></p>
+<p><input class="button-primary" type="submit" name="pb_save" value="<?php _e('Save Changes', 'monochrome'); ?>" /></p>
 
 </form>
 
@@ -314,8 +302,8 @@ function widget_monochrome_search() {
 	<div class="side_box" id="search_area_top">
    <div id="search_area" class="clearfix">
     <form method="get" id="searchform" action="<?php bloginfo('url'); ?>/">
-     <div><input type="text" value="<?php esc_attr_e( 'Search','monochrome' ); ?>" name="s" id="search_input" onfocus="this.value=''; changefc('white');" /></div>
-     <div><input type="image" src="<?php bloginfo('template_url'); ?>/img/search_button_n.gif" alt="<?php esc_attr_e( 'Search from this blog.', 'monochrome' ); ?>" title="<?php esc_attr_e( 'Search from this blog.', 'monochrome' ); ?>" id="search_button" /></div>
+     <div><input type="text" value="<?php _e('Search','monochrome'); ?>" name="s" id="search_input" onfocus="this.value=''; changefc('white');" /></div>
+     <div><input type="image" src="<?php bloginfo('template_url'); ?>/img/search_button_n.gif" alt="<?php _e('Search from this blog.','monochrome'); ?>" title="<?php _e('Search from this blog.','monochrome'); ?>" id="search_button" /></div>
     </form>
    </div>
 </div>

@@ -1,24 +1,18 @@
 <?php
-/**
- * @package WordPress
- * @subpackage Andrea
- */
 
 // Calculate content_width based on layout option
 $content_width = 1000;
-$options = andrea_get_theme_options();
+$options = get_option( 'andrea_theme_options' );
 if ( 'fixed-width' == $options['layout_choice'] )
 	$content_width = 500;
 
 function andrea_setup() {
-	$options = andrea_get_theme_options();
 
 	$themecolors = array(
-		'bg' => '00355F',
-		'border' => '246192',
-		'text' => 'D4E7F7',
-		'link' => '87B2D8',
-		'url' => '4E8ABE'
+		'bg' => 'fff',
+		'border' => '777',
+		'text' => '1c1c1c',
+		'link' => '004276',
 	);
 
 	// Widgets
@@ -120,27 +114,13 @@ function andrea_header_style() {
 <?php
 }
 
-/**
- * Get our wp_nav_menu() fallback, wp_page_menu(), to show a home link.
- */
-function andrea_page_menu_args( $args ) {
-	$args['show_home'] = true;
-	return $args;
-}
-add_filter( 'wp_page_menu_args', 'andrea_page_menu_args' );
-
-/**
- *Changed wp_page_menu structure to get rid of the wrapped div and add menu_class arguments to <ul>
- */
-function andrea_add_menu_class ($page_markup) {
-	preg_match('/^<div class=\"([a-z0-9-_]+)\">/i', $page_markup, $matches);
-	$divclass = $matches[1];
-	$toreplace = array('<div class="'.$divclass.'">', '</div>');
-	$new_markup = str_replace($toreplace, '', $page_markup);
-	$new_markup = preg_replace('/^<ul>/i', '<ul class="'.$divclass.'">', $new_markup);
-	return $new_markup;
-}
-add_filter('wp_page_menu', 'andrea_add_menu_class');
+// Fallback for primary navigation
+function andrea_page_menu() { ?>
+	<ul class="menu">
+		<li class="page_item<?php echo ( is_front_page() ) ? ' current_page_item' : ''; ?>"><a href="<?php bloginfo( 'url' ); ?>/"><?php _e( 'Home', 'andrea' ); ?></a></li>
+		<?php wp_list_pages( 'title_li=&depth=1' ); ?>
+	</ul>
+<?php }
 
 // Load theme options
 require_once( get_template_directory() . '/inc/theme-options.php' );
@@ -178,13 +158,4 @@ function andrea_comment( $comment, $args, $depth ) {
 		<p><?php _e( 'Pingback:', 'andrea' ); ?> <?php comment_author_link(); ?><?php edit_comment_link( __('&mdash; Edit', 'andrea' ), ' ' ); ?></p>
 
 	<?php endif;
-}
-
-function andrea_get_theme_options() {
-	$defaults = array(
-		'layout_choice' => 'flexible-width',
-	);
-	$options = get_option( 'andrea_theme_options', $defaults );
-	
-	return $options;
 }

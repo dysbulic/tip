@@ -29,7 +29,7 @@ wp_head();
 ?>
 </head>
 
-<body <?php body_class( 'center ' . ( is_page() || is_single() || is_404() ? 'single' : '' ) ); ?>><div id="wrapper">
+<body class="center <?php if (is_page() || is_single() || is_404()) { echo " single"; } ?>"><div id="wrapper">
 
 <div id="header">
 

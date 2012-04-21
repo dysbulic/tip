@@ -31,7 +31,7 @@
 			elseif ( is_page() )
 				{ single_post_title(''); echo ' | '; bloginfo('uti_theme'); }
 			elseif ( is_search() )
-				{ bloginfo('name'); echo ' | '; _e( 'Search results for', 'uti_theme' ) . ' ' . get_search_query(); }
+				{ bloginfo('name'); echo ' | '; _e('Search results for ', 'uti_theme') . get_search_query(); }
 			elseif ( is_404() )
 				{ bloginfo('name'); echo ' | '; _e('Not Found', 'uti_theme'); }
 			else

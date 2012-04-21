@@ -6,7 +6,7 @@
 	</div>
 	<?php return; endif; ?>
 
-		<li><?php get_search_form(); ?></li>
+		<li><?php include (TEMPLATEPATH . '/searchform.php'); ?></li>
 </ul>
 <ul>
  <?php wp_list_bookmarks(); ?>

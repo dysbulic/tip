@@ -40,7 +40,7 @@
 	<?php else : ?>
 
 		<h4><?php _e('No posts found. Try a different search?', 'daydream'); ?></h4>
-		<?php get_search_form(); ?>
+		<?php include (TEMPLATEPATH . '/searchform.php'); ?>
 		<div style="width: 100%; height: 40px;"></div>
 
 	<?php endif; ?>

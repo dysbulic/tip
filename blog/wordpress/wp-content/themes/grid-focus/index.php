@@ -15,7 +15,7 @@ get_header();
 					<span class="comments"><?php comments_popup_link( '0', '1', '%' ); ?></span>
 				</p>
 			</div>
-			<h2 class="entry-title"><a href="<?php the_permalink() ?>" title="<?php the_title_attribute(); ?>"><?php the_title() ?></a></h2>
+			<h2><a href="<?php the_permalink() ?>" title="<?php the_title_attribute(); ?>"><?php the_title() ?></a></h2>
 			<div class="entry">
 				<?php the_content( __( 'Read the rest of this entry &raquo;', 'grid-focus' ) ); ?>
 				<?php wp_link_pages(); ?>

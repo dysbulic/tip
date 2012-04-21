@@ -10,7 +10,7 @@
 		<option value=""><?php _e('Monthly Archives'); ?></option>
           <?php get_archives('monthly','','option','','',''); ?>
         </select>		
-        <?php get_search_form(); ?>
+        <?php include (TEMPLATEPATH . '/searchform.php'); ?>
 	  </div>
 	  <div class="title">
         <h2><?php _e('Links'); ?></h2>

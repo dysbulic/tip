@@ -5,7 +5,7 @@ Description: A somewhat dirty, grungy theme with two widget areas and several cu
 Author: Christopher Wallace
 Author URI: http://www.chris-wallace.com
 Version: 1.2-wpcom
-Tags: red, black, blue, tan, green, two-columns, fixed-width, right-sidebar, custom-menu, microformats, rtl-language-support, translation-ready, full-width-template, custom-background, custom-header, post-formats, blog, cartoon, gaming, journal, music, scrapbooking, tumblelog, colorful, dark, grungy, textured, cartoony
+Tags: custom-menu, sticky-post, microformats, rtl-language-support, translation-ready, full-width-template, blog, two-columns, fixed-width, cartoon, gaming, journal, music, scrapbooking, tumblelog, colorful, dark, grungy, textured, red, black, blue, tan, green, right-sidebar, custom-background, custom-header, post-formats
 */
 
 /* =Structure
@@ -51,7 +51,6 @@ body {
 }
 #tertiary.widget-area {
 	background: url(images/bg-sidebar-two.png) repeat-y top right;
-	clear: right;
 }
 #colophon {
 	clear: both;
@@ -121,7 +120,7 @@ a:hover {
 #branding {
 	background: url(images/header.png) no-repeat;
 	padding: 10px;
-	position: relative;
+	height: 88px;
 }
 #branding hgroup {
 	background: #aa1f10;
@@ -160,13 +159,6 @@ a:hover {
 	margin: -55px 0px 20px -70px;
 	position: relative;
 		left: 20px;
-}
-.with-header .header-image img {
-	border-left: 99px solid #222;
-	border-right: 99px solid #222;
-	border-bottom: 1px solid #ccc;
-	margin: -55px 0px 20px -50px;
-	position: static;
 }
 
 
@@ -685,9 +677,6 @@ article.comment footer .comment-meta {
 	list-style-type: none;
 	margin: 0;
 }
-.widget ul li {
-	margin: 8px 0;
-}
 .textwidget {
 	margin: 0 10px 20px;
 }
@@ -754,14 +743,4 @@ aside,
 footer,
 nav {
 	display: block;
-}
-
-/* =WP.com
------------------------------------------------ */
-
-#main #flickr_badge_uber_wrapper {
-	width: auto;
-}
-#main #flickr_badge_wrapper img {
-	max-width: 140px;
 }

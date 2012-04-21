@@ -35,7 +35,7 @@ function duotone_do_page() {
 				<label for="automatic" onclick="jQuery('#choice_automatic').attr('checked','checked');"><?php echo __('Automatic Background Color'); ?></label>
 			</p>
 			<p class="submit">
-			<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Update Background Color' ); ?>" />
+			<input type="submit" class="button-primary" value="<?php _e('Update Background Color') ?>" />
 		</p>
 	
 		</form>

@@ -1,6 +1,7 @@
 <?php
 /**
- * @package Spectrum
+ * @package WordPress
+ * @subpackage Spectrum
  */
 
 get_header(); ?>
