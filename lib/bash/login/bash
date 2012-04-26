@@ -30,10 +30,10 @@ alias srceach='find \( -name mimis -or -name jquery -or -name eson -or -name rhi
 # Ignore hidden files in tab completion
 bind 'set match-hidden-files off' 
 
-function cd() {
+#function cd() {
     # [ $# -eq 0 ] && { echo 'a'; false; } || { echo 'b'; }
-    [ $# -eq 0 ] && { command cd ~/.../; } || { command cd "$@"; }
-}
+#    [ $# -eq 0 ] && { command cd ~/.../; } || { command cd "$@"; }
+#}
 
 export RSYNC_RSH=ssh
 export CVS_RSH=ssh
@@ -45,6 +45,9 @@ export CVS_RSH=ssh
 for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin; do
     [ -d "$path" ] && export PATH="$path:$PATH"
 done
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
 
 # [ -d ~/bin ] && export PATH=~/bin:$PATH
 # [ -d ~/bin/sdcc/bin/ ] && export PATH=$PATH:~/bin/sdcc/bin/
@@ -638,3 +641,5 @@ alias pullhashes="rsync $ARGS \"\$REMOTE:\$__HASHDIR\" \"\$LOCAL\""
 alias print="eval echo \$OUT"
 
 [ "$(pwd)" == ~ ] && cd ...
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

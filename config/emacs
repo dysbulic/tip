@@ -141,8 +141,13 @@
     (progn (load nxml-file)
            (message "nxml mode loaded")))
 
+(setq haml-file ".../lib/emacs/mode/haml/haml-mode.el")
+(if (file-exists-p haml-file)
+    (progn (load-file haml-file)
+           (message "haml mode loaded")))
+
 ( setq auto-mode-alist
-       ( cons '("\\(xml\\|xsl\\|html\\|rng\\|xhtml\\|xslt\\|rml\\|docbook\\|svg\\|tmpl\\)" . nxml-mode )
+       ( cons '("\\(xml\\|xsl\\|html\\|rng\\|xhtml\\|xslt\\|rml\\|docbook\\|svg\\|tmpl\\)$" . nxml-mode )
              auto-mode-alist ) )
 
 (setq auto-mode-alist
