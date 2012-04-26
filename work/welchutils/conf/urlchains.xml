@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<httpchains>
+  <chains>
+    <chain>
+      <enabled>false</enabled>
+      <url>http://www.welch.jhu.edu</url>
+      <posts>
+        <post>
+          <key>name</key>
+          <value>Paco</value>
+        </post>
+        <post>
+          <key>lastname</key>
+          <value>Wong</value>
+        </post>
+      </posts>
+      <wait>1000</wait>
+      <fileUpload>work/libs/httpcomponents-client-4.1.1/tutorial/pdf</fileUpload>
+      <saveContentFile>tmp/savedhtmls/welch.html</saveContentFile>
+    </chain>
+    
+    <chain>
+      <enabled>false</enabled>
+      <url>http://www.jhu.edu</url>
+      <posts>
+        <post>
+          <key>name</key>
+          <value>Paco</value>
+        </post>
+        <post>
+          <key>lastname</key>
+          <value>Wong</value>
+        </post>
+      </posts>
+      <wait>100</wait>
+      <fileUpload>work/libs/httpcomponents-client-4.1.1/tutorial/pdf</fileUpload>
+      <saveContentFile>tmp/savedhtmls/jhu.html</saveContentFile>
+    </chain>
+    
+    <chain>
+      <enabled>false</enabled>
+      <url>http://www.cnn.com</url>
+      <saveContentFile>tmp/savedhtmls/cnn.html</saveContentFile>
+      <wait>1000</wait>
+      <repeat>5</repeat>
+    </chain>
+    
+    <chain>
+      <!--<enabled>false</enabled>-->
+      <url>http://google.com</url>
+      <saveContentFile>tmp/savedhtmls/google.html</saveContentFile>
+    </chain>
+    
+    <chain>
+      <enabled>false</enabled>
+      <url>http://cfdev.welch.jhmi.edu/users/fwong3/test/login.cfm</url>
+      <saveContentFile>tmp/savedhtmls/login1.html</saveContentFile>
+    </chain>
+
+    <chain>
+      <url>http://localhost/work/welchutils/branches/file-upload/test/dump/vars/?test=test&amp;text[]=one&amp;text[]=two</url>
+      <saveContentFile>tmp/savedhtmls/gettest.txt</saveContentFile>
+    </chain>
+
+    <chain>
+      <url>http://localhost/work/welchutils/branches/file-upload/test/dump/vars/</url>
+      <posts>
+        <post><key>test</key><value>test</value></post>
+        <post><key>text[]</key><value>one</value></post>
+        <post><key>text[]</key><value>two</value></post>
+      </posts>
+      <saveContentFile>tmp/savedhtmls/posttest.txt</saveContentFile>
+    </chain>
+
+    <chain>
+      <url>http://localhost/work/welchutils/branches/file-upload/test/dump/vars/?test=test</url>
+      <posts>
+        <post><key>test</key><value>test</value></post>
+        <post><key>text[]</key><value>one</value></post>
+        <post><key>text[]</key><value>two</value></post>
+      </posts>
+      <saveContentFile>tmp/savedhtmls/getposttest.txt</saveContentFile>
+    </chain>
+
+    <chain>
+      <url>http://localhost/work/welchutils/branches/file-upload/test/dump/vars/</url>
+      <posts>
+        <post><key>test</key><value>test</value></post>
+        <post><key>text[]</key><value>one</value></post>
+        <post><key>text[]</key><value>two</value></post> 
+        <post><key>text[]</key><file>conf/urlchains.xml</file></post>
+        <post><key>file</key><file>conf/urlchains.xml</file></post>
+      </posts>
+      <saveContentFile>tmp/savedhtmls/postfiletest.txt</saveContentFile>
+    </chain>
+    
+    <chain>
+      <url>http://localhost/work/welchutils/branches/file-upload/test/dump/vars/</url>
+      <posts>
+        <post><key>test</key><value>test</value></post>
+        <post><key>text[]</key><value>one</value></post>
+        <post><key>text[]</key><value>two</value><file>conf/urlchains.xml</file></post> 
+        <post><key>text[]</key><file>conf/urlchains.xml</file></post>
+        <post><key>file</key><file>conf/urlchains.xml</file></post>
+      </posts>
+      <saveContentFile>tmp/savedhtmls/postmultivartest.txt</saveContentFile>
+    </chain>
+    
+    <chain>
+      <enabled>true</enabled>
+      <url>http://cfdev.welch.jhmi.edu/users/fwong3/test/loginaction.cfm?mode=&amp;d=@var_1@</url>
+      <posts>
+        <post>
+          <key>userid</key>
+          <value>Paco</value>
+        </post>
+        <post>
+          <key>passwd</key>
+          <value>password</value>
+        </post>
+      </posts>
+      <postRedirect>true</postRedirect>
+      <saveContentFile>tmp/savedhtmls/loginaction.cfm.html</saveContentFile>
+      <wait>1000</wait>
+    </chain>
+    
+    <chain>
+      <enabled>false</enabled>
+      <url>http://cfdev.welch.jhmi.edu/users/fwong3/test/login.cfm</url>
+      <saveContentFile>tmp/savedhtmls/login2.html</saveContentFile>
+      <wait>1000</wait>
+    </chain>
+    
+    <chain><!-- Redirect test  -->
+      <!--<enabled>false</enabled>-->
+      <url>http://cfdev.welch.jhmi.edu/users/fwong3/test/loginrd.cfm</url>
+      <saveContentFile>tmp/savedhtmls/rdtest.html</saveContentFile>
+      <wait>1000</wait>
+    </chain>
+  </chains>
+</httpchains>

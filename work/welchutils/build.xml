@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns:ivy="antlib:org.apache.ivy.ant" default="jar">
+
+  <target name="setup" unless="setup.done">
+    <copy todir="build">
+      <fileset dir="java">
+        <include name="**/*.java" />
+        <!--<exclude name="" />-->
+      </fileset>
+    </copy>
+    <copy todir="build/conf">
+      <fileset dir="conf" />
+    </copy>
+    <copy todir="build" file="log4j.properties"/>
+
+    <ivy:retrieve />
+    <ivy:cachepath pathid="lib.path.id"/>
+
+    <property name="setup.done" value="true" />
+  </target>
+
+  <target name="build" depends="setup">
+    <javac srcdir="build" destdir="build" deprecation="on"
+           classpathref="lib.path.id" includeantruntime="last">
+<!--  <classpath> -->
+        <!--<pathelement location="/usr/share/java/antlr.jar"/>-->
+        <!-- <fileset dir="${user.home}/lib"><include name="**/*.jar"/></fileset> -->
+<!--  </classpath> -->
+    </javac>
+  </target>
+
+  <target name="jar" depends="build">
+    <jar destfile="dist/httpchain.jar" basedir="build">
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Main-Class" value="jhu.welch.atis.utils.httpchain.CLIDriver" />
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="run" depends="jar">
+    <java classpathref="lib.path.id" classname="jhu.welch.atis.utils.httpchain.CLIDriver">
+      <classpath>
+        <pathelement location="dist/httpchain.jar"/>
+      </classpath>
+    </java>
+  </target>
+
+  <target name="javadoc" depends="setup">
+    <javadoc packagenames="*" sourcepath="build"
+             excludepackagenames="" defaultexcludes="yes"
+             destdir="build/api" windowtitle="JHU HTTPChain"
+             author="true" version="true" use="true">
+      <doctitle><![CDATA[<h1>HTTP Chain</h1>]]></doctitle>
+      <bottom><![CDATA[<a href="http://www.welch.jhu.edu">JHU ATIS</a>]]></bottom>
+      <!--
+          <tag name="todo" scope="all" description="To do:"/>
+          <group title="Group 1 Packages" packages="com.dummy.test.a*"/>
+          <group title="Group 2 Packages" packages="com.dummy.test.b*:com.dummy.test.c*"/>
+          <link offline="true" href="http://java.sun.com/products/jdk/1.2/docs/api/" packagelistLoc="C:\tmp"/>
+          <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
+      -->
+    </javadoc>
+  </target>
+
+  <property name="ivy.install.version" value="2.1.0-rc2" />
+  <condition property="ivy.home" value="${env.IVY_HOME}">
+    <isset property="env.IVY_HOME" />
+  </condition>
+  <property name="ivy.home" value="${user.home}/.ant" />
+  <property name="ivy.jar.dir" value="${ivy.home}/lib" />
+  <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+
+  <target name="download-ivy" unless="offline">
+
+    <mkdir dir="${ivy.jar.dir}"/>
+    <!-- download Ivy from web site so that it can be used even without any special installation -->
+    <get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" 
+         dest="${ivy.jar.file}" usetimestamp="true"/>
+  </target>
+
+  <target name="init-ivy" depends="download-ivy">
+    <!-- try to load ivy here from ivy home, in case the user has not already dropped
+         it into ant's lib dir (note that the latter copy will always take precedence).
+         We will not fail as long as local lib dir exists (it may be empty) and
+         ivy is in at least one of ant's lib dir or the local lib dir. -->
+      <path id="ivy.lib.path">
+        <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+      </path>
+      <taskdef resource="org/apache/ivy/ant/antlib.xml"
+               uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+  </target>
+</project>
