@@ -1,0 +1,38 @@
+#header h2 {
+  width: 100%;
+  margin-right: -275px;
+  margin-left: 1em;
+}
+#namedivider { top: 75px; }
+#header { height: 125px; }
+#sidebar .content { filter: alpha(opacity=50); /* no effect because hasLayout is false */ }
+#content { width: 630px; }
+
+#body { position: relative; }
+#sidebar {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  height: 2000px;
+  width: 250px;
+}
+#content { margin-left: 250px; }
+.clear { height: 0; }
+
+li { behavior: url("themes/squiggle/ie_element_hover.htc"); }
+.block-menu ul {
+  margin: 0;
+  zoom: 1;
+}
+.block-menu ul.menu  ul {
+  width: expression(this.parentNode.parentNode.offsetWidth + 'px' );
+}
+.block-menu li.hovered ul {
+  visibility: visible;
+}
+.block-menu ul.menu li, .block-menu ul.menu a {
+  margin-left: 0em;
+}
+.block-menu ul.menu ul {
+  width: expression(((document.getElementsByTagName("body")[0].offsetWidth - document.all['sidebar'].offsetWidth) * .9) + 'px');
+}

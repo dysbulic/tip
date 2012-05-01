@@ -1,0 +1,42 @@
+#ifndef __GLOBAL__
+#define __GLOBAL__
+
+const long MAX_ROBOT_NAME_LENGTH = 256;
+const long VIDEO_WIDTH = 320;
+const long VIDEO_HEIGHT = 240;
+
+const long MAX_INTERFACE_MODES = 2;
+const long CURRENT_INTERFACE_MANIPULATION  = 0;
+const long CURRENT_INTERFACE_ORCHESTRATION = 1;
+
+const long MAX_OVERLAYS_PER_INTERFACE = 6;
+const long ORCHESTRATION_INTERFACE_CHEMICAL_OVERLAY = 0;
+const long ORCHESTRATION_INTERFACE_BOMB_OVERLAY = 1;
+const long MANIPULATION_INTERFACE_ORCHESTRATION_OVERLAY = 0;
+
+const long MAX_NUM_ROBOTS = 10;
+
+const long STARTING_BATTERY_LEVEL = 50000;
+
+const float DRIVE_SPEED = 0.35;
+const float ROTATE_SPEED = 0.35;
+
+// tasks
+const long TASK_WAYPOINT        = 0;
+const long TASK_CHEMICAL_SAMPLE = 1;
+const long TASK_DIRT_SAMPLE     = 2;
+
+const long TASK_COST = 1000;
+const long WAYPOINT_COST = 1000;
+
+const long MAX_ROBOT_TASK_PROGRESS = 1000;
+
+const float REQUIRED_DISTANCE_TO_WAYPOINT = 0.3;
+
+const float MINIMUM_BOMB_FINDING_DISTANCE = 0.5;
+
+#define PLAYER_SERVER_IP "129.59.88.141"
+#define PLAYER_SERVER_PORT 6665
+#define PLAYER_CONFIG "config/simulationinterface.cfg"
+
+#endif

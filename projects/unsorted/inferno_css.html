@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Simple CSS Explanation</title>
+    <link rel="stylesheet" href="styles/inferno.css" type="text/css"/>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p>This is a very simple cascading style sheet (css) explanation. It is not meant to be <a href="http://www.w3.org/TR/REC-CSS2/">authoritative</a>, a <a href="http://www.zvon.org/xxl/CSS2Reference/Output/index.html">reference</a>, or a <a href="http://hotwired.lycos.com/webmonkey/authoring/stylesheets/tutorials/tutorial1.html">tutorial</a>. Instead it is just a brief overview of what css is and a simple example showing the style used with this page.</p>
+    <p>CSS is a way to separate the content of a html document from its presentation. The html specifies what elements are on the page and how they are grouped and then the stylesheet specifies how the page looks. This is useful for a couple of reasons. First and foremost it can save lots of time and energy. CSS lets you control aspects of how presentation such as font color and size that previously took lots of &lt;font&gt; tags mixed through the html. If you wanted to change any of the colors then you had to hunt down all of the &lt;font&gt; tags and change them appropriately. Cascading style sheets lets you specify all the appearance properties for a document in one place and thus makes making changes much simpler. Actually you can have one stylesheet used by hundreds of pages and so to change the appearance of all your webpages you need only change one file.</p>
+    <p>Also css allows different people to manage the appearance of the document than manage its content. I, for instance, happen to be very good at writing programs to generate html, but my aesthetic sense leaves much to be desired. Using css I can create lots of html and someone with a finer tuned sense of color balance can write the style for it and voila, you end up with a solid match of the technical and the artistic, with each person handling the area where they are the strongest.</p>
+    <p>I will begin with a simple example that illustrates where the "cascading" in cascading style sheets comes from. Each element in the page gets its properties from the styles that are the closest to it. For instance in the following html:</p>
+    <pre>
+      &lt;div style="font-size: 15pt; color: green;"&gt;
+         &lt;p&gt;15pt green text&lt;/p&gt;
+         &lt;p style="color: red";&gt;15pt red text&lt;/p&gt;
+         &lt;p style="color: blue; font-size: 12pt;"&gt;12pt blue text&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Normal text&lt;/p&gt;
+    </pre>
+    <p>Looks like this when it is rendered:</p>
+    <div style="border: solid gray;">
+      <div style="font-size: 15pt; color: green;">
+         <p>15pt green text</p>
+         <p style="color: red;">15pt red text</p>
+         <p style="color: blue; font-size: 12pt;">12pt blue text</p>
+      </div>
+      <p>Normal text</p>
+    </div>
+    <p><em>Note: If you are unfamiliar with the &lt;div&gt; tag, it just specifies a division in the document.</em></p>
+    <p>This sample gives a little idea of how styles are applied. The first tag is the &lt;div&gt;ision tag; it says that for this section of the document any text that doesn't have the styles overridden will have 15 point green text. The first &lt;p&gt;aragraph tag doesn't have any other styles so the &lt;div&gt;ision tags styles apply. The second &lt;p&gt;aragraph tag has a font color style. Because this tag is closer to the text than the &lt;div&gt; the red color overrides the green. Because the font size is not overridden though the text is still 15 point. The final &lt;p&gt; overrides both the font size and the font color and so none of the properties for the &lt;div&gt; show through.</p>
+    <p>After the &lt;div&gt; is closed there is one more &lt;p&gt;. A &lt;div&gt;ision tag has no representation on the screen. It is used only to specify groupings of elements in html. The final &lt;p&gt; is outside of that &lt;div&gt;ision so none of the styles for it apply.</p>
+    <p>Each style contains a set of style declarations. These are simple keyword: value; pairs, for instance font-size: 14pt;. There are different valid keywords for different tags and different values allowed for each keyword. To learn about what they are you can either look at the <a href="http://www.w3.org/TR/REC-CSS2/">specification</a> or a <a href="http://www.zvon.org/xxl/CSS2Reference/Output/index.html">reference</a>.</p>
+    <p>Hopefully that gives a good general idea of how stylesheets are applied. The properties of a document that have styles is pretty large. Not only things like the font size and color but also the justification of lines and the background and the spaces between characters and borders too. The group that is over deciding what sorts of things stylesheets will do is called the world wide web consortium (<a href="http://www.w3c.org">w3c</a>). It is a group of companies and individuals that confer on different ideas and then come out with standards. The makers of internet browsers, like <a href="http://www.netscape.com">Netscape</a> and <a href="http://www.microsoft.com/windows/ie/">Internet Explorer</a> then take those standards and write their browsers to support them. Cascading style sheets have been around for a while and have been supported in one way or another since Netscape 4 and IE 3. Support is not always perfect but things are pretty solid now and it is a safe bet as a web designer that using css will not limit people's ability to see your site. For a while now the browser that has the best support for css as well as lots of other standards is <a href="http://www.mozilla.org/">Mozilla</a>.</p>
+    <p>To cover a couple of other things brieflly...</p>
+    <p>There are three ways that you can use styles in your document. The one shown above is called an <em>inline</em> style. It is done by simply putting a "style" attribute in the tag. It is perhaps the least useful form of style usage because it ties the style to a specific spot. There are times though when you only want the style in one place and inline styles work for that.</p>
+    <p>A more general type of style is called an <em>embedded</em> stylesheet. This type is specified in the text of your html, but instead of being in the tags it is in a special &lt;style&gt; section. For instance an embedded stylesheet appearing in a document might look like this:</p>
+    <pre>
+      &lt;style type="text/css"&gt;&lt;!--
+        P { font-size: 14pt;
+            color: rgb(254, 193, 139); }
+        H1 { text-align: center; }
+      --&gt;&lt;/style&gt;
+    </pre>
+    <p style="font-size: 14pt; color: rgb(254, 193, 139);">Any &lt;p&gt; tags in the document would then look like this. It is <em>not</em> necessary to specify the styles inline if they are embedded. If any of the &lt;p&gt; tags had inline styles for font size or color then those properties would override the embedded ones, but if there were no inline styles closer to the text then the embedded style would take affect.</p>
+    <p>You might have noticed that instead of specifying a name for the color, like red or blue, instead there is rgb(245, 193, 139). You are allowed to specify colors a few ways in css. There are predefined color names like red and green and blue, also though you can use rgb() and specify the red, green, and blue values of the color as numbers from 0 to 255. Another format you are allowed to use is the traditional html #rrggbb notation where you have the same information as in rgb() but the numbers are written one right after the other in hexadecimal. For instance rgb(245, 193, 139) = #FEC18B. I personally prefer the rgb notation.</p>
+    <p>Also inline styles introduces the idea of "rules". A rule is just a tag name followed by a set of style declarations enclosed in {}'s.</p>
+    <p>The most useful type of stylesheet is a <em>linked</em> stylesheet. It is much the same as an embedded stylesheet except it is in a different file. To link to a stylesheet you just include a line like this in the &lt;head&gt;er of your document:</p>
+    <pre>
+      &lt;link rel="stylesheet" href="/styles/inferno.css" type="text/css"&gt;
+    </pre>
+    <p>The format of the linked document is a set of rules just like the embedded stylesheet. This document has a <a href="/styles/inferno.css">linked stylesheet</a>. If you look at it you will see that it specifies the font color and size and background.</p>
+    <p>One thing that you will notice if you look at the stylesheet for this page is that the rule names are not all exactly the names for tags. Specifically there is a set that looks like this:</p>
+    <pre>
+      A:link, A:active {
+        text-decoration: none;
+        color: rgb(121, 121, 255);
+      }
+      A:visited {
+        text-decoration: none;
+        color: rgb(186, 176, 237);
+      }
+      A:hover {
+        text-shadow: 3px 3px 5px red;
+        color: rgb(245, 251, 134);
+      }
+    </pre>
+    <p>The &lt;a&gt;nchor tag has a special set of properties: ":link", ":active", ":visited" and ":hover". These specify the properties of links in your document when they are displayed. You might have noticed that none of the links on this page are underlined. This is because of the text-decoration: none; style in the :link section. Also if you are using IE 5 or Netscape 6 then when your mouse passes over a link it turns yellow. This is because of the :hover color: rgb(245, 251, 134); style. If you wanted to you could have the background change colors when the mouse passes over or have the text change size or any other type of style change.</p>
+    <p>The especially nice thing that I mentioned before about linked stylesheets is that they can be shared by many pages but to change the appearance of a page you need only alter it in one place.</p>
+    <p>So, this is a brief overview of stylesheets. If you want a more in depth tutorial I recommend either <a href="http://hotwired.lycos.com/webmonkey/authoring/stylesheets/tutorials/tutorial1.html">webmonkey</a> or <a href="http://www.zvon.org/xxl/CSS2Tutorial/General/htmlIntro.html">zvon</a>.</p>
+    <p>If you have any questions or suggestions feel free to <a href="mailto:will@himinbi.org">e-mail me</a>.</p>
+  </body>
+</html>

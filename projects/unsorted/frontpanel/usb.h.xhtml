@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>USB Constants and Structures</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <link rel="stylesheet" type="text/css" href="code.css" />
+    <style type="text/css">
+      #SCIvars { opacity: .5; }
+    </style>
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript" src="trim_code.js"></script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+    <script type="text/javascript">//<![CDATA[
+    //]]></script>
+  </head>
+  <body>
+    <h1>USB Constants and Structures</h1>
+    <p></p>
+    <hr />
+
+<div class="program">
+<div class="code"><![CDATA[
+#ifndef USB_H
+#define USB_H
+]]></div>
+<div class="explanation">Inclusion guard</div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#include "types.h"
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define USB_V_1_1		0x0110
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define LANG_US_EN		0x0409
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define REQ_GET_STATUS		0
+#define REQ_CLEAR_FEATURE	1
+#define REQ_SET_FEATURE		3
+#define REQ_SET_ADDRESS		5
+#define REQ_GET_DESCRIPTOR	6
+#define REQ_SET_DESCRIPTOR	7
+#define REQ_GET_CONFIGURATION	8
+#define REQ_SET_CONFIGURATION	9
+#define REQ_GET_INTERFACE	10
+#define REQ_SET_INTERFACE	11
+#define REQ_SYNCH_FRAME		12
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define DESCR_TYPE_DEVICE		1
+#define DESCR_TYPE_CONFIGURATION	2
+#define DESCR_TYPE_STRING		3
+#define DESCR_TYPE_INTERFACE		4
+#define DESCR_TYPE_ENDPOINT		5
+#define DESCR_TYPE_DEVICE_QUALIFIER	6
+#define DESCR_TYPE_OTHER_SPEED_CONFIG	7
+#define DESCR_TYPE_INTERFACE_POWER	8
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define REQ_MASK_TRANSDIRECTION (1<<7)
+#define REQ_MASK_TYPE		(3<<5)
+#define REQ_MASK_RECIPIENT	0x18
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define REQ_RECIP_DEVICE	0
+#define REQ_RECIP_INTERFACE	1
+#define REQ_RECIP_ENDPOINT	2
+#define REQ_RECIP_OTHER		3
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define REQ_TYPE_STANDARD	(0<<5)
+#define REQ_TYPE_CLASS		(1<<5)
+#define REQ_TYPE_VENDOR		(2<<5)
+#define REQ_TYPE_RESERVERD	(3<<5)
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define CLASS_INDEPENDENT  0
+#define SUBCLASS_NONE      0
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define VENDOR_DEFINED 0xFF
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define IN_ENDPOINT    (1<<7)
+#define OUT_ENDPOINT   0x00
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define CONTROL_TRANSFER         0
+#define ISOSYNCHRONOUS_TRANSFER  1
+#define BULK_TRANSFER            2
+#define INTERRUPT_TRANSFER       3
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define NO_SYNCHRONIZATION       (0<<2)
+#define ASYNCHRONOUS             (1<<2)
+#define ADAPTIVE_SYNCHRONOZATION (2<<2)
+#define SYNCHRONOUS              (3<<2)
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#define DATA_ENDPOINT              (0<<4)
+#define FEEDBACK_ENDPOINT          (1<<4)
+#define IMPLICIT_FEEDBACK_ENDPOINT (2<<4)
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+typedef struct usb_request {
+  uint8 bmRequestType;          // bitmap
+  uint8 bRequest;
+  uint16 wValue;
+  uint16 wIndex;
+  uint16 wLength;
+} USB_REQUEST;
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+typedef struct device_descriptor {
+  uint8 bLength;
+  uint8 bDescriptorType;
+  uint16 bcdUSB;
+  uint8 bDeviceClass;
+  uint8 bDeviceSubClass;
+  uint8 bDeviceProtocol;
+  uint8 bMaxPacketSize;
+  uint16 idVendor;
+  uint16 idProduct;
+  uint16 bcdDevice;
+  uint8 iManufacturer;
+  uint8 iProduct;
+  uint8 iSerialNumber;
+  uint8 bNumConfigurations;
+} DEVICE_DESCRIPTOR;
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+typedef struct config_descriptor {
+  uint8 bLength;
+  uint8 bDescriptorType;
+  uint16 wTotalLength;
+  uint8 bNumInterfaces;
+  uint8 bConfigurationVal;
+  uint8 iConfiguration;
+  uint8 bmAttributes;
+  uint8 MaxPower;
+} CONFIG_DESCRIPTOR;
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+typedef struct interface_descriptor {
+  uint8 bLength;
+  uint8 bDescriptorType;
+  uint8 bInterfaceNumber;
+  uint8 bAlternateSetting;
+  uint8 bNumEndPoints;
+  uint8 bInterfaceClass;
+  uint8 bInterfaceSubClass;
+  uint8 bInterfaceProtocol;
+  uint8 iInterface;
+} INTERFACE_DESCRIPTOR;
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+typedef struct endpoint_descriptor {
+  uint8 bLength;
+  uint8 bDescriptorType;
+  uint8 bEndpointAddress;
+  uint8 bmAttributes;
+  uint16 wMaxPacketSize;
+  uint8 bInterval;
+} ENDPOINT_DESCRIPTOR;
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+typedef struct full_config {
+  CONFIG_DESCRIPTOR Config;
+  INTERFACE_DESCRIPTOR Interface;
+  ENDPOINT_DESCRIPTOR endpoint1;
+  ENDPOINT_DESCRIPTOR endpoint2;
+} FULL_CONFIG;
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="oneline code">#define DEVSTRING_DESCRIPTOR(STRING_LENGTH)</div>
+<div class="oneline code"> typedef struct devstring_descriptor {</div>
+<div class="oneline code">   uint8 bLength;</div>
+<div class="oneline code">   uint8 bDescriptorType;</div>
+<div class="oneline code">   char bString[STRING_LENGTH];</div>
+<div class="oneline code"> } DEVSTRING_DESCRIPTOR
+</div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="oneline code">#define MANUFACTURER_DESCRIPTOR(STRING_LENGTH)</div>
+<div class="oneline code"> typedef struct manufstring_descriptor {</div>
+<div class="oneline code">   uint8 bLength;</div>
+<div class="oneline code">   uint8 bDescriptorType;</div>
+<div class="oneline code">   char bString[STRING_LENGTH];</div>
+<div class="oneline code"> } MANUFACTURER_DESCRIPTOR
+</div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+typedef struct lang_descriptor {
+  uint8 bLength;
+  uint8 bDescriptorType;
+  uint16 wLANGID0;
+} LANG_DESCRIPTOR;
+]]></div>
+<div class="explanation"></div>
+</div>
+
+<div class="program">
+<div class="code"><![CDATA[
+#endif
+]]></div>
+<div class="explanation"></div>
+</div>
+
+  </body>
+</html>

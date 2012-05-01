@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Scope of XML Retrieval Functions</title>
+    <link type="text/css" rel="stylesheet" href="javascript_test.css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      function debug(text) {
+        var debugArea = document.createElement("div");
+        debugArea.appendChild(document.createTextNode(text));
+        //debugArea.innerHTML = text;
+        document.getElementsByTagName("body").item(0).appendChild(debugArea);
+      }
+      function debugBreak() {
+        document.getElementsByTagName("body").item(0)
+          .appendChild(document.createElement("hr"));
+      }
+    </script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p>IE and Movilla seem to scope the callback function on their XML
+    loaders differently. <code>XMLHttpRequest</code>, scopes the
+    return to that calling function. <code>XMLHTTP</code> scopes to
+    the <code>window</code> object. Mozilla's implementation allows
+    variables to be associated with the callback whereas IE's puts
+    everything in the global scope. I like Mozilla's and want to try
+    and reproduce it on IE.</p>
+    <form action="" onsubmit="eval(this['code'].value); return false">
+      <div style="height: 90%">
+        <textarea name="code" cols="" rows=""
+>function createRequest() {
+  var request;
+  if(typeof(XMLHttpRequest) != "undefined") {
+    request = new XMLHttpRequest();
+  } else if (window.ActiveXObject) {
+    var msxmlProgids = new Array("MSXML2.XMLHTTP.5.0", "MSXML2.XMLHTTP.4.0", "MSXML2.XMLHTTP.3.0",
+                                 "MSXML2.XMLHTTP", "Microsoft.XMLHTTP");
+    for(var i = 0; (i &lt; msxmlProgids.length &amp;&amp;
+                    typeof(request) == "undefined"); i++) {
+      try { request = new ActiveXObject(msxmlProgids[i]); } catch(e) { }
+    }
+  }
+  return request;
+}
+
+function requestURL(request, url, asynchronous) {
+  asynchronous = typeof(asynchronous) != "undefined" ? asynchronous : true;
+  try {
+    request.open("GET", url, asynchronous);
+    request.send(null);
+  } catch(e) {
+    debug("For: \"" + url + "\": " + e);
+  }
+}
+
+var scopeTestFunction = function() {
+  var scope = "unknown";
+  if(this == window) { scope = "window"; }
+  else if(this == arguments.callee) { scope = "callee"; }
+  else { scope += " (" + this + ")"; }
+  debug("Scope of callback: " + scope + " [" + this.userData + "]");
+}
+scopeTestFunction.userData = "user data";
+
+var request = createRequest();
+request.onreadystatechange = scopeTestFunction;
+requestURL(request, window.location.pathname);
+
+var nestingCallback = function() {
+  arguments.callee.callback.apply(arguments.callee.callback, arguments);
+}
+nestingCallback.callback = scopeTestFunction;
+
+request = createRequest();
+request.onreadystatechange = nestingCallback;
+requestURL(request, window.location.pathname);</textarea>
+      </div>
+      <div><input type="submit" value="Go"></input></div>
+    </form>
+  </body>
+</html>

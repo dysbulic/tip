@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Centered Triple Matting with CSS</title>
+    <style type="text/css">/*<![CDATA[*/
+      #body { width: 650px; }
+      img { border: 1px solid white; display: block; }
+      .matte { padding: 5px; border: 1px solid; }
+      .image { padding: 5px; border: 1px dashed; }
+      .caption { margin: .5em auto .1em auto; text-align: center; }
+
+      #staticborder { text-align: center; }
+      #staticborder img { border: 1px solid white; }
+      #staticborder .matte { width: 182px; background-color: #677870; }
+      #staticborder .image { width: 194px; background-color: #D3DBC8; margin: auto; }
+
+      #tableborder .matte, #tableborder .image { display: table; margin: auto; }
+      #tableborder .matte { background-color: #722100; }
+      #tableborder .image { background-color: #FCEEB9; }
+
+      .example { border: 2px solid #333; background-color: #DDD; padding: .25em .5em .25em .5em; }
+      .inner, #overflowexample .outer { width: 20px; height: 20px; padding: 0; }
+      .inner, .outer, .container { border: 2px solid; }
+      .container { border-color: #8A6; background-color: #CFA; }
+      .outer { border-color: #68A; background-color: #ACF; }
+      .inner { border-color: #A86; background-color: #FCA; }
+      .inner { margin: 5px; }
+      #cssoverflow { position: relative; }
+      #cssoverflow .inner { position: absolute; top: 2px; left: 2px; }
+      #ieoverflow .outer, #positionexample .outer { width: 34px; height: 34px; }
+      #browseroverflow, #cssoverflow, #ieoverflow, #centeralign, #browserposition, #relativeposition
+        { margin-left: 20px; }
+
+      #zerowidth { text-align: center; }
+      #zerowidth .matte { background-color: #51557A; }
+      #zerowidth .image { background-color: #E8CF8C; text-align: center; /* doesn't do anything */ }
+
+      .marker { width: 50%; border-width: 2px; border-style: solid solid none solid; text-align: center; }
+
+      #centeralign .outer { padding: 5px 0 5px 0; text-align: center; }
+      #centeralign .inner { margin: auto; }
+
+      #relativeposition .holder, #relativeposition .inner { position: relative; }
+      #relativeposition .holder { left: 50%; border: 1px dashed gray; width: 30px; margin: 5px 0 5px 2px; }
+      #relativeposition .inner { width: 20px; left: -50%; margin-left: 2px; }
+
+      #zeroholder .image, #zeroholder .matte { margin: 0 auto 0 auto; }
+      #zeroholder .matte, #zeroholder .image { display: table; }
+      #zeroholder .image img { display: block; margin: 0px; border: 1px solid white; }
+      #zeroholder .matte { background-color: #3E2D4D; border: 1px solid; }
+      #zeroholder .image { background-color: #E3E5FC; border: 1px dashed; }
+
+      pre.caption { font-family: serif; font-size: 100%; }
+
+      #finallayout { margin: 0 -5px 0 -5px; }
+      #finallayout .imageholder { float: left; margin: 0 0 7px 7px; }
+      #finallayout .imageholder, #finallayout .matteholder { width: 210px; }
+      #finallayout .captionholder { min-height: 2.5em; line-height: 1em; }
+      #finallayout .image { height: 100%; padding: 5px 5px 0 5px; border: none; }
+      #finallayout .matte { display: table; margin: auto; }
+      #finallayout .matteholder { display: table-cell; height: 200px; text-align: center; }
+      #finallayout .image img { display: block; margin: 0; border: 1px solid white; max-width: 180px; max-height: 180px; }
+      #finallayout .matte { background-color: #513221; border: 1px solid; }
+      #finallayout .imageholder { background-color: #F5E9E1; border: 1px dashed; }
+
+      #finallayout:after { content: ' '; display: block; height: 0; clear: both; }
+
+    /*]]>*/</style>
+    <!--[if ! IE]>-->
+    <style type="text/css">
+      /* causes a space as though the image was not using block display */
+      #finallayout .matteholder { vertical-align: middle; }
+    </style>
+    <!--<![endif]-->
+    <!--[if lt IE 7]>
+    <style type="text/css">
+      #zerowidth .image { width: 0; }
+
+      #relativeposition .inner { margin-left: 4px; }
+      #relativeposition .holder { width: 0; margin-left: -24px; }
+      #relativeposition .outer { padding: 5px 0 5px 0; }
+
+      #zeroholder .imageholder { text-align: center; }
+      #zeroholder .image { width: 0; }
+      #zeroholder .image * { position: relative; }
+      #zeroholder .matteholder, #zeroholder .captionholder { width: 0; left: 50%; margin-left: -5px; }
+      #zeroholder .matte, #zeroholder .caption { left: -50%; }
+
+      #finallayout .imageholder, #finallayout .matteholder { width: 207px; }
+      #finallayout .imageholder { padding: 5px 3px 2.5em 3px; }
+      #finallayout .image { height: 200px; margin-top: -5px; }
+      #finallayout .imageholder * { position: relative; }
+
+      #finallayout .matteholder { height: 0; width: 0; }
+      #finallayout .matteholder { left: 50%; margin-left: -5px; }
+      #finallayout .matteholder { top: 50%; margin-top: -3px; }
+      #finallayout .matte { left: -50%; top: -50%; }
+      #finallayout .captionholder { position: absolute; left: 0; bottom: -2.4em; height: 2.5em; width: 200px; }
+
+      #finallayout { height: 0; }
+    </style>
+    <![endif]-->
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="body">
+      <h1>Mathless Triple Matting with <acronym title="Cascading Style Sheets">CSS</acronym></h1>
+      <p>Most of the time the goal with images in a layout is to seamlessly blend them in. For photo galleries and some types of articles though, you want to highlight the images and make them more prominent. In the real world of picture framing, a common method to accomplish this is triple matting. By using different colored matte borders, you can both accentuate an image and draw out the colors to make it more visually appealing. <a href="http://www.mandarindesign.com/boxes.html">Mandarin Design</a> has about thirty different styles for doing this with <acronym title="Cascading Style Sheets">CSS</acronym>, but there are issues&#x2026;</p>
+      <p>The one that I like and want to use for my gallery is a pretty simple triple matte with a caption:</p>
+      
+      <pre><code>img { border: 1px solid white; }
+.matte, .image { padding: 5px; border-width: 1px; }
+.matte { width: 182px; border-style: solid; }
+.image { width: 194px; border-style: dashed; margin: auto; }</code></pre>
+
+      <div id="staticborder">
+        <div class="image">
+          <div class="matte">
+            <img src="monet%20-%20st.%20lazare.jpg" alt="Saint-Lazare Station" />
+          </div>
+          <p class="caption">Monet - <cite>Saint-Lazare Station</cite>, 1877</p>
+        </div>
+      </div>
+      <p>That's pretty enough, but it is done by specifying the <code>width</code> of both the <code>.matte</code> <code>div</code> and <code>.image</code> <code>div</code> that surrounds both the image and caption. I want to do this for a generic photo gallery and surely I don't have to code something to do the borders on an image by image basis.</p>
+
+      <h2>The Problem</h2>
+
+      <p>The issue is <code>block</code> elements try to be the width of their parent. There are a couple <a href="http://www.w3.org/TR/REC-CSS2/visuren.html#display-prop" title="CSS display property">different options</a> for things to try:</p>
+
+      <ul>
+        <li>The width of <code>float</code>ed elements is determined by their content, but you can't center floats</li>
+        <li>The width of <code>inline</code> elements is also determined by the content, but this won't handle the height</li>
+      </ul>
+
+      <h2>Using CSS Tables</h2>
+
+      <p>For real CSS browsers, the <code>table</code> display holds the key. The CSS looks like this:</p>
+
+      <pre><code>.matte, .image { display: table; margin: auto; }</code></pre>
+
+      <div id="tableborder">
+        <div class="image">
+          <div class="matte">
+            <img src="monet%20-%20st.%20romain%20soleil.jpg" alt="Rouen Cathedral" />
+          </div>
+          <p class="caption">Monet - <cite>Rouen Cathedral</cite>, 1894</p>
+        </div>
+      </div>
+
+      <p>Those who know browsers (and those browsing with <acronym title="Internet Explorer">IE</acronym>) will see a problem. IE doesn't support the <code>table</code> <code>display</code> and so the elements just display with the default <code>block</code> style. There is a partial solution to this problem from a nonstandard way that IE deals with overflowing elements.</p>
+
+      <div id="overflowexample" class="example">
+        <h2>Reflows in Internet Explorer</h2>
+        <p>If you had the following HTML:</p>
+        <pre>&#x3C;div class="outer">&#x3C;div class="inner">&#x3C;/div>&#x3C;/div></pre>
+        <p>With the following style applied:</p>
+        <pre>.inner, .outer
+  { width: 20px; height: 20px; border: 2px solid; }
+.outer
+  { border-color: #68A; background-color: #ACF; }
+.inner
+  { border-color: #A86; background-color: #FCA;
+    margin: 5px; }</pre>
+        <p>In your browser, this is what it looks like:</p>
+        <div id="browseroverflow"><div class="outer overflow"><div class="inner overflow"><!----></div></div></div>
+        <p>In a CSS compliant browser, it would display like this:</p>
+        <div id="cssoverflow"><div class="outer overflow"></div><div class="inner overflow"><!----></div></div>
+        <p>Whereas in IE, the outer box is reflowed and it comes out like this:</p>
+        <div id="ieoverflow"><div class="outer overflow"><div class="inner overflow"><!----></div></div></div>
+      </div>
+      
+      <p>This means that if the size of the elements is specified as a value that is too small in IE, it will reflow the borders and background. That is all that is reflowed however. The actual element has a width of whatever you specified. This is a problem because it causes the text in the caption <code>&#x3C;p></code> to wrap. To deal with this, we can change the <code>&#x3C;p></code> to a <code>&#x3C;pre></code> and add some CSS:</p>
+
+      <pre><code>&#x3C;style type="text/css">
+  pre.caption { font-family: serif; font-size: 100%; }
+&#x3C;/style>
+&#x3C;!--[if lt IE 7]>
+&#x3C;style type="text/css">
+  .image { width 0; }
+&#x3C;/style>
+&#x3C;![endif]--></code></pre>
+
+      <div id="zerowidth">
+        <div class="image">
+          <div class="matte">
+            <img src="monet%20-%20matin.jpg" alt="Monet - Matin" />
+          </div>
+          <pre class="caption">Monet - <cite>Effet de Neige, le Matin</cite>, 1891</pre>
+        </div>
+      </div>
+
+      <p>The last problem is that centering has been lost. <code>text-align: center</code> doesn't affect the contents of reflowed boxes. The reflowing does affect relative positioning though and we can use that to our advantage:</p>
+
+      <div class="example">
+        <h2>Centering Using Relative Percentages</h2>
+        <p>There are two centering methods that will be employed. The first is the simple <code>text-align: center</code> which can be used to center <code>block</code> elements in IE:</p>
+        <pre>&#x3C;div class="outer">&#x3C;div class="inner">&#x3C;/div>&#x3C;/div></pre>
+        <pre>.inner { width: 20px; height: 20px; }
+.outer { <strong>text-align: center</strong>; }
+.inner, outer { border: 2px solid; }
+.outer { border-color: #68A; background-color: #ACF; }
+.inner { border-color: #A86; background-color: #FCA; margin: 5px; }</pre>
+        <div id="centeralign">
+          <div class="outer"><div class="inner"><!----></div></div>
+        </div>
+
+        <p>This method won't work for reflowed regions, but <code>relative</code> <code>position</code>ing can be used. The basic idea is you have three nested <code>div</code>s. The first one sets the frame. The second is relatively positioned at 50% to start at the center of the first. The third is the same size as the second (via a <code>width</code> of <code>0</code> on the second in IE). It is then relatively positioned -50% of the second, putting it in the center of the first.</p>
+        <p>It's a little convoluted to describe. Here's what it looks like:</p>
+
+        <pre>&#x3C;div class="outer">
+  &#x3C;div class="holder">
+    &#x3C;div class="inner">&#x3C;/div>
+  &#x3C;/div>
+&#x3C;/div></pre>
+
+        <pre>/* .inner and .outer borders from above */
+.holder, .inner { position: relative; }
+.holder { border: 1px dashed gray; <strong>left: 50%</strong>; <strong>width: 0</strong>;
+          margin: 5px 0 5px -4px; }
+.inner { <strong>left: -50%</strong>;
+         margin-left: 4px; /* compensate for borders */ }
+.outer { padding: 5px 0 5px 0; }</pre>
+
+        <div id="relativeposition">
+          <div class="marker">width: 50%;</div>
+          <div class="outer">
+            <div class="holder">
+              <div class="inner"><!----></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2>Puttin' It All Together</h2>
+
+      <p>To use this method will require a few extra <code>div</code>s. Both the matte and the caption need an element of the same size to be positioned relative to. The whole image needs a container to be centered within. In the end the html looks like this:</p>
+
+      <pre>&#x3C;div class="imageholder">&#x3C;div class="image">
+  &#x3C;div class="matteholder">&#x3C;div class="matte">
+    &#x3C;img src="" alt="" />
+  &#x3C;/div>&#x3C;/div>
+  &#x3C;div class="captionholder">
+    &#x3C;pre class="caption">&#x2026;&#x3C;/pre>
+  &#x3C;/div>
+&#x3C;/div></pre>
+
+      <pre><code>&#x3C;style type="text/css">
+  .image, .matte, .caption { display: table; margin: auto }
+  .image img { display: block; margin: 0; border: 1px white; }
+  .matte { background-color: #3E2D4D; border: 1px solid; }
+  .image { background-color: #E3E5FC; border: 1px dashed; }
+  pre.caption { font-family: serif; font-size: 100%; }
+&#x3C;/style>
+&#x3C;!--[if lt IE 7]>
+&#x3C;style type="text/css">
+  .imageholder { text-align: center; }
+  .image { width: 0; }
+  .image * { position: relative; }
+  .matteholder, .captionholder { width: 0; left: 50%; margin-left: -5px; }
+  .matte, .caption { left: -50%; }
+&#x3C;/style>
+&#x3C;![endif]--></code></pre>
+
+      <div id="zeroholder">
+        <div class="imageholder"><div class="image">
+          <div class="matteholder"><div class="matte">
+            <img src="monet%20-%20garden%20footpath.jpg" alt="Monet - Footpath in the Garden" />
+          </div></div>
+          <div class="captionholder">
+            <pre class="caption">Monet - <cite>Footpath in the Garden</cite>, 1891</pre>
+          </div>
+        </div></div>
+      </div>
+      
+      <h2>Photo Gallery</h2>
+
+      <p>In the end though, I don't want to center the images. I want to have a dynamic table sort of feel where the cells will reflow to the width of the screen. This uses many of the same concepts and the same tag layout as the last example, but the CSS is quite a bit different to allow for vertical centering as well as horizontal:</p>
+
+      <pre>&#x3C;style type="text/css">/*&#x3C;![CDATA[*/
+  .imageholder { float: left; margin: 0 0 7px 7px; }
+  .imageholder, .matteholder { width: 210px; }
+  .captionholder { min-height: 2.5em; line-height: 1em; }
+  .image { height: 100%; padding: 5px 5px 0 5px; border: none; }
+  .matte { display: table; margin: auto; }
+  .matteholder { display: table-cell; height: 200px; text-align: center; }
+  .image img { display: block; margin: 0; border: 1px solid white;
+                max-width: 180px; max-height: 180px; }
+  .matte { background-color: #3E2D4D; border: 1px solid; }
+  .imageholder { background-color: #E3E5FC; border: 1px dashed; }
+/*]]&#x3E;*/&#x3C;/style>
+&#x3C;!--[if ! IE]>-->
+&#x3C;style type="text/css">
+  /* causes a space as though the image was not using block display in IE */
+  .matteholder { vertical-align: middle; }
+&#x3C;/style>
+&#x3C;!--&#x3C;![endif]-->
+&#x3C;!--[if lt IE 7]>
+&#x3C;style type="text/css">
+  .imageholder, .matteholder { width: 207px; }
+  .imageholder { padding: 5px 3px 2.5em 3px; }
+  .image { height: 200px; margin-top: -5px; }
+  .matteholder { height: 0px; } 
+  .imageholder * { position: relative; }
+
+  .matteholder { width: 0; height: 0; }
+  .matteholder { left: 50%; margin-left: -5px; }
+  .matteholder { top: 50%; margin-top: -3px; }
+  .matte { left: -50%; top: -50%; }
+  .captionholder { position: absolute; left: 0; bottom: -2.4em;
+                   width: 200px; height: 2.5em; }
+&#x3C;/style></pre>
+
+      <div id="finallayout">
+        <div class="imageholder"><div class="image">
+          <div class="matteholder"><div class="matte">
+            <img src="monet - sunflowers.jpg" alt="" />
+          </div></div>
+          <div class="captionholder">
+            <p class="caption">Monet - <cite>Bouquet of Sunflowers</cite>, 1881</p>
+          </div>
+        </div></div>
+        <div class="imageholder"><div class="image">
+          <div class="matteholder"><div class="matte">
+            <img src="monet - san giorgio.jpg" alt="" />
+          </div></div>
+          <div class="captionholder">
+            <p class="caption">Monet - <cite>San Giorgio Maggiore at Dusk</cite>, 1908</p>
+          </div>
+        </div></div>
+        <div class="imageholder"><div class="image">
+          <div class="matteholder"><div class="matte">
+            <img src="monet - gondola.jpg" alt="" />
+          </div></div>
+          <div class="captionholder">
+            <p class="caption">Monet - <cite>Gondola in Venice</cite>, 1908</p>
+          </div>
+        </div></div>
+        <div class="imageholder"><div class="image">
+          <div class="matteholder"><div class="matte">
+            <img src="monet - antibes.jpg" alt="" />
+          </div></div>
+          <div class="captionholder">
+            <p class="caption">Monet - <cite>Gardener's House at Antibes</cite>, 1888</p>
+          </div>
+        </div></div>
+        <div class="imageholder"><div class="image">
+          <div class="matteholder"><div class="matte">
+            <img src="monet - tulipes.jpg" alt="" />
+          </div></div>
+          <div class="captionholder">
+            <p class="caption">Monet - <cite>A Field of Tulips in Holland</cite>, 1886</p>
+          </div>
+        </div></div>
+        <div class="imageholder"><div class="image">
+          <div class="matteholder"><div class="matte">
+            <img src="monet - irises.jpg" alt="" />
+          </div></div>
+          <div class="captionholder">
+            <p class="caption">Monet - <cite>Water-Irises</cite>, 1900</p>
+          </div>
+        </div></div>
+        <div class="imageholder"><div class="image">
+          <div class="matteholder"><div class="matte">
+            <img src="monet - poppy field.jpg" alt="" />
+          </div></div>
+          <div class="captionholder">
+            <p class="caption">Monet - <cite>Oat and Poppy Field</cite>, 1890</p>
+          </div>
+        </div></div>
+        <div class="imageholder"><div class="image">
+          <div class="matteholder"><div class="matte">
+            <img src="monet - argenteuil.jpg" alt="" />
+          </div></div>
+          <div class="captionholder">
+            <p class="caption">Monet - <cite>The Port at Argenteuil</cite>, 1872</p>
+          </div>
+        </div></div>
+      </div>
+      <h2>Closing Notes</h2>
+      <p>It is worth noting that this method relies on IE's quirks mode. In this particular document, it is triggered by the <code>&#x3C;?xml ?></code> declaration. Also, there is a <a href="http://odin.himinbi.org/tests/test_element_width.html">bug</a> in Opera when using <code>max-width</code> in conjunction with <code>display: table</code> that can affect this layout in certain circumstances.</p>
+      
+      <hr />
+      
+      <p><a href="mailto:wholcomb@gmail.com">Will Holcomb</a> returned from a stint in <a href="http://mr.pcvs.org">Peace Corps Mauritania</a> at the beginning of the year. His unexpected employment as web administrator for the <a href="http://www.mpp.org">Marijuana Policy Project</a> has left him without enough time to update his site: <a href="http://www.himinbi.org">himinbi.org</a>.</p>
+    </div>
+  </body>
+</html>

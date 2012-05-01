@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML
+><HEAD
+><TITLE
+>Overview</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+"><LINK
+REL="HOME"
+TITLE="Website Maintenance Via CVS HOW-TO"
+HREF="website-via-cvs.html"><LINK
+REL="UP"
+TITLE="Introduction"
+HREF="intro.html"><LINK
+REL="PREVIOUS"
+TITLE="Goals"
+HREF="goals.html"><LINK
+REL="NEXT"
+TITLE="Server Setup"
+HREF="server.html"></HEAD
+><BODY
+CLASS="section"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Website Maintenance Via CVS HOW-TO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="goals.html"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Introduction</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="server.html"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="section"
+><H1
+CLASS="section"
+><A
+NAME="overview"
+>Overview</A
+></H1
+>
+      
+      <P
+>The system is going to be running both a CVS repository and a webserver. The users will not update their pages directly, rather the webserver will be serving pages from a checked out copy of a CVS repository. Users will also have a home directory where they can get the kinks worked out of the site before going live. This system has several advantages:</P
+>
+      <P
+></P
+><UL
+><LI
+><P
+>Security:</P
+>
+          <P
+></P
+><UL
+><LI
+><P
+>Chroot: The webserver will be running inside chroot jail. This will prevent users from accessing files in the regular filesystem and will limit the exploits possible from a compromised account.</P
+></LI
+><LI
+><P
+>Limited Login: Users will have a restricted shell and will only be allowed to perform a few basic operations like changing their passwords and running cvs.</P
+></LI
+><LI
+><P
+>Apache: Several security constrictions will be placed on Apache to control the ways that it may be accessed and how it serves pages.</P
+></LI
+><LI
+><P
+>SSH: Access to the repository will be via SSH. This will allow access from anywhere on the Internet with a relatively high degree of security.</P
+></LI
+><LI
+><P
+>CVS: File permissions will be structured in such a way that users are only able to alter certain pages and they will not be able to permanently remove files from the repository. An attack could temporarily alter the pages that a user has permission to alter, but without exploiting the CVS server it is not possible to permanently alter the site.</P
+></LI
+><LI
+><P
+>Quotas: Users will have limits on the amount of information that they can store. Disk space is not an issue and the limits will not be such that it should ever affect the ability to create a site, but it will prevent certain denial of service attacks.</P
+></LI
+></UL
+>
+        </LI
+><LI
+><P
+>Accessibility:</P
+>
+          <P
+></P
+><UL
+><LI
+><P
+>Users will be able to access their files from any platform that supports CVS. This includes nearly every operating system. <A
+HREF="http://www.wincvs.org"
+TARGET="_top"
+>WinCVS</A
+> can be used for Windows users and it provides a simple GUI interface.</P
+></LI
+><LI
+><P
+>Users will be able to edit their files in whatever editor they prefer and then upload the changed files.</P
+></LI
+><LI
+><P
+><A
+HREF="http://viewcvs.sourceforge.net"
+TARGET="_top"
+>ViewCVS</A
+> will be installed allowing users and administrators to see what changes have been made to the pages, when and by whom.</P
+></LI
+></UL
+>
+        </LI
+><LI
+><P
+>Accountability:</P
+>
+          <P
+></P
+><UL
+><LI
+><P
+>CVS will handle this in spades. The exact time, nature and owner of all changes will be recorded and reversible.</P
+></LI
+></UL
+>
+        </LI
+><LI
+><P
+>Appropriate Communication:</P
+>
+          <P
+></P
+><UL
+><LI
+><P
+><A
+HREF="http://www.list.org"
+TARGET="_top"
+>Mailman</A
+> will be running on the server. There will be a variety of lists devoted to different aspects of the development. Users can subscribe or unsubscribe to lists as their needs dictate.</P
+></LI
+></UL
+>
+        </LI
+></UL
+>
+      <P
+>Drawbacks:
+        <P
+></P
+><UL
+><LI
+><P
+>Having the whole site in CVS requires a minimum of twice the disk space of a non-CVS setup. Given the prices of hard drives however this is not a serious concern.</P
+></LI
+></UL
+>
+      </P
+>
+    </DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="goals.html"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="website-via-cvs.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="server.html"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Goals</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="intro.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Server Setup</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

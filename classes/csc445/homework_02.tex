@@ -1,0 +1,283 @@
+\documentclass[12pt,a4paper,twoside]{article}  % Comments after  % are ignored
+\usepackage{amsmath,amssymb,amsfonts}          % Typical maths resource packages
+\usepackage{hyperref}                          % For creating hyperlinks in cross references
+\usepackage{pstricks}
+
+\pagestyle{headings}         % Option to put page headers
+                             % Needed \documentclass[a4paper,twoside]{article}
+
+%\textwidth 17.5cm
+%\rightmargin 1in
+
+%\topmargin -1cm
+%\parindent 0cm
+%\textheight 24cm
+%\parskip 1mm
+
+%\theoremindent .5in
+%\newtheorem{definition}[theorem]{Definition}
+
+\author{Will Holcomb \small{CSC445 - Homework \#2}}
+\title{Homework \#2}
+\date{September 17, 2002}
+
+\begin{document}
+\maketitle
+
+\section{Number 1: Exercise 3.4.1}
+\begin{enumerate}
+
+\item Verify that $R + S = S + R \ni R,S$ are regular expressions:
+\begin{equation}
+L(R + S) = L(R) \cup L(S) = \{x | x \in L(R) \oplus x \in L(S)\}
+\end{equation}
+\begin{equation}
+L(S + R) = L(S) \cup L(R) = \{x | x \in L(S) \oplus x \in L(R)\}
+\end{equation}
+
+\item Verify that $(R + S) + T = R + (S + T) \ni R,S,T$ are regular expressions:
+\begin{eqnarray}
+(R + S) + T &=& (L(R) \cup L(S)) \cup L(T) = L(R) \cup L(S) \cup L(T) \nonumber\\
+            &=& R + (S + T)
+\end{eqnarray}
+
+\item Verify that $(RS)T = R(ST) \ni R,S,T$ are regular expressions:
+\begin{eqnarray}
+(RS)T &=& (L(R)L(S))L(T) = L(R)L(S)L(T) \nonumber\\
+      &=& \{xyz | x \in L(R); y \in L(S); z \in L(T)\}
+\end{eqnarray}
+\begin{eqnarray}
+R(ST) &=& L(R)(L(S)L(T)) = L(R)L(S)L(T) \nonumber\\
+      &=& \{xyz | x \in L(R); y \in L(S); z \in L(T)\}
+\end{eqnarray}
+
+\item Verify that $R(S + T) = RS + RT \ni R,S,T$ are regular expressions:
+\begin{eqnarray}
+R(S + T) &=& L(R)(L(S) \cup L(T)) \nonumber\\
+         &=& \{xy | x \in L(R); y \in L(S) \oplus y \in L(T)\}
+\end{eqnarray}
+\begin{eqnarray}
+RS + RT &=& L(R)L(S) \cup L(R)L(T) \nonumber\\
+        &=& \{xy | x \in L(R); y \in L(S)\} \cup \{xy | x \in L(R); y \in L(T)\} \nonumber\\
+        &=& \{xy | x \in L(R); y \in L(S) \oplus y \in L(T)\}
+\end{eqnarray}
+
+\item Verify that $(R + S)T = RT + ST \ni R,S,T$ are regular expressions:
+\begin{eqnarray}
+(R + S)T &=& (L(R) \cup L(S))L(T) \nonumber\\
+         &=& \{xy | x \in L(R) \oplus x \in L(S); y \in L(T)\}
+\end{eqnarray}
+\begin{eqnarray}
+RT + ST &=& L(R)L(T) \cup L(S)L(T) \nonumber\\
+        &=& \{xy | x \in L(R); y \in L(T)\} \cup \{xy | x \in L(S); y \in L(T)\} \nonumber\\
+        &=& \{xy | x \in L(R) \oplus x \in L(S); y \in L(T)\}
+\end{eqnarray}
+
+\item Verify that $(R^*)^* = R^* \ni R$ is a regular expression:
+\begin{equation}
+R^* = \cup_{i=0}^\infty R^i \ni R^n = \{x_1x_2x_3{\ldots}x_n | x_i \in L(R)\}
+\end{equation}
+\begin{eqnarray}
+    (R^*)^* &=& \cup_{i=0}^\infty (R^*)^i \\
+\ni (R^*)^n &=& \{x_1x_2x_3{\ldots}x_n | x_i \in R^*\} \nonumber\\
+            &=& \{y_1y_2y_3{\ldots}y_n | y_i \in L(R)\}
+\end{eqnarray}
+
+\item Verify that $(\epsilon + R)^* = R^* \ni R$ is a regular expression:
+\begin{eqnarray}
+(\epsilon + R)^* &=& (L(\epsilon) \cup L(R))^* \nonumber\\
+\ni (L(\epsilon) \cup L(R))^i &=& \{x_1x_2x_3{\ldots}x_n | x_i \in L(R) \oplus x_i \in L(\epsilon)\}
+\end{eqnarray}
+\begin{eqnarray}
+\forall x \in (L(\epsilon) \cup L(R))^i & \exists & x \in R^j \ni j = i - \textrm{count}_\epsilon(x) \nonumber\\
+                                        & \therefore & R^* \supseteq (L(\epsilon) \cup L(R))^*
+\end{eqnarray}
+
+\item Verify that $(R^*S^*)^* = (R + S)^* \ni R,S$ are regular expressions:
+\begin{eqnarray}
+(R^*S^*)^* = \{x_1x_2x_3{\ldots}x_n | \ldots\}
+\end{eqnarray}
+
+\end{enumerate}
+
+\section{Number 2: Exercise 3.4.2}
+\begin{enumerate}
+
+\item Prove or disprove that $(R + S)^* = R^* + S^* \ni R,S$ are regular expressions:
+\begin{eqnarray}
+xy \ni x \in L(R); y \in L(S) &\in& (R + S)^* \\
+xy \ni x \in L(R); y \in L(S) &\not \in& R^* + S^*
+\end{eqnarray}
+
+\item Prove or disprove that $(RS + R)^*R = R(SR + R)^* \ni R,S$ are regular expressions:
+
+\begin{eqnarray}
+(RS + R)^*R = R^+(SR^+)^* = R(SR + R)^*
+\end{eqnarray}
+
+\item Prove or disprove that $(RS + R)^*RS = (RR^*S)^* \ni R,S$ are regular expressions:
+\begin{eqnarray}
+\epsilon &\in& (RR^*S)^* \\
+\epsilon &\not \in& (RS + R)^*RS
+\end{eqnarray}
+
+\item Prove or disprove that $(R + S)^*S = (R^*S)^* \ni R,S$ are regular expressions:
+\begin{eqnarray}
+\epsilon &\in& (R^*S)^* \\
+\epsilon &\not \in& (R + S)^*S
+\end{eqnarray}
+
+\item Prove or disprove that $S(RS + S)^*R = RR^*S(RR^*S)^* \ni R,S$ are regular expressions:
+
+\begin{eqnarray}
+xy \ni x \in L(R); y \in L(S) &\in& RR^*S(RR^*S)^* \\
+xy \ni x \in L(R); y \in L(S) &\not \in& S(RS + S)^*R
+\end{eqnarray}
+
+\end{enumerate}
+
+\section{Number 3: Exercise 4.1.1}
+\begin{enumerate}
+
+\item Prove $L = \{0^n1^n | n \geq 1\}$ is not regular using the
+pumping lemma.
+
+Let $M$ be a deteminitic finite autonoma:
+\begin{eqnarray}
+  M &=& (Q, \Sigma, \delta, q_0, F) \\
+|Q| &=& n
+\end{eqnarray}
+Let $w$ be a string $\ni w = 0^n1^n; n \geq 1$.
+
+$w \in L$ and $|w| = 2n$ by definition.
+
+Assume $w$ is regular. Since $|w| > n$, by the pumping lemma:
+\begin{eqnarray}
+\exists xyz = w \ni y &\neq& \epsilon \\
+                 |xy| &\leq& n \\
+          w_k = xy^kz &\in& L; k \in \mathbb{N}; k \geq 0
+\end{eqnarray}
+
+Since the first $n$ characters are 0's and $|xy| \leq n$ then:
+\begin{eqnarray}
+x &=& 0^a; a \geq 0 \\
+y &=& 0^b; b \geq 1 \\
+z &=& 0^c1^n; c \geq 0; \\
+|w| &=& a + b + c + n = 2n
+\end{eqnarray}
+
+When $w_0 = xy^0z = xz = 0^a0^c1^n, |0^a0^c| = a + c = n - b < n$
+since $b \geq 1$. $\therefore L$ cannot be regular since that
+$w_0 \not \in L$.
+
+\item Prove the language of any fully nested set of parenthesis is
+not regular.
+
+Let $w = \textrm{(}^n\textrm{)}^n$. $w \in L$ and $|w| = 2n > n$, so
+the pumping lemma holds.
+
+Define a homomorphism $h \ni$
+\begin{eqnarray}
+h(\textrm{(}) &=& 0 \\
+h(\textrm{)}) &=& 1
+\end{eqnarray}
+
+$h(w) = 0^n1^n$ which has been shown to violate the pumping lemma,
+$\therefore L$ is not regular.
+
+\item Prove that $\{0^n10^n | n \geq 1\}$ is not reqular.
+
+This proof is very similar to the proof for $\{0^n1^n\}$ in that it
+centers around the fact that a dfa has no memory.
+
+Pick $w = 0^n10^n$. If $L$ is regular then:
+\begin{eqnarray}
+w &=& 0^a0^b0^c10^n; a,c \geq 0; b \geq 1 \\
+w_i &=& 0^a(0^b)^i0^c10^n \in L; a,c \geq 0; b \geq 1; i \geq 0 \\
+a + b + c &=& n
+\end{eqnarray}
+
+This is a contradiction since the number of 0's in the first part of
+$w_0$ will be:
+\begin{equation}
+a + c = n - b < n
+\end{equation}
+
+$\therefore |w_0| \not \in L$, since the number of 0's in the second half
+is $n$.
+
+\item Prove that $\{0^n1^m2^n | n, m \in \mathbb{N}\}$ is not regular.
+
+Define a homomorphism $h \ni$
+\begin{eqnarray}
+h(0) &=& 0 \\
+h(1) &=& \epsilon \\
+h(2) &=& 1
+\end{eqnarray}
+
+$h(L) = \{0^n1^n\}$ which is not regular $\therefore L$ is not regular.
+
+\item Prove that $\{0^n1^m | n \leq m\}$ is not regular.
+
+\begin{eqnarray}
+L = \{0^n1^m | n \leq m\} &=& \{0^n1^nl^{m - n} | n \leq m\} \nonumber\\
+                      &=& \{0^n1^n\}\{1^k | k \geq 0\} = L_1L_2
+\end{eqnarray}
+
+Since we know:
+\begin{quote}
+If $L_1$ and $L_2$ are regular languages then $L_1L_2$ is also a regular
+language.
+\end{quote}
+
+By the contrapositive we know that if $L_1L_2$ is not a regular language
+then $L_1$ or $L_2$ is not a regular language. $\ldots$
+
+\item Prove that $\{0^n1^{2n} | n \geq 1\}$ is not a regular language.
+
+Define an inverse homomorphism $h^{-1} \ni$
+\begin{eqnarray}
+h^{-1}(0) &=& 0 \\
+h^{-1}(11) &=& 1
+\end{eqnarray}
+
+$h^{-1}(L) = \{0^n1^n | n \geq 1\}$. $h^{-1}(L)$ is not regular,
+$\therefore L$ is not regular.
+
+\end{enumerate}
+
+\section{Number 4: Exercise 4.1.4}
+\begin{enumerate}
+
+\item What breaks down on using the pumping lemma on $\emptyset$?
+
+$\nexists w \in L$
+
+\item What breaks down on using the pumping lemma on $\{00, 11\}$?
+
+$|w| = 2 \forall w \in L$. It is not possible to pick an arbitrary $n$.
+
+\item What breaks down on using the pumping lemma on
+$(\mathbf{00} + \mathbf{11})^*$?
+
+$L$ is represented by a regular expresion which is, by definition,
+regular. Specifically, $y$ could be {\bf 00} or {\bf 11} and
+$y^k \in L$.
+
+\item What breaks down on using the pumping lemma on
+$\mathbf{01}^*\mathbf{0}^*\mathbf{1}$?
+
+\begin{eqnarray}
+x &=& \mathbf{01} \\
+y &=& \mathbf{0}  \\
+z &=& \mathbf{1}
+\end{eqnarray}
+
+Satisfies the pumping lemma since:
+\begin{equation}
+w_i = xy^iz \in L; i \geq 0
+\end{equation}
+
+\end{enumerate}
+
+\end{document}

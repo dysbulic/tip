@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Restructuring Data Files</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Restructing Data Files</h1> <p>Back when I worked for <a
+    href="http://www.mil-tec.com">Miltec</a>, we were doing using huge
+    (10-20mb) space separated data files to drive visualizations. The
+    data coming from various sensors would vary in the order that it
+    recorded yaw, pitch and roll and since the data files had no
+    headers, it worked best to simply run them through a preprocessor
+    to put them in a uniform order. This is that program. I got fancy
+    and added some options. I don't really remember how to run <a
+    href="restructure.pl">this program</a>. Here's the help
+    though:</p>
+
+    <pre>restructures a ascii text file which is delineated into columns
+ separated by spaces or columns.
+
+-r "[colnum[:tranform]]+" -> restructure
+  colnum = column number for the output file
+  transform = factor to transform the output by
+
+  exe: -r "3:10 4 5 1:.01 3" would generate an output with the 3rd, 4th,
+   5th, 1st and 3rd columns of the input with each element of the first
+   3rd column multiplied by 10 and each element of the original 1st
+   column (the 4th in the output) multiplied by .01.
+
+-p -> pad
+
+  exe: -p would generate output columns padded to the length of the
+   longest element in the column
+
+-d "separator" -> output column separator; default: " "
+
+-i "filename" -> input filename
+
+-s "rexex" -> input separator regex; default: ",\s+"
+
+-x -> xmlize
+
+  exe: -> -x would generate output of the form:
+   &lt;data name="dataname">
+     &lt;column name="colname">
+       &lt;point index="1">123456&lt;/point>
+       &lt;point index="2">123456&lt;/point>
+     &lt;/column>
+     &lt;column name="colname">
+     &lt;/column>
+   &lt;/data>
+
+-n "dataname" -> title for the data
+
+ exe: -n "2001Earnings" would put the string 2001Earnings as the name
+  property for the xml output or would use the table 2001Earnings as
+  the table to insert into in the database.
+
+-b "[user][:pass]@[hostname][/dbname]" -> insert columns into database url
+
+  exe: will:mypass@localhost/samples will insert the columns into the
+   table specified by -n; the table must already be created and have
+   column names matching the columns of the input.
+
+-h -> help</pre>
+  </body>
+</html>
+
+<!-- LocalWords:  rel
+-->

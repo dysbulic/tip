@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20001102//EN"
+ "http://www.w3.org/TR/2000/CR-SVG-20001102/DTD/svg-20001102.dtd">
+<svg viewBox="0 0 500 500" width="500" height="500" preserveAspectRatio="xMinYMin"
+ a:scriptImplementation="Adobe"
+ xmlns="http://www.w3.org/2000/svg"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/">
+  <title>Bézier Curve Tester</title>
+  <desc>Little app to show different Bézier curves</desc>
+  <defs>
+    <style type="text/css">
+      path {
+        stroke: black;
+        fill: none;
+      }
+      #background {
+        fill: rgb(220, 219, 220);
+      }
+      #curve {
+        stroke-width: 4;
+      }
+      #line-2 {
+        stroke-width: 3.5;
+      }
+      #web {
+       stroke-dasharray: 5, 5;
+      }
+      [class="line"] {
+        stroke-width: 2.5;
+      }
+      [class="hover"] {
+        fill: red;
+      }
+      [class="select"] {
+        fill: blue;
+      }
+    </style>
+    <script type="text/ecmascript" a:scriptImplementation="Adobe"><![CDATA[
+      var svgNS = "http://www.w3.org/2000/svg"
+
+      var background = document.createElementNS(svgNS, "rect");
+      background.setAttribute("id", "background");
+      /*
+      var properties = new Array("x", "y", "width", "height");
+      for(i = 0; i < properties.length; i++) {
+        background.setAttribute(properties[i], document.rootElement[properties[i]].baseVal.value);
+      }
+      */
+      background.setAttribute("x", "-500");
+      background.setAttribute("y", "-500");
+      background.setAttribute("width", "1100");
+      background.setAttribute("height", "1100");
+      document.rootElement.addEventListener("mousemove", drag, false);
+      document.rootElement.addEventListener("mouseup", point_release, false);
+      document.rootElement.appendChild(background);
+
+      const NONE = 0;
+      const BEZIER = 1;
+      const MIDPOINT = 2;
+      var type = BEZIER;
+
+      document.rootElement.addEventListener("click", toggle_type, false);
+      function toggle_type() {
+        type = (type + 1) % 3;
+        if(type == NONE) {
+          approximation.setAttribute("d", "");
+        } else {
+          update_path();
+        }
+      }
+
+      var curve = document.createElementNS(svgNS, "path");
+      curve.setAttribute("id", "curve");
+      document.rootElement.appendChild(curve);
+
+      var points = new Array();
+      points.add_point =
+        function (x, y) {
+          var point = document.rootElement.createSVGPoint();
+          point.x = x;
+          point.y = y;
+          this.push(point);
+        };
+      points.add_point(50, 50);
+      points.add_point(50, 450);
+      points.add_point(450, 450);
+      points.add_point(450, 50);
+
+      var circles = new Array();
+      for(i = 0; i < points.length; i++) {
+        circles.push(document.createElementNS(svgNS, "circle"));
+        circles[circles.length - 1].setAttribute("r", 5);
+        circles[circles.length - 1].addEventListener("mouseover", point_over, false);
+        circles[circles.length - 1].addEventListener("mouseout", point_out, false);
+        circles[circles.length - 1].addEventListener("mousedown", point_click, false);
+        circles[circles.length - 1].point = points[i];
+      }
+
+      approximation = document.createElementNS(svgNS, "path");
+      approximation.setAttribute("id", "web");
+      document.rootElement.appendChild(approximation);
+
+      var point = document.createElementNS(svgNS, "circle");
+      point.setAttribute("r", 5);
+      point.addEventListener("mouseover", point_over, false);
+      point.addEventListener("mouseout", point_out, false);
+      point.addEventListener("mousedown", point_click, false);
+      point.point = document.rootElement.createSVGPoint();
+      point.point.x = 50;
+      point.point.y = 250;
+      document.rootElement.appendChild(point);
+      
+      var lines = new Array();
+      for(i = 1; i < circles.length; i++) {
+        lines.push(document.createElementNS(svgNS, "line"));
+        lines[lines.length - 1].setAttribute("id", "line-" + i);
+        lines[lines.length - 1].setAttribute("class", "line");
+        lines[lines.length - 1].addEventListener("mouseover", line_over, false);
+        lines[lines.length - 1].addEventListener("mouseout", line_out, false);
+        lines[lines.length - 1].addEventListener("mousedown", line_click, false);
+        lines[lines.length - 1].p1 = circles[i - 1];
+        lines[lines.length - 1].p2 = circles[i];
+        document.rootElement.appendChild(lines[lines.length - 1]);
+      }
+
+      for(i = 0; i < circles.length; i++) {
+        document.rootElement.appendChild(circles[i]);
+      }
+
+      var selected_points = new Array();
+      var last_point = document.rootElement.createSVGPoint();
+      var offset = document.rootElement.createSVGPoint();
+
+      function drag(event) {
+        if(selected_points.length > 0) {
+          offset.x = event.clientX - last_point.x;
+          last_point.x = event.clientX;
+          offset.y = event.clientY - last_point.y;
+          last_point.y = event.clientY;
+          for(i = 0; i < selected_points.length; i++) {
+            selected_points[i].x += offset.x;
+            selected_points[i].y += offset.y;
+          }
+          update_path();
+        }
+      }
+
+      function point_over(event) {
+        hover(event.target);
+      }
+
+      function line_over(event) {
+        hover(event.target.p1);
+        hover(event.target.p2);
+      }
+
+      function hover(item) {
+        item.setAttribute("class", "hover");
+      }
+
+      function point_out(event) {
+        dehover(event.target);
+      }
+
+      function line_out(event) {
+        dehover(event.target.p1);
+        dehover(event.target.p2);
+      }
+
+      function dehover(item) {
+        if(selected_points.length == 0) {
+          item.setAttribute("class", null);
+        }
+      }
+
+      function point_click(event) {
+        select(event.target);
+        last_point.x = event.clientX;
+        last_point.y = event.clientY;
+      }
+
+      function line_click(event) {
+        select(event.target.p1);
+        select(event.target.p2);
+        last_point.x = event.clientX;
+        last_point.y = event.clientY;
+      }
+
+      function select(item) {
+        item.setAttribute("class", "select");
+        selected_points.push(item.point);
+//        var matrix = event.target.getCTM();
+//        offset.x = matrix.e - event.clientX;
+//        offset.y = matrix.f - event.clientY;
+      }
+
+      function point_release(event) {
+        event.target.setAttribute("class", "hover");
+        selected_points = new Array();
+      }
+
+      update_path();
+
+      function update_path() {
+        var curve_path = "M " + points[0].x + "," + points[0].y + " C";
+        for(i = 1; i < points.length; i++) {
+          curve_path += " " + points[i].x + "," + points[i].y;
+        }
+        curve.setAttribute("d", curve_path);
+
+        for(i = 0; i < lines.length; i++) {
+          lines[i].setAttribute("x1", lines[i].p1.point.x);
+          lines[i].setAttribute("y1", lines[i].p1.point.y);
+          lines[i].setAttribute("x2", lines[i].p2.point.x);
+          lines[i].setAttribute("y2", lines[i].p2.point.y);
+        }
+
+        for(i = 0; i < circles.length; i++) {
+          circles[i].setAttribute("cx", circles[i].point.x);
+          circles[i].setAttribute("cy", circles[i].point.y);
+        }
+
+        point.setAttribute("cx", point.point.x);
+        point.setAttribute("cy", point.point.y);
+
+        switch(type) {
+        case BEZIER:
+          bezier_approximation();
+          break;
+        case MIDPOINT:
+          midpoint_approximation();
+          break;
+        }
+      }
+
+      function bezier_approximation() {
+        var axes = new Object();
+        axes.x = true; axes.y = true;
+        
+        var controls = new Array();
+        for(i = 0; i < 4; i++) {
+          controls[i] = document.rootElement.createSVGPoint();
+        }
+        for(axis in axes) {
+          controls[0][axis] = (-points[0][axis] + 3 * points[1][axis]
+                               - 3 * points[2][axis] + points[3][axis]);
+          controls[1][axis] = (3 * points[0][axis] - 6 * points[1][axis]
+                               + 3 * points[2][axis]);
+          controls[2][axis] = -3 * points[0][axis] + 3 * points[1][axis];
+          controls[3][axis] = points[0][axis];
+        }
+        var path = "";
+        for(t = 0; Math.floor(t * 10) / 10 <= 1; t += 1 / 8) {
+          path += " M" + point.point.x + "," + point.point.y + " L ";
+          for(axis in axes) {
+            path += ((axis == "x" ? " " : ",") 
+                     + ((((controls[0][axis] * t) + controls[1][axis]) * t
+                        + controls[2][axis]) * t + controls[3][axis]));
+          }
+        }
+        approximation.setAttribute("d", path);
+      }
+
+      Hull.prototype = new Array();
+      Hull.prototype.add_point =
+      function (p1, p2) {
+        var point = document.rootElement.createSVGPoint();
+        point.x = (p1.x + p2.x) / 2;
+        point.y = (p1.y + p2.y) / 2;
+        this.push(point);
+      }
+      Hull.prototype.toString =
+      function() {
+        return ("M "  + this[0].x + "," + this[0].y +
+                " L " + this[1].x + "," + this[1].y +
+                " "   + this[2].x + "," + this[2].y +
+                " M " + this[3].x + "," + this[3].y +
+                " "   + this[4].x + "," + this[4].y);
+      }
+      function Hull(p1, p2, p3, p4) {
+        this.start = p1;
+        this.end = p4;
+        this.add_point(p1, p2);
+        this.add_point(p2, p3);
+        this.add_point(p3, p4);
+        this.add_point(this[0], this[1]);
+        this.add_point(this[1], this[2]);
+        this.contact = document.rootElement.createSVGPoint();
+        this.contact.x = (this[3].x + this[4].x) / 2;
+        this.contact.y = (this[3].y + this[4].y) / 2;
+      }
+      
+      function midpoint_approximation() {
+        var iterations = 3;
+        var hulls = new Array();
+        var path = ("M " + points[0].x + "," + points[0].y +
+                    " L " + point.point.x + "," + point.point.y +
+                    " M " + points[3].x + "," + points[3].y +
+                    " L " + point.point.x + "," + point.point.y);
+        hulls.push(new Hull(points[0], points[1], points[2], points[3]));
+        for(i = 1; i <= iterations; i++) {
+          var newhulls = new Array();
+          while(hulls.length > 0) {
+            hull = hulls.pop();
+            path += (hull + " M " + hull.contact.x + "," + hull.contact.y +
+                     " L " + point.point.x + "," + point.point.y);
+            if(i <= iterations) {
+              newhulls.push(new Hull(hull.start, hull[0], hull[3], hull.contact));
+              newhulls.push(new Hull(hull.contact, hull[4], hull[2], hull.end));
+            }
+          }
+          hulls = newhulls;
+        }
+        approximation.setAttribute("d", path);
+      }
+    ]]></script>
+  </defs>
+</svg>

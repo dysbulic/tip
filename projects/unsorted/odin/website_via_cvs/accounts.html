@@ -1,0 +1,299 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML
+><HEAD
+><TITLE
+>User Accounts</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+"><LINK
+REL="HOME"
+TITLE="Website Maintenance Via CVS HOW-TO"
+HREF="website-via-cvs.html"><LINK
+REL="UP"
+TITLE="Server Setup"
+HREF="server.html"><LINK
+REL="PREVIOUS"
+TITLE="Setting up the Directory Structure"
+HREF="directory-structure.html"></HEAD
+><BODY
+CLASS="section"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Website Maintenance Via CVS HOW-TO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="directory-structure.html"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Server Setup</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+>&nbsp;</TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="section"
+><H1
+CLASS="section"
+><A
+NAME="accounts"
+>User Accounts</A
+></H1
+>
+      
+      <P
+>Now that the basic setup is complete some user accounts can be added. Users will have very limited access to the system. Specifically they will be able to:</P
+>
+      <P
+></P
+><UL
+><LI
+><P
+>Checkout files from the repository via cvs</P
+></LI
+><LI
+><P
+>Access their personal webpages via windows filesharing</P
+></LI
+><LI
+><P
+>Change their passwords</P
+></LI
+></UL
+>
+      <P
+>Other than that they should have no access to the server. This is accomplished in a fairly straightforward way. As an example I will add a new user. His name is Mark Spence and he is working with someone else on developing a page for the Associate Director of the program. This little shell script will add him as a user:</P
+>
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;        #!/bin/bash
+        BASEDIR=/home/www/files/home
+        REL_PATH=../../../../../usr/bin # Relative path from BASEDIR to programs to be linked in
+        read -p "New Username: " NEW_USER
+        cat /etc/passwd | sed -e "s/:.*//g" | grep $NEW_USER &#62; /dev/null &#38;&#38; echo "Username $NEW_USER already present in /etc/passwd" &#38;&#38; exit 1
+        [ -d $BASEDIR/$NEW_USER ] &#38;&#38; echo "$BASEDIR/$NEW_USER already exists" &#38;&#38; exit 1
+        read -p "User's Full Name: " FULLNAME
+        read -p "User's NT Id: " NT_ID
+        useradd -g www -G cvsread -d "$BASEDIR/$NEW_USER" -s /bin/rbash -c "$FULLNAME" -M -n $NEW_USER
+        smbadduser "$NEW_USER:$NT_ID"
+        mkdir $BASEDIR/$NEW_USER
+        cd $BASEDIR/$NEW_USER
+        ln -s $REL_PATH/passwd
+        ln -s $REL_PATH/smbpasswd
+        ln -s $REL_PATH/cvs
+        ln -s $REL_PATH/quota
+        ln -s $REL_PATH/du
+        echo "# .bash_profile" &#62; .bash_profile
+        echo "# $FULLNAME ($NEW_USER) added " $(date +"%A, %Y %B %d, %T (%-I:%M:%S %p)") &#62;&#62; .bash_profile
+        echo export PATH=. &#62;&#62; .bash_profile
+        mkdir www
+        chown -R $NEW_USER:www .
+        chmod -R a-w .
+        chattr +i . .bash_profile
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      <P
+>You might not have rbash set up on your system. If you don't, just create a symlink to bash named rbash. This is a restricted shell and the user is not allowed to change directories or set the environment variables SHELL, PATH, ENV, or BASH_ENV. Also they can't run commands with a / in them, so setting their path to . and not allowing them to own their home directory fairly effectively limits them to only running the programs symlinked into their home directory (passwd, smbpasswd and cvs).</P
+>
+      <P
+>Because the path is set to . the user cannot be allowed to write to her home directory, else she might put a new shell there and execute it. Also the directory and bash profile are set to immutable because even though they don't have access to the chmod command via a shell they can still change permissions via the windows filesharing. This box is intended only as a webserver and not for any other type of storage. There will be another computer running where they can have user accounts to learn on.</P
+>
+      <P
+>I am also imposing 150mb quotas on everyone which ought to be more than enough for most anything they would like to do.</P
+>
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;        edquota mspence
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      <P
+>And the input looks something like:</P
+>
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;        Disk quotas for user mspence (uid 517):
+          Filesystem                   blocks       soft       hard     inodes     soft     hard
+          /dev/hdb4                        16     150000     150000          7        0        0
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      <P
+>Conveniently enough this information is also available via the windows explorer properties if his home directory is mapped via smb.</P
+>
+      <P
+>This creates a basic account for him. To add a branch in the main webroot for them do:</P
+>
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;        cvs -d /home/www/files/cvs checkout -l websites/honors.tntech.edu
+        mkdir rita_barnes
+        cvs add rita_barnes/
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      <P
+>This directory will not show up on the server immediately because the way that the repository is updated prunes empty directories. In order for this directory to be available for Mark to update it needs to be owned by his group:</P
+>
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;        groupadd www-rita_barnes
+        usermod -G $(id -G mspence | sed -e "s/ /,/g"),www-rita_barnes mspence
+        chown :www-rita_barnes /home/www/files/cvs/websites/honors.tntech.edu/rita_barnes
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      <P
+>Once I get a password to Mark Spence he should now be able to log in via ssh and make changes to that part of the repository. A simple session either from another Linux box or from cygwin might look like:</P
+>
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;        export CVS_RSH=ssh
+        cvs -d ":ext:mspence@honors.tntech.edu:/home/www/files/cvs/" checkout websites/honors.tntech.edu/rita_barnes
+        cd websites/honors.tntech.edu/rita_barnes/
+        echo "hi" &#62; test.txt
+        cvs add test.txt
+        cvs commit -m "Testing adding a file" test.txt
+        lynx http://www.honors.tntech.edu/rita_barnes/test.txt
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      <P
+>This same basic process is available from any platform that has a cvs client and a ssh client.</P
+>
+    </DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="directory-structure.html"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="website-via-cvs.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Setting up the Directory Structure</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="server.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,931 @@
+
+**** 11/06/102 12:06:09 ******** NT Evaluation PSpice (July 1997) ************
+
+ * W:\odin\hat\hat_controller.sch
+
+
+ ****     CIRCUIT DESCRIPTION
+
+
+******************************************************************************
+
+
+
+
+* Schematics Version 8.0 - July 1997
+* Wed Nov 06 12:06:08 2002
+
+
+
+** Analysis setup **
+.OP 
+
+
+* From [SCHEMATICS NETLIST] section of msim.ini:
+.lib nom.lib
+
+.INC "hat_controller.net"
+
+**** INCLUDING hat_controller.net ****
+* Schematics Netlist *
+
+
+
+X_U4A         $N_0001 $N_0002 $N_0003 $G_DPWR $G_DGND 7408 PARAMS:
++ IO_LEVEL=0 MNTYMXDLY=0
+X_U2A         $N_0004 $N_0003 $N_0005 $N_0001 $N_0006 $N_0002 $G_DPWR $G_DGND
++  74393 PARAMS:
++ IO_LEVEL=0 MNTYMXDLY=0
+X_U7A         $N_0007 $N_0008 $N_0009 $G_DPWR $G_DGND 7408 PARAMS:
++ IO_LEVEL=0 MNTYMXDLY=0
+X_U5A         $N_0003 $N_0009 $N_0010 $N_0007 $N_0011 $N_0008 $G_DPWR $G_DGND
++  74393 PARAMS:
++ IO_LEVEL=0 MNTYMXDLY=0
+X_U8A         $N_0012 $N_0013 $N_0014 $G_DPWR $G_DGND 7408 PARAMS:
++ IO_LEVEL=0 MNTYMXDLY=0
+X_U6A         $N_0009 $N_0014 $N_0015 $N_0012 $N_0016 $N_0013 $G_DPWR $G_DGND
++  74393 PARAMS:
++ IO_LEVEL=0 MNTYMXDLY=0
+X_U11         $N_0015 $N_0012 $N_0016 $N_0013 $N_0017 $N_0018 $N_0019 $N_0020
++  $N_0021 $N_0022 $N_0023 $N_0024 $G_DPWR $G_DGND 7449 PARAMS:
++ IO_LEVEL=0 MNTYMXDLY=0
+X_U9         $N_0005 $N_0001 $N_0006 $N_0002 $N_0025 $N_0026 $N_0027 $N_0028
++  $N_0029 $N_0030 $N_0031 $N_0032 $G_DPWR $G_DGND 7449 PARAMS:
++ IO_LEVEL=0 MNTYMXDLY=0
+X_U10         $N_0010 $N_0007 $N_0011 $N_0008 $N_0033 $N_0034 $N_0035 $N_0036
++  $N_0037 $N_0038 $N_0039 $N_0040 $G_DPWR $G_DGND 7449 PARAMS:
++ IO_LEVEL=0 MNTYMXDLY=0
+D_D60         $N_0040 0 D1N4002 
+D_D67         $N_0024 0 D1N4002 
+X_X1         0 0 $N_0004 0 0 0 0 +5v 555D PARAMS: MAXFREQ=3E6
+D_D57         $N_0029 0 D1N4002 
+D_D58         $N_0028 0 D1N4002 
+D_D68         $N_0021 0 D1N4002 
+D_D69         $N_0020 0 D1N4002 
+D_D61         $N_0037 0 D1N4002 
+D_D62         $N_0036 0 D1N4002 
+D_D51         $N_0032 0 D1N4002 
+D_D53         $N_0031 0 D1N4002 
+D_D52         $N_0030 0 D1N4002 
+D_D59         $N_0027 0 D1N4002 
+D_D56         $N_0026 0 D1N4002 
+D_D65         $N_0039 0 D1N4002 
+D_D63         $N_0038 0 D1N4002 
+D_D64         $N_0035 0 D1N4002 
+D_D66         $N_0034 0 D1N4002 
+D_D72         $N_0023 0 D1N4002 
+D_D70         $N_0022 0 D1N4002 
+D_D71         $N_0019 0 D1N4002 
+D_D73         $N_0018 0 D1N4002 
+
+**** RESUMING hat_controller.cir ****
+.INC "hat_controller.als"
+
+
+
+**** INCLUDING hat_controller.als ****
+* Schematics Aliases *
+
+.ALIASES
+X_U4A           U4A(A=$N_0001 B=$N_0002 Y=$N_0003 PWR=$G_DPWR GND=$G_DGND )
+X_U2A           U2A(A=$N_0004 CLR=$N_0003 QA=$N_0005 QB=$N_0001 QC=$N_0006
++  QD=$N_0002 PWR=$G_DPWR GND=$G_DGND )
+X_U7A           U7A(A=$N_0007 B=$N_0008 Y=$N_0009 PWR=$G_DPWR GND=$G_DGND )
+X_U5A           U5A(A=$N_0003 CLR=$N_0009 QA=$N_0010 QB=$N_0007 QC=$N_0011
++  QD=$N_0008 PWR=$G_DPWR GND=$G_DGND )
+X_U8A           U8A(A=$N_0012 B=$N_0013 Y=$N_0014 PWR=$G_DPWR GND=$G_DGND )
+X_U6A           U6A(A=$N_0009 CLR=$N_0014 QA=$N_0015 QB=$N_0012 QC=$N_0016
++  QD=$N_0013 PWR=$G_DPWR GND=$G_DGND )
+X_U11           U11(A=$N_0015 B=$N_0012 C=$N_0016 D=$N_0013 BIbar=$N_0017
++  OA=$N_0018 OB=$N_0019 OC=$N_0020 OD=$N_0021 OE=$N_0022 OF=$N_0023 OG=$N_0024
++  PWR=$G_DPWR GND=$G_DGND )
+X_U9            U9(A=$N_0005 B=$N_0001 C=$N_0006 D=$N_0002 BIbar=$N_0025
++  OA=$N_0026 OB=$N_0027 OC=$N_0028 OD=$N_0029 OE=$N_0030 OF=$N_0031 OG=$N_0032
++  PWR=$G_DPWR GND=$G_DGND )
+X_U10           U10(A=$N_0010 B=$N_0007 C=$N_0011 D=$N_0008 BIbar=$N_0033
++  OA=$N_0034 OB=$N_0035 OC=$N_0036 OD=$N_0037 OE=$N_0038 OF=$N_0039 OG=$N_0040
++  PWR=$G_DPWR GND=$G_DGND )
+D_D60           D60(1=$N_0040 2=0 )
+D_D67           D67(1=$N_0024 2=0 )
+X_X1            X1(GND=0 TRIGGER=0 OUTPUT=$N_0004 RESET=0 CONTROL=0 THRESHOLD=0
++  DISCHARGE=0 VCC=+5v )
+D_D57           D57(1=$N_0029 2=0 )
+D_D58           D58(1=$N_0028 2=0 )
+D_D68           D68(1=$N_0021 2=0 )
+D_D69           D69(1=$N_0020 2=0 )
+D_D61           D61(1=$N_0037 2=0 )
+D_D62           D62(1=$N_0036 2=0 )
+D_D51           D51(1=$N_0032 2=0 )
+D_D53           D53(1=$N_0031 2=0 )
+D_D52           D52(1=$N_0030 2=0 )
+D_D59           D59(1=$N_0027 2=0 )
+D_D56           D56(1=$N_0026 2=0 )
+D_D65           D65(1=$N_0039 2=0 )
+D_D63           D63(1=$N_0038 2=0 )
+D_D64           D64(1=$N_0035 2=0 )
+D_D66           D66(1=$N_0034 2=0 )
+D_D72           D72(1=$N_0023 2=0 )
+D_D70           D70(1=$N_0022 2=0 )
+D_D71           D71(1=$N_0019 2=0 )
+D_D73           D73(1=$N_0018 2=0 )
+_    _($G_DPWR=$G_DPWR)
+_    _($G_DGND=$G_DGND)
+_    _(+5v=+5v)
+.ENDALIASES
+
+
+**** RESUMING hat_controller.cir ****
+.probe
+
+
+.END
+
+
+**** Generated AtoD and DtoA Interfaces ****
+
+*
+* Analog/Digital interface for node $N_0035
+*
+* Moving X_U10.U49DLY_OC:OUT2 from analog node $N_0035 to new digital node $N_0035$DtoA
+X$$N_0035_DtoA1
++ $N_0035$DtoA
++ $N_0035
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0019
+*
+* Moving X_U11.U49DLY_OC:OUT2 from analog node $N_0019 to new digital node $N_0019$DtoA
+X$$N_0019_DtoA1
++ $N_0019$DtoA
++ $N_0019
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0036
+*
+* Moving X_U10.U49DLY_OC:OUT3 from analog node $N_0036 to new digital node $N_0036$DtoA
+X$$N_0036_DtoA1
++ $N_0036$DtoA
++ $N_0036
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0020
+*
+* Moving X_U11.U49DLY_OC:OUT3 from analog node $N_0020 to new digital node $N_0020$DtoA
+X$$N_0020_DtoA1
++ $N_0020$DtoA
++ $N_0020
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0026
+*
+* Moving X_U9.U49DLY_OC:OUT1 from analog node $N_0026 to new digital node $N_0026$DtoA
+X$$N_0026_DtoA1
++ $N_0026$DtoA
++ $N_0026
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node X_X1.qb
+*
+* Moving X_X1.u1:QBAR1 from analog node X_X1.qb to new digital node X_X1.qb$DtoA
+X$X_X1.qb_DtoA1
++ X_X1.qb$DtoA
++ X_X1.qb
++ +5v
++ 0
++ dtoa_555
++       PARAMS: DRVH=  96.4   DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0031
+*
+* Moving X_U9.U49DLY_OC:OUT6 from analog node $N_0031 to new digital node $N_0031$DtoA
+X$$N_0031_DtoA1
++ $N_0031$DtoA
++ $N_0031
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0032
+*
+* Moving X_U9.U49DLY_OC:OUT7 from analog node $N_0032 to new digital node $N_0032$DtoA
+X$$N_0032_DtoA1
++ $N_0032$DtoA
++ $N_0032
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node 0
+*
+* Moving X_X1.u1:CLRBAR from analog node 0 to new digital node 0$AtoD
+X$0_AtoD1
++ 0
++ 0$AtoD
++ +5v
++ 0
++ atod_555
++       PARAMS: CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0037
+*
+* Moving X_U10.U49DLY_OC:OUT4 from analog node $N_0037 to new digital node $N_0037$DtoA
+X$$N_0037_DtoA1
++ $N_0037$DtoA
++ $N_0037
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0038
+*
+* Moving X_U10.U49DLY_OC:OUT5 from analog node $N_0038 to new digital node $N_0038$DtoA
+X$$N_0038_DtoA1
++ $N_0038$DtoA
++ $N_0038
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0021
+*
+* Moving X_U11.U49DLY_OC:OUT4 from analog node $N_0021 to new digital node $N_0021$DtoA
+X$$N_0021_DtoA1
++ $N_0021$DtoA
++ $N_0021
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0022
+*
+* Moving X_U11.U49DLY_OC:OUT5 from analog node $N_0022 to new digital node $N_0022$DtoA
+X$$N_0022_DtoA1
++ $N_0022$DtoA
++ $N_0022
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0027
+*
+* Moving X_U9.U49DLY_OC:OUT2 from analog node $N_0027 to new digital node $N_0027$DtoA
+X$$N_0027_DtoA1
++ $N_0027$DtoA
++ $N_0027
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0028
+*
+* Moving X_U9.U49DLY_OC:OUT3 from analog node $N_0028 to new digital node $N_0028$DtoA
+X$$N_0028_DtoA1
++ $N_0028$DtoA
++ $N_0028
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0034
+*
+* Moving X_U10.U49DLY_OC:OUT1 from analog node $N_0034 to new digital node $N_0034$DtoA
+X$$N_0034_DtoA1
++ $N_0034$DtoA
++ $N_0034
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0018
+*
+* Moving X_U11.U49DLY_OC:OUT1 from analog node $N_0018 to new digital node $N_0018$DtoA
+X$$N_0018_DtoA1
++ $N_0018$DtoA
++ $N_0018
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0039
+*
+* Moving X_U10.U49DLY_OC:OUT6 from analog node $N_0039 to new digital node $N_0039$DtoA
+X$$N_0039_DtoA1
++ $N_0039$DtoA
++ $N_0039
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0023
+*
+* Moving X_U11.U49DLY_OC:OUT6 from analog node $N_0023 to new digital node $N_0023$DtoA
+X$$N_0023_DtoA1
++ $N_0023$DtoA
++ $N_0023
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0024
+*
+* Moving X_U11.U49DLY_OC:OUT7 from analog node $N_0024 to new digital node $N_0024$DtoA
+X$$N_0024_DtoA1
++ $N_0024$DtoA
++ $N_0024
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0029
+*
+* Moving X_U9.U49DLY_OC:OUT4 from analog node $N_0029 to new digital node $N_0029$DtoA
+X$$N_0029_DtoA1
++ $N_0029$DtoA
++ $N_0029
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0030
+*
+* Moving X_U9.U49DLY_OC:OUT5 from analog node $N_0030 to new digital node $N_0030$DtoA
+X$$N_0030_DtoA1
++ $N_0030$DtoA
++ $N_0030
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface for node $N_0040
+*
+* Moving X_U10.U49DLY_OC:OUT7 from analog node $N_0040 to new digital node $N_0040$DtoA
+X$$N_0040_DtoA1
++ $N_0040$DtoA
++ $N_0040
++ $G_DPWR
++ $G_DGND
++ DtoA_STD_OC
++       PARAMS: DRVH=   1.0000E+06 DRVL= 104    CAPACITANCE=   0     
+*
+* Analog/Digital interface power supply subcircuits
+*
+
+X$DIGIFPWR 0 DIGIFPWR
+
+**** 11/06/102 12:06:09 ******** NT Evaluation PSpice (July 1997) ************
+
+ * W:\odin\hat\hat_controller.sch
+
+
+ ****     Diode MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               D1N4002         
+          IS   14.110000E-09 
+           N    1.984        
+         ISR  100.000000E-12 
+         IKF   94.81         
+          BV  100.1          
+         IBV   10            
+          RS     .03389      
+          TT    4.761000E-06 
+         CJO   51.170000E-12 
+          VJ     .3905       
+           M     .2762       
+
+
+**** 11/06/102 12:06:09 ******** NT Evaluation PSpice (July 1997) ************
+
+ * W:\odin\hat\hat_controller.sch
+
+
+ ****     MOSFET MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               X_X1.nchan      
+               NMOS            
+       LEVEL    1            
+           L  100.000000E-06 
+           W  100.000000E-06 
+         VTO    0            
+          KP   20.000000E-06 
+       GAMMA    0            
+         PHI     .6          
+          IS   10.000000E-15 
+          JS    0            
+          PB     .8          
+        PBSW     .8          
+          CJ    0            
+        CJSW    0            
+        CGSO    1.000000E-12 
+        CGDO    1.000000E-12 
+        CGBO    1.000000E-12 
+         TOX    0            
+          XJ    0            
+      DIOMOD    1            
+         VFB    0            
+          U0    0            
+        TEMP    0            
+         VDD    0            
+       XPART    0            
+
+
+**** 11/06/102 12:06:09 ******** NT Evaluation PSpice (July 1997) ************
+
+ * W:\odin\hat\hat_controller.sch
+
+
+ ****     Digital Input MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               din555          DIN74_OC        
+        FILE DSO_DTOA        DSO_DTOA        
+      FORMAT    6               6            
+    TIMESTEP  100.000000E-12  100.000000E-12 
+      S0NAME 0               0               
+       S0TSW  700.000000E-12    3.500000E-09 
+       S0RLO  100               7.13         
+       S0RHI    1.000000E+06  389            
+      S1NAME 1               1               
+       S1TSW  700.000000E-12    5.500000E-09 
+       S1RLO    1.000000E+06  200.000000E+03 
+       S1RHI  300             200.000000E+03 
+      S2NAME x               X               
+       S2TSW  700.000000E-12    3.500000E-09 
+       S2RLO  200              42.9          
+       S2RHI  200             116            
+      S3NAME r               R               
+       S3TSW  700.000000E-12    3.500000E-09 
+       S3RLO  200              42.9          
+       S3RHI  200             116            
+      S4NAME f               F               
+       S4TSW  700.000000E-12    3.500000E-09 
+       S4RLO  200              42.9          
+       S4RHI  200             116            
+      S5NAME z               Z               
+       S5TSW  700.000000E-12    5.500000E-09 
+       S5RLO  200.000000E+03  200.000000E+03 
+       S5RHI  200.000000E+03  200.000000E+03 
+
+
+**** 11/06/102 12:06:09 ******** NT Evaluation PSpice (July 1997) ************
+
+ * W:\odin\hat\hat_controller.sch
+
+
+ ****     Digital Output MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               X_X1.cmp        do555           
+        FILE DSO_ATOD        DSO_ATOD        
+      FORMAT    6               6            
+     CHGONLY    1               1            
+    TIMESTEP  100.000000E-12  100.000000E-12 
+      S0NAME 0               X               
+       S0VHI                    2            
+       S0VLO -500                .8          
+      S1NAME 1               0               
+       S1VHI  500                .8          
+       S1VLO                   -1.5          
+      S2NAME                 R               
+       S2VHI                    1.4          
+       S2VLO                     .8          
+      S3NAME                 R               
+       S3VHI                    2            
+       S3VLO                    1.3          
+      S4NAME                 X               
+       S4VHI                    2            
+       S4VLO                     .8          
+      S5NAME                 1               
+       S5VHI                   50            
+       S5VLO                    2            
+      S6NAME                 F               
+       S6VHI                    2            
+       S6VLO                    1.3          
+      S7NAME                 F               
+       S7VHI                    1.4          
+       S7VLO                     .8          
+
+
+**** 11/06/102 12:06:09 ******** NT Evaluation PSpice (July 1997) ************
+
+ * W:\odin\hat\hat_controller.sch
+
+
+ ****     Digital Gate MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               D_08            D0_GATE         
+      TPLHMN    7.000000E-09    0            
+      TPLHTY   17.500000E-09    0            
+      TPLHMX   27.000000E-09    0            
+      TPHLMN    4.800000E-09    0            
+      TPHLTY   12.000000E-09    0            
+      TPHLMX   19.000000E-09    0            
+
+
+**** 11/06/102 12:06:09 ******** NT Evaluation PSpice (July 1997) ************
+
+ * W:\odin\hat\hat_controller.sch
+
+
+ ****     Digital Edge Triggered FF MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               D0_EFF          
+  TPCLKQLHMN    0            
+  TPCLKQLHTY    0            
+  TPCLKQLHMX    0            
+  TPCLKQHLMN    0            
+  TPCLKQHLTY    0            
+  TPCLKQHLMX    0            
+   TPPCQLHMN    0            
+   TPPCQLHTY    0            
+   TPPCQLHMX    0            
+   TPPCQHLMN    0            
+   TPPCQHLTY    0            
+   TPPCQHLMX    0            
+    TWCLKLMN    0            
+    TWCLKLTY    0            
+    TWCLKLMX    0            
+    TWCLKHMN    0            
+    TWCLKHTY    0            
+    TWCLKHMX    0            
+     TWPCLMN    0            
+     TWPCLTY    0            
+     TWPCLMX    0            
+   TSUDCLKMN    0            
+   TSUDCLKTY    0            
+   TSUDCLKMX    0            
+ TSUPCCLKHMN    0            
+ TSUPCCLKHTY    0            
+ TSUPCCLKHMX    0            
+    THDCLKMN    0            
+    THDCLKTY    0            
+    THDCLKMX    0            
+  TSUCECLKMN    0            
+  TSUCECLKTY    0            
+  TSUCECLKMX    0            
+   THCECLKMN    0            
+   THCECLKTY    0            
+   THCECLKMX    0            
+
+
+**** 11/06/102 12:06:09 ******** NT Evaluation PSpice (July 1997) ************
+
+ * W:\odin\hat\hat_controller.sch
+
+
+ ****     Digital Gated FF MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               X_X1.t_srff     
+    TPDQLHMN    0            
+    TPDQLHTY    0            
+    TPDQLHMX    0            
+    TPDQHLMN    0            
+    TPDQHLTY    0            
+    TPDQHLMX    0            
+    TPGQLHMN    0            
+    TPGQLHTY    0            
+    TPGQLHMX    0            
+    TPGQHLMN    0            
+    TPGQHLTY    0            
+    TPGQHLMX    0            
+   TPPCQLHMN   48.000000E-09 
+   TPPCQLHTY  120.000000E-09 
+   TPPCQLHMX  192.000000E-09 
+   TPPCQHLMN    0            
+   TPPCQHLTY    0            
+   TPPCQHLMX    0            
+      TWGHMN    0            
+      TWGHTY    0            
+      TWGHMX    0            
+     TWPCLMN    0            
+     TWPCLTY    0            
+     TWPCLMX    0            
+     TSUDGMN    0            
+     TSUDGTY    0            
+     TSUDGMX    0            
+   TSUPCGHMN    0            
+   TSUPCGHTY    0            
+   TSUPCGHMX    0            
+      THDGMN    0            
+      THDGTY    0            
+      THDGMX    0            
+
+
+**** 11/06/102 12:06:09 ******** NT Evaluation PSpice (July 1997) ************
+
+ * W:\odin\hat\hat_controller.sch
+
+
+ ****     Digital Delay Line MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               X_X1.dlymod     
+       DLYMN  166.666700E-09 
+       DLYTY  166.666700E-09 
+       DLYMX  166.666700E-09 
+
+
+**** 11/06/102 12:06:09 ******** NT Evaluation PSpice (July 1997) ************
+
+ * W:\odin\hat\hat_controller.sch
+
+
+ ****     Digital IO  MODEL PARAMETERS
+
+
+******************************************************************************
+
+
+
+
+               X_X1.io_555     IO_STD_OC       io_std          io_stm          
+        DRVL  104             104             104               0            
+        DRVH   96.4             1.000000E+06   96.4             0            
+       AtoD1 atod_555        AtoD_STD        AtoD_STD                        
+       AtoD2 atod_555        AtoD_STD_NX     AtoD_STD_NX                     
+       AtoD3 atod_555        AtoD_STD        AtoD_STD                        
+       AtoD4 atod_555        AtoD_STD_NX     AtoD_STD_NX                     
+       DtoA1 dtoa_555        DtoA_STD_OC     DtoA_STD        DtoA_STM        
+       DtoA2 dtoa_555        DtoA_STD_OC     DtoA_STD        DtoA_STM        
+       DtoA3 dtoa_555        DtoA_STD_OC     DtoA_STD        DtoA_STM        
+       DtoA4 dtoa_555        DtoA_STD_OC     DtoA_STD        DtoA_STM        
+      TSWHL1                    2.617000E-09    1.373000E-09                 
+      TSWHL2                    2.598000E-09    1.346000E-09                 
+      TSWHL3                    2.747000E-09    1.511000E-09                 
+      TSWHL4                    2.732000E-09    1.487000E-09                 
+      TSWLH1                    1.432000E-09    3.382000E-09                 
+      TSWLH2                    1.460000E-09    3.424000E-09                 
+      TSWLH3                    1.589000E-09    3.517000E-09                 
+      TSWLH4                    1.615000E-09    3.564000E-09                 
+       TPWRT  100.000000E+03  100.000000E+03  100.000000E+03  100.000000E+03 
+
+
+**** 11/06/102 12:06:09 ******** NT Evaluation PSpice (July 1997) ************
+
+ * W:\odin\hat\hat_controller.sch
+
+
+ ****     SMALL SIGNAL BIAS SOLUTION       TEMPERATURE =   27.000 DEG C
+
+
+******************************************************************************
+
+
+
+ NODE   VOLTAGE     NODE   VOLTAGE     NODE   VOLTAGE     NODE   VOLTAGE
+
+
+(  +5v)    0.0000  ($G_DGND)    0.0000                   ($G_DPWR)    5.0000    
+
+($N_0018)     .7269                   ($N_0019)     .7269                       
+
+($N_0020)     .7269                   ($N_0021)     .7269                       
+
+($N_0022)     .7269                   ($N_0023)     .7269                       
+
+($N_0024)     .7269                   ($N_0026)     .7269                       
+
+($N_0027)     .7269                   ($N_0028)     .7269                       
+
+($N_0029)     .7269                   ($N_0030)     .7269                       
+
+($N_0031)     .7269                   ($N_0032)     .7269                       
+
+($N_0034)     .7269                   ($N_0035)     .7269                       
+
+($N_0036)     .7269                   ($N_0037)     .7269                       
+
+($N_0038)     .7269                   ($N_0039)     .7269                       
+
+($N_0040)     .7269                   (X_X1.qb)    0.0000                       
+
+(X_X1.botm)    0.0000                 
+
+
+
+ DGTL NODE : STATE  DGTL NODE : STATE  DGTL NODE : STATE  DGTL NODE : STATE
+
+
+(X_U9.OUTD) : X    ($N_0019$DtoA) : X                    (X_U9.OUTA) : X        
+
+(X_U6A.CLR) : X    ( $N_0003) : X     ($N_0035$DtoA) : X                        
+
+(X_U2A.CLRBAR) : X                    ( $N_0004) : 1     (  X_X1.r) : 0         
+
+(X_U6A.QA) : X     ($N_0028$DtoA) : X                    ($N_0021$DtoA) : X     
+
+($N_0026$DtoA) : X                    ( $N_0025) : Z     ( $N_0009) : X         
+
+( X_X1.sd) : 0     (X_U5A.CLR) : X    (X_U2A.QC) : X     (X_U10.OUTE) : X       
+
+($N_0030$DtoA) : X                    (X_U11.OUTF) : X   ( $N_0010) : X         
+
+(X_U10.OUTB) : X   (   $D_HI) : 1     (X_U11.OUTC) : X   ( $N_0015) : X         
+
+($N_0018$DtoA) : X                    ( X_X1.rd) : 0     (X_U9.OUTE) : X        
+
+( $N_0016) : X     (X_X1.strt) : 0    (X_U9.OUTB) : X    ($N_0034$DtoA) : X     
+
+($N_0020$DtoA) : X                    ( $N_0005) : X     (  X_X1.s) : 0         
+
+(X_U6A.QB) : X     (X_U5A.QD) : X     ($N_0040$DtoA) : X                        
+
+( $N_0006) : X     ( X_X1.hi) : 1     (X_U5A.QA) : X     (X_U6A.QD) : X         
+
+(X_U5A.QB) : X     (X_U5A.CLRBAR) : X                    (X_U10.OUTF) : X       
+
+($N_0024$DtoA) : X                    (X_U11.OUTG) : X   (X_U2A.QA) : X         
+
+(  0$AtoD) : 0     ( $N_0011) : X     (X_U10.OUTC) : X   (X_U11.OUTD) : X       
+
+( $N_0012) : X     (   $D_NC) : Z     ( X_U6A.A) : X     ( X_U2A.A) : 1         
+
+(X_U9.OUTF) : X    ( $N_0033) : Z     (X_U11.OUTA) : X   ( $N_0017) : Z         
+
+($N_0039$DtoA) : X                    ($N_0037$DtoA) : X                        
+
+(X_U9.OUTC) : X    ($N_0023$DtoA) : X                    ( $N_0001) : X         
+
+( $N_0002) : X     (X_U6A.QC) : X     ( $N_0007) : X     ($N_0032$DtoA) : X     
+
+(X_U6A.CLRBAR) : X                    ( $N_0008) : X     ($N_0029$DtoA) : X     
+
+($N_0027$DtoA) : X                    (X_U5A.QC) : X     (X_U10.OUTG) : X       
+
+( X_U5A.A) : X     (X_U2A.QB) : X     (X_U10.OUTD) : X   (X_U2A.CLR) : X        
+
+(X_U11.OUTE) : X   (X_X1.qb$DtoA) : 1                    ( $N_0013) : X         
+
+(X_U10.OUTA) : X   ($N_0038$DtoA) : X                    ($N_0031$DtoA) : X     
+
+($N_0036$DtoA) : X                    (X_U9.OUTG) : X    (X_U11.OUTB) : X       
+
+(X_U2A.QD) : X     ( $N_0014) : X     ($N_0022$DtoA) : X                    
+
+
+
+
+    VOLTAGE SOURCE CURRENTS
+    NAME         CURRENT
+
+    X$DIGIFPWR.VDPWR  -7.736E-01
+    X$DIGIFPWR.VDGND  -4.177E-01
+
+    TOTAL POWER DISSIPATION   3.87E+00  WATTS
+
+
+**** 11/06/102 12:06:09 ******** NT Evaluation PSpice (July 1997) ************
+
+ * W:\odin\hat\hat_controller.sch
+
+
+ ****     OPERATING POINT INFORMATION      TEMPERATURE =   27.000 DEG C
+
+
+******************************************************************************
+
+
+
+
+
+
+**** DIODES
+
+
+NAME         D_D60       D_D67       D_D57       D_D58       D_D68     
+MODEL        D1N4002     D1N4002     D1N4002     D1N4002     D1N4002   
+ID           1.99E-02    1.99E-02    1.99E-02    1.99E-02    1.99E-02 
+VD           7.27E-01    7.27E-01    7.27E-01    7.27E-01    7.27E-01 
+REQ          2.58E+00    2.58E+00    2.58E+00    2.58E+00    2.58E+00 
+CAP          1.85E-06    1.85E-06    1.85E-06    1.85E-06    1.85E-06 
+
+NAME         D_D69       D_D61       D_D62       D_D51       D_D53     
+MODEL        D1N4002     D1N4002     D1N4002     D1N4002     D1N4002   
+ID           1.99E-02    1.99E-02    1.99E-02    1.99E-02    1.99E-02 
+VD           7.27E-01    7.27E-01    7.27E-01    7.27E-01    7.27E-01 
+REQ          2.58E+00    2.58E+00    2.58E+00    2.58E+00    2.58E+00 
+CAP          1.85E-06    1.85E-06    1.85E-06    1.85E-06    1.85E-06 
+
+NAME         D_D52       D_D59       D_D56       D_D65       D_D63     
+MODEL        D1N4002     D1N4002     D1N4002     D1N4002     D1N4002   
+ID           1.99E-02    1.99E-02    1.99E-02    1.99E-02    1.99E-02 
+VD           7.27E-01    7.27E-01    7.27E-01    7.27E-01    7.27E-01 
+REQ          2.58E+00    2.58E+00    2.58E+00    2.58E+00    2.58E+00 
+CAP          1.85E-06    1.85E-06    1.85E-06    1.85E-06    1.85E-06 
+
+NAME         D_D64       D_D66       D_D72       D_D70       D_D71     
+MODEL        D1N4002     D1N4002     D1N4002     D1N4002     D1N4002   
+ID           1.99E-02    1.99E-02    1.99E-02    1.99E-02    1.99E-02 
+VD           7.27E-01    7.27E-01    7.27E-01    7.27E-01    7.27E-01 
+REQ          2.58E+00    2.58E+00    2.58E+00    2.58E+00    2.58E+00 
+CAP          1.85E-06    1.85E-06    1.85E-06    1.85E-06    1.85E-06 
+
+NAME         D_D73     
+MODEL        D1N4002   
+ID           1.99E-02 
+VD           7.27E-01 
+REQ          2.58E+00 
+CAP          1.85E-06 
+
+
+**** MOSFETS
+
+
+NAME         X_X1.m1   
+MODEL        X_X1.nchan
+ID           0.00E+00 
+VGS          0.00E+00 
+VDS          0.00E+00 
+VBS          0.00E+00 
+VTH          0.00E+00 
+VDSAT        0.00E+00 
+GM           0.00E+00 
+GDS          0.00E+00 
+GMB          0.00E+00 
+CBD          0.00E+00 
+CBS          0.00E+00 
+CGSOV        1.00E-15 
+CGDOV        1.00E-15 
+CGBOV        2.00E-18 
+CGS          0.00E+00 
+CGD          0.00E+00 
+CGB          0.00E+00 
+
+          JOB CONCLUDED
+
+          TOTAL JOB TIME             .59
+

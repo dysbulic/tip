@@ -1,0 +1,1586 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>PSY-304B Homework #5</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math, table + math, math + table, table + table { margin-top: .75em; }
+      .data td, .data th { text-align: center; padding: .25em; border: 1px solid; }
+      td, th { padding: .25em .5em; border: 1px solid; }
+      .ellip td { text-align: center; }
+      table { margin: auto; }
+      .hl { background-color: #BBB; }
+      ol { margin-left: 0em; }
+      .answer { margin: 0em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY-304B: Quantitative Methods &amp; Experimental Design</h1>
+      <h2>Homework #5</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 14:35 Tues., 15 April 2008</h2>
+    </div>
+    <blockquote>
+      <p>For all problems, unless otherwise indicated, assume a Type 1 error rate = .05.</p>
+    </blockquote>
+    <ol>
+      <li id="p1">
+        <div class="question">
+          <p>A researcher is interested in assessing whether those individuals who respond to antidepressant medication differ in levels of the hormone prolactin. Two groups of depressed patients are formed from those who participated in a lengthy treatment study: responders and non-responders. The researcher also wants to assess whether a personality disorder (PD) can affect prolactin responses. For this reason, patients are also divided into those with a Personality Disorder and those without a Personality Disorder. Thus, the final design is a 2 (Responder/No Responder) &times; 2 (Personality Disorder/No Personality Disorder).</p>
+
+          <p>In these problems the effects are named as:</p>
+          <ul>
+            <li><code>dep_gp</code> &mdash; the first effect (responder to the anti-depressant medication)</li>
+            <li><code>pd_gp</code> &mdash; the second effect (having a personality disorder)</li>
+            <li><code>prl</code> &mdash; the dependent variable of prolactin level</li>
+          </ul>
+
+          <p>The data can be loaded into <a href="homework_5.R">R</a> using the following commands:</p>
+          <pre>RespPers = c(34, 49, 38, 30)
+RespNoPers = c(23, 29, 19, 44, 22, 30, 27, 30, 29, 27, 34)
+NoRespPers = c(54, 49, 24, 25, 47, 50, 34, 39, 44)
+NoRespNoPers = c(40, 36, 39)
+prolactin.frame = data.frame(prolactin_level = c(RespPers, RespNoPers, NoRespPers, NoRespNoPers)
+                             responder = c(rep(True, length(RespPers) + length(RespNoPers)),
+                                           rep(False, length(NoRespPers) + length(NoRespNoPers))),
+                             disorder = c(rep(True, length(RespPers)),
+                                          rep(False, length(RespNoPers)),
+                                          rep(True, length(NoRespPers)),
+                                          rep(False, length(NoRespNoPers))))</pre>
+
+          <p>In the questions below, when cell or marginal sample sizes are involved in the answer (e.g. as contrast coefficients, terms in null hypotheses), answer using the actual n’s involved in the experiment rather than abstract terms like <em>n<sub>1,1</sub></em>.</p>
+        </div>
+        <div class="answer">
+          <p>There are two tables that will be useful in answering these questions. The first is a frequency table that shows the number of elements in each cell:</p>
+          <table class="data">
+            <tr><th colspan="2" rowspan="2"></th><th colspan="2">Disorder</th></tr>
+            <tr><th>True</th><th>False</th></tr>
+            <tr><th rowspan="2">Responder</th><th>True</th><td>4</td><td>11</td></tr>
+            <tr><th>False</th><td>9</td><td>3</td></tr>
+          </table>
+
+          <p>The second is the cell means for each of the factor levels:</p>
+          <table class="data">
+            <tr><th colspan="2" rowspan="2"></th><th colspan="2">Disorder</th></tr>
+            <tr><th>True</th><th>False</th></tr>
+            <tr><th rowspan="2">Responder</th><th>True</th><td>37.75</td><td>28.55</td></tr>
+            <tr><th>False</th><td>40.66</td><td>38.33</td></tr>
+          </table>
+
+          <p>To deal with boolean conditions in this document the following notation will be used:</p>
+
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mover><mi>Responder</mi><mo>&macr;</mo></mover></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>&not;<mi>Responder</mi></mo></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mtext>The set of people who were unresponsive to the anti-depressant</mtext></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Consider the main effect for dep_gp. Express the null hypothesis for the weighted mean/Type 1 SS test of this effect. Your expression should be in terms of cell population means that are expressed symbolically (i.e., 'mu's). You can either express sample sizes symbolically (i.e., n's) or use the actual sample sizes in this study. Maxwell and Delaney's Table 7.18 (p. 328) exemplifies expressions of null hypotheses in terms of cell means.</p>
+            </div>
+            <div class="answer">
+              <p>For the <em>balanced</em> ANOVA, the null hypothesis for the main effect of responder is a responsiveness to the antidepressant mediation has no effect on prolactin level.</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>H</mi><mn>0</mn></msub></mtd>
+                    <mtd><mo>:</mo></mtd>
+                    <mtd><msub><mi>&mu;</mi><mi>Responder</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mi>&mu;</mi><mover><mi>Responder</mi><mo>&macr;</mo></mover></msub></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              
+              <p>For the <em>unbalanced</em> ANOVA using weighted cell means the null hypothesis is that responsiveness to the antidepressant medication had an effect whose proportion is a function of the number of subjects used in this particular experiment: (<em>for brevity, Responser is abbreviated 'R' and Disorder 'D'</em>)</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>H</mi><mn>0</mn></msub></mtd>
+                    <mtd><mo>:</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow>
+                      <msub><mi>n</mi><mi>R</mi></msub>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow>
+                      <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>There are eight unknowns in this equation. There is no simple statement about the data that can be made through an examination of this statement other than another experiment will need the same proportional distribution of subjects in order to verify this experiment.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Consider again the main effect for dep_gp. Express the null hypothesis for the unweighted mean/Type 3 SS test of this effect. Your expression should again be in terms of cell population means that are expressed symbolically.</p>
+            </div>
+            <div class="answer">
+              <p>For the <em>unbalanced</em> ANOVA using an unweighted mean, the null hypothesis is the same as that as the balanced ANOVA: responsiveness to the antidepressant mediation has no effect on prolactin level.</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>H</mi><mn>0</mn></msub></mtd>
+                    <mtd><mo>:</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow>
+                      <mn>2</mn>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow>
+                      <mn>2</mn>
+                    </mfrac></mtd>
+                    <mtd>&iff;</mtd>
+                    <mtd>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                      </msub>
+                      <mo>+</mo>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                      </msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                      </msub>
+                      <mo>+</mo>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                      </msub>
+                    </mtd>
+                    <mtd>&iff;</mtd>
+                    <mtd><msub><mi>&mu;</mi><mi>R</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mi>&mu;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Consider the main effect for pd_gp. Let's say that you wanted to test this hypothesis using weighted means. What is the contrast that tests this main effect? What we're looking for here is a linear combination of the cell means in this sample of data (i.e., the linear combination that constitutes &psi;&Hat; &mdash; show coefficient values and relevant sample means).</p>
+            </div>
+            <div class="answer">
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>H</mi><mn>0</mn></msub></mtd>
+                    <mtd><mo>:</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow>
+                      <msub><mi>n</mi><mi>D</mi></msub>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow>
+                      <msub><mi>n</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>&iff;</mtd>
+                    <mtd>
+                      <mfrac>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                        <msub><mi>n</mi><mi>D</mi></msub>
+                      </mfrac>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                      </msub>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                        <msub><mi>n</mi><mi>D</mi></msub>
+                      </mfrac>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                      </msub>
+                      <mo>-</mo>
+                      <mfenced><mrow>
+                        <mfrac>
+                          <msub>
+                            <mi>n</mi>
+                            <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                          </msub>
+                          <msub><mi>n</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        </mfrac>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <mfrac>
+                          <msub>
+                            <mi>n</mi>
+                            <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                          </msub>
+                          <msub><mi>n</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        </mfrac>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>&iff;</mtd>
+                    <mtd>
+                      <mfrac>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                        <msub><mi>n</mi><mi>D</mi></msub>
+                      </mfrac>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                      </msub>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                        <msub><mi>n</mi><mi>D</mi></msub>
+                      </mfrac>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                      </msub>
+                      <mo>-</mo>
+                      <mfrac>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                        <msub><mi>n</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                      </msub>
+                      <mo>-</mo>
+                      <mfrac>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                        <msub><mi>n</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                      </msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>As a table these values are:</p>
+              <table class="data">
+                <tr><th colspan="2" rowspan="2"></th><th colspan="2">Disorder</th></tr>
+                <tr><th>True</th><th>False</th></tr>
+                <tr>
+                  <th rowspan="2">Responder</th>
+                  <th>True</th>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                      <mfrac>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                        <msub><mi>n</mi><mi>D</mi></msub>
+                      </mfrac>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                      <mo>-</mo>
+                      <mfrac>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                        <msub><mi>n</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                    </math>
+                  </td>
+                </tr>
+                <tr>
+                  <th>False</th>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                      <mfrac>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                        <msub><mi>n</mi><mi>D</mi></msub>
+                      </mfrac>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                      <mo>-</mo>
+                      <mfrac>
+                        <msub>
+                          <mi>n</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                        <msub><mi>n</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                    </math>
+                  </td>
+                </tr>
+              </table>
+              <p>For this particular dataset, those values are:</p>
+              <table class="data">
+                <tr><th colspan="2" rowspan="2"></th><th colspan="2">Disorder</th></tr>
+                <tr><th>True</th><th>False</th></tr>
+                <tr>
+                  <th rowspan="2">Responder</th>
+                  <th>True</th>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mfrac><mn>4</mn><mn>13</mn></mfrac>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mo>-</mo><mfrac><mn>11</mn><mn>14</mn></mfrac>
+                    </math>
+                  </td>
+                </tr>
+                <tr>
+                  <th>False</th>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mfrac><mn>9</mn><mn>13</mn></mfrac>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mo>-</mo><mfrac><mn>3</mn><mn>14</mn></mfrac>
+                    </math>
+                  </td>
+                </tr>
+              </table>
+              <p>Note that these are admissible coefficients, but that they specify a specific combination of cell means that is not generally applicable assuming that the populations being sampled are potentially infinite.</p>
+              
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mmultiscripts>
+                        <mover><mi>&psi;</mi><mi>&Hat;</mi></mover>
+                        <none /><none />
+                        <mprescripts/><none/><mi>I</mi>
+                      </mmultiscripts>
+                    </mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>9.12</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Consider again the main effect for pd_gp. Now let's say that you wanted to test this hypothesis using unweighted means. What is the contrast that tests this main effect?</p>
+            </div>
+            <div class="answer">
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>H</mi><mn>0</mn></msub></mtd>
+                    <mtd><mo>:</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow>
+                      <mn>2</mn>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow>
+                      <mn>2</mn>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>&iff;</mtd>
+                    <mtd>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                      </msub>
+                      <mo>+</mo>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                      </msub>
+                      <mo>-</mo>
+                      <mfenced><mrow>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mi>&mu;</mi>
+                          <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>&iff;</mtd>
+                    <mtd>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                      </msub>
+                      <mo>+</mo>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                      </msub>
+                      <mo>-</mo>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                      </msub>
+                      <mo>-</mo>
+                      <msub>
+                        <mi>&mu;</mi>
+                        <mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                      </msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              
+              <table class="data">
+                <tr><th colspan="2" rowspan="2"></th><th colspan="2">Disorder</th></tr>
+                <tr><th>True</th><th>False</th></tr>
+                <tr><th rowspan="2">Responder</th><th>True</th><td>1</td><td>-1</td></tr>
+                <tr><th>False</th><td>1</td><td>-1</td></tr>
+              </table>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mmultiscripts>
+                        <mover><mi>&psi;</mi><mi>&Hat;</mi></mover>
+                        <none /><none />
+                        <mprescripts/><none/><mi>III</mi>
+                      </mmultiscripts>
+                    </mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>11.53</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>For these data, express the weighted mean contrast for the main effect of dep_gp in terms of effect parameters. Discuss the implications of your results for interpretation of the results of tests of weighted marginal means.</p>
+            </div>
+            <div class="answer">
+              <p>Consider the general formula for a particular cell in terms of effect parameters:</p>
+              <ul>
+                <li>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <msub><mi>&mu;</mi><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></msub>
+                  </math>
+                  &mdash; the population mean of a given combination of factors
+                </li>
+                <li>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                  </math>
+                  &mdash; the mean of the entire population
+                </li>
+                <li>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <msub><mi>&alpha;</mi><mi>j</mi></msub>
+                    <mo>=</mo>
+                    <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>j</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                    <mo>-</mo>
+                    <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                  </math>
+                  &mdash; the main effect for a particular level of factor <em>j</em>
+                </li>
+                <li>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <msub><mi>&beta;</mi><mi>k</mi></msub>
+                    <mo>=</mo>
+                    <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>k</mo></mfenced></msub><mo>&macr;</mo></mover>
+                    <mo>-</mo>
+                    <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                  </math>
+                  &mdash; the main effect for a particular level of factor <em>k</em>
+                </li>
+                <li>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <msub>
+                      <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced>
+                    </msub>
+                    <mo>=</mo>
+                    <msub><mi>&mu;</mi><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></msub>
+                    <mo>-</mo>
+                    <mfenced><mrow>
+                      <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                      <mo>+</mo>
+                      <msub><mi>&alpha;</mi><mi>j</mi></msub>
+                      <mo>+</mo>
+                      <msub><mi>&beta;</mi><mi>k</mi></msub>
+                    </mrow></mfenced>
+                  </math>
+                  &mdash; the interaction effect for a specific combination of the two factors <em>j</em> and <em>k</em>
+                </li>
+              </ul>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                    <msub><mi>&mu;</mi><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                      <mo>+</mo>
+                      <msub><mi>&alpha;</mi><mi>j</mi></msub>
+                      <mo>+</mo>
+                      <msub><mi>&beta;</mi><mi>k</mi></msub>
+                      <mo>+</mo>
+                      <msub>
+                        <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced>
+                      </msub>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>When attempting to determine if there is a significant main effect the hypothesis being tested is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>&alpha;</mi><mi>i</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mi>&alpha;</mi><mi>j</mi></msub></mtd>
+                    <mtd><mo>&ForAll;</mo></mtd>
+                    <mtd><mfenced><mi>i</mi><mi>j</mi></mfenced></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>When examining dep_gp, this is equivalent to:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>&alpha;</mi><mi>R</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mi>R</mi><mi>&bull;</mi></mfenced></msub>
+                      <mo>-</mo>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mi>&bull;</mi><mi>&bull;</mi></mfenced></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>&bull;</mi></mfenced></msub>
+                      <mo>-</mo>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mi>&bull;</mi><mi>&bull;</mi></mfenced></msub>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mi>R</mi><mi>&bull;</mi></mfenced></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>&bull;</mi></mfenced></msub>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              
+              <p>
+                To this point the comparison of weighted and unweighted means is the same. They diverge is the value for 
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mi>j</mi><mi>&bull;</mi></mfenced></msub><mo>&macr;</mo></mover>
+                </math>.
+                For weighted means these values are:
+              </p>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mover>
+                        <msub><mi>&mu;</mi><mfenced open="" close=""><mi>R</mi><mi>&bull;</mi></mfenced></msub>
+                        <mover><mo>&macr;</mo><mi>w</mi></mover>
+                      </mover>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced></msub>
+                        <msub><mi>&mu;</mi><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced></msub>
+                        <mo>+</mo>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>&mu;</mi><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                      </mrow>
+                      <msub><mi>n</mi><mi>R</mi></msub>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced></msub>
+                        <msub><mi>&mu;</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced></msub>
+                        <mo>+</mo>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>&mu;</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                      </mrow>
+                      <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mover>
+                        <msub><mi>&mu;</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>&bull;</mi></mfenced></msub>
+                        <mover><mo>&macr;</mo><mi>w</mi></mover>
+                      </mover>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd></mtd>
+                    <mtd>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced></msub>
+                        <msub><mi>n</mi><mi>R</mi></msub>
+                      </mfrac>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced></msub>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>n</mi><mi>R</mi></msub>
+                      </mfrac>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced></msub>
+                        <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced></msub>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                    </mtd>
+                    <mtd></mtd>
+                    <mtd></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>Going from means back to effect parameters complicates the equation:</p>
+              
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd columnspan="2">
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced></msub>
+                        <msub><mi>n</mi><mi>R</mi></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                        <mo>+</mo>
+                        <msub><mi>&alpha;</mi><mi>R</mi></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>n</mi><mi>R</mi></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                        <mo>+</mo>
+                        <msub><mi>&alpha;</mi><mi>R</mi></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced></msub>
+                        <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                        <mo>+</mo>
+                        <msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                        <mo>+</mo>
+                        <msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>The grand mean will factor out of everything:</p>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd columnspan="2">
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced></msub>
+                        <msub><mi>n</mi><mi>R</mi></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&alpha;</mi><mi>R</mi></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>n</mi><mi>R</mi></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&alpha;</mi><mi>R</mi></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced></msub>
+                        <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              
+              <p>The weights for <em>&alpha;<sub>j</sub></em> will combine:</p>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd columnspan="2">
+                      <mfenced><mrow>
+                        <mfrac>
+                          <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced></msub>
+                          <msub><mi>n</mi><mi>R</mi></msub>
+                        </mfrac>
+                        <mo>+</mo>
+                        <mfrac>
+                          <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                          <msub><mi>n</mi><mi>R</mi></msub>
+                        </mfrac>
+                      </mrow></mfenced>
+                      <msub><mi>&alpha;</mi><mi>R</mi></msub>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced></msub>
+                        <msub><mi>n</mi><mi>R</mi></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>n</mi><mi>R</mi></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mrow>
+                        <mfrac>
+                          <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced></msub>
+                          <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                        </mfrac>
+                        <mo>+</mo>
+                        <mfrac>
+                          <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                          <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                        </mfrac>
+                      </mrow></mfenced>
+                      <msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced></msub>
+                        <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <msub><mi>&alpha;</mi><mi>R</mi></msub>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced></msub>
+                        <msub><mi>n</mi><mi>R</mi></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>n</mi><mi>R</mi></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced></msub>
+                        <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>So, for this data, the null hypothesis is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <msub><mi>&alpha;</mi><mi>R</mi></msub>
+                      <mo>-</mo>
+                      <msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced></msub>
+                        <msub><mi>n</mi><mi>R</mi></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>n</mi><mi>R</mi></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>-</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced></msub>
+                        <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>-</mo>
+                      <mfrac>
+                        <msub><mi>n</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                        <msub><mi>n</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      </mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfrac><mn>4</mn><mn>15</mn></mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfrac><mn>11</mn><mn>15</mn></mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>-</mo>
+                      <mfrac><mn>9</mn><mn>12</mn></mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>-</mo>
+                      <mfrac><mn>3</mn><mn>12</mn></mfrac>
+                      <mfenced><mrow>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>For these data, express the unweighted mean contrast for the main effect of dep_gp in terms of effect parameters. Discuss the implications of your results for interpretation of the results of tests of unweighted marginal means.</p>
+            </div>
+            <div class="answer">
+              <p>
+                The initial logic is identical to the problem above. It deviates in the meaning of 
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mi>j</mi><mi>&bull;</mi></mfenced></msub><mo>&macr;</mo></mover>
+                </math>.
+                For unweighted means these values are:
+              </p>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mover>
+                        <msub><mi>&mu;</mi><mfenced open="" close=""><mi>R</mi><mi>&bull;</mi></mfenced></msub>
+                        <mover><mo>&macr;</mo><mi>u</mi></mover>
+                      </mover>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <msub><mi>&mu;</mi><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced></msub>
+                        <mo>+</mo>
+                        <msub><mi>&mu;</mi><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                      </mrow>
+                      <mn>2</mn>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <msub><mi>&mu;</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced></msub>
+                        <mo>+</mo>
+                        <msub><mi>&mu;</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                      </mrow>
+                      <mn>2</mn>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mover>
+                        <msub><mi>&mu;</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>&bull;</mi></mfenced></msub>
+                        <mover><mo>&macr;</mo><mi>u</mi></mover>
+                      </mover>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd columnspan="3">
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced></msub>
+                      <mo>+</mo>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd columnspan="3">
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced></msub>
+                      <mo>+</mo>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced></msub>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd columnspan="3">
+                      <mfenced><mrow>
+                        <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                        <mo>+</mo>
+                        <msub><mi>&alpha;</mi><mi>R</mi></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfenced><mrow>
+                        <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                        <mo>+</mo>
+                        <msub><mi>&alpha;</mi><mi>R</mi></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd columnspan="3">
+                      <mfenced><mrow>
+                        <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                        <mo>+</mo>
+                        <msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfenced><mrow>
+                        <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                        <mo>+</mo>
+                        <msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd columnspan="3">
+                      <mfenced><mrow>
+                        <msub><mi>&alpha;</mi><mi>R</mi></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfenced><mrow>
+                        <msub><mi>&alpha;</mi><mi>R</mi></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd columnspan="3">
+                      <mfenced><mrow>
+                        <msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mi>D</mi></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfenced><mrow>
+                        <msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd columnspan="3">
+                      <mn>2</mn><msub><mi>&alpha;</mi><mi>R</mi></msub>
+                      <mo>+</mo>
+                      <msub><mi>&beta;</mi><mi>D</mi></msub>
+                      <mo>+</mo>
+                      <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                      <mo>+</mo>
+                      <mfenced><mrow>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd columnspan="3">
+                      <mn>2</mn><msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      <mo>+</mo>
+                      <msub><mi>&beta;</mi><mi>D</mi></msub>
+                      <mo>+</mo>
+                      <msub><mi>&beta;</mi><mover><mi>D</mi><mo>&macr;</mo></mover></msub>
+                      <mo>+</mo>
+                      <mfenced><mrow>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd columnspan="3">
+                      <mn>2</mn><msub><mi>&alpha;</mi><mi>R</mi></msub>
+                      <mo>+</mo>
+                      <mfenced><mrow>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mi>D</mi></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd columnspan="3">
+                      <mn>2</mn><msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      <mo>+</mo>
+                      <mfenced><mrow>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                        </msub>
+                        <mo>+</mo>
+                        <msub>
+                          <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mover><mi>R</mi><mo>&macr;</mo></mover><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                        </msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>Recall that the interaction coefficients sum to zero along each row and column:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mn>2</mn><msub><mi>&alpha;</mi><mi>R</mi></msub>
+                      <mo>+</mo><mfenced><mn>0</mn></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>2</mn><msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub>
+                      <mo>+</mo><mfenced><mn>0</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd><msub><mi>&alpha;</mi><mi>R</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mi>&alpha;</mi><mover><mi>R</mi><mo>&macr;</mo></mover></msub></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>So, when using unweighted means (from the type III sum of squares), the null hypothesis tested is the same as for balanced ANOVA.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Using R, conduct a 2-way ANOVA of these data that generates both the Type 1 (weighted mean) and Type 3 (unweighted mean) SS solutions. Write the code in such a way that the dep_gp factor is the first one tested by the Type 1 SS.</p>
+            </div>
+            <div class="answer">
+<pre>> # Type I Sum of Squares
+> prolactin.aov = aov(prolactin_level ~ responder * disorder,
++                     data = prolactin.frame)
+> summary(prolactin.aov)
+
+                   Df  Sum Sq Mean Sq F value  Pr(>F)
+responder           1  550.05  550.05  7.8669 0.01006
+disorder            1  200.66  200.66  2.8698 0.10376
+responder:disorder  1   60.12   60.12  0.8598 0.36342
+Residuals          23 1608.14   69.92
+
+> # Type III Sum of Squares
+> drop1(prolactin.aov, .~., test = "F")
+
+Single term deletions
+
+Model:
+prolactin_level ~ responder * disorder
+                   Df Sum of Sq     RSS     AIC F value   Pr(F)
+&lt;none&gt;                          1608.14  118.35
+responder           1     23.56 1631.70  116.74  0.3369 0.56725
+disorder            1    248.52 1856.67  120.23  3.5544 0.07208
+responder:disorder  1     60.12 1668.26  117.34  0.8598 0.36342</pre>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Consider the results for the main effect for dep_gp yielded by the Type 1 and Type 3 omnibus analyses. Explain why these two sets of results lead to discrepant conclusions about the effects of dep_gp.</p>
+            </div>
+            <div class="answer">
+              <p>There is a significant main effect for reponse to the antidepressant when using the type I sum of squares, but not for the type III sum of squares.</p>
+              <p>
+                The issue is that the cells with the maxima and minima,
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mover>
+                    <msub>
+                      <mi>Y</mi>
+                      <mfenced open="" close=""><mo>&bull;</mo><mover><mi>R</mi><mo>&macr;</mo></mover><mi>D</mi></mfenced>
+                    </msub>
+                    <mo>&macr;</mo>
+                  </mover>
+                </math>
+                and 
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mover>
+                    <msub>
+                      <mi>Y</mi>
+                      <mfenced open="" close=""><mo>&bull;</mo><mi>R</mi><mover><mi>D</mi><mo>&macr;</mo></mover></mfenced>
+                    </msub>
+                    <mo>&macr;</mo>
+                  </mover>
+                </math>,
+                have at nearly three times the number of subjects that the cells with median values. Because each level of the main effect for response contains one of these cells the weighted means are pulled away from each other. This has the ultimate effect of inflating the F value.
+              </p>
+              <p>It is important to note that the statistical result isn't incorrect. It represents a valid and interpretable result, but that result is not one that can be easily abstracted to make generalizable statements about the overall population.</p>
+              <p>The type III sum of squares tests a hypothesis that is more generally interesting, and it finds no statistically significant trends in the data.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+var $items = []
+var $dots = []
+var currentIdx
+
+$( function() {
+    $('#slider li').each( function() {
+        var $item = $(this)
+        $items.push( $item )
+        $item.hide()
+
+        var $dot = $('<span>&#x2022;</span>')
+        $dots.push( $dot )
+        $('#sliderpos').append( $dot )
+    } )
+    setIndex( 0 )
+} )
+
+function setIndex( idx ) {
+    idx %= $items.length
+    if( idx != currentIdx ) {
+        if( currentIdx != undefined ) {
+            $items[ currentIdx ].fadeOut()
+            $dots[ currentIdx ].attr( {
+                'class' : 'inactive'
+            } )
+        }
+
+        $items[ idx ].fadeIn()
+        $dots[ idx ].attr( {
+            'class' : 'active'
+        } )
+
+        currentIdx = idx
+    }
+}
+
+function next() {
+    setIndex( currentIdx + 1 )
+}
+
+setInterval( next, 3000 )

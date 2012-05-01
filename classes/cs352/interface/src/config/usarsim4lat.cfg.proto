@@ -1,0 +1,240 @@
+#############################################################################################
+# Configuration file for the HCI interface
+#
+# Ids assigned to hardware are calculated by robot_number * 3 + 1
+#############################################################################################
+
+## Simulator ###############################################################################
+driver
+(
+  name "us_bot"
+  provides ["simulation:0"]
+  port 3000
+  host "192.168.1.100"
+  spawn 0
+)
+
+## Robot 0 ##################################################################################
+driver
+(
+ name "us_bot"
+ provides ["simulation:1"]
+ port 3000
+ host "192.168.1.100"
+ pos [21 -4 18]
+ rot [0 0 0]
+ bot "USARBot.P2AT"
+ botname "robot0"
+)
+
+driver
+(
+  name "us_position"
+  hackspeedscale 12.12
+  provides ["odometry:::position2d:1"]
+  requires ["simulation:1"]
+)
+
+driver
+(
+  name "us_laser"
+  laser_name "Scanner1"
+  provides ["laser:1"]
+  requires ["simulation:1"]
+)
+
+driver
+(
+  name "vfh"
+  provides ["position2d:2"]
+  requires ["position2d:1" "laser:1"]
+)
+
+driver
+(
+  name "us_fakelocalize"
+  provides ["odometry:::position2d:3"]
+  requires ["simulation:1"]
+)
+
+driver
+(
+  name "usarcamera"
+  plugin "../libusarcamera"
+  provides ["camera:1"] 
+  startx 0
+  starty 0
+  width 320
+  height 240
+  port 5003
+  address "192.168.1.100"
+)
+
+## Robot 1 ##################################################################################
+driver
+(
+ name "us_bot"
+ provides ["simulation:4"]
+ port 3000
+ host "192.168.1.100"
+ pos [22 -4 18]
+ rot [0 0 0]
+ bot "USARBot.P2AT"
+ botname "robot1"
+)
+
+driver
+(
+  name "us_position"
+  hackspeedscale 20.0
+  provides ["odometry:::position2d:4" ]
+  requires ["simulation:4"]
+)
+
+driver
+(
+  name "us_laser"
+  laser_name "Scanner1"
+  provides ["laser:4"]
+  requires ["simulation:4"]
+)
+
+driver
+(
+  name "vfh"
+  provides ["position2d:5"]
+  requires ["position2d:4" "laser:4"]
+)
+
+driver
+(
+  name "us_fakelocalize"
+  provides ["odometry:::position2d:6" ]
+  requires ["simulation:4"]
+)
+
+driver
+(
+  name "usarcamera"
+  plugin "../libusarcamera"
+  provides ["camera:4"] 
+  startx 320
+  starty 0
+  width 320
+  height 240
+  port 5003
+  address "192.168.1.100"
+)
+
+## Robot 2 ##################################################################################
+driver
+(
+ name "us_bot"
+ provides ["simulation:7"]
+ port 3000
+ host "192.168.1.100"
+ pos [23 -4 18]
+ rot [0 0 0]
+ bot "USARBot.P2AT"
+ botname "robot2"
+)
+
+driver
+(
+  name "us_position"
+  hackspeedscale 20.0
+  provides ["odometry:::position2d:7" ]
+  requires ["simulation:7"]
+)
+
+driver
+(
+  name "us_laser"
+  laser_name "Scanner1"
+  provides ["laser:7"]
+  requires ["simulation:7"]
+)
+
+driver
+(
+  name "vfh"
+  provides ["position2d:8"]
+  requires ["position2d:7" "laser:7"]
+)
+
+driver
+(
+  name "us_fakelocalize"
+  provides ["odometry:::position2d:9" ]
+  requires ["simulation:7"]
+)
+
+driver
+(
+  name "usarcamera"
+  plugin "../libusarcamera"
+  provides ["camera:7"] 
+  startx 640
+  starty 0
+  width 320
+  height 240
+  port 5003
+  address "192.168.1.100"
+)
+
+## Robot 3 ##################################################################################
+driver
+(
+ name "us_bot"
+ provides ["simulation:10"]
+ port 3000
+ host "192.168.1.100"
+ pos [21 -5 18]
+ rot [0 0 0]
+ bot "USARBot.P2AT"
+ botname "robot3"
+)
+
+driver
+(
+  name "us_position"
+  hackspeedscale 20.0
+  provides ["odometry:::position2d:10" ]
+  requires ["simulation:10"]
+)
+
+driver
+(
+  name "us_laser"
+  laser_name "Scanner1"
+  provides ["laser:10"]
+  requires ["simulation:10"]
+)
+
+driver
+(
+  name "vfh"
+  provides ["position2d:11"]
+  requires ["position2d:10" "laser:10"]
+)
+
+driver
+(
+  name "us_fakelocalize"
+  provides ["odometry:::position2d:12" ]
+  requires ["simulation:10"]
+)
+
+driver
+(
+  name "usarcamera"
+  plugin "../libusarcamera"
+  provides ["camera:10"] 
+  startx 960
+  starty 0
+  width 320
+  height 240
+  port 5003
+  address "192.168.1.100"
+)
+

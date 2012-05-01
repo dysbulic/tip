@@ -1,0 +1,1523 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>PSY-304B Midterm</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math, table + math, math + table { margin-top: .75em; }
+      .data td, .data th { text-align: center; padding: .25em; border: 1px solid; }
+      td, th { padding: .25em .5em; border: 1px solid; text-align: center; }
+      object { width: 100%; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY-304B: Quantitative Methods &amp; Experimental Design</h1>
+      <h2>Midterm Exam</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 14:35 Tues., 18 March 2008</h2>
+    </div>
+    <blockquote>
+      <p>For all problems, unless otherwise indicated, assume a Type 1 error rate = .05 and that comparisons are two-tailed.</p>
+    </blockquote>
+    <ol>
+      <li id="p1">
+        <div class="question">
+          <p>A researcher is interested in comparing the efficacy of 3 alternative treatments for speech anxiety. Treatment #1 is behavior therapy (BT), treatment #2 is the beta-adrenergic blocker Atenolol (AT), and treatment #3 is placebo (PL). Out of a total sample size of 30, 12 patients are randomly assigned to the BT group, 12 patients are randomly assigned to the AT group, and 6 patients are randomly assigned to the PL group. The primary dependent measure is an overall rating of public speaking ability conducted by trained raters who are experts in non-verbal aspects of public speaking. These ratings were made on a 0 to 10 scale, with higher scores indicating better public speaking. The ratings for each group are shown below:</p>
+          <table>
+            <tr>
+              <th>BT group</th>
+              <td>6</td><td>7</td><td>6</td><td>5</td><td>5</td><td>5</td><td>7</td><td>8</td><td>9</td><td>6</td><td>6</td><td>7</td>
+            </tr>
+            <tr>
+              <th>AT group</th>
+              <td>4</td><td>8</td><td>10</td><td>3</td><td>6</td><td>5</td><td>6</td><td>3</td><td>7</td><td>5</td><td>4</td><td>6</td>
+            </tr>
+            <tr>
+              <th>PL group</th>
+              <td>0</td><td>7</td><td>0</td><td>7</td><td>0</td><td>7</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+          </table>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Conduct a one-way analysis of variance to test the null hypothesis using SAS. After presenting the results, indicate whether or not the results of this test lead you to reject the null hypothesis. (10)</p>
+            </div>
+            <div class="answer">
+              <p><a href="midterm.R">R</a> produces:</p>
+              <pre>Analysis of Variance Table
+
+Response: Speaking_Ability
+          Df  Sum Sq Mean Sq F value  Pr(>F)
+Treatment  2  34.167  17.083  3.3586 0.04982 *
+Residuals 27 137.333   5.086</pre>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mmultiscripts>
+                        <mi>F</mi>
+                        <mfenced open="" close=""><mn>2</mn><mn>27</mn></mfenced><none/>
+                        <mprescripts/><mn>0.05</mn><none/>
+                      </mmultiscripts>
+                    </mtd>
+                    <mtd><mo>&lt;</mo></mtd>
+                    <mtd>
+                      <mmultiscripts>
+                        <mi>F</mi>
+                        <mfenced open="" close=""><mn>2</mn><mn>27</mn></mfenced><none/>
+                        <mprescripts/><mn>0.04982</mn><none/>
+                      </mmultiscripts>
+                    </mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>3.3586</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>There is a 4.98% chance these observations came from a central F-distribution. This is less than our accepted 5% error rate, so H<sub>0</sub> is rejected.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Devise a scenario that would lead to a violation of the assumption of independence of errors (ie., observations). That is, make up a story about features of the study that I have not told you about that would plausibly result in a violation of the independence of errors assumption. Is it likely that your violation scenario would result in an increase in Type-I errors or an increase in Type-II errors (ie., decreased power) if a one-way ANOVA were still performed on these data? (15)</p>
+            </div>
+            <div class="answer">
+              <p>The assumption of independence applies both within and between groups. When there are correlations within the data this will cause the data to stratify into groups in a manner the ANOVA is not designed to account for. A within group correlation, <em>&rho;<sub>w</sub></em>, and between group correlation, <em>&rho;<sub>b</sub></em>, affect the expected value of the <acronym title="Mean Square Within">MSW</acronym> and <acronym title="Mean Square Between">MSB</acronym> in different ways.</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>E</mo><mfenced><html:acronym title="Mean Square Between">MSB</html:acronym></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                      <mfenced><mrow>
+                        <mn>1</mn><mo>+</mo>
+                        <mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                        <msub><mi>&rho;</mi><mi>w</mi></msub><mo>-</mo>
+                        <mi>n</mi><msub><mi>&rho;</mi><mi>b</mi></msub>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfrac>
+                        <mrow>
+                          <mi>n</mi><mo>&Sum;</mo>
+                          <msup>
+                            <mfenced><mrow>
+                              <msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo><mover><mi>&mu;</mi><mo>_</mo></mover>
+                            </mrow></mfenced>
+                            <mn>2</mn>
+                          </msup>
+                        </mrow>
+                        <mi>J</mi>
+                      </mfrac>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>E</mo><mfenced><html:acronym title="Mean Square Within">MSW</html:acronym></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msubsup><mi>&sigma;</mi><mi>&epsilon;</mi><mn>2</mn></msubsup>
+                      <mfenced><mrow>
+                        <mn>1</mn><mo>-</mo><msub><mi>&rho;</mi><mi>w</mi></msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The effects of violating the assumption of independence depends on whether the violation is within or between groups. In the previous example, imagine that the researcher chose the mental health facility associated with his university. Unbeknownst to the researcher, that particular facility has a reputation within the community of classical Shakespearean actors of the world as the premier establishment for dealing with stage fright.</p>
+              <p>Subjects were collected through responses to fliers posted in the facility. All the respondents are actors, and there are two classes of people who responded: aspiring actors too nervous to get on stage and established actors looking to iron out their craft. This division can be seen to some extent in the placebo group where individuals were either much better than average or completely inept.</p>
+              <p>It turns out that some of the characteristics that influence a person's decision to perform Shakespeare on the public stage also affect their response to different types of therapies. The response to drug therapies is like the general population, but there is a positive correlation between being a Shakespearean actor and responding well to behavioral therapy. This means that for this study there is a positive <em>&rho;<sub>w</sub></em> for the behavioral therapy, but <em>&rho;<sub>b</sub></em> = 0.</p>
+              <p>A positive <em>&rho;<sub>w</sub></em> will drive up the expected value of the MSB and reduce the MSW. This will increase the ratio of the two and create an inflated F-value with an increased likelihood of rejection. This means that the probability of incorrect rejection (Type 1 error) is no longer simply based on sampling error, and is greater than &alpha;.</p>
+              <p>Between group correlations, <em>&rho;<sub>b</sub></em>, only increase the MSB, and will reduce the F-value. This reduces the probability of rejecting and the power of the test.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Conduct a statistical test assessing whether the assumption of homogeneity of variance is violated. (10)</p>
+            </div>
+            <div class="answer">
+              <p>A common test for the homogeneity of variances that is relatively robust to non-normality is Levene's Test. For that, <a href="midterm.R">R</a> produces:</p>
+              <pre>Levene's Test for Homogeneity of Variance
+      Df F value   Pr(>F)
+group  2  14.092 6.44e-05 ***
+      27</pre>
+              <p>So there's a very small (0.00644%) chance that these variances are homogeneous.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Based on the results of this test (in part c.), what do you conclude? What would be the consequences of violating this assumption on the Type I error rates and/or power of the one-way ANOVA? (10)</p>
+            </div>
+            <div class="answer">
+              <p>Heterogeneity of variances is particularly detrimental to the ANOVA when paired with unequal sample sizes. The exact effects depend on the variances:</p>
+              <pre>Speech Anxiety Data Variances
+
+Behavior_Therapy = 0.667
+        Atenolol = 6.8
+         Placebo = 14.7</pre>
+                <!-- <p>Recall that a variables covariance with itself is its variance.</p> -->
+              <p>In this particular situation there is an "inverse pairing" &mdash; the group with the least number of samples, "Placebo," has the largest variance. For an inverse pairing the ANOVA is said to be overly liberal, meaning that it will reject too frequently (increased type I error rate) and support the experimenters' belief.</p>
+              <p>For a direct pairing, the type II error rate will increase and power will decrease.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Based on the results of part c., conduct an alternative test of the null hypothesis that you tested in part a. Unlike the ANOVA, this test would not assume homogeneity of the population variances. Does this test yield conclusions that are similar or different to that of the standard ANOVA? Why? (15)</p>
+            </div>
+            <div class="answer">
+              <p>The R test, <code>oneway.test</code> will perform a Welch test if the parameter <code>equal.var</code> is set to <code>FALSE</code>.</p>
+              <p>The Welch test is an ANOVA on the distance of the means from the grand mean. The difference may either be the absolute value or, as R does, the square of the distance.</p>
+              <pre>    One-way analysis of means (not assuming equal variances)
+
+data:  Speaking_Ability and Treatment
+F = 2.023, num df = 2.000, denom df = 10.944, p-value = 0.1788</pre>
+              <p>The probability these values came from a central F is more than tripled, but there is now a 17.9% chance, so the test fails to reject.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li id="p2">
+        <div class="question">
+          <p>A study was conducted on the effect of magnetic stimulation of the frontal lobes of the brain on feelings of positive affect. 40 adults were randomly assigned to each of the following four experimental conditions with 10 participants per condition:</p>
+          <ol>
+            <li>unilateral stimulation of the left hemisphere frontal cortex (LF)</li>
+            <li>unilateral stimulation of the right hemisphere frontal cortex (RF)</li>
+            <li>bilateral stimulation of both the left and right frontal cortices (BILAT)</li>
+            <li>sham stimulation control (CONTROL)</li>
+          </ol>
+          <p>Three hours after stimulation, participants completed a self-report scale assessing positive affect (potential range = 10 to 50). The following data were obtained:</p>
+          <table>
+            <tr>
+              <th>Treatment</th>
+              <th>
+                Sample Mean,
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mover><mi>Y</mi><mo>_</mo></mover><mi>j</mi></msub></math>
+              </th>
+              <th>
+                Sample Variance,
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mover><mi>s</mi><mo>&Hat;</mo></mover><mn>2</mn></msup></math>
+              </th>
+            </tr>
+            <tr><td>LF</td><td>35</td><td>13</td></tr>
+            <tr><td>RF</td><td>28</td><td>10</td></tr>
+            <tr><td>BILAT</td><td>33</td><td>12</td></tr>
+            <tr><td>CONTROL</td><td>30</td><td>11</td></tr>
+          </table>
+          <p>You are interested in testing three contrasts:</p>
+          <ul>
+            <li>The first contrast (&Psi;<sub>1</sub>) is left frontal vs. right frontal</li>
+            <li>The second contrast (&Psi;<sub>2</sub>) is right frontal vs. the average of the left frontal and bilateral groups</li>
+            <li>The third contrast (&Psi;<sub>3</sub>) is the average of the three frontal stimulation groups (left, right, bilateral) vs the sham stimulation control group</li>
+          </ul>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Using the table below, fill in appropriate contrast coefficients (c<sub><em>i</em>,<em>j</em></sub>) for each contrast: (12)</p>
+            </div>
+            <div class="answer">
+              <p>Recall that for acceptable contrasts:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><munder><mo>&Sum;</mo><mi>j</mi></munder><msub><mi>c</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <table>
+                <tr><th>Contrast</th><th>Left Frontal (LF)</th><th>Right Frontal (RF)</th><th>Bilateral (BOTH)</th><th>Sham (CONTROL)</th></tr>
+                <tr><td>&Psi;<sub>1</sub></td><td>1</td><td>-1</td><td>0</td><td>0</td></tr>
+                <tr><td>&Psi;<sub>2</sub></td><td>1</td><td>-2</td><td>1</td><td>0</td></tr>
+                <tr><td>&Psi;<sub>3</sub></td><td>1</td><td>1</td><td>1</td><td>-3</td></tr>
+              </table>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Conduct a two-tailed test of each these three contrasts (you can assume that the variances for all four populations are equal). Conduct each test at a per comparison Type I error rate of .05 (in other contexts this might not be an optimal decision, but for now let's assume it's ok). (18)</p>
+              <p>Besides showing your work, fill out the table below:</p>
+            </div>
+            <div class="answer">
+              <p>A contrast is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mi>&Psi;</mi></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><munder><mo>&Sum;</mo><mi>j</mi></munder><msub><mi>c</mi><mi>j</mi></msub><msub><mi>&mu;</mi><mi>j</mi></msub></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>Because the actual means are not generally known, an unbiased estimate of the contrast is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munder><mo>&Sum;</mo><mi>j</mi></munder>
+                      <msub><mi>c</mi><mi>j</mi></msub><msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>
+                A scaled version of the contrast is a form of a z-score and, if the null hypothesis H<sub>0</sub>: &Psi; = 0, is true, will have a t-distribution. The <acronym title="Mean Square Within">MSW</acronym> is generally used as the estimate for
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msubsup><mi>&sigma;</mi><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mn>2</mn></msubsup>
+                </math>,
+                and so the degrees of freedom is N - J (the dof for the MSW). The MSW uses the entire sample population for its estimate rather than simply the specific sample groups involved in the contrast. This is how a two group contrast varies from a simple t-test. The t-test only uses the two populations to compute the estimate of the variance.
+              </p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mi>z</mi></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mover><mi>&Psi;</mi><mo>&Hat;</mo></mover>
+                      <msub><mi>&sigma;</mi><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover></msub>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mover><mi>&Psi;</mi><mo>&Hat;</mo></mover>
+                      <msqrt><msubsup><mi>&sigma;</mi><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mn>2</mn></msubsup></msqrt>
+                    </mfrac></mtd>
+                    <mtd><mo>~</mo></mtd>
+                    <mtd><msub><mi>t</mi><mi>N</mi></msub></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msubsup><mi>&sigma;</mi><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mn>2</mn></msubsup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mo>var</mo><mfenced><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>var</mo>
+                      <mfenced><mrow>
+                        <mo>&Sum;</mo><msub><mi>c</mi><mi>j</mi></msub><msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub>
+                      </mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>&Sum;</mo><msubsup><mi>c</mi><mi>j</mi><mn>2</mn></msubsup>
+                      <mo>var</mo><mfenced><msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>
+                For this particular example however, we do not have access to actual sample data. The data has already been aggregated into means and variances. A pooled estimate of the variance then is:
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mover><msup><mover><mi>s</mi><mo>&Hat;</mo></mover><mn>2</mn></msup><mo>_</mo></mover>
+                </math>.
+                This quantity is equivalent to the MSW.
+              </p>
+              <p>Recall that the variance for a mean is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msubsup><mi>&sigma;</mi><mi>&mu;</mi><mn>2</mn></msubsup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <msubsup><mi>&sigma;</mi><mi>population</mi><mn>2</mn></msubsup>
+                      <mi>n</mi>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The best estimate of the variance for a contrast for equal-sized groups is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msubsup><mi>&sigma;</mi><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mn>2</mn></msubsup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <html:acronym title="Mean Square Within">MSW</html:acronym>
+                      <mo>&Sum;</mo>
+                      <mfrac><msubsup><mi>c</mi><mi>i</mi><mn>2</mn></msubsup><msub><mi>n</mi><mi>i</mi></msub></mfrac>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mover><msup><mover><mi>s</mi><mo>&Hat;</mo></mover><mn>2</mn></msup><mo>_</mo></mover>
+                      <mo>&Sum;</mo>
+                      <mfrac><msubsup><mi>c</mi><mi>i</mi><mn>2</mn></msubsup><msub><mi>n</mi><mi>i</mi></msub></mfrac>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mover><msup><mover><mi>s</mi><mo>&Hat;</mo></mover><mn>2</mn></msup><mo>_</mo></mover>
+                      <mfrac>
+                        <mrow><mo>&Sum;</mo><msubsup><mi>c</mi><mi>i</mi><mn>2</mn></msubsup></mrow>
+                        <mi>n</mi>
+                      </mfrac>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>Changing the signs for the <em>c<sub>i</sub></em>s will change the sign of <em>&Psi;</em>, so the test can fail with either a large or small value and is thus two-tailed.</p>
+
+              <table>
+                <tr>
+                  <th><em>&Psi;<sub>i</sub></em></th>
+                  <td>&Psi;<sub>1</sub></td>
+                  <td>&Psi;<sub>2</sub></td>
+                  <td>&Psi;<sub>3</sub></td>
+                </tr>
+                <tr>
+                  <th>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mi>i</mi></msub></math>
+                  </th>
+                  <td>1 (35) + -1 (28) = 7</td>
+                  <td>1 (35) + -2 (28) + 1 (33) = 12</td>
+                  <td>1 (35) + 1 (28) + 1 (33) + -3 (30) = 6</td>
+                </tr>
+                <tr>
+                  <th>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <msub>
+                        <mover><mi>&sigma;</mi><mo>&Hat;</mo></mover>
+                        <msub><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mi>i</mi></msub>
+                      </msub>
+                    </math>
+                  </th>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <msqrt><mrow>
+                        <mfenced><mn>11.5</mn></mfenced>
+                        <mfrac>
+                          <mrow><msup><mn>1</mn><mn>2</mn></msup><mo>+</mo><msup><mn>-1</mn><mn>2</mn></msup></mrow>
+                          <mn>10</mn>
+                        </mfrac>
+                      </mrow></msqrt>
+                      <mo>&ape;</mo><mn>1.517</mn>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <msqrt><mrow>
+                        <mfenced><mn>11.5</mn></mfenced>
+                        <mfrac>
+                          <mrow>
+                            <msup><mn>1</mn><mn>2</mn></msup><mo>+</mo>
+                            <msup><mn>-2</mn><mn>2</mn></msup><mo>+</mo>
+                            <msup><mn>1</mn><mn>2</mn></msup>
+                          </mrow>
+                          <mn>10</mn>
+                        </mfrac>
+                      </mrow></msqrt>
+                      <mo>&ape;</mo><mn>2.627</mn>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <msqrt><mrow>
+                        <mfenced><mn>11.5</mn></mfenced>
+                        <mfrac>
+                          <mrow>
+                            <msup><mn>1</mn><mn>2</mn></msup><mo>+</mo>
+                            <msup><mn>1</mn><mn>2</mn></msup><mo>+</mo>
+                            <msup><mn>1</mn><mn>2</mn></msup><mo>+</mo>
+                            <msup><mn>-3</mn><mn>2</mn></msup>
+                          </mrow>
+                          <mn>10</mn>
+                        </mfrac>
+                      </mrow></msqrt>
+                      <mo>&ape;</mo><mn>3.715</mn>
+                    </math>
+                  </td>
+                </tr>
+                <tr>
+                  <th><em>t</em></th>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mfrac><mn>7</mn><msqrt><mn>2.3</mn></msqrt></mfrac>
+                      <mo>&ape;</mo><mn>4.615663</mn>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mfrac><mn>12</mn><msqrt><mn>6.9</mn></msqrt></mfrac>
+                      <mo>&ape;</mo><mn>4.568322</mn>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mfrac><mn>6</mn><msqrt><mn>13.8</mn></msqrt></mfrac>
+                      <mo>&ape;</mo><mn>1.615146</mn>
+                    </math>
+                  </td>
+                </tr>
+                <tr>
+                  <th><em>df</em></th>
+                  <td>40 - 4 = 36</td>
+                  <td>36</td>
+                  <td>36</td>
+                </tr>
+                <tr>
+                  <th>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mo>P</mo>
+                      <mfenced><mrow>
+                        <msub><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mi>i</mi></msub>
+                        <mo>~</mo>
+                        <msub><mi>t</mi><mi>df</mi></msub>
+                      </mrow></mfenced>
+                    </math>
+                  </th>
+                  <td><code>pt(7/sqrt(2.3),36)</code> &ape; 0.9999758</td>
+                  <td><code>pt(12/sqrt(6.9),36)</code> &ape; 0.9999721</td>
+                  <td><code>pt(6/sqrt(13.8),36)</code> &ape; 0.9424946</td>
+                </tr>
+                <tr>
+                  <th>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mmultiscripts>
+                        <mi>t</mi>
+                        <mi>df</mi><none/>
+                        <mprescripts/><mn>0.975</mn><none/>
+                      </mmultiscripts>
+                    </math>
+                  </th>
+                  <td><code>qt(.975,36)</code> &ape; 2.028094</td>
+                  <td>2.028094</td>
+                  <td>2.028094</td>
+                </tr>
+                <tr>
+                  <th>Reject H<sub>0</sub></th>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>No</td>
+                </tr>
+              </table>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Do the three contrasts constitute an orthogonal set? Justify your answer. (10)</p>
+            </div>
+            <div class="answer">
+              <p>No. Orthogonality for a set of comparisons may be conceptualized in terms of vectors in an n-dimensional space where each dimension is a characteristic being measured. A set of vectors is an orthogonal set if the cross product of all pairwise sets is orthogonal.</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>&ForAll;</mo></mtd>
+                    <mtd><mfenced open="" close="">
+                      <msub><mover><mi>&Psi;</mi><mo>&rharu;</mo></mover><mi>i</mi></msub>
+                      <msub><mover><mi>&Psi;</mi><mo>&rharu;</mo></mover><mi>j</mi></msub>
+                    </mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced open="" close="">
+                        <mfenced open="&lang;" close="&rang;">
+                          <msub><mi>c</mi><mfenced open="" close=""><mi>i</mi><mn>1</mn></mfenced></msub>
+                          <msub><mi>c</mi><mfenced open="" close=""><mi>i</mi><mn>2</mn></mfenced></msub>
+                          <mo>&hellip;</mo>
+                          <msub><mi>c</mi><mfenced open="" close=""><mi>i</mi><mi>n</mi></mfenced></msub>
+                        </mfenced>
+                        <mfenced open="&lang;" close="&rang;">
+                          <msub><mi>c</mi><mfenced open="" close=""><mi>j</mi><mn>1</mn></mfenced></msub>
+                          <msub><mi>c</mi><mfenced open="" close=""><mi>j</mi><mn>2</mn></mfenced></msub>
+                          <mo>&hellip;</mo>
+                          <msub><mi>c</mi><mfenced open="" close=""><mi>j</mi><mi>n</mi></mfenced></msub>
+                        </mfenced>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>&SuchThat;</mo></mtd>
+                    <mtd><mi>i</mi><mo>&ne;</mo><mi>j</mi></mtd>
+                    <mtd><mo>,</mo></mtd>
+                    <mtd>
+                      <msub><mover><mi>&Psi;</mi><mo>&rharu;</mo></mover><mi>i</mi></msub><mo>&bull;</mo>
+                      <msub><mover><mi>&Psi;</mi><mo>&rharu;</mo></mover><mi>j</mi></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munderover><mo>&Sum;</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover>
+                      <msub><mi>c</mi><mfenced open="" close=""><mi>i</mi><mi>k</mi></mfenced></msub>
+                      <msub><mi>c</mi><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              
+              <p>A set of contrasts being orthogonal means that the contrasts are <a href="http://en.wikipedia.org/wiki/Linearly_independent">linearly independent</a>.</p>
+              <p>This set of contrasts is not orthogonal because:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <msub><mover><mi>&Psi;</mi><mo>&rharu;</mo></mover><mn>1</mn></msub><mo>&bull;</mo>
+                      <msub><mover><mi>&Psi;</mi><mo>&rharu;</mo></mover><mn>2</mn></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced open="&lang;" close="&rang;"><mn>1</mn><mn>-1</mn><mn>0</mn><mn>0</mn></mfenced>
+                      <mo>&bull;</mo>
+                      <mfenced open="&lang;" close="&rang;"><mn>1</mn><mn>-2</mn><mn>1</mn><mn>0</mn></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mn>1</mn></mfenced><mfenced><mn>1</mn></mfenced><mo>+</mo>
+                      <mfenced><mn>-1</mn></mfenced><mfenced><mn>-2</mn></mfenced><mo>+</mo>
+                      <mfenced><mn>0</mn></mfenced><mfenced><mn>1</mn></mfenced><mo>+</mo>
+                      <mfenced><mn>0</mn></mfenced><mfenced><mn>0</mn></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>3</mn></mtd>
+                    <mtd><mo>&ne;</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li id="p3">
+        <div class="question">
+          <p>A social psychologist is interested in assessing the effects of five different types of feedback on nonverbal expressiveness in a social interaction task. Five experimental conditions are used (denoted below as A-E). Subjects are randomly assigned to groups with n = 20 per group. In the questions below, try to give a precise probability value for the familywise Type 1 error rate. If you cannot give a precise value, give a range estimate (i.e., if X is the familywise Type 1 error rate, something like L &le; X &le; U, where L and U are specific probability values). Assume that all comparisons are two-tailed.</p>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>The population means for all 5 groups are identical. The researcher is interested in conducting the following comparisons:</p>
+              <ol>
+                <li>D vs. E</li>
+                <li>A vs the pooled means of B, C, D, and E</li>
+                <li>C vs. the pooled means of D and E</li>
+                <li>B vs. the pooled means of C, D, and E</li>
+              </ol>
+              <p>If the researcher were to conduct each of these four comparisons at a per comparison Type 1 error rate of &alpha; = .08, what would be the familywise Type 1 error rate for this set of comparisons? (10)</p>
+            </div>
+            <div class="answer">
+              <p>To help visualize the contrasts, consider them as a matrix: (<em>the order has been changed to more clearly show orthogonality</em>)</p>
+              <table>
+                <tr><th>Contrast</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr>
+                <tr><td><em>&Psi;</em><sub>2</sub></td><td>4</td><td>-1</td><td>-1</td><td>-1</td><td>-1</td></tr>
+                <tr><td><em>&Psi;</em><sub>4</sub></td><td>0</td><td>3</td><td>-1</td><td>-1</td><td>-1</td></tr>
+                <tr><td><em>&Psi;</em><sub>3</sub></td><td>0</td><td>0</td><td>2</td><td>-1</td><td>-1</td></tr>
+                <tr><td><em>&Psi;</em><sub>1</sub></td><td>0</td><td>0</td><td>0</td><td>1</td><td>-1</td></tr>
+              </table>
+              <p>This group of contrasts is an orthogonal set meaning they are linearly independent and knowing the value of one contrast provides no predictive power for any other contrast. This means that the errors are uncorrelated, so an exact value for the value can be found. The probability that any one test, <em>T<sub>i</sub></em>, will fail is &alpha; = 0.08. The probability that one of the set will fail (for independent events) then is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>&alpha;</mi><mi>fw</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>P</mo>
+                      <mfenced><mrow>
+                        <munderover><mo>&or;</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover>
+                        <msub><mi>T</mi><mi>k</mi></msub>
+                      </mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <mo>P</mo>
+                      <mfenced><mrow>
+                        <munderover><mo>&and;</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover>
+                        <mo>&not;</mo><msub><mi>T</mi><mi>k</mi></msub>
+                      </mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <munderover><mo>&Pi;</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover>
+                      <mo>P</mo>
+                      <mfenced><mrow>
+                        <mo>&not;</mo><msub><mi>T</mi><mi>k</mi></msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <munderover><mo>&Pi;</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover>
+                      <mfenced><mrow>
+                        <mn>1</mn><mo>-</mo>
+                        <mo>P</mo><mfenced><msub><mi>T</mi><mi>k</mi></msub></mfenced>
+                      </mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <munderover><mo>&Pi;</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover>
+                      <mfenced><mrow><mn>1</mn><mo>-</mo><mi>&alpha;</mi></mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mi>&alpha;</mi></mrow></mfenced><mi>K</mi></msup>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>For this particular experiment:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>&alpha;</mi><mi>fw</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mi>&alpha;</mi></mrow></mfenced><mi>K</mi></msup>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mn>0.08</mn></mrow></mfenced><mn>4</mn></msup>
+                    </mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>0.28</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>The population means for all 5 groups are identical. The researcher decides to conduct the following three comparisons:</p>
+              <ol>
+                <li>D vs. E</li>
+                <li>A vs. B</li>
+                <li>A vs. the mean of B and E</li>
+              </ol>
+              <p>If the researcher conducts each of these comparisons at a per comparison Type 1 error rate of &alpha; = .10, what would be the familywise Type 1 error rate for this set of comparisons? (10)</p>
+            </div>
+            <div class="answer">
+              <table>
+                <tr><th>Contrast</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr>
+                <tr><td><em>&Psi;</em><sub>1</sub></td><td>0</td><td>0</td><td>0</td><td>1</td><td>-1</td></tr>
+                <tr><td><em>&Psi;</em><sub>2</sub></td><td>1</td><td>-1</td><td>0</td><td>0</td><td>0</td></tr>
+                <tr><td><em>&Psi;</em><sub>3</sub></td><td>2</td><td>-1</td><td>0</td><td>0</td><td>-1</td></tr>
+              </table>
+              <p>An exact value for the familywise error cannot be specified for these contrasts because <em>&Psi;</em><sub>3</sub> is non-orthogonal to both <em>&Psi;</em><sub>1</sub> and <em>&Psi;</em><sub>2</sub>. This means the a sampling error that would cause a Type I error for <em>&Psi;</em><sub>3</sub> will also affect <em>&Psi;</em><sub>1</sub> and <em>&Psi;</em><sub>2</sub>. Bounds may be placed on the error however.</p>
+              <p>The upper bound would be simply if the errors for all three contrasts were independent:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>&alpha;</mi><mi>fw</mi></msub></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mi>&alpha;</mi></mrow></mfenced><mi>K</mi></msup>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mn>0.1</mn></mrow></mfenced><mn>3</mn></msup>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0.271</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>A simple value for the lower bound is simply the per-comparison error rate, &alpha;. That bound may be set a bit higher however because two of the contrasts are independent, so the lower bound must be at least the familywise error for those two:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>&alpha;</mi><mi>fw</mi></msub></mtd>
+                    <mtd><mo>&ge;</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mi>&alpha;</mi></mrow></mfenced><mi>K</mi></msup>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mn>0.1</mn></mrow></mfenced><mn>2</mn></msup>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0.19</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>So the final bounds are:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mn>0.19</mn></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><msub><mi>&alpha;</mi><mi>fw</mi></msub></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mn>0.271</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Let’s assume that the researcher wants to do the three comparisons listed in part b. above. Let’s say that the population means for A-E are actually as follows: A = 5, B = 5, C = 5, D = 10, E = 5. The experimenter uses a per comparison type 1 error rate of &alpha; = .10. What would be the familywise type 1 error rate for this set of contrasts? (10)</p>
+            </div>
+            <div class="answer">
+              <p>A Type I error is an incorrect rejection of the null hypothesis. Since the mean of D is in reality different than the other means, rejecting H<sub>0</sub> for <em>&Psi;</em><sub>1</sub> is <em>correct</em>. This means there was no error. If there is an error, it will be a Type II error because the test should have rejected. The error rate, &alpha;, is not concerned with Type II error rates however.</p>
+              <p>So, there are only two contrasts which can incorrectly reject because of sampling errors: <em>&Psi;</em><sub>2</sub> and <em>&Psi;</em><sub>3</sub>. These two comparisons are not orthogonal, so their error rates can only be bounded:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mi>&alpha;</mi></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0.1</mn></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><msub><mi>&alpha;</mi><mi>fw</mi></msub></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mn>0.19</mn></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mn>1</mn><mo>-</mo>
+                      <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mn>0.1</mn></mrow></mfenced><mn>2</mn></msup>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li id="p4">
+        <div class="question">
+          <p>A researcher is interested in assessing the effects of environmental stimulation (high/low) and predictability of diet (predictable/unpredictable) on levels of the hormone prolactin (PRL) in rat pups. 32 rat pups are randomly assigned to the 4 conditions, with 8 pups per condition. The 4 conditions are as follows:</p>
+          <ol>
+            <li>high stimulation plus high predictability (S+/P+)</li>
+            <li>high stimulation plus low predictability (S+/P-)</li>
+            <li>low stimulation plus high predictability (S-/P+)</li>
+            <li>low stimulation plus low predictability (S-/P-)</li>
+          </ol>
+          <p>PRL scores for each of the four groups are as follows:</p>
+          <table>
+            <tr><th>S+/P+</th><td>25</td><td>23</td><td>18</td><td>16</td><td>12</td><td>19</td><td>20</td><td>21</td></tr>
+            <tr><th>S+/P-</th><td>18</td><td>17</td><td>16</td><td>11</td><td>14</td><td>15</td><td>21</td><td>12</td></tr>
+            <tr><th>S-/P+</th><td>20</td><td>12</td><td>15</td><td>13</td><td>8</td><td>17</td><td>17</td><td>18</td></tr>
+            <tr><th>S-/P-</th><td>12</td><td>15</td><td>17</td><td>10</td><td>18</td><td>10</td><td>9</td><td>14 </td></tr>
+          </table>
+          <p>For all questions below, assume that all contrasts are two-tailed and that the researcher uses a familywise Type 1 error rate = to .05.</p>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Consider the set of all pairwise comparisons. What would be the minimum difference between means necessary to find at least one significant effect if the researcher were to conduct:</p>
+              <ol>
+                <li>a Bonferroni test</li>
+                <li>a Tukey HSD test</li>
+                <li>a Scheffe test</li>
+              </ol>
+              <p>Note: You can use SAS to generate the MSW but, beyond that, use hand calculations to arrive at these minimum mean difference values (you can, however, check your work using SAS). Turn in your work as well as your minimum difference values. (15)</p>
+            </div>
+            <div class="question">
+              <p>Conducting all pairwise tests involves compairing all possible pairs of groups. The number of such possible pairings is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mi>k</mi></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munderover><mo>&Sum;</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>J</mi></munderover>
+                      <mi>j</mi><mo>-</mo><mn>1</mn>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><mrow><mi>J</mi><mfenced><mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow></mfenced></mrow><mn>2</mn></mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <ol>
+                <li>
+                  <p>Bonferroni Test &mdash; Bonferroni corrects the per-comparison error rate, <em>&alpha;<sub>PC</sub></em>, to create the desired familywise error rate, <em>&alpha;<sub>FW</sub></em>.</p>
+                  <p>There are several methods for performing the correction. The original from Bonferroni assumes the worst case, that all errors on <em>k</em> comparisons are uncorrelated, and relies on:</p>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd><msub><mi>&alpha;</mi><mi>FW</mi></msub></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mn>1</mn><mo>-</mo>
+                          <msup><mfenced><mrow><mn>1</mn><mo>-</mo><msub><mi>&alpha;</mi><mi>PC</mi></msub></mrow></mfenced><mi>k</mi></msup>
+                        </mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mi>k</mi><msub><mi>&alpha;</mi><mi>PC</mi></msub></mtd>
+                        <mtd><mo>&rArr;</mo></mtd>
+                        <mtd><msub><mi>&alpha;</mi><mi>PC</mi></msub></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mfrac><msub><mi>&alpha;</mi><mi>FW</mi></msub><mi>k</mi></mfrac></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <p>The researcher then specifies <em>&alpha;<sub>FW</sub></em> and performs the tests at the computed <em>&alpha;<sub>PC</sub></em> significance level.</p>
+                  <p>In general, for a pairwise contrast with equal sample sizes, there is a specific difference in the two means being compared that must be exceeded for the test to reject. A comparison will reject generally if:</p>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd><mi>z</mi></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mover><mi>&Psi;</mi><mo>&Hat;</mo></mover>
+                          <msub><mi>&sigma;</mi><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover></msub>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mover><mi>&Psi;</mi><mo>&Hat;</mo></mover>
+                          <msqrt><msubsup><mi>&sigma;</mi><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mn>2</mn></msubsup></msqrt>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mover><mi>&Psi;</mi><mo>&Hat;</mo></mover>
+                          <msqrt><mrow>
+                            <html:acronym title="Mean Square Within">MSW</html:acronym>
+                            <mo>&Sum;</mo><mfrac><msubsup><mi>c</mi><mi>i</mi><mn>2</mn></msubsup><msub><mi>n</mi><mi>i</mi></msub></mfrac>
+                          </mrow></msqrt>
+                        </mfrac></mtd>
+                        <mtd><mo>&ge;</mo></mtd>
+                        <mtd>
+                          <mmultiscripts>
+                            <mi>t</mi>
+                            <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow><none/>
+                            <mprescripts/><mfrac><msub><mi>&alpha;</mi><mi>FW</mi></msub><mn>2</mn></mfrac><none/>
+                          </mmultiscripts>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <p>When there are only two groups, this simplifies. (<em>Recall the sum of the weights in the comparison must be 0, so in the two group situation the magnitude of the weights must be the same and signs opposing.</em>)</p>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd><mfrac>
+                          <mover><mi>&Psi;</mi><mo>&Hat;</mo></mover>
+                          <msqrt><mrow>
+                            <html:acronym title="Mean Square Within">MSW</html:acronym>
+                            <mo>&Sum;</mo><mfrac><msubsup><mi>c</mi><mi>i</mi><mn>2</mn></msubsup><msub><mi>n</mi><mi>i</mi></msub></mfrac>
+                          </mrow></msqrt>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mrow>
+                            <mi>c</mi><msub><mover><mi>y</mi><mo>_</mo></mover><mn>1</mn></msub><mo>-</mo>
+                            <mi>c</mi><msub><mover><mi>y</mi><mo>_</mo></mover><mn>2</mn></msub>
+                          </mrow>
+                          <msqrt><mrow>
+                            <html:acronym title="Mean Square Within">MSW</html:acronym>
+                            <mfenced><mfrac><mrow><mn>2</mn><msup><mi>c</mi><mn>2</mn></msup></mrow><mi>n</mi></mfrac></mfenced>
+                          </mrow></msqrt>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mrow>
+                            <msub><mover><mi>y</mi><mo>_</mo></mover><mn>1</mn></msub><mo>-</mo>
+                            <msub><mover><mi>y</mi><mo>_</mo></mover><mn>2</mn></msub>
+                          </mrow>
+                          <msqrt><mrow>
+                            <html:acronym title="Mean Square Within">MSW</html:acronym>
+                            <mfenced><mfrac><mn>2</mn><mi>n</mi></mfrac></mfenced>
+                          </mrow></msqrt>
+                        </mfrac></mtd>
+                        <mtd><mo>&ge;</mo></mtd>
+                        <mtd>
+                          <mmultiscripts>
+                            <mi>t</mi>
+                            <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow><none/>
+                            <mprescripts/><mfrac><msub><mi>&alpha;</mi><mi>FW</mi></msub><mn>2</mn></mfrac><none/>
+                          </mmultiscripts>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mmultiscripts>
+                            <mi>t</mi>
+                            <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow><none/>
+                            <mprescripts/><mfrac><msub><mi>&alpha;</mi><mi>PC</mi></msub><mrow><mn>2</mn><mi>k</mi></mrow></mfrac><none/>
+                          </mmultiscripts>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd><mfenced open="|" close="|"><mrow>
+                          <msub><mover><mi>y</mi><mo>_</mo></mover><mn>1</mn></msub><mo>-</mo>
+                          <msub><mover><mi>y</mi><mo>_</mo></mover><mn>2</mn></msub>
+                        </mrow></mfenced></mtd>
+                        <mtd><mo>&ge;</mo></mtd>
+                        <mtd><mfenced open="|" close="|"><mrow>
+                          <mmultiscripts>
+                            <mi>t</mi>
+                            <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow><none/>
+                            <mprescripts/><mfrac><msub><mi>&alpha;</mi><mi>PC</mi></msub><mrow><mn>2</mn><mi>k</mi></mrow></mfrac><none/>
+                          </mmultiscripts>
+                          <msqrt><mrow>
+                            <html:acronym title="Mean Square Within">MSW</html:acronym>
+                            <mfenced><mfrac><mn>2</mn><mi>n</mi></mfrac></mfenced>
+                          </mrow></msqrt>
+                        </mrow></mfenced></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mfenced open="|" close="|"><mrow>
+                          <mmultiscripts>
+                            <mi>t</mi>
+                            <mi>28</mi><none/>
+                            <mprescripts/><mfrac><mn>0.05</mn><mrow><mn>2</mn><mfenced><mn>6</mn></mfenced></mrow></mfrac><none/>
+                          </mmultiscripts>
+                          <msqrt><mrow>
+                            <mn>13.37054</mn><mfenced><mfrac><mn>2</mn><mn>8</mn></mfrac></mfenced>
+                          </mrow></msqrt>
+                        </mrow></mfenced></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>3.745076</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </li>
+                <li>
+                  <p>Tukey <acronym title="Honestly Significant Difference">HSD</acronym> Test &mdash; Controls <em>&alpha;<sub>FW</sub></em> for the "maximal contrast" which is simply the contrast involving the maximum difference of means. It relies on the fact that under the complete null, <em>&mu;<sub>i</sub></em> = <em>&mu;<sub>j</sub></em> &ForAll; <em>i</em>,<em>j</em>, the z-score is distributed as a "Sudentized Range" created by generating <em>g</em> random z-scores:</p>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd><msubsup><mi>Q</mi><mfenced open="" close=""><mi>g</mi><mi>df</mi></mfenced><mi>R</mi></msubsup></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mrow><msub><mi>Z</mi><mi>max</mi></msub><mo>-</mo><msub><mi>Z</mi><mi>min</mi></msub></mrow>
+                          <msqrt><mfrac><msubsup><mi>&chi;</mi><mi>df</mi><mn>2</mn></msubsup><mi>df</mi></mfrac></msqrt>
+                        </mfrac></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <p>The minimum difference is based off generating a critical value from the Studentized Range:</p>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mmultiscripts>
+                            <mi>Q</mi>
+                            <mfenced open="" close=""><mi>J</mi><mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow></mfenced><mi>R</mi>
+                            <mprescripts/><mrow><mn>1</mn><mo>-</mo><mi>&alpha;</mi></mrow><none/>
+                          </mmultiscripts>
+                        </mtd>
+                        <mtd><mo>&le;</mo></mtd>
+                        <mtd><mfrac>
+                          <mrow>
+                            <msub><mover><mi>y</mi><mo>_</mo></mover><mi>max</mi></msub><mo>-</mo>
+                            <msub><mover><mi>y</mi><mo>_</mo></mover><mi>min</mi></msub>
+                          </mrow>
+                          <msqrt><mfrac><html:acronym title="Mean Square Within">MSW</html:acronym><mi>n</mi></mfrac></msqrt>
+                        </mfrac></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mrow>
+                            <msub><mover><mi>y</mi><mo>_</mo></mover><mi>max</mi></msub><mo>-</mo>
+                            <msub><mover><mi>y</mi><mo>_</mo></mover><mi>min</mi></msub>
+                          </mrow>
+                        </mtd>
+                        <mtd><mo>&ge;</mo></mtd>
+                        <mtd>
+                          <mmultiscripts>
+                            <mi>Q</mi>
+                            <mfenced open="" close=""><mi>J</mi><mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow></mfenced><mi>R</mi>
+                            <mprescripts/><mrow><mn>1</mn><mo>-</mo><mi>&alpha;</mi></mrow><none/>
+                          </mmultiscripts>
+                          <msqrt><mfrac><html:acronym title="Mean Square Within">MSW</html:acronym><mi>n</mi></mfrac></msqrt>
+                        </mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd>
+                          <mmultiscripts>
+                            <mi>Q</mi>
+                            <mfenced open="" close=""><mn>4</mn><mn>28</mn></mfenced><mi>R</mi>
+                            <mprescripts/><mn>0.95</mn><none/>
+                          </mmultiscripts>
+                          <msqrt><mfrac><mn>13.37054</mn><mn>8</mn></mfrac></msqrt>
+                        </mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>4.99</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </li>
+                <li>
+                  <p>Scheffe Test &mdash; Also controls for the maximal error, however it is not limited to pairwise contrasts. In general, the maximal contracts for a given set of means will be:</p>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd><msub><mover><mi>&Psi;</mi><mo>&rharu;</mo></mover><mi>max</mi></msub></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfenced open="&lang;" close="&rang;">
+                          <msub><mi>m</mi><mn>1</mn></msub><msub><mi>m</mi><mn>1</mn></msub><mo>&hellip;</mo>
+                          <msub><mi>m</mi><mi>n</mi></msub>
+                        </mfenced></mtd>
+                        <mtd><mo>&SuchThat;</mo></mtd>
+                        <mtd><msub><mi>m</mi><mi>i</mi></msub></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <msub><mi>n</mi><mi>i</mi></msub>
+                          <mfenced><mrow>
+                            <msub><mi>&mu;</mi><mi>i</mi></msub><mo>-</mo>
+                            <mover><mi>&mu;</mi><mo>_</mo></mover>
+                          </mrow></mfenced>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <p>An unbiased estimate of this quantity is:</p>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd><mover><msub><mover><mi>&Psi;</mi><mo>&rharu;</mo></mover><mi>max</mi></msub><mo>&Hat;</mo></mover></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfenced open="&lang;" close="&rang;">
+                          <msub><mover><mi>m</mi><mo>&Hat;</mo></mover><mn>1</mn></msub>
+                          <msub><mover><mi>m</mi><mo>&Hat;</mo></mover><mn>1</mn></msub><mo>&hellip;</mo>
+                          <msub><mover><mi>m</mi><mo>&Hat;</mo></mover><mi>n</mi></msub>
+                        </mfenced></mtd>
+                        <mtd><mo>&SuchThat;</mo></mtd>
+                        <mtd><msub><mover><mi>m</mi><mo>&Hat;</mo></mover><mi>i</mi></msub></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <msub><mi>n</mi><mi>i</mi></msub>
+                          <mfenced><mrow>
+                            <msub><mover><mi>y</mi><mo>_</mo></mover><mi>i</mi></msub><mo>-</mo>
+                            <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                          </mrow></mfenced>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  
+                  <p>Consider a quantity known as the "Sum of Squares Contrast:"</p>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd><html:acronym title="Sum of Squares Contrast">SS&Psi;</html:acronym></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <msup><mi>&Psi;</mi><mn>2</mn></msup>
+                          <mrow>
+                            <mo>&Sum;</mo>
+                            <mfrac>
+                              <msubsup><mi>c</mi><mi>i</mi><mn>2</mn></msubsup>
+                              <msub><mi>n</mi><mi>i</mi></msub>
+                            </mfrac>
+                          </mrow>
+                        </mfrac></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <p>
+                    The maximum value for 
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <html:acronym title="Sum of Squares Contrast">SS<mover><mi>&Psi;</mi><mo>&Hat;</mo></mover></html:acronym>
+                    </math>
+                    is the <acronym title="Sum of Squares Between">SSB</acronym> from the ANOVA. Recall from the ANOVA that:
+                  </p>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd><mfrac>
+                          <mrow>
+                            <mo>&Sum;</mo>
+                            <msub><mi>n</mi><mi>j</mi></msub>
+                            <msup>
+                              <mfenced><mrow>
+                                <msub><mover><mi>Y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo>
+                                <mover><mover><mi>Y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                              </mrow></mfenced>
+                              <mn>2</mn>
+                            </msup>
+                          </mrow>
+                          <mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mtext><html:acronym title="Sum of Squares Between">SSB</html:acronym></mtext>
+                          <mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mtext><html:acronym title="Mean Square Between">MSB</html:acronym></mtext></mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd><mfrac>
+                          <mrow>
+                            <mo>&Sum;</mo>
+                            <msup>
+                              <mfenced><mrow>
+                                <msub><mi>y</mi><mi>i</mi></msub><mo>-</mo>
+                                <mover><msub><mi>Y</mi><mi>i</mi></msub><mo>_</mo></mover>
+                              </mrow></mfenced>
+                              <mn>2</mn>
+                            </msup>
+                          </mrow>
+                          <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mtext><html:acronym title="Sum of Squares Within">SSW</html:acronym></mtext>
+                          <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext></mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd><msub>
+                          <mi>F</mi>
+                          <mfenced open="" close="">
+                            <mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow>
+                            <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow>
+                          </mfenced>
+                        </msub></mtd>
+                        <mtd><mo>~</mo></mtd>
+                        <mtd><mfrac>
+                          <mtext><html:acronym title="Mean Square Between">MSB</html:acronym></mtext>
+                          <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mtext><html:acronym title="Sum of Squares Between">SSB</html:acronym></mtext>
+                          <mrow>
+                            <mfenced><mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                            <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                          </mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mtext><html:acronym title="Maximum Sum of Squares Contrast">
+                            SS<msub><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mi>max</mi></msub>
+                          </html:acronym></mtext>
+                          <mrow>
+                            <mfenced><mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                            <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                          </mrow>
+                        </mfrac></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+
+                  <p>This can be used to find a distribution for the maximum sum of squares contrast:</p>
+
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mfenced><mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                          <msub>
+                            <mi>F</mi>
+                            <mfenced open="" close="">
+                              <mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow>
+                              <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow>
+                            </mfenced>
+                          </msub>
+                        </mtd>
+                        <mtd><mo>~</mo></mtd>
+                        <mtd><mfrac>
+                          <mtext><html:acronym title="Maximum Sum of Squares Contrast">
+                            SS<msub><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mi>max</mi></msub>
+                          </html:acronym></mtext>
+                          <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mfrac>
+                            <msubsup><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mi>max</mi><mn>2</mn></msubsup>
+                            <mrow>
+                              <mo>&Sum;</mo>
+                              <mfrac>
+                                <msubsup><mover><mi>m</mi><mo>&Hat;</mo></mover><mi>i</mi><mn>2</mn></msubsup>
+                                <msub><mi>n</mi><mi>i</mi></msub>
+                              </mfrac>
+                            </mrow>
+                          </mfrac>
+                          <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mfrac>
+                            <msup>
+                              <mfenced><mrow>
+                                <mo>&Sum;</mo>
+                                <msub><mover><mi>m</mi><mo>&Hat;</mo></mover><mi>i</mi></msub>
+                                <msub><mover><mi>y</mi><mo>_</mo></mover><mi>i</mi></msub>
+                              </mrow></mfenced>
+                              <mn>2</mn>
+                            </msup>
+                            <mrow>
+                              <mo>&Sum;</mo>
+                              <mfrac>
+                                <msubsup><mover><mi>m</mi><mo>&Hat;</mo></mover><mi>i</mi><mn>2</mn></msubsup>
+                                <msub><mi>n</mi><mi>i</mi></msub>
+                              </mfrac>
+                            </mrow>
+                          </mfrac>
+                          <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                        </mfrac></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+
+                  <p>For a two element contrast with equal <em>n</em>'s, this quantity will simplify:</p>
+
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mfenced><mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                          <msub>
+                            <mi>F</mi>
+                            <mfenced open="" close="">
+                              <mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow>
+                              <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow>
+                            </mfenced>
+                          </msub>
+                        </mtd>
+                        <mtd><mo>~</mo></mtd>
+                        <mtd><mfrac>
+                          <mfrac>
+                            <msup>
+                              <mfenced><mrow>
+                                <mo>&Sum;</mo>
+                                <msub><mover><mi>m</mi><mo>&Hat;</mo></mover><mi>i</mi></msub>
+                                <msub><mover><mi>y</mi><mo>_</mo></mover><mi>i</mi></msub>
+                              </mrow></mfenced>
+                              <mn>2</mn>
+                            </msup>
+                            <mrow>
+                              <mo>&Sum;</mo>
+                              <mfrac>
+                                <msubsup><mover><mi>m</mi><mo>&Hat;</mo></mover><mi>i</mi><mn>2</mn></msubsup>
+                                <msub><mi>n</mi><mi>i</mi></msub>
+                              </mfrac>
+                            </mrow>
+                          </mfrac>
+                          <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mfrac>
+                            <mrow>
+                              <msup><mover><mi>m</mi><mo>&Hat;</mo></mover><mn>2</mn></msup>
+                              <msup>
+                                <mfenced><mrow>
+                                  <msub><mover><mi>y</mi><mo>_</mo></mover><mn>1</mn></msub><mo>-</mo>
+                                <msub><mover><mi>y</mi><mo>_</mo></mover><mn>2</mn></msub>                                
+                                </mrow></mfenced>
+                                <mn>2</mn>
+                              </msup>
+                            </mrow>
+                            <mrow>
+                              <mfrac>
+                                <mrow><mn>2</mn><msup><mover><mi>m</mi><mo>&Hat;</mo></mover><mn>2</mn></msup></mrow>
+                                <mi>n</mi>
+                              </mfrac>
+                            </mrow>
+                          </mfrac>
+                          <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <msup>
+                            <mfenced><mrow>
+                              <msub><mover><mi>y</mi><mo>_</mo></mover><mn>1</mn></msub><mo>-</mo>
+                              <msub><mover><mi>y</mi><mo>_</mo></mover><mn>2</mn></msub>                                
+                            </mrow></mfenced>
+                            <mn>2</mn>
+                          </msup>
+                          <mrow>
+                            <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                            <mfenced><mfrac><mn>2</mn><mi>n</mi></mfrac></mfenced>
+                          </mrow>
+                        </mfrac></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <p>The minimum siginficant difference of means then is:</p>
+
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd><mfrac>
+                          <msup>
+                            <mfenced><mrow>
+                              <msub><mover><mi>y</mi><mo>_</mo></mover><mn>1</mn></msub><mo>-</mo>
+                              <msub><mover><mi>y</mi><mo>_</mo></mover><mn>2</mn></msub>                                
+                            </mrow></mfenced>
+                            <mn>2</mn>
+                          </msup>
+                          <mrow>
+                            <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                            <mfenced><mfrac><mn>2</mn><mi>n</mi></mfrac></mfenced>
+                          </mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>&ge;</mo></mtd>
+                        <mtd>
+                          <mfenced><mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                          <mmultiscripts>
+                            <mi>F</mi>
+                            <mfenced open="" close="">
+                              <mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow>
+                              <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow>
+                            </mfenced>
+                            <none/>
+                            <mprescripts/><mrow><mn>1</mn><mo>-</mo><mi>&alpha;</mi></mrow><none/>
+                          </mmultiscripts>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd><mfenced open="|" close="|"><mrow>
+                          <msub><mover><mi>y</mi><mo>_</mo></mover><mn>1</mn></msub><mo>-</mo>
+                          <msub><mover><mi>y</mi><mo>_</mo></mover><mn>2</mn></msub>
+                        </mrow></mfenced></mtd>
+                        <mtd><mo>&ge;</mo></mtd>
+                        <mtd><msqrt><mrow>
+                          <mfenced><mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                          <mmultiscripts>
+                            <mi>F</mi>
+                            <mfenced open="" close="">
+                              <mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow>
+                              <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow>
+                            </mfenced>
+                            <none/>
+                            <mprescripts/><mrow><mn>1</mn><mo>-</mo><mi>&alpha;</mi></mrow><none/>
+                          </mmultiscripts>
+                          <mfenced><mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext></mfenced>
+                          <mfenced><mfrac><mn>2</mn><mi>n</mi></mfrac></mfenced>
+                        </mrow></msqrt></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><msqrt><mrow>
+                          <mfenced><mn>3</mn></mfenced>
+                          <mmultiscripts>
+                            <mi>F</mi>
+                            <mfenced open="" close=""><mn>3</mn><mn>28</mn></mfenced><none/>
+                            <mprescripts/><mn>0.95</mn><none/>
+                          </mmultiscripts>
+                          <mfenced><mn>13.37054</mn></mfenced>
+                          <mfenced><mfrac><mn>2</mn><mn>8</mn></mfrac></mfenced>
+                        </mrow></msqrt></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>5.436</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </li>
+              </ol>
+
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Using SAS, conduct all possible pairwise comparisons via the Tukey HSD method. Turn in the SAS output and a brief summary of what comparisons are statistically significant and what comparisons are not. (15)</p>
+            </div>
+            <div class="answer">
+              <pre>  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = Response ~ Effect, data = rat.data.stack, projections = T)
+
+$Effect
+             diff        lwr       upr     p adj
+S-/P+-S-/P- 1.875 -3.1167936  6.866794 0.7360701
+S+/P--S-/P- 2.375 -2.6167936  7.366794 0.5711672
+S+/P+-S-/P- 6.125  1.1332064 11.116794 0.0117370
+S+/P--S-/P+ 0.500 -4.4917936  5.491794 0.9926883
+S+/P+-S-/P+ 4.250 -0.7417936  9.241794 0.1165103
+S+/P+-S+/P- 3.750 -1.2417936  8.741794 0.1940084</pre>
+              <p>The only contrast to reject is "S+/P+ vs S-/P-" with a probability of approximately 1.17%. This is also apparent in the graphical representation of the Tukey 95% intervals where S+/P vs S-/P- is the only interval that does not contain 0.</p>
+              <object style="height:500px" id="tukey" type="image/svg+xml" data="midterm-tukey.svg"></object>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Using SAS, conduct all possible pairwise comparisons via the Scheffe method. Turn in the SAS output and a brief summary of what comparisons are statistically significant and what comparisons are not. (15)</p>
+            </div>
+            <div class="answer">
+              <p>Unfortunately, R does not include a built-in method for performing the Scheffe test. For this reason it was necessary to implement it in R based largely on an adaptation for the code for the Tukey test. While the process was certainly educational, it was ultimately off, by what I'm fairly certain is a constant factor (probably of a half). Class started 5 minutes ago though, so I'll have to find this problem at some later time.</p>
+              <pre>               diff       lwr       upr     p adj
+S+/P- v S+/P+ 1.875 -5.330914  9.080914 0.6037222
+S-/P+ v S+/P+ 2.375 -4.830914  9.580914 0.7057328
+S-/P- v S+/P+ 6.125 -1.080914 13.330914 0.9669701
+S-/P+ v S+/P- 0.500 -6.705914  7.705914 0.1560044
+S-/P- v S+/P- 4.250 -2.955914 11.455914 0.9035778
+S-/P- v S-/P+ 3.750 -3.455914 10.955914 0.8705437</pre>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>If there are any differences between the results of the Tukey and Scheffe comparisons conducted in steps b and c, explain why they exist. (5)</p>
+            </div>
+            <div class="answer">
+              <p>From the previously computed minimum mean differences of the Tukey and Scheffe, it is known that pairs with a mean difference of more than 4.99 and 5.44 respectively should reject. S-/P- v S+/P+ has a mean difference of 6.125 and so both should reject it. There are no mean differences in the range (4.99, 5.44) so there should be no difference in the rejections.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li id="p5">
+        <div class="question">
+          <p>Below are several multiple comparison dilemmas. Assume that the researcher can choose one of four multiple comparison tests: Bonferroni, Fisher LSD, Tukey HSD, and Scheffe. Indicate which procedure you consider to be the optimal one for the specific situation described.</p>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>A researcher conducts a study with four experimental conditions. She plans in advance to conduct three pairwise comparisons and the complex comparison comparing the means of conditions B and C to condition D. These are the only comparisons that she plans on conducting and does in fact conduct. (5)</p>
+            </div>
+            <div class="answer">
+              <p>Given that there are a small number of a priori comparisons, Bonferroni is an acceptable mutiplicity error correction method. For a small number of pairwise comparisons, Bonferroni should give a better familywise error than Tukey.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>A researcher conducts a study with six experimental conditions. She plans in advance to conduct all pairwise comparisons. These are the only comparisons that she plans on conducting and does in fact conduct. (5)</p>
+            </div>
+            <div class="answer">
+              <p>For all pairwise comparisons, Tukey is a permissible correction which will give more power than Bonferroni and Scheffe.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>A researcher conducts a study with four experimental conditions. Initially, she intended to conduct all pairwise comparisons. After looking at the data, she decides that only one of the comparisons is likely to be significant, so she conducts that single comparison. (5)</p>
+            </div>
+            <div class="answer">
+              <p>Because the a priori decision was to examine all pairwise contrasts, the researcher is limited to Tukey even though the actual ad hoc comparisons would have more power if Bonferroni was conducted. Because only pairwise comparisons were considered initially, it is not necessary to employ Sheffe.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>A researcher conducts a study with three experimental conditions. She plans in advance to conduct all pairwise comparisons. These are the only comparisons that she plans on conducting and does in fact conduct. (5)</p>
+            </div>
+            <div class="answer">
+              <p>Because there are only three conditions, the most powerful correction method will be the Fisher <a href="Least Significant Difference">LSD</a>.</p>
+              <p>Fisher LSD is a qualification-based test. An ANOVA is performed on the data at the &alpha; Type I error rate. If the ANOVA rejects then any number of comparisons are performed, also at the &alpha; Type I error rate. The idea is that the ANOVA bounds the error for the entire data set at &alpha;. Data with genuinely equivalent means will fail the ANOVA &alpha;(100)% of the time.</p>
+              <p>The issue with the Fisher LSD is, consider an experiment with <em>k</em> conditions which have actually identical means. Imagine the experimenter would like to run the set of <em>k</em> - 1 orthogonal contrasts on the data. The error rate for this set of contrasts will be 1 - (1 - &alpha;)<sup><em>k</em> - 1</sup>. Using the Fisher LSD to correct could bound this error to &alpha;, but only because all the means are equivalent.</p>
+              <p>Consider the situation where the null hypothesis is partially true. Add a new condition which has a genuine difference in mean of large magnitude from the previous <em>k</em> equivalent conditions. This is called a "partial null" as opposed to a "complete null" where all the means are equal. This new condition will cause the ANOVA to consistently reject, and the previous <em>k</em> conditions are essentially run without any error correction.</p>
+              <p>The Fisher LSD is a permissible correction for a three condition experiment simply because the two groups that might have been passed by a partial null will simply be run against each other where it is appropriate to use an &alpha; type I error rate.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </body>
+</html>

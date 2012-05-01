@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Outline of 6.5 - 6.8 in Concepts of Programming Languages: Expressions and Assignment Statements</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/main.css" />
+    <style type="text/css">
+      .program {
+        background-color: rgb(150, 202, 254);
+      }
+      .result {
+        background-color: rgb(151, 283, 154);
+      }
+      pre {
+        font-size: 11.5pt;
+        font-family: sans-serif;
+        padding-left: .5em;
+      }
+      ul {
+        margin-left: 0em;
+        padding-left: 0em;
+      }
+      ul ul {
+        padding-left: 2em;
+      }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p>This is a presentation for CSC410 on expressions and assignment
+    statements as covered in <em>Concepts of Programming
+    Languages</em> by Robert Sebesta.</p>
+    <ul>
+      <li><a href="#relations">Relationial and Boolean Expressions</a></li>
+      <li><a href="#shorts">Short Circuit Evaluations</a></li>
+      <li><a href="#assignments">Assignment Statements</a></li>
+      <li><a href="#mixers">Mixed-Mode Assignment</a></li>
+    </ul>
+    <hr />
+    <ul>
+      <li><a name="relations"></a>Relational Expressions:
+        <ul>
+          <li><strong>Relational Expression</strong>: A boolean
+          expression formed by comparing the values of two operands
+          using a <strong>relational operator</strong></li>
+          <li>Some languages do not include a boolean type (C, C++),
+          but the value returned from a relational expression is still
+          a boolean conceptually</li>
+          <li>Relational operators are commonly overloaded for a
+          variety of types and will work for most of the primitive
+          types</li>
+          <li>Relational operators are given a lower precedence than
+          arithmetic operators so they are evaluated second. (a + 1 &lt;=
+          b * 2)</li>
+          <li>
+            <pre class="program">#!/usr/bin/perl
+
+$a = "25";
+$b = 25;
+$c = 102;
+$d = "Joe is ";
+$e = "forty";
+
+push @test, "$a gt $c"; # interpolated
+push @test, '$a &lt; $c';
+push @test, '$a eq $b';
+push @test, '$a == $b';
+push @test, 'print $d + $a . " "';
+push @test, 'print $d . $a . " "';
+push @test, 'print $d + $e . " "';
+
+foreach $test (@test) {
+  print "$test is ";
+  (eval $test) ? print "true\n" : "false\n";
+}</pre>
+            <pre class="result">25 gt 102 is true
+$a &lt; $c is true
+$a eq $b is true
+$a == $b is true
+print $d + $a . " " is 25 true
+print $d . $a . " " is Joe is 25 true
+print $d + $e . " " is 0 true</pre>
+          </li>
+        </ul>
+      </li>
+      <li>Boolean expressions:
+        <ul>
+          <li><strong>Boolean operators</strong>: Operators used to
+          combine boolean values</li>
+	  <li>Common boolean operators are:
+            <ul>
+              <li>AND: '<code>&amp;&amp;</code>' or '<code>&amp;</code>'</li>
+	      <li>Inclusive OR: '<code>||</code>' or '<code>|</code>'</li>
+	      <li>NOT: '<code>!</code>' or '<code>~</code>'</li>
+	      <li>Exclusive OR: '<code>^</code>'</li>
+            </ul>
+          </li>
+
+          <li>Operator presedence is usually NOT, then AND, then
+          OR</li>
+
+          <li>In pacsal boolean operators have higher precedence than
+          relational, so (a &lt; 5 or a &gt; 0) is not legal because
+          it is interpreted as ((a &lt; (5 or a)) &gt; 0) and (5 or a)
+          is not a valid expression</li>
+
+          <li>In ada boolean operators all have the same presedence
+          and are nonassociative, so (a &gt; b and a &lt; c or k = 5)
+          is not legal. It must be ((a &gt; b and a &lt; c) or k =
+          5)</li>
+          
+          <li>C does not have an explicit boolean type; relational
+          expressions return 0 or 1. This makes (a &lt; b &lt; c)
+          legal, though it is onterpreted as ((0 or 1) &lt; c)</li>
+
+          <li>
+            <a name="shorts"></a>Short circuit evaluation:
+            <ul>
+              <li>(x * a) * (b / q + 5); when x is 0 the rest of the
+              expression does not need to be evaluated since it will
+              be 0. Likewise in (a &gt;= 10 &amp;&amp; b &lt;= 50),
+              when a is less than 10 the rest need not be computed
+              since (false &amp;&amp; anything) = false</li>
+	      <li>Boolean expressions are often <strong>short
+	      circuited</strong>, meaning that when the final result
+	      is known computation is stopped</li>
+	      <li>
+                This allows certain types of expressions:
+                <pre class="program">
+// Simple linear search
+for(i = 0; i &lt; length &amp;&amp; item[i] != searchItem; i++);</pre>
+              </li>
+              <li>
+                This can also introduce errors when function calls
+                are allowed in expressions:
+                <pre class="program">
+import java.text.DateFormat;
+import java.util.Calendar;
+
+public class test {
+  public static void main(String[] args) {
+    DateFormat format = DateFormat.getDateInstance();
+
+    Calendar today = Calendar.getInstance();
+    today.set(2001, Calendar.OCTOBER, 31); // All Hallows Eve
+    Calendar tomorrow = Calendar.getInstance();
+    tomorrow.set(2001, Calendar.NOVEMBER, 1); // All Saints Day
+     while(today.get(Calendar.DATE) &lt; tomorrow.get(Calendar.DATE) &amp;
+          test.addDay(today));
+
+    System.out.println("Pass #1:");
+    System.out.println("     Today: " + format.format(today.getTime()));
+    System.out.println("  Tomorrow: " + format.format(tomorrow.getTime()));
+
+    today.set(2001, Calendar.OCTOBER, 31); // All Hallows Eve
+
+    while(today.get(Calendar.DATE) &lt; tomorrow.get(Calendar.DATE) &amp;&amp;
+          test.addDay(today));
+
+    System.out.println("Pass #2:");
+    System.out.println("     Today: " + format.format(today.getTime()));
+    System.out.println("  Tomorrow: " + format.format(tomorrow.getTime()));
+  }
+
+  protected static boolean addDay(Calendar date) {
+    boolean newMonth = date.get(Calendar.DATE) >= date.getMaximum(Calendar.DATE);
+    date.add(Calendar.DATE, 1);
+    return newMonth;
+  }
+}</pre>
+          <pre class="result">Pass #1:
+    Today: Nov 1, 2001
+ Tomorrow: Nov 1, 2001
+Pass #2:
+    Today: Oct 31, 2001
+ Tomorrow: Nov 1, 2001</pre>
+              </li>
+              <li>
+                Different languages deal with handling side effects
+                differently:
+                <ul>
+                  <li>Modula-2 ignores the issue and all boolean
+                  expressions are short circuit</li>
+                  <li>FORTRAN-77 says any relevant function calls must set
+                  affected variables to "undefined". This is difficult to
+                  do in general though</li>
+                  <li>Ada has short circuit <code>and</code> and
+                  <code>or</code> and then complete operators <code>and
+                  then</code> and <code>or else</code></li>
+                  <li>C, C++ and Java have short circuit <code>&amp;&amp;</code>
+                  and <code>||</code> and then complete operators
+                  <code>&amp;</code> and <code>|</code></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a name="assignments"></a>Assignment Statements:
+        <ul>
+          <li>
+            Simple Assignment:
+            <ul>
+              <li>Simple Assignment is of the form &lt;target&gt;
+              &lt;assignment operator&gt; &lt;target&gt;</li>
+              <li>FORTRAN, BASIC, PL/1, and C based languages use
+              <code>=</code> as the assignment operator</li>
+              <li>Algol 60 and many others use <code>:=</code></li>
+              <li>Most often a separate operators are used for
+              assignment and equality. In PL/1 both are <code>=</code>
+              and (a = b = c) will assign a boolean (b = c) to a</li>
+            </ul>
+          </li>
+          <li>
+            Multiple Targets:
+            <ul>
+              <li>In PL/1 (a, b = 0) will assign to both a and b</li>
+              <li>In C based languages, the assignment operator returns
+              a value equal to what was assigned. That makes (a = b =
+              0) assign the same value to both a and b</li>
+              <li>
+                This allows for statements like:
+                <pre class="program">while((ch = getchar()) != EOF);</pre>
+             </li>
+	     <li>
+               Also though it allows for difficult to track typing
+               errors like:
+               <pre class="program">if(a = b) // As opposed to if(a == b)</pre>
+             </li>
+             <li>Java avoids this issue by only allowing boolean
+	     expressions within control structures</li>
+            </ul>
+          </li>
+          <li>
+            Conditional targets:
+            <ul>
+              <li>
+                C++ and Java allow (<code>a &gt; b ? m : n =
+                5</code>). This is the same as
+                <pre class="program">if(a &gt; b) {
+  m = 5;
+} else {
+  n = 5;
+}</pre>
+              </li>
+            </ul>
+          </li>
+          <li>
+            Compound Assignments:
+            <ul>
+              <li>First introduced in Algol 68 and later adopted in C
+              based languages</li>
+              <li>There is arithmetic compound assignment
+              (<code>+=</code>, <code>-=</code>, <code>*=</code>,
+              <code>/=</code>) where (<code>a += b</code>) is the same
+              as (<code>a = a + b</code>)</li>
+              <li>In C based languages there are also binary compound
+              assignments (<code>|=</code>, <code>&amp;=</code>,
+              <code>^=</code>, <code>~=</code>)</li>
+            </ul>
+          </li>
+          <li>
+            Unary Assignments:
+            <ul>
+              <li>C based languages include special unary increment and
+              decrement operators</li>
+              <li>(<code>a++</code> is the same as (<code>a = a +
+              1</code>)</li>
+            </ul>
+          </li>
+          <li>
+            <a name="mixers"></a>Mixed-Mode Assignments:
+            <ul>
+              <li>Fortran, C and C++ use coersion to allow most types
+              of assignments</li>
+              <li>Java will only allow widening coersions, so a float
+              cannot be assigned to an int without an explicit
+              typecast</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </body>
+</html>
+          

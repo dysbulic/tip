@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Table Sort Test</title>
+    <link rel="stylesheet" href="table_arrow.css" type="text/css" />
+    <style type="text/css">
+      table {
+        width: 30%;
+      }
+      td {
+        text-align: center;
+        border: thin solid gray;
+      }
+    </style>
+    <script type="text/javascript" src="table_sort.js"></script>
+    <script type="text/javascript">//<![CDATA[
+      function toggleAlignment(name) {
+        var element = document.getElementById(name);
+	if(element.style.margin.indexOf("auto") == -1) {
+	  element.style.margin = "auto";
+	} else {
+	  element.style.margin = "inherit";
+	}
+      }
+    //]]></script>
+  </head>
+  <body onload="allowSorting('table')">
+    <h1>Table Sort Test</h1>
+    <p>This is a test at seeing how hard the javascript is to sort a
+    html table dynamically... Clicking on the table headers makes it
+    sort on that column.</p>
+    <p>This is also now a mozilla bug test because the center aligned
+    tables do not redraw correctly (margin: auto). What it looks like is
+    happening is the spot where the entry would be if the element were
+    left justified is getting drawn.</p>
+    <p>To get number one:
+      <ol>
+        <li>Click the checkbox to center the table (it changes the
+	margin style for the element between "inheirt" and  "auto")</li>
+	<li>Click on the table headers and it will not redraw
+        correctly. Switching windows and forcing a complete redraw
+	does get the correct result.</li>
+      </ol>
+    </p>
+    <form><input type="checkbox" checked="checked"
+     onchange="toggleAlignment('table')">
+     Center align table</input></form>
+    <table id="table" style="margin: auto;">
+      <thead>
+        <tr>
+          <th>Letter</th>
+          <th>Number</th>
+          <th>Date</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background-color: rgb(255, 164, 164);">
+          <td>A</td>
+          <td>537</td>
+          <td>05/15</td>
+          <td><a href="http://news.google.com">News</a></td>
+        </tr>
+        <tr style="background-color: rgb(255, 198, 164);">
+          <td>B</td>
+          <td>64</td>
+          <td>08/19</td>
+          <td><a href="http://www.google.com">Search</a></td>
+        </tr>
+        <tr style="background-color: rgb(255, 253, 164);">
+          <td>C</td>
+          <td>234</td>
+          <td>25/13</td>
+          <td><a href="http://images.google.com">Images</a></td>
+        </tr>
+        <tr style="background-color: rgb(166, 255, 164);">
+          <td>D</td>
+          <td>005</td>
+          <td>04/12</td>
+          <td><a href="http://froogle.google.com">Shopping</a></td>
+        </tr>
+        <tr style="background-color: rgb(164, 189, 255);">
+          <td>E</td>
+          <td>7</td>
+          <td>06/98</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

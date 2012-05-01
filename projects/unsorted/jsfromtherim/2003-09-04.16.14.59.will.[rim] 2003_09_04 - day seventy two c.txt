@@ -1,0 +1,99 @@
+From will@himinbi.org Fri Sep  5 16:14:59 2003
+Received: from localhost.localdomain ([213.185.107.13])
+	by honors.tntech.edu (8.12.8/8.12.8) with ESMTP id h85LEXRb029950
+	for <jsfromtherim@himinbi.org>; Fri, 5 Sep 2003 16:14:50 -0500
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by localhost.localdomain (8.12.8/8.12.8) with ESMTP id h85LC34a004509
+	for <jsfromtherim@himinbi.org>; Fri, 5 Sep 2003 21:12:19 GMT
+Received: (from will@localhost)
+	by localhost.localdomain (8.12.8/8.12.8/Submit) id h85LBp9Z004491
+	for jsfromtherim@himinbi.org; Fri, 5 Sep 2003 21:11:51 GMT
+Resent-Message-Id: <200309052111.h85LBp9Z004491@localhost.localdomain>
+X-Authentication-Warning: localhost.localdomain: will set sender to will@himinbi.org using -f
+Date: Thu, 4 Sep 2003 23:48:55 +0000
+From: Will Holcomb <will@himinbi.org>
+To: Journals from Mauritania <jsfromtherim@himinbi.org>
+Message-ID: <20030904234855.GE1665@trogdor.mr>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.4i
+Resent-From: Will Holcomb <will@himinbi.org>
+Resent-Date: Fri, 5 Sep 2003 21:11:51 +0000
+Resent-To: Journals from Mauritania <jsfromtherim@himinbi.org>
+X-honors.tntech.edu-MailScanner-Information: Please contact the ISP for more information
+X-honors.tntech.edu-MailScanner: Found to be clean
+Subject: [rim] 2003/09/04 - day seventy two c
+Sender: jsfromtherim-admin@holcomb.info
+Errors-To: jsfromtherim-admin@holcomb.info
+X-BeenThere: jsfromtherim@holcomb.info
+X-Mailman-Version: 2.0.13
+Precedence: bulk
+List-Unsubscribe: <http://holcomb.info/mailman/listinfo/jsfromtherim>,
+	<mailto:jsfromtherim-request@holcomb.info?subject=unsubscribe>
+List-Id: Will's journals from Mauritania <jsfromtherim.holcomb.info>
+List-Post: <mailto:jsfromtherim@holcomb.info>
+List-Help: <mailto:jsfromtherim-request@holcomb.info?subject=help>
+List-Subscribe: <http://holcomb.info/mailman/listinfo/jsfromtherim>,
+	<mailto:jsfromtherim-request@holcomb.info?subject=subscribe>
+List-Archive: <http://holcomb.info/pipermail/jsfromtherim/>
+
+Sorry about all the duplicate messages earlier. Here is my lesson for
+the day in mail in unix. I mentioned recently switching from pine to
+mutt.
+
+Well, pine sends its mail by connecting to a mail server and actually
+sending the message. This means that pine can operate pretty much
+anywhere since it handles all the particulars of sending the message
+itself. The way that it worked on my laptop is I was actually running
+sendmail which allowed relaying connections from localhost.
+
+Relaying, for anyone who cares is simply when a computer accepts a
+message that is not destined for it directly and passes it on. If you
+have ever set up something like outlook and specified a smtp server,
+you were specifying your smtp relay.
+
+The way that mutt sends mail is to pipe the message to another program
+which then delivers it. In general on a *nix machine this program will
+be sendmail as well. This is how it works on my laptop. The advantage
+to mutt is that I don't have to have access to a smtp server in order
+to send mail. (I.E. I don't have to run sendmail all the time.)
+
+Sendmail though, when it is run as a program that receives piped input
+is not running as the root user. This means that it cannot store
+messages in the usual queue location of /var/spool/mqueue (which is
+only writable by root). Instead it uses /var/spool/clientmqueue which
+is writable by the smmsp group (and the sendmail binary is sgid to
+that group).
+
+Ok, the thing is that when you run the mailq program it only checks
+/var/spool/mqueue and so it always reports that there are no messages
+waiting to go out. (Which is what I was talking about yesterday with
+the disappearing queue.) Before with pine it was always in the mqueue
+and so I could use mailq to see what I had waiting.
+
+When I checked and saw an empty queue I was confused and didn't know
+there was another place and so resent one journal to see if it would
+appear. It didn't and so I waited until I went to the cybercafé to try
+and see if running sendmail -q would make messages appear on the
+receiving end. It didn't and I am guessing that is because it only
+checked the mqueue.
+
+So, I bounced the journals I sent before (and accidentally bounced the
+one I resent). Bouncing something is like forwarding, but you don't
+edit the messages and if they came from someone else, to the new
+recipient it will look as though the message came from whoever sent it
+to you.
+
+When I bounced them though, I am guessing, the sendmail running as a
+pipe checked the clientmqueue and send the first round I had sent
+already. This meant that one journal went out 4 times (twice in each
+batch). Sorry about that. =)
+
+Now I am using mailq -O QueueDirectory=/var/spool/clientmqueue and all
+is well in the world. =)
+
+Love,
+Will
+

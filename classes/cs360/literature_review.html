@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>Applications of Machine Learning to Predicting Music Preferences</title>
+    <!-- <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" /> -->
+    <link rel="stylesheet" type="text/css" href="http://odin.himinbi.org/styles/assignment.css" />
+    <style type="text/css">
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>Applications of Machine Learning to Predicting Music Preferences</h1>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>12 December 2007</h2>
+    </div>
+    <h1 id="abstract">Abstract</h1>
+    <p>This paper looks at methods and results of recent work in the field of using machine learning to predict music preferences. There is quite a bit of research in this arena and this review attempts to collect a representative sample. Unlike more purely academic subjects this field is being driven in part by corporate interests, and for this reason there is also some attention paid in this paper to successful commercial applications. The paper begins with a general introduction followed by summaries of the subjects of interest and test results. It was not possible to cover all the papers of interest, and a listing with brief descriptions is included before the bibliography.</p>
+
+    <h1 id="structure">Structure</h1>
+    <ol>
+      <li><a href="#abstract">Abstract</a></li>
+      <li><a href="#structure">Structure</a></li>
+      <li><a href="#intro">Introduction</a></li>
+      <li>
+        <a href="#commercial">Commercial Systems</a>
+        <ol>
+          <li><a href="#mis">Music Information Systems</a></li>
+          <li><a href="#pandora">The Music Genome Project</a></li>
+        </ol>
+      </li>
+      <li>
+        <a href="#papers">Papers</a>
+        <ol>
+          <li><a href="#inference">Probabilistic Model for Music Recommendation</a></li>
+          <li><a href="#auto_pred">Automatic Prediction of Hit Songs</a></li>
+          <li><a href="#anchor_space">Anchor Space for Classification and Similarity Measurement of Music</a></li>
+        </ol>
+      </li>
+      <li>
+        <a href="#additional_info">Additional Information</a>
+        <ol>
+          <li><a href="#fourier">Fourier Transforms</a></li>
+          <li><a href="#mel">Mel Frequency Cepstral Coefficient</a></li>
+          <li><a href="#topics">Further Topics</a></li>
+        </ol>
+      </li>
+      <li><a href="#bibliography">Bibliography</a></li>
+    </ol>
+
+    <h1 id="intro">Introduction</h1>
+    <p>Music is one of the fundamental methods of human expression. With billions of dollars tied up in the entertainment industry around the world, music is big business as well. The question of what exactly makes good music is open to considerable debate. Personal experiences, cultural conditioning, social pressures and very likely even brain structure all play important roles in influencing an individual's response to a piece of music. Despite this variety, there seem to be patterns in musical preferences. Machine learning holds some promise for being able to discern and leverage those patterns in useful ways.</p>
+    <p>Machine learning, as a field, deals with, intuitively, designing processes whereby machines learn. There are several types of learning possible, but in the domain of preference prediction the most applicable type is inductive learning where, given a set of evidence, the computer will attempt to determine the salient characteristics.</p>
+    <p>Music production starts with musicians and ends with the listeners. Machine learning has the potential to provide useful information to both ends of this process.</p>
+    <p>People write music for reasons from love to angst to patriotism. Record companies, however, produce records for essentially one reason: profit. For a given song, a record company would like to know how popular a song is going to be and what needs to be done to make the some more popular. Commercial systems are already developing to give musicians a hit rating [<a href="#mis">1</a>] for their new song and many record companies are taking this into account.</p>
+    <p>Hundreds of new songs are produced every day. It is literally impossible for a listener to hear and evaluate them all. Listeners would like to be able generate suggestions based on their preferences of songs that they might enjoy. Products are developing [<a href="#pandora">2</a>] which allow users to create custom radio stations that incrementally tailor themselves to the user based on feedback.</p>
+    <p>Academic research is more active in the area of estimating user preferences.  There's work using a variety of algorithms including anchor space clustering [<a href="#anchor">6</a>], support vector machines [<a href="#auto_pred">5</a>], and Bayesian inference [<a href="#inference">4</a>].</p>
+    <p>A machine learning algorithm is only as strong as the characteristics the algorithm has to work with. There is a variety of research on the usefulness of characteristics including the more commonplace Mel coefficients [<a href="#mel">7</a>] and Fourier transforms [<a href="#fourier">8</a>], but also creative applications such as latent semantic analysis [<a href="#semantic_anal">5</a>,<a href="#auto_pred">4</a>].</p>
+    
+
+    <h1 id="commercial">Commercial Systems</h1>
+
+    <h2 id="mis"><a href="http://www.musintelligence.com">Music Intelligence Solutions</a> &mdash; <a href="http://www.hitsongscience.com">Hit Song Science</a></h2>
+
+    <blockquote>
+      <p>Vicen&ccedil; Gait&aacute;n Alcalde, Carlos Mar&icirc;a L&oacute;pez Ullod, Antonio Trias Bonet, Antonio Trias Llopis, and Jes&ecirc;s Sanz Marcos. Daniel Caldentey Ysern, Dominic Arkwright. Method and System for Music Recommendation. United States Patent #7,081,579, 25 July 2006. Polyphonic Human Media Interface, S.L.</p>
+    </blockquote>
+
+    <p><a href="http://www.musintelligence.com">Music Intelligence Solutions</a> (MIS), is the American expansion of the Spain-based <a href="http://www.polyphonichmi.com">Polyphonic HMI</a> and holder of <a href="http://www.patentstorm.us/patents/7081579.html">US patent #7,081,579</a>: <cite>Method and System for Music Recommendation</cite>. MIS is currently marketing several targeted product offerings. Their initial product, still in production, is <a href="http://www.hitsongscience.com">Hit Song Science</a>, a fee-based popularity prediction for musicians. They are expanding their technology into the arena of music recommendation with some product such as <a href="http://www.uplaya.com/community.html">Music Information Universe</a> which allows the development of custom recommendation systems for clients with specific content or subscribers.</p>
+    <p>The primary characterization used in MIS's computations are discrete Fourier transforms [<a href="#fourier">8</a>]. The song is divided into parts, various characteristics are extracted and the progression of the averages for different characteristics over time generates a signature. These signature vectors are then grouped using the "sum of differences squared," which is better known as k-means clustering.</p>
+    <p>The primary strengths of MIS's system, lie in the determination of which spectral components correspond to perceptual auditory characteristics such as "brightness, tempo, volume, rhythm and octave." Another important characteristic is their dataset which includes in excess of 3.5 million songs.</p>
+
+    <h2 id="pandora"><a href="http://www.pandora.com/mgp.shtml">Music Genome Project</a> &mdash; <a href="http://www.pandora.com">Pandora Radio</a></h2>
+
+    <blockquote>
+      <p>Ike, Elephant. "Tim Westergren Interview." Available online at <a href="http://videos.howstuffworks.com/reuters/1069-how-pandora-radio-works-video.htm">http://videos.howstuffworks.com/reuters/1069-how-pandora-radio-works-video.htm</a>. Tiny Mix Tapes, Jan. 2006.</p>
+      <p>Music Genome Project Website. About the Music Genome Project. Available online at <a href="http://www.pandora.com/mgp.shtml">http://www.pandora.com/mgp.shtml</a>. Visited December 2007.</p>
+    </blockquote>
+
+    <p>The metaphor that <a href="http://www.pandora.com">Pandora</a> uses is an adaptive radio station that trains itself to a listener's tastes. Unlike many other systems [<a href="#music_sln">1</a>], Pandora includes a variety of expert identified characteristics such as genre and number and gender of artists. Users interact with Pandora via the web. A user specifies either an artist or song to model the channel on, and positive or negative feedback on the songs that are selected help to tune the station to the listener's preferences.</p>
+
+    <p>The <a href="http://www.pandora.com/mgp.shtml">Music Genome Project</a> serves as the basis for the categorization in Pandora. It aims to be "the most comprehensive analysis of music ever." [<a href="#pandora">3</a>] Relatively few specific statistics have been published, but in an interview with Reuters [<a href="#pandora">2</a>], Pandora creator Tim Westergren claimed the system examines "close to 400" qualities and has a database of "hundreds of thousands of songs."</p>
+
+    <h1 id="papers">Papers</h1>
+
+    <h2 id="inference"><a href="music_papers/A Probabilistic Model for Music Recommendation Considering Audio Features.pdf">Probabilistic Model for Music Recommendation</a></h2>
+
+    <blockquote>
+      <p>Qing Li, Sung Hyon Myaeng, Dong Hai Guan, and Byeong Man Kim. A Probabilistic Model for Music Recommendation Considering Audio Features. In <cite>Information Retrieval Technology</cite>, pages 72-83. Springer Verlag, Lecture Notes in Computer Science 3689, 2005.</p>
+    </blockquote>
+
+    <p>Content-based filters are a system for producing recommendations where a set is filtered based on explicit or implied characteristics of the searcher. For example, a keyword-based search engine takes a term and searches for pages containing that term. Collaborative filtering on the other hand looks at the behaviors of other people and attempts to infer preferences. For example, Amazon has a section when viewing a product titled, "other users who bought this also bought&hellip;"</p>
+    <p>Both types of filters have issues with the so called "cold start problem." That is it is not possible to infer anything about someone that nothing is known about. Li et al. describe a system that cannot overcome the problem entirely, but which permits the system to "warm" more quickly and start making effective recommendations even with sparse information.</p>
+    <p>The approach centers around two groups of clusters: one for abstracting listeners and the other for songs. The songs are clustered using k-means, but there is an addition of fuzzy set theory to allow a song to belong to all clusters to some, perhaps zero, extent. Communities of listeners are clustered using k-mentoids for its robustness to the effects of outliers.</p>
+    <p>Several characteristics are considered in clustering the audio data including MFCC [<a href="#mel">7</a>], additional spectral components, rhythmic features and pitch features. Listener clusters are based solely on rankings of songs.</p>
+    <p>Testing was done on 760 pieces with 4.340 ratings made by 128 users. Each of 25 trials omitted a single test user and the accuracy was averaged over the trials. Different complexities were examined for both users and songs. The error dropped from 87% to 64% going from 1 to 50 communities, it then rose semi-linearly until the maximum sample size of 160. The error with increased complexity of audio features also went up and down, but the range was only 0.02. Compared to a item-based content filtering scheme, there was a 5% increase in effectiveness.</p>
+
+    <h2 id="auto_pred"><a href="music_papers/HPL-2005-149 - Automatic Prediction of Hit Songs.pdf">Automatic Prediction of Hit Songs</a></h2>
+
+    <blockquote>
+      <p>Ruth Dhanaraj and Beth Logan. HPL-2005-149: Automatic Prediction of Hit Songs. In Proceedings of the International Conference on Music Information Retrieval. London, UK, August 2005.</p>
+    </blockquote>
+
+    <p>The bulk of work into music preference determination is based on musical characteristics, be they automated characteristics such as MFCC [<a href="mel">7</a>] or expert identified data such as genre. Relatively little attention has been given to the lyric content of the songs.</p>
+    
+    <p>Dhanaraj and Logan attempt to examine the possibility of the role that semantic content plays in a songs popularity. Two methods are compared. One takes the MFCC features from several points in a variety of songs were used to generate a set of k-means clusters. The clusters were then identified and a song's identification vector was a composite of the identifiers of the clusters that its series of MFCCs belong to. This permits both a generalization of MFCC types and a more compact vector. The comparison method involved the application of <a href="music_papers/dp1 - An Introduction to Latent Semantic Analysis.pdf">latent semantic analysis</a> [<a href="#latent_sem">8</a>] which uses probabilistic methods to correlate word frequency with likely semantic concepts present in a document. The identification vector was developed using a similar k-means approach.</p>
+
+    <p>The identification vectors were then classified using <a href="music_papers/A Tutorial on Support Vector Machines for Pattern Recognition.pdf">support vector machines</a> [<a href="#svm">9</a>]. Additionally the same vectors were classified using "boosting classifiers" consisting of <a href="music_papers/schapire90strength - The Strength of Weak Learnability.pdf">optimal combinations of weak linear learners</a>. [<a href="#weak_learners">10</a>]</p>
+
+    <p>Tests were conducted on a 1700 song dataset. Semantic content proved a slightly more effective determinant (68% effective versus 66%) of song popularity than audio content. Repeated tests were done with different numbers of k-means clusters and different vector sizes. There was relatively little variation in effectiveness, but in general boosting tended to decrease in performance as the complexity increased.</p>
+
+    <p>One of the more interesting findings was that the semantic content that proved most effective for the weak learners were terms that acted as negative bounds &mdash; that is terms that were almost certain not to occur in a popular song.</p>
+
+    <h2 id="anchor_space"><a href="music_papers/Berenzweig - Anchor Space for Classification and Similarity Measurement of Music.pdf">Anchor Space for Classification and Similarity Measurement of Music</a></h2>
+
+    <blockquote>
+      <p>Adam Berenzweig, Daniel P.W. Ellis and Steve Lawrence. Anchor Space for Classification and Similarity Measurement of Music. In Proceedings of the <cite>International Conference on Multimedia and Exposition</cite> pages I-29-32. Baltimore, Maryland, July 2003.</p>
+    </blockquote>
+
+    <p>Anchor-spaces deal with a common issue in clustering. Algorithms such as k-means and support vector machines [<a href="#svm">9</a>] rely on conceptualizing the data as vectors in an n-dimensional space. This makes it difficult to deal with certain types of data such as music genre which do not have a natural ordered mapping to the real numbers. Anchor space attempts to deal with this by using an expert to select representative anchors for a given property. Clusters can then be built that express their finding in terms of the relationships to those anchors which are frequently more intuitive than raw spectral data. For example, the results of an anchor space clustering of music data might enable one to say, "the song has a strong blues influence with some folk elements."</p>
+    <p>The clustering was done with two configurations of neural nets. For the M anchors being considered, one method was a M-way classifier configured so strong activation of one feature would suppress others, and the was M separate classifiers. The input to the classifiers was MFCCs and the deltas between those MFCCs. Feedback into the neural networks was gathered via a web interface where listeners could rank the relative similarity of songs.</p>
+    <p>Tests were conducted on several different quantities of data with different modeling methods. The best results were seen using linear weights within the neural nets (as opposed to logarithmic) where the system achieved 38% effectiveness (as opposed to a 0.25% random possibility).</p>
+
+    <h1 id="additional_info">Additional Information</h1>
+
+    <h2 id="fourier">Fourier Transforms</h2>
+    
+    <p>The Fourier series is based on the idea that any waveform can be approximated to arbitrary precision with a combination of sine and cosine waves. The Fourier transform produces the weights to represent a waveform as summation of these curves. It takes complex analog signals and allows them to be represented as a series of numbers.</p>
+
+    <p>Digital audio recordings are generally not represented as the actual waveforms. Rather thousands of samples are taken and reproduce an approximation of the original signal. Compact discs for example are sampled at 44.1kHz. The normal Fourier series is designed to deal with continuous curves whereas discrete Fourier transforms are specifically designed to handle sequenced sets of discrete chunks.</p>
+    
+    <h2 id="mel"><a href="http://en.wikipedia.org/wiki/Mel_frequency_cepstral_coefficient">Mel Frequency Cepstral Coefficient</a></h2>
+
+    <blockquote>
+      <p>Wikipedia Website Article. Mel Frequency Cepstral Coefficients. Available online at <a href="http://en.wikipedia.org/wiki/Mel_frequency_cepstral_coefficient">http://en.wikipedia.org/wiki/Mel_frequency_cepstral_coefficient</a>. Visited December 2007.</p>
+    </blockquote>
+
+    <p>For frequencies about 500Hz, larger and larger increases in frequency are perceived by the human auditory system as equivalent increases in pitch. The Mel Frequency Cepstral Coefficients (MFCCs) simply band of the Fourier series into a logarithmic scale that approximates human hearing using the Mel's scale.</p>
+
+    <h2 id="topics">Topics for Additional Research</h2>
+    
+    <p>There is a surprisingly large amount of information on this topic on the internet once one begins to look.</p>
+
+    <ul>
+      <li>The University of Illinois Graduate School of Library and Information Science runs the <a href="http://www.music-ir.org">Music-IR</a> project which is a clearinghouse for information related to the subject of music information retrieval including an <a href="https://www-s.isrl.uiuc.edu/~music-ir/greenstone/library.cgi?p=about&amp;c=mirabp">online bibliography</a> with hundreds of entries.</li>
+      <li>The <a href="http://labrosa.ee.columbia.edu">Laboratory for the Recognition and Organization of Speech and Audio</a> (LabROSA) at Columbia produces a variety of interesting research combining advanced topics from both signal processing and clustering.</li>
+      <li>Another subsidiary issue in online systems which seek to expose information about music is how to encapsulate the data. The <a href="http://musicontology.com">Music Ontology</a> provides a RDF model for describing music.</li>
+      <li>Sun Microsystems is in the process of developing a system called <a href="http://research.sun.com/projects/dashboard.php?id=153%20project">Search Inside the Music</a> headed by <a href="http://blogs.sun.com/plamere/">Paul Lamere</a> that is slated to be an open-source project addressing a variety of feature extraction and clustering algorithms accessed through a 3D interface.</li>
+      <li>Each year the <a href="http://www.ismir.net">International Conference on Music Information Retrieval</a> produces a several articles driving the field.</li>
+    </ul>
+
+    <h2 id="bibliography">Bibliography</h2>
+    <ol>
+      <li>Vicen&ccedil; Gait&aacute;n Alcalde, Carlos Mar&icirc;a L&oacute;pez Ullod, Antonio Trias Bonet, Antonio Trias Llopis, and Jes&ecirc;s Sanz Marcos. Daniel Caldentey Ysern, Dominic Arkwright. Method and System for Music Recommendation. United States Patent #7,081,579, 25 July 2006. Polyphonic Human Media Interface, S.L.</li>
+      <li>Ike, Elephant. "Tim Westergren Interview." Available online at <a href="http://videos.howstuffworks.com/reuters/1069-how-pandora-radio-works-video.htm">http://videos.howstuffworks.com/reuters/1069-how-pandora-radio-works-video.htm</a>. Tiny Mix Tapes, Jan. 2006.</li>
+      <li>Music Genome Project Website. About the Music Genome Project. Avialable online at <a href="http://www.pandora.com/mgp.shtml">http://www.pandora.com/mgp.shtml</a>. Visited December 2007.</li>
+      <li>Qing Li, Sung Hyon Myaeng, Dong Hai Guan, and Byeong Man Kim. A Probabilistic Model for Music Recommendation Considering Audio Features. In <cite>Information Retrieval Technology</cite>, pages 72-83. Springer Verlag, Lecture Notes in Computer Science 3689, 2005.</li>
+      <li>Ruth Dhanaraj and Beth Logan. HPL-2005-149: Automatic Prediction of Hit Songs. In Proceedings of the International Conference on Music Information Retrieval. London, UK, August 2005.</li>
+      <li>Adam Berenzweig, Daniel P.W. Ellis and Steve Lawrence. Anchor Space for Classification and Similarity Measurement of Music. In Proceedings of the <cite>International Conference on Multimedia and Exposition</cite> pages I-29-32. Baltimore, Maryland, July 2003.</li>
+      <li>Wikipedia Website Article. Mel Frequency Cepstral Coefficients. Available online at <a href="http://en.wikipedia.org/wiki/Mel_frequency_cepstral_coefficient">http://en.wikipedia.org/wiki/Mel_frequency_cepstral_coefficient</a>. Visited December 2007.</li>
+      <li id="latent_sem">Darrell Laham, Peter W. Foltz and Thomas K. Landauer. An Introduction to Latent Semantic Analysis. <cite>Discourse Processes, 25</cite>, pages 259-284. 1998.</li>
+      <li id="svm">Christopher Burges. A Tutorial on Support Vector Machines for Pattern Recognition. <cite>Data Mining and Knowledge Discovery, 2</cite>, pages 121-167. Kluwer Academic Publishers, Boston. 1998.</li>
+      <li id="weak_learners">R. E. Schapire. The strength of weak learnability. <cite>Machine Learning, 5</cite> pages 197-227. 1990.</li>
+    </ol>
+  </body>
+</html>
+      

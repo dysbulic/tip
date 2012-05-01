@@ -1,0 +1,211 @@
+{INITLIZE.INC    uses globals,tools1,tools2}
+
+FUNCTION read_num(VAR filvar:text):integer;
+VAR
+ num:lstring;
+ code,val_u:integer;
+BEGIN
+ readln(filvar,num);
+ val(num,val_u,code);
+ IF code=0 THEN read_num:=val_u ELSE read_num:=0;
+END;
+
+{OVERLAY} PROCEDURE startup;
+VAR num:integer;
+BEGIN
+ grquery(grafixcard,commport);
+ num:=initgrafix(grafixcard);
+ setdisplay(grafpg0);
+ screenrect(screen);
+ num:=systemfont(8);
+ hite:=getfontfield(88);
+END;
+
+{OVERLAY} PROCEDURE init_menus;
+VAR
+ i,j,x:integer;
+ filvar:text;
+ command:lstring;
+ r:rect;
+BEGIN
+ FOR i:=0 TO 6 DO new(mymenus[i]);
+ WITH mymenus[0]^ DO
+  BEGIN
+   menuleft:=-20;
+   menuwidth:=0;
+   nitems:=26;
+   FOR j:=0 TO nitems DO WITH the_items[j] DO
+    BEGIN
+     text:='';
+     enabled:=TRUE;
+     marked:=FALSE;
+    END;
+  END;
+ x:=1;
+ assign(filvar,'menudata.txt');
+ reset(filvar);
+ i:=read_num(filvar);
+ WHILE i>0 DO WITH mymenus[i]^ DO
+  BEGIN
+   menuleft:=x;
+   menuwidth:=read_num(filvar);
+   nitems:=read_num(filvar);
+   FOR j:=0 TO nitems DO WITH the_items[j] DO
+    BEGIN
+     readln(filvar,command);
+     text:=command;
+     enabled:=TRUE;
+     marked:=FALSE;
+     IF j=0 THEN text:='F'+chr(i+48)+':'+text;
+    END;  {for j}
+   x:=x+stringwidth(the_items[0].text)+10+(17*ord(i=1));
+   i:=read_num(filvar);
+  END;  {with i}
+ obsmenu:=mymenus[1]^;
+ stdmenu:=mymenus[1]^;
+ stdmenu.menuwidth:=188;
+ stdmenu.nitems:=10;
+ FOR j:=0 TO 10 DO WITH stdmenu.the_items[j] DO
+  BEGIN
+   readln(filvar,command);
+   text:=command;
+   enabled:=TRUE;
+   marked:=FALSE;
+  END;  {for j}
+ menu2box(mymenus[4],r);
+ draw_box(menuads,r,imsize);
+END;
+
+{OVERLAY} PROCEDURE init_betas;
+BEGIN
+ nice_betas[0]:=0.0;          nice_betas[1]:=0.1;        nice_betas[2]:=0.2;
+ nice_betas[3]:=0.3;          nice_betas[4]:=0.3049106;  nice_betas[5]:=0.4;
+ nice_betas[6]:=0.4165977;    nice_betas[7]:=0.5;        nice_betas[8]:=0.5527708;
+ nice_betas[9]:=0.6;          nice_betas[10]:=0.7;       nice_betas[11]:=0.7453559;
+ nice_betas[12]:=0.75;        nice_betas[13]:=0.8;       nice_betas[14]:=0.85;
+ nice_betas[15]:=0.8660254;   nice_betas[16]:=0.9;       nice_betas[17]:=0.9165151;
+ nice_betas[18]:=0.942809;    nice_betas[19]:=0.95;      nice_betas[20]:=0.96;
+ nice_betas[21]:=0.9682458;   nice_betas[22]:=0.97;      nice_betas[23]:=0.9797959;
+ nice_betas[24]:=0.98;        nice_betas[25]:=0.9860133; nice_betas[26]:=0.9897433;
+ nice_betas[27]:=0.99;        nice_betas[28]:=0.9921567; nice_betas[29]:=0.993807999;
+ nice_betas[30]:=0.9949874;   nice_betas[31]:=0.995;     nice_betas[32]:=0.9977753;
+ nice_betas[33]:=0.998749218; nice_betas[34]:=0.999;     nice_betas[35]:=0.9995;
+ nice_betas[36]:=0.999687451; nice_betas[37]:=0.9998611015; nice_betas[38]:=0.9999;
+END;  {init_betas}
+
+{OVERLAY} PROCEDURE init_errors;
+BEGIN
+ errors[0]:='~Hit any key.';
+ errors[1]:='One of the objects must be selected before this operation can be performed.';
+ errors[2]:='Due to its nature, you cannot align the Shuttle with other objects.';
+ errors[3]:='WARNING: Inserting steps into the shuttle''s program deletes all subsequent steps.'
+             +'~Press ESC to cancel, or any other key to proceed.';
+END;
+
+{OVERLAY} PROCEDURE init_echos;
+BEGIN
+ echos[0]:='';
+ echos[1]:='CHANGE TIME:'+chr(24)+chr(25)+' (ALSO:Home,End,PgUp,PgDn)  '+chr(27)+'screen'+chr(26);
+ echos[2]:='~ENTER or ESC';
+ echos[3]:='  ?=Help';
+END;
+
+{OVERLAY} PROCEDURE init_rects;
+BEGIN
+ setrect(echo_rect,-1,-1,screen_width+2,hite+1);framerect(echo_rect);
+ setrect(arena,60,echo_rect.ymax+1,screen_width,screen.ymax-hite-3);
+ setrect(beta_area,0,arena.ymin,59,arena.ymax);
+ setrect(error_rect,200,120,464,130);
+ setrect(t_rect,580,arena.ymax+2,screen_width,screen.ymax);
+ setrect(bot_half,0,echo_rect.ymax+1,screen_width,(screen.ymax DIV 2)-20);
+ setrect(middle_rect,0,bot_half.ymax+1,screen_width,bot_half.ymax+3);
+ setrect(top_half,0,middle_rect.ymax+1,screen_width,screen.ymax);
+END;
+
+PROCEDURE init_colors(forprint:boolean);
+BEGIN
+ penclr:=1;axisclr:=1;coneclr:=1;tablclr:=1;
+ evntclr:=1;intclr:=1;scaleclr:=1;
+ g_mode:=1;
+ IF NOT goodgrafix THEN
+  BEGIN
+   g_mode:=0;
+   setdisplay(grafpg0);
+   hirescolor(yellow);
+  END
+ ELSE
+  BEGIN
+   IF colorgrafix THEN
+    BEGIN
+     g_mode:=2;
+     penclr:=14;axisclr:=11;coneclr:=3;tablclr:=11;
+     evntclr:=12;intclr:=7;scaleclr:=10;
+    END;
+   IF forprint THEN
+    BEGIN
+     penclr:=15;axisclr:=15;coneclr:=15;tablclr:=15;
+     evntclr:=15;intclr:=15;scaleclr:=15;
+    END;
+  END;
+END;
+
+{OVERLAY} PROCEDURE init_bools;
+BEGIN
+ selecting:=FALSE;
+ inton:=TRUE;
+ worldlines_on:=TRUE;
+ event_stop:=TRUE;
+ done:=FALSE;
+END;
+
+PROCEDURE empty_all;
+BEGIN
+ IF frontwindow=details THEN frontwindow:=obswindow;
+ subject:=NIL;
+ clear_everything;
+END;
+
+{OVERLAY} PROCEDURE init_misc;
+BEGIN
+ themenu:=0;
+ frontwindow:=0;
+ dbeta:=0.5;
+ the_press:=0;
+ cga_res:=5/11;       {pixels y / pixels x on CGA screen}
+ scroll_offset:=0;
+ old_scroll:=0;
+ split_offset:=0;
+ x_offset:=0.0;
+ t_offset:=0.0;
+ orig_frame:=0.0;
+ xmeter:=40;
+ get_ymeter(FALSE);
+ get_max_scroll;
+ arrow_mode:=1;
+ new(splitptr); new(selection); new(last_slctn); new(thing); new(subject);
+ new(h_cursptr); new(d_cursptr);
+ betc:=next_beta(0);
+ empty_all;
+END;
+
+PROCEDURE init_curs;
+CONST
+ sizex=25;
+ sizey=10;
+ x=100;
+ y=50;
+VAR cursrect:rect; dummy:str255;
+BEGIN
+ rasterop(zREPz);
+ setrect(cursrect,x-sizex,gen_y(y-sizey),x+sizex,gen_y(y+sizey));
+ pensize(7,5);
+ drawrel(x-sizex,y,(2*sizex),0);       {horizontal line}
+ drawrel(x,y-sizey,0,(2*sizey));       {vertical line}
+ draw_box(h_cursptr,cursrect,h_cursbytes);
+ eraserect(cursrect);
+ pensize(1,1);
+ drawrel(x-sizex,y,(2*sizex),0);       {horizontal line}
+ drawrel(x,y-sizey,0,(2*sizey));       {vertical line}
+ draw_box(d_cursptr,cursrect,d_cursbytes);
+ eraserect(cursrect);
+END;

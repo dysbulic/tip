@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tmpl="http://odin.himinbi.org/templ/0.1/"
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+      tmpl:iscontent="false">
+  <head>
+    <title><tmpl:var name="title"/></title>
+    <meta name="description" content="Granite Staters for Medical Marijuana (GSMM) - your guide to the presidential candidates and medical marijuana in 2007" />
+    <link rel="shortcut icon" href="graphics/GSMM_icon.ico" />
+    <link rel="stylesheet" type="text/css" href="granitestaters.css" />
+    <tmpl:condcomment cond="if lt IE 8">
+      <link rel="stylesheet" type="text/css" href="granitestaters.ie.css" /> 
+    </tmpl:condcomment>
+    <tmpl:condcomment cond="if lt IE 7">
+      <link rel="stylesheet" type="text/css" href="granitestaters.ie6.css" />
+    </tmpl:condcomment>
+    <script type="text/javascript" src="ie7_triple_columns.js"> </script>
+    <tmpl:var name="header"/>
+  </head>
+  <body>
+    <div id="body">
+    <div id="middle">
+      <div id="leftshadow"> &nbsp;&nbsp;&nbsp;</div>
+      <div id="center">
+        <a href="." id="header">
+          <img src="graphics/header_v6.jpg" width="759" height="83" alt="" />
+        </a>
+        <div id="quicklinks">
+          <div class="first">
+          <form name="links" action="">
+            <div>
+              <select name="link" onchange="window.location.href=this[this.selectedIndex].value;">
+                <option value="">&mdash; QUICK FIND &mdash;</option>
+                <option value=".">&mdash; HOME &mdash;</option>
+                <!--
+                <optgroup label="&mdash; VOTER GUIDE &mdash;">
+                  <option value="guide/">John Edwards</option>
+                </optgroup>
+                -->
+                <optgroup label="&mdash; LATEST NEWS &mdash;">
+                  <option value="news/">In the Press</option>
+                <!--
+                  <option value="releases/">Press Releases</option>
+                -->
+                  <option value="alerts/">Action Alerts</option>
+                </optgroup>
+                <optgroup label="&mdash; GET ACTIVE &mdash;">
+                  <option value="volunteer.html">Volunteer</option>
+                  <option value="lte.html">Letter-to-the-Editor</option>
+                  <!-- <option value="act.html">Contact the Candidates</option> -->
+                  <option value="http://www.kintera.org/site/lookup.asp?c=mjJTJ3MRIwE&amp;b=2626331">Get E-mail Updates</option>
+                </optgroup>
+                <option value="contact.html">&mdash; CONTACT US &mdash;</option>
+                <option value="http://www.kintera.org/site/lookup.asp?c=mjJTJ3MRIwE&amp;b=2637985">&mdash; DONATE &mdash;</option>
+              </select>
+              <input type="submit" value="Go"></input>
+            </div>
+          </form>
+          <p>Your Guide to the Candidates' Views on Medical Marijuana</p>
+          </div>
+        </div>
+        <div id="contentrow">
+        <div id="primary">
+        <ul id="navigation">
+          <li><a href=".">Home</a></li>
+          <li><a href="guide.html">Voter Guide</a></li>
+          <li class="parent">
+            <a href="news/">Latest News</a>
+            <ul>
+              <li><a href="news/">In the Press</a></li>
+              <!-- <li><a href="releases/">Press Releases</a></li> -->
+              <li><a href="alerts/">Alerts</a></li>
+            </ul>
+          </li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li class="parent"><a href="action.html">Get Active</a>
+          <ul>
+            <li class="image"><a href="lte.html"><img src="graphics/letters.jpg" alt="Write Letters" /></a></li>
+            <li class="image"><a href="volunteer.html"><img src="graphics/volunteer.jpg" alt="Volunteer to Help the Campaign" /></a></li>
+            <!-- <li class="image"><a href="act.html"><img src="graphics/contact.jpg" alt="Contact the Candidates" /></a></li> -->
+            <li class="image"><a href="http://www.kintera.org/site/lookup.asp?c=mjJTJ3MRIwE&amp;b=2626331"><img src="graphics/e-updates.jpg" alt="Sign Up for E-mail Updates" /></a></li>
+            <li class="image"><a href="http://www.kintera.org/site/lookup.asp?c=mjJTJ3MRIwE&amp;b=2637985"><img src="graphics/donate_v2.jpg" alt="Donate to the Campaign" /></a></li>
+            <!-- <li><a href="http://www.mpp.org/site/apps/nl/content2.asp?c=glKZLeMQIsG&amp;b=1173733&amp;ct=1973479" target="_new"><img src="graphics/zogby.jpg" alt="84% Support - NH Dems Speak in official poll" /></a></li> -->
+          </ul></li>
+        </ul>
+        <div id="content">
+          <tmpl:var name="content" />
+	</div>
+        </div>
+        </div>
+        <div id="footer">
+          <div class="first">
+          <p>This campaign is staffed and funded by the Marijuana Policy Project</p>
+          <p>P.O. Box 357 - Manchester, NH - 03105</p>
+          <p><a href="http://www.MarijuanaPolicy.org" target="_new">MarijuanaPolicy.org</a></p>
+          </div>
+        </div>
+      </div>
+      <div id="rightshadow"> &nbsp;&nbsp;&nbsp;</div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project default="jars">
+
+  <patternset id="Axes-files">
+    <include name="**/AxesTest.*" />
+    <include name="**/mvis/SimpleScene*" />
+    <include name="**/mvis/Axes*" />
+  </patternset>
+
+  <patternset id="Behavior-files">
+    <include name="**/BehaviorTest*" />
+    <include name="**/*Panel*" />
+    <include name="**/images/earth*" />
+    <include name="**/SimpleScene*" />
+    <include name="**/Axes*" />
+    <include name="**/MouseSphere*" />
+  </patternset>
+
+  <patternset id="Detach-files">
+    <include name="**/DetachTest*" />
+  </patternset>
+  
+  <patternset id="LabelRotation-files">
+    <include name="**/*Label*" />
+    <include name="**/util/*" />
+  </patternset>
+
+  <patternset id="Star-files">
+    <include name="**/LineTest*" />
+    <include name="**/Star*" />
+  </patternset>
+
+  <patternset id="Spinners-files">
+    <include name="**/ScaleTest*" />
+    <include name="**/ComponentViewer*" />
+    <include name="**/Bounds*" />
+    <include name="**/Runner*" />
+  </patternset>
+
+  <patternset id="Translation-files">
+    <include name="**/TranslationTest*" />
+    <include name="**/StatedCanvas*" />
+  </patternset>
+
+  <patternset id="ViewPlatformTest-files">
+    <include name="**/ViewPlatformTest*" />
+    <include name="**/JTuple*" />
+    <include name="**/xith/**" />
+    <include name="**/org/j3d/**" />
+  </patternset>
+
+  <patternset id="Overlays-files">
+    <include name="**/xith/**" />
+    <include name="**/navtools/**" />
+    <include name="images/overlay/*" />
+  </patternset>
+
+  <patternset id="SceneViewer-files">
+    <include name="**/himinbi/ui/**" />
+    <include name="**/himinbi/util/**" />
+    <include name="**/app/Scene**" />
+    <include name="**/himinbi/media/**" />
+    <include name="images/textures/*" />
+  </patternset>
+
+  <patternset id="XSLTTransformer-files">
+    <include name="**/himinbi/util/XSLTTransformer*" />
+  </patternset>
+
+   <target name="keychain-check">
+     <available file=".keys" property="keychain.exists" />
+   </target>
+
+   <target name="make-keychain" depends="keychain-check" unless="keychain.exists">
+     <exec dir="." executable="keytool">
+       <arg line="-genkey -keystore .keys -alias himinbi -storepass keystore -dname 'OU=Tests and Toys ,O=Himinbiorg ,L=Washington ,S=District of Columbia ,C=US'" />
+     </exec>
+   </target>
+
+  <target name="setup" depends="make-keychain" unless="setup.done">
+    <mkdir dir="build" />
+    <property name="setup.done" value="true" />
+  </target>
+
+  <target name="buildjar" depends="setup">
+    <javac srcdir="src" destdir="build" deprecation="on">
+      <patternset refid="${target}-files" />
+      <classpath>
+        <fileset dir="${user.home}/lib">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>
+    <jar destfile="${target}.jar" basedir="build">
+      <patternset refid="${target}-files" />
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Main-Class" value="${main.class}" />
+      </manifest>
+    </jar>
+    <signjar jar="${target}.jar" alias="himinbi" storepass="keystore" keystore=".keys" />
+  </target>
+
+  <target name="Axes.jar" depends="">
+    <antcall target="buildjar">
+      <param name="target" value="Axes" />
+      <param name="main.class" value="org.himinbi.j3d.test.AxesTest" />
+    </antcall>
+  </target>
+
+  <target name="Behavior.jar">
+    <antcall target="buildjar">
+      <param name="target" value="Behavior" />
+      <param name="main.class" value="org.himinbi.j3d.test.BehaviorTest" />
+    </antcall>
+  </target>
+
+  <target name="Detach.jar">
+    <antcall target="buildjar">
+      <param name="target" value="Detach" />
+      <param name="main.class" value="org.himinbi.j3d.test.DetachTest" />
+    </antcall>
+  </target>
+
+  <target name="LabelRotation.jar">
+    <antcall target="buildjar">
+      <param name="target" value="LabelRotation" />
+      <param name="main.class" value="org.himinbi.ui.test.LabelRotationTest" />
+    </antcall>
+  </target>
+
+  <target name="Star.jar">
+    <antcall target="buildjar">
+      <param name="target" value="Star" />
+      <param name="main.class" value="org.himinbi.j3d.test.LineTest" />
+    </antcall>
+  </target>
+
+  <target name="Spinners.jar">
+    <antcall target="buildjar">
+      <param name="target" value="Spinners" />
+      <param name="main.class" value="org.himinbi.ui.test.ScaleTest" />
+    </antcall>
+  </target>
+
+  <target name="Translation.jar">
+    <antcall target="buildjar">
+      <param name="target" value="Translation" />
+      <param name="main.class" value="org.himinbi.j3d.test.TranslationTest" />
+    </antcall>
+  </target>
+
+  <target name="ViewPlatformTest.jar">
+    <antcall target="buildjar">
+      <param name="target" value="ViewPlatformTest" />
+      <param name="main.class" value="org.himinbi.j3d.test.ViewPlatformTest" />
+    </antcall>
+  </target>
+
+  <target name="Overlays.jar">
+    <antcall target="buildjar">
+      <param name="target" value="Overlays" />
+      <param name="main.class" value="com.xith.java3d.testbed.OverlayTester" />
+    </antcall>
+  </target>
+
+  <target name="SceneViewer.jar">
+    <antcall target="buildjar">
+      <param name="target" value="SceneViewer" />
+      <param name="main.class" value="org.himinbi.app.SceneViewer" />
+    </antcall>
+  </target>
+
+  <target name="XSLTTransformer.jar">
+    <antcall target="buildjar">
+      <param name="target" value="XSLTTransformer" />
+      <param name="main.class" value="org.himinbi.util.XSLTTransformer" />
+    </antcall>
+  </target>
+
+  <target name="jars" depends="Star.jar,Spinners.jar,Translation.jar,Axes.jar,Behavior.jar,Detach.jar,LabelRotation.jar,ViewPlatformTest.jar,Overlays.jar,SceneViewer.jar,XSLTTransformer.jar" />
+
+<!--
+  <target name="run" depends="jar">
+    <java classname="hello"
+          classpath="hello.jar"
+          fork="true"
+          />
+  </target>
+-->
+</project>

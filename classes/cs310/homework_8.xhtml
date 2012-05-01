@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-310 Homework #8</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math { margin-top: .75em; }
+      .title { font-variant: small-caps; }
+      object { width: 100%; }
+      th, td { padding: .25em .5em; border: 1px solid; text-align: center; }
+      #p3 { page-break-before: always; }
+      .outer > tr > td { border: none; }
+      .ps th { width: 5em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 310: Design and Analysis of Algorithms</h1>
+      <h2>Homework #8</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 13:10 Mon., 7 April 2008</h2>
+    </div>
+    <blockquote><p>All work should be done on your own. If you discuss this assignment in any way with anyone else, or find help for getting the answer from any source, you must state so clearly at the top of your submission. There should be no working together except to understand the question.</p></blockquote>
+    <p>I discussed the meaning of plane scanning for #4 with Jeff Green.</p>
+    <ol>
+      <li id="p1">
+        <div class="question">
+          <p>There is an algorithm for finding the convex hull that takes O(<em>hn</em>) time where <em>h</em> is the number of points on the hull. Show that there can be &Omega;(<em>n</em>) points on the convex hull, making the worst case &Omega;(<em>n</em><sup>2</sup>).</p>
+        </div>
+        <div class="answer">
+          <p>Every point on the convex hull achieved through either a Graham Scan or Gift Wrapping will consist of line segments whose endpoints are elements of the set of points to be contained by the hull. The maximum number of points in the hull therefore is <em>n</em>.</p>
+          <p>The convex hull is a convex polygon. A set of points that defines a convex polygon will therefore be the same as a convex hull for those points. (Since there's only a single convex polygon for a set of points that polygon has to be the same as the hull.)</p>
+          <p>A simple method for arranging a set of points into a convex polygon is to arrange them on a circle some distance from a center point not an element of the set. The line segments of the polygon are then found by sequentially joining the points in the order they appear while traveling around the circle.</p>
+          <object style="height:250px" id="convex_polygon" type="image/svg+xml" data="convex_polygon.svg"></object>
+          <p>This works because all the points are a fixed distance from the center point. All line segments start and end the same distance from the center of the polygon. A concavity for such a polygon would rely on a point being closer to the center than the ones to either side and this isn't possible.</p>
+          <p>This arrangements therefore makes a convex polygon from <em>n</em> points which would make the convex hull require <em>n</em> points and the execution time of Gift Wrapping will be O(<em>n</em><sup>2</sup>).</p>
+        </div>
+      </li>
+      <li id="p2">
+        <div class="question">
+          <p>Since the bounds O(<em>hn</em>) and O(<em>n</em> log <em>n</em>) are incomparable, a good approach is to run the two algorithms in "pseudo-parallel." In a pseudo-parallel algorithm, two algorithms are run simultaneously, alternating a step of one algorithm with a step of the other, until one algorithm terminates. If the worst case running time of algorithm <em>A</em> is &Theta;(<em>f<sub>A</sub></em>(n)) and the worst case running time of algorithm <em>B</em> is &Theta;(<em>f<sub>B</sub></em>(n)), show that the worst case running time of running <em>A</em> and <em>B</em> in pseudo-parallel is O(min(<em>f<sub>A</sub></em>(n), <em>f<sub>B</sub></em>(n)).</p>
+        </div>
+        <div class="answer">
+          <p>This really depends on the definition of the term, "step." A step could be considered in terms of a time slice for a multiprocess operating system. Each algorithm is allowed access to the hardware and conducts a fixed number of operations. In this situation if all programs are given equal priority and equal time slices the length of time to execute any two algorithms simultaneously will simply be double the time for executing a single one (neglecting process switching overhead).</p>
+          <p>Programming wise this method of pseudo-parallelism would correspond to two separate processes running on an operating system on a single processor with a single core. Another model is a multi-threaded program. This model allows for a different concept of "step" because each algorithm can signal when a "step" has completed through use of a mutex. This model makes more sense for the purpose of this question because it makes it possible for the programs to run simultaneously in something other than a constant times the original running time.</p>
+          <p>The two algorithms in question are:</p>
+          <ul>
+            <li>Gift Wrapping:
+            <ol>
+              <li>Step 1: Find the anchor point with minimum y.</li>
+              <li>Steps 2 to <em>hn</em> + 1: Finding p<sub>i</sub> such that all points are to the right of the line between p<sub>i - 1</sub> and p<sub>i</sub>. This takes O(<em>n</em>) time.</li>
+            </ol>
+            </li>
+            <li>Graham Scan:
+            <ol>
+              <li>Step 1: Find the anchor point with minimum y.</li>
+              <li>Steps 2 to <em>n</em> + 1: Add a point to the heap sorted by angle relative to anchor point. This takes O(log <em>n</em>) time.</li>
+              <li>Step <em>n</em> + 2: Build convex hull. This takes O(<em>n</em>) time.</li>
+            </ol>
+            </li>
+          </ul>
+          <p>Each of these steps takes roughly equivalent time. If <em>h</em> &lt; log <em>n</em> then gift wrapping will terminate while the Graham Scan is still building its heap. After the heap is done, Graham Scan will build the hull in the time it takes Gift Wrapping to find a single point.</p>
+        </div>
+      </li>
+      <li id="p3">
+        <div class="question">
+          <p>Design two algorithms, <em>A</em> and <em>B</em>, with worst case running times &Theta;(<em>f<sub>A</sub></em>(n)) and &Theta;(<em>f<sub>B</sub></em>(n)) respectively such that the worst case running time of these two algorithms in parallel is not &Omega;(min(<em>f<sub>A</sub></em>(n), <em>f<sub>B</sub></em>(n)).</p>
+        </div>
+        <div class="answer">
+          <p>For time slicing this is not possible. The running time of one process cannot slow others beyond the time and resources allotted by the operating system. (Resource hungry processes at times will slow a system and other processes, but this is a controllable result of resource allocation by the operating system.)</p>
+          <p>When the program defines the steps however, all that is required is improper definition of a step. Say for instance in the previous example that instead of adding the points to the heap for Graham Scan one at a time that they were all added in one step. That step would then take O(<em>n</em> log <em>n</em>) time and the pseudo-parallel algorithm would take O(<em>n</em> log <em>n</em>) regardless of whether <em>h</em> is less than log <em>n</em> or not.</p>
+        </div>
+      </li>
+      <li id="p4">
+        <div class="question">
+          <p>Show that you can determine whether there are intersections among a set of <em>n</em> line segments in O(<em>n</em> log <em>n</em>) time, even if the lines are not simply horizontal and vertical. (<em>Hint: Plane sweep still works.</em>)</p>
+        </div>
+        <div class="answer">
+          <p>The basic idea of plane sweep is the points are placed in a queue based on the leftmost point (minimum point). A second queue is made with the order of the rightmost points that correspond to the sorted left point. One at a time the element with the minimum x is processed from each of those queues. Generating these queues will take O(<em>n</em> log <em>n</em>) for the sorting. Processing these elements corresponds conceptually to a line passing from left to right and processing the start and end of lines as they are reached.</p>
+          <object style="height:250px" id="scanline" type="image/svg+xml" data="scanline.svg"></object>
+          <p>Some computation is done as a line is started or ended. At any given time there is a set of lines that the scanline intersects. These are easily managed by adding them to the queue when the start point is processed and removing them when the endpoint is removed. Any intersection between two lines will have to occur while those lines are a part of the set of active lines.</p>
+          <object style="height:250px" id="scanline" type="image/svg+xml" data="scanline_active.svg"></object>
+          <p>Using this fact, a line can be tested for intersections with the set of active lines when it enters the set. Doing this alone would generate O(n<sup>2</sup>) potential comparisons. To limit this growth requires limiting the number of comparisons. This can be done by considering that if a line segment will have an intersection, it will have to include the lines either directly above or below. Finding these lines can be found in O(log <em>n</em>) time by keeping the lines ordered by the x-coordinate in a tree.</p>
+          <p>This tree will need to reordered at three times. When a line is added, when a line ends, or when an intersection is passed since that necessarily represents a change in which line is above the other. The order of those two lines may simply be flipped in constant time.</p>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>ANOVA Power in R</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <style type="text/css">
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>ANOVA Power in R</h1>
+    </div>
+    <p>I on a recent <a href="homework_2.xhtml">homework assignment</a> I missed a question because R seemingly miscomputed the power of the ANOVA. I want to figure out why.</p>
+    <p>In the R code the equation for the non-centrality parameter for F is:</p>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd>&lambda;</mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mi>n</mi><mfenced><mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+            <mfrac>
+              <msubsup><mi>&sigma;</mi><mi>&mu;</mi><mn>2</mn></msubsup>
+              <msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup>
+            </mfrac>
+          </mtd>
+        </mtr>
+      </mtable>
+    </math>
+    <p>This gave an answer of 60 when it should have been 45 and the question is "why?"</p>
+    <p>The more traditional expression of &lambda; is:</p>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><mi>&lambda;</mi></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mo>&Sum;</mo>
+            <msup><mfenced><mfrac><msub><mi>&mu;</mi><mi>i</mi></msub><msub><mi>&sigma;</mi><mi>i</mi></msub></mfrac></mfenced><mn>2</mn></msup>
+          </mtd>
+        </mtr>
+      </mtable>
+    </math>
+    <p>
+      From the PSY304B class notes, it is possible to show that the ratio of
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mtext html:title="Mean Square Between">MSB</mtext><mtext>MSW</mtext></mfrac></math>
+      has a noncentrality parameter of:
+    </p>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><mi>&lambda;</mi></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mfrac>
+              <mrow>
+                <munderover><mo>&Sum;</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>J</mi></munderover>
+                <msub><mi>n</mi><mi>j</mi></msub>
+                <msup>
+                  <mfenced><mrow><msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo><mover><mi>&mu;</mi><mo>_</mo></mover></mrow></mfenced>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+              <msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup>
+            </mfrac>
+          </mtd>
+        </mtr>
+      </mtable>
+    </math>
+    <p>
+      Consider this for equal group sizes (<em>n<sub>j</sub></em> = <em>n</em> &ForAll; <em>j</em>) in terms of the between group variance,
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msubsup><mi>&sigma;</mi><mi>&mu;</mi><mn>2</mn></msubsup>
+      </math>.
+      Bear in mind that, <em>for some reason I can't fully recall</em>, the divisor for the variance of the means is <em>n</em> and not <em>n</em> - 1.
+    </p>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><msubsup><mi>&sigma;</mi><mi>&mu;</mi><mn>2</mn></msubsup></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mfrac>
+              <mrow>
+                <munderover><mo>&Sum;</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>J</mi></munderover>
+                <msup>
+                  <mfenced><mrow><msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo><mover><mi>&mu;</mi><mo>_</mo></mover></mrow></mfenced>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+              <mi>J</mi>
+            </mfrac>
+          </mtd>
+          <mtd><mo>&rArr;</mo></mtd>
+          <mtd>
+              <mrow>
+                <munderover><mo>&Sum;</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>J</mi></munderover>
+                <msup>
+                  <mfenced><mrow><msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo><mover><mi>&mu;</mi><mo>_</mo></mover></mrow></mfenced>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+          </mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd><mi>J</mi><msubsup><mi>&sigma;</mi><mi>&mu;</mi><mn>2</mn></msubsup></mtd>
+        </mtr>
+      </mtable>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><mi>&lambda;</mi></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mfrac>
+              <mrow>
+                <munderover><mo>&Sum;</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>J</mi></munderover>
+                <mi>n</mi>
+                <msup>
+                  <mfenced><mrow><msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo><mover><mi>&mu;</mi><mo>_</mo></mover></mrow></mfenced>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+              <msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup>
+            </mfrac>
+          </mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mfrac>
+              <mrow>
+                <mi>n</mi>
+                <munderover><mo>&Sum;</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>J</mi></munderover>
+                <msup>
+                  <mfenced><mrow><msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo><mover><mi>&mu;</mi><mo>_</mo></mover></mrow></mfenced>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+              <msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup>
+            </mfrac>
+          </mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mfrac>
+              <mrow><mi>n</mi><mi>J</mi><msubsup><mi>&sigma;</mi><mi>&mu;</mi><mn>2</mn></msubsup></mrow>
+              <msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup>
+            </mfrac>
+          </mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mi>n</mi><mi>J</mi>
+            <mfrac>
+              <msubsup><mi>&sigma;</mi><mi>&mu;</mi><mn>2</mn></msubsup>
+              <msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup>
+            </mfrac>
+          </mtd>
+        </mtr>
+      </mtable>
+    </math>
+    <p>
+      There's the problem. The R code used <em>J</em> - 1 as the divisor for
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msubsup><mi>&sigma;</mi><mi>&mu;</mi><mn>2</mn></msubsup>
+      </math>.
+    </p>
+    <p>Given that I don't actually know why it should be <em>J</em> rather than <em>J</em> - 1, one of the simplest methods for me to prove one way or the other is using simulation. Simply run 10,000 or 100,000 ANOVAs on data randomly generated to fit the desired characteristics.</p>
+    <p>This is actually somewhat tricky. The desired characteristics are:</p>
+    <ul>
+      <li>A sample size: <em>N</em></li>
+      <li>A number of sample groups: <em>J</em></li>
+      <li>
+        A ratio of between and within deviations (Cohen's <em>f</em>):
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <mfrac><msub><mi>&sigma;</mi><mi>&mu;</mi></msub><msub><mi>&sigma;</mi><mi>y</mi></msub></mfrac>
+        </math>
+      </li>
+    </ul>
+    <p>
+      One question is how random should the data be? I can generate <em>J</em> means from a normal distribution with a variance of
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msubsup><mi>&sigma;</mi><mi>&mu;</mi><mn>2</mn></msubsup>
+      </math>
+      and then for each
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msub><mi>&mu;</mi><mi>i</mi></msub>
+      </math>
+      generate <em>n</em> samples from a distribution
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>N</mi>
+        <mfenced>
+          <mrow><mi>&mu;</mi><mo>=</mo><msub><mi>&mu;</mi><mi>i</mi></msub></mrow>
+          <msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup>
+        </mfenced>
+      </math>.
+    </p>
+    <p>
+      Another option is to fix the
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msub><mi>&mu;</mi><mi>i</mi></msub>
+      </math>s.
+      Consider a set of samples:
+    </p>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><mi>X</mi></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mfenced open="{" close="}">
+              <mrow><mi>&mu;</mi><mo>+</mo><mi>&alpha;</mi></mrow>
+              <mi>&mu;</mi><mi>&mu;</mi><mo>&hellip;</mo><mi>&mu;</mi><mi>&mu;</mi>
+              <mrow><mi>&mu;</mi><mo>-</mo><mi>&alpha;</mi></mrow>
+            </mfenced>
+          </mtd>
+        </mtr>
+      </mtable>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><mover><mi>X</mi><mo>_</mo></mover></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mfrac><mrow><mo>&Sum;</mo><msub><mi>x</mi><mi>i</mi></msub></mrow><mi>n</mi></mfrac>
+          </mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mfrac>
+            <mrow>
+              <mfenced><mrow><mi>&mu;</mi><mo>+</mo><mi>&alpha;</mi></mrow></mfenced><mo>+</mo>
+              <mi>&mu;</mi><mo>+</mo><mo>&hellip;</mo><mo>+</mo><mi>&mu;</mi><mo>+</mo>
+              <mfenced><mrow><mi>&mu;</mi><mo>-</mo><mi>&alpha;</mi></mrow></mfenced>
+            </mrow>
+            <mi>n</mi>
+            </mfrac>
+          </mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd><mfrac><mrow><mi>n</mi><mi>&mu;</mi></mrow><mi>n</mi></mfrac></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd><mi>&mu;</mi></mtd>
+          <mtd><mo>&ForAll;</mo></mtd>
+          <mtd><mi>&alpha;</mi></mtd>
+        </mtr>
+      </mtable>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><msubsup><mi>&sigma;</mi><mi>x</mi><mn>2</mn></msubsup></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mfrac>
+              <mrow>
+                <mo>&Sum;</mo>
+                <msup><mfenced><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>-</mo><mi>&mu;</mi></mrow></mfenced><mn>2</mn></msup>
+              </mrow>
+              <mi>n</mi>
+            </mfrac>
+          </mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mfrac>
+              <mrow>
+                <msup>
+                  <mfenced><mrow><mfenced><mrow><mi>&mu;</mi><mo>+</mo><mi>&alpha;</mi></mrow></mfenced><mo>-</mo><mi>&mu;</mi></mrow></mfenced>
+                  <mn>2</mn>
+                </msup>
+                <mo>+</mo>
+                <msup><mfenced><mrow><mi>&mu;</mi><mo>-</mo><mi>&mu;</mi></mrow></mfenced><mn>2</mn></msup>
+                <mo>+</mo><mo>&hellip;</mo><mo>+</mo>
+                <msup><mfenced><mrow><mi>&mu;</mi><mo>-</mo><mi>&mu;</mi></mrow></mfenced><mn>2</mn></msup>
+                <mo>+</mo>
+                <msup>
+                  <mfenced><mrow><mfenced><mrow><mi>&mu;</mi><mo>-</mo><mi>&alpha;</mi></mrow></mfenced><mo>-</mo><mi>&mu;</mi></mrow></mfenced>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+              <mi>n</mi>
+            </mfrac>
+          </mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <mfrac>
+              <mrow><mn>2</mn><msup><mi>&alpha;</mi><mn>2</mn></msup></mrow>
+              <mi>n</mi>
+            </mfrac>
+          </mtd>
+        </mtr>
+      </mtable>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><mi>&alpha;</mi></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd><msqrt><mfrac><mrow><mi>n</mi><msubsup><mi>&sigma;</mi><mi>x</mi><mn>2</mn></msubsup></mrow><mn>2</mn></mfrac></msqrt></mtd>
+        </mtr>
+      </mtable>
+    </math>
+  </body>
+</html>

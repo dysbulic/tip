@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Firework</title>
+    <link rel="stylesheet" href="../styles/main.css" type="text/css" />
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript" src="../colortable/colortable.js"></script>
+    <script type="text/javascript">//<![CDATA[
+      var steps = [{count:10,
+                    steps:["brightness = .25 * percent"]},
+                   {count:15,
+                    steps:["brightness = .25 + .25 * percent"]},
+                   {count:10,
+                    steps:["saturation = 1 - Math.pow(percent, 2)",
+                           "brightness = .5 + .5 * percent"]},
+                   {count:5,
+                    steps:["saturation = 0",
+                           "brightness = 1"]},
+                   {count:30,
+                    steps:["saturation = 0",
+                           "brightness = Math.pow(1 - percent, 2)"]}];
+      var timeout = 100;
+      var running = false;
+      var freeDots = new Array();
+      var activeDots = new Array();
+
+      function animate_start() {
+        running = true;
+        if(typeof(this.step) == "undefined") {
+          this.step = 0;
+          this.hue = Math.random() * 360;
+        } else {
+          this.step++;
+        }
+        var saturation = 1;
+        var brightness = 0;
+        var count = this.step;
+        var index = 0;
+        while(index < steps.length && count > steps[index].count) {
+          count -= steps[index].count;
+          index++;
+        }
+        if(index < steps.length) {
+          var percent = count / steps[index].count;
+          for(i = 0; i < steps[index].steps.length; i++) {
+            eval(steps[index].steps[i]);
+          }
+          setStyleProperty(document.getElementsByTagName("body")[0], "background-color",
+                           getCSSColor(this.hue, saturation, brightness));
+          setTimeout(animate_start, timeout);
+        } else {
+          this.step = undefined;
+          running = false;
+        }
+      }
+
+      addListener(this, "click", function(event) {shoot(event.clientX, event.clientY);});
+      addListener(this, "keypress", function() {explode(Math.random() * window.innerWidth,
+                                                        Math.random() * window.innerHeight);});
+
+      function get_dot() {
+        var dot;
+        if(!this.canvas) this.canvas = document.getElementsByTagName("body")[0];
+        if(freeDots.length > 0) {
+          dot = freeDots.pop();
+          dot.style.display = "inline";
+        } else {
+          dot = document.createElement("div");
+          this.canvas.appendChild(dot);
+          dot.appendChild(document.createTextNode("•"));
+          dot.style.position = "absolute";
+          dot.setAttribute("class", "sprite");
+        }
+        return dot;
+      }
+
+      function shoot(x, y) {
+        var dot = get_dot();
+        dot.setAttribute("class", "shell");
+        if(Math.random() < .5) {
+          dot.origin = {x:Math.round(Math.random()) * window.innerWidth,
+                        y:Math.random() * window.innerHeight};
+        } else {
+          dot.origin = {x:Math.random() * window.innerWidth,
+                        y:Math.round(Math.random()) * window.innerHeight};
+        }
+        dot.delta = {x:x - dot.origin.x,
+                     y:y - dot.origin.y};
+
+        dot.steps = 8 + Math.random() * 5;
+        dot.count = 0;
+        activeDots.push(dot);
+        step();
+      }
+        
+      function explode(x, y) {
+        var dotcount = 50 + Math.random() * 50;
+        var origin = {x:x, y:y};
+        for(i = 0; i < dotcount; i++) {
+          var dot = get_dot();
+          angle = Math.random() * Math.PI * 2;
+          distance = 5 + Math.random() * 25;
+          dot.origin = origin;
+          dot.delta = {x:distance * Math.cos(angle),
+                       y:distance * Math.sin(angle)};
+          dot.steps = 8 + Math.random() * 5;
+          dot.count = 0;
+          activeDots.push(dot);
+        }
+        step();
+      }
+
+      function step() {
+        for(i = activeDots.length - 1; i >= 0; i--) {
+          percent = activeDots[i].count / activeDots[i].steps;
+          activeDots[i].style.left =
+            activeDots[i].origin.x + activeDots[i].delta.x * percent - 6 + "px";
+          activeDots[i].style.top =
+            activeDots[i].origin.y + activeDots[i].delta.y * percent - 9 + "px";
+          activeDots[i].count++;
+          if(activeDots[i].count > activeDots[i].steps) {
+            if(activeDots[i].getAttribute("class") == "shell") {
+              activeDots[i].setAttribute("class", "sprite");
+              explode(activeDots[i].origin.x + activeDots[i].delta.x,
+                      activeDots[i].origin.y + activeDots[i].delta.y);
+            }
+            activeDots[i].style.display = "none";
+            freeDots.push(activeDots.splice(i, 1)[0]);
+          }
+        }
+        if(activeDots.length > 0) {
+          setTimeout(step, timeout);
+        }
+      }
+    //]]></script>
+    <style type="text/css">
+      body {
+        overflow: hidden;
+      }
+      .shell {
+        font-size: 20pt;
+      }
+    </style>
+  </head>
+  <body></body>
+</html>

@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Mortgage Calculator</title>
+    <link rel="stylesheet" type="text/css" href="mortgage.css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-939849-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript" src="mortgage_equations.js"></script>
+    <script type="text/javascript">//<![CDATA[
+      var defaults = { 'term':'15', 'interest':'5.5', 'payment':'750' };
+      var elements = new Array();
+      var unknownProperty;
+      function init() {
+        form = document.forms['mortgage'];
+        body = document.getElementsByTagName("body")[0];
+        for(input in form) {
+          if(typeof(form[input]) != "undefined" && form[input] != null
+             && typeof(form[input].nodeName) != "undefined" && form[input].nodeName.toLowerCase() == "input") {
+            var keylistener = new Function("e", "keypressed(e, this.name);");
+            keylistener.name = input;
+            addListener(form[input], "keypress", keylistener, true);
+            addListener(form[input], "change", eval("function(e) { var name = \"" + input + "\"; changed(e, name); }"), true);
+            addListener(form[input], "focus", focused, true);
+            addListener(form[input], "blur", blured, true);
+            elements[input] = new Object();
+            elements[input].input = form[input];
+            elements[input].type = form[input].className;
+          }
+        }
+	for(i = 0; i < form.childNodes.length; i++) {
+	  child = form.childNodes[i];
+	  if(child.nodeType == Node.ELEMENT_NODE && child.nodeName.toLowerCase() == "div") {
+            var dot = document.createElement("span");
+            dot.className = "dot";
+            child.insertBefore(dot, child.firstChild);
+            for(j = 0; j < child.childNodes.length; j++) {
+              var divchild = child.childNodes[j];
+              if(divchild.nodeType == Node.ELEMENT_NODE && divchild.nodeName.toLowerCase() == "input"
+                 && typeof(divchild.name) != "undefined" && divchild.name != "") {
+                elements[divchild.name].div = child;
+                if(typeof(determinations[divchild.name]) != "undefined") {
+                  child.className += " selectable";
+                  dot.appendChild(document.createTextNode(String.fromCharCode(8226)));
+                  addListener(child, "click", eval("function(e) { var name = \"" + divchild.name + "\"; selectDiv(e, name); }"), false);
+                  if(typeof(unknownProperty) == "undefined") {
+                    setActiveProperty(divchild.name);
+                  }
+                  break;
+                }
+              }
+            }
+	  }
+	}
+      }
+      function setActiveProperty(name) {
+        if(name != unknownProperty) {
+          if(typeof(unknownProperty) != "undefined") {
+            elements[unknownProperty].div.className = elements[unknownProperty].div.className.replace(/\s*active/g, "");
+            elements[unknownProperty].input.disabled = false;
+          }
+          elements[name].div.className += " active";
+          elements[name].input.disabled = true;
+          unknownProperty = name;
+        }
+      }
+      function selectDiv(event, name) {
+        if(getSource(event).nodeName.toLowerCase() != "input") {
+          setActiveProperty(name);
+        }
+      }
+      function keypressed(event, name) {
+        if(event.altKey || event.ctrlKey || event.metaKey) {
+          return;
+        }
+        var whichchar = String.fromCharCode(event.which); // the char codes are completely broken on a mac
+        if(whichchar == "" || whichchar.match(/[1-9]/) || whichchar.match(/[\x00\x08]/)) {
+          return;
+        }
+        if(whichchar.match(/[\x0D]/)) { // enter key
+          computeElement(unknownProperty);
+        }
+        var value = getSource(event).value;
+        if(name == "interest" && whichchar == "." && value.indexOf(".") == -1) {
+          return;
+        }
+        if(name != "term" && whichchar == "0") {
+          return;
+        }
+        if(name == "term" && whichchar == "0" && value.match(/[1-9\.]/)) {
+          return;
+        }
+        killEvent(event);
+      }
+      function commaify(value, decimalDegree) {
+        newvalue = "";
+        var pointIndex = value.indexOf(".");
+        if(pointIndex == -1) {
+          pointIndex = value.length;
+        }
+	for(start = 0, end = (pointIndex % 3); end <= pointIndex; start = end, end += 3) {
+          newvalue += value.substring(start, end);
+	  if(end != 0 && end < pointIndex) {
+            newvalue += ",";
+          }
+        }
+        if(pointIndex < value.length) {
+          decimal = value.substring(pointIndex, value.length);
+          if(typeof(decimalDegree) != "undefined") {
+            decimal = Math.round(decimal * Math.pow(10, decimalDegree)) / Math.pow(10, decimalDegree);
+          }
+          newvalue += decimal.toString().replace(/^0*/, "");
+        }
+        return newvalue;
+      }
+      function formatValue(value, type) {
+        //alert("Formating " + value + " (" + typeof(value) + ") as " + type);
+        if(value) {
+          var decimalDegree = 2;
+          if(type == "interest") { decimalDegree = 3; }
+          newvalue = commaify(value, decimalDegree);
+          switch(type) {
+            case "money": newvalue = "$" + newvalue; break;
+            case "interest": newvalue += "%"; break;
+            case "time":
+              newvalue += " year";
+              if(value != "1") { newvalue += "s"; }
+              break;
+          }
+        }
+        return newvalue;
+      }
+      function computeElement(name) {
+        var values = new Array();
+        for(input in elements) {
+          if(input != name && typeof(elements[input].input) != "undefined") {
+            if(elements[input].input.value == "") {
+              var defaultValue = "0";
+              if(typeof(defaults[input]) != "undefined") {
+                defaultValue = defaults[input];
+              }
+              elements[input].input.value = formatValue(defaultValue, elements[input].type);
+            }
+            values[input] = parseFloat(elements[input].input.value.replace(/[$,%a-z\s]/g, ""));
+          }
+        }
+        determinations[name](values);
+        elements[name].input.value = formatValue(values[name].toString(), elements[name].type);
+      }
+      function changed(event, name) {
+        computeElement(unknownProperty);
+        var source = getSource(event);
+        var value = source.value.replace(/[$,%a-z\s]/g, "");
+        if(value.match(/[1-9.]/)) {
+          value = value.replace(/^0*/, "");
+        }
+        source.value = formatValue(value, elements[name].type);
+      }
+      function focused(event) {
+        source = getSource(event);
+        source.className += " active";
+        if(source.value) { source.value = source.value.replace(/[$,%a-z\s]/g, "").replace(/^0*/, ""); }
+      }
+      function blured(event) {
+        source = getSource(event);
+        source.className = source.className.replace(/\s*active/g, "");
+      }
+    //]]></script>
+  </head>
+  <body onload="init()">
+    <h1>Should You Buy or Rent?</h1>
+    
+    <p>The traditional wisdom has long been that home ownership is one of the routes to riches. "Why should I give give my money away every month to someone else when I could be paying it to myself?" Home ownership means building equity and tax breaks &mdash; it's the American dream. Definitely a good idea, right?</p>
+
+    <p>Ummm, maybe. Home buying is only a smart economic decision for certain people. This page takes into account many of the different factors involved in purchasing a home and helps you get a better idea of if it is a good idea or not.</p>
+
+    <p>If you are interested in the math, <a href="math.xhtml">more info is available</a>.</p>
+
+    <form id="mortgage" action="" onsubmit="return false">
+      <ul id="houseinfo">
+        <li id="costs">
+          <h2>Home Costs</h2>
+          <ul>
+            <li><label>
+              <span>House Cost</span>
+              <span class="explanation">When you buy a house, the person you are buying it from expects a certain quantity of money. This is the <em>cost of the house</em>.</span>
+              <input class="money" name="cost" type="text" />
+            </label></li>
+            <li><label>
+              <span>Downpayment</span>
+              <span class="explanation">When you buy a house, you generally have a chunk of cash that you give to the bank to get things rolling. This is the <em>downpayment</em>. In general, with a downpayment of 20% or more, the federal government will provide insurance to the lender if the lendee should default on the loan. With a downpayment of less than 20%, a private company must provide that insurance &mdash; <acronym title="Private Mortgage Insurance">PMI</acronym>. One method of avoiding PMI is to have a downpayment of 10% and to take a home equity loan on the purchased home for an additional 10%. This is called a <em>piggyback loan</em>.</span>
+              <input class="money" name="downpayment" type="text" />
+            </label></li>
+            <li><label>
+              <span>Closing Costs</span>
+              <span class="explanation">Fees charges by the bank to provide the mortgage loan. These include the originiation cost, house assessment, attorneys' fees and title search. Typically 3-6% of the loan depending on the state and lender.</span>
+              <input class="money" name="closing" type="text" />
+            </label></li>
+            <li><label>
+              <span>Property Taxes</span>
+              <span class="explanation">Money provided to the municipality to cover costs of elementary education, public utilities and whatnot.</span>
+              <input class="money" name="proptaxes" type="text" />
+            </label></li>
+            <li><label>
+              <span>Stock Growth Rate</span>
+              <span class="explanation">Rate at which money invested in a mutual or index fund would increase in value per year. This rate is important in computing the cost of a house because money invested in a house is not invested elsewhere.</span>
+              <input class="rate" name="stockrate" type="text" />
+            </label></li>
+            <li>
+              <h3>Loans</h3>
+              <span class="explanation"></span>
+            </li>
+          </ul>
+        </li>
+        <li id="benefits">
+          <h2>Home Benefits</h2>
+          <ul>
+            <li><label>
+              <span>Home Appreciation Rate</span>
+              <span class="explanation">Rate at which a home is expected to increase in value per year. In general this rate should track about with inflation (~3%). Choosing a home in a neighborhood that is gentrifying or improving the home can cause this rate to exceed inflation. A correction in the housing market, poorly planned renovations or a neighborhood decline can cause this rate to undercut inflation or even become negative.</span>
+              <input class="rate" name="appreciation" type="text" />
+            </label></li>
+            <li><label>
+              <span>Cost to Rent</span>
+              <span class="explanation">Everyone has to live somewhere. How much would you be spending per month to rent if you don't buy?</span>
+              <input class="money" name="rent" type="text" />
+            </label></li>
+            <li><label>
+              <span>Rental Income</span>
+              <span class="explanation">If your house has more room than you need, you might rent some of the extra room. How much will you make from that per month?</span>
+              <input class="money" name="rentincome" type="text" />
+            </label></li>
+            <li>
+              <h3>Taxable Table</h3>
+              <span class="explanation">Interest payments on a mortgage are tax deductible. If you are a grad student making $20k per year it is entierly possible you will pay more in interest than your taxable income.</span>
+            </li>
+          </ul>
+        </li>
+        <li id="payment"><label>
+          <span>Monthly Payment</span>
+          <input class="money" name="payment" type="text" />
+        </label></li>
+        <li id="reset"><input type="reset" /></li>
+      </ul>
+    </form>
+  </body>
+</html>

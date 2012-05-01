@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Actionscript MP3 Player</title>
+    <style type="text/css">
+      html, body {
+        height: 100%;
+        margin: 0px;
+      }
+      #test_player {
+        display: block;
+        height: 400px;
+        width: 100%;
+        border: 2px solid black;
+      }
+      #player {
+        display: block;
+        height: 25px;
+        width: 50%;
+        margin: auto;
+        border: 2px solid black;
+      }
+      #explanation {
+        float: left;
+      }
+      #display {
+        float: right;
+      }
+      #explanation, #display {
+        width: 49%;
+      }
+    </style>
+    <script type="text/javascript">//<![CDATA[
+      var display;
+      var testplayer;
+      function setup() {
+        display = document.getElementById("display");
+        testplayer = document.getElementById("test_player");
+        testplayer.addEventListener("load", function() { alert("hi") }, false);
+        testplayer.addEventListener("click", function() { alert("hi") }, false);
+        test("Test on Body Load");
+      }
+      function test(testid) {
+        if(testid) {
+          var h1 = document.createElement("h1");
+          h1.appendChild(document.createTextNode(testid));
+          display.appendChild(h1);
+        }
+        var tests = new Array("name",
+                              "typeof(testplayer)",
+                              "testplayer == null",
+                              "document[name]",
+                              "document[name] == document.getElementById(name)",
+                              "testplayer.nodeName",
+                              "testplayer.GetVariable(\"playing\")",
+                              "testplayer.GetVariable(\"_root.playing\")",
+                              "testplayer.GetVariable(\"_level0.playing\")",
+                              "testplayer.GetVariable(\"/:playing\")");
+        var list = document.createElement("ul");
+        display.appendChild(list);
+        for(var i = 0; i < tests.length; i++) {
+          list.appendChild(document.createElement("li"));
+          list.lastChild.appendChild(document.createTextNode(tests[i] + " = " + eval(tests[i])));
+        }
+      }
+      function songLoadedCallback(file) {
+        display.appendChild(document.createElement("h1"));
+        display.lastChild.appendChild(document.createTextNode("songLoadedCallback called: " +
+                                      "\"" + file + "\""));
+      }
+    //]]></script>
+  </head>
+  <body onload="setup()">
+    <object id="test_player"
+            type="application/x-shockwave-flash"
+            data="PlayerDebug.swf">
+      <param name="FlashVars" value="song=Black Eyed Peas - Let's Get Retarded.mp3"></param>
+      <param name="FlashVars" value="backgroundColor="></param>
+      <param name="FlashVars" value="hoverColor=0xAA2E04"></param>
+      <param name="FlashVars" value="fontColor=0x032581"></param>
+      <param name="FlashVars" value="fontAlign=left"></param>
+          <!-- <param name="movie" value="actionscript_sound_test.swf"></param> -->
+          <!-- <param name="allowScriptAccess" value="sameDomain"></param> -->
+          <!-- <param name="quality" value="high"></param> -->
+    </object>
+    <hr />
+    <object id="player" type="application/x-shockwave-flash" data="Player.swf?song=Sen. Richard M. Nixon - Checkers Speech.mp3">
+    </object>
+    <hr />
+    <form id="setvar" action="." onsubmit="return false;">
+      <div style="text-align: center">
+        <input type="submit" value="testplayer.SetVariable('song', 'Sen. Richard M. Nixon - Checkers Speech.mp3')" onclick="eval(this.value)"></input>
+        <input type="submit" value="testplayer.SetVariable('song', 'Lt. Col. Oliver North - Testimony At The Iran-Contra Hearings.mp3')" onclick="eval(this.value)"></input>
+      </div>
+      <div style="text-align: center">
+        <input type="submit" value="test('Test on Button Click')" onclick="eval(this.value)"></input>
+      </div>
+      <div style="text-align: center">
+        <input type="submit" value="testplayer.SetVariable('playing', true)" onclick="eval(this.value)"></input>
+        <input type="submit" value="testplayer.SetVariable('playing', false)" onclick="eval(this.value)"></input>
+      </div>
+      <div style="text-align: center">
+        <input type="submit" value="testplayer.SetVariable('paused', true)" onclick="eval(this.value)"></input>
+        <input type="submit" value="testplayer.SetVariable('paused', false)" onclick="eval(this.value)"></input>
+      </div>
+      <div style="text-align: center">
+        <input type="submit" value="testplayer.SetVariable('seekOffset', 20000)" onclick="eval(this.value)"></input>
+        <input type="submit" value="alert(testplayer.GetVariable('seekOffset'))" onclick="eval(this.value)"></input>
+      </div>
+    </form>
+    <div id="explanation">
+      <p>For a <a
+      href="http://mr.pcvs.org/miriam/bismillah/">slideshow</a>
+      project of mine, I needed to play a mp3 in time with the display
+      of pictures. Straight HTML doesn't provide a method for this and
+      so I decided upon a <a
+      href="http://www.macromedia.com/support/flash/action_scripts/actionscript_dictionary/">Flash</a>
+      component since that should be fairly widely accessible both
+      cross browsers and platforms.</p>
+      <p>There are several Flash based mp3 players available, and the
+      <a href="http://musicplayer.sourceforge.net"><acronym
+      title="XML Shareable Playlist Format">xspf</acronym></a> player
+      was just about what I wanted except its interactivity with
+      Javascript is limited.</p>
+      <p>So, I set about trying to update it. The problem is that it
+      was done in the Flash Studio program which costs $500 I don't
+      have. In seeking an alternative, I found <a
+      href="http://www.mtasc.org"><acronym
+      title="Motion-Twin ActionScript 2 Compiler">MTASC</acronym></a>.
+      It was made to be
+      used in conjunction with the Flash studio, but if one is willing
+      to forgo the graphical interface design stuff, you can create a
+      program using just it.</p>
+      <p>So, this is the resultant player:</p>
+      <ul>
+        <li><a href="Player.as" title="Main program class">Player.as</a></li>
+      </ul>
+      <p>I am having a hell of a time with scoping and instantiation
+      in ActionScript, so at this point it is all in one class and
+      very procedural.</p>
+    </div>
+    <div id="display"></div>
+  </body>
+</html>

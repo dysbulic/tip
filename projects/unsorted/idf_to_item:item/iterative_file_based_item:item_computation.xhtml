@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:m="http://www.w3.org/1998/Math/MathML"
+      xml:lang="en">
+  <head>
+    <title>Iterative File-Based Item:Item Similarity Computation</title>
+    <link rel="stylesheet" type="text/css" href="../styles/assignment.css" />
+    <style type="text/css">
+      .result th, .result td { padding: .25em .5em; text-align: center; border: 1px solid; }
+      object { width: 100% }
+    </style>
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-939849-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+  </head>
+  <body>
+    <h1>Iterative File-Based Item:Item Similarity Computation</h1>
+
+    <p>This is a system for computing item:item similarity for use with the <a href="http://blogs.sun.com/plamere/entry/recommendation_for_the_rest_of">Project Aura</a> datastore.</p>
+
+    <p>Project Aura is an open source project from Sun Microsystems that aims at providing an extensible recommendation engine. There have been some innovations such as the application of <a href="comparing_tf%3Bidf_to_item%3Bitem_similarity.xhtml"><acronym title="Text Frequency / Inverse Document Frequency">TF-IDF</acronym></a> to the textual data surrounding songs, and this part of the system is about adding a more traditional method of predicting similarity: item:item comparison.</p>
+
+    <h2>Item:Item Similarity</h2>
+
+    <p><em>ToDo: Describe item:item</em></p>
+
+    <h2>Computation</h2>
+
+    <p>One of the primary advantages of item:item similarity is that the differences between items should change relatively little over time. This characteristic means that even though item:item similarity is more complex than some user-based metrics, it can be computed occasionally with a relatively small effect on the results for a particular user. Aura, therefore, uses the traditional method of periodic batch updating of item:item similarities.</p>
+
+    <p>Project Aura is specifically designed to operate on the <a href="https://www.projectcaroline.net">Project Caroline</a> utility computing system. Caroline, as a grid gains much of it's power from its efficiency from distributing processes across multiple machines and then coordinating them through network connections and shared network storage. The Aura datastore accomplishes this with a distributed binary tree.</p>
+
+    <h3 id="data_extraction">Step #1: Get the Data Out of the Datastore</h3>
+
+    <p>All data requests are managed through a central <code>DataStore</code> interface. Requests are filtered down a few levels until they are farmed out to a <code>PartitionCluster</code>.</p>
+
+    <object style="height:400px" id="tree_progression" type="image/svg+xml" data="datastore.svg"></object>
+
+    <p>The first step in generating the similarity is to start a <code>ReplicantProcessor</code> for each of the <code>PartitionClusters</code>. This processor will simply iterate over all the items in each partition and generate a file for each where each line is of the form:</p>
+
+    <p>(Artist, User, Listen Count)</p>
+
+    <ul>
+      <li><em>Maximum Simultaneous Processors:</em> <em>n</em></li>
+      <li><em>Output:</em> <em>n</em> partition dump files (one per <code>PartitionCluster</code>)</li>
+    </ul>
+
+    <h3>The Cosine Distance</h3>
+
+    <p>The numerator of the cosine distance is the dot product and the denominator is the product of the lengths of the vectors.</p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mover><mi>a</mi><mo>&rharu;</mo></mover><mo>&dot;</mo><mover><mi>b</mi><mo>&rharu;</mo></mover><mo>=</mo>
+      <mo>&Sum;</mo><msub><mi>a</mi><mi>i</mi></msub><msub><mi>b</mi><mi>i</mi></msub><mo>=</mo>
+      <mfenced open="|" close="|"><mover><mi>a</mi><mo>&rharu;</mo></mover></mfenced>
+      <mfenced open="|" close="|"><mover><mi>b</mi><mo>&rharu;</mo></mover></mfenced>
+      <mo>cos</mo><mfenced><mi>&theta;</mi></mfenced>
+      <mo>&iff;</mo>
+      <mo>cos</mo><mfenced><mi>&theta;</mi></mfenced><mo>=</mo>
+      <mfrac>
+        <mrow><mover><mi>a</mi><mo>&rharu;</mo></mover><mo>&dot;</mo><mover><mi>b</mi><mo>&rharu;</mo></mover></mrow>
+        <mrow>
+          <mfenced open="|" close="|"><mover><mi>a</mi><mo>&rharu;</mo></mover></mfenced>
+          <mfenced open="|" close="|"><mover><mi>b</mi><mo>&rharu;</mo></mover></mfenced>
+        </mrow>
+      </mfrac>
+      <mo>=</mo>
+      <mfrac>
+        <mrow><mo>&Sum;</mo><msub><mi>a</mi><mi>i</mi></msub><msub><mi>b</mi><mi>i</mi></msub></mrow>
+        <mrow>
+          <msqrt><mrow><mo>&Sum;</mo><msubsup><mi>a</mi><mi>i</mi><mn>2</mn></msubsup></mrow></msqrt>
+          <msqrt><mrow><mo>&Sum;</mo><msubsup><mi>b</mi><mi>i</mi><mn>2</mn></msubsup></mrow></msqrt>
+        </mrow>
+      </mfrac>
+    </math>
+
+    <object style="height:400px" id="tree_progression" type="image/svg+xml" data="cosine_generation_overview.svg"></object>
+
+    <h3 id="dot_components">Step #2-1: Generate Dot Product Components</h3>
+        
+    <p>The <em>n</em> partition dump files can be merged with the each of the other partition dumps (including itself) using the username as the merge key. For each element in the Cartesian product, produce a new value:</p>
+
+    <p>
+      (Artist Dual = Artist<sub>a</sub>.Artist<sub>b</sub>, Listen Product = Listen Count<sub>a</sub> * Listen Count<sub>b</sub>)
+    </p>
+
+    <ul>
+      <li><em>Maximum Simultaneous Processors:</em> <em>n</em><sup>2</sup></li>
+      <li><em>Output:</em> <em>n</em><sup>2</sup> dot product component files</li>
+    </ul>
+
+    <h3 id="dot_combination">Step #3-1: Partition Dot Product Components</h3>
+
+    <p>In order for a simple processor to generate a dot product, all the components need to be in the same file. There is a relatively simple method for grouping unique items across multiple files. All of the element keys are hashed and the element is written to the file numbered with the hash modulo the number of files. A file locking system has to be used to prevent over writes, but the locks will only be held briefly and there is no possibility of a deadlock.</p>
+
+    <ul>
+      <li><em>Maximum Simultaneous Processors:</em> <em>n</em><sup>2</sup></li>
+      <li><em>Output:</em> arbitrary <em>m</em> dot product component partitions</li>
+    </ul>
+
+    <h3>Step #4-1: Sum Dot Product Components</h3>
+
+    <p>Each of the <em>m</em> dot product collected files now contain all elements that are components of the same dot product. A processor can be run on each on of the files to sum all the elements with the same key and output a single element whose value is the sum of all the elements with that key in the file.</p>
+
+    <p>Because the elements in the dot product component files are unsorted, the files can't simply be processed a line at a time. For this particular implementation, the entire file is heaped in memory so that elements can be processed in groups before being output.</p>
+
+    <p>
+      (Artist Dual, Dot Product = &Sum; Listen Product<sub>i</sub>)
+    </p>
+
+    <ul>
+      <li><em>Maximum Simultaneous Processors:</em> <em>m</em></li>
+      <li><em>Output:</em> <em>m</em> dot product files</li>
+    </ul>
+
+    <h3>Step #2-2: Vector Lengths</h3>
+
+    <p>This step is also numbered two because its only prerequisite is the partition dump files. This process can be completed in parallel with the generation of the dot products.</p>
+
+    <p>The partition dump files are merged on the artist name as the key. Because the <code>ProcessCluster</code>s are keyed on the artist id, all the components for each vector are already in a single file. If fact they are already grouped, so the processing can be performed by reading only a single value at a time.</p>
+
+    <p>
+      (Artist, Vector Length = 
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msqrt><mrow><mo>&Sum;</mo><msub><mi>Listen Count</mi><mi>i</mi></msub></mrow></msqrt>
+      </math>)
+    </p>
+
+    <ul>
+      <li><em>Maximum Simultaneous Processors:</em> <em>n</em></li>
+      <li><em>Output:</em> <em>n</em> vector length files</li>
+    </ul>
+
+    <h3>Step #3-2: Vector Length Combinations</h3>
+
+    <p>As with the <a href="#dot_components">dot product components</a> the next step is to generate the Cartesian product to generate all possible combinations of vector lengths.</p>
+
+    <p>
+      (Artist Dual = Artist<sub>a</sub>.Artist<sub>b</sub>, Vector Product = Vector Length<sub>a</sub> * Vector Length<sub>b</sub>)
+    </p>
+
+    <ul>
+      <li><em>Maximum Simultaneous Processors:</em> <em>n</em><sup>2</sup></li>
+      <li><em>Output:</em> <em>n</em><sup>2</sup> vector combination files</li>
+    </ul>
+
+    <h3>Step #4-2: Partition Vector Length Combinations</h3>
+
+    <p>The <em>n</em><sup>2</sup> vector combination files need to be combined with the <em>m</em> dot product files. There is no natural alignment between the files, and a simple way to create one is to partition the vector combinations into <em>m</em> files using the same method as the <a href="#dot_combination">dot product partitioning</a>.</p>
+
+    <ul>
+      <li><em>Maximum Simultaneous Processors:</em> <em>n</em><sup>2</sup></li>
+      <li><em>Output:</em> <em>m</em> vector combination partitions</li>
+    </ul>
+
+    <h3>Step #5: Compute Cosine Distances</h3>
+
+    <p>Each of the <em>m</em> files can now be merged together on the Artist.Artist keys. Each file will have each key once and the resultant output will contain each key only once.</p>
+
+    <p>
+      (Artist Dual, Cosine Distance =
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mfrac><msub><mi>Dot Product</mi><mi>i</mi></msub><msub><mi>Vector Product</mi><mi>i</mi></msub></mfrac>
+      </math>)
+    </p>
+
+    <ul>
+      <li><em>Maximum Simultaneous Processors:</em> <em>m</em></li>
+      <li><em>Output:</em> <em>m</em> cosine distance files</li>
+    </ul>
+
+    <h2>Implementation</h2>
+
+    <p>This design is a pretty straightforward copy of some ideas from map-reduce with some additional operations lifted from relational algebra.</p>
+
+    <h3>Getting Data From Files</h3>
+
+    <p>A <a href="druthers.xhtml">more complete system</a> would be based out of more complex relational topics, but since all joins in this system are on a single key it is possible to use a simpler record-based model. A <code>RecordSet</code> is simply a group of <code>Map</code>s identified with <code>String</code> keys. Each <code>Map</code> + key combination is a <code>Record</code>.</p>
+
+    <p>The <code>RecordSet</code> has two primary functions:</p>
+
+    <ul>
+      <li>Read <code>Record</code>s from a file</li>
+      <li>Put <code>Record</code>s into groups if required. If <code>Record</code>s are grouped then they don't necessarily come in any particular order, but all <code>Record</code>s with a particular key in the set will sequential and the order needs to be consistent across <code>RecordSet</code>s.</li>
+    </ul>
+
+    <h3></h3>
+    
+  </body>
+</html>

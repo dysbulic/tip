@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Sizing Elements to the Container's Height</title>
+
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+
+    <link rel="stylesheet" type="text/css" href="drop_shadow.css" />
+    <style type="text/css">/*<![CDATA[*/
+      body { font-size: 13pt; line-height: 120%; }
+      #body { width: 600px; text-align: justify; margin-left: 50px; }
+      h1 { font-size: 20pt; }
+      pre code { display: block; margin-left: 30px; }
+
+      .example { border: 2px solid #333; background-color: #DDD; padding: .25em .5em .25em .5em; }
+      .inner, .outer { width: 20px; height: 20px; border: 2px solid; padding: 0; }
+      .outer { border-color: #68A; background-color: #ACF; }
+      .inner { border-color: #A86; background-color: #FCA; margin: 5px; }
+      #cssoverflow { position: relative; }
+      #cssoverflow .inner { position: absolute; top: 7px; left: 7px; margin: 0; }
+      #ieoverflow .outer { width: 34px; height: 34px; }
+      #browseroverflow, #cssoverflow, #ieoverflow { margin-left: 3em; }
+
+      #layoutsample { border: 2px solid #BBB; padding: 5px 0 5px 0; text-align: center; }
+
+      .left.shadow.sample, .right.shadow.sample { border-color: #DDD; }
+      .left.shadow.sample { width: 15px; }
+
+      .leftcol, .rightcol, .centercol { border: 2px solid; padding: 1.5em .25em .5em .25em; }
+      .leftcol { padding-bottom: 5.5em; } /* Just to push its height up to test the layout */
+
+      .leftcol { border-right: none; border-color: #575; background-color: #DFD; }
+      .centercol { border-color: #557; background-color: #DDF; }
+      .rightcol { border-left: none; border-color: #755; background-color: #FDD; }
+
+      .header, .footer { border: 2px solid black; padding: .25em 0 .25em 0; }
+      .header { border-color: #DCB; background-color: #FED; }
+      .footer { border-color: #BCD; background-color: #DEF; }
+
+      .sample { display: inline-block; border: 1px solid; width: 1em; height: 1em; padding: 0; }
+      .sample { display: -moz-inline-box; vertical-align: top; }
+
+      .lettered { list-style: lower-alpha; }
+      li p { margin: .25em 0 .25em 0; }
+    /*]]>*/</style>
+    <!--[if !IE]>--><!-- Sometimes it is mozilla that is broken -->
+    <link rel="stylesheet" type="text/css" href="drop_shadow_non_ie.css" />
+    <style type="text/css">
+    </style>
+    <!--<![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" type="text/css" href="drop_shadow_ie.css" />
+    <style type="text/css">
+      .leftcol { margin-right: -1px; }
+      .sample { position: static; }
+    </style>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="body">
+      <p><em>I had to redo this again to support a site with relative links in it. I have a <a href="mixed_tables.php">layout</a> that handles the equal height columns and also relative links (and drop shadows to boot).</em></p>
+      <hr />
+      <p><em>I'm using a method for sizing the height of elements that I've not seen previously and I think perhaps I can submit it to <a href="http://alistapart.com">A List Apart</a>&hellip;</em></p>
+      <p><em>I'm going to retract the submission because I was unaware that a <code>xml</code> declaration turned on IE's quirks mode. This layout only works in quirks mode and not even in that in IE7. A better, though hackish solution, is <a href="http://positioniseverything.net/articles/onetruelayout/equalheight">absurdly tall <code>div</code>s</a>.</em></p>
+      <p>I've redone <a href="#layoutsample">my sample</a> using the <a href="overflow.php">overflow method</a>.</p>
+      <hr />
+      <h1>Sizing Elements to the Container's Height</h1>
+      <p>Three column layouts are <a href="http://css-discuss.incutio.com/?page=ThreeColumnLayouts">all the rage nowadays</a>. It's a great way to keep your navigation bits accessible and keep the content from getting really wide and looking all cluttered. Most of time attention is paid only to the widths of the columns, but heights can be important as well. Say, for instance, that you want a navigation bar on the side to go all the way to the bottom of the page. There are seveal methods that are currently being employed to achieve this effect:</p>
+      <ul>
+        <li>
+          <p>One of the most common methods is to put <a href="100_percent_height.html"> 100% height on the <code>#navbar</code>, <code>body</code> and <code>html</code></a>.</p>
+          <pre><code>html, body, #navbar { height: 100%; }
+html, body { margin: 0; }
+#navbar, #content { float: left; }</code></pre>
+          <p>This works well enough so long as:</p>
+          <ol class="lettered">
+            <li>The content of the page is less than the height of the screen. If the content is longer than the screen, the <code>#navbar</code> <a href="100_percent_height_long_content.html">stops at the edge of the initial view</a>.</li>
+            <li>100% of the height is what you want. In a layout with a header or footer, the 100% high <code>#navbar</code> will <a href="100_percent_height_with_header.html">force scrolling regardless of the content's length</a>.</li>
+          </ol>
+        </li>
+        <li><p>Another method is to <a href="http://www.alistapart.com/articles/fauxcolumns/">fake the background on the side column</a> by either using a background image on the containing element. The problem with this is fixes the layout sizes and requires image editing to play with the appearance. This was the method used on this site when I got it and it kept irritating me.</p></li>
+        <li><p>Similarly, you could make the <a href="http://www.positioniseverything.net/ordered-borders-center.html">side borders of the containing element really big</a>, but this prevents you from using images and specifying widths as percentages.</p></li>
+        <li><p>The best method I've seen is <a href="http://positioniseverything.net/articles/onetruelayout/equalheight"><code>div</code>s with long padding and negative bottom margins</a>. They essentially extend as far as the content possibly could and are contained by an element with <code>overflow: hidden</code> to crop the bottom. Honestly, this works well and the only reason I don't especially like it is my layout is two nested three column layouts (the outer one is drop shadows) and the markup was getting convoluted.</p></li>
+      </ul>
+      <p>What I really want is to be able to say is: "This element should be the same height as the containing element." I was searching the internet for a method to do this and ran across this statement at <a href="http://www.quirksmode.org/css/100percheight.html">quirksmode</a>:</p>
+      <blockquote>
+        <p>"[I]f you want to make an element as high as the entire page (whatever this height may be) you're out of luck. Although it might seem simple the specs (and the browsers' unthinking conformance) make this completely impossible.</p>
+        <p>"The spec says: 'If the height of the containing block is not specified explicitly (i.e., it depends on content height), the value is interpreted like <code>auto</code>.'"</p>
+      </blockquote>
+      <p>That's pretty daunting. I like quirksmode and there's lots of good information over there. In fact, when I read that, I gave up and started looking for workarounds. Fortunately however, I have a really bad memory. I ran across the problem a little while later and, before I remembered it is impossible, solved the problem.</p>
+      <a name="workarounds"></a>
+      <p>As is often the case, the solutions are completely different for <acronym title="Internet Explorer">IE</acronym> and <acronym title="Cascading Style Sheet">CSS</acronym> compliant browsers. First, to deal with IE:</p>
+
+      <h2>Sizing to the Container's Height in IE</h2>
+      <p>The solution in IE arises from what happens when an element overflows its boundaries. According to the specification it should simply extend past the bottom unless the <a href="http://www.w3.org/TR/CSS21/visufx.html#overflow">overflow property</a> specifies otherwise. In IE the containing block is reflowed to be large enough to contain the content.</p>
+      <div class="example">
+        <p>If you had the following HTML:</p>
+        <pre>&lt;div class="outer">&lt;div class="inner">&lt;/div>&lt;/div></pre>
+        <p>With the following style applied:</p>
+        <pre>.inner, .outer
+  { width: 20px; height: 20px; border: 2px solid; }
+.outer
+  { border-color: #68A; background-color: #ACF; }
+.inner
+  { border-color: #A86; background-color: #FCA;
+    margin: 5px; }</pre>
+        <p>In your browser, this is what it looks like:</p>
+        <div id="browseroverflow"><div class="outer"><div class="inner"></div></div></div>
+        <p>In a CSS compliant browser, it would display like this:</p>
+        <div id="cssoverflow"><div class="outer"></div><div class="inner"></div></div>
+        <p>Whereas in IE, the outer box is reflowed and it comes out like this:</p>
+        <div id="ieoverflow"><div class="outer"><div class="inner"></div></div></div>
+      </div>
+      <p>If you've been following closely, you may be wondering why the <code>#navbar</code> stopped short on <a href="100_percent_height_long_content.html">example with long content</a>. The <code>body</code> had a height of 100% which was too short. Why didn't the box reflow to encompass the content? Apparently the reflowing doesn't work for the <code>body</code>. If the page content is wrapped in a <code>div</code> however and that <code>div</code>'s height is set to 100%, it will <a href="ie_height_reflow.html">reflow as expected</a>:</p>
+      <pre><code>html, body, #body, #navbar { height: 100%; }
+html, body { margin: 0; }
+#navbar, #content { float: left; }</code></pre>
+      <h2>Resizing to the Container's Height with CSS</h2>
+      <p>Sizing to the height of the container in a CSS compliant browser simply takes advantage of the fact that <a href="css_table_cell.html">table cells are the height of the containing row</a>. In some browsers (Firefox, Opera), children of elements with a <code>display</code> of <code>table-cell</code> will render according to the <a href="http://www.w3.org/TR/REC-CSS2/tables.html#height-layout">CSS specification</a>. I won't go into the details, but if you are curious, you can see my <a href="http://odin.himinbi.org/tests/test_css_table_display.html">invalidated bug report</a>. The end effect is that you'll sometimes get strange top margins if you leave the <code>vertical-align</code> property as <code>baseline</code>.</p>
+
+      <pre><code>html, body { height: 100%; margin: 0; }
+body { display: table; }
+#navbar { display: table-cell; vertical-align: top; }</code></pre>
+
+      <a name="combined"></a>
+      <h2>Combining the Two Methods</h2>
+      <p>These two methods are similar enough that they can almost be combined without any CSS hacks. The one issue is that in the IE layout the <code>#navbar</code> is <code>float</code>ed. If this is done in the CSS layout the element is pulled out of the normal flow and the height is only that of the contained elements. I personally like to use <a href="http://msdn.microsoft.com/workshop/author/dhtml/overview/ccomment_ovw.asp">conditional comments</a> rather than parsing bugs to handle IE specific stuff. Who knows, maybe IE 7 will actually work. Using these, it is painless to <a href="sizing_to_height_combined.html">combine the two methods</a>. Also, in case you were curious, this still fills the initial screen with <a href="sizing_to_height_combined_short.html">less than a screenful of content</a>.  <em>(This time I included the whole style tag to show the conditional comments.)</em></p>
+      <pre><code>&lt;style type="text/css">
+  html, body, #body, #navbar { height: 100%; margin: 0; }
+  #body { display: table; }
+  #navbar { display: table-cell; }
+&lt;/style>
+&lt;!--[if lt IE 7]>
+&lt;style type="text/css">
+  #navbar { float: left; }
+&lt;/style>
+&lt;![endif]--></code></pre>
+
+      <h2>Applying the Method</h2>
+      <p>The layout that I have been working on converting to CSS needs this method in several places. The HTML looks like:</p>
+      <pre><code>&lt;div class="layout">
+  &lt;!-- top shadow markup omitted -->
+  &lt;div class="shadowed">
+    &lt;div class="left shadow">&lt;/div>
+    &lt;div class="body">
+      &lt;div class="header">&lt;/div>
+      &lt;div class="content">
+        &lt;div class="leftcol">&lt;/div>
+        &lt;div class="centercol">&lt;/div>
+        &lt;div class="rightcol">&lt;/div>
+      &lt;/div>
+      &lt;div class="footer">&lt;/div>
+    &lt;/div>
+    &lt;div class="right shadow">&lt;/div>
+  &lt;/div>
+  &lt;!-- bottom shadow markup omitted -->
+&lt;/div></code></pre>
+
+      <p>And I want it to render like this:</p>
+
+      <a name="layoutsample"></a>
+      <div id="layoutsample">
+        <div class="layout">
+          <div class="top shadow"><div class="left"></div><div class="center"></div><div class="right"></div></div>
+          <div class="shadowed">
+            <div class="left shadow"></div>
+            <div class="body">
+              <div class="header">Header</div>
+              <div class="content">
+                <div class="leftcol">Navigation</div>
+                <div class="centercol">Page Content</div>
+                <div class="rightcol">Jump Points</div>
+              </div>
+              <div class="footer">Footer</div>
+            </div>
+            <div class="right shadow"></div>
+          </div>
+          <div class="bottom shadow"><div class="left"></div><div class="center"></div><div class="right"></div></div>
+        </div>
+      </div>
+      <p>There are several columns in this layout whose heights are important:</p>
+      <ul>
+        <li>The drop shadows (<code>.left.shadow</code> <span class="sample left shadow"></span> and <code>.right.shadow</code> <span class="sample right shadow"></span>) need to be the same height as the <code>.header</code> <span class="sample header"></span>, <code>.content</code>, <code>.footer</code> <span class="sample footer"></span></li>
+        <li>The three columns in <code>.content</code> (<code>.leftcol</code> <span class="sample leftcol"></span>, <code>.centercol</code> <span class="sample centercol"></span> and <code>.rightcol</code> <span class="sample rightcol"></span>) all need to be the same height</li>
+      </ul>
+      <p>Though they look very similar, the layout for these two sets of columns is different. I will discuss each in turn.</p>
+
+      <h2>Drop Shadows</h2>
+      <p>They are often maligned by the web's technorati, but the client wanted drop shadows on this layout. This is a description of how the columns on the center section were done. (The contents of the <code>.shadowed</code> <code>div</code>.) There's really not all that much to them. The bits for specifying the sizes of the shadows are shared by both layouts:</p>
+      <pre><code>.right { width: 15px; }
+.left { width: 10px; }</code></pre>
+      <p>The CSS version is pretty simple. Though it goes counter to the CSS adherents thinking, all you have to do is look at the layout as if it was in a table:</p>
+      <pre><code>.layout { display: table; width: 80%; margin: auto; }
+.shadow.top, .shadowed, .shadow.bottom
+  { display: table-row; }
+.left, .body, .right { display: table-cell; }</code></pre>
+      <p>The IE version is a bit more complicated. You might have noticed that the width of <code>.layout</code> is a percentage. This means it isn't possible to know the actual pixel width. The drop shadows however, do have fixed pixel widths. Most three column layouts float all three columns and either specify all three as percentages or all three as fixed widths. There are a couple different ways to handle this mixed scenario. One would be to float the columns to the left and right and allow the content the fill in the middle. The problem with that is it requires both <code>.left.shadow</code> and <code>.right.shadow</code> to come before <code>.body</code>, and for the CSS layout <code>.right.shadow</code> needs to come after <code>.body</code>.</p>
+      <p>Instead of using floats, I took advantage of the fact that IE reflows affect absolutely positioned elements as well as floats. So the shadows are just absolutely positioned and there is an appropriate margin on the <code>.body</code>.</p>
+      <pre><code>#layoutsample { text-align: center; }
+.shadowed { height: 0; position: relative; }
+.left { position: absolute; left: 0; }
+.right { position: absolute; top: 0; right: 0; }
+.body { padding: 0 15px 0 10px; }
+.shadow.left, .shadow.right { height: 100%; }</code></pre>
+
+      <h2>Content Columns</h2>
+      <p>The content columns are more a more traditional three column layout (in IE at least). Again, the styles controlling the widths are shared:</p>
+      <pre><code>.leftcol, .rightcol { width: 25%; }
+.centercol { width: 50%; }</code></pre>
+      <p>The CSS compliant markup is pretty much identical:</p>
+      <pre><code>.content { display: table; width: 100%; }
+.leftcol, .rightcol, .centercol { display: table-cell; }</code></pre>
+      <p>And the version for IE is pretty simple too:</p>
+      <pre><code>.content { height: 0; }
+.leftcol, .rightcol, .centercol
+  { float: left; height: 100%; }</code></pre>
+
+      <a name="footerbug"></a>
+      <h2>Bugs</h2>
+      <p>I developed this layout working in <a href="http://www.mozilla.com">Firefox</a> 1.5.03 in XP, Fedora Care 4 and OSX. Then I ported it over to <a href="http://www.microsoft.com/ie/">Internet Explorer</a> 6.0, <a href="http://www.apple.com/macosx/features/safari/">Safari</a> 2.0.3 and <a href="http://konqueror.kde.org">Konqueror</a> 3.5.2-0.1.fc4. During the porting process I ran across several bugs. Most of them don't warrant mentioning and are noted in comments in <a href="drop_shadow.css">the stylesheet</a>, but one affects the HTML. There is a one pixel space under the footer in Firefox XP that doesn't appear in any other browser including Firefox OSX. There's no way I know of to catch that without javascript, so I just whacked a pixel off of all the browsers except IE.</p>
+      <p>Doing this goes back to the conditional comments which can be used to exclude content from IE as well as include it:</p>
+      <pre>&lt;!--[if !IE]>-->
+&lt;style type="text/css">
+  .footer { margin-bottom: -1px; }
+&lt;/style>
+&lt;!--&lt;![endif]--></pre>
+
+      <h2>Samples</h2>
+      <p>The <a href="#layoutsample">sample above</a> is laid out with this layout. The operative styles are:</p>
+      <ul>
+        <li><a href="drop_shadow.css"><code>drop_shadow.css</code></a>: the basic layout style</li>
+        <li><a href="drop_shadow_ie.css"><code>drop_shadow_ie.css</code></a>: the IE specific elements of the layout</li>
+        <li><a href="drop_shadow_non_ie.css"><code>drop_shadow_non_ie.css</code></a>: the elements of the layout hidden from IE. (This is only the <a href="#footerbug">footer bug</a>.)</li>
+      </ul>
+    </div>
+  </body>
+</html>

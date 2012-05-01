@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Table Properties</title>
+    <link type="text/css" rel="stylesheet" href="javascript_test.css" />
+    <style type="text/css">
+      table {
+        border-collapse: collapse;
+      }
+      td {
+        border: 2px solid gray;
+        width: 1em;
+        height: 1em;
+      }
+      .display {
+        border: 2px solid gray;
+        margin: 1em;
+        padding: .5em;
+      }
+      .dot {
+        position: absolute;
+        color: red;
+        font-size: 20pt;
+      }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+    <script src="../javascript_compatability/compatability.js" type="text/javascript"></script>
+    <script type="text/javascript">//<![CDATA[
+      function fillTable(name, rows, cols) {
+        var table = document.getElementById(name);
+        for(var i = 0; i < rows; i++) {
+          var row = document.createElement("tr");
+          table.appendChild(row);
+          for(var j = 0; j < cols; j++) {
+            row.appendChild(document.createElement("td"));
+          }
+        }
+      }
+      function printProperties(name) {
+        var table = document.getElementById(name);
+        var tableParent = table.parentNode;
+        var display = document.createElement("div");
+        display.setAttribute("class", "display");
+        tableParent.replaceChild(display, table);
+        tableParent.insertBefore(table, display);
+
+        var firstChild = table.firstChild;
+        while(firstChild.nodeType != Node.ELEMENT_NODE && firstChild.nextSibling) {
+          firstChild = firstChild.nextSibling;
+        }
+        var elements = {};
+        elements[name] = table;
+        elements[name + ".firstChild"] = firstChild;
+        line = document.createElement("div");
+        line.appendChild(document.createTextNode
+          ("Child name = " + elements[name + ".firstChild"].nodeName));
+        display.appendChild(line);
+        var props = new Array("scrollWidth", "scrollLeft", "offsetLeft",
+                              "clientWidth");
+        var styleProps = new Array("width", "height", "left", "right",
+                                   "margin-left", "margin-right");
+        for(elmName in elements) {
+          for(var i = 0; i < props.length; i++) {
+            var line = document.createElement("div");
+            line.appendChild(document.createTextNode
+              (elmName + "[" + props[i] + "] = " + elements[elmName][props[i]]));
+            display.appendChild(line);
+          }
+          var computedStyle = getCurrentStyle(elements[elmName]);
+          for(i = 0; i < styleProps.length; i++) {
+            var computedValue =
+             (computedStyle.getPropertyValue ? computedStyle.getPropertyValue(styleProps[i]) :
+              computedStyle[props[i]]);
+            line = document.createElement("div");
+            line.appendChild(document.createTextNode
+              (elmName + "[" + styleProps[i] + "] = " + elements[elmName].style.getPropertyValue(styleProps[i])
+               + " (" + computedValue + ")"));
+            display.appendChild(line);
+          }
+        }
+      }
+      function placeDot(name, x, y) {
+        var table = document.getElementById(name);
+        var firstChild = table.firstChild;
+        while(firstChild.nodeType != Node.ELEMENT_NODE && firstChild.nextSibling) {
+          firstChild = firstChild.nextSibling;
+        }
+
+        var dot = document.createElement("div");
+        dot.setAttribute("class", "dot");
+        dot.innerHTML = "&bull;";
+        border = (table.scrollWidth - firstChild.scrollWidth) / 2;
+        dot.style.setProperty("left", border + x - 4.5 + "px", null);
+        dot.style.setProperty("top", y - 15 + "px", null);
+        table.parentNode.appendChild(dot);
+      }
+     //]]></script>
+  </head>
+  <body>
+    <p>I need to understand the javascript properties of tables a
+    little bit better to work on a program.</p>
+    <div style="position: relative">
+      <table id="one" style="width: 50%; margin: auto;" ></table>
+    </div>
+    <div style="position: relative">
+      <table id="two" style="width: 75%; margin: auto;" ></table>
+    </div>
+    <script type="text/javascript">//<![CDATA[
+      fillTable("one", 10, 20);
+      printProperties("one");
+      for(var i = 0; i <= 60; i += 5) {
+        placeDot("one", i, i);
+      }
+      fillTable("two", 10, 20);
+      printProperties("two");
+      for(var i = 0; i <= 300; i += 5) {
+        placeDot("two", i * 2, i / 2);
+      }
+    //]]></script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>FileSet in Java</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+      iframe { width: 100%; border: 1px solid; border-right: none; height: 15em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Java File Hierarchy</h1>
+    
+    <p>You have a file hierarchy and you'd like to iterate over all the files and do something to them. I've accidentally solved this problem twice now and I figured I'd make a note if it so I don't do so again.</p>
+
+    <p>The first time I did it (and the solution I like better other than requiring an external library) is: <a href="../jars/src/org/himinbi/util/AntFileList.java">org.himinbi.util.AntFileList</a>. It simply wraps <a href="http://ant.apache.org">Ant</a>'s FileSet in an iterator. This allows you to specify complex sets of including and excluding patterns.</p>
+    
+    <iframe src="../jars/src/org/himinbi/util/AntFileList.java"></iframe>
+
+    <p>The second time was entierly with the standard library: <a href="../jars/src/org/himinbi/util/FileList.java">org.himinbi.util.FileList</a>. This is a lazy iterator and only gets the contents of a directory when necessary. It should be about as fast as possible.</p>
+
+    <iframe src="../jars/src/org/himinbi/util/FileList.java"></iframe>
+  </body>
+</html>

@@ -1,0 +1,172 @@
+;; Red Hat Linux default .emacs initialization file
+
+;; Are we running XEmacs or Emacs?
+(defvar running-xemacs (string-match "XEmacs\\|Lucid" emacs-version))
+
+;; Set up the keyboard so the delete key on both the regular keyboard
+;; and the keypad delete the character under the cursor and to the right
+;; under X, instead of the default, backspace behavior.
+(global-set-key [delete] 'delete-char)
+(global-set-key [kp-delete] 'delete-char)
+
+;; Turn on font-lock mode for Emacs
+(cond ((not running-xemacs)
+	(global-font-lock-mode t)))
+
+(set-background-color "#000000")
+(set-face-background 'default "black")
+
+;; Always end a file with a newline
+(setq require-final-newline t)
+
+;; default to better frame titles
+(setq frame-title-format
+      (concat  "%b - emacs@" (system-name)))
+
+;; Stop at the end of the file, not just add lines
+(setq next-line-add-newlines nil)
+
+;; Enable wheelmouse support by default
+(require 'mwheel)
+
+;; From ftp://ftp.csd.uu.se/pub/users/andersl/emacs/my-init.el
+
+;; Don't want to always hit return
+(setq completion-auto-exit t)
+
+;; One space ends a sentence
+(set 'sentence-end "[.?!][]\"')]*\\($\\|\t\\| \\)[ \t\n]*")
+(set 'sentence-end-double-space nil)
+
+;(eval-after-load "ispell"
+;  '(progn
+;     (setq ispell-program-name "aspell")))
+
+;;;-------------------------------------------------------------------
+;;; Mark handling.  The following two lines makes the highlighted
+;;; region visible, but I'm still able to use all region-commands even
+;;; if the region has been turned off (just like in the good ol'
+;;; days!)
+;;;
+
+(if (boundp 'transient-mark-mode)
+    (setq transient-mark-mode t))
+(setq mark-even-if-inactive t)
+
+;; For the apache coding style
+
+;(defun apache-jakarta-mode ()
+;  "The Java mode specialization for Apache Jakarta projects."
+;  (if (not (assoc "apache-jakarta" c-style-alist))
+;      ;; Define the Apache Jakarta cc-mode style.
+;      (c-add-style "apache-jakarta" '("java" (indent-tabs-mode . nil))))
+
+;  (c-set-style "apache-jakarta")
+;  (c-set-offset 'substatement-open 0 nil)
+;  (setq mode-name "Apache Jakarta")
+
+;  ;; Turn on syntax highlighting when X is running.
+;  (if (boundp 'window-system)
+;      (progn (setq font-lock-support-mode 'lazy-lock-mode)
+;             (font-lock-mode t))))
+
+; Waste of display space if you can't click on it
+(if (not window-system) (menu-bar-mode nil))
+
+;; Activate Jakarta mode.
+;(if (fboundp 'jde-mode)
+;    (add-hook 'jde-mode-hook 'apache-jakarta-mode)
+;  (add-hook 'java-mode-hook 'apache-jakarta-mode))
+
+;; No tabs-- use spaces when indenting (doesn't affect Makefiles, 
+;; does affect text files and code, doesn't affect existing tabs).
+;; The use of setq-default means this only affects modes that don't
+;; overwrite this setting.
+(setq-default indent-tabs-mode nil)
+
+;; conditionally set editing mode for javascript
+(setq javascript-file "~/.emacs.d/javascript.el")
+(if (file-exists-p javascript-file)
+    (progn (load javascript-file)
+           (setq auto-mode-alist
+                 (append '(("\\.js$" . javascript-mode)) auto-mode-alist))
+           (message "javascript mode loaded"))
+  (setq auto-mode-alist
+        (append '(("\\.js$" . c-mode)) auto-mode-alist)))
+
+;; Input control characters in hex
+(setq read-quoted-char-radix 16)
+
+(defun set-mail-mode ()
+  "Sets the environment properly for sending mail from"
+  (interactive nil)
+  (auto-fill-mode 1)
+  (set-input-method "french-postfix")
+  (global-set-key [?\C-x ?\C-t] 'ispell-buffer)
+  (message "mail mode set"))
+
+(global-set-key [?\C-\M-M] 'set-mail-mode)
+
+;; turn on filling and french for mail messages
+(setq auto-mode-alist
+      (append '(("mutt[-[:alnum:]]\\{3,\\}$" . set-mail-mode))
+              auto-mode-alist))
+
+;; make a shortcut for the goto-line function
+(global-set-key [?\M-1] 'goto-line)
+
+;; define a function to do a word count
+(defun word-count nil "Count words in buffer" (interactive)
+  (shell-command-on-region (point-min) (point-max) "wc -w"))
+
+(setq nxml-file ".../lib/emacs/mode/nxml/rng-auto.el")
+(if (file-exists-p nxml-file)
+    (progn (load nxml-file)
+           (setq auto-mode-alist
+                 (cons '("\\(xml\\|xsl\\|html\\|rng\\|xhtml\\|xslt\\|rml\\|docbook\\|svg\\|tmpl\\)" . nxml-mode)
+                       auto-mode-alist))
+           (message "nxml mode loaded")))
+
+(setq matlab-file ".../emacs.d/matlab.el")
+(if (file-exists-p matlab-file)
+    (progn (load matlab-file)
+           (setq auto-mode-alist
+                 (cons '("\\.m\\'" . matlab-mode)
+                       auto-mode-alist))
+           (message "matlab mode loaded")))
+
+
+(setq php-file "~/.emacs.d/php-mode.el")
+(if (file-exists-p php-file)
+    (progn (load php-file)
+           (setq auto-mode-alist
+                 (cons '("\\.php\\'" . php-mode)
+                       auto-mode-alist))
+           (message "php mode loaded")))
+
+;; (setq python-file "~/.emacs.d/python-mode/python-mode.el")
+;; (if (file-exists-p python-file)
+;;     (progn (load python-file)
+;;            (setq auto-mode-alist
+;;                  (cons '("\\.\\(py\\)\\'" . python-mode)
+;;                        auto-mode-alist))
+;;            (message "python mode loaded")))
+
+;(setq auto-mode-alist
+;      (cons '("\\.\\(js\\)\\'" . c-mode)
+;            auto-mode-alist))
+
+(defun remove-hard-wrap () 
+  "Make several lines into a single long line."
+  (interactive)
+  (let ((fill-column 90002000))
+    (fill-paragraph nil)))
+(global-set-key "\C-x\M-q" 'remove-hard-wrap)
+
+;(setq javascript-file "~/.emacs.d/javascript-mode.el")
+;(if (file-exists-p javascript-file)
+;    (progn (load javascript-file)
+;           (setq auto-mode-alist
+;                 (cons '("\\.\\(js\\)\\'" . javascript-mode)
+;                       auto-mode-alist))
+;           (message "javascript mode loaded")))

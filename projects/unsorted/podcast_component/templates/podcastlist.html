@@ -1,0 +1,34 @@
+<mos:comment>
+@package Indiefeed
+@license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+</mos:comment>
+ 
+<mos:tmpl name="test" useglobals="true">
+Test <a href="{R_ARTIST_URL}"><mos:var name="copiedVar" copyFrom="casts.R_ARTIST"/></a>
+</mos:tmpl>
+
+<mos:tmpl name="aartist" useglobals="true">
+ <a href="{R_ARTIST_URL}"><mos:var name="copiedVar" copyFrom="casts.R_ARTIST"/></a>
+</mos:tmpl>
+
+<mos:tmpl name="helloworld">
+<h1>Hello World {NAME}<h1>
+
+<ul>
+<mos:tmpl name="casts">
+  <li>
+<!--
+  <mos:tmpl name="artist" type="condition" conditionVar="R_ARTIST_URL">
+    <mos:sub condition="__default"><a href="{casts.R_ARTIST_URL}"><mos:var name="copiedVar" copyFrom="casts.R_ARTIST"/></a></mos:sub>
+    <mos:sub condition="__empty">{casts.R_ARTIST}</mos:sub>
+  </mos:tmpl>
+-->
+    &mdash; {R_TITLE}
+    <mos:link src="test" />
+  </li>
+</mos:tmpl>
+</ul>
+
+<input type="hidden" name="option" value="{OPTION}" />
+<input type="hidden" name="task" value="" />
+</mos:tmpl>

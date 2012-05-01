@@ -1,0 +1,2579 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-360 Homework #5</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      object { width: 100%; }
+      table { border-collapse: collapse; }
+      td, th { border: 1px solid; padding: .25em .5em; text-align: center; }
+      .plan { width: 1000px; }
+      #graph_plan { height: 600px; }
+      #partial_plan { height: 300px; }
+      #progression_plan, #regression_plan { height: 800px; }
+      #forward { height: 400px; }
+      math + math { margin-top: .5em; padding-top: .5em; }
+      mo[class~=dist] { font-weight: bold; }
+      em em { font-style: normal; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 360: Introduction to Artificial Intelligence</h1>
+      <h2>Homework #5</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 24:00 Thrs., 5 December 2007</h2>
+    </div>
+    <ol>
+      <li>
+        <div class="question">
+          <h2>Probability</h2>
+          <p>Consider the domain of dealing five card poker hands from a standard deck of 52 cards, under the assumption the dealer is fair.</p>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>How many atomic events are there in the joint probability distribution? (I.e., how many five card hands are there?)</p>
+            </div>
+            <div class="answer">
+              <p>This is simply the number of ways to choose five things from 52:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mfenced><mfrac linethickness="0"><mn>52</mn><mn>5</mn></mfrac></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfrac>
+                        <mrow><mn>52</mn><mo>!</mo></mrow>
+                        <mrow><mn>5</mn><mo>!</mo><mfenced><mrow><mn>52</mn><mo>-</mo><mn>5</mn></mrow></mfenced><mo>!</mo></mrow>
+                      </mfrac>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfrac>
+                        <mrow>
+                          <mfenced><mn>52</mn></mfenced><mfenced><mn>51</mn></mfenced><mfenced><mn>50</mn></mfenced>
+                          <mfenced><mn>49</mn></mfenced><mfenced><mn>48</mn></mfenced>
+                        </mrow>
+                        <mrow><mn>5</mn><mo>!</mo></mrow>
+                      </mfrac>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>2598960</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>What is the probability of each atomic event?</p>
+            </div>
+            <div class="answer">
+              <p>Each hand is equally likely, so:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mfrac><mn>1</mn><mn>2598960</mn></mfrac>
+              </math>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>What is the probability of being dealt a royal straight flush?</p>
+            </div>
+            <div class="answer">
+              <p>There are four royal straight flushes, so:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac><mn>4</mn><mn>2598960</mn></mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><mn>1</mn><mn>649740</mn></mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>What is the probability of being dealt four of a kind?</p>
+            </div>
+            <div class="answer">
+              <p>Each hand of four of a kind is distinguished by two things, the card there is four of and the card that is different. There are 13 different cards to have four of and for each given four of a kind there are 48 cards that are different. So, the number of ways to get four of a kind is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfenced><mn>13</mn></mfenced><mfenced><mn>48</mn></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>624</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The probability then would be:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac><mn>624</mn><mn>2598960</mn></mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><mn>1</mn><mn>4165</mn></mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+<!--
+          <li>
+            <div class="question">
+              <p>What is the probability of being dealt a straight?</p>
+            </div>
+            <div class="answer">
+              <p></p>
+            </div>
+          </li>
+-->
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>Show that the statement:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced separators="|"><mfenced open="" close=""><mi>A</mi><mi>B</mi></mfenced><mi>C</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>P</mo><mfenced separators="|"><mi>A</mi><mi>C</mi></mfenced>
+                  <mo>P</mo><mfenced separators="|"><mi>B</mi><mi>C</mi></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>is equivalent to either of the statements:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced separators="|"><mi>A</mi><mfenced open="" close=""><mi>B</mi><mi>C</mi></mfenced></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>P</mo><mfenced separators="|"><mi>A</mi><mi>C</mi></mfenced></mtd>
+                <mtd><mtext>and</mtext></mtd>
+                <mtd><mo>P</mo><mfenced separators="|"><mi>B</mi><mfenced open="" close=""><mi>A</mi><mi>C</mi></mfenced></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>P</mo><mfenced separators="|"><mi>B</mi><mi>C</mi></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+        <div class="answer">
+          <p>First, some notation. P<sub><em>A,B</em></sub>(<em>a</em>,<em>b</em>) is the joint probability of <em>A</em> and <em>B</em>:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mo>P</mo><mfenced open="" close=""><mi>A</mi><mi>B</mi></mfenced></msub><mfenced><mi>a</mi><mi>b</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>P</mo><mfenced><mrow><mi>A</mi><mo>=</mo><mi>a</mi><mo>&and;</mo><mi>B</mi><mo>=</mo><mi>b</mi></mrow></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>P</mo><mfenced><mrow><mi>A</mi><mo>=</mo><mi>a</mi><mo>|</mo><mi>B</mi><mo>=</mo><mi>b</mi></mrow></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>P</mo><mfenced><mrow><mi>B</mi><mo>=</mo><mi>b</mi><mo>|</mo><mi>A</mi><mo>=</mo><mi>a</mi></mrow></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The initial statement:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced separators="|"><mfenced open="" close=""><mi>A</mi><mi>B</mi></mfenced><mi>C</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>P</mo><mfenced separators="|"><mi>A</mi><mi>C</mi></mfenced>
+                  <mo>P</mo><mfenced separators="|"><mi>B</mi><mi>C</mi></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Is a statement that <em>A</em> and <em>B</em> are independent, that is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced separators="|"><mi>A</mi><mi>B</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>P</mo><mfenced><mi>A</mi></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced separators="|"><mi>B</mi><mi>A</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>P</mo><mfenced><mi>B</mi></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>For conditional probability in general:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced separators="|"><mi>A</mi><mi>B</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced separators="&cap;"><mi>A</mi><mi>B</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced><mi>B</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced separators="&and;"><mi>A</mi><mi>B</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced><mi>B</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced><mi>A</mi><mi>B</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced><mi>B</mi></mfenced></mrow>
+                </mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>This can be expanded to conditional joint probability:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced separators="|"><mfenced><mi>A</mi><mi>B</mi></mfenced><mi>C</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced separators="&cap;"><mfenced><mi>A</mi><mi>B</mi></mfenced><mi>C</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced separators="&and;"><mfenced separators="&and;"><mi>A</mi><mi>B</mi></mfenced><mi>C</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced separators="&and;"><mi>A</mi><mi>B</mi><mi>C</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced><mi>A</mi><mi>B</mi><mi>C</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Likewise:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced separators="|"><mi>A</mi><mfenced><mi>B</mi><mi>C</mi></mfenced></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced separators="&cap;"><mi>A</mi><mfenced><mi>B</mi><mi>C</mi></mfenced></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced><mi>B</mi><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced separators="&and;"><mi>A</mi><mfenced separators="&and;"><mi>B</mi><mi>C</mi></mfenced></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced separatos="&and;"><mi>B</mi><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced separators="&and;"><mi>A</mi><mi>B</mi><mi>C</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced separators="&and;"><mi>B</mi><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced><mi>A</mi><mi>B</mi><mi>C</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced><mi>B</mi><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Combining these two forms along with Bayes' rule gives:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced separators="|"><mfenced><mi>A</mi><mi>B</mi></mfenced><mi>C</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced><mi>A</mi><mi>B</mi><mi>C</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><mo>P</mo><mfenced><mi>A</mi><mi>B</mi><mi>C</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>P</mo><mfenced separators="|"><mfenced><mi>A</mi><mi>B</mi></mfenced><mi>C</mi></mfenced>
+                  <mo>P</mo><mfenced><mi>C</mi></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced separators="|"><mi>B</mi><mi>C</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced><mi>B</mi><mi>C</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><mo>P</mo><mfenced><mi>B</mi><mi>C</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>P</mo><mfenced separators="|"><mi>B</mi><mi>C</mi></mfenced>
+                  <mo>P</mo><mfenced><mi>C</mi></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced separators="|"><mi>A</mi><mfenced><mi>B</mi><mi>C</mi></mfenced></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced><mi>A</mi><mi>B</mi><mi>C</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced><mi>B</mi><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow>
+                    <mo>P</mo><mfenced separators="|"><mfenced><mi>A</mi><mi>B</mi></mfenced><mi>C</mi></mfenced>
+                    <mo>P</mo><mfenced><mi>C</mi></mfenced>
+                  </mrow>
+                  <mrow><mo>P</mo><mfenced><mi>B</mi><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow>
+                    <mo>P</mo><mfenced separators="|"><mfenced><mi>A</mi><mi>B</mi></mfenced><mi>C</mi></mfenced>
+                    <mo>P</mo><mfenced><mi>C</mi></mfenced>
+                  </mrow>
+                  <mrow>
+                    <mo>P</mo><mfenced separators="|"><mi>B</mi><mi>C</mi></mfenced>
+                    <mo>P</mo><mfenced><mi>C</mi></mfenced>
+                  </mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced separators="|"><mfenced><mi>A</mi><mi>B</mi></mfenced><mi>C</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced separators="|"><mi>B</mi><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Incorporating the initial assumption of independence:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced separators="|"><mi>A</mi><mfenced><mi>B</mi><mi>C</mi></mfenced></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mo>P</mo><mfenced separators="|"><mfenced><mi>A</mi><mi>B</mi></mfenced><mi>C</mi></mfenced></mrow>
+                  <mrow><mo>P</mo><mfenced separators="|"><mi>B</mi><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow>
+                    <mo>P</mo><mfenced separators="|"><mi>A</mi><mi>C</mi></mfenced>
+                    <mo>P</mo><mfenced separators="|"><mi>B</mi><mi>C</mi></mfenced>
+                  </mrow>
+                  <mrow><mo>P</mo><mfenced separators="|"><mi>B</mi><mi>C</mi></mfenced></mrow>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>P</mo><mfenced separators="|"><mi>A</mi><mi>C</mi></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Suppose you are a witness to a nighttime hit-and-run accident involving a taxi in Athens. All taxis in Athens are either blue or green. You swear, under oath, that the taxi was blue. Extensive testing shows that, under dim lighting conditions, discrimination between blue and green is 75% reliable.</p>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Is it possible to calculate the most likely color for the taxi?</p>
+            </div>
+            <div class="answer">
+              <p>From the question we are given probabilities about the events:</p>
+              <ul>
+                <li>t<sub>g</sub> &mdash; The taxi was green</li>
+                <li>t<sub>b</sub> &mdash; The taxi was blue</li>
+                <li>p<sub>g</sub> &mdash; The perceived color was green</li>
+                <li>p<sub>b</sub> &mdash; The perceived color was blue</li>
+              </ul>
+              <p>The information given is:</p>
+              <ul>
+                <li>All taxis are either blue or green:
+                <ul>
+                  <li>P(t<sub>g</sub> &or; t<sub>b</sub>) = 1</li>
+                  <li>P(t<sub>g</sub> &and; t<sub>b</sub>) = 0</li>
+                </ul>
+                </li>
+                <li>Discrimination between blue and green is 75% reliable. (An assumption is made that the person making the statement is being honest and that they are accurately reporting their perceptions.) This is somewhat tricky since it is possible to say, "I know what the perception is, so the perception is given." For the purposes of testing reliability though, the actual color is what was known and the perception was determined:
+                <ul>
+                  <li>P(p<sub>g</sub> | t<sub>g</sub>) = P(p<sub>b</sub> | t<sub>b</sub>) = .75</li>
+                  <li>P(p<sub>g</sub> | t<sub>b</sub>) = P(p<sub>b</sub> | t<sub>g</sub>) = .25</li>
+                </ul>
+                </li>
+              </ul>
+              <p>The desired quantity is the most likely color for the taxi:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>x</mi><mi>i</mi></msub></mtd>
+                    <mtd><mo>&SuchThat;</mo></mtd>
+                    <mtd>
+                      <mfenced open="" close="" separators=";">
+                        <mrow>
+                          <mfenced open="" close=""><msub><mi>x</mi><mi>i</mi></msub><msub><mi>x</mi><mi>j</mi></msub></mfenced>
+                          <mo>&Element;</mo>
+                          <mfenced open="{" close="}"><msub><mi>t</mi><mi>g</mi></msub><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                        </mrow>
+                        <mrow><mi>i</mi><mo>&ne;</mo><mi>j</mi></mrow>
+                        <mrow>
+                          <mo>P</mo><mfenced><msub><mi>x</mi><mi>i</mi></msub></mfenced><mo>&gt;</mo>
+                          <mo>P</mo><mfenced><msub><mi>x</mi><mi>j</mi></msub></mfenced>
+                        </mrow>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>&ForAll;</mo></mtd>
+                    <mtd><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>It is worth noting two facts:</p>
+              <ul>
+                <li>If there is a tie for the top place, then <em>x<sub>i</sub></em> is not defined</li>
+                <li>For this situation where there are only two colors, the statement can be simplified to:
+                <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                  <mtable>
+                    <mtr>
+                      <mtd><mi>x</mi></mtd>
+                      <mtd><mo>&SuchThat;</mo></mtd>
+                      <mtd>
+                        <mfenced open="" close="" separators=";">
+                          <mrow>
+                            <mi>x</mi><mo>&Element;</mo>
+                            <mfenced open="{" close="}"><msub><mi>t</mi><mi>g</mi></msub><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                          </mrow>
+                          <mrow><mo>P</mo><mfenced><mi>x</mi></mfenced><mo>&gt;</mo><mn>0.5</mn></mrow>
+                        </mfenced>
+                      </mtd>
+                    </mtr>
+                  </mtable>
+                </math>
+                </li>
+              </ul>
+              <p>Consider the probability that the taxi was in fact blue given it was perceived to be blue, using Bayes' rule: (If this is less than 0.5 then the taxi was probably green.)</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>P</mo><mfenced separators="|"><msub><mi>t</mi><mi>b</mi></msub><msub><mi>p</mi><mi>b</mi></msub></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow><mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub><msub><mi>p</mi><mi>b</mi></msub></mfenced></mrow>
+                      <mrow><mo>P</mo><mfenced><msub><mi>p</mi><mi>b</mi></msub></mfenced></mrow>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow><mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub><msub><mi>p</mi><mi>b</mi></msub></mfenced></mrow>
+                      <mrow>
+                        <mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub><msub><mi>p</mi><mi>b</mi></msub></mfenced><mo>+</mo>
+                        <mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub><mrow><mo>&not;</mo><msub><mi>p</mi><mi>b</mi></msub></mrow></mfenced>
+                      </mrow>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow><mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub><msub><mi>p</mi><mi>b</mi></msub></mfenced></mrow>
+                      <mrow>
+                        <mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub><msub><mi>p</mi><mi>b</mi></msub></mfenced><mo>+</mo>
+                        <mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub><msub><mi>p</mi><mi>g</mi></msub></mfenced>
+                      </mrow>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <mo>P</mo><mfenced separators="|"><msub><mi>p</mi><mi>b</mi></msub><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                        <mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                      </mrow>
+                      <mrow>
+                        <mrow>
+                          <mo>P</mo><mfenced separators="|"><msub><mi>p</mi><mi>b</mi></msub><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                          <mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                        </mrow>
+                        <mo>+</mo>
+                        <mrow>
+                          <mo>P</mo><mfenced separators="|"><msub><mi>p</mi><mi>b</mi></msub><msub><mi>t</mi><mi>g</mi></msub></mfenced>
+                          <mo>P</mo><mfenced><msub><mi>t</mi><mi>g</mi></msub></mfenced>
+                        </mrow>
+                      </mrow>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <mo>P</mo><mfenced separators="|"><msub><mi>p</mi><mi>b</mi></msub><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                        <mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                      </mrow>
+                      <mrow>
+                        <mrow>
+                          <mo>P</mo><mfenced separators="|"><msub><mi>p</mi><mi>b</mi></msub><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                          <mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                        </mrow>
+                        <mo>+</mo>
+                        <mrow>
+                          <mo>P</mo><mfenced separators="|"><msub><mi>p</mi><mi>b</mi></msub><msub><mi>t</mi><mi>g</mi></msub></mfenced>
+                          <mfenced><mrow><mn>1</mn><mo>-</mo><mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub></mfenced></mrow></mfenced>
+                        </mrow>
+                      </mrow>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>All of the conditional probabilities are known, but P(t<sub>b</sub>) isn't, so the solution isn't known. This makes sense. Say for example there are 10,000 taxis in Athens. 9,999 are green and 1 is blue. The likelihood that I mistook one of the green ones for the blue one is much higher than the probability that I actually saw the one blue one.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>How about if it is known that 9 out of 10 Athenian taxis are green?</p>
+            </div>
+            <div class="answer">
+              <p>This adds an additional known probability:</p>
+              <ul>
+                <li>P(t<sub>g</sub>) = 0.9</li>
+                <li>P(t<sub>b</sub>) = 1 - P(t<sub>g</sub>) = 0.1</li>
+              </ul>
+              <p>With this information it is possible to solve the previous equation:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo>P</mo><mfenced separators="|"><msub><mi>t</mi><mi>b</mi></msub><msub><mi>p</mi><mi>b</mi></msub></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <mo>P</mo><mfenced separators="|"><msub><mi>p</mi><mi>b</mi></msub><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                        <mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                      </mrow>
+                      <mrow>
+                        <mrow>
+                          <mo>P</mo><mfenced separators="|"><msub><mi>p</mi><mi>b</mi></msub><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                          <mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub></mfenced>
+                        </mrow>
+                        <mo>+</mo>
+                        <mrow>
+                          <mo>P</mo><mfenced separators="|"><msub><mi>p</mi><mi>b</mi></msub><msub><mi>t</mi><mi>g</mi></msub></mfenced>
+                          <mfenced><mrow><mn>1</mn><mo>-</mo><mo>P</mo><mfenced><msub><mi>t</mi><mi>b</mi></msub></mfenced></mrow></mfenced>
+                        </mrow>
+                      </mrow>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow><mfenced><mn>0.75</mn></mfenced><mfenced><mn>0.1</mn></mfenced></mrow>
+                      <mrow>
+                        <mrow><mfenced><mn>0.75</mn></mfenced><mfenced><mn>0.1</mn></mfenced></mrow><mo>+</mo>
+                        <mrow><mfenced><mn>0.25</mn></mfenced><mfenced><mrow><mn>1</mn><mo>-</mo><mn>0.1</mn></mrow></mfenced></mrow>
+                      </mrow>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0.25</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>So, there is only a <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>1</mn><mn>4</mn></mfrac></math> probability that the taxi was blue given I thought it was blue. I.e., it was probably green.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>Two astronomers in different parts of the world make measurements <em>M<sub>1</sub></em> and <em>M<sub>2</sub></em> of the number of stars, <em>N</em>, for a particular region of the sky. Normally, there is a small probability, <em>e</em>, that there will be an error of up to one star in either direction. Each telescope can also be badly out of focus (events <em>F<sub>1</sub></em> and <em>F<sub>2</sub></em>) with much smaller probability <em>f</em>, in which case the scientist will undercount by three or more stars. If <em>N</em> is less than 3, they can fail to detect any stars at all. Consider the following Baysean networks:</p>
+          <object id="bayes_nets" type="image/svg+xml" data="bayes_nets.svg"></object>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Which of these Baysean networks are correct (but not necessarily efficient) representations of the question?</p>
+            </div>
+            <div class="answer">
+              <p><em>ii</em> is clearly correct because a change in <em>N</em> or <em>F<sub>i</sub></em> will affect <em>M<sub>i</sub></em>. The statement of the question highly suggests that at least one of the other two is an inefficient solution.</p>
+              <p><em>i</em> can be eliminated because <em>M<sub>i</sub></em> is only dependent on <em>F<sub>i</sub></em>. The count found by the first observer, <em>M<sub>1</sub></em>, is very likely correlated to the count found by the second, <em>M<sub>2</sub></em>.</p>
+              <p><em>iii</em> doesn't have any conditional independences which is correct, though not terribly efficient.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Which is the best network?</p>
+            </div>
+            <div class="answer">
+              <p><em>ii</em> is the most succinct network which requires the minimum of information to do computations.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Write out the conditional probability distribution for P(<em>M<sub>1</sub></em> | N), for the case where N &Element; {1,2,3} and <em>M<sub>1</sub></em> &Element; {0,1,2,3,4}. Each element should be expressed in terms of the parameters <em>e</em> and/or <em>f</em>.</p>
+            </div>
+            <div class="answer">
+              <p>If a telescope is out of focus it will undercount by at least three. Counting errors will cause an error of at most one, so it is not possible to undercount by two. Also it is not possible to overcount by more than one.</p>
+              <p>It is assumed that the likelihood of a counting error is equally likely in either direction, so:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mrow><msub><mi>M</mi><mi>i</mi></msub><mo>=</mo><mi>k</mi><mo>-</mo><mn>1</mn></mrow>
+                        <mrow><mi>N</mi><mo>=</mo><mi>k</mi></mrow>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mrow><msub><mi>M</mi><mi>i</mi></msub><mo>=</mo><mi>k</mi><mo>+</mo><mn>1</mn></mrow>
+                        <mrow><mi>N</mi><mo>=</mo><mi>k</mi></mrow>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><mi>e</mi><mn>2</mn></mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <table>
+                <tr>
+                  <th><em>M<sub>1</sub></em></th>
+                  <th>P(<em>M<sub>1</sub></em> | <em>N</em> = 1)</th>
+                  <th>P(<em>M<sub>1</sub></em> | <em>N</em> = 2)</th>
+                  <th>P(<em>M<sub>1</sub></em> | <em>N</em> = 3)</th>
+                </tr>
+                <tr>
+                  <td>0</td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>e</mi><mn>2</mn></mfrac></math></td>
+                  <td>0</td>
+                  <td><em>f</em></td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>1 - <em>e</em></td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>e</mi><mn>2</mn></mfrac></math></td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>e</mi><mn>2</mn></mfrac></math></td>
+                  <td>1 - <em>e</em></td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>e</mi><mn>2</mn></mfrac></math></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>0</td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>e</mi><mn>2</mn></mfrac></math></td>
+                  <td>1 - <em>e</em> - <em>f</em></td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>e</mi><mn>2</mn></mfrac></math></td>
+                </tr>
+              </table>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Suppose <em>M<sub>1</sub></em> = 1 and <em>M<sub>2</sub></em> = 3. What are the possible number of stars if there is no prior constraint on the value of <em>N</em>?</p>
+            </div>
+            <div class="answer">
+              <p>Since it is possible to undercount by an arbitrary number of stars, there is no maximum possible. Both <em>M<sub>1</sub></em> and <em>M<sub>2</sub></em> could be underestimating by 100,000 stars for all that is specified in the problem. The question is the minimum number. It is only possible to overcount by 1, so the minimum set by <em>M<sub>2</sub></em> is 2.</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mn>2</mn></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mi>N</mi></mtd>
+                    <mtd><mo>&lt;</mo></mtd>
+                    <mtd><mn>&infin;</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>What is the most likely number of stars given <em>M<sub>1</sub></em> = 1 and <em>M<sub>2</sub></em> = 3? If it is not possible to compute this, explain what additional information is needed and how it would affect the result.</p>
+            </div>
+            <div class="answer">
+              <p>The likelihood that the telescopes are out of focus and a serious overcount is happening is constant at <em>f</em>. If this is the case then anything above <em>N</em> = 6 (<em>M<sub>2</sub></em> + 3) has the same probability:</p>
+              <table>
+                <tr>
+                  <th><em>N</em></th>
+                  <th><em>M<sub>1</sub></em> - <em>N</em></th>
+                  <th><em>M<sub>2</sub></em> - <em>N</em></th>
+                  <th>P(<em>N</em> | <em>M<sub>1</sub></em> = 1)</th>
+                  <th>P(<em>N</em> | <em>M<sub>2</sub></em> = 3)</th>
+                  <th>P(<em>N</em> | <em>M<sub>1</sub></em> = 1,<em>M<sub>2</sub></em> = 3)</th>
+                </tr>
+                <tr><td>&le; 1</td><td>&ge; 0</td><td>&ge; 2</td><td></td><td>0<sup>1</sup></td><td>0</td></tr>
+                <tr>
+                  <td>2</td>
+                  <td>-1</td>
+                  <td>1</td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>e</mi><mn>2</mn></mfrac></math></td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>e</mi><mn>2</mn></mfrac></math></td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><msup><mi>e</mi><mn>2</mn></msup><mn>2</mn></mfrac></math></td>
+                </tr>
+                <tr><td>3</td><td>-2</td><td>0</td><td>0<sup>2</sup></td><td></td><td>0</td></tr>
+                <tr>
+                  <td>4</td>
+                  <td>-3</td>
+                  <td>-1</td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi></math></td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>e</mi><mn>2</mn></mfrac></math></td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mrow><mi>e</mi><mi>f</mi></mrow><mn>2</mn></mfrac></math></td>
+                </tr>
+                <tr><td>5</td><td>-4</td><td>-2</td><td></td><td>0<sup>2</sup></td><td>0</td></tr>
+                <tr>
+                  <td>&ge; 6</td>
+                  <td>&ge; -5</td>
+                  <td>&ge; -3</td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi></math></td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi></math></td>
+                  <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>f</mi><mn>2</mn></msup></math></td>
+                </tr>
+              </table>
+              <ul>
+                <li><sup>1</sup> &mdash; can't overcount by more than one</li>
+                <li><sup>2</sup> &mdash; can't undercount by two</li>
+              </ul>
+              <p>The most likely number of stars is 2. From the problem specification, it is stated that <em>f</em> is "much smaller" than <em>e</em>. This can be taken to assume:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mi>f</mi></mtd>
+                    <mtd><mo>&lt;</mo></mtd>
+                    <mtd><mi>e</mi></mtd>
+                    <mtd><mo>&Implies;</mo></mtd>
+                    <mtd>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mrow><mi>N</mi><mo>=</mo><mn>4</mn></mrow>
+                        <mfenced open="" close="">
+                          <mrow><msub><mi>M</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn></mrow>
+                          <mrow><msub><mi>M</mi><mn>2</mn></msub><mo>=</mo><mn>3</mn></mrow>
+                        </mfenced>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><mrow><mi>e</mi><mi>f</mi></mrow><mn>2</mn></mfrac></mtd>
+                    <mtd><mo>&lt;</mo></mtd>
+                    <mtd><mfrac><msup><mi>e</mi><mn>2</mn></msup><mn>2</mn></mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mrow><mi>N</mi><mo>=</mo><mn>2</mn></mrow>
+                        <mfenced open="" close="">
+                          <mrow><msub><mi>M</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn></mrow>
+                          <mrow><msub><mi>M</mi><mn>2</mn></msub><mo>=</mo><mn>3</mn></mrow>
+                        </mfenced>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mi>f</mi></mtd>
+                    <mtd><mo>&lt;</mo></mtd>
+                    <mtd><mfrac><mi>e</mi><msqrt><mn>2</mn></msqrt></mfrac></mtd>
+                    <mtd><mo>&Implies;</mo></mtd>
+                    <mtd>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mrow><mi>N</mi><mo>&ge;</mo><mn>6</mn></mrow>
+                        <mfenced open="" close="">
+                          <mrow><msub><mi>M</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn></mrow>
+                          <mrow><msub><mi>M</mi><mn>2</mn></msub><mo>=</mo><mn>3</mn></mrow>
+                        </mfenced>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msup><mi>f</mi><mn>2</mn></msup></mtd>
+                    <mtd><mo>&lt;</mo></mtd>
+                    <mtd><mfrac><msup><mi>e</mi><mn>2</mn></msup><mn>2</mn></mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mrow><mi>N</mi><mo>=</mo><mn>2</mn></mrow>
+                        <mfenced open="" close="">
+                          <mrow><msub><mi>M</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn></mrow>
+                          <mrow><msub><mi>M</mi><mn>2</mn></msub><mo>=</mo><mn>3</mn></mrow>
+                        </mfenced>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>Consider the following variable elimination algorithm:</p>
+          <ul>
+            <li>function <code>Elimination-Ask</code>(<em>X</em>, <em>e</em>, <em>bn</em>) returns a distribution over <em>X</em>
+            <ul>
+              <li>inputs:
+              <ul>
+                <li><em>X</em> &mdash; the query variable</li>
+                <li><em>e</em> &mdash; evidence of a specified event</li>
+                <li><em>bn</em> &mdash; a Baysean network specifying a joint distribution P(<em>X<sub>1</sub></em>,&hellip;,<em>X<sub>n</sub></em>)</li>
+              </ul>
+              </li>
+              <li>variables:
+              <ul>
+                <li><em>factors</em> &lArr; []</li>
+                <li><em>vars</em> &lArr; <code>Reverse</code>(<code>Vars</code>[<em>bn</em>])</li>
+              </ul>
+              </li>
+              <li>algorithm:
+              <ul>
+                <li>for each <em>var</em> in <em>vars</em> do
+                <ul>
+                  <li><em>factors</em> &lArr; [<code>Make-Factor</code>(<em>X</em>,<em>e</em>)|<em>factors</em>]</li>
+                  <li>if <em>var</em> is a hidden variable then <em>factors</em> &lArr; <code>SumOut</code>(<em>var</em>,<em>factors</em>)</li>
+                </ul>
+                </li>
+                <li>return <code>Normalize</code>(<code>Pointwise-Product</code>(<em>factors</em>))</li>
+              </ul>
+              </li>
+            </ul>
+            </li>
+          </ul>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Apply variable elimination to the query:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mo>P</mo>
+                <mfenced separators="|">
+                  <mi>Burglary</mi>
+                  <mfenced open="" close="">
+                    <mrow><mi>JohnCalls</mi><mo>=</mo><mi>true</mi></mrow>
+                    <mrow><mi>MaryCalls</mi><mo>=</mo><mi>true</mi></mrow>
+                  </mfenced>
+                </mfenced>
+              </math>
+            </div>
+            <div class="answer">
+              <p>For the purposes of succinct representation, the full predicates are shortened:</p>
+              <ul>
+                <li><em>B</em> = {<em>b</em>, &not;<em>b</em>} = <em>Burglary</em></li>
+                <li><em>J</em> = {<em>j</em>, &not;<em>j</em>} = <em>JohnCalls</em></li>
+                <li><em>M</em> = {<em>m</em>, &not;<em>m</em>} = <em>MaryCalls</em></li>
+              </ul>
+              <p>There are also hidden variables:</p>
+              <ul>
+                <li><em>A</em> = {<em>a</em>, &not;<em>a</em>} = <em>Alarm</em></li>
+                <li><em>E</em> = {<em>e</em>, &not;<em>e</em>} = <em>Earthquake</em></li>
+              </ul>
+              <p>The basics of this problem are predicated on the following Baysean network:</p>
+              <object id="alarm_nets" type="image/svg+xml" data="alarm_bayes_net.svg"></object>
+              <p>Recall, in general, for a Bayes' net:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo>P</mo>
+                      <mfenced><msub><mi>x</mi><mn>1</mn></msub><mo>&hellip;</mo><msub><mi>x</mi><mi>n</mi></msub></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munderover><mo>&Pi;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>x</mi><mi>i</mi></msub><mrow><mo>parents</mo><mfenced><msub><mi>X</mi><mi>i</mi></msub></mfenced></mrow>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The problem is considered in terms of the entire probability distribution, <strong>P</strong>, as opposed to the probability of a particular event, P. For a given:</p>
+              <ul>
+                <li><em>X</em> &mdash; query variable being investigated</li>
+                <li><em>o</em> &mdash; observed values of evidence variables</li>
+                <li><em>u</em> &mdash; unobserved variables</li>
+              </ul>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo class="dist">P</mo><mfenced separators="|"><mi>X</mi><mi>o</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mi>&alpha;</mi><mo class="dist">P</mo><mfenced><mi>X</mi><mi>o</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi><munder><mo>&Sum;</mo><mi>u</mi></munder>
+                      <mo class="dist">P</mo><mfenced><mi>X</mi><mi>o</mi><mi>u</mi></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>So, for this example:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo class="dist">P</mo><mfenced separators="|"><mi>B</mi><mfenced open="" close=""><mi>j</mi><mi>m</mi></mfenced></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mi>&alpha;</mi><mo class="dist">P</mo><mfenced><mi>B</mi><mi>j</mi><mi>m</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi><munder><mo>&Sum;</mo><mi>e</mi></munder><munder><mo>&Sum;</mo><mi>a</mi></munder>
+                      <mo class="dist">P</mo><mfenced><mi>B</mi><mi>e</mi><mi>a</mi><mi>j</mi><mi>m</mi></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>
+                <em>I really don't understand the
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><munder><mo>&Sum;</mo><mi>e</mi></munder><mi>e</mi></math>.
+                I thought <em>e</em> meant there was an earthquake whereas <em>E</em> represented the probability distribution. Why isn't the equation:</em>
+              </p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mo class="dist">P</mo><mfenced separators="|"><mi>B</mi><mfenced open="" close=""><mi>j</mi><mi>m</mi></mfenced></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mi>&alpha;</mi><mo class="dist">P</mo><mfenced><mi>B</mi><mi>j</mi><mi>m</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi><munder><mo>&Sum;</mo><mi>e</mi></munder><munder><mo>&Sum;</mo><mi>a</mi></munder>
+                      <mo class="dist">P</mo><mfenced><mi>B</mi><mi>E</mi><mi>A</mi><mi>j</mi><mi>m</mi></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p><em>The syntax I'm going to use is:</em></p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><munder><mo>&Sum;</mo><mi>y</mi></munder><mo>P</mo><mfenced><mi>Y</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mo>P</mo><mfenced><mi>y</mi></mfenced><mo>+</mo><mo>P</mo><mfenced><mrow><mo>&not;</mo><mi>y</mi></mrow></mfenced></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The first step is to reconsider the problem in terms of the known conditional independences from the Baysean network:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|"><mi>B</mi><mfenced open="" close=""><mi>j</mi><mi>m</mi></mfenced></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi><munder><mo>&Sum;</mo><mi>e</mi></munder><munder><mo>&Sum;</mo><mi>a</mi></munder>
+                      <mo class="dist">P</mo><mfenced><mi>B</mi><mi>E</mi><mi>A</mi><mi>j</mi><mi>m</mi></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi><munder><mo>&Sum;</mo><mi>e</mi></munder><munder><mo>&Sum;</mo><mi>a</mi></munder>
+                      <mo class="dist">P</mo><mfenced><mi>B</mi></mfenced>
+                      <mo>P</mo><mfenced><mi>E</mi></mfenced>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|"><mi>A</mi><mfenced open="" close=""><mi>B</mi><mi>E</mi></mfenced></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>j</mi><mi>A</mi></mfenced>
+                      <mo>P</mo><mfenced separators="|"><mi>m</mi><mi>A</mi></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>Under the laws of summation, this is equivalent to:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mi>&alpha;</mi><mo class="dist">P</mo><mfenced><mi>B</mi></mfenced>
+                <munder><mo>&Sum;</mo><mi>e</mi></munder><mo>P</mo><mfenced><mi>E</mi></mfenced>
+                <munder><mo>&Sum;</mo><mi>a</mi></munder>
+                <mo class="dist">P</mo><mfenced separators="|"><mi>A</mi><mfenced open="" close=""><mi>B</mi><mi>E</mi></mfenced></mfenced>
+                <mo>P</mo><mfenced separators="|"><mi>j</mi><mi>A</mi></mfenced>
+                <mo>P</mo><mfenced separators="|"><mi>m</mi><mi>A</mi></mfenced>
+              </math>
+              <p>The next steps involve working through the equation from right to left producing a set of factors. Factors are produced in several ways.</p>
+              <p>
+                For
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mo>P</mo><mfenced separators="|"><mi>m</mi><mi>A</mi></mfenced>
+                </math>,
+                <em>m</em> is a fixed value, and the factor for a fixed value is simply:
+              </p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mo class="dist">f</mo><mi>m</mi></msub><mfenced><mi>A</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mfrac linethickness="0">
+                        <mrow><mo>P</mo><mfenced separators="|"><mi>m</mi><mi>a</mi></mfenced></mrow>
+                        <mrow><mo>P</mo><mfenced separators="|"><mi>m</mi><mrow><mo>&not;</mo><mi>a</mi></mrow></mfenced></mrow>
+                      </mfrac></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>
+                Similarly for
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mo>P</mo><mfenced separators="|"><mi>j</mi><mi>A</mi></mfenced>
+                </math>,
+                <em>j</em> is a fixed value:
+              </p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mo class="dist">f</mo><mi>j</mi></msub><mfenced><mi>A</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mfrac linethickness="0">
+                        <mrow><mo>P</mo><mfenced separators="|"><mi>j</mi><mi>a</mi></mfenced></mrow>
+                        <mrow><mo>P</mo><mfenced separators="|"><mi>j</mi><mrow><mo>&not;</mo><mi>a</mi></mrow></mfenced></mrow>
+                      </mfrac></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p><em>There is another notational change here. Russell and Norvig use:</em></p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mo class="dist">f</mo><mi>j</mi></msub><mfenced><mi>A</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mo class="dist">f</mo><mi>J</mi></msub><mfenced><mi>j</mi><mi>A</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mfrac linethickness="0">
+                        <mrow><mo>P</mo><mfenced separators="|"><mi>j</mi><mi>a</mi></mfenced></mrow>
+                        <mrow><mo>P</mo><mfenced separators="|"><mi>j</mi><mrow><mo>&not;</mo><mi>a</mi></mrow></mfenced></mrow>
+                      </mfrac></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mo class="dist">f</mo><mi>J</mi></msub><mfenced><mi>J</mi><mi>A</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr>
+                            <mtd><mo>P</mo><mfenced separators="|"><mi>j</mi><mi>a</mi></mfenced></mtd>
+                            <mtd><mo>P</mo><mfenced separators="|"><mi>j</mi><mrow><mo>&not;</mo><mi>a</mi></mrow></mfenced></mtd>
+                          </mtr>
+                          <mtr>
+                            <mtd><mo>P</mo><mfenced separators="|"><mi>j</mi><mrow><mo>&not;</mo><mi>a</mi></mrow></mfenced></mtd>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|"><mrow><mo>&not;</mo><mi>j</mi></mrow><mrow><mo>&not;</mo><mi>a</mi></mrow></mfenced>
+                            </mtd>
+                          </mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              
+              <p><em>
+                Since 
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msub><mo class="dist">f</mo><mi>j</mi></msub><mfenced><mi>A</mi></mfenced>
+                </math>
+                is the pairing of <em>j</em> with the elements from <em>A</em>, I am going to use 
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msub><mo class="dist">f</mo><mi>J</mi></msub><mfenced><mi>A</mi></mfenced>
+                </math>
+                as the pairings of the elements of <em>J</em> with the elements of <em>A</em>. This is more intuitive since what would the notation
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msub><mo class="dist">f</mo><mi>J</mi></msub><mfenced><mi>A</mi></mfenced>
+                </math>
+                mean in Russell and Norvig's representation? It is a factor of what with the elements of <em>A</em>? If <em>J</em> needs to be present in the argument list to represent its inclusion in the factor then
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msub><mo class="dist">f</mo><mi>J</mi></msub><mfenced><mi>A</mi></mfenced>
+                </math>
+                doesn't make sense. So, for my notation, 
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msub><mo class="dist">f</mo><mi>J</mi></msub><mfenced><mi>J</mi><mi>A</mi></mfenced>
+                </math>
+                is a 2&times;2&times;2 matrix since there's a dimension for each axis. Specifically:
+              </em></p>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mo class="dist">f</mo><mi>J</mi></msub><mfenced><mi>J</mi><mi>A</mi></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msub><mo class="dist">f</mo><mi>j</mi></msub><mfenced><mi>A</mi><mi>J</mi></mfenced>
+                      <mo>&olarr;</mo>
+                      <msub><mo class="dist">f</mo><mrow><mo>&not;</mo><mi>j</mi></mrow></msub><mfenced><mi>A</mi><mi>J</mi></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr>
+                            <mtd><mo>P</mo><mfenced separators="|"><mi>j</mi><mfenced open="" close=""><mi>a</mi><mi>j</mi></mfenced></mfenced></mtd>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mi>j</mi><mfenced open="" close=""><mrow><mo>&not;</mo><mi>a</mi></mrow><mi>j</mi></mfenced>
+                              </mfenced>
+                            </mtd>
+                          </mtr>
+                          <mtr>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mi>j</mi><mfenced open="" close=""><mrow><mi>a</mi></mrow><mrow><mo>&not;</mo><mi>j</mi></mrow></mfenced>
+                              </mfenced>
+                            </mtd>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mi>j</mi><mfenced open="" close=""><mrow><mo>&not;</mo><mi>a</mi></mrow><mrow><mo>&not;</mo><mi>j</mi></mrow></mfenced>
+                              </mfenced>
+                            </mtd>
+                          </mtr>
+                        </mtable>
+                      </mfenced>
+                      <mo>&olarr;</mo>
+                      <mfenced>
+                        <mtable>
+                          <mtr>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mrow><mo>&not;</mo><mi>j</mi></mrow><mfenced open="" close=""><mi>a</mi><mi>j</mi></mfenced>
+                              </mfenced>
+                            </mtd>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mrow><mo>&not;</mo><mi>j</mi></mrow><mfenced open="" close=""><mrow><mo>&not;</mo><mi>a</mi></mrow><mi>j</mi></mfenced>
+                              </mfenced>
+                            </mtd>
+                          </mtr>
+                          <mtr>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mrow><mo>&not;</mo><mi>j</mi></mrow>
+                                <mfenced open="" close=""><mrow><mi>a</mi></mrow><mrow><mo>&not;</mo><mi>j</mi></mrow></mfenced>
+                              </mfenced>
+                            </mtd>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mrow><mo>&not;</mo><mi>j</mi></mrow>
+                                <mfenced open="" close=""><mrow><mo>&not;</mo><mi>a</mi></mrow><mrow><mo>&not;</mo><mi>j</mi></mrow></mfenced>
+                              </mfenced>
+                            </mtd>
+                          </mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr>
+                          <mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                      <mo>&olarr;</mo>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr>
+                          <mtr><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p><em>Where <em>A</em>&olarr;<em>B</em> represents that <em>A</em> and <em>B</em> are the unstacked layers of a three-dimensional matrix. The above result is not useful in any way to the best of my knowledge, it simply serves to illustrate the meaning of the syntax and show the procedure for a three dimensional expansion.</em></p>
+              <p>
+                For the next term,
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mo>P</mo><mfenced separators="|"><mi>A</mi><mfenced open="" close=""><mi>B</mi><mi>E</mi></mfenced></mfenced>
+                </math>,
+                dealing with the conditional probability on <em>B</em> and <em>E</em>, the factor is:
+              </p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <msub><mo class="dist">f</mo><mi>A</mi></msub>
+                      <mfenced><mi>B</mi><mi>E</mi></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msub><mo class="dist">f</mo><mi>a</mi></msub><mfenced><mi>B</mi><mi>E</mi></mfenced>
+                      <mo>&olarr;</mo>
+                      <msub><mo class="dist">f</mo><mrow><mo>&not;</mo><mi>a</mi></mrow></msub><mfenced><mi>B</mi><mi>E</mi></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr>
+                            <mtd><mo>P</mo><mfenced separators="|"><mi>a</mi><mfenced open="" close=""><mi>b</mi><mi>e</mi></mfenced></mfenced></mtd>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mi>a</mi><mfenced open="" close=""><mi>b</mi><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                              </mfenced>
+                            </mtd>
+                          </mtr>
+                          <mtr>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mi>a</mi><mfenced open="" close=""><mrow><mo>&not;</mo><mi>b</mi></mrow><mi>e</mi></mfenced>
+                              </mfenced>
+                            </mtd>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mi>a</mi><mfenced open="" close=""><mrow><mo>&not;</mo><mi>b</mi></mrow><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                              </mfenced>
+                            </mtd>
+                          </mtr>
+                        </mtable>
+                      </mfenced>
+                      <mo>&olarr;</mo>
+                      <mfenced>
+                        <mtable>
+                          <mtr>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mrow><mo>&not;</mo><mi>a</mi></mrow><mfenced open="" close=""><mi>b</mi><mi>e</mi></mfenced>
+                              </mfenced>
+                            </mtd>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mrow><mo>&not;</mo><mi>a</mi></mrow><mfenced open="" close=""><mi>b</mi><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                              </mfenced>
+                            </mtd>
+                          </mtr>
+                          <mtr>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mrow><mo>&not;</mo><mi>a</mi></mrow><mfenced open="" close=""><mrow><mo>&not;</mo><mi>b</mi></mrow><mi>e</mi></mfenced>
+                              </mfenced>
+                            </mtd>
+                            <mtd>
+                              <mo>P</mo>
+                              <mfenced separators="|">
+                                <mrow><mo>&not;</mo><mi>a</mi></mrow>
+                                <mfenced open="" close=""><mrow><mo>&not;</mo><mi>b</mi></mrow><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                              </mfenced>
+                            </mtd>
+                          </mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              
+              <p>The next element in the equation is the summation over <em>a</em>. Factors may be combined with a type of summation where:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <msub>
+                        <mo class="dist">f</mo>
+                        <mfenced open="" close=""><mover><mi>A</mi><mo>_</mo></mover><mi>j</mi><mi>m</mi></mfenced>
+                      </msub>
+                      <mfenced><mi>B</mi><mi>E</mi></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munder><mo>&Sum;</mo><mi>a</mi></munder>
+                      <mfenced open="" close="" separators="&times;">
+                        <mrow><msub><mo class="dist">f</mo><mi>A</mi></msub><mfenced><mi>B</mi><mi>E</mi></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>j</mi></msub><mfenced><mi>A</mi></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>m</mi></msub><mfenced><mi>A</mi></mfenced></mrow>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced open="" close="" separators="&times;">
+                        <mrow><msub><mo class="dist">f</mo><mi>a</mi></msub><mfenced><mi>B</mi><mi>E</mi></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>j</mi></msub><mfenced><mi>a</mi></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>m</mi></msub><mfenced><mi>a</mi></mfenced></mrow>
+                      </mfenced>
+                      <mo>+</mo>
+                      <mfenced open="" close="" separators="&times;">
+                        <mrow>
+                          <msub><mo class="dist">f</mo><mrow><mo>&not;</mo><mi>a</mi></mrow></msub>
+                          <mfenced><mi>B</mi><mi>E</mi></mfenced>
+                        </mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>j</mi></msub><mfenced><mrow><mo>&not;</mo><mi>a</mi></mrow></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>m</mi></msub><mfenced><mrow><mo>&not;</mo><mi>a</mi></mrow></mfenced></mrow>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>The operation &times; is the pointwise product. The pointwise product of two factors yields a new factor that is the union of the variables in the factors. Consider one of the elements in the previous equation: <em>(Note that this operation divides the levels of <em>f<sub>A</sub></em>(<em>B</em>,<em>E</em>) and reduces the dimensionality by a level.</em></p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mfenced open="" close="" separators="&times;">
+                        <mrow><msub><mo class="dist">f</mo><mi>a</mi></msub><mfenced><mi>B</mi><mi>E</mi></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>j</mi></msub><mfenced><mi>a</mi></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>m</mi></msub><mfenced><mi>a</mi></mfenced></mrow>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced separators="&times;" open="" close="">
+                        <mfenced>
+                          <mtable>
+                            <mtr>
+                              <mtd><mo>P</mo><mfenced separators="|"><mi>a</mi><mfenced open="" close=""><mi>b</mi><mi>e</mi></mfenced></mfenced></mtd>
+                              <mtd>
+                                <mo>P</mo>
+                                <mfenced separators="|">
+                                  <mi>a</mi><mfenced open="" close=""><mi>b</mi><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mfenced>
+                            </mtd>
+                            </mtr>
+                            <mtr>
+                              <mtd>
+                                <mo>P</mo>
+                                <mfenced separators="|">
+                                  <mi>a</mi><mfenced open="" close=""><mrow><mo>&not;</mo><mi>b</mi></mrow><mi>e</mi></mfenced>
+                                </mfenced>
+                              </mtd>
+                              <mtd>
+                                <mo>P</mo>
+                                <mfenced separators="|">
+                                  <mi>a</mi><mfenced open="" close=""><mrow><mo>&not;</mo><mi>b</mi></mrow><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced>
+                                </mfenced>
+                              </mtd>
+                            </mtr>
+                          </mtable>
+                        </mfenced>
+                        <mfenced><mrow><mo>P</mo><mfenced separators="|"><mi>j</mi><mi>a</mi></mfenced></mrow></mfenced>
+                        <mfenced><mrow><mo>P</mo><mfenced separators="|"><mi>m</mi><mi>a</mi></mfenced></mrow></mfenced>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0.95</mn></mtd><mtd><mn>0.94</mn></mtd></mtr>
+                          <mtr><mtd><mn>0.29</mn></mtd><mtd><mn>0.001</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                      <mo>&times;</mo>
+                      <mfenced><mn>0.9</mn></mfenced>
+                      <mo>&times;</mo>
+                      <mfenced><mn>0.7</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr>
+                            <mtd><mfenced><mn>0.95</mn></mfenced><mfenced><mn>0.63</mn></mfenced></mtd>
+                            <mtd><mfenced><mn>0.94</mn></mfenced><mfenced><mn>0.63</mn></mfenced></mtd>
+                          </mtr>
+                          <mtr>
+                            <mtd><mfenced><mn>0.29</mn></mfenced><mfenced><mn>0.63</mn></mfenced></mtd>
+                            <mtd><mfenced><mn>0.001</mn></mfenced><mfenced><mn>0.63</mn></mfenced></mtd>
+                          </mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0.5985</mn></mtd><mtd><mn>0.5922</mn></mtd></mtr>
+                          <mtr><mtd><mn>0.1827</mn></mtd><mtd><mn>0.00063</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>The process is the same for <em>&not;a</em>, and that factor is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mfenced open="" close="" separators="&times;">
+                        <mrow><msub><mo class="dist">f</mo><mrow><mo>&not;</mo><mi>a</mi></mrow></msub><mfenced><mi>B</mi><mi>E</mi></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>j</mi></msub><mfenced><mrow><mo>&not;</mo><mi>a</mi></mrow></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>m</mi></msub><mfenced><mrow><mo>&not;</mo><mi>a</mi></mrow></mfenced></mrow>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0.05</mn></mtd><mtd><mn>0.6</mn></mtd></mtr>
+                          <mtr><mtd><mn>0.71</mn></mtd><mtd><mn>0.999</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                      <mo>&times;</mo>
+                      <mfenced><mn>0.1</mn></mfenced>
+                      <mo>&times;</mo>
+                      <mfenced><mn>0.3</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0.0015</mn></mtd><mtd><mn>0.0018</mn></mtd></mtr>
+                          <mtr><mtd><mn>0.0213</mn></mtd><mtd><mn>0.02997</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              
+              <p>The sum of those factors then is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <msub>
+                        <mo class="dist">f</mo>
+                        <mfenced open="" close=""><mover><mi>A</mi><mo>_</mo></mover><mi>j</mi><mi>m</mi></mfenced>
+                      </msub>
+                      <mfenced><mi>B</mi><mi>E</mi></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munder><mo>&Sum;</mo><mi>a</mi></munder>
+                      <mfenced open="" close="" separators="&times;">
+                        <mrow><msub><mo class="dist">f</mo><mi>A</mi></msub><mfenced><mi>B</mi><mi>E</mi></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>j</mi></msub><mfenced><mi>A</mi></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>m</mi></msub><mfenced><mi>A</mi></mfenced></mrow>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced open="" close="" separators="&times;">
+                        <mrow><msub><mo class="dist">f</mo><mrow><mi>a</mi></mrow></msub><mfenced><mi>B</mi><mi>E</mi></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>j</mi></msub><mfenced><mi>a</mi></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>m</mi></msub><mfenced><mi>a</mi></mfenced></mrow>
+                      </mfenced>
+                      <mo>+</mo>
+                      <mfenced open="" close="" separators="&times;">
+                        <mrow><msub><mo class="dist">f</mo><mrow><mo>&not;</mo><mi>a</mi></mrow></msub><mfenced><mi>B</mi><mi>E</mi></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>j</mi></msub><mfenced><mrow><mo>&not;</mo><mi>a</mi></mrow></mfenced></mrow>
+                        <mrow><msub><mo class="dist">f</mo><mi>m</mi></msub><mfenced><mrow><mo>&not;</mo><mi>a</mi></mrow></mfenced></mrow>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0.5985</mn></mtd><mtd><mn>0.5922</mn></mtd></mtr>
+                          <mtr><mtd><mn>0.1827</mn></mtd><mtd><mn>0.00063</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                      <mo>+</mo>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0.0015</mn></mtd><mtd><mn>0.0018</mn></mtd></mtr>
+                          <mtr><mtd><mn>0.0213</mn></mtd><mtd><mn>0.02997</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0.5985</mn><mo>+</mo><mn>0.0015</mn></mtd><mtd><mn>0.5922</mn><mo>+</mo><mn>0.0018</mn></mtd></mtr>
+                          <mtr><mtd><mn>0.1827</mn><mo>+</mo><mn>0.0213</mn></mtd><mtd><mn>0.00063</mn><mo>+</mo><mn>0.02997</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0.6</mn></mtd><mtd><mn>0.594</mn></mtd></mtr>
+                          <mtr><mtd><mn>0.204</mn></mtd><mtd><mn>0.0306</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              
+              <p>
+                Note that the process of summing
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msub><mo class="dist">f</mo><mi>A</mi></msub><mfenced><mi>B</mi></mfenced>
+                </math>
+                to
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msub><mo class="dist">f</mo><mover><mi>A</mi><mo>_</mo></mover></msub><mfenced><mi>B</mi></mfenced>
+                </math>
+                reduced
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msub><mo class="dist">f</mo><mi>A</mi></msub><mfenced><mi>B</mi></mfenced>
+                </math>
+                from a 2&times;2 matrix to a 2&times;1. In general, summing will remove a dimension from the matrix.
+              </p>
+              <p>
+                The next element in the equation is
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mo>P</mo><mfenced><mi>E</mi></mfenced>
+                </math>
+                this is simply the probabilities of <em>E</em> not conditional on anything, and the factor is represented as:
+              </p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mo class="dist">f</mo><mi>E</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mo>P</mo><mfenced><mi>e</mi></mfenced></mtd></mtr>
+                          <mtr><mtd><mo>P</mo><mfenced><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p><em>
+                This is also a deviation from Russell and Norvig who represent this quantity as
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msub><mo class="dist">f</mo><mi>E</mi></msub><mfenced><mi>e</mi></mfenced>
+                </math>.
+              </em></p>
+              <p>The next element in the equation is a summation over <em>e</em> which, as before, produces:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub>
+                      <mo class="dist">f</mo>
+                      <mfenced open="" close="">
+                        <mover><mi>E</mi><mo>_</mo></mover><mover><mi>A</mi><mo>_</mo></mover><mi>j</mi><mi>m</mi>
+                      </mfenced>
+                    </msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munder><mo>&Sum;</mo><mi>e</mi></munder>
+                      <mfenced open="" close="" separators="&times;">
+                        <mrow><msub><mo class="dist">f</mo><mi>E</mi></msub></mrow>
+                        <mrow>
+                          <msub>
+                            <mo class="dist">f</mo>
+                            <mfenced open="" close="">
+                              <mover><mi>A</mi><mo>_</mo></mover><mi>j</mi><mi>m</mi>
+                            </mfenced>
+                          </msub>
+                          <mfenced><mi>B</mi><mi>E</mi></mfenced>
+                        </mrow>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced open="" close="" separators="&times;">
+                        <mrow><msub><mo class="dist">f</mo><mi>e</mi></msub></mrow>
+                        <mrow>
+                          <msub>
+                            <mo class="dist">f</mo>
+                            <mfenced open="" close="">
+                              <mover><mi>A</mi><mo>_</mo></mover><mi>j</mi><mi>m</mi>
+                            </mfenced>
+                          </msub>
+                          <mfenced><mi>B</mi><mi>E</mi></mfenced>
+                        </mrow>
+                      </mfenced>
+                      <mo>+</mo>
+                      <mfenced open="" close="" separators="&times;">
+                        <mrow><msub><mo class="dist">f</mo><mrow><mo>&not;</mo><mi>e</mi></mrow></msub></mrow>
+                        <mrow>
+                          <msub>
+                            <mo class="dist">f</mo>
+                            <mfenced open="" close="">
+                              <mover><mi>A</mi><mo>_</mo></mover><mi>j</mi><mi>m</mi>
+                            </mfenced>
+                          </msub>
+                          <mfenced><mi>B</mi><mrow><mi>E</mi></mrow></mfenced>
+                        </mrow>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mrow><mo>P</mo><mfenced><mi>e</mi></mfenced></mrow></mfenced>
+                      <mo>&times;</mo>
+                      <msub>
+                        <mo class="dist">f</mo>
+                        <mfenced open="" close="">
+                          <mover><mi>A</mi><mo>_</mo></mover><mi>j</mi><mi>m</mi>
+                        </mfenced>
+                      </msub>
+                      <mfenced><mi>B</mi><mrow><mi>E</mi></mrow></mfenced>
+                      <mo>+</mo>
+                      <mfenced><mrow><mo>P</mo><mfenced><mrow><mo>&not;</mo><mi>e</mi></mrow></mfenced></mrow></mfenced>
+                      <msub>
+                        <mo class="dist">f</mo>
+                        <mfenced open="" close="">
+                          <mover><mi>A</mi><mo>_</mo></mover><mi>j</mi><mi>m</mi>
+                        </mfenced>
+                      </msub>
+                      <mfenced><mi>B</mi><mrow><mi>E</mi></mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mn>0.002</mn></mfenced>
+                      <mo>&times;</mo>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0.6</mn></mtd><mtd><mn>0.594</mn></mtd></mtr>
+                          <mtr><mtd><mn>0.204</mn></mtd><mtd><mn>0.0306</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                      <mo>+</mo>
+                      <mfenced><mn>0.998</mn></mfenced>
+                      <mo>&times;</mo>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0.6</mn></mtd><mtd><mn>0.594</mn></mtd></mtr>
+                          <mtr><mtd><mn>0.204</mn></mtd><mtd><mn>0.0306</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mn>0.002</mn></mfenced>
+                      <mo>&times;</mo>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0.6</mn></mtd><mtd><mn>0.594</mn></mtd></mtr>
+                          <mtr><mtd><mn>0.204</mn></mtd><mtd><mn>0.0306</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                      <mo>+</mo>
+                      <mfenced><mn>0.998</mn></mfenced>
+                      <mo>&times;</mo>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0.6</mn></mtd><mtd><mn>0.594</mn></mtd></mtr>
+                          <mtr><mtd><mn>0.204</mn></mtd><mtd><mn>0.0306</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo>P</mo><mfenced separators="|"><mi>B</mi><mfenced open="" close=""><mi>j</mi><mi>m</mi></mfenced></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced>
+                        <mtable>
+                          <mtr><mtd><mn>0.284</mn></mtd></mtr>
+                          <mtr><mtd><mn>0.716</mn></mtd></mtr>
+                        </mtable>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Calculate the number of computations performed and compare that with the number performed by enumeration.</p>
+            </div>
+            <div class="answer">
+              <p>By counting:</p>
+              <ul>
+                <li>Enumeration: 24</li>
+                <li>Elimination: 7</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Suppose a network has the form of a chain: a sequence of boolean variables <em>X<sub>1</sub></em>,&hellip;,<em>X<sub>n</sub></em> where <code>Parents</code>(<em>X<sub>i</sub></em>) = {<em>X<sub>i - 1</sub></em>} for <em>i</em> = 2,&hellip;,<em>n</em>.</p>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>What is the complexity of computing P(<em>X<sub>1</sub></em>|<em>X<sub>n</sub></em> = true) using enumeration?</p>
+                </div>
+                <div class="answer">
+                  <p>In general:</p>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mo>P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>X</mi><mn>1</mn></msub><mrow><msub><mi>X</mi><mi>n</mi></msub><mo>=</mo><mi>true</mi></mrow>
+                          </mfenced>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mi>&alpha;</mi>
+                          <munder><mo>&Sum;</mo><mrow><msub><mi>k</mi><mi>n</mi></msub><mo>=</mo><mi>true</mi></mrow></munder>
+                          <munder>
+                            <mo>&Sum;</mo>
+                            <mrow>
+                              <msub><mi>k</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></msub><mo>&Element;</mo>
+                              <msub><mi>X</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></msub>
+                            </mrow>
+                          </munder>
+                          <mo>&hellip;</mo>
+                          <munder>
+                            <mo>&Sum;</mo>
+                            <mrow>
+                              <msub><mi>k</mi><mn>2</mn></msub><mo>&Element;</mo><msub><mi>X</mi><mn>2</mn></msub>
+                            </mrow>
+                          </munder>
+                          <mo>P</mo>
+                          <mfenced>
+                            <mrow>
+                              <msub><mi>X</mi><mrow><mi>n</mi></mrow></msub><mo>=</mo>
+                              <msub><mi>k</mi><mrow><mi>n</mi></mrow></msub>
+                            </mrow>
+                            <mrow>
+                              <msub><mi>X</mi><mrow><mi>n</mi><mo>-</mo><mi>1</mi></mrow></msub><mo>=</mo>
+                              <msub><mi>k</mi><mrow><mi>n</mi><mo>-</mo><mi>1</mi></mrow></msub>
+                            </mrow>
+                            <mo>&hellip;</mo>
+                            <mrow>
+                              <msub><mi>X</mi><mrow><mi>2</mi></mrow></msub><mo>=</mo>
+                              <msub><mi>k</mi><mrow><mi>2</mi></mrow></msub>
+                            </mrow>
+                            <mrow>
+                              <msub><mi>X</mi><mn>1</mn></msub>
+                            </mrow>
+                          </mfenced>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <p>This equation can then be factored based on the knowledge in the Bayes' diagram:</p>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mi>&alpha;</mi>
+                          <munder><mo>&Sum;</mo><mrow><msub><mi>k</mi><mi>n</mi></msub><mo>=</mo><mi>true</mi></mrow></munder>
+                          <mo>P</mo>
+                          <mfenced separators="|">
+                            <mrow><msub><mi>X</mi><mrow><mi>n</mi></mrow></msub><mo>=</mo><msub><mi>k</mi><mi>n</mi></msub></mrow>
+                            <mfenced open="" close="">
+                              <msub><mi>X</mi><mrow><mi>n</mi><mo>-</mo><mi>1</mi></mrow></msub>
+                            </mfenced>
+                          </mfenced>
+                          <munder>
+                            <mo>&Sum;</mo>
+                            <mrow>
+                              <msub><mi>k</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></msub><mo>&Element;</mo>
+                              <msub><mi>X</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></msub>
+                            </mrow>
+                          </munder>
+                          <mo>P</mo>
+                          <mfenced separators="|">
+                            <mrow>
+                              <msub><mi>X</mi><mrow><mi>n</mi><mo>-</mo><mi>1</mi></mrow></msub><mo>=</mo>
+                              <msub><mi>k</mi><mrow><mi>n</mi><mo>-</mo><mi>1</mi></mrow></msub>
+                            </mrow>
+                            <mfenced open="" close="">
+                              <msub><mi>X</mi><mrow><mi>n</mi><mo>-</mo><mi>2</mi></mrow></msub>
+                            </mfenced>
+                          </mfenced>
+                          <mo>&hellip;</mo>
+                          <munder>
+                            <mo>&Sum;</mo>
+                            <mrow><msub><mi>k</mi><mn>2</mn></msub><mo>&Element;</mo><msub><mi>X</mi><mn>2</mn></msub></mrow>
+                          </munder>
+                          <mo>P</mo>
+                          <mfenced separators="|">
+                            <mrow><msub><mi>X</mi><mn>2</mn></msub><mo>=</mo><msub><mi>k</mi><mn>2</mn></msub></mrow>
+                            <msub><mi>X</mi><mn>1</mn></msub>
+                          </mfenced>
+                          <mo class="dist">P</mo>
+                          <mfenced>
+                            <mrow><msub><mi>X</mi><mn>1</mn></msub></mrow>
+                          </mfenced>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <p>Since |<em>k<sub>i</sub></em>| = 2 &forall; <em>k</em> &lt; n, the enumeration search tree will be a full binary tree of depth <em>n</em> - 1.</p>
+                  <p>The number of non-leaf nodes in such a tree (and required computational complexity) is 2<sup>n</sup> - 2.</p>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>What is the complexity using elimination?</p>
+                </div>
+                <div class="answer">
+                  <p>Each reduction will take two computations and there are <em>n</em> of them, so 2<em>n</em><sup>2</sup>.</p>
+                </div>
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>You're a security guard in an underground installation. You want to know if it's raining on a given day, but your only exposure to the outside world occurs when the director arrives each morning either with, or without an umbrella. Thus, for each day, <em>t</em>, the set of evidince varialbes, <em>E<sub>t</sub></em>, contains a single element <em>u<sub>t</sub></em> representing the presence or absence of an umbrella. The set of unobservable state variables, <em>X<sub>t</sub></em>, contains a single variable <em>r<sub>t</sub></em> representing whether it is raining or not.</p>
+          <p>Furthermore, assume the following observed probabilities:</p>
+          <table>
+            <tr><th><em>r<sub>t - 1</sub></em></th><th>P(<em>r<sub>t</sub></em> = T|<em>r<sub>t - 1</sub></em>)</th></tr>
+            <tr><td>T</td><td>0.7</td></tr>
+            <tr><td>F</td><td>0.3</td></tr>
+          </table>
+          <table>
+            <tr><th><em>r<sub>t</sub></em></th><th>P(<em>u<sub>t</sub></em> = T|<em>r<sub>t</sub></em>)</th></tr>
+            <tr><td>T</td><td>0.9</td></tr>
+            <tr><td>F</td><td>0.2</td></tr>
+          </table>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Suppose you observe an unending sequence of days on which the umbrella appears. Show that, as the days go by, the probability of rain on the current day increases monotonically toward a fixed point. What is that fixed point?</p>
+            </div>
+            <div class="answer">
+              <p>An examination of this question requires an application of chaining for a first-order Markov process which states:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>X</mi><mi>t</mi></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mi>t</mi></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|"><msub><mi>u</mi><mi>t</mi></msub><msub><mi>X</mi><mi>t</mi></msub></mfenced>
+                      <munder>
+                        <mo>&Sum;</mo><mrow><mi>r</mi><mo>&Element;</mo><msub><mi>X</mi><mrow><mi>t</mi><mo>-</mo><mn>1</mn></mrow></msub></mrow>
+                      </munder>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>X</mi><mi>t</mi></msub>
+                        <mfenced open="" close="">
+                          <mi>r</mi>
+                          <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mrow><mi>t</mi><mo>-</mo><mn>1</mn></mrow></mfenced></msub>
+                        </mfenced>
+                      </mfenced>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mi>r</mi>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mrow><mi>t</mi><mo>-</mo><mn>1</mn></mrow></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|"><msub><mi>u</mi><mi>t</mi></msub><msub><mi>X</mi><mi>t</mi></msub></mfenced>
+                      <munder>
+                        <mo>&Sum;</mo><mrow><mi>r</mi><mo>&Element;</mo><msub><mi>X</mi><mrow><mi>t</mi><mo>-</mo><mn>1</mn></mrow></msub></mrow>
+                      </munder>
+                      <mo class="dist">P</mo><mfenced separators="|"><msub><mi>X</mi><mi>t</mi></msub><mi>r</mi></mfenced>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mi>r</mi>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mrow><mi>t</mi><mo>-</mo><mn>1</mn></mrow></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>This function allows the probability of a given event to be built up from a given set of evidence. Like any chain however, it must have an end. In this case, that end is <strong>P</strong>(<em>R<sub>0</sub></em>) = &lt;P(<em>r<sub>0</sub></em>),P(&not;<em>r<sub>0</sub></em>)&gt; which is the probability distribution for rain on day 0.</p>
+              <p>For the sake of simplicity, <strong>P</strong>(<em>R<sub>0</sub></em>) will be assumed to be fixed at &lt;0.5,0.5&gt;. If, as the question asks, the distribution is converging on a fixed value, then the start point for the convergance should not matter.</p>
+              <p>The calculations start off with a computation of the probability distribution for rain on day 1 which is slightly different from other calculations because <strong>P</strong>(<em>R<sub>0</sub></em>|<em>u<sub>0</sub></em>) is defined as <strong>P</strong>(<em>R<sub>0</sub></em>).</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>1</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>0</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munder><mo>&Sum;</mo><msub><mi>r</mi><mn>0</mn></msub></munder>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>1</mn></msub>
+                        <msub><mi>r</mi><mn>0</mn></msub>
+                      </mfenced>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>r</mi><mn>0</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>0</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munder><mo>&Sum;</mo><msub><mi>r</mi><mn>0</mn></msub></munder>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>1</mn></msub>
+                        <msub><mi>r</mi><mn>0</mn></msub>
+                      </mfenced>
+                      <mo>P</mo><mfenced separators="|"><msub><mi>r</mi><mn>0</mn></msub></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>1</mn></msub>
+                        <msub><mi>r</mi><mn>0</mn></msub>
+                      </mfenced>
+                      <mo>P</mo><mfenced separators="|"><msub><mi>r</mi><mn>0</mn></msub></mfenced>
+                      <mo>+</mo>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>1</mn></msub>
+                        <mrow><mo>&not;</mo><msub><mi>r</mi><mn>0</mn></msub></mrow>
+                      </mfenced>
+                      <mo>P</mo><mfenced separators="|"><mrow><mo>&not;</mo><msub><mi>r</mi><mn>0</mn></msub></mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.7</mn><mn>0.3</mn></mfenced><mfenced><mn>0.5</mn></mfenced>
+                      <mo>+</mo>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.3</mn><mn>0.7</mn></mfenced><mfenced><mn>0.5</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.35</mn><mn>0.15</mn></mfenced>
+                      <mo>+</mo>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.15</mn><mn>0.35</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfenced open="&lt;" close="&gt;"><mn>0.5</mn><mn>0.5</mn></mfenced></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>Now, this value may be used for the first link in the chain:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>1</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>1</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>u</mi><mn>1</mn></msub>
+                        <msub><mi>R</mi><mn>1</mn></msub>
+                      </mfenced>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>1</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>0</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <mfenced open="&lt;" close="&gt;">
+                        <mrow><mo>P</mo><mfenced separators="|"><msub><mi>u</mi><mn>1</mn></msub><msub><mi>r</mi><mn>1</mn></msub></mfenced></mrow>
+                        <mrow>
+                          <mo>P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>u</mi><mn>1</mn></msub><msub><mrow><mo>&not;</mo><mi>r</mi></mrow><mn>1</mn></msub>
+                          </mfenced>
+                        </mrow>
+                      </mfenced>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>1</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>0</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.9</mn><mn>0.2</mn></mfenced>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.5</mn><mn>0.5</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.45</mn><mn>0.1</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&prop;</mo></mtd>
+                    <mtd>
+                      <mfenced open="&lt;" close="&gt;">
+                        <mfrac><mn>0.45</mn><mrow><mn>0.45</mn><mo>+</mo><mn>0.1</mn></mrow></mfrac>
+                        <mfrac><mn>0.1</mn><mrow><mn>0.45</mn><mo>+</mo><mn>0.1</mn></mrow></mfrac>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.8182</mn><mn>0.1818</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The next link progresses in the same way, but <em>u<sub>1</sub></em> is now defined and meaningful:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>2</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>1</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munder><mo>&Sum;</mo><msub><mi>r</mi><mn>1</mn></msub></munder>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>2</mn></msub>
+                        <msub><mi>r</mi><mn>1</mn></msub>
+                      </mfenced>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>r</mi><mn>1</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>1</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>2</mn></msub>
+                        <msub><mi>r</mi><mn>1</mn></msub>
+                      </mfenced>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>r</mi><mn>1</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>1</mn></mfenced></msub>
+                      </mfenced>
+                      <mo>+</mo>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>2</mn></msub>
+                        <mrow><mo>&not;</mo><msub><mi>r</mi><mn>1</mn></msub></mrow>
+                      </mfenced>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mrow><mo>&not;</mo><msub><mi>r</mi><mn>1</mn></msub></mrow>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>1</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.7</mn><mn>0.3</mn></mfenced><mfenced><mn>0.8182</mn></mfenced>
+                      <mo>+</mo>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.3</mn><mn>0.7</mn></mfenced><mfenced><mn>0.1818</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.6273</mn><mn>0.3727</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The next link in the chain is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>2</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>2</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>u</mi><mn>2</mn></msub>
+                        <msub><mi>R</mi><mn>2</mn></msub>
+                      </mfenced>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>2</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>1</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.9</mn><mn>0.2</mn></mfenced>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.6273</mn><mn>0.3727</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&prop;</mo></mtd>
+                    <mtd><mfenced open="&lt;" close="&gt;"><mn>0.8834</mn><mn>0.1166</mn></mfenced></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>To do one more iteration to solidify the pattern:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>3</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>2</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>3</mn></msub>
+                        <msub><mi>r</mi><mn>2</mn></msub>
+                      </mfenced>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>r</mi><mn>2</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>2</mn></mfenced></msub>
+                      </mfenced>
+                      <mo>+</mo>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>3</mn></msub>
+                        <mrow><mo>&not;</mo><msub><mi>r</mi><mn>2</mn></msub></mrow>
+                      </mfenced>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mrow><mo>&not;</mo><msub><mi>r</mi><mn>2</mn></msub></mrow>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>2</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.7</mn><mn>0.3</mn></mfenced><mfenced><mn>0.8834</mn></mfenced>
+                      <mo>+</mo>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.3</mn><mn>0.7</mn></mfenced><mfenced><mn>0.1166</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.6534</mn><mn>0.3466</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>3</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>3</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>u</mi><mn>3</mn></msub>
+                        <msub><mi>R</mi><mn>3</mn></msub>
+                      </mfenced>
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>R</mi><mn>3</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>2</mn></mfenced></msub>
+                      </mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mi>&alpha;</mi>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.9</mn><mn>0.2</mn></mfenced>
+                      <mfenced open="&lt;" close="&gt;"><mn>0.6534</mn><mn>0.3466</mn></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&prop;</mo></mtd>
+                    <mtd><mfenced open="&lt;" close="&gt;"><mn>0.8946</mn><mn>0.1054</mn></mfenced></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The effect of having an umbrealla present every day means that the factors remain the same. The actual math has to date eluded me, but <a href="umbrella_probabilities.py">this program</a> will estimate the converged value to an arbitrary number of decimal places. The value it comes up with is, to 50 places:</p>
+              <p>&lt;0.89674554944846594496715149092767174611258015717335, 0.10325445055153405503284850907232825388741984282665&gt;</p>
+
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Consider <em>forecasting</em> further and further into the future, given just the first two umbrella observations.</p>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>Compute the probability P(<em>r<sub>k + 2</sub></em>|<em>u<sub>1</sub></em>, <em>u<sub>2</sub></em>) for 1 &le; <em>k</em> &le; 20 and plot the results.</p>
+                </div>
+                <div class="answer">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mo class="dist">P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub>
+                            <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mi>t</mi></mfenced></msub>
+                          </mfenced>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <munder><mo>&Sum;</mo><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub></munder>
+                          <mo class="dist">P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub>
+                            <msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub>
+                          </mfenced>
+                          <mo>P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub>
+                            <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mi>t</mi></mfenced></msub>
+                          </mfenced>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <p>
+                    The value of
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mo class="dist">P</mo>
+                      <mfenced separators="|">
+                        <msub><mi>r</mi><mn>2</mn></msub>
+                        <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>2</mn></mfenced></msub>
+                      </mfenced>
+                    </math>
+                    is somewhat open to debate. In the previous question the value at <em>t</em> = 2 was based on an initial 50/50 probability of rain. Using that assumption:
+                  </p>
+
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mo class="dist">P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>R</mi><mn>3</mn></msub>
+                            <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>2</mn></mfenced></msub>
+                          </mfenced>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <munder><mo>&Sum;</mo><msub><mi>r</mi><mn>2</mn></msub></munder>
+                          <mo class="dist">P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>R</mi><mn>3</mn></msub>
+                            <msub><mi>r</mi><mn>2</mn></msub>
+                          </mfenced>
+                          <mo>P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>r</mi><mn>2</mn></msub>
+                            <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mi>2</mi></mfenced></msub>
+                          </mfenced>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mo class="dist">P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>R</mi><mn>3</mn></msub>
+                            <msub><mi>r</mi><mn>2</mn></msub>
+                          </mfenced>
+                          <mo>P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>r</mi><mn>2</mn></msub>
+                            <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mi>2</mi></mfenced></msub>
+                          </mfenced>
+                          <mo>+</mo>
+                          <mo class="dist">P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>R</mi><mn>3</mn></msub>
+                            <mrow><mo>&not;</mo><msub><mi>r</mi><mn>2</mn></msub></mrow>
+                          </mfenced>
+                          <mo>P</mo>
+                          <mfenced separators="|">
+                            <mrow><mo>&not;</mo><msub><mi>r</mi><mn>2</mn></msub></mrow>
+                            <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mi>2</mi></mfenced></msub>
+                          </mfenced>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd>
+                          <mfenced open="&lt;" close="&gt;"><mn>0.7</mn><mn>0.3</mn></mfenced><mfenced><mn>0.8834</mn></mfenced>
+                          <mo>+</mo>
+                          <mfenced open="&lt;" close="&gt;"><mn>0.3</mn><mn>0.7</mn></mfenced><mfenced><mn>0.1166</mn></mfenced>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd>
+                          <mfenced open="&lt;" close="&gt;"><mn>0.6534</mn><mn>0.3466</mn></mfenced>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mo class="dist">P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>R</mi><mn>4</mn></msub>
+                            <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mn>2</mn></mfenced></msub>
+                          </mfenced>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <munder><mo>&Sum;</mo><msub><mi>r</mi><mn>3</mn></msub></munder>
+                          <mo class="dist">P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>R</mi><mn>4</mn></msub>
+                            <msub><mi>r</mi><mn>3</mn></msub>
+                          </mfenced>
+                          <mo>P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>r</mi><mn>3</mn></msub>
+                            <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mi>2</mi></mfenced></msub>
+                          </mfenced>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mo class="dist">P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>R</mi><mn>4</mn></msub>
+                            <msub><mi>r</mi><mn>3</mn></msub>
+                          </mfenced>
+                          <mo>P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>r</mi><mn>3</mn></msub>
+                            <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mi>2</mi></mfenced></msub>
+                          </mfenced>
+                          <mo>+</mo>
+                          <mo class="dist">P</mo>
+                          <mfenced separators="|">
+                            <msub><mi>R</mi><mn>4</mn></msub>
+                            <mrow><mo>&not;</mo><msub><mi>r</mi><mn>3</mn></msub></mrow>
+                          </mfenced>
+                          <mo>P</mo>
+                          <mfenced separators="|">
+                            <mrow><mo>&not;</mo><msub><mi>r</mi><mn>3</mn></msub></mrow>
+                            <msub><mi>u</mi><mfenced open="" close="" separators=":"><mn>1</mn><mi>2</mi></mfenced></msub>
+                          </mfenced>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd>
+                          <mfenced open="&lt;" close="&gt;"><mn>0.5614</mn><mn>0.4386</mn></mfenced>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <object id="forward" type="image/svg+xml" data="umbrella_forward_probabilities.svg"></object>
+                </div>
+              </li>
+              <li>
+                <div class="question">
+                  <p>You should see that this probability converges toward a fixed point. What is this point?</p>
+                </div>
+                <div class="answer">
+                  <p>&lt;0.5,0.5&gt;</p>
+                </div>
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </body>
+</html>

@@ -1,0 +1,217 @@
+REGEDIT4
+
+; Used to lock down a user account. In order for it to work, you have
+; to first run: (replacing [user] with the user to lock down)
+;      reg load HKLM\ruser "C:\Documents and Settings\[user]\NTUSER.DAT"
+; Then run:
+;      regedit lock_down.reg
+; Then run: (this must be done before logging in to the other account)
+;      reg unload HKLM\ruser
+
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main]
+"Search Page"="http://www.google.com"
+"Search Bar"="http://www.google.com/ie"
+
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\SearchURL]
+@="http://www.google.com/keyword/%s"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\Search]
+;"SearchAssistant"="http://www.google.com/ie"
+
+; [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\LocalUser\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; "NoToolbarsOnTaskbar"=dword:1
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion]
+;"ProgramFilesDir"="d:\"
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Messenger]
+;"Start"=dword:4
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoSaveSettings"=dword:1
+
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel]
+"AdvancedTab"=dword:0
+
+[HKEY_CLASSES_ROOT\VBSFile\Shell]
+@="Open"
+
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Restrictions]
+; [HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Internet Explorer\Restrictions]
+; Always prompt user when downloading files
+"AlwaysPromptWhenDownload"=dword:1
+; Disable changes to browsers bars
+"NoBrowserBars"=dword:1
+; Disable the Tools > Internet Options menu
+"NoBrowserOptions"=dword:1
+; Disable the ability to Save As
+;NoBrowserSaveAs
+; Disable the Favorites.
+"NoFavorites"=dword:1
+"NoFileNew"=dword:1
+;NoFileOpen - Disable the File > Open command. 
+;NoFindFiles - Disable the Find Files command. 
+;NoNavButtons - Disables the Forward and Back navigation buttons 
+;NoOpeninNewWnd - Disable Open in New Window option. 
+;NoPrinting - Remove Print and Print Preview from the File menu. 
+;NoSelectDownloadDir - Disable the option of selecting a download directory. 
+;NoTheaterMode - Disable the Full Screen view option. 
+;NoViewSource - Disable the ability to view the page source HTML. 
+; Remove Mail and News menu item
+"RestGoMenu"=dword:1
+
+; Remove access to network neighborhood
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoNetHood"=dword:1
+
+; remove the ability 
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoToolbarCustomize"=dword:1
+
+; disable context menus for the start button, tab control and clock
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoTrayContextMenu"=dword:1
+
+; Remove the Ability to Hide Toolbars
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoBandCustomize"=dword:1
+
+;
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoFolderOptions"=dword:1
+
+;
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoPropertiesMyComputer"=dword:1
+
+; No Administrative Tools
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"StartMenuAdminTools"="No"
+
+; Turn on the classic start menu
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoSimpleStartMenu"=dword:1
+
+; Turn off the baloons that pop up in the task bar
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"EnableBalloonTips"=dword:0
+
+;
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoSetFolders"=dword:1
+
+; Remove Taskbar Options
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoSetTaskbar"=dword:1
+
+; Remove My Network Places
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoStartMenuNetworkPlaces"=dword:1
+
+; Remove Logoff Option from Start Menu
+;
+;[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+;"StartMenuLogoff"=dword:1
+
+; Remove Run Option
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoRun"=dword:1
+
+; Remove Find
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+;"NoFind"=dword:1
+
+; Remove the Help Option from the Start Menu
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+;"NoSMHelp"=dword:1
+
+; Keep Users from Moving the Taskbar 
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Poliies\Explorer]
+"LockTaskbar"=dword:1
+
+;
+;
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\MMC]
+"RestrictToPermittedSnapins"=dword:1
+
+;
+;
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa]
+;"DisableDomainCreds"=dword:1
+
+;
+;
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore]
+;"DisableConfig"=dword:1
+;"DisableSR"=dword:1
+
+; Don't Allow Active Desktop Configuration
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoSetActiveDesktop"=dword:1
+
+; Disable Active Desktop
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoActiveDesktop"=dword:1
+
+; No Display Conrol Panel
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System]
+"NoDispCPL"=dword:1
+
+; No Control Panel on Start Menu
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoControlPanel"=dword:1
+
+; No Printers on Start Menu
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoPrinters"=dword:1
+
+;
+;
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+;HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+"DisableRegistryTools"=dword:1
+
+; Disable Windows Update
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoWindowsUpdate"=dword:1

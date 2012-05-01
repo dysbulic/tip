@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Mixlists Database Schema</title>
+    <link rel="stylesheet" type="text/css" href="mixlists.css" />
+    <style type="text/css">
+      iframe { width: 100%; height: 15em; border: 2px solid green; }
+    </style>
+    <!--
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+    -->
+  </head>
+  <body>
+    <h1><span class="firstletter">M</span>ixlists</h1>
+    <h2>Database Schema</h2>
+    <div id="content">
+      <p>In order to tag songs properly, I need some authoritative source for the titles of songs. The database from <a href="http://musicbrainz.org">MusicBrainz</a> is an excellent candidate. There are three major issues with MusicBrainz:</p>
+      <ul>
+        <li>The core of their track identification system is a proprietary online service known as <a href="http://www.musicdns.org">MusicDNS</a>. I can generate audio fingerprints for my files and submit those for matching <acronym title="globally uniquie identifier">GUID</acronym>s. The system works well enough, but is completely closed and I don't like that.</li>
+        <li>MusicBrainz is an album structured database. It compiles track lists for albums. That's fine if you were using it as a replacement for something like <acronym title="Compact Disc Database">CDDB</acronym>, but many of the tracks I want to identify have never been on an album.</li>
+        <li>MusicBrainz uses postgresql to run their site. DreamHost, my provider, only has MySQL available.</li>
+      </ul>
+      <p>The proprietary nature of the system is something that I'm willing to accept for the time being. The other two issues can be solved my taking the existing database dump and running it through a script to produce a MySQL dump. The data that is important to me:</p>
+
+      <iframe src="tracklist_tables.sql"></iframe>
+
+      <p>A python script, <a href="load_mbdump.py">load_mbdump.py</a>, then converts the PostgreSQL table to MySQL format. Once the tables have been loaded into MySQL, <a href="clean_db.php">clean_db.php</a> can be used to reformat the entries a bit for usage.</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>PSY-351: Computational Methods &mdash; Homework #6</title>
+    <link rel="stylesheet" type="text/css" href="../../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math, table + math, math + table, table + table { margin-top: .75em; }
+      .data td, .data th { text-align: center; padding: .25em; border: 1px solid; }
+      td, th { padding: .25em .5em; border: 1px solid; }
+      .ellip td { text-align: center; }
+      table { margin: auto; }
+      .hl { background-color: #BBB; }
+      ol { margin-left: 0em; }
+      .answer { margin: 0em; }
+      object { height: 400px; width: 100%; }
+      .pair { width: 45%; height: auto; border: 1px solid; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY-351: Computational Methods</h1>
+      <h2>Homework #6</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 14:10 Wed., 8 October 2008</h2>
+    </div>
+    
+    <p>For this assignment, I want you to fit a psychometric function to some data using the techniques we discussed in class on Wednesday.</p>
+ 
+    <p>For this assignment, there are a number of MATLAB files you can use online:</p>
+
+    <ul>
+      <li><a href="homework6.m">homework6.m</a></li>
+      <li><a href="hook.m">hook.m</a></li>
+      <li><a href="log_likelihood.m">log_likelihood.m</a></li>
+      <li><a href="lnfactorial.m">lnfactorial.m</a></li>
+      <li><a href="mymodel_psy.m">mymodel_psy.m</a></li>
+    </ul>
+
+    <p>This example code is the same as the code I briefly showed you in class.</p>
+ 
+    <p>Note that the data is in the MATLAB file.</p>
+    
+    <ol>
+      <li id="p1">
+        <div class="question">
+          <p>First, just run the <a href="homework6.m">homework6.m</a> file and follow what it does and how it works.</p>
+        </div>
+        
+        <div class="answer">
+          <object type="image/svg+xml" data="homework_06.full_psycho.svg"></object>
+        </div>
+
+        <p>Recall that the probability function is bounded between &gamma; and &alpha;:</p>
+
+        <div class="question">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>p</mo><mfenced separators="|"><mi>Correct</mi><msub><mi>S</mi><mi>i</mi></msub></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>&Psi;</mo>
+                  <mfenced separators=";">
+                    <mi>x</mi><mfenced open="" close=""><mi>&alpha;</mi><mi>&beta;</mi><mi>&gamma;</mi><mi>&lambda;</mi></mfenced>
+                  </mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mi>&gamma;</mi><mo>+</mo>
+                  <mfenced><mrow><mn>1</mn><mo>-</mo><mi>&gamma;</mi><mo>-</mo><mi>&lambda;</mi></mrow></mfenced>
+                  <mo>F</mo><mfenced spearators=";"><mi>x</mi><mfenced open="" close=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mn>0</mn></mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd><mo>F</mo><mfenced spearators=";"><mi>x</mi><mfenced open="" close=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced></mfenced></mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd><mn>1</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          
+          <p><a href="homework6.m">homework6.m</a> uses the Weibull version of the psychometric function:</p>
+
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>F</mo><mfenced spearators=";"><mi>x</mi><mfenced open="" close=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mn>1</mn><mo>-</mo>
+                  <msup>
+                    <mn>e</mn>
+                    <msup>
+                      <mfenced><mfrac><mrow><mo>-</mo><mi>x</mi></mrow><mi>&beta;</mi></mfrac></mfenced>
+                      <mi>&alpha;</mi>
+                    </msup>
+                  </msup>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <p>Create a modified version of this code where you set &lambda; = 0 and refit the data. What happens?</p>
+        </div>
+
+        <div class="answer">
+          <p>&lambda; is the padding between the 1 and the top of the curve. By forcing it to 0, the curve has to reach 1.</p>
+
+          <object type="image/svg+xml" data="homework_06.zero_lambda.svg"></object>
+
+          <p>&gamma; is the lower bound. By forcing it to 0, the curve has to start at 0. Surprisingly, this has a better fit than constraiing &lambda; to 0.</p>
+
+          <object type="image/svg+xml" data="homework_06.zero_gamma.svg"></object>
+        </div>
+      </li>
+
+      <li id="p2">
+        <div class="question">
+          <p>Modify <a href="mymodel_psy.m">mymodel_psy.m</a> (call it <a href="mymodel_logistic.m">mymodel_logistic.m</a>) to create a version that uses the logistic function instead of the Weibull function. Recall that the logistic function is:</p>
+ 
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>F</mo><mfenced spearators=";"><mi>x</mi><mfenced open="" close=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mn>1</mn>
+                  <mrow>
+                    <mn>1</mn><mo>+</mo>
+                    <msup>
+                      <mn>e</mn>
+                      <mfrac>
+                        <mrow><mo>-</mo><mfenced><mrow><mi>x</mi><mo>-</mo><mi>&alpha;</mi></mrow></mfenced></mrow>
+                        <mi>&beta;</mi>
+                      </mfrac>
+                    </msup>
+                  </mrow>
+                </mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+ 
+          <p>Fit the logistic version of the psychometric function to the data.</p>
+         </div>
+
+        <div class="answer">
+          <object type="image/svg+xml" data="homework_06.logistic.svg"></object>
+        </div>
+      </li>
+
+      <li id="p3">
+        <div class="question">
+          <p>I want you to use those best-fitting parameters from the Weibull version of the psychometric function to create a "simulated" dataset using the same number of simulated trials as the observed trials. This amounts to a simple Monte Carlo simulation.</p>
+        </div>
+
+        <div class="answer">
+          <object type="image/svg+xml" data="homework_06.fit_predicted.svg"></object>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

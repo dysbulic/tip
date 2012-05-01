@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Booting a Linux Box Running Trixbox from a RocketRAID 2310</title>
+    <link rel="stylesheet" type="text/css" href="styles/main.css" />
+    <style type="text/css">
+      .example { text-indent: 0; text-align: left; }
+      .example code, pre.example {
+        display: block;
+        margin-bottom: .25em;
+        padding: .25em 1em .2em 2em;
+        background-color: #AAA;
+        text-indent: -1em;
+      }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Booting a Linux Box Running Trixbox from a RocketRAID 2310</h1>
+    <p>We have a <a href="http://dell.com">Poweredge server</a> at work that we just got in to run <a href="http://www.asterisk.org">Asterisk</a>. (Since the old <a href="http://www.apple.com/macosx/">OSX</a> server kicked the bucket. The server didn't come with a <acronym title="Redundant Array of Inexpensive Devices">RAID</acronym> controller, so we ordered a <a href="http://www.highpoint-tech.com">HighPoint</a> <acronym title="Peripheral Component Interconnect Express">PCI-E</acronym> <a href="http://www.highpoint-tech.com/USA/rr2310.htm">RocketRAID 2310</a>.</p>
+    <p>I've not really done much with the phone system, but once upon a time I knew how to put a computer together, so was tasked with sticking this card in and getting the system up. The distribution I was to install was <a href="http://www.trixbox.org">Trixbox</a> which is based on <a href="http://www.centos.org"><acronym title="Community Operating System">CentOS</acronym></a> which is in turn based on <a href="http://www.redhat.com/rhel/">Red Hat Enterprise</a>.</p>
+    <p><em>These instructions are specific to Trixbox, but should carry over fairly well to adding third party filesystem drivers to any Linux system.</em></p>
+
+    <h2>Installing Trixbox</h2>
+
+    <p>The first issues came with the installation of Trixbox. The drivers for accessing the <acronym title="RocketRAID">RR</acronym>2310 aren't included, so you have to download them from <a href="http://www.highpoint-tech.com/USA/bios_rr2310.htm">HighPoint's support</a>. They had a version that was marked as Red Hat Enterprise / CentOS, so I downloaded <a href="http://www.highpoint-tech.com/BIOS%20+%20Driver/rr2310/Linux/RR2310_00-RHEL-1.11-0403.tgz">those</a>.</p>
+
+    <p>Upon extracting the tarball, I found that they were 3.5" floppy images. The <a href="http://www.apple.com/imac/">iMac</a> I was working on couldn't open them, so I downloaded a copy of <a href="http://www.e-fense.com/helix/">Helix</a>, booted the server off of that and used it to copy the files off:</p>
+    <p class="example">
+      <code>mount -o loop disk.img /mnt/disk</code>
+      <code>cp -a /mnt/disk/* /mnt/flashdrive/disk/</code>
+    </p>
+
+    <p>There were two good looking candidates for the files I was looking for: <code>rr2310_00-rhel-4-i386.img</code> and <code>rr2310_00-rhel-4u3.img</code>, so I copied them both. There is a <code>README</code> and the second is identified as being for the x86_64 version. Well, I'll save you the trial and error it took me and if you were to do:</p>
+    <p class="example"><code>cat rr2310_00-rhel-4u3/modules.cgz | gunzip | cpio -it</code></p>
+    <p>You'd see:</p>
+    <pre>2.6.9-34.EL/i686/rr2310_00.ko
+2.6.9-34.EL/x86_64/rr2310_00.ko
+2.6.9-34.ELhugemem/i686/rr2310_00.ko
+2.6.9-34.ELlargesmp/x86_64/rr2310_00.ko
+2.6.9-34.ELsmp/i686/rr2310_00.ko
+2.6.9-34.ELsmp/x86_64/rr2310_00.ko</pre>
+
+    <p>That matches the kernel version of CentOS-4 and are the needed files. (The others are for <code>2.6.9-5</code>, <code>11</code> and <code>22</code>.)</p>
+
+    <p>Having burned those files onto the root of a CD, I ran the Trixbox install:</p>
+
+    <p class="example"><code>linux dd</code></p>
+
+    <p>This prompts you for a drivers disc that lets you put in our CD and recognizes RAID controller. Unfortunately it seems to skip over some of the automation that Trixbox has put into the Asterisk install, but there's no way around it.</p>
+
+    <p><em>All of the following changes can be done at the end of the installation if you hit <code>ALT-F2</code> to get a prompt before rebooting the system.</em></p>
+
+    <h2>Booting off the RocketRAID</h2>
+
+
+    <p>The next disappointment came when the system rebooted. The kernel module hadn't been saved in the system and to I ended with a kernel panic complaining of not being able to mount the root filesystem.</p>
+
+    <p>I rebooted the system using the Trixbox CD in rescue mode using the command: <em>(This isn't necessary if you know not to reboot when finishing the install.)</em></p>
+
+    <p class="example"><code>linux dd rescue</code></p>
+
+    <p>I copied the kernel module into the RAID filesystem:</p>
+
+    <p class="example"><code>cp /tmp/rr2310_00.ko /mnt/sysimage/lib/modules/2.6.9-34.0.1.EL/kernel/drivers/scsi/</code></p>
+
+    <p>Then I made the RAID filesystem the base for my session:</p>
+
+    <p class="example"><code>chroot /mnt/sysimage</code></p>
+
+    <p>Whenever the kernel is started, there is an initial ramdisk filesystem that is loaded and that it uses to find anything else that it needs to complete booting. These <a href="http://en.wikipedia.org/wiki/Cramfs">cramfs</a> based boot filesystems can be created with <code>mkinitrd</code>.</p>
+    
+    <p class="example"><code>mkinitrd --preload scsi_mod --preload sd_mod --with rr2310_00 /boot/initrd-2.6.9-34.0.1.EL+rr2310.img 2.6.9-34.0.1.EL</code></p>
+
+    <p>If you want to check that the filesystem was correctly created, you can run:</p>
+
+    <p class="example"><code>cat /boot/initrd-2.6.9-34.0.1.EL+rr2310.img | gunzip | cpio -it | less</code></p>
+
+    <p>All that is left now is to edit <code>/boot/grub/grub.conf</code> and add a section using the new <acronym title="initial ramdisk">initrd</acronym>:</p>
+
+    <pre class="example">title RAID CentOS-4 i386 (2.6.9-34.0.1.EL)
+  root (hd0,0)
+  kernel /vmlinuz-2.6.9-34.0.1.EL ro root=/dev/VolGroup00/LogVol00
+  initrd /initrd-2.6.9-34.0.1.EL+rr2310.img</pre>
+
+    <p>Happy calling.</p>
+
+    <hr />
+
+    <p>Places that I have found kernel modules on the trixbox CD:</p>
+
+    <ul>
+      <li>CentOS/base/hdstg2.img:modules/modules.cgz (cramfs:gzipped cpio) (200 modules)</li>
+      <li>CentOS/base/netstg2.img:modules/modules.cgz (cramfs:gzipped cpio) (146 modules)</li>
+      <li>CentOS/base/stage2.img:modules/modules.cgz (cramfs:gzipped cpio) (298 modules)</li>
+      <li>images/boot.iso:isolinux/initrd.img:modules/modules.cgz (iso9660:gzipped ext2:gzipped cpio) (154 modules)</li>
+    </ul>
+
+    <pre class="example">for file in *.img; do
+  mount -o loop "$file" mnt;
+  mkdir "${file%.img}";
+  cp -a mnt/* "${file%.img}";
+  pushd "${file%.img}";
+  cat modules.cgz | gunzip | cpio -i --make-directories;
+  popd;
+  umount mnt;
+done</pre>
+
+cd /ramdisk
+mkdir trixbox
+mount /cdrom
+cp -av /cdrom/* trixbox/
+cd trixbox/CentOS/base/
+mkdir mnt
+mount -o loop stage2.img mnt
+mkdir stage
+cp -a mnt/* stage
+cd stage/modules/
+cat modules.cgz | gunzip | cpio -i --make-directories
+cp ../../../../rr2310_drivers/rr2310_00-rhel-4u3/2.6.9-34.EL/i686/rr2310_00.ko 2.6.9-34.EL/i686/
+mv modules.cgz modules.original.cgz
+find 2.6.9-34.EL/ | cpio -o | gzip -9 > modules.cgz
+rm -rfv 2.6.9-34.EL/
+cd ../..
+mkcramfs stage stage2.img
+rm -rfv stage
+mkisofs -o trixbox.iso -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -J -r trixbox
+scp trixbox.iso wholcomb@10.1.1.164:
+drutil burn trixbox.iso
+  </body>
+</html>

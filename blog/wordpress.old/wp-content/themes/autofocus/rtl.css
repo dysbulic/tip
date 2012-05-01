@@ -1,0 +1,274 @@
+/*
+Theme Name: AutoFocus
+
+Adding support for language written in a Right To Left (RTL) direction is easy -
+it's just a matter of overwriting all the horizontal positioning attributes
+of your CSS stylesheet in a separate stylesheet file named rtl.css.
+
+http://codex.wordpress.org/Right_to_Left_Language_Support
+
+*/
+
+body {
+	direction: rtl;
+	unicode-bidi: embed;
+}
+
+
+/* =Typography
+-------------------------------------------------------------- */
+
+ol,
+ul {
+	margin: 0 0 24px 24px;
+	padding: 0 49px 0 0;
+}
+dd {
+	margin: 0 24px 24px 0;
+}
+th,
+td,
+caption {
+	padding: 0 6px 0 12px;
+}
+
+
+/* =Layout
+-------------------------------------------------------------- */
+
+.showgrid {
+	background: url( 'images/grid.png' ) repeat-y;
+}
+#header-wrapper,
+#header,
+#access,
+div.menu,
+#content,
+#sidebar,
+#comments,
+#footer {
+	float: right;
+}
+.page #content {
+	margin: 0 0 24px 15px;
+}
+
+
+/* =Header
+-------------------------------------------------------------- */
+
+#site-title,
+#site-description {
+	padding: 0 5px 0 0;
+}
+
+
+/* =Navigation Menu
+-------------------------------------------------------------- */
+
+#access ul,
+div.menu ul {
+	padding-left: auto;
+	padding-right: 0;
+}
+#access ul ul,
+div.menu ul ul {
+	border-left: 1px solid #e1e1e1;
+	border-right: none;
+	float: right;
+	left: 160px;
+	right: auto;
+}
+#access ul ul ul,
+div.menu ul ul ul {
+	left: 100%;
+	right: auto;
+}
+
+
+/* =Content Navigation
+-------------------------------------------------------------- */
+
+#nav-above .nav-previous {
+	left: auto;
+	right: -100px;
+	text-align: left;
+}
+#nav-above .nav-next {
+	left: -900px;
+	right: auto;
+	text-align: right;
+}
+#nav-below {
+	float: right;
+}
+#nav-below .nav-previous,
+#nav-below .nav-next {
+	float: right;
+}
+#nav-below .nav-next {
+	text-align: left;
+}
+
+
+/* =Content
+-------------------------------------------------------------- */
+
+.hentry {
+	float: right;
+}
+#post-thumbnail {
+	background: url( 'images/loading-image.gif' ) no-repeat center;
+}
+#entry-content {
+	float: right;
+	margin: 0 0 0 15px;
+}
+#entry-meta {
+	float: right;
+}
+#s {
+	border-left: 2px solid #bbb;
+	border-right: none;
+	float: right;
+	margin: 0 0 0 5px;
+}
+#searchsubmit {
+	float: right;
+}
+
+
+/* =Index Featured Image Grid
+-------------------------------------------------------------- */
+
+.archive .featured,
+.search .featured {
+	margin: 0 0 5px 5px;
+}
+.featured-trigger {
+	left: auto;
+	right: 0;
+}
+.featured-date {
+	left: auto;
+	right: 15px;
+}
+.featured-position-0,
+.featured-position-10 {
+	margin: 0 0 5px 5px;
+}
+.featured-position-2,
+.featured-position-12 {
+	margin: 0 0 5px 5px;
+}
+.featured-position-4,
+.featured-position-14,
+.featured-position-5,
+.featured-position-15 {
+	margin: 0 0 5px 5px;
+}
+.featured-position-7,
+.featured-position-17 {
+	margin: 0 0 5px 5px;
+}
+.featured-position-8,
+.featured-position-18 {
+	margin: 0 0 5px 5px;
+}
+.featured-banner {
+	left: auto;
+	right: 0;
+}
+
+
+/* =Archive
+-------------------------------------------------------------- */
+
+.entry-meta {
+	float: right;
+}
+
+
+/* =Images
+-------------------------------------------------------------- */
+
+.alignleft { /* left aligned images */
+	float: right;
+	margin: 12px 0 12px 15px;
+}
+div.alignleft { /* left aligned captions */
+	margin: 12px 0 7px 15px;
+}
+.alignright { /* right aligned images */
+	float: left;
+	margin: 12px 15px 12px 0;
+}
+div.alignright { /* right aligned captions */
+	margin: 12px 15px 7px 0;
+}
+.gallery {
+	float: right;
+}
+
+
+/* =Widgets
+-------------------------------------------------------------- */
+
+.widget-area .widget {
+	float: right;
+}
+.widget_categories .children,
+.widget_nav_menu .sub-menu,
+.widget_pages .children {
+	padding: 0 24px 0 0;
+}
+
+
+/* =Comments
+-------------------------------------------------------------- */
+
+#comments {
+	padding: 0 0 0 210px;
+}
+#comment-nav-above,
+#comment-nav-below {
+	float: right;
+}
+.comment-nav-previous {
+	float: right;
+}
+.comment-nav-next {
+	float: left;
+}
+.commentlist img.avatar {
+	float: right;
+	margin: 0 0 0 15px;
+}
+.edit-comment-link a {
+    float: left;
+    text-align: left;
+}
+li.comment ol,
+li.comment ul {
+	margin: 0 0 24px 24px;
+}
+li.comment li ol,
+li.comment li ul {
+	margin: 0 0 0 24px;
+}
+li.comment ul.children {
+	margin-left: 0;
+	margin-right: auto;
+}
+
+
+/* =IE7
+-------------------------------------------------------------- */
+
+#ie7 #nav-above .nav-next {
+	left: -100px;
+	right: auto;
+}
+#ie7 .featured-thumbnail {
+	text-align: right;
+}

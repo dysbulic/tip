@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-310 Homework #4</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math { margin-top: .75em; }
+      .title { font-variant: small-caps; }
+      object { width: 100%; }
+      th, td { padding: .25em .5em; border: 1px solid; }
+      #p3 { page-break-before: always; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 310: Design and Analysis of Algorithms</h1>
+      <h2>Homework #4</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 13:10 Mon., 18 February 2008</h2>
+    </div>
+    <blockquote><p>All work should be done on your own. If you discuss this assignment in any way with anyone else, or find help for getting the answer from any source, you must state so clearly at the top of your submission. There should be no working together except to understand the question.</p></blockquote>
+    <ol>
+      <li id="p1">
+        <div class="question">
+          <p>Show that it is possible to multiply two <em>n</em>&times;<em>n</em> 0/1 (boolean) matrices in o(<em>n</em><sup>3</sup>) without using any of the fast matrix multiplication algorithms such as Strassen's algorithm.</p>
+        </div>
+        <div class="answer">
+          <p>In general the multiplication of two matrices is performed as:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>c</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <munderover><mo>&Sum;</mo><mrow><mi>x</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover>
+                  <msub><mi>a</mi><mfenced open="" close=""><mi>i</mi><mi>x</mi></mfenced></msub>
+                  <msub><mi>b</mi><mfenced open="" close=""><mi>x</mi><mi>j</mi></mfenced></msub>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Naive matrix multiplication of a <em>n</em>&times;<em>m</em> by a <em>m</em>&times;<em>p</em> matrix produces a <em>n</em>&times;<em>p</em> matrix, each element of which requires <em>m</em> multiplications. The number of calculations then is <em>npm</em>. For a symmetric <em>n</em>&times;<em>n</em> matrix, this is <em>n</em><sup>3</sup>.</p>
+          <p>For a boolean matrix, each value is constrained to a point that a productive quantity of the possible operations can be precomputed in a reasonable amount of space. The problem is divided into "microsets" where every possible combination of a recurring computation is precomputed and simply looked up rather than computed. In this situation, consider a <em>n</em>&times;<em>n</em> table. Each row and column is one permutation of a log<sub>2</sub><em>n</em> length bit string.</p>
+          <p>
+            For a series of elements in the original <em>n</em>&times;<em>n</em> boolean matrices, the multiplications can be then done in
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>log</mo><mi>n</mi></math>
+            sized chunks which are looked up from the table in constant time. So the computation of the entire matrix will be:
+          </p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>n</mi><mi>n</mi><mfrac><mi>n</mi><mrow><mo>log</mo><mi>n</mi></mrow></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>O</mo><mfenced><mfrac><msup><mi>n</mi><mn>3</mn></msup><mrow><mo>log</mo><mi>n</mi></mrow></mfrac></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>o</mo><mfenced><msup><mi>n</mi><mn>3</mn></msup></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+        </div>
+      </li>
+      <li id="p2">
+        <div class="question">
+          <p>Design a code for at least three characters which is not uniquely decipherable, but has the property that if any character is deleted it is uniquely decipherable.</p>
+        </div>
+        <div class="answer">
+          <p>A simple code is:</p>
+          <ul>
+            <li>a &rArr; '<code>0</code>'</li>
+            <li>b &rArr; '<code>1</code>'</li>
+            <li>c &rArr; '<code>01</code>'</li>
+          </ul>
+        </div>
+      </li>
+      <li id="p3">
+        <div class="question">
+          <p>Show that if elements are given to you sorted by weight, Huffman codes can be computed in O(<em>n</em>) rather than O(<em>n</em> log <em>n</em>) time.</p>
+        </div>
+        <div class="answer">
+          <p>For a non-sorted list of elements, a Huffman code can be generated by iteratively building a tree. At each iteration the two elements with the smallest weights are combined in a binary tree. This tree is then readded to the list as a single element with a weight equal to the combined weight of the elements comprising it.</p>
+          <p>If the elements are presented in a sorted order then finding the smallest ones becomes simple. A pattern forms from the first few iterations:</p>
+          <ol>
+            <li>The first iteration the first two elements in the list are the smallest. The resultant node is added to a separate queue.</li>
+            <li>The next iteration the smallest node is either going to be the new node just placed on the queue or two more nodes from the list. If it is two nodes from the list, a new node will be formed. Because it was formed by two nodes that are greater than the nodes that formed the node at the head of the queue, it's value will be greater. It is added to the back of the queue and the queue stays ordered.</li>
+            <li>Out of the set of possible nodes, the two smallest will always be some combination of the first two in the list and the first two in the queue. When a new node is created, it can always be put at the back of the queue and the queue will stay sorted because the elements used to form it are always increasing in value.</li>
+          </ol>
+          <p>The algorithm runs until the list is empty and there's a single element on the queue. There was never more than four comparisons for the formation of any element, so the algorithm is O(<em>n</em>).</p>
+        </div>
+      </li>
+      <li id="p4">
+        <div class="question">
+          <p>An optimal binary search tree on an alphabetically ordered, weighted set of elements is a binary search tree which minimizes the sum <em>w<sub>i</sub></em><em>l<sub>i</sub></em> where <em>w<sub>i</sub></em> and <em>l<sub>i</sub></em> are the weight and depth of the <em>i</em><sup>th</sup> element respectively. Using a Huffman type strategy where the three elements with the smallest total value are combined into an optimal tree which is then treated as an node with respect to the rest of the tree.</p>
+        </div>
+        <div class="answer">
+          <p>For this example, depth counting begins at 1. This makes it simpler to illustrate however the ranks of scores for tree configurations will be the same regardless of the depth the configuration occurs.</p>
+          <p>Consider the following weighted elements: (there have to be at least four because the algorithm by definition makes the best three-element tree)</p>
+          <table>
+            <tr><td>A</td><td>B</td><td>C</td><td>D</td></tr>
+            <tr><td>3</td><td>2</td><td>3</td><td>1</td></tr>
+          </table>
+          
+          <p>The first iteration, the algorithm will combine B, C and D because 3 + 2 + 3 &gt; 2 + 3 + 1. The optimal tree for these will place C (the weightiest element) at the top:</p>
+          <object style="height:90px" id="tree_t1" type="image/svg+xml" data="optimal_search_t1.svg"></object>
+          <p>When combining this tree with A, there are two options that will maintain the alphabetic ordering of the tree, both of which have a total score of 18.</p>
+          <object style="height:190px" id="tree_t2" type="image/svg+xml" data="optimal_search_t2.svg"></object>
+          <p>An alternative tree has a score of 17, so the algorithm does not produce optimal trees:</p>
+          <object style="height:180px" id="tree_t3" type="image/svg+xml" data="optimal_search_manual.svg"></object>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<style type="text/css">
+.FAFLeftNavTd, .FAFRightNav { display: none; }
+html { background: #ae8069 url('sand.tile.jpg') fixed; margin: 0; padding: 0; }
+body {
+background: rgb(249, 247, 214) url('http://mpp.org/atf/cf/{FC4E88DF-6ACE-4AA6-851C-0688A929D3C5}/boynton_top.gif') repeat-x fixed;
+background: transparent url('http://mpp.org/atf/cf/{FC4E88DF-6ACE-4AA6-851C-0688A929D3C5}/footsteps.wide.jpg') no-repeat fixed top center;
+}
+.header b font { color: white; }
+td { color: #510606; }
+a { display: none; }
+.visible { display: inline; }
+table table table table table a { display: inline; }
+#bodytable-5, #bodytable-6 { display: none; }
+#bodytable-4 td { padding: .25em .5em; }
+#bodytable-7 { background-color: #9EE; }
+</style>
+<!--[if lt IE 8]>
+<style type="text/css">
+  body { background-color: #ae8069;
+         background-image: url('https://www.kintera.com/AccountTempFilesSSL/account13064/images/footsteps.wide.lores.jpg'); }
+</style>
+<![endif]-->
+<script type="text/javascript">/* <![CDATA[ */
+window.onload = function() {
+ var rows = document.getElementsByTagName("tr");
+ for(var i = 0; i < rows.length; i++) {
+   if(rows.item(i).getAttribute("bgcolor") == "#006b6b") {
+     rows.item(i).className = "header";
+   }
+ }
+ var bodyTable = undefined;
+ var tables = document.getElementsByTagName("table");
+ /* some moron doesn't know when to use the id attribute */
+ for(var i = 0; i < tables.length && bodyTable == undefined; i++) {
+   if(tables[i].className == "FAFBodyTable") bodyTable = tables[i];
+ }
+ tables = bodyTable.getElementsByTagName("table");
+ for(var i = 0; i < tables.length; i++) {
+   tables[i].setAttribute("id", "bodytable-" + (i + 1));
+ }
+}
+//]]></script>
+<p>There are no physical tickets for this event. Your name will be added to the guest list. <strong>Please note that tickets are nonrefundable.</strong> Your contribution is tax-deductible for the price of each ticket minus $25.</p>

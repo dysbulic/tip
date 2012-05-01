@@ -1,0 +1,30 @@
+# Options +Indexes
+HeaderName HEADER.html
+IndexOptions NameWidth=* DescriptionWidth=* FancyIndexing FoldersFirst ScanHTMLTitles SuppressHTMLPreamble XHTML HTMLTable -SuppressIcon
+IndexIgnore .. .svn *~ .DS_Store HEADER.html svn-commit.tmp
+
+AddCharset UTF-8 .html .php .css .js
+
+DirectoryIndex index.php index.xhtml index.html index.svg
+
+RemoveHandler .sh
+RemoveHandler .py
+RemoveHandler .pl
+
+AddType application/x-java-jnlp-file .jnlp
+AddType application/x-httpd-php-source .phps
+AddType text/plain .sh .com .vbs .py .java .c
+AddType image/svg+xml .svg .svgz
+AddType text/xml :
+AddEncoding x-gzip .svgz
+
+#RewriteEngine on
+#RewriteCond %{REQUEST_URI} ^.*gmail/*(.*)$ [NC]
+#RewriteRule ^(.*)$ http://gmail.com/%1 [R,L]
+
+<FilesMatch ".svn">
+  AuthUserFile /home/will/sites/.htpasswd
+  AuthName "Subversion Pass"
+  AuthType Basic
+  Require Valid-User
+</FilesMatch> 

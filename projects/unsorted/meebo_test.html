@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Meebo Javascript Developer Test</title>
+    <link rel="stylesheet" type="text/css" href="styles/main.css" />
+    <style type="text/css">
+      .note { margin-left: 2em; border: 3px double; background-color: #EEE; padding: 1em 2em; }
+      body { max-width: 800px; }
+      li { display: list-item; min-height: 2em; }
+      ol ol { list-style: lower-alpha; }
+      td { border: 1px solid; padding: .25em .75em; }
+      .test { width: 3em; background-color: red; border: 2px dashed; }
+      #comptests .test { width: 8em; }
+      .passed, #passedtest { background-color: green; }
+    </style>
+    <script type="text/javascript">//<![CDATA[
+      if(!Node) { // stupid IE lacks this
+        var Node = { ELEMENT_NODE : 1, ATTRIBUTE_NODE : 2, TEXT_NODE : 3, CDATA_SECTION_NODE : 4,
+                     ENTITY_REFERENCE_NODE : 5, ENTITY_NODE : 6, PROCESSING_INSTRUCTION_NODE : 7,
+                     COMMENT_NODE : 8, DOCUMENT_NODE : 9, DOCUMENT_TYPE_NODE : 10,
+                     DOCUMENT_FRAGMENT_NODE : 11, NOTATION_NODE : 12 }
+      }
+      // strips out any whitespace only text nodes
+      // this cuts out the space between elements in the table that make addressing difficult
+      // this will cause a display error for <p><u>un</u> <b>bo</b></p>
+      function removeWhitespace(node) {
+        var i, child;
+        for(i = node.childNodes.length - 1; i >= 0; i--) {
+          child = node.childNodes.item(i);
+          switch(child.nodeType) {
+            case Node.TEXT_NODE: if(child.data.match(/^\s*$/)) node.removeChild(child); break;
+            case Node.ELEMENT_NODE: removeWhitespace(child); break;
+          }
+        }
+        return node;
+      }
+    //]]></script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+    
+  </head>
+  <body>
+    <h1><a href="http://meebo.com">Meebo</a> Javascript <a href="http://blog.meebo.com/jobs?o#web">Developer Test</a></h1>
+
+    <p class="note">I do love me these tests. They're always kinda tricky and you'll often get a good brain teaser. The <a href="paypal/">PayPal</a> one kept my house entertained for a week and the <a href="vicious_cycle_test/">Vicious Cycle</a> one has still got me stumped.</p>
+
+    <ol>
+      <li>
+        <blockquote><p>When does <code>div.setAttribute('<em>attr</em>', <em>val</em>)</code> not equal <code>div.<em>attr</em> = <em>val</em></code>?</p></blockquote>
+
+        <p>I don't normally use the div.<em>attr</em> shorthand because I find code more readable the more explicit it is. That said, I have to use it to set the class attribute because in IE6, styles are not applied when the class attribute is set with <code>setAttribute</code>. <em>The coloring of the following table is dynamic, and looks different in IE and non-crappy browsers.</em></p>
+        
+        <table>
+          <tbody id="classtests">
+            <tr><td><code>this.setAttribute('class', this.className + ' passed')</code></td><td class="test">&bull;</td></tr>
+            <tr><td><code>this.class += " passed"</code></td><td class="test">&bull;</td></tr>
+            <tr><td><code>this.className += ' passed'</code></td><td class="test">&bull;</td></tr>
+            <tr><td><code>this.className = 'passed'</code></td><td class="test">&bull;</td></tr>
+            <tr><td><code>this.style = "background-color: green"</code></td><td class="test">&bull;</td></tr>
+            <tr><td><code>this.setAttribute('style', 'background-color: green')</code></td><td class="test">&bull;</td></tr>
+            <tr><td><code>this.style.setProperty('background-color', 'green', null)</code></td><td class="test">&bull;</td></tr>
+            <tr><td><code>this.style.backgroundColor = 'green'</code></td><td class="test">&bull;</td></tr>
+            <tr><td><code>this.id = "passedtest"</code></td><td class="test">&bull;</td></tr>
+            <tr><td><code>this.setAttribute('id', 'passedtest')</code></td><td class="test">&bull;</td></tr>
+          </tbody>
+        </table>
+        <script type="text/javascript">//<![CDATA[
+          var testsTable = removeWhitespace(document.getElementById('classtests'));
+          for(i = 0; i < testsTable.childNodes.length; i++) {
+            var testRow = testsTable.childNodes.item(i);
+            var code = testRow.firstChild.firstChild.firstChild.data;
+            var testbed = testRow.childNodes.item(1);
+            try {
+              eval("var func = function() { " + code + " };");
+              func.call(testbed);
+            } catch(e) {
+              var message = (typeof(e.message) != "undefined" ? e.message : e.description);
+              //alert("For: \"" + code + "\": " + message);
+            }
+          }
+        //]]></script>
+      </li>
+      <li>
+        <blockquote>
+          <p>What's the difference between these two statements:</p>
+          <ol>
+            <li><code>var x = 3;</code></li>
+            <li><code>x = 3;</code></li>
+          </ol>
+        </blockquote>
+
+        <p>The first operates on the local scope, the second on the closest containing scope (frequently the global namespace). If a <code>var x</code> has been defined between this scope and the global scope, this function will affect that instance.</p>
+
+        <p>Scoping in javascript is funky anyhow, I think a good question on an in-person exam would be, "What does this print? Assume <code>debug()</code> handles the display."</p>
+
+        <pre>var x = 3;
+(function() { x = 6; var x = 5; })();
+debug("x = " + x);
+y = 3;
+(function() { y = 13; })();
+debug("y = " + y);
+if(true) { var z = 23; }
+debug("z = " + z);</pre>
+
+        <p>Some people would know that the <code>if</code> blocks don't create a new scope like most other languages with C-esque syntax. It'd be a more rare one to know that the <code>var x</code> after the assignment of <code>x</code> makes variable local for the entire function, so the output is <code>x = 3</code>, <code>y = 13</code>, <code>z = 23</code>.</p>
+      </li>
+      <li>
+        <blockquote>
+          <p>What's the difference between:</p>
+          <ol>
+            <li><code>!!(obj1 &amp;&amp; obj2)</code></li>
+            <li><code>(obj1 &amp;&amp; obj2)</code></li>
+          </ol>
+        </blockquote>
+
+        <table>
+          <thead>
+            <tr><th>a</th><th>b</th><th>a &amp;&amp; b</th><th>!!(a &amp;&amp; b)</th></tr>
+          </thead>
+          <tbody id="comptests">
+            <tr><td>true</td><td>true</td><td class="test"></td><td class="test"></td></tr>
+            <tr><td>true</td><td>false</td><td class="test"></td><td class="test"></td></tr>
+            <tr><td>false</td><td>true</td><td class="test"></td><td class="test"></td></tr>
+            <tr><td>true</td><td>undefined</td><td class="test"></td><td class="test"></td></tr>
+            <tr><td>true</td><td>0</td><td class="test"></td><td class="test"></td></tr>
+            <tr><td>true</td><td>1</td><td class="test"></td><td class="test"></td></tr>
+            <tr><td>true</td><td>NaN</td><td class="test"></td><td class="test"></td></tr>
+            <tr><td>1</td><td>1</td><td class="test"></td><td class="test"></td></tr>
+            <tr><td>0</td><td>10</td><td class="test"></td><td class="test"></td></tr>
+            <tr><td>10</td><td>0</td><td class="test"></td><td class="test"></td></tr>
+            <tr><td>0</td><td>0</td><td class="test"></td><td class="test"></td></tr>
+            <tr><td>10</td><td>"test"</td><td class="test"></td><td class="test"></td></tr>
+            <tr><td>""</td><td>"test"</td><td class="test"></td><td class="test"></td></tr>
+          </tbody>
+        </table>
+
+        <script type="text/javascript">//<![CDATA[
+          var testsTable = removeWhitespace(document.getElementById('comptests'));
+          for(i = 0; i < testsTable.childNodes.length; i++) {
+            var testRow = testsTable.childNodes.item(i);
+            try {
+              eval("var a = " + testRow.firstChild.firstChild.data);
+              eval("var b = " + testRow.childNodes.item(1).firstChild.data);
+              var val = a && b;
+              var pos = (val === a && val === b ? "both" :
+                         (val === a ? "a" :
+                          (val === b ? "b" : "neither")));
+              if(typeof(val) == "string") val = '"' + val + '"';
+              testRow.childNodes.item(2).appendChild(document.createTextNode(val + " (" + pos + ")"));
+              if(a && b) testRow.childNodes.item(2).className += " passed";
+              testRow.childNodes.item(3).appendChild(document.createTextNode(!!(a && b)));
+              if(!!(a && b)) testRow.childNodes.item(3).className += " passed";
+            } catch(e) {
+              var message = (typeof(e.message) != "undefined" ? e.message : e.description);
+              alert("For: \"" + code + "\": " + message);
+            }
+          }
+        //]]></script>
+        
+        <p>Many kudos to <a href="http://atrus.org">Nikolas Coukouma</a> for the answer on this one. I did not know that in javascript conditions evaluate to the first false term or the last term if all are true, so <code>(a &amp;&amp; b) == (a ? b : a)</code>. (I actually learned it later in the week from <a href="http://101out.com/js.php">Douglas Crockford</a>.) The double negation coerces it into being a boolean.</p>
+        <p>You'll also note that <code>NaN !== NaN</code>.</p>
+      </li>
+      <li>
+        <blockquote>
+          <p>Write a one-line piece of JavaScript code that concatenates all strings passed into a function:</p>
+          <pre>function concatenate(/* any number of strings */) {
+  var string = /* your one line here */
+  return string;
+}</pre>
+        </blockquote>
+        
+        <script type="text/javascript">//<![CDATA[
+          function concat_func() {
+            return (function(args, idx) { return (idx < args.length ?
+                                                  args[idx] + arguments.callee(args, idx + 1) :
+                                                  "") })(arguments, 0);
+          }
+          function concat_join() {
+            return (function(args) { var arr = new Array();
+                                     for(i = 0; i < args.length; i++) { arr.push(args[i]); }
+                                     return arr.join(''); })(arguments);
+          }
+          function concat_append() {
+            return (function(args) { var val = "";
+                                     for(i = 0; i < args.length; i++) { val += args[i]; }
+                                     return val; })(arguments);
+          }
+          function concat_test() {
+            var loopCount = 15000;
+            var startTime = new Date();
+            for(var count = 0; count < loopCount; count++) {
+              str = concat_join("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
+            }
+            var joinTime = new Date().getTime() - startTime;
+            startTime = new Date();
+            for(var count = 0; count < loopCount; count++) {
+              str = concat_append("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
+            }
+            var appendTime = new Date().getTime() - startTime;
+            startTime = new Date();
+            for(var count = 0; count < loopCount; count++) {
+              str = concat_func("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
+            }
+            var funcTime = new Date().getTime() - startTime;
+            alert("After " + loopCount + " Iterations:\n   Join: " + joinTime + " :\n   Append: " + appendTime + "\n   Functional: " + funcTime);
+          }
+        //]]></script>
+
+        <p>I'm wondering if whoever wrote this assumed that <a href="http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Functions:arguments"><code>arguments</code></a> is a real array and therefore someone could do:</p>
+
+        <pre>return arguments.join('');</pre>
+
+        <p>That would be nice, but it isn't a real array, it has indices like an array, but it doesn't have <code>push</code> or <code>pop</code> or any of those niceties. This can be done in one pseudo-line though using an inline function:</p>
+
+        <pre>return (function(args) { var val = "";
+                         for(i = 0; i &lt; args.length; i++) { val += args[i]; }
+                         return val; })(arguments);</pre>
+
+        <pre>return (function(args) { var arr = new Array();
+                         for(i = 0; i &lt; args.length; i++) { arr.push(args[i]); }
+                         return arr.join(''); })(arguments);</pre>
+
+        <p>Javascript doesn't have a lambda operator, but another option is to do something a little more functional:</p>
+
+        <pre>return (function(args, idx) { return (idx &lt; args.length ?
+                                      args[idx] + arguments.callee(args, idx + 1) :
+                                      "") })(arguments, 0);</pre>
+
+        <p>I'm curious about the different performance characteristics of these solutions, but not so interested that I would write something like <a href="http://www.jorendorff.com/articles/javascript/speed-test.html">Jason Orendorff</a>. Maybe someday he'll make those functions more easily accessible.</p>
+        <form action=""><div><input type="button" value="Timing Test" onclick="concat_test()"/></div></form>
+
+      </li>
+      <li>
+        <blockquote>
+          <p>What do these two examples have in common?</p>
+
+          <ol>
+            <li><pre>var obj = document.getElementById('adiv');
+document.getElementById('adiv').ptr = obj;</pre></li>
+            <li><pre>function assignClick() {
+  var el = document.createElement('div');
+  function handleClick() { el.innerHTML = 'clicked!'; }
+  el.attachEvent('onclick', handleClick);
+}</pre></li>
+          </ol>
+        </blockquote>
+        <p>The answer for this one also comes from <a href="http://atrus.org">Nikolas Coukouma</a>. I hate IE and only work in it enough to get things to work like they do in Firefox, so I didn't know that the <code>div.ptr = obj</code> assignment would create an element attribute in IE. Knowing that the answer is simple, that the behavior of these two snippets is significantly different in IE and W3C compliant browsers.</p>
+        <p>In retrospect, I should have guessed this since the second one will obviously only work in IE and seemed incredibily sloppy that they would include a piece of IE only code in their test.</p>
+      </li>
+    </ol>
+  </body>
+</html>

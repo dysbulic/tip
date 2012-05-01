@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Motorola 68HC08 Hello World</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+      .program {
+        font-family: Courier;
+        float: left;
+        width: 400px;
+        clear: left;
+        white-space: pre;
+      }
+      .explanation {
+        clear: right;
+        margin-left: 400px;
+        border-left: 1px solid #AAA;
+        padding-left: 1em;
+        margin-bottom: 1em;
+      }
+      .vars .program { width: 200px; }
+      .vars .explanation { margin-left: 200px; }
+      table {
+        border-collapse: collapse;
+        margin-top: .25em;
+      }
+      th, td {
+        padding: .1em .5em;
+        border: 1px solid;
+        width: 5em;
+      }
+      .gray { background-color: #AAA; }
+      #SCIvars { opacity: .5; }
+      hr { width: 50% }
+    </style>
+    <script type="text/javascript">//<![CDATA[
+    //]]></script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Motorola 68HC08 Hello World</h1>
+    <p>I have a <a href="">MC68HC908JB8</a> that I know exactly diddly about. This is an attempt to piece together a simple "Hello World" program in assembly. I want to be able to hook the chip up to a USB port and read the device name. I'm working primarily from the code from the usb-ir-boy project. This code is heavily commented in hopes that I can gain a clue.</p>
+    <hr />
+
+<p>I spent several hours trying to understand the SCI interface before noticing that my microcontroller doesn't have one.</p>
+<div id="SCIvars" class="vars">
+<div class="program">SCC1	= $0013</div>
+<div class="explanation">
+  This is a variable definition. This is the address of the Serial Communication Interface (SCI) Control Register #1. From the documentation, this register is:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0013</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="Loop Mode">LOOPS</acronym></td>
+      <td rowspan="2"><acronym title="Enable SCI">ENSCI</acronym></td>
+      <td rowspan="2"><acronym title="Transmit Inversion">TXINV</acronym></td>
+      <td rowspan="2"><acronym title="Mode Character Length (0: 8-bit / 1: 9-bit)">M</acronym></td>
+      <td rowspan="2"><acronym title="Wakeup Condition (0: Idle Line / 1: Address Mark)">WAKE</td>
+      <td rowspan="2"><acronym title="Idle Line Type">ILTY</acronym></td>
+      <td rowspan="2"><acronym title="Parity Enable">PEN</acronym></td>
+      <td rowspan="2"><acronym title="Parity (0: Even / 1: Odd)">PTY</acronym></td>
+    </tr>
+    <tr><th>Write:</th></tr>
+  </table>
+</div>
+<div class="program">SCC2	= $0014</div>
+<div class="explanation">
+  SCI Control Register #2:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0014</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="SCI Transmittter Interrupt Enable">SCTIE</acronym></td>
+      <td rowspan="2"><acronym title="Transmission Complete Interrupt Enable">TCIE</acronym></td>
+      <td rowspan="2"><acronym title="SCI Receive Interrupt Enable">SCRIE</acronym></td>
+      <td rowspan="2"><acronym title="Idle Line Interrupt Enable">ILIE</acronym></td>
+      <td rowspan="2"><acronym title="Transmitter Enable">TE</acronym></td>
+      <td rowspan="2"><acronym title="Receiver Enabled">RE</acronym></td>
+      <td rowspan="2"><acronym title="Receiver Wakeup (0: Normal Operation / 1: Disable Interrupts)">RWU</acronym></td>
+      <td rowspan="2"><acronym title="Send Break">SBK</acronym></td>
+    </tr>
+    <tr><th>Write:</th></tr>
+  </table>
+</div>
+<div class="program">SCC3	= $0015</div>
+<div class="explanation">
+  SCI Control Register #3:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0015</code></th><th>Read:</th>
+      <td><acronym title="Possible Ninth Recieve Bit (if M is set)">R8</acronym></td>
+      <td rowspan="2"><acronym title="Possible Ninth Transmit Bit (if M is set)">T8</acronym></td>
+      <td rowspan="2" class="gray"><acronym title="Reserved">R</acronym></td>
+      <td rowspan="2" class="gray"><acronym title="Reserved">R</acronym></td>
+      <td rowspan="2"><acronym title="Overrun Interrupt Enable">ORIE</acronym></td>
+      <td rowspan="2"><acronym title="Noise Error Interrupt Enable">NEIE</acronym></td>
+      <td rowspan="2"><acronym title="Framing Error Interrupt Enable">FEIE</acronym></td>
+      <td rowspan="2"><acronym title="Parity Error Interrupt Enable">PEIE</acronym></td>
+    </tr>
+    <tr><th>Write:</th><td class="gray"></td></tr>
+  </table>
+</div>
+<div class="program">SCS1	= $0016</div>
+<div class="explanation">
+  SCI Status Register #1:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0016</code></th><th>Read:</th>
+      <td><acronym title="SCI Transfer Empty">SCTE</acronym></td>
+      <td><acronym title="Transmission Complete">TC</acronym></td>
+      <td><acronym title="SCI Reciever Full">SCRF</acronym></td>
+      <td>IDLE</td>
+      <td><acronym title="Overrun">OR</acronym></td>
+      <td><acronym title="Noise Flag">NF</acronym></td>
+      <td><acronym title="Framing Error">FE</acronym></td>
+      <td><acronym title="Parity Error">PE</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+    </tr>
+  </table>
+</div>
+<div class="program">SCS2	= $0017</div>
+<div class="explanation">
+  SCI Status Register #2:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0017</code></th><th>Read:</th>
+      <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+      <td><acronym title="Break Flag">BKF</acronym></td>
+      <td><acronym title="Reception in Progress Flag">RPF</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+    </tr>
+  </table>
+</div>
+<div class="program">SCDR	= $0018</div>
+<div class="explanation">SCI Data Register: Read and write data from the SCI</div>
+<div class="program">SCBR	= $0019</div>
+<div class="explanation">
+  SCI Baud Rate Register:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0019</code></th><th>Read:</th><td>0</td><td>0</td>
+      <td rowspan="2"><acronym title="SCI Baud Rate Prescaler Bit 1">SCP1</acronym></td>
+      <td rowspan="2"><acronym title="SCI Baud Rate Prescaler Bit 0">SCP0</acronym></td>
+      <td rowspan="2" class="gray"></td>
+      <td rowspan="2"><acronym title="SCI Baud Rate Select Bit 2">SCR2</acronym></td>
+      <td rowspan="2"><acronym title="SCI Baud Rate Select Bit 1">SCR1</acronym></td>
+      <td rowspan="2"><acronym title="SCI Baud Rate Select Bit 0">SCR0</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th><td class="gray"></td><td class="gray"></td>
+    </tr>
+  </table>
+</div>
+
+<hr />
+
+<div class="program">PPG	= $001E</div>
+<div class="explanation">
+  PLL Programming Register (PPG):
+  <table>
+    <tr>
+      <th rowspan="2"><code>$001E</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="Multiplier Select Bit 7">MUL7</acronym></td>
+      <td rowspan="2"><acronym title="Multiplier Select Bit 6">MUL6</acronym></td>
+      <td rowspan="2"><acronym title="Multiplier Select Bit 5">MUL5</acronym></td>
+      <td rowspan="2"><acronym title="Multiplier Select Bit 4">MUL4</acronym></td>
+      <td rowspan="2"><acronym title="Voltage-Controlled Oscillator (VCO) Range Select Bit 7">VRS7</acronym></td>
+      <td rowspan="2"><acronym title="Voltage-Controlled Oscillator (VCO) Range Select Bit 6">VRS6</acronym></td>
+      <td rowspan="2"><acronym title="Voltage-Controlled Oscillator (VCO) Range Select Bit 5">VRS5</acronym></td>
+      <td rowspan="2"><acronym title="Voltage-Controlled Oscillator (VCO) Range Select Bit 4">VRS4</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+    </tr>
+  </table>
+</div>
+<div class="program">MOR	= $001F</div>
+<div class="explanation">
+  Mask Option Register (MOR):
+  <table>
+    <tr>
+      <th rowspan="2"><code>$001F</code></th><th>Read:</th><td rowspan="2" class="gray">0</td>
+      <td><acronym title="ROM Security">ROMSEC</acronym></td>
+      <td><acronym title="Low-Voltage Inhibit (LVI) Power Disable">LVIRSTD</acronym></td>
+      <td><acronym title="Low-Voltage Inhibit (LVI) Reset Disable">LVIPWRD</acronym></td>
+      <td><acronym title="Short Stop Recovery">SSREC</acronym></td>
+      <td><acronym title="COP Long Timeout">COPL</acronym></td>
+      <td><acronym title="STOP Instruction Enable">STOP</acronym></td>
+      <td><acronym title="Computer Operating Properly (COP) Disable">COPD</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+      <td class="gray"><acronym title="Reserved">R</acronym></td>
+    </tr>
+  </table>
+</div>
+<hr />
+</div>
+
+<div id="locations" class="vars">
+
+<div class="program">UCR0	= $003B</div>
+<div class="explanation">
+</div>
+<div class="program">UCR1	= $003C</div>
+<div class="explanation">
+  USB Control Register 1:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$003C</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Sequence (DATA:X Token Active for Next Endpoint 1 Transmit)">T1SEQ</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Force Stall">STALL1</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Enable">TX1E</acronym></td>
+      <td rowspan="2"><acronym title="Force Resume">FRESUM</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Data Packet Size Bit 3">TP1SIZ3</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Data Packet Size Bit 2">TP1SIZ2</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Data Packet Size Bit 1">TP1SIZ1</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Data Packet Size Bit 0">TP1SIZ0</acronym></td>
+    </tr>
+    <tr><th>Write:</th></tr>
+  </table>
+</div>
+<div class="program">UCR2	= $0019</div>
+<div class="explanation">
+  USB Control Register 2:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0019</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Sequence (DATA:X Token Active for Next Endpoint 2 Transmit)">T2SEQ</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Force Stall">STALL2</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Enable">TX2E</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Recieve Enable">RX2E</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Data Packet Size Bit 3">TP2SIZ3</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Data Packet Size Bit 2">TP2SIZ2</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Data Packet Size Bit 1">TP2SIZ1</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Data Packet Size Bit 0">TP2SIZ0</acronym></td>
+    </tr>
+    <tr><th>Write:</th></tr>
+  </table>
+</div>
+<div class="program">UCR3	= $001A</div>
+<div class="explanation">
+  USB Control Register 3:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$001A</code></th><th>Read:</th>
+      <td><acronym title="Endpoint 0 Transmit First Flag">TX1ST</acronym></td>
+      <td>0</td>
+      <td rowspan="2"><acronym title="Endpoint 0 Force STALL Bit for OUT Token">OSTALL0</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 0 Force STALL Bit for IN Token">ISTALL1</acronym></td>
+      <td>0</td>
+      <td rowspan="2"><acronym title="Pull-up Enable">PULLEN</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Enable">ENABLE2</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Enable">ENABLE1</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th><td class="gray"></td>
+      <td><acronym title="Clear Endpoint 0 Transmit First Flag (1: Reset Flag)">TX1STR</acronym></td>
+      <td class="gray"></td>
+    </tr>
+  </table>
+</div>
+<div class="program">UCR4	= $001B</div>
+<div class="explanation">
+  USB Control Register 4:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$001B</code></th><th>Read:</th>
+      <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+      <td rowspan="2"><acronym title="Force USB Output">FUSBO</acronym></td>
+      <td rowspan="2"><acronym title="Force D+">FDP</acronym></td>
+      <td rowspan="2"><acronym title="Force D-">FDM</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th><td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+    </tr>
+  </table>
+</div>
+<div class="program">USR0	= $003D</div>
+<div class="explanation">
+  USB Status Register 0:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$003D</code></th><th>Read:</th>
+      <td><acronym title="Endpoint 0 Receive Sequence (Last Recieve was DATA:X)">R0SEQ</acronym></td>
+      <td><acronym title="SETUP Token Detect">SETUP</acronym></td>
+      <td>0</td>
+      <td>0</td>
+      <td><acronym title="Endpoint 0 Receive Data Packet Size Bit 3">RP0SIZ3</acronym></td>
+      <td><acronym title="Endpoint 0 Receive Data Packet Size Bit 2">RP0SIZ2</acronym></td>
+      <td><acronym title="Endpoint 0 Receive Data Packet Size Bit 1">RP0SIZ1</acronym></td>
+      <td><acronym title="Endpoint 0 Receive Data Packet Size Bit 0">RP0SIZ0</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+      <td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+    </tr>
+  </table>
+</div>
+<div class="program">USR1	= $003E</div>
+<div class="explanation">
+  USB Status Register 1:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$003E</code></th><th>Read:</th>
+      <td><acronym title="Endpoint 2 Receive Sequence (Last Recieve was DATA:X)">R2SEQ</acronym></td>
+      <td><acronym title="ACK Token Transmit">TXACK</acronym></td>
+      <td><acronym title="NAK Token Transmit">TXNAK</acronym></td>
+      <td><acronym title="STALL Token Transmit">TXSTL</acronym></td>
+      <td><acronym title="Endpoint 2 Receive Data Packet Size Bit 3">RP2SIZ3</acronym></td>
+      <td><acronym title="Endpoint 2 Receive Data Packet Size Bit 2">RP2SIZ2</acronym></td>
+      <td><acronym title="Endpoint 2 Receive Data Packet Size Bit 1">RP2SIZ1</acronym></td>
+      <td><acronym title="Endpoint 2 Receive Data Packet Size Bit 0">RP2SIZ0</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+      <td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+    </tr>
+  </table>
+</div>
+
+<div class="program">UE0D0	= $0020</div>
+<div class="explanation">USB Endpoint 0 Data Register 0: First of eight read/write data registers (<code>UE0D7</code> = <code>$0027</code>)</div>
+<div class="program">UE1D0	= $0028</div>
+<div class="explanation">USB Endpoint 1 Data Register 0: First of eight write only data registers (<code>UE1D7</code> = <code>$002F</code>)</div>
+<div class="program">UE2D0	= $0030</div>
+<div class="explanation">USB Endpoint 2 Data Register 0: First of eight read/write data registers (<code>UE2D7</code> = <code>$0037</code>)</div>
+
+<div class="program">UIR0	= $0039</div>
+<div class="explanation">
+  USB Interrupt Register 0:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0039</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="End-of-Packet Detect Interrupt Enable">EOPIE</acronym></td>
+      <td rowspan="2"><acronym title="USB Suspend">SUSPND</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Transmit Interrupt Enable">TXD2IE</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 2 Recieve Interrupt Enable">RXD2IE</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 1 Transmit Interrupt Enable">TXD1IE</acronym></td>
+      <td>0</td>
+      <td rowspan="2"><acronym title="Endpoint 0 Transmit Interrupt Enable">TXD0IE</acronym></td>
+      <td rowspan="2"><acronym title="Endpoint 0 Recieve Interrupt Enable">RXD0IE</acronym></td>
+    </tr>
+    <tr><th>Write:</th><td class="gray"></td></tr>
+  </table>
+</div>
+<div class="program">UIR1	= $003A</div>
+<div class="explanation">
+  USB Interrupt Register 1:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$003A</code></th><th>Read:</th>
+      <td><acronym title="End-of-Packet Detect Flag">EOPF</acronym></td>
+      <td><acronym title="USB Reset Flag">RSTF</acronym></td>
+      <td><acronym title="Endpoint 2 Data Transmit Flag">TXD2F</acronym></td>
+      <td><acronym title="Endpoint 2 Data Recieve Flag">RXD2F</acronym></td>
+      <td><acronym title="Endpoint 1 Data Transmit Flag">TXD1F</acronym></td>
+      <td><acronym title="Resume Flag">RESUMF</acronym></td>
+      <td><acronym title="Endpoint 0 Data Transmit Flag">TXD0F</acronym></td>
+      <td><acronym title="Endpoint 0 Data Recieve Flag">RXD0F</acronym></td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+      <td class="gray"></td><td class="gray"></td><td class="gray"></td><td class="gray"></td>
+    </tr>
+  </table>
+</div>
+<div class="program">UIR2	= $0018</div>
+<div class="explanation">
+  USB Interrupt Register 1:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0018</code></th><th>Read:</th>
+      <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+    </tr>
+    <tr>
+      <th>Write:</th>
+      <td><acronym title="End-of-Packet Flag Reset">EOPFR</acronym></td>
+      <td><acronym title="Clear Reset Indicator">RSTFR</acronym></td>
+      <td><acronym title="Endpoint 2 Transmit Flag Reset">TXD2FR</acronym></td>
+      <td><acronym title="Endpoint 2 Recieve Flag Reset">RXD2FR</acronym></td>
+      <td><acronym title="Endpoint 1 Transmit Flag Reset">TDX1FR</acronym></td>
+      <td><acronym title="Resume Flag Reset">RESUMFR</acronym></td>
+      <td><acronym title="Endpoint 0 Transmit Flag Reset">TXD0FR</acronym></td>
+      <td><acronym title="Endpoint 0 Recieve Flag Reset">RXD0FR</acronym></td>
+   </tr>
+  </table>
+</div>
+<div class="program">UADDR	= $0038</div>
+<div class="explanation">
+  USB Interrupt Register 1:
+  <table>
+    <tr>
+      <th rowspan="2"><code>$0018</code></th><th>Read:</th>
+      <td rowspan="2"><acronym title="USB Module Enable">USBEN</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 6">UADD6</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 5">UADD5</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 4">UADD4</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 3">UADD3</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 2">UADD2</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 1">UADD1</acronym></td>
+      <td rowspan="2"><acronym title="USB Function Address Bit 0">UADD0</acronym></td>
+    </tr>
+    <tr><th>Write:</th></tr>
+  </table>
+</div>
+
+
+<hr />
+
+<div class="program">FLASH	= $8000</div>
+<div class="explanation">I don't really get this. According to the docs, this is in the <code>$0A00</code> - <code>$ADFF</code> range that is "Unimplemented"</div>
+<div class="program">VECTORS	= $FFFE</div>
+<div class="explanation">This is the address of the <code>Reset Vector</code></div>
+
+</div> <!-- end #vars -->
+
+<div class="program">.area GSINIT0</div>
+<div class="explanation">Don't know what this means, just copied it from the sdcc generated assembly</div>
+
+<div class="program">entry::</div>
+<div class="explanation">I'm pretty sure double colons specify an exported entry point</div>
+
+<div class="program">        	ldhx #$0140</div>
+<div class="explanation"><q>Load H:X from M</q> H:X is the 2-byte "Index Register"</div>
+
+<div class="program">		txs</div>
+<div class="explanation"><q>Transfer H:X to SP</q> So the previous <code>$0140</code> becomes the value of the Stack Pointer. This is the end of RAM which goes from <code>$0040</code> - <code>$013F</code>. This makes sense because <q>the stack pointer decrements during pushes and increments during pulls.</q></div>
+
+<div class="program">		mov  #$80, UADDR</div>
+<div class="explanation">Sets the <code>USBEN</code> bit, enabling the USB module</div>
+
+<div class="program">		mov  #$3B, UIR0</div>
+<div class="explanation">Enable all Tx/Rx interrupts (TXD2IE | RXD2IE | TXD1IE | TXD0IE | RXD0IE)</div>
+
+<div class="program">		mov  #$FF, UIR2</div>
+<div class="explanation">Reset all flags</div>
+
+<div class="program">		jsr  __HC08Setup</div>
+<div class="explanation"><q>Jump to Subroutine</q></div>
+
+<div class="program">		jsr  _main</div>
+
+<div class="program">done:		bra  done</div>
+<div class="explanation"><q>Branch Always</q> So, this is an endless loop for some reason</div>
+
+<hr />
+
+<div class="program">__HC08Setup:</div>
+<div class="explanation"></div>
+<div class="program">		mov  #$01,MOR			; disable Watchdog</div>
+<div class="explanation"></div>
+<div class="program">		mov  #$01,PPG			; select proper Clock Source for SCI</div>
+<div class="explanation"></div>
+<div class="program">		rts</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">;-----------------------------------------------------------------------------</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">; void initSCI();</div>
+<div class="explanation"></div>
+<div class="program">;</div>
+<div class="explanation"></div>
+<div class="program">_initSCI::	mov  #$40,SCC1				; Enable SCI</div>
+<div class="explanation"></div>
+<div class="program">		mov  #$0c,SCC2                          ; RE+TE</div>
+<div class="explanation"></div>
+<div class="program">			;</div>
+<div class="explanation"></div>
+<div class="program">			; Baudrate Calculation for 4.9152 MHz XTAL</div>
+<div class="explanation"></div>
+<div class="program">			;-----------------------------------------------</div>
+<div class="explanation"></div>
+<div class="program">			; BaudRate = ClockSource / (64 * Divisor)</div>
+<div class="explanation"></div>
+<div class="program">			; if ClockSource = BusClock = XTAL/4</div>
+<div class="explanation"></div>
+<div class="program">			; (set SCIBDSCR Bit in OPTION2!) then</div>
+<div class="explanation"></div>
+<div class="program">			; BaudRate = 4.9152 MHz / (4 * 64 * SCP * SCR)</div>
+<div class="explanation"></div>
+<div class="program">			; BaudRate = 19200 Baud / (SCP * SCR)</div>
+<div class="explanation"></div>
+<div class="program">			;-----------------------------------------------</div>
+<div class="explanation"></div>
+<div class="program">			; Rem: in Monitor Mode BusClock = XTAL/2!</div>
+<div class="explanation"></div>
+<div class="program">			;</div>
+<div class="explanation"></div>
+<div class="program">			mov  #$00,SCBR				; 19200 Baud</div>
+<div class="explanation"></div>
+<div class="program">			rts</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">;-----------------------------------------------------------------------------</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">; putSCI(char c);</div>
+<div class="explanation"></div>
+<div class="program">;</div>
+<div class="explanation"></div>
+<div class="program">_putSCI::	brclr #7,*SCS1,_putSCI		; check SCTE flag</div>
+<div class="explanation"></div>
+<div class="program">		sta  SCDR</div>
+<div class="explanation"></div>
+<div class="program">		rts</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">; char getSCI();</div>
+<div class="explanation"></div>
+<div class="program">;</div>
+<div class="explanation"></div>
+<div class="program">_getSCI::	brclr #5,*SCS1,_getSCI		; check SCRF flag</div>
+<div class="explanation"></div>
+<div class="program">		lda  SCDR</div>
+<div class="explanation"></div>
+<div class="program">		rts</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">_putchar	= _putSCI</div>
+<div class="explanation"></div>
+<div class="program">_getchar	= _getSCI</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">;-----------------------------------------------------------------------------</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">; void puts(char *s);</div>
+<div class="explanation"></div>
+<div class="program">;</div>
+<div class="explanation"></div>
+<div class="program">_puts::		psha</div>
+<div class="explanation"></div>
+<div class="program">			;</div>
+<div class="explanation"></div>
+<div class="program">			; load HX with integer argument from stack</div>
+<div class="explanation"></div>
+<div class="program">			;</div>
+<div class="explanation"></div>
+<div class="program">			ldx  4,sp</div>
+<div class="explanation"></div>
+<div class="program">			pshx</div>
+<div class="explanation"></div>
+<div class="program">			ldx  6,sp</div>
+<div class="explanation"></div>
+<div class="program">			pulh</div>
+<div class="explanation"></div>
+<div class="program">			;</div>
+<div class="explanation"></div>
+<div class="program">putsloop:	lda  ,x</div>
+<div class="explanation"></div>
+<div class="program">			beq  putsexit</div>
+<div class="explanation"></div>
+<div class="program">			jsr  _putchar</div>
+<div class="explanation"></div>
+<div class="program">			aix  #1</div>
+<div class="explanation"></div>
+<div class="program">			bra  putsloop</div>
+<div class="explanation"></div>
+<div class="program">putsexit:	pula</div>
+<div class="explanation"></div>
+<div class="program">			rts</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">;-----------------------------------------------------------------------------</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">_main::		jsr  _initSCI</div>
+<div class="explanation"></div>
+<div class="program">			;</div>
+<div class="explanation"></div>
+<div class="program">			clrh</div>
+<div class="explanation"></div>
+<div class="program">			clrx</div>
+<div class="explanation"></div>
+<div class="program">delay1:		aix  #-1</div>
+<div class="explanation"></div>
+<div class="program">			cphx #0</div>
+<div class="explanation"></div>
+<div class="program">			bne  delay1</div>
+<div class="explanation"></div>
+<div class="program">			;</div>
+<div class="explanation"></div>
+<div class="program">mainloop:	ldhx #message</div>
+<div class="explanation"></div>
+<div class="program">			pshx</div>
+<div class="explanation"></div>
+<div class="program">			pshh</div>
+<div class="explanation"></div>
+<div class="program">			jsr  _puts</div>
+<div class="explanation"></div>
+<div class="program">			ais  #2</div>
+<div class="explanation"></div>
+<div class="program">			jsr  _getchar</div>
+<div class="explanation"></div>
+<div class="program">			bra  mainloop</div>
+<div class="explanation"></div>
+<div class="program">			rts</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">;-----------------------------------------------------------------------------</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">message:	.ascii "\r\n\r\n"</div>
+<div class="explanation"></div>
+<div class="program">			.ascii "HC08 Welcome Kit\r\n"</div>
+<div class="explanation"></div>
+<div class="program">			.ascii "http://elektronikladen.de/kit08.html\r\n"</div>
+<div class="explanation"></div>
+<div class="program">			.byte  0</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">;-----------------------------------------------------------------------------</div>
+<div class="explanation"></div>
+<div class="program">			.area memory(abs)</div>
+<div class="explanation"></div>
+<div class="program">			.org VECTORS</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">			.word entry</div>
+<div class="explanation"></div>
+<div class="program">;-----------------------------------------------------------------------------</div>
+<div class="explanation"></div>
+<div class="program">
+</div>
+<div class="explanation"></div>
+<div class="program">
+</div>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>Decision Field Theory Example</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <link rel="stylesheet" type="text/css" href="dft_form_positions.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/psy351/" /> -->
+    <style type="text/css">
+      body { margin: 3em; }
+      #header { text-align: center; }
+    </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+    <script type="text/javascript" src="dft_form.js"></script>
+    <script type="text/javascript" src="ofc/js/json/json2.js"></script>
+    <script type="text/javascript" src="ofc/js/swfobject.js"></script>
+    <script type="text/javascript">
+      swfobject.embedSWF("ofc/open-flash-chart.swf", "chart", "550", "200", "9.0.0");
+    </script>
+    <script type="text/javascript">
+    </script>
+<!--
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-2592249-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+-->
+  </head>
+  <body>
+    <div id="header">
+      <h1><a href="preference_reversals.xhtml#dft">Decision Field Theory</a> Example</h1>
+      <h2><a href="http://hoenir.himinbi.org">Will Holcomb</a></h2>
+      <h2>December 2008</h2>
+    </div>
+
+    <ul>
+      <li><a href="dft_example.xhtml?w_a=.6&amp;w_d=.4&amp;a_b=5&amp;a_g=-3&amp;a_n=-4&amp;d_b=-6&amp;d_g=3&amp;d_n=4&amp;i_bg=-3&amp;i_bn=-2&amp;i_gn=-5&amp;i_bb=3&amp;i_gg=3&amp;i_nn=3&amp;p_b=.5&amp;p_g=.5&amp;p_n=.5&amp;t=1&amp;count=200&amp;autorun">Similarity Effect</a></li>
+      <li><a href="dft_example.xhtml?w_a=.6&amp;w_d=.4&amp;a_b=5&amp;a_g=-3&amp;a_n=-4&amp;d_b=-6&amp;d_g=3&amp;d_n=4&amp;i_bg=-3&amp;i_bn=0&amp;i_gn=-3&amp;i_bb=3&amp;i_gg=3&amp;i_nn=3&amp;p_b=.5&amp;p_g=.5&amp;p_n=.5&amp;t=1&amp;count=200&amp;autorun">Compromise Effect</a></li>
+      <li><a href="dft_example.xhtml?w_a=.5&amp;w_d=.5&amp;a_b=5&amp;a_g=-3&amp;a_n=-4&amp;d_b=-6&amp;d_g=3&amp;d_n=4&amp;i_bg=-3&amp;i_bn=-2&amp;i_gn=-5&amp;i_bb=3&amp;i_gg=3&amp;i_nn=3&amp;p_b=.5&amp;p_g=.5&amp;p_n=.5&amp;t=1&amp;count=200&amp;autorun">Attraction Effect</a></li>
+    </ul>
+
+    <form id="dft" action="">
+      <div id="holder">
+        <object type="image/svg+xml" data="dft_election_form.svg"></object>
+        <input type="text" name="w_a" class="weight"/>
+        <input type="text" name="w_d" class="weight"/>
+        <input type="text" name="a_b" class="event"/>
+        <input type="text" name="a_g" class="event"/>
+        <input type="text" name="a_n" class="event"/>
+        <input type="text" name="d_b" class="event"/>
+        <input type="text" name="d_g" class="event"/>
+        <input type="text" name="d_n" class="event"/>
+        <input type="text" name="u_b" class="utility"/>
+        <input type="text" name="u_g" class="utility"/>
+        <input type="text" name="u_n" class="utility"/>
+        <input type="text" name="v_b" class="valence"/>
+        <input type="text" name="v_g" class="valence"/>
+        <input type="text" name="v_n" class="valence"/>
+        <input type="text" name="i_bg" class="inhibition"/>
+        <input type="text" name="i_bn" class="inhibition"/>
+        <input type="text" name="i_gn" class="inhibition"/>
+        <input type="text" name="i_bb" class="self inhibition"/>
+        <input type="text" name="i_gg" class="self inhibition"/>
+        <input type="text" name="i_nn" class="self inhibition"/>
+        <input type="text" name="p_b" class="preference"/>
+        <input type="text" name="p_g" class="preference"/>
+        <input type="text" name="p_n" class="preference"/>
+        <input type="text" name="t" class="threshold"/>
+        <button id="calc" onclick="recompute(); return false;">Calculate</button>
+        <input type="text" name="count" class="count"/>
+        <button id="iter" onclick="iterate(); return false;">Iterate</button>
+      </div>
+    </form>
+    <div id="tableholder"></div>
+    <div id="chart"></div>
+  </body>
+</html>

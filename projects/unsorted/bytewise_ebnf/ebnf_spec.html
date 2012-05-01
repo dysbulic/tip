@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Bytewise EBNF - Specification</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+      h1, h2, h3 { text-align: center; }
+      h3 { margin: 3em 10% 1em; border-bottom: 1px solid; }
+      table { margin: auto; border-collapse: collapse; }
+      td { text-align: left; }
+      th, td { padding: .5em; border: 1px solid; }
+      .ebnf code { display: block; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Bytewise EBNF</h1>
+    
+    <p>This is a description of the EBNF language used in the <a href=".">bytewise EBNF parser</a>. It draws from several sources:</p>
+    <ul>
+      <li><a href="http://www.cl.cam.ac.uk/~mgk25/iso-14977.pdf">ISO-14977</a>: ISO standard for EBNF</li>
+      <li><a href="http://python.org">Python Programming Language</a></li>
+    </ul>
+
+    <hr />
+
+    <h2>Rules</h2>
+    <p>The left-hand side of a rule is separated from the right by an equal sign (<code>=</code>). A rule is terminated by a semicolon (<code>;</code>).</p>
+
+    <h3>EBNF</h3>
+    <div class="ebnf spec">
+      <code>grammar = rule*;</code>
+      <code>rule = left-hand side, "=", element list, ";";</code>
+    </div>
+
+    <h2>Terminals</h2>
+    
+    <p>Terminals get their format from Python strings. They begin either with a single quote (<code>'</code>) or a double quote (<code>"</code>). Within quote deliniated by one type of quote, that type of quote must be backslash escaped and the other doesn't. Standard backslash escapes are respected as well as some new ones:</p>
+
+    <table>
+      <tr><th>Escape</th><th>Meaning</th></tr>
+      <tr><td>\"</td><td>double quote (0x22)</td></tr>
+      <tr><td>\'</td><td>single quote (0x27)</td></tr>
+      <tr><td>\\</td><td>backslash (0x5C)</td></tr>
+      <tr><td>\0</td><td>null (0x00)</td></tr>
+      <tr><td>\a</td><td>bell (0x07)</td></tr>
+      <tr><td>\f</td><td>formfeed (0x0C)</td></tr>
+      <tr><td>\n</td><td>linefeed (0x0A)</td></tr>
+      <tr><td>\N{<i>name</i>}</td><td>unicode character named <i>name</i></td></tr>
+      <tr><td>\r</td><td>carriage return (0x0D)</td></tr>
+      <tr><td>\t</td><td>horizontal tab (0x09)</td></tr>
+      <tr><td>\u<i>hhhh</i></td><td>unicode character with 16-bit hexadecimal value <i>hhhh</i></td></tr>
+      <tr><td>\U<i>hhhhhhhh</i></td><td>unicode character with 32-bit hexadecimal value <i>hhhhhhhh</i></td></tr>
+      <tr><td>\v</td><td>vertical tab (0x0B)</td></tr>
+      <tr><td>\x<i>hh</i></td><td>character with hexadecimal value <i>hh</i></td></tr>
+      <tr><td colspan="2"><hr /></td></tr>
+      <tr><td>\b<i>bbbbbbbb</i></td><td>binary byte specification</td></tr>
+      <tr><td>\b{<i>bb&hellip;</i>}</td><td>variable length binary bitfield specification (must be a multiple of 8)</td></tr>
+      <tr><td>\e<i>hh</i></td><td>little endian binary byte specification</td></tr>
+      <tr><td>\e{<i>hh&hellip;</i>}</td><td>little endian variable length hexadecimal bitfield specification</td></tr>
+      <tr><td>\E<i>hh</i></td><td>big endian binary byte specification</td></tr>
+      <tr><td>\E{<i>hh&hellip;</i>}</td><td>big endian variable length  bitfield specification</td></tr>
+      <tr><td>\x{<i>hh&hellip;</i>}</td><td>variable length hexadecimal bitfield specification</td></tr>
+    </table>
+
+    <h3>Notes</h3>
+    <p>Binary and hexadecimal values have an alternate value of '<code>x</code>' which means "unimportant", so "<code>\b11xxxxxx</code>" would match any bytes starting with <code>11</code>.</p>
+
+    <h3>EBNF</h3>
+    <div class="ebnf spec">
+      <code>terminal = single quoted string | double quoted string | character list | dot;</code>
+      <code>single quoted string = "'", string character*, "'";</code>
+      <code>double quoted string = '"', string character*, '"';</code>
+      <code>string character = [^\\] | escaped character | character specification | bitfield specification | endianness designation;</code>
+      <code>escaped character = "\\", [^beEuUx];</code>
+      <code>character specification = "\\", (("b", [01xX]{8}) | ("x", hex digit{2}) | ("u", hex digit{4}) | ("U", hex digit{8}));</code>
+      <code>bitfield specification = "\\", (("b{", ([01xX]{8})+, "}") | ("x{", hex digit+, "}"));</code>
+      <code>endianness designation = "\\", [eE], "{", (hex digit+ | (character specification | bitfield specification)+), "}";</code>
+      <code>hex digit = [a-fA-F0-9xX];</code>
+    </div>
+
+    <h3>Examples</h3>
+    <div class="ebnf">
+      <code>"This is a \"terminal\" with 'single quotes' in it"</code>
+      <code>'This is a "snowman:" \u2603'</code>
+    </div>
+
+    <h2>Character Classes</h2>
+    <p>In addition to strings, bytes may be matched by character lists which are enclosed in brackets (<code>[]</code>). Within those lists, there are shorthand character classes. Posix character classes are recognized:</p>
+
+    <h3>Notes</h3>
+    <p>Character lists may be negated by making the first character a caret (<code>^</code>). To use a caret as a character in a character list, either backslash escape it or don't use it as the first character. Similarly, backslash escaping may be used to include the characters: <code>\</code>, <code>-</code> and <code>]</code>.</p>
+
+    <table>
+      <tr><th>Class</th><th>Meaning</th></tr>
+      <tr><td>[:alnum:]</td><td>Alphanumeric characters (<code>[[:alpha:][:digit:]]</code>)</td></tr>
+      <tr><td>[:alpha:]</td><td>Alphabetic characters (<code>[a-zA-Z]</code>)</td></tr>
+      <tr><td>[:blank:]</td><td>Space and TAB characters (<code>[ \t\v]</code>)</td></tr>
+      <tr><td>[:cntrl:]</td><td>Control characters</td></tr>
+      <tr><td>[:digit:]</td><td>Numeric characters (<code>[0-9]</code>)</td></tr>
+      <tr><td>[:graph:]</td><td>Characters that are both printable and visible. (A space is printable but not visible, whereas an `a' is both.)</td></tr>
+      <tr><td>[:lower:]</td><td>Lowercase alphabetic characters (<code>[a-z]</code>)</td></tr>
+      <tr><td>[:print:]</td><td>Printable characters (<code>[^[:control:]]</code>)</td></tr>
+      <tr><td>[:punct:]</td><td>Punctuation characters (<code>[^[:alnum:][:control:][:space:]]</code>)</td></tr>
+      <tr><td>[:space:]</td><td>Space characters (<code>[ \t\v\n\r]</code>)</td></tr>
+      <tr><td>[:upper:]</td><td>Uppercase alphabetic characters (<code>[A-Z]</code>)</td></tr>
+      <tr><td>[:xdigit:]</td><td>Characters that are hexadecimal digits (<code>[a-fA-F0-9]</code>)</td></tr>
+    </table>
+
+    <h3>EBNF</h3>
+    <div class="ebnf spec">
+      <code>character list = "[", ([^\\[] | escaped character | character specification | character class)+, "]";</code>
+      <code>character class = "[:", ("alnum" | "alpha" | "blank" | "cntrl" | "digit" | "graph" | "lower" | "print" | "punct" | "space" | "upper" | "xdigit"), ":]";</code>
+    </div>
+
+    <h2>Non-Terminals</h2>
+
+    <p>Non-terminals are pretty much any string starting with an alpha-numeric character. Spaces are allowed in non-terminal names. Characters that mark the end of a non-terminal: comma (<code>,</code>), bar (<code>|</code>), semicolon (<code>;</code>). Non-terminals may not contain open parentheses (<code>(</code>).</p>
+
+    <h3>Notes</h3>
+    <p>Non-terminals are processed in a lexagraphic step that compresses all whitespace in between words and trims any leading or trailing whitespace. This means that non-terminals may not be distinguished by whitespace.</p>
+
+    <h3>EBNF</h3>
+    <div class="ebnf spec">
+      <code>non-terminal = [^"'(,|[], [^(,|]*;</code>
+    </div>
+
+    <h3>Examples</h3>
+    <div class="ebnf">
+      <code>Null Terminated String</code>
+      <code>2nd length byte</code>
+    </div>
+
+    <h2>Left-Hand Side of a Rule: Non-Terminal List</h2>
+    <p>The left-hand side is composed of one or more non-terminals spearated by bars.</p>
+
+    <h3>EBNF</h3>
+    <div class="ebnf spec">
+      <code>left-hand side = non-terminal, ("|", non-terminal)*;</code>
+    </div>
+
+    <h3>Examples</h3>
+    <div class="ebnf">
+      <code>Comment</code>
+      <code>Number | Long String | Text</code>
+    </div>
+
+    <h2>Alternation</h2>
+    <p>Choices between multiple terminals and non-terminals may be represented using a bar (<code>|</code>).</p>
+
+    <h3>EBNF</h3>
+    <div class="ebnf spec">
+      <code>element choice = element, ("|", element)*;</code>
+      <code>element = (group | terminal | non-terminal | named group), repetition?;</code>
+    </div>
+
+    <h3>Examples</h3>
+    <div class="ebnf">
+      <code>Up | Down</code>
+      <code>"one" | "two"{2} | "three"{3}</code>
+    </div>
+
+    <h2>Concatenation</h2>
+    <p>Multiple terminals and non-terminals may be combined using a comma (<code>,</code>).</p>
+
+    <h3>Note</h3>
+    <p>The precedence of concatenation is higher than alternation, so <code>A, B | C, D</code> = <code>(A, B) | (C, D)</code>.</p>
+
+    <h3>EBNF</h3>
+    <div class="ebnf spec">
+      <code>element list = element choice, (",", element choice)*;</code>
+    </div>
+
+    <h3>Examples</h3>
+    <div class="ebnf">
+      <code>Start, "middle", End</code>
+      <code>"test", "one", delimiter, "two", delimiter, "three"</code>
+    </div>
+
+    <h2>Grouping</h2>
+    <p>Sets of terminals and nonterminals may be combined into groups using parenthesis.</p>
+
+    <h3>EBNF</h3>
+    <div class="ebnf spec">
+      <code>group = "(", element list, ")";</code>
+    </div>
+
+    <h3>Examples</h3>
+    <div class="ebnf">
+      <code>(Subject, Predicate) | Command</code>
+      <code>("ch-"*, "check") | (Mike Check, "click"), Rock</code>
+    </div>
+
+    <h2>Repetition</h2>
+    <p>Repetition specifies that a terminal or non-terminal is repeated multiple times.</p>
+
+    <table>
+      <tr><th>Symbol</th><th>Meaning</th></tr>
+      <tr><td><code>{<i>m</i>,<i>n</i>}</code></td><td>Repeated at least <i>m</i> times, but no more than <i>n</i></td></tr>
+      <tr><td><code>{<i>n</i>}</code></td><td>Equivalent to <code>{<i>n</i>,<i>n</i>}</code></td></tr>
+      <tr><td><code>*</code></td><td>Equivalent to <code>{0,&#8734;}</code></td></tr>
+      <tr><td><code>+</code></td><td>Equivalent to <code>{1,&#8734;}</code></td></tr>
+      <tr><td><code>?</code></td><td>Equivalent to <code>{0,1}</code></td></tr>
+    </table>
+
+    <h3>EBNF</h3>
+    <div class="ebnf spec">
+      <code>repetition = [*+] | ("{", expression, (",", expression)?, "}");</code>
+      <code>expression = sum;</code>
+      <code>sum = (sum, [+-], term) | term;</code>
+      <code>term = (term, [*/], shift) | shift;</code>
+      <code>shift = (shift, ("&lt;&lt;" | ">>"), operand) | operand;</code>
+      <code>operand = ("(", expression, ")") | named group | number;</code>
+      <code>number = [0-9]+;</code>
+    </div>
+
+    <h3>Examples</h3>
+    <div class="ebnf">
+      <code>"check"*</code>
+      <code>Whitespace{15,30}</code>
+    </div>
+
+    <h2>Named Groups</h2>
+    <p>Named groups allow for the extension of the grammar to account for non-context-free situations. Normally the character preceeding a group will be:</p>
+
+    <ul>
+      <li>equal sign: (<code>=</code>) - start of a rule</li>
+      <li>comma: (<code>,</code>) - concatenation with the previous element</li>
+      <li>bar: (<code>|</code>) - choice between the previous element and this one</li>
+    </ul>
+
+    <p>If the characters preceeding an open parenthesis are not one of these, then they are taken to be the name of the group. Handlers may register with the parser and recieve notification both when named groups are started and finished. At this point they have access to the parser and may modify both the grammar and the parse tree. <em>(This will need further information once I know the exact restrictions that will be in place.)</em></p>
+
+    <p>There are a few functions defined in the parser already:</p>
+
+    <table>
+      <tr><th>Function</th><th>Execution Point</th><th>Meaning</th></tr>
+      <tr>
+        <td><code>$(<i>name</i>)</code></td>
+        <td>before processing</td>
+        <td>replaces the non-terminal <i>name</i> with a terminal with the value of the last expansion of <i>name</i></td>
+      </tr>
+      <tr>
+        <td><code>size-of(<i>expansion</i>)</code></td>
+        <td>after processing</td>
+        <td>replaces the current expansion with the number of bytes in <i>expression</i></td>
+      </tr>
+      <!-- <tr><td><code></code></td><td></td></tr> -->
+    </table>
+
+    <h3>Examples</h3>
+    <div class="ebnf">
+      <code>ABCs = As, "b"{size-of($(As))}, "c"{size-of($(As))}</code>
+      <code>As = "a"*;</code>
+    </div>
+  </body>
+</html>

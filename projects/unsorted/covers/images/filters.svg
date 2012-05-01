@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20001102//EN"
+ "http://www.w3.org/TR/2000/CR-SVG-20001102/DTD/svg-20001102.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+  <title>Debian Cover Filters</title>
+  <defs>
+    <filter id="dropShadow">
+      <desc>Produces a 3D effect as if the item was close to the surface</desc>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="2" dy="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="whiteShadow">
+      <desc>Produces a white border</desc>
+      <feMorphology operator="dilate" in="SourceAlpha" radius="5"/>
+      <feGaussianBlur stdDeviation=".65"/>
+      <feComponentTransfer result="whiteness">
+        <feFuncR type="discrete" tableValues="1 1"/> <!-- Batik doesn't like -->
+        <feFuncG type="discrete" tableValues="1 1"/> <!--  a single valued   -->
+        <feFuncB type="discrete" tableValues="1 1"/> <!--  tableValues       -->
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode in="whiteness"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="emboss">
+      <desc>Don't know how to do the emboss yet, so just a drop shadow</desc>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1"/>
+      <feOffset dx="2" dy="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+</svg>

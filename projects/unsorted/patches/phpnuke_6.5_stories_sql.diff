@@ -1,0 +1,531 @@
+--- orig/html/admin/modules/stories.php	2003-03-17 02:54:31.000000000 -0600
++++ html/admin/modules/stories.php	2003-04-15 19:24:31.000000000 -0500
+@@ -13,7 +13,7 @@
+ /************************************************************************/
+ 
+ if (!eregi("admin.php", $_SERVER['PHP_SELF'])) { die ("Access Denied"); }
+-$result = sql_query("select radminarticle, radminsuper from ".$prefix."_authors where aid='$aid'", $dbi);
++$result = sql_query("select radminarticle, radminsuper from ${prefix}_authors where aid='$aid'", $dbi);
+ list($radminarticle, $radminsuper) = sql_fetch_row($result, $dbi);
+ if (($radminarticle==1) OR ($radminsuper==1)) {
+ 
+@@ -51,7 +51,7 @@
+ 
+ function deleteStory($qid) {
+     global $prefix, $dbi;
+-    $result = sql_query("delete from ".$prefix."_queue where qid=$qid", $dbi);
++    $result = sql_query("delete from ${prefix}_queue where qid=$qid", $dbi);
+     if (!$result) {
+ 	return;
+     }
+@@ -60,7 +60,7 @@
+ 
+ function SelectCategory($cat) {
+     global $prefix, $dbi;
+-    $selcat = sql_query("select catid, title from ".$prefix."_stories_cat order by title", $dbi);
++    $selcat = sql_query("select catid, title from ${prefix}_stories_cat order by title", $dbi);
+     $a = 1;
+     echo "<b>"._CATEGORY."</b> ";
+     echo "<select name=\"catid\">";
+@@ -119,7 +119,7 @@
+ 
+ function EditCategory($catid) {
+     global $prefix, $dbi;
+-    $result = sql_query("select title from ".$prefix."_stories_cat where catid='$catid'", $dbi);
++    $result = sql_query("select title from ${prefix}_stories_cat where catid='$catid'", $dbi);
+     list($title) = sql_fetch_row($result, $dbi);
+     include ("header.php");
+     GraphicAdmin();
+@@ -130,7 +130,7 @@
+     OpenTable();
+     echo "<center><font class=\"option\"><b>"._EDITCATEGORY."</b></font><br>";
+     if (!$catid) {
+-	$selcat = sql_query("select catid, title from ".$prefix."_stories_cat", $dbi);
++	$selcat = sql_query("select catid, title from ${prefix}_stories_cat", $dbi);
+ 	echo "<form action=\"admin.php\" method=\"post\">";
+ 	echo "<b>"._ASELECTCATEGORY."</b>";
+ 	echo "<select name=\"catid\">";
+@@ -159,7 +159,7 @@
+ 
+ function DelCategory($cat) {
+     global $prefix, $dbi;
+-    $result = sql_query("select title from ".$prefix."_stories_cat where catid='$cat'", $dbi);
++    $result = sql_query("select title from ${prefix}_stories_cat where catid='$cat'", $dbi);
+     list($title) = sql_fetch_row($result, $dbi);
+     include ("header.php");
+     GraphicAdmin();
+@@ -170,7 +170,7 @@
+     OpenTable();
+     echo "<center><font class=\"option\"><b>"._DELETECATEGORY."</b></font><br>";
+     if (!$cat) {
+-	$selcat = sql_query("select catid, title from ".$prefix."_stories_cat", $dbi);
++	$selcat = sql_query("select catid, title from ${prefix}_stories_cat", $dbi);
+ 	echo "<form action=\"admin.php\" method=\"post\">"
+ 	    ."<b>"._SELECTCATDEL.": </b>"
+ 	    ."<select name=\"cat\">";
+@@ -182,10 +182,10 @@
+ 	    ."<input type=\"submit\" value=\"Delete\">"
+ 	    ."</form>";
+     } else {
+-	$result2 = sql_query("select * from ".$prefix."_stories where catid='$cat'", $dbi);
++	$result2 = sql_query("select * from ${prefix}_stories where catid='$cat'", $dbi);
+ 	$numrows = sql_num_rows($result2, $dbi);
+ 	if ($numrows == 0) {
+-	    sql_query("delete from ".$prefix."_stories_cat where catid='$cat'", $dbi);
++	    sql_query("delete from ${prefix}_stories_cat where catid='$cat'", $dbi);
+ 	    echo "<br><br>"._CATDELETED."<br><br>"._GOTOADMIN."";
+ 	} else {
+ 	    echo "<br><br><b>"._WARNING.":</b> "._THECATEGORY." <b>$title</b> "._HAS." <b>$numrows</b> "._STORIESINSIDE."<br>"
+@@ -203,18 +203,18 @@
+ 
+ function YesDelCategory($catid) {
+     global $prefix, $dbi;
+-    sql_query("delete from ".$prefix."_stories_cat where catid='$catid'", $dbi);
+-    $result = sql_query("select sid from ".$prefix."_stories where catid='$catid'", $dbi);
++    sql_query("delete from ${prefix}_stories_cat where catid='$catid'", $dbi);
++    $result = sql_query("select sid from ${prefix}_stories where catid='$catid'", $dbi);
+     while(list($sid) = sql_fetch_row($result, $dbi)) {
+-	sql_query("delete from ".$prefix."_stories where catid='$catid'", $dbi);
+-	sql_query("delete from ".$prefix."_comments where sid='$sid'", $dbi);
++	sql_query("delete from ${prefix}_stories where catid='$catid'", $dbi);
++	sql_query("delete from ${prefix}_comments where sid='$sid'", $dbi);
+     }
+     Header("Location: admin.php");
+ }
+ 
+ function NoMoveCategory($catid, $newcat) {
+     global $prefix, $dbi;
+-    $result = sql_query("select title from ".$prefix."_stories_cat where catid='$catid'", $dbi);
++    $result = sql_query("select title from ${prefix}_stories_cat where catid='$catid'", $dbi);
+     list($title) = sql_fetch_row($result, $dbi);
+     include ("header.php");
+     GraphicAdmin();
+@@ -226,7 +226,7 @@
+     echo "<center><font class=\"option\"><b>"._MOVESTORIES."</b></font><br><br>";
+     if (!$newcat) {
+ 	echo ""._ALLSTORIES." <b>$title</b> "._WILLBEMOVED."<br><br>";
+-	$selcat = sql_query("select catid, title from ".$prefix."_stories_cat", $dbi);
++	$selcat = sql_query("select catid, title from ${prefix}_stories_cat", $dbi);
+ 	echo "<form action=\"admin.php\" method=\"post\">";
+ 	echo "<b>"._SELECTNEWCAT.":</b> ";
+ 	echo "<select name=\"newcat\">";
+@@ -240,11 +240,11 @@
+ 	echo "<input type=\"submit\" value=\""._OK."\">";
+ 	echo "</form>";
+     } else {
+-	$resultm = sql_query("select sid from ".$prefix."_stories where catid='$catid'", $dbi);
++	$resultm = sql_query("select sid from ${prefix}_stories where catid='$catid'", $dbi);
+ 	while(list($sid) = sql_fetch_row($resultm, $dbi)) {
+-	    sql_query("update ".$prefix."_stories set catid='$newcat' where sid='$sid'", $dbi);
++	    sql_query("update ${prefix}_stories set catid='$newcat' where sid='$sid'", $dbi);
+ 	}
+-	sql_query("delete from ".$prefix."_stories_cat where catid='$catid'", $dbi);
++	sql_query("delete from ${prefix}_stories_cat where catid='$catid'", $dbi);
+ 	echo ""._MOVEDONE."";
+     }
+     CloseTable();
+@@ -254,14 +254,14 @@
+ function SaveEditCategory($catid, $title) {
+     global $prefix, $dbi;
+     $title = ereg_replace("\"","",$title);
+-    $check = sql_query("select catid from ".$prefix."_stories_cat where title=$title", $dbi);
++    $check = sql_query("select catid from ${prefix}_stories_cat where title=$title", $dbi);
+     if ($check) {
+ 	$what1 = _CATEXISTS;
+ 	$what2 = _GOBACK;
+     } else {
+ 	$what1 = _CATSAVED;
+ 	$what2 = "[ <a href=\"admin.php\">"._GOTOADMIN."</a> ]";
+-	$result = sql_query("update ".$prefix."_stories_cat set title='$title' where catid='$catid'", $dbi);
++	$result = sql_query("update ${prefix}_stories_cat set title='$title' where catid='$catid'", $dbi);
+ 	if (!$result) {
+ 	    return;
+ 	}
+@@ -282,14 +282,14 @@
+ function SaveCategory($title) {
+     global $prefix, $dbi;
+     $title = ereg_replace("\"","",$title);
+-    $check = sql_query("select catid from ".$prefix."_stories_cat where title=$title", $dbi);
++    $check = sql_query("select catid from ${prefix}_stories_cat where title=$title", $dbi);
+     if ($check) {
+ 	$what1 = _CATEXISTS;
+ 	$what2 = _GOBACK;
+     } else {
+ 	$what1 = _CATADDED;
+ 	$what2 = _GOTOADMIN;
+-	$result = sql_query("insert into ".$prefix."_stories_cat values (NULL, '$title', '0')", $dbi);
++	$result = sql_query("insert into ${prefix}_stories_cat values (DEFAULT, '$title', DEFAULT)", $dbi);
+ 	if (!$result) {
+ 	    return;
+ 	}
+@@ -309,19 +309,19 @@
+ 
+ function autodelete($anid) {
+     global $prefix, $dbi;
+-    sql_query("delete from ".$prefix."_autonews where anid=$anid", $dbi);
++    sql_query("delete from ${prefix}_autonews where anid=$anid", $dbi);
+     Header("Location: admin.php?op=adminMain");
+ }
+ 
+ function autoEdit($anid) {
+     global $aid, $bgcolor1, $bgcolor2, $prefix, $dbi, $multilingual;
+-    $result = sql_query("select radminarticle, radminsuper from ".$prefix."_authors where aid='$aid'", $dbi);
++    $result = sql_query("select radminarticle, radminsuper from ${prefix}_authors where aid='$aid'", $dbi);
+     list($radminarticle, $radminsuper) = sql_fetch_row($result, $dbi);
+-    $result2 = sql_query("select aid from ".$prefix."_stories where sid='$sid'", $dbi);
++    $result2 = sql_query("select aid from ${prefix}_stories where sid='$sid'", $dbi);
+     list($aaid) = sql_fetch_row($result2, $dbi);
+     if (($radminarticle == 1) AND ($aaid == $aid) OR ($radminsuper == 1)) {
+     include ("header.php");
+-    $result = sql_query("select catid, aid, title, time, hometext, bodytext, topic, informant, notes, ihome, alanguage, acomm from ".$prefix."_autonews where anid=$anid", $dbi);
++    $result = sql_query("select catid, aid, title, time, hometext, bodytext, topic, informant, notes, ihome, alanguage, acomm from ${prefix}_autonews where anid=$anid", $dbi);
+     list($catid, $aid, $title, $time, $hometext, $bodytext, $topic, $informant, $notes, $ihome, $alanguage, $acomm) = sql_fetch_row($result, $dbi);
+     ereg ("([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})", $time, $datetime);
+     GraphicAdmin();
+@@ -356,7 +356,7 @@
+     $hometext = stripslashes($hometext);
+     $bodytext = stripslashes($bodytext);
+     $notes = stripslashes($notes);
+-    $result=sql_query("select topicimage from ".$prefix."_topics where topicid=$topic", $dbi);
++    $result=sql_query("select topicimage from ${prefix}_topics where topicid=$topic", $dbi);
+     list($topicimage) = sql_fetch_row($result, $dbi);
+     echo "<table border=\"0\" width=\"75%\" cellpadding=\"0\" cellspacing=\"1\" bgcolor=\"$bgcolor2\" align=\"center\"><tr><td>"
+ 	."<table border=\"0\" width=\"100%\" cellpadding=\"8\" cellspacing=\"1\" bgcolor=\"$bgcolor1\"><tr><td>"
+@@ -366,7 +366,7 @@
+ 	."<br><br><b>"._TITLE."</b><br>"
+ 	."<input type=\"text\" name=\"title\" size=\"50\" value=\"$title\"><br><br>"
+ 	."<b>"._TOPIC."</b> <select name=\"topic\">";
+-    $toplist = sql_query("select topicid, topictext from ".$prefix."_topics order by topictext", $dbi);
++    $toplist = sql_query("select topicid, topictext from ${prefix}_topics order by topictext", $dbi);
+     echo "<option value=\"\">"._ALLTOPICS."</option>\n";
+     while(list($topicid, $topics) = sql_fetch_row($toplist, $dbi)) {
+     if ($topicid==$topic) { $sel = "selected "; }
+@@ -501,9 +501,9 @@
+ 
+ function autoSaveEdit($anid, $year, $day, $month, $hour, $min, $title, $hometext, $bodytext, $topic, $notes, $catid, $ihome, $alanguage, $acomm) {
+     global $aid, $ultramode, $prefix, $dbi;
+-    $result = sql_query("select radminarticle, radminsuper from ".$prefix."_authors where aid='$aid'", $dbi);
++    $result = sql_query("select radminarticle, radminsuper from ${prefix}_authors where aid='$aid'", $dbi);
+     list($radminarticle, $radminsuper) = sql_fetch_row($result, $dbi);
+-    $result2 = sql_query("select aid from ".$prefix."_stories where sid='$sid'", $dbi);
++    $result2 = sql_query("select aid from ${prefix}_stories where sid='$sid'", $dbi);
+     list($aaid) = sql_fetch_row($result2, $dbi);
+     if (($radminarticle == 1) AND ($aaid == $aid) OR ($radminsuper == 1)) {
+     if ($day < 10) {
+@@ -518,7 +518,7 @@
+     $hometext = stripslashes(FixQuotes($hometext));
+     $bodytext = stripslashes(FixQuotes($bodytext));
+     $notes = stripslashes(FixQuotes($notes));
+-    $result = sql_query("update ".$prefix."_autonews set catid='$catid', title='$title', time='$date', hometext='$hometext', bodytext='$bodytext', topic='$topic', notes='$notes', ihome='$ihome', alanguage='$alanguage', acomm='$acomm' where anid=$anid", $dbi);
++    $result = sql_query("update ${prefix}_autonews set catid='$catid', title='$title', time='$date', hometext='$hometext', bodytext='$bodytext', topic='$topic', notes='$notes', ihome='$ihome', alanguage='$alanguage', acomm='$acomm' where anid=$anid", $dbi);
+     if (!$result) {
+ 	exit();
+     }
+@@ -574,7 +574,7 @@
+ 	$tsec = "0$tsec";
+     }
+     $date = "$tmonth $tday, $tyear @ $thour:$tmin:$tsec";
+-    $result = sql_query("SELECT qid, uid, uname, subject, story, storyext, topic, alanguage FROM ".$prefix."_queue where qid=$qid", $dbi);
++    $result = sql_query("SELECT qid, uid, uname, subject, story, storyext, topic, alanguage FROM ${prefix}_queue where qid=$qid", $dbi);
+     list($qid, $uid, $uname, $subject, $story, $storyext, $topic, $alanguage) = sql_fetch_row($result, $dbi);
+     $subject = stripslashes($subject);
+     $story = stripslashes($story);
+@@ -586,7 +586,7 @@
+ 	."<b>"._NAME."</b><br>"
+ 	."<input type=\"text\" NAME=\"author\" size=\"25\" value=\"$uname\">";
+     if ($uname != $anonymous) {
+-	$res = sql_query("select user_email from ".$prefix."_users where username='$uname'", $dbi);
++	$res = sql_query("select user_email from ${prefix}_users where username='$uname'", $dbi);
+ 	list($email) = sql_fetch_row($res, $dbi);
+ 	echo "&nbsp;&nbsp;<font class=\"content\">[ <a href=\"mailto:$email?Subject=Re: $subject\">"._EMAILUSER."</a> | <a href='modules.php?name=Your_Account&op=userinfo&username=$uname'>"._USERPROFILE."</a> | <a href=\"modules.php?name=Private_Messages&amp;mode=post&amp;u=$uid\">"._SENDPM."</a> ]</font>";
+     }
+@@ -595,7 +595,7 @@
+     if($topic=="") {
+         $topic = 1;
+     }
+-    $result = sql_query("select topicimage from ".$prefix."_topics where topicid=$topic", $dbi);
++    $result = sql_query("select topicimage from ${prefix}_topics where topicid=$topic", $dbi);
+     list($topicimage) = sql_fetch_row($result, $dbi);
+     echo "<table border=\"0\" width=\"70%\" cellpadding=\"0\" cellspacing=\"1\" bgcolor=\"$bgcolor2\" align=\"center\"><tr><td>"
+ 	."<table border=\"0\" width=\"100%\" cellpadding=\"8\" cellspacing=\"1\" bgcolor=\"$bgcolor1\"><tr><td>"
+@@ -604,7 +604,7 @@
+     themepreview($subject, $storypre);
+     echo "</td></tr></table></td></tr></table>"
+ 	."<br><b>"._TOPIC."</b> <select name=\"topic\">";
+-    $toplist = sql_query("select topicid, topictext from ".$prefix."_topics order by topictext", $dbi);
++    $toplist = sql_query("select topicid, topictext from ${prefix}_topics order by topictext", $dbi);
+     echo "<option value=\"\">"._SELECTTOPIC."</option>\n";
+     while(list($topicid, $topics) = sql_fetch_row($toplist, $dbi)) {
+         if ($topicid==$topic) {
+@@ -762,13 +762,13 @@
+ 	."<b>"._NAME."</b><br>"
+ 	."<input type=\"text\" name=\"author\" size=\"25\" value=\"$author\">";
+     if ($author != $anonymous) {
+-	$res = sql_query("select user_id, user_email from ".$prefix."_users where username='$author'", $dbi);
++	$res = sql_query("select user_id, user_email from ${prefix}_users where username='$author'", $dbi);
+ 	list($pm_userid, $email) = sql_fetch_row($res, $dbi);
+ 	echo "&nbsp;&nbsp;<font class=\"content\">[ <a href=\"mailto:$email?Subject=Re: $subject\">"._EMAILUSER."</a> | <a href='modules.php?name=Your_Account&op=userinfo&username=$author'>"._USERPROFILE."</a> | <a href=\"modules.php?name=Private_Messages&amp;mode=post&amp;u=$uid\">"._SENDPM."</a> ]</font>";
+     }
+     echo "<br><br><b>"._TITLE."</b><br>"
+ 	."<input type=\"text\" name=\"subject\" size=\"50\" value=\"$subject\"><br><br>";
+-    $result = sql_query("select topicimage from ".$prefix."_topics where topicid=$topic", $dbi);
++    $result = sql_query("select topicimage from ${prefix}_topics where topicid=$topic", $dbi);
+     list($topicimage) = sql_fetch_row($result, $dbi);
+     echo "<table width=\"70%\" bgcolor=\"$bgcolor2\" cellpadding=\"0\" cellspacing=\"1\" border=\"0\"align=\"center\"><tr><td>"
+ 	."<table width=\"100%\" bgcolor=\"$bgcolor1\" cellpadding=\"8\" cellspacing=\"1\" border=\"0\"><tr><td>"
+@@ -776,7 +776,7 @@
+     themepreview($subject, $hometext, $bodytext, $notes);
+     echo "</td></tr></table></td></tr></table>"
+ 	."<br><b>"._TOPIC."</b> <select name=\"topic\">";
+-    $toplist = sql_query("select topicid, topictext from ".$prefix."_topics order by topictext", $dbi);
++    $toplist = sql_query("select topicid, topictext from ${prefix}_topics order by topictext", $dbi);
+     echo "<option value=\"\">"._ALLTOPICS."</option>\n";
+     while(list($topicid, $topics) = sql_fetch_row($toplist, $dbi)) {
+         if ($topicid==$topic) {
+@@ -929,19 +929,19 @@
+ 	$hometext = stripslashes(FixQuotes($hometext));
+ 	$bodytext = stripslashes(FixQuotes($bodytext));
+ 	$notes = stripslashes(FixQuotes($notes));
+-	$result = sql_query("insert into ".$prefix."_autonews values (NULL, '$catid', '$aid', '$subject', '$date', '$hometext', '$bodytext', '$topic', '$author', '$notes', '$ihome', '$alanguage', '$acomm')", $dbi);
++	$result = sql_query("Insert into ${prefix}_autonews values (DEFAULT, '$catid', '$aid', '$subject', '$date', '$hometext', '$bodytext', '$topic', '$author', '$notes', '$ihome', '$alanguage', '$acomm')", $dbi);
+ 	if (!$result) {
+ 	    return;
+ 	}
+ 	if ($uid == 1) {
+ 	} else {
+-	    sql_query("update ".$prefix."_users set counter=counter+1 where user_id='$uid'", $dbi);
++	    sql_query("update ${prefix}_users set counter=counter+1 where user_id='$uid'", $dbi);
+ 	}
+-	    sql_query("update ".$prefix."_authors set counter=counter+1 where aid='$aid'", $dbi);
++	    sql_query("update ${prefix}_authors set counter=counter+1 where aid='$aid'", $dbi);
+ 	if ($ultramode) {
+     	    ultramode();
+ 	}
+-	sql_query("delete from ".$prefix."_queue where qid=$qid", $dbi);
++	sql_query("delete from ${prefix}_queue where qid=$qid", $dbi);
+ 	Header("Location: admin.php?op=submissions");
+     } else {
+ 	if ($uid == 1) $author = "";
+@@ -954,16 +954,16 @@
+ 	    $haspoll = 1;
+ 	    $timeStamp = time();
+ 	    $pollTitle = FixQuotes($pollTitle);
+-	    if(!sql_query("INSERT INTO ".$prefix."_poll_desc VALUES (NULL, '$pollTitle', '$timeStamp', 0, '$alanguage', '0')", $dbi)) {
++	    if(!sql_query("INSERT INTO ${prefix}_poll_desc VALUES (DEFAULT, '$pollTitle', '$timeStamp', DEFAULT, '$alanguage', DEFAULT)", $dbi)) {
+ 		return;
+ 	    }
+-	    $object = sql_fetch_object(sql_query("SELECT pollID FROM ".$prefix."_poll_desc WHERE pollTitle='$pollTitle'", $dbi), $dbi);
++	    $object = sql_fetch_object(sql_query("SELECT pollID FROM ${prefix}_poll_desc WHERE pollTitle='$pollTitle'", $dbi), $dbi);
+ 	    $id = $object->pollID;
+ 	    for($i = 1; $i <= sizeof($optionText); $i++) {
+ 		if($optionText[$i] != "") {
+ 		    $optionText[$i] = FixQuotes($optionText[$i]);
+ 		}
+-		if(!sql_query("INSERT INTO ".$prefix."_poll_data (pollID, optionText, optionCount, voteID) VALUES ($id, '$optionText[$i]', 0, $i)", $dbi)) {
++		if(!sql_query("INSERT INTO ${prefix}_poll_data (pollID, optionText, optionCount, voteID) VALUES ($id, '$optionText[$i]', 0, $i)", $dbi)) {
+ 		    return;
+ 		}
+ 	    }
+@@ -971,18 +971,18 @@
+ 	    $haspoll = 0;
+ 	    $id = 0;
+ 	}
+-	$result = sql_query("insert into ".$prefix."_stories values (NULL, '$catid', '$aid', '$subject', now(), '$hometext', '$bodytext', '0', '0', '$topic', '$author', '$notes', '$ihome', '$alanguage', '$acomm', '$haspoll', '$id', '0', '0')", $dbi);
+-	$result = sql_query("select sid from ".$prefix."_stories WHERE title='$subject' order by time DESC limit 0,1", $dbi);
++	$result = sql_query("insert into ${prefix}_stories values (DEFAULT, '$catid', '$aid', '$subject', now(), '$hometext', '$bodytext', DEFAULT, DEFAULT, '$topic', '$author', '$notes', '$ihome', '$alanguage', '$acomm', '$haspoll', '$id', DEFAULT, DEFAULT)", $dbi);
++	$result = sql_query("select sid from ${prefix}_stories WHERE title='$subject' order by time DESC limit 0,1", $dbi);
+ 	list($artid) = sql_fetch_row($result, $dbi);
+-	sql_query("UPDATE ".$prefix."_poll_desc SET artid='$artid' WHERE pollID='$id'", $dbi);
++	sql_query("UPDATE ${prefix}_poll_desc SET artid='$artid' WHERE pollID='$id'", $dbi);
+ 	if (!$result) {
+ 	    return;
+ 	}
+ 	if ($uid == 1) {
+ 	} else {
+-    	    sql_query("update ".$prefix."_users set counter=counter+1 where user_id='$uid'", $dbi);
++    	    sql_query("update ${prefix}_users set counter=counter+1 where user_id='$uid'", $dbi);
+ 	}
+-	sql_query("update ".$prefix."_authors set counter=counter+1 where aid='$aid'", $dbi);
++	sql_query("update ${prefix}_authors set counter=counter+1 where aid='$aid'", $dbi);
+ 	if ($ultramode) {
+     	    ultramode();
+ 	}
+@@ -992,9 +992,9 @@
+ 
+ function editStory($sid) {
+     global $user, $bgcolor1, $bgcolor2, $aid, $prefix, $dbi, $multilingual;
+-    $result = sql_query("select radminarticle, radminsuper from ".$prefix."_authors where aid='$aid'", $dbi);
++    $result = sql_query("select radminarticle, radminsuper from ${prefix}_authors where aid='$aid'", $dbi);
+     list($radminarticle, $radminsuper) = sql_fetch_row($result, $dbi);
+-    $result2 = sql_query("select aid from ".$prefix."_stories where sid='$sid'", $dbi);
++    $result2 = sql_query("select aid from ${prefix}_stories where sid='$sid'", $dbi);
+     list($aaid) = sql_fetch_row($result2, $dbi);
+     if (($radminarticle == 1) AND ($aaid == $aid) OR ($radminsuper == 1)) {
+ 	include ('header.php');
+@@ -1003,13 +1003,13 @@
+ 	echo "<center><font class=\"title\"><b>"._ARTICLEADMIN."</b></font></center>";
+ 	CloseTable();
+ 	echo "<br>";
+-	$result = sql_query("SELECT catid, title, hometext, bodytext, topic, notes, ihome, alanguage, acomm FROM ".$prefix."_stories where sid=$sid", $dbi);
++	$result = sql_query("SELECT catid, title, hometext, bodytext, topic, notes, ihome, alanguage, acomm FROM ${prefix}_stories where sid=$sid", $dbi);
+         list($catid, $subject, $hometext, $bodytext, $topic, $notes, $ihome, $alanguage, $acomm) = sql_fetch_row($result, $dbi);
+ 	$subject = stripslashes($subject);
+         $hometext = stripslashes($hometext);
+         $bodytext = stripslashes($bodytext);
+         $notes = stripslashes($notes);
+-        $result2=sql_query("select topicimage from ".$prefix."_topics where topicid=$topic", $dbi);
++        $result2=sql_query("select topicimage from ${prefix}_topics where topicid=$topic", $dbi);
+         list($topicimage) = sql_fetch_row($result2, $dbi);
+         OpenTable();
+         echo "<center><font class=\"option\"><b>"._EDITARTICLE."</b></font></center><br>"
+@@ -1022,7 +1022,7 @@
+ 	    ."<b>"._TITLE."</b><br>"
+ 	    ."<input type=\"text\" name=\"subject\" size=\"50\" value=\"$subject\"><br><br>"
+ 	    ."<b>"._TOPIC."</b> <select name=\"topic\">";
+-	$toplist = sql_query("select topicid, topictext from ".$prefix."_topics order by topictext", $dbi);
++	$toplist = sql_query("select topicid, topictext from ${prefix}_topics order by topictext", $dbi);
+ 	echo "<option value=\"\">"._ALLTOPICS."</option>\n";
+ 	while(list($topicid, $topics) = sql_fetch_row($toplist, $dbi)) {
+     	    if ($topicid==$topic) { $sel = "selected "; }
+@@ -1095,17 +1095,17 @@
+ 
+ function removeStory($sid, $ok=0) {
+     global $ultramode, $aid, $prefix, $dbi;
+-    $result = sql_query("select counter, radminarticle, radminsuper from ".$prefix."_authors where aid='$aid'", $dbi);
++    $result = sql_query("select counter, radminarticle, radminsuper from ${prefix}_authors where aid='$aid'", $dbi);
+     list($counter, $radminarticle, $radminsuper) = sql_fetch_row($result, $dbi);
+-    $result2 = sql_query("select aid from ".$prefix."_stories where sid='$sid'", $dbi);
++    $result2 = sql_query("select aid from ${prefix}_stories where sid='$sid'", $dbi);
+     list($aaid) = sql_fetch_row($result2, $dbi);
+     if (($radminarticle == 1) AND ($aaid == $aid) OR ($radminsuper == 1)) {
+ 	if($ok) {
+ 	    $counter--;
+-    	    sql_query("DELETE FROM ".$prefix."_stories where sid=$sid", $dbi);
+-	    sql_query("DELETE FROM ".$prefix."_comments where sid=$sid", $dbi);
+-	    sql_query("update ".$prefix."_poll_desc set artid='0' where artid='$sid'", $dbi);
+-	    $result = sql_query("update ".$prefix."_authors set counter='$counter' where aid='$aid'", $dbi);
++    	    sql_query("DELETE FROM ${prefix}_stories where sid=$sid", $dbi);
++	    sql_query("DELETE FROM ${prefix}_comments where sid=$sid", $dbi);
++	    sql_query("update ${prefix}_poll_desc set artid='0' where artid='$sid'", $dbi);
++	    $result = sql_query("update ${prefix}_authors set counter='$counter' where aid='$aid'", $dbi);
+ 	    if ($ultramode) {
+ 	        ultramode();
+ 	    }
+@@ -1142,16 +1142,16 @@
+ 
+ function changeStory($sid, $subject, $hometext, $bodytext, $topic, $notes, $catid, $ihome, $alanguage, $acomm) {
+     global $aid, $ultramode, $prefix, $dbi;
+-    $result = sql_query("select radminarticle, radminsuper from ".$prefix."_authors where aid='$aid'", $dbi);
++    $result = sql_query("select radminarticle, radminsuper from ${prefix}_authors where aid='$aid'", $dbi);
+     list($radminarticle, $radminsuper) = sql_fetch_row($result, $dbi);
+-    $result2 = sql_query("select aid from ".$prefix."_stories where sid='$sid'", $dbi);
++    $result2 = sql_query("select aid from ${prefix}_stories where sid='$sid'", $dbi);
+     list($aaid) = sql_fetch_row($result2, $dbi);
+     if (($radminarticle == 1) AND ($aaid == $aid) OR ($radminsuper == 1)) {
+ 	$subject = stripslashes(FixQuotes($subject));
+ 	$hometext = stripslashes(FixQuotes($hometext));
+ 	$bodytext = stripslashes(FixQuotes($bodytext));
+ 	$notes = stripslashes(FixQuotes($notes));
+-	sql_query("update ".$prefix."_stories set catid='$catid', title='$subject', hometext='$hometext', bodytext='$bodytext', topic='$topic', notes='$notes', ihome='$ihome', alanguage='$alanguage', acomm='$acomm' where sid=$sid", $dbi);
++	sql_query("update ${prefix}_stories set catid='$catid', title='$subject', hometext='$hometext', bodytext='$bodytext', topic='$topic', notes='$notes', ihome='$ihome', alanguage='$alanguage', acomm='$acomm' where sid=$sid", $dbi);
+ 	if ($ultramode) {
+     	    ultramode();
+ 	}
+@@ -1198,7 +1198,7 @@
+ 	."<b>"._TITLE."</b><br>"
+ 	."<input type=\"text\" name=\"subject\" size=\"50\"><br><br>"
+ 	."<b>"._TOPIC."</b>";
+-    $toplist = sql_query("select topicid, topictext from ".$prefix."_topics order by topictext", $dbi);
++    $toplist = sql_query("select topicid, topictext from ${prefix}_topics order by topictext", $dbi);
+     echo "<select name=\"topic\">";
+     echo "<option value=\"\">"._SELECTTOPIC."</option>\n";
+     while(list($topicid, $topics) = sql_fetch_row($toplist, $dbi)) {
+@@ -1348,7 +1348,7 @@
+     $subject = ereg_replace("\"", "''", $subject);
+     $hometext = stripslashes($hometext);
+     $bodytext = stripslashes($bodytext);
+-    $result=sql_query("select topicimage from ".$prefix."_topics where topicid=$topic", $dbi);
++    $result=sql_query("select topicimage from ${prefix}_topics where topicid=$topic", $dbi);
+     list($topicimage) = sql_fetch_row($result, $dbi);
+     echo "<table border=\"0\" width=\"75%\" cellpadding=\"0\" cellspacing=\"1\" bgcolor=\"$bgcolor2\" align=\"center\"><tr><td>"
+ 	."<table border=\"0\" width=\"100%\" cellpadding=\"8\" cellspacing=\"1\" bgcolor=\"$bgcolor1\"><tr><td>"
+@@ -1358,7 +1358,7 @@
+ 	."<br><br><b>"._TITLE."</b><br>"
+ 	."<input type=\"text\" name=\"subject\" size=\"50\" value=\"$subject\"><br><br>"
+ 	."<b>"._TOPIC."</b><select name=\"topic\">";
+-    $toplist = sql_query("select topicid, topictext from ".$prefix."_topics order by topictext", $dbi);
++    $toplist = sql_query("select topicid, topictext from ${prefix}_topics order by topictext", $dbi);
+     echo "<option value=\"\">"._ALLTOPICS."</option>\n";
+     while(list($topicid, $topics) = sql_fetch_row($toplist, $dbi)) {
+ 	if ($topicid==$topic) {
+@@ -1504,11 +1504,11 @@
+ 	$subject = ereg_replace("\"", "''", $subject);
+ 	$hometext = stripslashes(FixQuotes($hometext));
+ 	$bodytext = stripslashes(FixQuotes($bodytext));
+-	$result = sql_query("insert into ".$prefix."_autonews values (NULL, '$catid', '$aid', '$subject', '$date', '$hometext', '$bodytext', '$topic', '$author', '$notes', '$ihome', '$alanguage', '$acomm')", $dbi);
++	$result = sql_query("insert into ${prefix}_autonews values (DEFAULT, '$catid', '$aid', '$subject', '$date', '$hometext', '$bodytext', '$topic', '$author', '$notes', '$ihome', '$alanguage', '$acomm')", $dbi);
+ 	if (!$result) {
+ 	    exit();
+ 	}
+-	$result = sql_query("update ".$prefix."_authors set counter=counter+1 where aid='$aid'", $dbi);
++	$result = sql_query("update ${prefix}_authors set counter=counter+1 where aid='$aid'", $dbi);
+ 	if ($ultramode) {
+ 	    ultramode();
+ 	}
+@@ -1521,16 +1521,16 @@
+ 	    $haspoll = 1;
+ 	    $timeStamp = time();
+ 	    $pollTitle = FixQuotes($pollTitle);
+-	    if(!sql_query("INSERT INTO ".$prefix."_poll_desc VALUES (NULL, '$pollTitle', '$timeStamp', 0, '$alanguage', '0')", $dbi)) {
++	    if(!sql_query("INSERT INTO ${prefix}_poll_desc VALUES (DEFAULT, '$pollTitle', '$timeStamp', DEFAULT, '$alanguage', DEFAULT)", $dbi)) {
+ 		return;
+ 	    }
+-	    $object = sql_fetch_object(sql_query("SELECT pollID FROM ".$prefix."_poll_desc WHERE pollTitle='$pollTitle'", $dbi), $dbi);
++	    $object = sql_fetch_object(sql_query("SELECT pollID FROM ${prefix}_poll_desc WHERE pollTitle='$pollTitle'", $dbi), $dbi);
+ 	    $id = $object->pollID;
+ 	    for($i = 1; $i <= sizeof($optionText); $i++) {
+ 		if($optionText[$i] != "") {
+ 		    $optionText[$i] = FixQuotes($optionText[$i]);
+ 		}
+-		if(!sql_query("INSERT INTO ".$prefix."_poll_data (pollID, optionText, optionCount, voteID) VALUES ($id, '$optionText[$i]', 0, $i)", $dbi)) {
++		if(!sql_query("INSERT INTO ${prefix}_poll_data (pollID, optionText, optionCount, voteID) VALUES ($id, '$optionText[$i]', 0, $i)", $dbi)) {
+ 		    return;
+ 		}
+ 	    }
+@@ -1538,14 +1538,14 @@
+ 	    $haspoll = 0;
+ 	    $id = 0;
+ 	}
+-	$result = sql_query("insert into ".$prefix."_stories values (NULL, '$catid', '$aid', '$subject', now(), '$hometext', '$bodytext', '0', '0', '$topic', '$aid', '$notes', '$ihome', '$alanguage', '$acomm', '$haspoll', '$id', '0', '0')", $dbi);
+-	$result = sql_query("select sid from ".$prefix."_stories WHERE title='$subject' order by time DESC limit 0,1", $dbi);
++	$result = sql_query("insert into ${prefix}_stories values (DEFAULT, '$catid', '$aid', '$subject', now(), '$hometext', '$bodytext', DEFAULT, DEFAULT, '$topic', '$aid', '$notes', '$ihome', '$alanguage', '$acomm', '$haspoll', '$id', DEFAULT, DEFAULT)", $dbi);
++	$result = sql_query("select sid from ${prefix}_stories WHERE title='$subject' order by time DESC limit 0,1", $dbi);
+ 	list($artid) = sql_fetch_row($result, $dbi);
+-	sql_query("UPDATE ".$prefix."_poll_desc SET artid='$artid' WHERE pollID='$id'", $dbi);
++	sql_query("UPDATE ${prefix}_poll_desc SET artid='$artid' WHERE pollID='$id'", $dbi);
+ 	if (!$result) {
+ 	    exit();
+ 	}
+-	$result = sql_query("update ".$prefix."_authors set counter=counter+1 where aid='$aid'", $dbi);
++	$result = sql_query("update ${prefix}_authors set counter=counter+1 where aid='$aid'", $dbi);
+ 	if ($ultramode) {
+ 	    ultramode();
+ 	}
+@@ -1563,7 +1563,7 @@
+     CloseTable();
+     echo "<br>";
+     OpenTable();
+-	$result = sql_query("SELECT qid, subject, timestamp, alanguage FROM ".$prefix."_queue order by timestamp DESC", $dbi);
++	$result = sql_query("SELECT qid, subject, timestamp, alanguage FROM ${prefix}_queue order by timestamp DESC", $dbi);
+ 	if(sql_num_rows($result, $dbi) == 0) {
+ 	    echo "<table width=\"100%\"><tr><td bgcolor=\"$bgcolor1\" align=\"center\"><b>"._NOSUBMISSIONS."</b></td></tr></table>\n";
+ 	} else {
+@@ -1606,7 +1606,7 @@
+ 
+ function subdelete() {
+     global $prefix, $dbi;
+-    sql_query("delete from ".$prefix."_queue", $dbi);
++    sql_query("delete from ${prefix}_queue", $dbi);
+     Header("Location: admin.php?op=adminMain");
+ }
+ 

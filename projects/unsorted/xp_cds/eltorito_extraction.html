@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <link rel="stylesheet" href="../styles/main.css" type="text/css" />
+    <title>Extracting an El Torito Boot Image</title>
+    <style type="text/css">
+      table {
+        border-collapse: collapse;
+        margin: auto;
+      }
+      td {
+        border: 2px dashed gray;
+        vertical-align: center;
+      }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Understanding the Basics of El Torito by Slipstreaming an XP
+    CD (Largely) Under Linux</h1>
+
+    <h2>Making a Disc Image</h2>
+
+    <p>I have a XP CD here that I have been using to do various
+    installs. Since the next closest available XP CD that I have
+    access to currently is about a thousand miles away in Tennessee
+    (I'm in Mauritania). So, I would like to have a copy of this
+    one.</p>
+
+    <p>Making a straight copy is easy enough, except the sand eats all
+    discs here and I don't really want a disc anyhow. I just want to
+    be able to make one.</p>
+
+    <p>With linux this is pretty easy to pull off.</p>
+
+    <code>dd if=/dev/scd0 of=isos/win_xp.iso</code>
+
+    <p>will give me a iso image that I can verify is good by
+    doing:</p>
+
+    <code>mount -o loop win_xp.iso /mnt/winxp/</code>
+
+    <p>When I get ready to burn it I just do:</p>
+
+    <code>cdrecord -v speed=2 dev=0,0 ~will/isos/win_xp.iso</code>
+
+    <p>This is all fine and good, but I would like to keep the key
+    with the disc. My initial idea was just to mount the iso image and
+    try writing into it. The structure of an iso though prevents this
+    from working. A simple solution is just to copy the files out and
+    make a new iso. The problem? The disc is bootable and it won't be
+    if I just make a new image. I need to copy the boot image out and
+    put it in the new one.</p>
+
+    <h2>Understanding the El Torito Structure</h2>
+
+    <p>Wanting to understand rather than just downloading an El Torito
+    XP boot image off the internet too me to the <a
+    href="eltorito.pdf">standard</a>.</p>
+
+    <blockquote>"The Yellow Book defines the logical structure of a
+    CD-ROM as having 333,000 sectors of 2,352 bytes each. 2,048 bytes
+    of each sector are available for user data, and the other 304
+    bytes are reserved for things like sync, header, error correction
+    and error detection code."</blockquote>
+
+    <h3>Primary Volume Descriptor</h3>
+
+    <blockquote>"The first 15 sectors are unused, with Sector 16
+    containing the Primary Volume Descriptor (PVD). On ISO9660 discs
+    it always starts with the characters 'CD001'."</blockquote>
+
+    <p>When I use <code>hexedit win_xp.iso</code> and search for
+    "CD001" it is at 0x8001 (2048 * 16 + 1), so all is good. I can
+    also do:</p>
+    
+    <code>dd bs=1 count=5 skip=$(((v=<b>16 * 0X800 + 1</b>));echo $v)
+    if=/dev/scd0 2> /dev/null; echo</code>
+
+    <h3>Boot Record Volume Descriptor</h3>
+
+    <blockquote>"The El Torito Specification adds two entries to the
+    CD-ROM. These are the Boot Record and the Boot Catalog. A Boot
+    Record Volume Descriptor reside at Sector 17 of the CD, which
+    serves as a Secondary Volume Descriptor. The CD001 header of the
+    Boot Record Volume Descriptor indicates that this disc is an ISO
+    9660 CD-ROM; the EL TORITO SPECIFICATION identifies the disc as
+    one that is potentially bootable."</blockquote>
+
+    <code>hexdump -C -n30 -s$(((v=<b>17 * 0x800 + 1</b>));echo $v) /dev/scd0</code>
+
+    <p>shows</p>
+
+    <pre>00008800  00 43 44 30 30 31 01 45  4c 20 54 4f 52 49 54 4f  |.CD001.EL TORITO|
+00008810  20 53 50 45 43 49 46 49  43 41 54 49 4f 4e 00 00  | SPECIFICATION..|
+00008820  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+00008840  00 00 00 00 00 00 00 13  00 00 00 00 00 00 00 00  |................|
+00008850  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+00008a00  fa 33 c0 8e d0 bc 00 7c  8b f4 8e c0 8e d8 fb eb  |.3.....|........|
+00008a10  51 43 44 2d 52 4f 4d 20  6e 6f 74 20 62 6f 6f 74  |QCD-ROM not boot|
+00008a20  61 62 6c 65 20 6f 6e 20  74 68 69 73 20 73 79 73  |able on this sys|
+00008a30  74 65 6d 2e 52 65 6d 6f  76 65 20 43 44 2d 52 4f  |tem.Remove CD-RO|
+00008a40  4d 20 61 6e 64 20 70 72  65 73 73 20 45 4e 54 45  |M and press ENTE|
+00008a50  52 20 6b 65 79 20 74 6f  20 63 6f 6e 74 69 6e 75  |R key to continu|
+00008a60  65 2e bd 11 7c b4 13 b0  00 b9 23 00 b6 00 b2 00  |e...|.....#.....|
+00008a70  b7 00 b3 07 cd 10 bd 34  7c b4 13 b0 00 b9 2e 00  |.......4|.......|
+00008a80  b6 01 b2 00 b7 00 b3 07  cd 10 b4 00 cd 16 3c 00  |..............<.|
+00008a90  74 f8 80 fc 1c 75 f3 ea  f0 ff 00 f0 00 00 00 00  |t....u..........|
+00008aa0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+00009000</pre>
+
+    <p>The <a href="eltorito.pdf">spec</a> gives this breakdown
+    (offset from the beginning of sector 17 at 0x8801):</p>
+
+    <table>
+      <tr>
+        <th>Offset</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td>Byte</td>
+        <td>Boot Record Indicator, must be 0</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>1-5</td>
+        <td>Byte</td>
+        <td>ISO-9660 Identifier, must be "CD001"</td>
+        <td>CD001</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Byte</td>
+        <td>Version of this descriptor, must be 1</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>7-26</td>
+        <td>Byte</td>
+        <td>Boot System Identifier, must be "EL TORITO SPECIFICATION" padded with 0’s</td>
+        <td>EL TORITO SPECIFICATION</td>
+      </tr>
+      <tr>
+        <td>27-46</td>
+        <td>Byte</td>
+        <td>Unused, must be 0</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>47-4A</td>
+        <td>Dword</td>
+        <td>Absolute pointer to first sector of Boot Catalog</td>
+        <td>0x00000013</td>
+      </tr>
+      <tr>
+        <td>4A-7FF</td>
+        <td>Byte</td>
+        <td>Unused, must be 0</td>
+        <td>There's some gobbeldy gook here that I assume is error handling from the looks of it</td>
+      </tr>
+    </table>
+
+    <p>The important value is the pointer to the boot catalog which is
+    0x13. It is in this sector that we look next:</p>
+
+    <h3>Boot Catalog: Validation Entry</h3>
+
+    <code>hexdump -C -n32 -s$(((v=<b>0x13 * 0x800</b>));echo $v) win_xp.iso</code>
+
+    <pre>00009800  01 00 00 00 4d 69 63 72  6f 73 6f 66 74 20 43 6f  |....Microsoft Co|
+00009810  72 70 6f 72 61 74 69 6f  6e 00 00 00 4c 49 55 aa  |rporation...LIU.|</pre>
+
+    <table>
+      <tr>
+        <th>Offset</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td>Byte</td>
+        <td>Header ID that to indicate that a boot catalog is present
+        on the disc. Must be 01</td>
+        <td>01</td>
+      </tr>
+      <tr>
+        <td rowspan="3">1</td>
+        <td rowspan="3">Byte</td>
+        <td rowspan="3">Platform ID</td>
+        <td><b>0 (80x86 platform id)</b></td>
+      </tr>
+      <tr>
+        <td>1 (Power PC platform id)</td>
+      </tr>
+      <tr>
+        <td>2 (Mac platform id)</td>
+      </tr>
+      <tr>
+        <td>2-3</td>
+        <td>Word</td>
+        <td>Reserved as 0</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>4-1B</td>
+        <td>Character</td>
+        <td>Manufacturer ID</td>
+        <td>Microsort Corporation</td>
+      </tr>
+      <tr>
+        <td>1C-1D</td>
+        <td>Word</td>
+        <td>Checksum (The sum of all the words in this record should
+        be 0)</td>
+        <td>0x494C</td>
+      </tr>
+      <tr>
+        <td>1E</td>
+        <td>Byte</td>
+        <td>Key value, must be 55</td>
+        <td>55</td>
+      </tr>
+      <tr>
+        <td>1F</td>
+        <td>Byte</td>
+        <td>Key value must be AA</td>
+        <td>AA</td>
+      </tr>
+    </table>
+
+    <h3>Boot Catalog: Default Entry</h3>
+
+    <code>hexdump -C -n16 -s$(((v=<b>0x13 * 0x800 + 0x20</b>));echo $v) win_xp.iso</code>
+
+    <pre>00009820  88 00 00 00 00 00 04 00  25 01 00 00 00 00 00 00  |........%.......|</pre>
+
+    <table>
+      <tr>
+        <th>Offset</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td rowspan="2">0</td>
+        <td rowspan="2">Byte</td>
+        <td rowspan="2">Boot Indicator</td>
+        <td>0 (not bootable)</td>
+      </tr>
+      <tr>
+        <td><b>88 (bootable)</b></td>
+      </tr>
+      <tr>
+        <td rowspan="5">1</td>
+        <td rowspan="5">Byte</td>
+        <td rowspan="5">Boot Media Type</td>
+        <td><b>0 (no emulation)</b></td>
+      </tr>
+      <tr>
+        <td>1 (1.2mb disk)</td>
+      </tr>
+      <tr>
+        <td>2 (1.44mb disk)</td>
+      </tr>
+      <tr>
+        <td>3 (2.88mb disk)</td>
+      </tr>
+      <tr>
+        <td>4 (hard drive)</td>
+      </tr>
+      <tr>
+        <td>2-3</td>
+        <td>Word</td>
+        <td>Load segment for image. If 0 use traditional 0x7C0</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Byte</td>
+        <td>System type (same as byte 5 of partition table in image)</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Byte</td>
+        <td>Unused</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>6-7</td>
+        <td>Word</td>
+        <td>Sector count of virtual/emulated sectors to store at the load segment during boot</td>
+        <td>0x0400</td>
+      </tr>
+      <tr>
+        <td>8-B</td>
+        <td>Dword</td>
+        <td>Load RBA (start address of the virtual disk)</td>
+        <td>0x00000125</td>
+      </tr>
+      <tr>
+        <td>C-1F</td>
+        <td>Byte</td>
+        <td>Unused</td>
+        <td>0</td>
+      </tr>
+    </table>
+
+    <p>Next there could be section entries which would define
+    alternate boot images for things like multiple platforms or
+    languages or whatever. There aren't any though.</p>
+
+    <h2>Extracting the Image</h2>
+
+    <p>The most important value in that last bit is the <code>Load
+    RBA</code>. It tells the offset of the beginning of the image on
+    the disc. Note that the double word was composited by collating
+    the bytes in reverse. <code>25 01 00 00</code> makes
+    <code>0x125</code>. I can use this offset to extract the
+    image:</p>
+
+    <code>dd if=win_xp.iso of=xp_boot.img bs=2048 count=1 skip=$((0x125))</code>
+
+    <p>And the md5sum matches what I found on the internet, so I am good.</p>
+
+    <hr />
+
+    <p>As long as I am at it I guess I will "slipstream" the first
+    service pack into it and set up an <a
+    href="http://unattended.msfn.org">unattended
+    install</a>&hellip;</p>
+  </body>
+</html>

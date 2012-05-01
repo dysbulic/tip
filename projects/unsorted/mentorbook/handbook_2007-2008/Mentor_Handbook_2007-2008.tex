@@ -1,0 +1,62 @@
+\documentclass[oneside,twocolumn]{book}
+
+\usepackage{Qstyle}		% to include mystyle.sty, where I put all my \newcommand statements, etc.
+
+%\includeonly{}			% if I want to process just {}.tex
+%\syntaxonly										% if I want to process just the syntax
+%\doublespacing									% if I want to double space the entire document
+\makeindex											% to make an index
+%\makeglossaries									% to make a glossary
+
+\begin{document}
+
+\input{title}
+
+%\title{Mentor Handbook 2007-2008}
+%\author{a guide to the point of departure}
+
+\frontmatter
+\include{formalities}
+\tableofcontents
+\include{preface} 
+%\include{introduction}
+
+\mainmatter
+\part{Level 1: The Heart of Mentor}
+\include{mentor}							% What is Mentor?
+\include{personal}						% Personal Development
+\include{journaling}					% Journaling
+\include{meditation}					% Meditation
+\include{mbti}								% MBTI
+\include{values}							% Creating a System of Values
+\include{models}							% Models of Development
+\include{critical_thinking}		% Critical Thinking
+\include{mindfulness}					% Mindfulness
+\include{wisdom}							%	Wisdom
+\include{readings}						% Readings and Movies
+\part{Level 2 Work}
+\include{personal2}						% Personal Development 2
+\include{community}						% Community
+\include{mbti2}								% MBTI 2
+\include{values2}							% Values 2
+\include{spirituality}				% Spirituality
+\include{mysticism}
+\include{paradox}							% Paradox
+\part{Appendices}
+\appendix
+\include{glossary}						% Jargon
+\include{connie}							% Connie's Autobiography
+\include{students}						% Mentor Students (included in this work)
+\include{accolades}						% Accolades and Plaudits for Mentor
+\include{original}						% Creative and Original Work by Mentor Students
+\include{random}							% Random
+\chapter{Bibliography}				% marks the place of the bib
+
+\backmatter
+%\include{glossary}						% make a glossary automatically
+%\include{notes}						% include my file notes.tex
+\bibliographystyle{astron}		% the style you want to use for references.
+\bibliography{mr,refs}				% the files containing all the articles and books you ever referenced.
+\printindex										% make an index automatically
+
+\end{document}

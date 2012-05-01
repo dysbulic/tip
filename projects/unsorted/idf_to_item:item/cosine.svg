@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg id="cosine"
+   version="1.1"
+   baseProfile="full"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:ev="http://www.w3.org/2001/xml-events"
+   viewBox="0 0 600 200">
+   width="100%" height="100%">
+
+  <title>Cosine.svg - a nice plot of the cosine function</title>
+  <desc>
+     Cosine(cos)-function
+     from Wikimedia Commons
+     plot-range: -2pi to 2pi
+     plotted with three different cubic bezier-curves
+     the bezier-controll-points are calculated to give a very accurate result.
+     symbols in "Computer Modern" (TeX) font embedded
+     created with a plain text editor using GNU/Linux
+
+     about: http://commons.wikimedia.org/wiki/Image:Cosine.svg
+     source: http://commons.wikimedia.org/
+     rights: GNU Free Documentation license,
+             Creative Commons Attribution ShareAlike license
+  </desc>
+
+  <defs>
+    <!-- the controll points lie on the intersection points of the tangents.
+         this yields a very accurate curve -->
+    <path id="sine-bow"
+       fill="none" stroke="red" stroke-width="0.1px" stroke-linecap="round"
+       d="M 0,0
+          C 0.173771,0.173771 0.347462,0.347461 0.523599,0.500000
+          C 0.699756,0.652557 0.872140,0.778496 1.047198,0.866025
+          C 1.223626,0.954240 1.396092,1.000000 1.570796,1.000000" />
+    <!-- pstricks-style arrow, zoom 1.5 -->
+    <marker id="Arrow" refX="2.52" refY="2.25" markerUnits="strokeWidth"
+       markerWidth="6" markerHeight="4.5" orient="auto">
+      <path d="M 2.52 2.25 L 0 4.5 L 6 2.25 L 0 0 z" />
+    </marker>
+
+    <line id="xgridline" x1="0" x2="0" y1="55" y2="-55" stroke="black"
+       stroke-width="0.5px" stroke-linecap="square" opacity="0.4" />
+    <line id="ygridline" x1="-266.327412" x2="266.327412" y1="0" y2="-0" 
+       stroke="black" stroke-width="0.5px" stroke-linecap="square"
+       opacity="0.4"/>
+    <line id="xtick" x1="0" x2="0" y1="5" y2="-5" stroke="black"
+       stroke-width="1px" stroke-linecap="square" opacity="1" />
+    <line id="ytick" x1="-5" x2="5" y1="0" y2="-0" stroke="black"
+       stroke-width="1px" stroke-linecap="square" opacity="1" />
+
+    <!-- now the used chars in "Computer Modern" font. They are implemented
+         as plain paths and not as glyphs just because it didn't work -->
+
+    <!-- c: horiz-adv-x="444.4"-->
+    <path id="c"
+       d="M 34 0 m 325 386 c -41 -3 -47 -33 -47 -46 c 0 -26 18 -46 46 -46
+          c 26 0 46 17 46 47 c 0 68 -76 107 -153 107
+          c -125 0 -217 -108 -217 -232 c 0 -128 99 -227 215 -227
+          c 134 0 166 120 166 130 c 0 10 -10 10 -13 10 c -9 0 -11 -4 -13 -10
+          c -29 -93 -94 -105 -131 -105 c -53 0 -141 43 -141 204
+          c 0 163 82 205 135 205 c 9 0 72 -1 107 -37 z"/>
+    <!-- o: horiz-adv-x="500"-->
+    <path id="o"
+       d="M 28 0 m 443 214 c 0 128 -100 234 -221 234
+          c -125 0 -222 -109 -222 -234 c 0 -129 104 -225 221 -225
+          c 121 0 222 98 222 225 z M 471 214 m -221 -200 c -43 0 -87 21 -114 67
+          c -25 44 -25 105 -25 141 c 0 39 0 93 24 137 c 27 46 74 67 114 67
+          c 44 0 87 -22 113 -65 c 26 -43 26 -101 26 -139 c 0 -36 0 -90 -22 -134
+          c -22 -45 -66 -74 -116 -74 z"/>
+    <!-- s: horiz-adv-x="394.4"-->
+    <path id="s"
+       d="M 33 0 m 175 194 c 22 -4 104 -20 104 -92 c 0 -51 -35 -91 -113 -91
+          c -84 0 -120 57 -139 142 c -3 13 -4 17 -14 17 c -13 0 -13 -7 -13 -25
+          v -132 c 0 -17 0 -24 11 -24 c 5 0 6 1 25 20 c 2 2 2 4 20 23
+          c 44 -42 89 -43 110 -43 c 115 0 161 67 161 139 c 0 53 -30 83 -42 95
+          c -33 32 -72 40 -114 48 c -56 11 -123 24 -123 82 c 0 35 26 76 112 76
+          c 110 0 115 -90 117 -121 c 1 -9 10 -9 12 -9 c 13 0 13 5 13 24 v 101
+          c 0 17 0 24 -11 24 c -5 0 -7 0 -20 -12 c -3 -4 -13 -13 -17 -16
+          c -38 28 -79 28 -94 28 c -122 0 -160 -67 -160 -123
+          c 0 -35 16 -63 43 -85 c 32 -26 60 -32 132 -46 z"/>
+    <!-- (: horiz-adv-x="388.9"-->
+    <path id="parleft"
+       d="M 99 0 m 232 -240 c 0 3 0 5 -17 22 c -125 126 -157 315 -157 468
+          c 0 174 38 348 161 473 c 13 12 13 14 13 17 c 0 7 -4 10 -10 10
+          c -10 0 -100 -68 -159 -195 c -51 -110 -63 -221 -63 -305
+          c 0 -78 11 -199 66 -312 c 60 -123 146 -188 156 -188 c 6 0 10 3 10 10
+          z"/>
+    <!-- ): horiz-adv-x="388.9"-->
+    <path id="parright"
+       d="M 57 0 m 232 250 c 0 78 -11 199 -66 312 c -60 123 -146 188 -156 188
+          c -6 0 -10 -4 -10 -10 c 0 -3 0 -5 19 -23 c 98 -99 155 -258 155 -467
+          c 0 -171 -37 -347 -161 -473 c -13 -12 -13 -14 -13 -17
+          c 0 -6 4 -10 10 -10 c 10 0 100 68 159 195 c 51 110 63 221 63 305 z"/>
+    <!-- x: horiz-adv-x="527.8"-->
+    <path id="x"
+       d="M 29 0 m 305 302 c 6 26 29 118 99 118 c 5 0 29 0 50 -13
+          c -28 -5 -48 -30 -48 -54 c 0 -16 11 -35 38 -35 c 22 0 54 18 54 58
+          c 0 52 -59 66 -93 66 c -58 0 -93 -53 -105 -76 c -25 66 -79 76 -108 76
+          c -104 0 -161 -129 -161 -154 c 0 -10 10 -10 12 -10 c 8 0 11 2 13 11
+          c 34 106 100 131 134 131 c 19 0 54 -9 54 -67 c 0 -31 -17 -98 -54 -238
+          c -16 -62 -51 -104 -95 -104 c -6 0 -29 0 -50 13 c 25 5 47 26 47 54
+          c 0 27 -22 35 -37 35 c -30 0 -55 -26 -55 -58 c 0 -46 50 -66 94 -66
+          c 66 0 102 70 105 76 c 12 -37 48 -76 108 -76 c 103 0 160 129 160 154
+          c 0 10 -9 10 -12 10 c -9 0 -11 -4 -13 -11
+          c -33 -107 -101 -131 -133 -131 c -39 0 -55 32 -55 66
+          c 0 22 6 44 17 88 z"/>
+    <!-- pi: horiz-adv-x="570"-->
+    <path id="pi"
+       d="M 27 0 m 238 373 h 113 c -33 -148 -42 -191 -42 -258
+          c 0 -15 0 -42 8 -76 c 10 -44 21 -50 36 -50 c 20 0 41 18 41 38
+          c 0 6 0 8 -6 22 c -29 72 -29 137 -29 165 c 0 53 7 107 18 159 h 114
+          c 13 0 49 0 49 34 c 0 24 -21 24 -40 24 h -335 c -22 0 -60 0 -104 -47
+          c -35 -39 -61 -85 -61 -90 c 0 -1 0 -10 12 -10 c 8 0 10 4 16 12
+          c 49 77 107 77 127 77 h 57 c -32 -121 -86 -242 -128 -333
+          c -8 -15 -8 -17 -8 -24 c 0 -19 16 -27 29 -27 c 30 0 38 28 50 65
+          c 14 46 14 48 27 98 z"/>
+    <!-- minus: horiz-adv-x="700"-->
+    <path id="minus"
+       d="M 83 0 m 578 230 c 14 0 33 0 33 20 c 0 20 -19 20 -33 20 h -467.2
+          c -14 0 -33 0 -33 -20 c 0 -20 19 -20 33 -20 z"/>
+    <!-- 1: horiz-adv-x="500"-->
+    <path id="one"
+       d="M 89 0 m 205 640 c 0 24 0 26 -23 26 c -62 -64 -150 -64 -182 -64 v -31
+          c 20 0 79 0 131 26 v -518 c 0 -36 -3 -48 -93 -48 h -32 v -31
+          c 35 3 122 3 162 3 c 40 0 127 0 162 -3 v 31 h -32
+          c -90 0 -93 11 -93 48 z"/>
+    <!-- 2: horiz-adv-x="500"-->
+    <path id="two"
+       d="M 50 0 m 399 174 h -25 c -5 -30 -12 -74 -22 -89 c -7 -8 -73 -8 -95 -8
+          h -180 l 106 103 c 156 138 216 192 216 292 c 0 114 -90 194 -212 194
+          c -113 0 -187 -92 -187 -181 c 0 -56 50 -56 53 -56 c 17 0 52 12 52 53
+          c 0 26 -18 52 -53 52 c -8 0 -10 0 -13 -1 c 23 65 77 102 135 102
+          c 91 0 134 -81 134 -163 c 0 -80 -50 -159 -105 -221 l -192 -214
+          c -11 -11 -11 -13 -11 -37 h 371 z"/>
+    <!-- 3: horiz-adv-x="500"-->
+    <path id="three"
+       d="M 42 0 m 248 352 c 82 27 140 97 140 176 c 0 82 -88 138 -184 138
+          c -101 0 -177 -60 -177 -136 c 0 -33 22 -52 51 -52 c 31 0 51 22 51 51
+          c 0 50 -47 50 -62 50 c 31 49 97 62 133 62 c 41 0 96 -22 96 -112
+          c 0 -12 -2 -70 -28 -114 c -30 -48 -64 -51 -89 -52
+          c -8 -1 -32 -3 -39 -3 c -8 -1 -15 -2 -15 -12 c 0 -11 7 -11 24 -11
+          h 44 c 82 0 119 -68 119 -166 c 0 -136 -69 -165 -113 -165
+          c -43 0 -118 17 -153 76 c 35 -5 66 17 66 55 c 0 36 -27 56 -56 56
+          c -24 0 -56 -14 -56 -58 c 0 -91 93 -157 202 -157
+          c 122 0 213 91 213 193 c 0 82 -63 160 -167 181 z"/>
+
+    <!--string expressions -->
+    <g id="cosx" transform="scale(0.02,-0.02)">
+      <use xlink:href="#c" x="-2688.1" y="0" />
+      <use xlink:href="#o" x="-2243.7" y="0" />
+      <use xlink:href="#s" x="-1743.7" y="0" />
+      <use xlink:href="#parleft" x="-1349.3" y="0" />
+      <use xlink:href="#x" x="-960.4" y="0" />
+      <use xlink:href="#parright" x="-388.9" y="0" />
+    </g>
+    <g id="xl" transform="scale(0.02,-0.02)">
+      <use xlink:href="#x" x="-285.75" y="0" />
+    </g>
+    <g id="xm2pi" transform="scale(0.02,-0.02)">
+      <use xlink:href="#minus" x="-1235" y="0" />
+      <use xlink:href="#two" x="-535" y="0" />
+      <use xlink:href="#pi" x="-35" y="0" />
+    </g>
+    <g id="xm32pi" transform="scale(0.02,-0.02)">
+      <use xlink:href="#minus" x="-1300" y="0" />
+      <path d="M -500,280 h 400" stroke="black"
+         stroke-width="40px" stroke-linecap="square" />
+      <use xlink:href="#three" x="-673.3" y="0"
+         transform="translate(0,400) scale(0.693147,0.693147)" />
+      <use xlink:href="#two" x="-673.3" y="0"
+         transform="translate(0,-300) scale(0.693147,0.693147)" />
+      <use xlink:href="#pi" x="0" y="0" />
+    </g>
+    <g id="xmpi" transform="scale(0.02,-0.02)">
+      <use xlink:href="#minus" x="-985" y="0" />
+      <use xlink:href="#pi" x="-285" y="0" />
+    </g>
+    <g id="xm12pi" transform="scale(0.02,-0.02)">
+      <use xlink:href="#minus" x="-935" y="0" />
+      <path d="M -135,280 h 400" stroke="black"
+         stroke-width="40px" stroke-linecap="square" />
+      <use xlink:href="#one" x="-165" y="0"
+         transform="translate(0,400) scale(0.693147,0.693147)" />
+      <use xlink:href="#two" x="-165" y="0"
+         transform="translate(0,-300) scale(0.693147,0.693147)" />
+      <use xlink:href="#pi" x="365" y="0" />
+    </g>
+
+    <g id="x12pi" transform="scale(0.02,-0.02)">
+      <path d="M -500,280 h 400" stroke="black"
+         stroke-width="40px" stroke-linecap="square" />
+      <use xlink:href="#one" x="-673.3" y="0"
+         transform="translate(0,400) scale(0.693147,0.693147)" />
+      <use xlink:href="#two" x="-673.3" y="0"
+         transform="translate(0,-300) scale(0.693147,0.693147)" />
+      <use xlink:href="#pi" x="0" y="0" />
+    </g>
+    <g id="xpi" transform="scale(0.02,-0.02)">
+      <use xlink:href="#pi" x="-285" y="0" />
+    </g>
+    <g id="x32pi" transform="scale(0.02,-0.02)">
+      <path d="M -235,280 h 400" stroke="black"
+         stroke-width="40px" stroke-linecap="square" />
+      <use xlink:href="#three" x="-308.3" y="0"
+         transform="translate(0,400) scale(0.693147,0.693147)" />
+      <use xlink:href="#two" x="-308.3" y="0"
+         transform="translate(0,-300) scale(0.693147,0.693147)" />
+      <use xlink:href="#pi" x="265" y="0" />
+    </g>
+    <g id="x2pi" transform="scale(0.02,-0.02)">
+      <use xlink:href="#two" x="-535" y="0" />
+      <use xlink:href="#pi" x="-35" y="0" />
+    </g>
+    <g id="y1" transform="scale(0.02,-0.02)">
+      <use xlink:href="#one" x="-500" y="0" />
+    </g>
+    <g id="y-1" transform="scale(0.02,-0.02)">
+      <use xlink:href="#minus" x="-1200" y="0" />
+      <use xlink:href="#one" x="-500" y="0" />
+    </g>
+  </defs>
+
+
+
+  <g transform="translate(300.5, 100.5)">
+    <!-- grid -->
+    <use xlink:href="#xgridline" x="-251.327412" y="0" />
+    <use xlink:href="#xgridline" x="-188.495559" y="0" />
+    <use xlink:href="#xgridline" x="-125.663706" y="0" />
+    <use xlink:href="#xgridline" x="-62.831853" y="0" />
+    <use xlink:href="#xgridline" x="62.831853" y="0" />
+    <use xlink:href="#xgridline" x="125.663706" y="0" />
+    <use xlink:href="#xgridline" x="188.495559" y="0" />
+    <use xlink:href="#xgridline" x="251.327412" y="0" />
+    <use xlink:href="#ygridline" x="0" y="40" />
+    <use xlink:href="#ygridline" x="0" y="-40" />
+
+    <!-- ticks -->
+    <use xlink:href="#xtick" x="-251.327412" y="0" />
+    <use xlink:href="#xtick" x="-188.495559" y="0" />
+    <use xlink:href="#xtick" x="-125.663706" y="0" />
+    <use xlink:href="#xtick" x="-62.831853" y="0" />
+    <use xlink:href="#xtick" x="62.831853" y="0" />
+    <use xlink:href="#xtick" x="125.663706" y="0" />
+    <use xlink:href="#xtick" x="188.495559" y="0" />
+    <use xlink:href="#xtick" x="251.327412" y="0" />
+    <use xlink:href="#ytick" x="0" y="40" />
+    <use xlink:href="#ytick" x="0" y="-40" />
+
+    <!-- axes -->
+    <line id="x-axis" x1="-280.5" x2="280.5" y1="0" y2="0" stroke="black"
+       stroke-width="2px" stroke-linecap="square" marker-end="url(#Arrow)" />
+    <line id="y-axis" x1="0" x2="0" y1="80.5" y2="-80.5" stroke="black"
+       stroke-width="2px" stroke-linecap="square" marker-end="url(#Arrow)" />
+
+    <!-- labels -->
+    <use xlink:href="#xl" x="286" y="16" />
+    <use xlink:href="#cosx" x="-6" y="-79" />
+    <g id="xlabels" transform="translate(0,25)">
+      <use xlink:href="#xm2pi" x="-251.327412" y="0" />
+      <use xlink:href="#xm32pi" x="-188.495559" y="0" />
+      <use xlink:href="#xmpi" x="-125.663706" y="0" />
+      <use xlink:href="#xm12pi" x="-62.831853" y="0" />
+      <use xlink:href="#x12pi" x="62.831853" y="0" />
+      <use xlink:href="#xpi" x="125.663706" y="0" />
+      <use xlink:href="#x32pi" x="188.495559" y="0" />
+      <use xlink:href="#x2pi" x="251.327412" y="0" />
+    </g>
+    <g id="ylabels" transform="translate(-8,7)">
+      <use xlink:href="#y1" x="0" y="-40" />
+      <use xlink:href="#y-1" x="0" y="40" />
+    </g>
+
+    <!-- curve -->
+    <g transform="scale(40, -40)">
+      <use transform="translate(-4.712389,0) scale(-1,1)" x="0" y="0"
+         xlink:href="#sine-bow" />
+      <use transform="translate(-4.712389,0) scale(1,-1)" x="0" y="0"
+         xlink:href="#sine-bow" />
+      <use transform="translate(-1.570796,0) scale(-1,-1)" x="0" y="0"
+         xlink:href="#sine-bow" />
+      <use transform="translate(-1.570796,0) scale(1,1)" x="0" y="0"
+         xlink:href="#sine-bow" />
+      <use transform="translate(1.570796,0) scale(-1,1)" x="0" y="0"
+         xlink:href="#sine-bow" />
+      <use transform="translate(1.570796,0) scale(1,-1)" x="0" y="0"
+         xlink:href="#sine-bow" />
+      <use transform="translate(4.712389,0) scale(-1,-1)" x="0" y="0"
+         xlink:href="#sine-bow" />
+      <use transform="translate(4.712389,0) scale(1,1)" x="0" y="0"
+         xlink:href="#sine-bow" />
+    </g>
+  </g>
+</svg>

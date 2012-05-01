@@ -1,0 +1,58 @@
+RewriteEngine on
+
+AuthUserFile /home/wjholcomb/sites/.htpasswd
+AuthName "Proofer Pass"
+AuthType Basic
+#Require valid-user
+
+RewriteRule subscribe(.html)? http://www.kintera.org/site/lookup.asp?c=pkIXL7MQJrE&b=2708745 [R,L]
+
+#RewriteCond %{SERVER_NAME} (www.)?stoparrestingpatients.org [NC]
+#RewriteCond %{REQUEST_FILENAME} !placeholder.html$
+#RewriteCond %{REQUEST_FILENAME} !tellafriend.*
+#RewriteRule .html$ http://stoparrestingpatients.org/placeholder.html [R,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} ^(.*)/([^/]+)(.[^\.]*)$
+RewriteCond %1/.templ.cache/%2%3 -f
+RewriteRule ^(.*)$ %1/.templ.cache/%2%3
+
+RewriteCond %1/.templ.cache/%2.php -f
+RewriteRule ^(.*)$ %1/.templ.cache/%2.php
+
+RewriteCond %1/.templ.cache/%2.html -f
+RewriteRule ^(.*)$ %1/.templ.cache/%2.html
+
+RewriteCond %{REQUEST_FILENAME} ^(.*)/([^/]+)(\.[^\.]*)$
+RewriteCond %1/%2.php -f
+RewriteRule ^(.*)$ %1/%2.php
+
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_FILENAME} ^(.*)/$
+RewriteCond %1/.templ.cache/index.php -f
+RewriteRule ^(.*)$ %1/.templ.cache/index.php
+
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_FILENAME} ^(.*)/$
+RewriteCond %1/.templ.cache/index.html -f
+RewriteRule ^(.*)$ %1/.templ.cache/index.html
+
+RewriteCond %1/.templ.cache/index.php -f
+
+#RewriteRule index.html index.php
+
+#RewriteRule ^(.*)$ http://odin.himinbi.org/?file=%1/.templ.cache/%2 [R]
+
+#RewriteRule ^(.*)$ http://odin.himinbi.org/?file=%1/.templ.cache/%2 [R]
+#RewriteRule ^(.*)$ http://odin.himinbi.org/?file=%{REQUEST_FILENAME} [R]
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule $ http://odin.himinbi.org/ [R,L]
+
+#RewriteCond %{REQUEST_FILENAME} !.htaccess$
+#RewriteCond %{REQUEST_FILENAME} !index.phps?$
+#RewriteCond %{REQUEST_URI} ^(.*)/([^/]*)$
+
+# RewriteLog logs/rewrite_test.log
+# RewriteLogLevel 3
+
+#RewriteRule ^.*$ %1/index.html.tmpl

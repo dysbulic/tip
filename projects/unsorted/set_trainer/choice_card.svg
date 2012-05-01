@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+     xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="100%" height="100%" viewBox="-1 -1 30 17"
+     a:scriptImplementation="Adobe"
+     onload="setShapes()">
+  <defs>
+    <script type="text/ecmascript" a:scriptImplementation="Adobe" xlink:href="card_functions.js" />
+    <script type="text/ecmascript" a:scriptImplementation="Adobe">//<![CDATA[
+      function setShapes() {
+      var url;
+      if(document.url)         { url = document.url; }
+      else if(document.getURL) { url = document.getURL(); }
+      else if(window.location) { url = window.location.href; }
+      else                     { throw("Could not find url"); }
+      var cardId = url.replace(/^.*\//g, "").replace(/\.svg/i, "");
+
+      var count;
+      switch(cardId.charAt(0)) {
+      case "1": case "2": case "3": count = parseInt(cardId.charAt(0)) - 1; break;
+      default: count = Math.floor(Math.random() * 3);
+      }
+
+      var color;
+      switch(cardId.charAt(1).toLowerCase()) {
+      case "r": color = RED;    break;
+      case "g": color = GREEN;  break;
+      case "p": color = PURPLE; break;
+      default:  color = Math.floor(Math.random() * 3);;
+      }
+
+      var shade;
+      switch(cardId.charAt(2).toLowerCase()) {
+      case "s": shade = SOLID;  break;
+      case "h": shade = HOLLOW; break;
+      case "l": shade = SHADED; break;
+      default:  shade = Math.floor(Math.random() * 3);
+      }
+
+      var shape;
+      switch(cardId.charAt(3).toLowerCase()) {
+      case "s": shape = SQUIGGLE; break;
+      case "o": shape = OVAL;     break;
+      case "d": shape = DIAMOND;  break;
+      default:  shape = Math.floor(Math.random() * 3);
+      }
+      
+      document.getElementsByTagName("svg").item(0).appendChild(generateCard(count, color, shade, shape));
+      }
+    //]]></script>
+    
+    <pattern id="redlines" width="100" height="1" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="100" y2="0" style="stroke-width: .5" class="red" />
+    </pattern> 
+    <pattern id="greenlines" width="100" height="1" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="100" y2="0" style="stroke-width: .5" class="green" />
+    </pattern> 
+    <pattern id="purplelines" width="100" height="1" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="100" y2="0" style="stroke-width: .5" class="purple" />
+    </pattern>
+    <path id="squiggle" d="M -2.5 4
+             c -1.5,-3  3.5,-3  5,0
+             c  1.5,3  -1.5,4   0,7
+             c  1.5,3  -3.5,3  -5,0
+             c -1.5,-3  1.5,-4  0,-7"/>
+    <path id="diamond" d="M 0 2 l -3,5.5 l 3,5.5 l 3,-5.5z"/>
+    <rect id="oval" x="-3" y="2" width="6" height="11" rx="3.5"/>
+    <style type="text/css">
+      [class~="card"] rect:first-child {
+        fill: white;
+        stroke: black;
+        stroke-width: .5;
+      }
+      [class~="red"] {
+        stroke: rgb(229, 53, 53);
+      }
+      [class~="green"] {
+        stroke: green;
+      }
+      [class~="purple"] {
+        stroke: purple;
+      }
+      [class~="hollow"] {
+        fill: none;
+      }
+      [class~="red"][class~="shaded"] {
+        fill: url("#redlines");
+      }
+      [class~="green"][class~="shaded"] {
+        fill: url("#greenlines");
+      }
+      [class~="purple"][class~="shaded"] {
+        fill: url("#purplelines");
+      }
+      [class~="shaded"] {
+      }
+      [class~="red"][class~="solid"] {
+        fill: rgb(229, 53, 53);
+      }
+      [class~="green"][class~="solid"] {
+        fill: green;
+      }
+      [class~="purple"][class~="solid"] {
+        fill: purple;
+      }
+      text {
+        font-size: 3.5;
+      }
+      #counter {
+        font-size: 13;
+        font-weight: bold;
+        text-anchor: middle;
+      }
+    </style>
+  </defs>
+</svg>

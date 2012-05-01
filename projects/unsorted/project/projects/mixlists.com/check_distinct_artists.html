@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Restructure Tracklist Database</title>
+    <link rel="stylesheet" type="text/css" href="mixlists.css" />
+    <script src="compatability.js" type="text/javascript"></script>
+    <script src="check_distinct_artists.js" type="text/javascript"></script>
+    <script type="text/javascript">//<![CDATA[
+    //]]></script>
+    <style type="text/css">
+      .segment { width: 50px; height: 75px; }
+      #slash { font-size: 100px; }
+      .artist { display: table; width: 100%; font-size: 20pt; }
+      .activeindicator, .info, .status {
+        display: table-cell;
+        border: solid #CCC;
+        border-width: 1px 2px;
+        padding: .5em .5em;
+        background-color: #DEDEDE;
+      }
+      .activeindicator { width: .5em; border-right: none; }
+      .status { width: 2em; border-left: none; text-align: center; font-family: sans-serif; vertical-align: middle; }
+      .active .activeindicator { background-color: rgb(255, 250, 93); }
+      .maybecomp .info, .maybecomp .status { background-color: rgb(162, 255, 139); }
+      .comp .info, .comp .status { background-color: rgb(28, 190, 17); }
+      .maybenotcomp .info, .maybenotcomp .status { background-color: rgb(255, 162, 139); }
+      .notcomp .info, .notcomp .status { background-color: rgb(255, 20, 20); }
+      .comp .wholename,  .notcomp .breakdown { opacity: .2; }
+    </style>
+  </head>
+  <body>
+    <h1><a href="."><span class="firstletter">M</span>ixlists</a></h1>
+    <div id="content">
+    <p>The MusicBrainz uses the "collaboration" <a href="">advanced relationship</a> to signify that a name represents a combination of artists. Unfortunately advanced relationships are not universally used and many composite artists are not correctly labeled. This page is for the review of that information so that updates can be made.</p>
+
+    <div id="count">
+      <object id="count5" class="segment" data="seven_segment.svg" type="image/svg+xml"></object>
+      <object id="count4" class="segment" data="seven_segment.svg" type="image/svg+xml"></object>
+      <object id="count3" class="segment" data="seven_segment.svg" type="image/svg+xml"></object>
+      <object id="count2" class="segment" data="seven_segment.svg" type="image/svg+xml"></object>
+      <object id="count1" class="segment" data="seven_segment.svg" type="image/svg+xml"></object>
+      <span id="slash">/</span>
+      <object id="total5" class="segment" data="seven_segment.svg" type="image/svg+xml"></object>
+      <object id="total4" class="segment" data="seven_segment.svg" type="image/svg+xml"></object>
+      <object id="total3" class="segment" data="seven_segment.svg" type="image/svg+xml"></object>
+      <object id="total2" class="segment" data="seven_segment.svg" type="image/svg+xml"></object>
+      <object id="total1" class="segment" data="seven_segment.svg" type="image/svg+xml"></object>
+    </div>
+
+    <div id="artistlist"></div>
+    <div id="status"></div>
+    </div>
+  </body>
+</html>

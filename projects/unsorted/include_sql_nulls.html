@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Including Nulls in SQL Joins</title>
+    <link rel="stylesheet" type="text/css" href="styles/main.css" />
+    <style type="text/css">
+      table { border-collapse: collapse; margin: auto; }
+      th, td { padding: 0 .5em 0 .5em; border: 1px solid; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Including Nulls in SQL Joins</h1>
+    <p>Ok, I'm hitting a slight problem in a database I'm working with in MySQL. It is a temporary database for cleaning some data from a less normalized database and it has three tables that are giving me some trouble:</p>
+
+    <pre><code>create table author (
+  id int primary key default null auto_increment,
+  name text not null);
+
+create table source (
+  id int primary key default null auto_increment,
+  name text not null);
+
+create table article (
+  id int primary key default null auto_increment,
+  title text not null,
+  author_id int default null references author(id),
+  source_id int default null references source(id));</code></pre>
+
+  <p>Because of the structure of the database I am modeling, I know that stories with more than one author just have all the author names concatenated into a comma separated list and the system I'm importing into is no better, so there is no need to fix this. Some sample data might look like:</p>
+
+  <pre><code>insert into author values (1, "Bob"), (2, "Roger and Mary"), (3, "Mary");
+insert into source values (1, "Daily News"), (2, "WXQZ-TV");
+insert into article values (null, "Bob's Big Day", 1, 1), (null, "Mary at the Beach", 2, 1), 
+                            (null, "Burger World", null, 2), (null, "Mien Kampf", null, null),
+                            (null, "Summertime", 2, null);</code></pre>
+
+    <p>A reasonable way then to reconstruct the data seemed to be:</p>
+
+    <pre><code>select title, author.name as author, source.name as source
+  from article, author, source
+  where article.author_id = author.id and article.source_id = source.id;</code></pre>
+
+  <table>
+    <tr><th>title</th><th>author</th><th>source</th></tr>
+    <tr><td>Bob's Big Day</td><td>Bob</td><td>Daily News</td></tr>
+    <tr><td>Mary at the Beach</td><td>Roger and Mary</td><td>Daily News</td></tr>
+  </table>
+
+  <p>So, no items that have null foreign keys are included in that result. How might I write it so as to include them?</p>
+
+    <pre><code>select title, author.name as author, source.name as source
+  from article, author, source
+  where (article.author_id = author.id or article.author_id is null) and article.source_id = source.id;</code></pre>
+
+    <table>
+      <tr><th>title</th><th>author</th><th>source</th></tr>
+      <tr><td>Bob's Big Day</td><td>Bob</td><td>Daily News</td></tr>
+      <tr><td>Burger World</td><td>Bob</td><td>WXQZ-TV</td></tr>
+      <tr><td>Mary at the Beach</td><td>Roger and Mary</td><td>Daily News</td></tr>
+      <tr><td>Burger World</td><td>Roger and Mary</td><td>WXQZ-TV</td></tr>
+      <tr><td>Burger World</td><td>Mary</td><td>WXQZ-TV</td></tr>
+    </table>
+    
+    <p>So articles with <code>null</code> <code>author_id</code>s are paired with every author. This is not what I am hunting for. For the answer I just have to remember SQL 101: join types&hellip;</p>
+    
+    <blockquote>
+      <ul>
+        <li><em>Cartesian product</em> &bull; pair every element of the first table with every element of the second: <code>select title, author.name as author, source.name as source from article, author, source;</code> (returns 30 rows = 2 * 3 * 5)</li>
+        <li><em>inner join</em> &bull; returns all rows from both tables where there is a match</li>
+        <li><em>left join</em> &bull; returns all the rows from the first table, even if there are no matches in the second table</li>
+        <li><em>right join</em> &bull; returns all the rows from the second table, even if there are no matches in the first table</li>
+      </ul>
+    </blockquote>
+
+    <p>A left join is what I want. For example, when I do:</p>
+
+    <pre><code>select title, author.name as author from article left join (author) on (article.author_id = author.id);</code></pre>
+
+    <table>
+      <tr><th>title</th><th>author</th></tr>
+      <tr><td>Bob's Big Day</td><td>Bob</td></tr>
+      <tr><td>Mary at the Beach</td><td>Roger and Mary</td></tr>
+      <tr><td>Burger World</td><td>NULL</td></tr>
+      <tr><td>Mien Kampf</td><td>NULL</td></tr>
+      <tr><td>Summertime</td><td>Roger and Mary</td></tr>
+    </table>
+
+    <p>The problem is when I add the source:</p>
+
+    <pre><code>select title, author.name as author, source.name as source
+  from article left join (author, source)
+   on (article.author_id = author.id and article.source_id = source.id);</code></pre>
+
+    <table>
+      <tr><th>title</th><th>author</th><th>source</th></tr>
+      <tr><td>Bob's Big Day</td><td>Bob</td><td>Daily News</td></tr>
+      <tr><td>Mary at the Beach</td><td>Bob</td><td>NULL</td></tr>
+      <tr><td>Burger World</td><td>Bob</td><td>NULL</td></tr>
+      <tr><td>Mien Kampf</td><td>Bob</td><td>NULL</td></tr>
+      <tr><td>Summertime</td><td>Bob</td><td>NULL</td></tr>
+      <tr><td>Bob's Big Day</td><td>Roger and Mary</td><td>NULL</td></tr>
+      <tr><td>Mary at the Beach</td><td>Roger and Mary</td><td>Daily News</td></tr>
+      <tr><td>Burger World</td><td>Roger and Mary</td><td>NULL</td></tr>
+      <tr><td>Mien Kampf</td><td>Roger and Mary</td><td>NULL</td></tr>
+      <tr><td>Summertime</td><td>Roger and Mary</td><td>NULL</td></tr>
+      <tr><td>Bob's Big Day</td><td>Mary</td><td>NULL</td></tr>
+      <tr><td>Mary at the Beach</td><td>Mary</td><td>NULL</td></tr>
+      <tr><td>Burger World</td><td>Mary</td><td>NULL</td></tr>
+      <tr><td>Mien Kampf</td><td>Mary</td><td>NULL</td></tr>
+      <tr><td>Summertime</td><td>Mary</td><td>NULL</td></tr>
+    </table>
+
+    <p>So I'm getting the Cartesian product of <code>article</code> and <code>artist</code> left joined with <code>source</code>. Not what I want&hellip; Looking at the syntax a bit more, I need to be chaining my left joins:</p>
+
+    <pre><code>select title, author.name as author, source.name as source
+  from article left join (author) on (article.author_id = author.id)
+               left join (source) on (article.source_id = source.id);</code></pre>
+
+    <table>
+      <tr><th>title</th><th>author</th><th>source</th></tr>
+      <tr><td>Bob's Big Day</td><td>Bob</td><td>Daily News</td></tr>
+      <tr><td>Mary at the Beach</td><td>Roger and Mary</td><td>Daily News</td></tr>
+      <tr><td>Burger World</td><td>NULL</td><td>WXQZ-TV</td></tr>
+      <tr><td>Mien Kampf</td><td>NULL</td><td>NULL</td></tr>
+      <tr><td>Summertime</td><td>Roger and Mary</td><td>NULL</td></tr>
+    </table>
+
+    <p>Voila.</p>
+  </body>
+</html>

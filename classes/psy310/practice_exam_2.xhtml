@@ -1,0 +1,1740 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Statistical Inference &mdash; Practice Exam #2</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <style type="text/css">
+      table td { padding: .25em .75em; text-align: center; }
+      th:first-child, td:first-child { border-right: thin solid; }
+      th { border-bottom: 3px double; }
+      .bordered { border: 1px solid; }
+      body > ol > li { border-left: 2px solid #444; padding-left: .5em; }
+      body > ol > li.wrong { border-left: dashed; }
+      body > ol > li.done { border: none; }
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY 310: Statistical Inference</h1>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Practice Exam #2</h2>
+      <h2>Due: Wed., 28 November 2007</h2>
+    </div>
+
+    <ol>
+      <li id="errortypes" class="done">
+        <div class="question">
+          <p>Incorrectly accepting a false statistical null hypothesis is to commit:</p>
+          <ol>
+            <li>a Type II Error &check;</li>
+            <li>a Beta Error</li>
+            <li>a Type I Error</li>
+            <li>a Gamma Error</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>A "null hypothesis," represented by H<sub>0</sub>, is the hypothesis being presented by the researcher for examination. It, along with the "alernative hypothesis," represented by H<sub>1</sub>, partition the paramater space (and the sample space which is a subset of the parameter space). It is assumed that a given hypothesis, H<sub>0</sub>, is either true or not in reality. The hypthesis is then either found true or false by the researcher. The combination for the various truth combinations is:</p>
+          <table class="bordered">
+            <tr><th colspan="2" rowspan="2"></th><th colspan="2">Actual H<sub>0</sub></th></tr>
+            <tr><th>True</th><th>False</th></tr>
+            <tr>
+              <th rowspan="2">Experimental H<sub>0</sub></th><th>True</th>
+              <td>Correct Acceptance<br />1 - &alpha;</td><td>Type II Error<br />&beta;</td>
+            </tr>
+            <tr>
+              <th>False</th><td>Type I Error<br />&alpha; (Significance)</td><td>Correct Rejection<br />1 - &beta; (Power)</td>
+            </tr>
+          </table>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>
+            Suppose you have a binomial process based on 9 trials, with probability of success equal to
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>1</mn><mn>3</mn></mfrac></math>
+            What is the probability of obtaining exactly 4 successes in this situation?
+          </p>
+          <ol>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mfrac><mn>448</mn><mn>2187</mn></mfrac>
+                <mo>&ape;</mo><mn>0.20485</mn>
+              </math>
+              &check;
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mfrac><mn>7744</mn><mn>6561</mn></mfrac>
+                <mo>&ape;</mo><mn>1.1803</mn>
+              </math>
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mfrac><mn>4160</mn><mn>19683</mn></mfrac>
+                <mo>&ape;</mo><mn>0.21135</mn>
+              </math>
+            </li>
+            <li>None of the above.</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>In a Bernoulli process with probability of success, <em>p</em> and number of trials <em>n</em>, the probability of <em>r</em> successes is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mo>P</mo><mfenced><mrow><mi>X</mi><mo>=</mo><mi>r</mi></mrow></mfenced>
+                  <mo>=</mo>
+                  <mfenced><mfrac linethickness="0"><mi>n</mi><mi>r</mi></mfrac></mfenced>
+                  <msup><mi>p</mi><mi>r</mi></msup>
+                  <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mi>p</mi></mrow></mfenced><mrow><mi>n</mi><mo>-</mo><mi>r</mi></mrow></msup>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced><mfrac linethickness="0"><mn>9</mn><mn>4</mn></mfrac></mfenced>
+                  <msup><mfenced><mfrac><mn>1</mn><mn>3</mn></mfrac></mfenced><mn>4</mn></msup>
+                  <msup>
+                    <mfenced><mrow><mn>1</mn><mo>-</mo><mfrac><mn>1</mn><mn>3</mn></mfrac></mrow></mfenced><mrow><mn>9</mn><mo>-</mo><mn>4</mn></mrow>
+                  </msup>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>=</mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow><mn>9</mn><mo>!</mo></mrow>
+                    <mrow><mn>4</mn><mo>!</mo><mfenced><mrow><mn>9</mn><mo>-</mo><mn>4</mn></mrow></mfenced><mo>!</mo></mrow>
+                  </mfrac>
+                  <msup><mfenced><mfrac><mn>1</mn><mn>3</mn></mfrac></mfenced><mn>4</mn></msup>
+                  <msup><mfenced><mfrac><mn>2</mn><mn>3</mn></mfrac></mfenced><mn>5</mn></msup>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>=</mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow><mn>9</mn><mo>!</mo></mrow>
+                    <mrow><mn>4</mn><mo>!</mo><mn>5</mn><mo>!</mo></mrow>
+                  </mfrac>
+                  <msup><mfenced><mfrac><mn>1</mn><mn>3</mn></mfrac></mfenced><mn>4</mn></msup>
+                  <msup><mfenced><mfrac><mn>2</mn><mn>3</mn></mfrac></mfenced><mn>5</mn></msup>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>=</mtd>
+                <mtd><mn>126</mn><mfrac><mn>1</mn><mn>81</mn></mfrac><mfrac><mn>32</mn><mn>243</mn></mfrac></mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>=</mtd>
+                <mtd><mfrac><mn>4032</mn><mn>19683</mn></mfrac></mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>&ape;</mtd>
+                <mtd><mn>0.20485</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>In Reject-Support testing, a Type II Error represents</p>
+          <ol>
+            <li>An incorrect positive in favor of the experimenter’s theory</li>
+            <li>An incorrect negative against the experimenter’s theory &check;</li>
+            <li>A correct positive in favor of the experimenter’s theory</li>
+            <li>A correct negative against the experimenter’s theory</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>See the question on <a href="#errortypes">error types</a> for the pertinent table. In Reject-Support testing the researcher structures their experiment such that the null hypothesis, H<sub>0</sub>, is is <em>contrary</em> to their belief. To find experimental evidence of their belief then, they must disprove H<sub>0</sub>. Since a Type II error is an incorrect acceptance of H<sub>0</sub>, the experimenter's theory is incorrectly rejected.</p>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Given the following probability distribution for the random variable:</p>
+          <table>
+            <tr><th>x</th><th>P<sub>x</sub>(x)</th></tr>
+            <tr><td>1</td><td>0.1</td></tr>
+            <tr><td>2</td><td>0.18</td></tr>
+            <tr><td>3</td><td>0.2</td></tr>
+            <tr><td>4</td><td>0.2</td></tr>
+            <tr><td>5</td><td>0.32</td></tr>
+          </table>
+          <p>The variance of X is:</p>
+          <ol>
+            <li>1.9484</li>
+            <li>2.0484</li>
+            <li>2.0332</li>
+            <li>1.8484 &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The variance is, in general, the average squared deviation from the expected value. For this data, the expected value is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mi>&mu;</mi><mo>=</mo><mo>E</mo><mfenced><mi>x</mi></mfenced>
+                </mtd>
+                <mtd>=</mtd>
+                <mtd>
+                  <mo>&Sum;</mo><msub><mi>x</mi><mi>i</mi></msub><mo>P</mo><mfenced><msub><mi>x</mi><mi>i</mi></msub></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>=</mtd>
+                <mtd>
+                  <mfenced><mn>1</mn></mfenced><mfenced><mn>0.1</mn></mfenced><mo>+</mo>
+                  <mfenced><mn>2</mn></mfenced><mfenced><mn>0.18</mn></mfenced><mo>+</mo>
+                  <mfenced><mn>3</mn></mfenced><mfenced><mn>0.2</mn></mfenced><mo>+</mo>
+                  <mfenced><mn>4</mn></mfenced><mfenced><mn>0.2</mn></mfenced><mo>+</mo>
+                  <mfenced><mn>5</mn></mfenced><mfenced><mn>0.32</mn></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>=</mtd>
+                <mtd><mn>3.46</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The variance then is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <msup><mi>&sigma;</mi><mn>2</mn></msup>
+                </mtd>
+                <mtd>=</mtd>
+                <mtd>
+                  <mo>E</mo>
+                  <mfenced><msup>
+                    <mfenced><mrow><mi>X</mi><mo>-</mo><mo>E</mo><mfenced><mi>X</mi></mfenced></mrow></mfenced><mn>2</mn>
+                  </msup></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>=</mtd>
+                <mtd>
+                  <mo>&Sum;</mo>
+                  <msup><mfenced><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>-</mo><mi>&mu;</mi></mrow></mfenced><mn>2</mn></msup>
+                  <msub><mi>p</mi><mi>i</mi></msub>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>=</mtd>
+                <mtd>
+                  <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mn>3.46</mn></mrow></mfenced><mn>2</mn></msup><mfenced><mn>0.1</mn></mfenced><mo>+</mo>
+                  <msup><mfenced><mrow><mn>2</mn><mo>-</mo><mn>3.46</mn></mrow></mfenced><mn>2</mn></msup><mfenced><mn>0.18</mn></mfenced><mo>+</mo>
+                  <msup><mfenced><mrow><mn>3</mn><mo>-</mo><mn>3.46</mn></mrow></mfenced><mn>2</mn></msup><mfenced><mn>0.2</mn></mfenced><mo>+</mo>
+                  <msup><mfenced><mrow><mn>4</mn><mo>-</mo><mn>3.46</mn></mrow></mfenced><mn>2</mn></msup><mfenced><mn>0.2</mn></mfenced><mo>+</mo>
+                  <msup><mfenced><mrow><mn>5</mn><mo>-</mo><mn>3.46</mn></mrow></mfenced><mn>2</mn></msup><mfenced><mn>0.32</mn></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>=</mtd>
+                <mtd><mn>1.8484</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done" id="bernoulli.5">
+        <div class="question">
+          <p>Suppose that the sex of a child is completely random, i.e., boys and girls occur in independent sequences with probability .50 each. What percentage of families with 5 children will have all 5 the same sex?</p>
+          <ol>
+            <li>6.25% &check;</li>
+            <li>12.5%</li>
+            <li>5.0%</li>
+            <li>7.5%</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>For a Bernoulli process with <em>p</em> = .5:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>p</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>1</mn><mo>-</mo><mi>p</mi></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <msup><mi>p</mi><mi>r</mi></msup>
+                  <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mi>p</mi></mrow></mfenced><mrow><mi>n</mi><mo>-</mo><mi>r</mi></mrow></msup>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msup><mi>p</mi><mi>r</mi></msup><msup><mi>p</mi><mrow><mi>n</mi><mo>-</mo><mi>r</mi></mrow></msup></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msup><mi>p</mi><mi>n</mi></msup></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msup><mfenced><mfrac><mn>1</mn><mn>2</mn></mfrac></mfenced><mi>n</mi></msup></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mn>1</mn><msup><mn>2</mn><mi>n</mi></msup></mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mfenced><mfrac linethickness="0"><mi>n</mi><mi>r</mi></mfrac></mfenced>
+                  <msup><mi>p</mi><mi>r</mi></msup>
+                  <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mi>p</mi></mrow></mfenced><mrow><mi>n</mi><mo>-</mo><mi>r</mi></mrow></msup>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mfenced><mfrac linethickness="0"><mi>n</mi><mi>r</mi></mfrac></mfenced>
+                    <msup><mn>2</mn><mi>n</mi></msup>
+                  </mfrac>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>For this situation, bear in mind that the number of ways to choose <em>b</em> things from <em>a</em> is the same as the number of ways fail to choose those things (<em>a</em> - <em>b</em>), so:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mfenced><mfrac linethickness="0"><mi>a</mi><mi>b</mi></mfrac></mfenced></mtd>
+                <mtd>=</mtd>
+                <mtd><mfenced><mfrac linethickness="0"><mi>a</mi><mrow><mi>a</mi><mo>-</mo><mi>b</mi></mrow></mfrac></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Given that,</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mo>P</mo><mfenced><mrow><mi>X</mi><mo>=</mo><mn>0</mn></mrow></mfenced><mo>+</mo>
+                  <mo>P</mo><mfenced><mrow><mi>X</mi><mo>=</mo><mn>5</mn></mrow></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mn>2</mn>
+                  <mfrac>
+                    <mfenced><mfrac linethickness="0"><mn>5</mn><mn>5</mn></mfrac></mfenced>
+                    <msup><mn>2</mn><mn>5</mn></msup>
+                  </mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mn>1</mn><mn>16</mn></mfrac></mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>0.0625</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done" id="combinations">
+        <div class="question">
+          <p>You have a pegboard with a line of 9 holes. How many distinctly different sequences can you construct that have 5 black pegs and 4 white pegs?</p>
+          <ol>
+            <li>116</li>
+            <li>136</li>
+            <li>15120</li>
+            <li>126 &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>This is simply the number of ways to pick the four white pegs from the set of nine:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mfenced><mfrac linethickness="0"><mn>9</mn><mn>4</mn></mfrac></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow><mn>9</mn><mo>!</mo></mrow>
+                    <mrow><mn>4</mn><mo>!</mo><mn>5</mn><mo>!</mo></mrow>
+                  </mfrac>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>126</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Suppose that there is no such thing as being "on a hot streak" in basketball, i.e., when a player shoots, a binomial process is a good model for whether the player makes or misses a shot. Suppose that a player is "a 50% shooter," that is, the player has a probability of success of .5. What is the probability that, if he takes 16 shots, he will make exactly 8?</p>
+          <ol>
+            <li>0.13747</li>
+            <li>0.19638 &check;</li>
+            <li>0.17674</li>
+            <li>0.1571</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>Because <em>p</em> = .5, the degenerate case may be used:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mfrac>
+                    <mfenced><mfrac linethickness="0"><mi>n</mi><mi>r</mi></mfrac></mfenced>
+                    <msup><mn>2</mn><mi>n</mi></msup>
+                  </mfrac>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mfenced><mfrac linethickness="0"><mn>16</mn><mn>8</mn></mfrac></mfenced>
+                    <msup><mn>2</mn><mn>16</mn></msup>
+                  </mfrac>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mfrac>
+                      <mrow><mn>16</mn><mo>!</mo></mrow>
+                      <mrow><mn>8</mn><mo>!</mo><mn>8</mn><mo>!</mo></mrow>
+                    </mfrac>
+                    <msup><mn>2</mn><mn>16</mn></msup>
+                  </mfrac>
+                </mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>0.19638</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Suppose you play a game where you know your probability of winning is 0.8. You play the game with even odds, i.e., if you win, you make $50, if you lose, you lose $50. Suppose you play the game 10 times. Which of the following is closest to the probability you will win money, i.e., win more than 5 of the games?</p>
+          <ol>
+            <li>0.96721 &check;</li>
+            <li>0.87913</li>
+            <li>0.79121</li>
+            <li>0.615399</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mo>P</mo><mfenced><mrow><mi>X</mi><mo>=</mo><mi>6</mi></mrow></mfenced><mo>+</mo>
+                  <mo>P</mo><mfenced><mrow><mi>X</mi><mo>=</mo><mi>7</mi></mrow></mfenced><mo>+</mo>
+                  <mo>P</mo><mfenced><mrow><mi>X</mi><mo>=</mo><mi>8</mi></mrow></mfenced><mo>+</mo>
+                  <mo>P</mo><mfenced><mrow><mi>X</mi><mo>=</mo><mi>9</mi></mrow></mfenced><mo>+</mo>
+                  <mo>P</mo><mfenced><mrow><mi>X</mi><mo>=</mo><mi>10</mi></mrow></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+              </mtr>
+              <mtr>
+                <mtd>
+                  <mo>&sum;</mo><mfenced><mfrac linethickness="0"><mn>10</mn><mi>i</mi></mfrac></mfenced>
+                  <msup><mi>p</mi><mi>i</mi></msup>
+                  <msup><mfenced><mrow><mi>p</mi><mo>-</mo><mn>1</mn></mrow></mfenced><mrow><mn>10</mn><mo>-</mo><mi>i</mi></mrow></msup>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Since this is a significant amount of math, it would be nice if there was a quicker way to find the solution. One possibility is the normal approximation of the binomial. According to the <a href="http://en.wikipedia.org/wiki/Central_limit_theorem">Central Limit Theorem</a>, if the sum of the variables has a finite variance, then it will be approximately normally distributed. The basic idea is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <munder><mtext>lim</mtext><mrow><mi>n</mi><mo>&rArr;</mo><mi>&infin;</mi></mrow></munder>
+                  <mo>P</mo>
+                  <mfenced><mrow>
+                    <mfrac>
+                      <mrow><msub><mi>X</mi><mi>n</mi></msub><mo>-</mo><mi>&mu;</mi></mrow>
+                      <mfrac><mi>&sigma;</mi><msqrt><mi>n</mi></msqrt></mfrac>
+                    </mfrac>
+                    <mo>&le;</mo><mi>z</mi>
+                  </mrow></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>&Phi;</mo><mfenced><mi>z</mi></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>For this example, an intutive formulation of the range would be:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mo>P</mo><mfenced><mrow><mn>6</mn><mo>&le;</mo><mi>X</mi><mo>&le;</mo><mn>10</mn></mrow></mfenced>
+          </math>
+          <p>There are two issues however:</p>
+          <ul>
+            <li>
+              <p>To accommodate moving from a discrete function to a continuous one, a better approximation will be produced by expanding the range covered by a half of the fundamental unit in each direction. In this case the result would be:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mo>P</mo><mfenced><mrow><mn>5.5</mn><mo>&le;</mo><mi>X</mi><mo>&le;</mo><mn>10.5</mn></mrow></mfenced>
+              </math>
+            </li>
+            <li>
+              <p>5.5 - 10.5 is a two-tailed interval. It includes the probability that the number of games won could be greater than 10. This is not possible and a better formulation would be:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mo>P</mo><mfenced><mrow><mi>X</mi><mo>&le;</mo><mn>5.5</mn></mrow></mfenced>
+              </math>
+            </li>
+          </ul>
+          <p>This numbers now needs to be converted to a z-score to use a <a href="normal_distribution_table.html">distribution table</a> to approximate the area under the normal curve to the left of that points. Converting to z-scores requires a mean, &mu;, and a standard deviation, &sigma; since:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>z</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mrow><mi>x</mi><mo>-</mo><mi>&mu;</mi></mrow><mi>&sigma;</mi></mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>For a binomial distribution:</p>
+          <ul>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mi>&mu;</mi></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mi>n</mi><mi>p</mi></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>10</mn><mfenced><mn>0.8</mn></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>8</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mi>&sigma;</mi></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mi>n</mi><mi>p</mi><mfenced><mrow><mn>1</mn><mo>-</mo><mi>p</mi></mrow></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>10</mn><mfenced><mn>0.8</mn></mfenced><mfenced><mn>0.2</mn></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>1.6</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </li>
+          </ul>
+          <p>This particular interval is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mfrac><mrow><mi>x</mi><mo>-</mo><mi>&mu;</mi></mrow><mi>&sigma;</mi></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mrow><mn>5.5</mn><mo>-</mo><mn>8</mn></mrow><mn>1.6</mn></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>-1.5625</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The <a href="distribution_table.html">distribution table</a> is then used to derive:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>&Phi;</mo><mfenced><mn>-1.56</mn></mfenced></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>0.5</mn><mo>-</mo><mn>0.4406</mn></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>0.0594</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced><mrow><mi>X</mi><mo>&le;</mo><mn>6</mn></mrow></mfenced></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mo>P</mo><mfenced><mrow><msub><mi>z</mi><mi>X</mi></msub><mo>&le;</mo><msub><mi>z</mi><mn>5.5</mn></msub></mrow></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>1</mn><mo>-</mo><mo>&Phi;</mo><mfenced><msub><mi>z</mi><mn>5.5</mn></msub></mfenced></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>1</mn><mo>-</mo><mn>0.0594</mn></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>0.9406</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>This is within 2.8% of 0.96721, so that is a safe choice for the answer.</p>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>You deal 5 cards without replacement from a shuffled poker deck. What is the probability that there will be exactly one ace, and that it will be drawn on card number 2?</p>
+          <ol>
+            <li>5.9895 x 10<sup>2</sup> &check;</li>
+            <li>0.94011</li>
+            <li>6.2499 x 10<sup>2</sup></li>
+            <li>5.7399 x 10<sup>2</sup></li>
+          </ol>
+        </div>
+        <div class="answer">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mtext>&not;ace</mtext></mtd>
+                <mtd><mo>&times;</mo></mtd>
+                <mtd><mtext>remaining ace</mtext></mtd>
+                <mtd><mo>&times;</mo></mtd>
+                <mtd><mtext>remaining &not;ace</mtext></mtd>
+                <mtd><mo>&times;</mo></mtd>
+                <mtd><mtext>remaining &not;ace</mtext></mtd>
+                <mtd><mo>&times;</mo></mtd>
+                <mtd><mtext>remaining &not;ace</mtext></mtd>
+                <mtd></mtd>
+                <mtd></mtd>
+              </mtr>
+              <mtr>
+                <mtd><mfrac><mn>48</mn><mn>52</mn></mfrac></mtd>
+                <mtd><mo>&times;</mo></mtd>
+                <mtd><mfrac><mn>4</mn><mn>51</mn></mfrac></mtd>
+                <mtd><mo>&times;</mo></mtd>
+                <mtd><mfrac><mn>47</mn><mn>50</mn></mfrac></mtd>
+                <mtd><mo>&times;</mo></mtd>
+                <mtd><mfrac><mn>46</mn><mn>49</mn></mfrac></mtd>
+                <mtd><mo>&times;</mo></mtd>
+                <mtd><mfrac><mn>45</mn><mn>48</mn></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mn>3243</mn><mn>54145</mn></mfrac></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>0.0598947</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>If a family has 3 children, what is the probability that they have exactly 2 girls?</p>
+          <ol>
+            <li>0.375 &check;</li>
+            <li>0.625</li>
+            <li>0.66667</li>
+            <li>0.33333</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>This is the same reasoning as the question on <a href="#bernoulli.5">Bernoulli processes with .5 probability</a>.</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mfrac>
+                    <mfenced><mfrac linethickness="0"><mi>n</mi><mi>r</mi></mfrac></mfenced>
+                    <msup><mn>2</mn><mi>n</mi></msup>
+                  </mfrac>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mfenced><mfrac linethickness="0"><mn>3</mn><mn>1</mn></mfrac></mfenced>
+                    <msup><mn>2</mn><mn>3</mn></msup>
+                  </mfrac>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mn>3</mn><mn>8</mn></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>0.375</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Samantha has 7 vases that she wishes to arrange on a shelf in her kitchen. How many different ways can she order the vases?</p>
+          <ol>
+            <li>5</li>
+            <li>5040 &check;</li>
+            <li>240</li>
+            <li>362880</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The number of permutations of <em>r</em> objects chosen from <em>n</em> is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mmultiscripts><mi>P</mi><mi>n</mi><none/><mprescripts/><mi>r</mi><none/></mmultiscripts>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfenced><mfrac linethickness="0"><mi>n</mi><mi>r</mi></mfrac></mfenced><mi>r</mi><mo>!</mo></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>When <em>r</em> = <em>n</em>:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mmultiscripts><mi>P</mi><mi>n</mi><none/><mprescripts/><mi>n</mi><none/></mmultiscripts>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfenced><mfrac linethickness="0"><mi>n</mi><mi>n</mi></mfrac></mfenced><mi>n</mi><mo>!</mo></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfenced><mn>1</mn></mfenced><mi>n</mi><mo>!</mo></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mi>n</mi><mo>!</mo></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>For this example:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mn>7</mn><mo>!</mo></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>5040</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Statistic <em>A</em> has a sampling variance of 58 and statistic <em>B</em> has a sampling variance of 86. The relative efficiency of <em>A</em> relative to <em>B</em> is</p>
+          <ol>
+            <li>2.1986</li>
+            <li>1.4828 &check;</li>
+            <li>0.67442</li>
+            <li>None of the above answers are correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>Efficiency of an estimator <math xmlns="http://www.w3.org/1998/Math/MathML"><mover><mi>&theta;</mi><mo>&Hat;</mo></mover></math> is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>Efficency</mo><mfenced><mover><mi>&theta;</mi><mo>&Hat;</mo></mover></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mn>1</mn><mrow><msubsup><mi>&sigma;</mi><mover><mi>&theta;</mi><mo>&Hat;</mo></mover><mn>2</mn></msubsup></mrow></mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The efficiency of A relative to B is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mfrac>
+                    <mfrac><mn>1</mn><mrow><msubsup><mi>&sigma;</mi><mi>A</mi><mn>2</mn></msubsup></mrow></mfrac>
+                    <mfrac><mn>1</mn><mrow><msubsup><mi>&sigma;</mi><mi>B</mi><mn>2</mn></msubsup></mrow></mfrac>
+                  </mfrac>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><msubsup><mi>&sigma;</mi><mi>B</mi><mn>2</mn></msubsup><msubsup><mi>&sigma;</mi><mi>A</mi><mn>2</mn></msubsup></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mn>86</mn><mn>58</mn></mfrac></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>1.48276</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>The sampling distribution of the sample mean based on <em>N</em> independent observations</p>
+          <ol>
+            <li>has a variance of <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><msup><mi>&sigma;</mi><mn>2</mn></msup><mi>N</mi></mfrac></math> for any population distribution</li>
+            <li>is always exactly normal, for any sample size, when the population distribution is normal</li>
+            <li>converges asymptotically to a normal distribution in shape under the conditions of the Central Limit Theorem</li>
+            <li>All of the above answers are correct &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Other factors remaining constant, which of the following factors would increase power?</p>
+          <ol>
+            <li>Decrease sample size</li>
+            <li>Increase &alpha; &check;</li>
+            <li>Increase &beta;</li>
+            <li>Increase the error variance in the data</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>Power is the probability a correct rejection. It is represented by 1 - &beta; where &beta; is the probability of a Type II error (incorrect acceptance).</p>
+          <p>A fundamental concept in calculations of power is the effect size which represents the deviation from the actual value. If, for example, the real &mu; for a population is 30 and the &mu; being tested by H<sub>0</sub>, &mu;<sub>0</sub>, is 40, then the effect size would be -10 (&mu; - &mu;<sub>0</sub>).</p>
+          <p>In general, it is not useful to discuss pure effect size because it varies across tests with different units, sample sizes and variances. A more useful measure is the effect size scaled by the standard deviation, known as the standardized effect size:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>E</mi><mi>s</mi></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mrow><mi>&mu;</mi><mo>-</mo><msub><mi>&mu;</mi><mn>0</mn></msub></mrow><mi>&sigma;</mi></mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Using this form, it is possible to make a statement like, "the effect size is half a standard deviation," which is meaningful for any test.</p>
+          <p>In general, the amount of error possible for an estimation of the mean is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>&sigma;</mi><mi>E</mi></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mi>&sigma;</mi><msqrt>n</msqrt></mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>This is from:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mo>P</mo>
+                  <mfenced><mtable><mtr>
+                    <mtd>
+                      <mover><mi>X</mi><mo>_</mo></mover><mo>-</mo><msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mi>i</mi></mfenced>
+                      <mfrac><mi>&sigma;</mi><msqrt>n</msqrt></mfrac>
+                    </mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd><mi>&mu;</mi></mtd>
+                    <mtd><mo>&le;</mo></mtd>
+                    <mtd>
+                      <mover><mi>X</mi><mo>_</mo></mover><mo>+</mo><msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mi>i</mi></mfenced>
+                      <mfrac><mi>&sigma;</mi><msqrt>n</msqrt></mfrac>
+                    </mtd>
+                  </mtr></mtable></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mi>i</mi></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>
+            So, for a given experimentally derived
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mover><mi>X</mi><mo>_</mo></mover></math>,
+            what is the probability that it will be correctly rejected if it is not within a confidence interval of &alpha; precision around the actual mean, &mu;?
+          </p>
+
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Suppose you somehow knew that the population standard deviation &sigma; is 10, and that the population distribution is normal. You wish to test the null hypothesis that &mu; = 0, using the 1-Sample Z-test of the form:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>Z</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <msub><mover><mi>X</mi><mo>_</mo></mover><mo>&bull;</mo></msub>
+                    <mfrac>
+                      <mi>&sigma;</mi><mi>N</mi>
+                    </mfrac>
+                  </mfrac>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>What is the statistical power if &alpha; =. 05, N = 34, and &mu; = 4.0</p>
+          <ol>
+            <li>0.58069</li>
+            <li>0.44521</li>
+            <li>0.69425</li>
+            <li>0.77425</li>
+            <li>0.51617</li>
+            <li>0.54521</li>
+            <li>0.64521 &check;</li>
+            <li>0.70973</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mn>1</mn><mo>-</mo><mi>&beta;</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>&Phi;</mo><mfenced><mrow><msqrt><mi>N</mi></msqrt><msub><mi>E</mi><mi>s</mi></msub><mo>-</mo><mi>R</mi></mrow></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>&Phi;</mo>
+                  <mfenced><mrow>
+                    <msqrt><mi>N</mi></msqrt><mfrac><mrow><mi>&mu;</mi><mo>-</mo><msub><mi>&mu;</mi><mn>0</mn></msub></mrow><mi>&sigma;</mi></mfrac>
+                    <mo>-</mo><msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac></mfenced>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>&Phi;</mo>
+                  <mfenced><mrow>
+                    <msqrt><mn>34</mn></msqrt><mfrac><mrow><mn>4</mn><mo>-</mo><mn>0</mn></mrow><mn>10</mn></mfrac>
+                    <mo>-</mo><msup><mo>&Phi;</mo><mn>-1</mn></msup><mfenced><mfrac><mn>0.05</mn><mn>2</mn></mfrac></mfenced>
+                  </mrow></mfenced>
+                </mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd>
+                  <mo>&Phi;</mo>
+                  <mfenced><mrow><msqrt><mn>34</mn></msqrt><mfenced><mn>0.4</mn></mfenced><mo>-</mo><mn>1.96</mn></mrow></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mo>&Phi;</mo><mfenced><mn>0.37</mn></mfenced></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>0.6443</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Suppose you observe a sample of size 40 independent observations from a normal distribution, and obtain a sample mean of
+          <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mover><mi>X</mi><mo>_</mo></mover><mo>&bull;</mo></msub><mo>=</mo><mn>80.2</mn></math>.
+          If the population standard deviation is &sigma; = 21.0, then a 95% confidence interval for the population mean &mu; has endpoints:</p>
+          <ol>
+            <li>74.738, 85.662</li>
+            <li>73.041, 87.359</li>
+            <li>39.041, 121.36</li>
+            <li>73.692, 86.708 &check;</li>
+            <li>76.880, 83.52</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>To have a certainty of 95%, that means that 5% of the curve needs to lie outside, or that you need the range bounded by 2.5% and 97.5%. The z-scores for those are &plusmn;1.96. In general, the confidence interval for an accuracy &alpha; is defined as:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mover><mi>X</mi><mo>_</mo></mover></mtd>
+                <mtd><mo>&plusmn;</mo></mtd>
+                <mtd>
+                  <mfenced><msub><mi>&sigma;</mi><mover><mi>X</mi><mo>_</mo></mover></msub></mfenced>
+                  <msub><mi>z</mi><mrow><mn>1</mn><mo>-</mo><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac></mrow></msub>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd><mover><mi>X</mi><mo>_</mo></mover></mtd>
+                <mtd><mo>&plusmn;</mo></mtd>
+                <mtd>
+                  <mfenced><mfrac><mi>&sigma;</mi><msqrt><mi>n</mi></msqrt></mfrac></mfenced>
+                  <msub><mi>z</mi><mrow><mn>1</mn><mo>-</mo><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac></mrow></msub>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Which, for this problem is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mover><mi>X</mi><mo>_</mo></mover></mtd>
+                <mtd><mo>&plusmn;</mo></mtd>
+                <mtd>
+                  <mfrac><mi>&sigma;</mi><msqrt><mi>n</mi></msqrt></mfrac>
+                  <msub><mi>z</mi><mrow><mn>1</mn><mo>-</mo><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac></mrow></msub>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd><mn>80.2</mn></mtd>
+                <mtd><mo>&plusmn;</mo></mtd>
+                <mtd><mfrac><mn>21</mn><msqrt>40</msqrt></mfrac><mfenced><mn>1.96</mn></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mn>73.69</mn></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>80.2</mn><mo>-</mo><mfrac><mn>21</mn><msqrt>40</msqrt></mfrac><mfenced><mn>1.96</mn></mfenced></mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd><mover><mi>X</mi><mo>_</mo></mover></mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd><mn>80.2</mn><mo>+</mo><mfrac><mn>21</mn><msqrt>40</msqrt></mfrac><mfenced><mn>1.96</mn></mfenced></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>86.71</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>If E(X) = 4.0, E(Y) = 2.0, and E(XY) = 12.0, then the covariance of the random variables X and Y is necessarily equal to</p>
+          <ol>
+            <li>0</li>
+            <li>4.0 &check;</li>
+            <li>6</li>
+            <li>-4.0</li>
+            <li>-2.0</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>Covariance is defined as:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>Cov</mo><mfenced><mi>X</mi><mi>Y</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>E</mo>
+                  <mfenced><mrow>
+                    <mfenced><mrow><mi>X</mi><mo>-</mo><mo>E</mo><mfenced>X</mfenced></mrow></mfenced>
+                    <mfenced><mrow><mi>Y</mi><mo>-</mo><mo>E</mo><mfenced>Y</mfenced></mrow></mfenced>
+                  </mrow></mfenced>                  
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>E</mo><mfenced><mrow><mi>X</mi><mi>Y</mi></mrow></mfenced>
+                  <mo>-</mo><mo>E</mo><mfenced>X</mfenced><mo>E</mo><mfenced>Y</mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>12</mn><mo>-</mo><mn>4</mn><mfenced><mn>2</mn></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>4</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>If A = {1, 2, 3, 4, 5} and B = {2, 5, 6}, then A &cap; B =</p>
+          <ol>
+            <li>{2, 5} &check;</li>
+            <li>{1, 3, 4}</li>
+            <li>{1, 2, 3, 4, 5, 6}</li>
+            <li>None of the above</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>A &cap; B is the elements A and B have in common.</p>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>For any two events A and B, we can say that the probability of A &Union; B is always:</p>
+          <ol>
+            <li>equal to Pr(A) + P(B) - Pr(A &cap; B) &check;</li>
+            <li>less than Pr(A &cap; B)</li>
+            <li>less than Pr(A - B)</li>
+            <li>equal to Pr(A) + Pr(B)</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>When joining A and B, the area  A &cap; B gets included twice: once with A and once with B. It is therefore necessary to remove it once in computing the probability.</p>
+        </div>
+      </li>
+      <li class="wrong">
+        <div class="question">
+          <p>There are 2,500,000 adult people in the large metropolitan area where you live. There is a serial killer on the loose who can be assumed to be a local adult resident, and otherwise alll that is known about the serial killer is that:</p>
+          <ul>
+            <li>the killer has blonde hair</li>
+            <li>the killer drives a red car</li>
+            <li>the killer likes to listen to Tiny Tim records</li>
+          </ul>
+          <p>It is also known that, in the general population,</p>
+          <ul>
+            <li>the probability a person has blonde hair is .20</li>
+            <li>the probability that a person drives a red car is .05</li>
+            <li>the probability that a person likes Tiny Tim records is .001</li>
+          </ul>
+          <p>Assuming these behaviors are independent, the probability that a person has all 3 of these behaviors is .00001. Suppose you have just started dating someone, and they have blonde hair. They arrange to pick you up for your first date, and they drive up in a red sports car. The evening goes well, and you decide to go for a romantic drive by the lake. At that point, your date puts on a CD of "Tiptoe Through the Tulips," by Tiny Tim. Knowing probability as well as you do, you</p>
+          <ol>
+            <li>run screaming to the woods, from where you call the police on your cell phone, since the probability is .99999 that your date is the killer</li>
+            <li>conk your date on the head with your cell phone, realizing that it is very unlikely that anyone who is not the killer would have this combination of traits</li>
+            <li>Ignore the evidence, since the odds are still about a million to one that your date is not the killer</li>
+            <li>Stay relaxed but vigilant, knowing that the odds are still about 24 to 1 that your date is not the killer &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The likelihood that someone has all three behaviors is 0.00001 (1 in 100,000) however, the likelihood that my date is the killer is 1 in 2,500,000 (since there's only one killer in the city). The specific probabilities specified in the problem are:</p>
+          <ul>
+            <li>P(<em>t</em>) = 0.001 (<em>probability that someone likes Tiny Tim</em>)</li>
+            <li>P(<em>r</em>) = 0.05 (<em>probability that someone drives a red car</em>)</li>
+            <li>P(<em>b</em>) = 0.20 (<em>probability someone is blonde</em>)</li>
+            <li>P(<em>k</em>) = 1 / 2.5&times;10<sup>6</sup> (<em>probability a person is the killer</em>)</li>
+            <li>P(<em>b</em>&and;<em>r</em>&and;<em>t</em>|<em>k</em>) = 1 (<em>probability the killer is a blonde who drives a red car and like Tiny Tim</em>)</li>
+          </ul>
+          <p>First, consider the probability that my date is the killer:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mo>P</mo>
+                  <mfenced separators="|">
+                    <mi>k</mi>
+                    <mfenced separators="&and;" open="" close="">
+                      <mi>b</mi><mi>r</mi><mi>t</mi>
+                    </mfenced>
+                  </mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mfenced separators="&and;" open="" close="">
+                          <mi>b</mi><mi>r</mi><mi>t</mi>
+                        </mfenced>
+                        <mi>k</mi>
+                      </mfenced>
+                      <mo>P</mo>
+                      <mfenced sepatators="|">
+                        <mi>k</mi>
+                      </mfenced>
+                    </mrow>
+                    <mrow>
+                      <mo>P</mo>
+                      <mfenced separators="&and;">
+                        <mi>b</mi><mi>r</mi><mi>t</mi>
+                      </mfenced>
+                    </mrow>
+                  </mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mfenced separators="&and;" open="" close="">
+                          <mi>b</mi><mi>r</mi><mi>t</mi>
+                        </mfenced>
+                        <mi>k</mi>
+                      </mfenced>
+                      <mo>P</mo>
+                      <mfenced sepatators="|">
+                        <mi>k</mi>
+                      </mfenced>
+                    </mrow>
+                    <mrow>
+                      <mo>P</mo><mfenced separators="&and;"><mi>b</mi></mfenced>
+                      <mo>P</mo><mfenced separators="&and;"><mi>r</mi></mfenced>
+                      <mo>P</mo><mfenced separators="&and;"><mi>t</mi></mfenced>
+                    </mrow>
+                  </mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow><mfenced>
+                      <mn>1</mn></mfenced><mfenced><mrow><mn>2.5</mn><mo>&times;</mo><msup><mn>10</mn><mn>-6</mn></msup></mrow>
+                    </mfenced></mrow>
+                    <mrow><mfenced><mn>0.20</mn></mfenced><mfenced><mn>0.05</mn></mfenced><mfenced><mn>0.001</mn></mfenced></mrow>
+                  </mfrac>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>0.25</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>To find the odds then are:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mo>odds</mo>
+                  <mfenced separators="|">
+                    <mi>k</mi>
+                    <mfenced separators="&and;" open="" close="">
+                      <mi>b</mi><mi>r</mi><mi>t</mi>
+                    </mfenced>
+                  </mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mi>k</mi>
+                        <mfenced separators="&and;" open="" close="">
+                          <mi>b</mi><mi>r</mi><mi>t</mi>
+                        </mfenced>
+                      </mfenced>
+                    </mrow>
+                    <mrow>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mrow><mo>&not;</mo><mi>k</mi></mrow>
+                        <mfenced separators="&and;" open="" close="">
+                          <mi>b</mi><mi>r</mi><mi>t</mi>
+                        </mfenced>
+                      </mfenced>
+                    </mrow>
+                  </mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mi>k</mi>
+                        <mfenced separators="&and;" open="" close="">
+                          <mi>b</mi><mi>r</mi><mi>t</mi>
+                        </mfenced>
+                      </mfenced>
+                    </mrow>
+                    <mrow>
+                      <mn>1</mn><mo>-</mo>
+                      <mo>P</mo>
+                      <mfenced separators="|">
+                        <mi>k</mi>
+                        <mfenced separators="&and;" open="" close="">
+                          <mi>b</mi><mi>r</mi><mi>t</mi>
+                        </mfenced>
+                      </mfenced>
+                    </mrow>
+                  </mfrac>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mn>0.25</mn><mn>0.75</mn></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mn>1</mn><mn>3</mn></mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>New spark plugs have just been installed in a small airplane with a 4-cylinder engine. For each spark plug, the probability that it is defective and will fail during the first 20 minutes of flight is 0.0001. Assume that spark plugs fail independently of each other. What is the probability that at least one of the spark plugs will fail during the first 20 minutes of flight?</p>
+          <ol>
+            <li>0.0004</li>
+            <li>0.9996</li>
+            <li>3.9994 x 10<sup>-4</sup> &check;</li>
+            <li>0.9999</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>This is the proabaility that one, two, three or four plugs will fail.</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mo>P</mo><mfenced><mrow><mi>X</mi><mo>=</mo><mi>1</mi></mrow></mfenced><mo>+</mo>
+            <mo>P</mo><mfenced><mrow><mi>X</mi><mo>=</mo><mi>2</mi></mrow></mfenced><mo>+</mo>
+            <mo>P</mo><mfenced><mrow><mi>X</mi><mo>=</mo><mi>3</mi></mrow></mfenced><mo>+</mo>
+            <mo>P</mo><mfenced><mrow><mi>X</mi><mo>=</mo><mi>4</mi></mrow></mfenced>
+          </math>
+          <p>Or, rather than computing all of those, it is the inverse of the probability that none will fail:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mn>1</mn><mo>-</mo><mo>P</mo><mfenced><mrow><mi>X</mi><mo>=</mo><mi>0</mi></mrow></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mn>1</mn><mo>-</mo>
+                  <mfenced><mfrac linethickness="0"><mi>n</mi><mi>r</mi></mfrac></mfenced>
+                  <msup><mi>p</mi><mi>r</mi></msup>
+                  <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mi>p</mi></mrow></mfenced><mrow><mi>n</mi><mo>-</mo><mi>r</mi></mrow></msup>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mn>1</mn><mo>-</mo>
+                  <mfenced><mfrac linethickness="0"><mn>4</mn><mn>0</mn></mfrac></mfenced>
+                  <msup><mn>0.0001</mn><mn>0</mn></msup>
+                  <msup><mfenced><mrow><mn>1</mn><mo>-</mo><mn>0.0001</mn></mrow></mfenced><mrow><mn>4</mn><mo>-</mo><mn>0</mn></mrow></msup>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mn>1</mn><mo>-</mo>
+                  <mfenced><mn>1</mn></mfenced><mfenced><mn>1</mn></mfenced><mfenced><msup><mn>0.9999</mn><mn>4</mn></msup></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>3.999</mn><mo>&times;</mo><msup><mn>10</mn><mrow><mo>-</mo><mn>4</mn></mrow></msup></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>In a recent election, 55.0% of the voters were Republican and 45.0% were not. Of the Republicans, 80.0% voted for Candidate X, and of the non-Republicans, 10.0% voted for Candidate X. Consider a randomly selected voter. What is the probability that the voter is Republican and voted for candidate X?</p>
+          <ol>
+            <li>0.45</li>
+            <li>0.44 &check;</li>
+            <li>0.8</li>
+            <li>0.7</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>For independent events:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd> 
+                  <mo>P</mo><mfenced><mrow><mi>A</mi><mo>&cap;</mo><mi>B</mi></mrow></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>P</mo><mfenced>A</mfenced><mo>P</mo><mfenced>B</mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfenced><mn>0.55</mn></mfenced><mfenced><mn>0.8</mn></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>0.44</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Convergence to a normal sampling distribution occurs</p>
+          <ol>
+            <li>faster when sampling from a highly skewed distribution than when sampling from a uniform distribution</li>
+            <li>faster (i.e., at a smaller N) when sampling from a uniform distribution than when sampling from a highly skewed distribution &check;</li>
+            <li>faster when sampling from a uniform distribution than when sampling from a normal distribution</li>
+            <li>none of the above is correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>In the casino game of roulette, a gambler can bet on which of 38 numbers will be selected by the spin of a wheel. On a $2 bet, the gambler gains $70 for picking the correct number, but loses the $2 otherwise. Let X be the amount won or lost on a roll. What is E(X)?</p>
+          <ol>
+            <li>-4.0</li>
+            <li>-0.10526 &check;</li>
+            <li>34.0</li>
+            <li>-0.02</li>
+            <li>3.7895</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The distribution table for this situation looks like:</p>
+          <table>
+            <tr><th>x</th><th>P<sub>x</sub>(x)</th></tr>
+            <tr><td>$70</td><td><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>1</mn><mn>38</mn></mfrac></math></td></tr>
+            <tr><td>-$2</td><td><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>37</mn><mn>38</mn></mfrac></math></td></tr>
+          </table>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mi>&mu;</mi><mo>=</mo><mo>E</mo><mfenced><mi>x</mi></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>&Sum;</mo><msub><mi>x</mi><mi>i</mi></msub><mo>P</mo><mfenced><msub><mi>x</mi><mi>i</mi></msub></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced><mn>$70</mn></mfenced><mfenced><mfrac><mn>1</mn><mn>38</mn></mfrac></mfenced><mo>+</mo>
+                  <mfenced><mn>-$2</mn></mfenced><mfenced><mfrac><mn>37</mn><mn>38</mn></mfrac></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mn>-$4</mn><mn>38</mn></mfrac></mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>-$0.10526</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>If the random variable X has an expected value of 100 and a variance of 49, then the random variable
+          <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>Y</mi><mo>=</mo><mfrac><mrow><mi>X</mi><mo>-</mo><mn>2</mn></mrow><mn>7</mn></mfrac></math>
+          has a mean and variance of:</p>
+          <ol>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <msub><mi>&mu;</mi><mi>y</mi></msub><mo>=</mo><mn>14</mn><mo>;</mo>
+                <msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup><mo>=</mo><mn>7</mn><mo>;</mo>
+              </math>
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <msub><mi>&mu;</mi><mi>y</mi></msub><mo>=</mo><mn>98</mn><mo>;</mo>
+                <msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup><mo>=</mo><mn>7</mn><mo>;</mo>
+              </math>
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <msub><mi>&mu;</mi><mi>y</mi></msub><mo>=</mo><mn>98</mn><mo>;</mo>
+                <msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup><mo>=</mo><mn>1</mn><mo>;</mo>
+              </math>
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <msub><mi>&mu;</mi><mi>y</mi></msub><mo>=</mo><mn>14</mn><mo>;</mo>
+                <msubsup><mi>&sigma;</mi><mi>y</mi><mn>2</mn></msubsup><mo>=</mo><mn>1</mn><mo>;</mo>
+              </math>
+              &check;
+            </li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The mean is straightforward:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>&mu;</mi><mi>y</mi></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mrow><msub><mi>&mu;</mi><mi>x</mi></msub><mo>-</mo><mn>2</mn></mrow><mn>7</mn></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mrow><mn>100</mn><mo>-</mo><mn>2</mn></mrow><mn>7</mn></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>14</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The standard deviation requires the application of the variance heuristic:</p>
+          <ol>
+            <li>
+              <p>Generate the square of the desired quantity:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msup>
+                      <mfenced><mfrac><mrow><mi>x</mi><mo>-</mo><mn>2</mn></mrow><mn>7</mn></mfrac></mfenced>
+                      <mn>2</mn>
+                    </msup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow><msup><mi>x</mi><mn>2</mn></msup><mo>-</mo><mn>4</mn><mi>x</mi><mo>+</mo><mn>4</mn></mrow>
+                      <mn>49</mn>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </li>
+            <li>
+              <p>In the squared quantity drop all variables that are not squares of a variable.</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac>
+                      <mrow><msup><mi>x</mi><mn>2</mn></msup><mo>-</mo><mn>4</mn><mi>x</mi><mo>+</mo><mn>4</mn></mrow>
+                      <mn>49</mn>
+                    </mfrac></mtd>
+                    <mtd><mo>&rArr;</mo></mtd>
+                    <mtd><mfrac><msup><mi>x</mi><mn>2</mn></msup><mn>49</mn></mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </li>
+            <li>
+              <p>In this quantity replace the squared variables with the variance of the given value or the covariance if it is a function of multiple variables:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac><msup><mi>x</mi><mn>2</mn></msup><mn>49</mn></mfrac></mtd>
+                    <mtd><mo>&rArr;</mo></mtd>
+                    <mtd><mfrac><msubsup><mi>&sigma;</mi><mi>x</mi><mn>2</mn></msubsup><mn>49</mn></mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </li>
+          </ol>
+          <p>So for this example, through the variance heurisitic, we get:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msubsup><mi>&sigma;</mi><mfrac><mrow><mi>x</mi><mo>-</mo><mn>2</mn></mrow><mn>7</mn></mfrac><mn>2</mn></msubsup></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><msubsup><mi>&sigma;</mi><mi>x</mi><mn>2</mn></msubsup><mn>49</mn></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mn>49</mn><mn>49</mn></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>1</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Another option is a change table:</p>
+          <table>
+            <tr><th></th><th>&mu;</th><th>&sigma;</th><th>&sigma;<sup>2</sup></th></tr>
+            <tr><td><em>x</em></td><td>100</td><td>7</td><td>49</td></tr>
+            <tr><td><em>x</em> - 2</td><td>98</td><td>7</td><td>49</td></tr>
+            <tr><td>(<em>x</em> - 2) / 7</td><td>14</td><td>1</td><td>1</td></tr>
+          </table>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Suppose you wish to test the null hypothesis H<sub>0</sub> : &mu; = 100 against the alternative H<sub>1</sub> : &mu; &ne; 100 What kind of test is this?</p>
+          <ol>
+            <li>A 1-tailed test of a point hypothesis</li>
+            <li>A 2-tailed test of a regional hypothesis</li>
+            <li>A 2-tailed test of a point hypothesis &check;</li>
+            <li>A 1-tailed test of a regional hypothesis</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The hypothesis is a single point in the parameter space, so it is a point hypothesis. The alternative hypothesis allows for the data to be either greater than or less than the given point, so the test is 2-tailed.</p>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>How many distinctly different subsets, including the null set, can be composed from 12 objects?</p>
+          <ol>
+            <li>479001600</li>
+            <li>4096 &check;</li>
+            <li>2048</li>
+            <li>4095</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>In general, this would be the number of subsets of size 0 through n, or:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mo>&Sum;</mo><mfenced><mfrac linethickness="0"><mi>n</mi><mi>i</mi></mfrac></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>However, one can consider a representation where each set is represented by a <em>n</em>-length bit field with a <em>x<sub>i</sub></em> = 0 if an element is not present or 1 if it is. The question is then the number of possibilities for that bitfield which is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msup><mn>2</mn><mi>n</mi></msup></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msup><mn>2</mn><mn>12</mn></msup></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>4096</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Suppose an exam has 12 multiple choice items, and each has 4 alternatives. Suppose that a student who knows absolutely nothing about the course material guesses on all 12 items. On average, how many items would you expect the student to get right?</p>
+          <ol>
+            <li>4.0</li>
+            <li>3.0 &check;</li>
+            <li>9.0</li>
+            <li>6.0</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>For a binomial:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>E</mo><mfenced><mi>x</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mi>n</mi><mi>p</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>12</mn><mfenced><mfrac><mn>1</mn><mn>4</mn></mfrac></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>3</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>Var</mo><mfenced><mi>x</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mi>n</mi><mi>p</mi><mfenced><mrow><mn>1</mn><mo>-</mo><mn>p</mn></mrow></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>12</mn><mfenced><mfrac><mn>1</mn><mn>4</mn></mfrac></mfenced><mfenced><mfrac><mn>3</mn><mn>4</mn></mfrac></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfenced><mfrac><mn>9</mn><mn>4</mn></mfrac></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Given the following probability distribution for the random variable:</p>
+          <table>
+            <tr><th>x</th><th>P<sub>x</sub>(x)</th></tr>
+            <tr><td>1</td><td>a</td></tr>
+            <tr><td>2</td><td>0.1</td></tr>
+            <tr><td>3</td><td>0.2</td></tr>
+            <tr><td>4</td><td>0.15</td></tr>
+            <tr><td>5</td><td>0.4</td></tr>
+          </table>
+          <p>The expected value of X is:</p>
+          <ol>
+            <li>3.65</li>
+            <li>3.905</li>
+            <li>3.55 &check;</li>
+            <li>3.75</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>First it is necessary to find <em>a</em>. This is straightforward knowing that:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>&Sum;</mo><mo>P</mo><mfenced><msub><mi>x</mi><mi>i</mi></msub></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>1</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mi>a</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>1</mn><mo>-</mo><mn>0.1</mn><mo>-</mo><mn>0.2</mn><mo>-</mo><mn>0.15</mn><mo>-</mo><mn>0.4</mn></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>0.15</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The expected value is simply:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mo>E</mo><mfenced><mi>x</mi></mfenced>
+                </mtd>
+                <mtd>=</mtd>
+                <mtd>
+                  <mo>&Sum;</mo><msub><mi>x</mi><mi>i</mi></msub><mo>P</mo><mfenced><msub><mi>x</mi><mi>i</mi></msub></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>=</mtd>
+                <mtd>
+                  <mfenced><mn>1</mn></mfenced><mfenced><mn>0.15</mn></mfenced><mo>+</mo>
+                  <mfenced><mn>2</mn></mfenced><mfenced><mn>0.1</mn></mfenced><mo>+</mo>
+                  <mfenced><mn>3</mn></mfenced><mfenced><mn>0.2</mn></mfenced><mo>+</mo>
+                  <mfenced><mn>4</mn></mfenced><mfenced><mn>0.15</mn></mfenced><mo>+</mo>
+                  <mfenced><mn>5</mn></mfenced><mfenced><mn>0.4</mn></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>=</mtd>
+                <mtd><mn>3.55</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Suppose that the sex of a child is completely random, i.e., boys and girls occur in independent sequences with probability .50 each. What percentage of families with 5 children will have all 5 the same sex?</p>
+          <ol>
+            <li>5.0%</li>
+            <li>7.5%</li>
+            <li>12.5%</li>
+            <li>6.25% &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>This is identical to the question on <a href="#bernoulli.5">Bernoulli processes with .5 probability</a>.</p>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>You have a pegboard with a line of 13 holes. How many distinctly different sequences can you construct that have 3 black pegs and 10 white pegs?</p>
+          <ol>
+            <li>1716</li>
+            <li>286 &check;</li>
+            <li>276</li>
+            <li>296</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The reasoning is the same as the <a href="#combinations">previous question on combinations</a>.</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mfenced><mfrac linethickness="0"><mn>13</mn><mn>10</mn></mfrac></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac><mrow><mn>13</mn><mo>!</mo></mrow><mrow><mn>10</mn><mo>!</mo><mn>3</mn><mo>!</mo></mrow></mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>286</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li class="done">
+        <div class="question">
+          <p>Suppose that &sigma; is known to be 15, and you gather data and construct a 95% confidence interval for &mu;, using the standard technique. If this confidence interval ranges from 25 to 37.8, what would be the outcome of a hypothesis test, performed at the &alpha; = 0.05 significance level, of the statistical null hypothesis that &mu; = 30?</p>
+          <ol>
+            <li>The hypothesis would be rejected if n is greater than 33, otherwise it would not be rejected</li>
+            <li>Not enough information is provided to answer the question</li>
+            <li>The null hypothesis would be rejected</li>
+            <li>The null hypothesis would not be rejected &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The H<sub>0</sub> being tested is for a &mu; that falls within the confidence interval, so the hypothesis is accepted.</p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>At 3am in the morning after the annual graduate student party (at which you consumed 5 beers, a jar of salsa, 8 ounces of potato chips, and 4 chocolate twinkies), you awaken with a splitting headache and stumble to the medicine cabinet in your dingy apartment. You grab four painkillers and gulp them down with a glass of water. You are about to head back to bed when you notice that your roomate has left a bottle of "rat-be-gone" tablets just to the left of the painkillers. (Your apartment has been overrun by rats recently, and your roomate decided to take action.) It suddenly hits you &mdash; you might have accidentally swallowed two rat-be-gone tablets!! Just then, you develop stomach cramps. You call the student hospital, but they put you on 30 minute hold. You don’t own a car, and your roomate has not returned, so you realize there is no chance of obtaining help. At that point, you remember your outstanding Psych. 310 training, and your probabilistic thinking skills kick in. It is known that: Since you reach with your right hand, the prior probability that you grabbed the painkiller bottle is .90. The probability that you will have stomach cramps, given that you swallowed rat-be-gone, is .99. The probability that you will have stomach cramps given that you did not swallow rat-be-gone, is .50. The probability that you will survive the night if you did indeed swallow rat-be-gone is .40. The probability that you will survive the night if you did not swallow rat-be-gone is .99999. What is the probability that you will survive the night?</p>
+          <ol>
+            <li>0.87412</li>
+            <li>0.34343</li>
+            <li>0.43188 &check;</li>
+            <li>0.48785</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>
+  

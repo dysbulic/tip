@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Color Table</title>
+    <link rel="stylesheet" type="text/css" href="colortable.css" />
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript" src="colortable.js"></script>
+    <script type="text/javascript" src="tabledemo.js"></script>
+    <script type="text/javascript">
+    </script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body onload="setup_tables();">
+    <h1>Color Table</h1>
+    <p>This is a little color picker program written in javascript. It
+    uses a hsv color table, rather than rgb because it is prettier to
+    look at. It is pretty simple, just pick the property that you want
+    to alter the color of and mousing over colors will change it. To
+    change the colors in the table click elements. To toggle the color
+    changing (so you can copy the text out of the sample box) right
+    click.</p>
+    <p>I apologize to internet explorer users. IE does not follow the
+    <a href="http://www.w3c.org/DOM/DOMTR">W3C DOM ecmascript
+    bindings</a> (as of IE6) for either managing events or
+    stylesheets. This program uses both to change the colors of
+    elements on the page. This page is known to work in <a
+    href="http://www.mozilla.org">mozilla</a>. <a
+    href="http://www.webstandards.org/">Vive les standards!</a></p>
+    <div id="controls">
+      <form action="" onsubmit="return false;">
+        <div id="rule-control">
+          <div>
+            <select id="rules-box"
+                    onchange="setRule(document.getElementById('rules-box').value);">
+            </select>
+          </div>
+          <div>
+            <input id="new-rule" type="text" />
+            <input type="submit" value="Add Rule"
+                   onclick="var element = document.getElementById('new-rule');
+                   addRule(element.value);
+                   element.value = '';" />
+          </div>
+        </div>
+        <div id="properties-control">
+          <div>
+            <select id="properties-box"
+                    onchange="setProperty(document.getElementById('properties-box').value);">
+            </select>
+          </div>
+          <div>
+            <input id="new-property" type="text" />
+            <input type="submit" value="Add Property"
+                   onclick="var element = document.getElementById('new-property');
+                   addProperty(element.value);
+                   element.value = '';" />
+          </div>
+        </div>
+        <div id="status" class="display"></div>
+      </form>
+    </div>
+    <div style="clear: both"></div>
+    <div id="colortable-xy"></div>
+    <div id="colortable-z"></div>
+    <div id="sample" class="display"></div>
+  </body>
+</html>

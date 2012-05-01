@@ -1,0 +1,11 @@
+RewriteEngine on
+
+RewriteOptions inherit
+
+# If this has already been translated it will come through
+#  as a absolute path, otherwise it will come through as
+#  relative. This strips pff the front if it is absolute.
+
+RewriteRule ^.*240((/.*)?)$ $1
+
+RewriteRule ^(.*)$ http://odin.himinbi.org/classes/csc240/$1

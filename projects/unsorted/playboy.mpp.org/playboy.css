@@ -1,0 +1,73 @@
+html, body { margin: 0; padding: 0; font-family: sans-serif; font-size: 18px; }
+body { text-align: center; background-color: #001623; }
+
+#header, #header .background, #headimg { height: 648px; position: relative; z-index: 1; }
+#header .background { position: absolute; width: 50%; }
+#header #leftbg { background-image: url('playboy_header_wide_left.png'); }
+#header #rightbg { background-image: url('playboy_header_wide_right.png'); right: 0; }
+#headimg { background: url('playboy_header_wide.jpg') no-repeat center top; }
+
+#header #leftbg { background-image: url('playboy_header_short_left.png'); }
+#header #rightbg { background-image: url('playboy_header_short_right.png'); }
+#headimg { background-image: url('playboy_header_short.jpg'); }
+
+#header img { display: block; margin: auto; z-index: 3; position: relative; }
+
+#outerholder, #innerholder { background: url('curvy_background_blue_small.jpg') repeat-y; }
+
+#outerholder { width: 726px; margin: auto; }
+#outerholder { background-color: white; background-position: -153px 0; }
+#outerholder { position: relative; top: -138px; left: 11px; }
+#innerholder { background-position: 624px 0; }
+
+#content { text-align: left; margin: 0 29px; position: relative; z-index: 5; padding-bottom: 5em; }
+hr { width: 50%; text-align: center; }
+h1 { font-size: 50px; margin-left: -20px; margin-top: 0; }
+h2 { margin: 0 3em 0 1em; padding: 0; line-height: 1em; }
+h1, h2, h3 { text-align: center; color: black; }
+
+ul { margin: 0; padding: 0; }
+
+#sidebars { position: absolute; top: 820px; }
+#leftside, #rightside { width: 150px; border: 2px groove #4E502C; background-color: #F7E9C2; padding: .5em .75em; z-index: 8; }
+#leftside { float: left; margin-left: 1em; }
+#rightside { float: right; margin-right: 1em; }
+.image img { width: 100%; border: 2px solid #4E502C; }
+.caption { font-size: 80%; color: #222; }
+
+#links { margin: 0; }
+#links { list-style: none; font-size: 90%; margin-bottom: 1em; }
+#links li { margin-bottom: .5em; }
+#links a, a.button { display: block; margin: auto; text-decoration: none; background-color: #232D65; color: #F7E9C2; border: 2px outset;
+                      padding: 5px 4px 3px; }
+#links a:hover, a.button:hover { border-style: inset; padding: 6px 2px 2px 6px; }
+
+@media print {
+ #header { display: none; }
+ #outerholder { width: 100%; left: 0; top: 0; }
+ #leftside, #rightside { display: block; }
+}
+
+#leftside { float: left; }
+h1, h2 { margin: 0px; }
+#headimg { margin-left: 50px; }
+#blurb { margin: 1em 0; }
+#headimg { background-image: url('playboy_header_straight.jpg'); }
+#outerholder, #innerholder { background: none; }
+#outerholder { width: 598px; background-color: white; border: 35px solid; left: 0px; top: -190px; border-bottom-color: #111; }
+#content { margin: 0 20px; }
+ul { margin-left: 1.5em; }
+
+#headimg { background-image: url('playboy_header_short.jpg'); }
+#header, #header .background, #headimg { height: 410px; }
+#outerholder { top: -80px; }
+#header #leftbg { background-image: url('playboy_header_short_left.png'); }
+#header #rightbg { background-image: url('playboy_header_short_right.png'); }
+
+.narrow #sides { position: absolute; top: 700px; left: 650px; z-index: 8; }
+.narrow #leftside, .narrow #rightside { float: left; clear: left; margin-left: 0; }
+.narrow #headimg { background-position: -254px 0; }
+.narrow #outerholder { margin-left: 26px; }
+.narrow #headimg { margin-left: 0px; }
+.narrow #outerholder { margin-left: 0px; }
+.narrow #content { margin-right: 35px; }

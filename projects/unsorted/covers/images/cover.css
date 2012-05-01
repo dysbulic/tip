@@ -1,0 +1,20 @@
+@font-face {
+  font-family: harpoon;
+  /* Batik dies on the local declaration */
+  /* src: local("Harpoon"), url("harpoonn.ttf") format("truetype"); */
+  src: url("harpoonn.ttf") format("truetype");
+}
+
+#discname, #release {
+  font-size: 25px;
+  font-family: harpoon;
+  filter: url("filters.svg#emboss");
+}
+
+#discid {
+  font-size: 200px;
+  opacity: .5;
+  fill: red;
+  text-anchor: middle;
+  filter: url("filters.svg#dropShadow");
+}

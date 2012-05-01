@@ -1,0 +1,26 @@
+<svg viewBox="0 0 500 500" width="100%" height="100%"
+     xmlns="http://www.w3.org/2000/svg" version="1.0"
+     xmlns:html="http://www.w3.org/1999/xhtml"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>Test Clipping ForeignObjects</title>
+  <defs>
+    <style type="text/css">
+      rect { fill: lightblue; stroke: gray; }
+      #green { fill: lightgreen; }
+      text { text-anchor: start; font-size: 5px; }
+    </style>
+    <clipPath id="clip">
+      <rect x="0" y="10" width="500" height="20"/>
+    </clipPath>
+    <use id="reflection" xlink:href="#reflBase" style="fill: white; clip-path: url(#reflClip)"/>
+  </defs>
+  <g transform="scale( -1, 1 ) translate( -500 )" style="clip-path: url(#clip)">
+    <foreignObject x="0" y="0" height="500" width="500"><!-- Doesn't work on fO -->
+      <html:html>
+	<html:body>
+	  <html:p>TThis is a test paragraph. <html:span title="This">It</html:span> uses <html:em>emphasis</html:em>. to emphasize emphatic empathic ellipses.</html:p> 
+	</html:body>
+      </html:html>
+    </foreignObject>
+  </g>
+</svg>

@@ -136,12 +136,12 @@
 (defun word-count nil "Count words in buffer" (interactive)
   (shell-command-on-region (point-min) (point-max) "wc -w"))
 
-(setq nxml-file ".../lib/emacs/mode/nxml/rng-auto.el")
+(setq nxml-file "~/.../lib/emacs/mode/nxml/rng-auto.el")
 (if (file-exists-p nxml-file)
     (progn (load nxml-file)
            (message "nxml mode loaded")))
 
-(setq haml-file ".../lib/emacs/mode/haml/haml-mode.el")
+(setq haml-file "~/.../lib/emacs/mode/haml/haml-mode.el")
 (if (file-exists-p haml-file)
     (progn (load-file haml-file)
            (message "haml mode loaded")))

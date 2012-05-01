@@ -1,0 +1,1397 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Statistical Inference &mdash; Practice Exam #1</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <style type="text/css">
+      table td { padding: .25em .75em; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY 310: Statistical Inference</h1>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Practice Exam #1</h2>
+      <h2>Due: Wed., 17 October 2007</h2>
+    </div>
+
+    <ol>
+      <li>
+        <div class="question">
+          <p>Compute the sample mean <math xmlns="http://www.w3.org/1998/Math/MathML"><mover><mi>X</mi><mo>_</mo></mover></math> for the following 5 numbers: 1, 4, 2, 3, 4</p>
+          <ol>
+            <li>2.8 &check;</li>
+            <li>3.00</li>
+            <li>2.24</li>
+            <li>1.4</li>
+            <li>None of the above are correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd><mover><mi>x</mi><mo>_</mo></mover></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow>
+                      <munderover>
+                        <mo>&Sum;</mo>
+                        <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                        <mi>n</mi>
+                      </munderover>
+                      <msub><mi>x</mi><mi>i</mi></msub>
+                    </mrow>
+                    <mi>n</mi>
+                  </mfrac>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Compute the sample variance <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>&sigma;</mi><mn>2</mn></msup></math> for the following 5 numbers: 3, 4, 2, 4, 5</p>
+          <ol>
+            <li>1.04</li>
+            <li>1.5</li>
+            <li>1.3 &check;</li>
+            <li>1.10</li>
+            <li>None of the above answers are correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd><msubsup><mi>&sigma;</mi><mi>x</mi><mn>2</mn></msubsup></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow>
+                    <munderover>
+                      <mo>&Sum;</mo>
+                      <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                      <mfenced open="|" close="|"><mi>x</mi></mfenced>
+                    </munderover>
+                    <msup><mfenced><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>-</mo><mover><mi>x</mi><mo>_</mo></mover></mrow></mfenced><mn>2</mn></msup>
+                  </mrow>
+                  <mrow><mfenced open="|" close="|"><mi>x</mi></mfenced><mo>-</mo><mn>1</mn></mrow>
+                </mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Suppose you have 10 numbers and have computed the mean to be 6.0. You then discover that the last number in the data was entered incorrectly. It was entered as 9.0 when it should have been 8.0. If you replace the incorrect value (9.0) with the correct one (8.0), and recompute the mean, you will obtain a new mean of:</p>
+          <ol>
+            <li>6.9</li>
+            <li>4.9</li>
+            <li>It is impossible to determine</li>
+            <li>5.9 &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>A series of numbers that will give the original mean are:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <msub><mi>x</mi><mn>1</mn></msub><mo>=</mo>
+            <msub><mi>x</mi><mn>2</mn></msub><mo>=</mo>
+            &hellip;<mo>=</mo>
+            <msub><mi>x</mi><mrow><mi>n</mi><mo>-</mo><mn>2</mn></mrow></msub><mo>=</mo>
+            <mover><mi>x</mi><mo>_</mo></mover>
+          </math>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <msub><mi>x</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></msub><mo>=</mo>
+            <mn>2</mn><mover><mi>x</mi><mo>_</mo></mover><mo>-</mo>
+            <msub><mi>x</mi><mi>n</mi></msub>
+          </math>
+          <p>The reason for this is to get the average of
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>x</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></msub></math>
+            and
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>x</mi><mi>n</mi></msub></math>
+            to equal
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mover><mi>x</mi><mo>_</mo></mover></math>.
+          </p>
+          <p>
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>x</mi><mi>n</mi></msub></math>
+            from this set can then be replaced with
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mrow><mi>x</mi><mo>'</mo></mrow><mi>n</mi></msub></math>
+            to compute the new average.
+          </p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mover><mrow><mi>x</mi><mo>'</mo></mrow><mo>_</mo></mover><mo>=</mo>
+            <mfrac>
+              <mrow>
+                <mfenced><mrow>
+                  <mi>n</mi><mo>-</mo><mn>2</mn>
+                </mrow></mfenced>
+                <mover><mi>x</mi><mo>_</mo></mover><mo>+</mo>
+                <mn>2</mn><mover><mi>x</mi><mo>_</mo></mover><mo>-</mo>
+                <msub><mi>x</mi><mi>n</mi></msub><mo>+</mo>
+                <msub><mrow><mi>x</mi><mo>'</mo></mrow><mi>n</mi></msub>
+              </mrow>
+              <mi>n</mi>
+            </mfrac>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>
+            Suppose two different scores, each with a minimum of zero and a maximum possible value of 25, are summed to produce a "total raw admission score" that is used to determine university admissions. Suppose that score A has a mean of
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>&mu;</mi><mn>1</mn></msub></math>
+            and a standard deviation of
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>&sigma;</mi></math>,
+            and score B has a mean of
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>&mu;</mi><mn>2</mn></msub></math>
+            and a standard deviation of
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>2</mn><mi>&sigma;</mi></math>.
+            Joseph has a Z-score of 1 on Score A and a Z-score of -1 on Score B, while Marilyn has a Z-score of -1 on Score A and a Z-score of 1 on Score B. Which student will have the higher total raw admission score?
+          </p>
+          <ol>
+            <li>Joseph</li>
+            <li>Both will have the same mark.</li>
+            <li>Marilyn &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>You have 4 numbers: a, b, c, d. If you multiply them all by 4, the mean of the resulting data set will be</p>
+          <ol>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mn>16</mn><mfenced separators="+"><mi>a</mi><mi>b</mi><mi>c</mi><mi>d</mi></mfenced>
+              </math>
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mn>4</mn><mfenced separators="+"><mi>a</mi><mi>b</mi><mi>c</mi><mi>d</mi></mfenced>
+              </math>
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mfenced separators="+"><mi>a</mi><mi>b</mi><mi>c</mi><mi>d</mi></mfenced>
+              </math>
+              &check;
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mfrac><mfenced separators="+"><mi>a</mi><mi>b</mi><mi>c</mi><mi>d</mi></mfenced><mn>4</mn></mfrac>
+              </math>
+            </li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>In general, if:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <msub><mrow><mi>x</mi><mo>'</mo></mrow><mi>i</mi></msub><mo>=</mo> 
+            <mi>k</mi><msub><mi>x</mi><mi>i</mi></msub>
+          </math>
+          <p>Then:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mover><mrow><mi>x</mi><mo>'</mo></mrow><mo>_</mo></mover><mo>=</mo>
+            <mfrac>
+              <mrow>
+                <mo>&Sum;</mo><mi>k</mi><msub><mi>x</mi><mi>i</mi></msub>
+              </mrow>
+              <mi>n</mi>
+            </mfrac>
+            <mo>=</mo>
+            <mfrac>
+              <mrow>
+                <mi>k</mi><mo>&Sum;</mo><msub><mi>x</mi><mi>i</mi></msub>
+              </mrow>
+              <mi>n</mi>
+            </mfrac>
+          </math>
+          <p>
+            In this particular situation,
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi><mo>=</mo><mi>n</mi></math>,
+            so they cancel.
+          </p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>You have 10 numbers with a sample mean of 9.0 and a sample variance of 11.0. You discover that the last number in the list was recorded as 10.0 when it should have been recorded as 14.0. If you correct your error and correctly recompute the sample variance, what value will you obtain?</p>
+          <ol>
+            <li>11.0</li>
+            <li>14.988</li>
+            <li>13.489 &check;</li>
+            <li>12.14</li>
+            <li>None of the above answers are correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Consider the following data array:</p>
+          <table>
+            <tr><td>5</td><td>3</td><td>1</td><td>2</td></tr>
+            <tr><td>5</td><td>9</td><td>9</td><td>8</td></tr>
+            <tr><td>5</td><td>7</td><td>15</td><td>2</td></tr>
+            <tr><td>4</td><td>7</td><td>6</td><td>1</td></tr>
+          </table>
+          <p>Compute:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <munderover>
+              <mo>&Sigma;</mo>
+              <mrow><mi>i</mi><mo>=</mo><mn>2</mn></mrow>
+              <mn>4</mn>
+            </munderover>
+            <munderover>
+              <mo>&Sigma;</mo>
+              <mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow>
+              <mn>3</mn>
+            </munderover>
+            <msub><mi>X</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+          </math>
+          <ol>
+            <li>59</li>
+            <li>72</li>
+            <li>66</li>
+            <li>67 &check;</li>
+            <li>None of the above.</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>For square matrices, indices range from 1 to n<sub>i</sub> and 1 to n<sub>j</sub> and:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <msub><mi>X</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+            <mo>=</mo>
+            <msub><mi>X</mi><mfenced open="" close=""><mtext>row</mtext><mtext>column</mtext></mfenced></msub>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>You have a sample of N observations, and you transform them to Z-scores. Assuming the original scores are not all equal, the quantity</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <munderover>
+              <mo>&Sigma;</mo>
+              <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+              <mn>N</mn>
+            </munderover>
+            <msubsup><mi>Z</mi><mi>i</mi><mn>2</mn></msubsup>
+          </math>
+          <p>will always be equal to:</p>
+          <ol>
+            <li>N - 1 &check;</li>
+            <li>0</li>
+            <li>1</li>
+            <li>N</li>
+            <li>Cannot be determined from the information given</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>This derivation relies on a transformation of the variance when dealing with z-scores: (Recall that
+          <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>&sigma;</mi><mi>z</mi></msub><mo>=</mo><mn>1</mn></math>
+          and
+          <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>&mu;</mi><mi>z</mi></msub><mo>=</mo><mn>0</mn></math>.)</p>
+
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <msubsup><mi>&sigma;</mi><mi>z</mi><mn>2</mn></msubsup>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow>
+                    <mo>&Sum;</mo>
+                    <msup><mfenced><mrow>
+                      <msub><mi>z</mi><mi>i</mi></msub><mo>-</mo><msub><mi>&mu;</mi><mi>z</mi></msub>
+                    </mrow></mfenced><mn>2</mn></msup>
+                  </mrow>
+                  <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                </mfrac></mtd>
+              </mtr>
+              <mtr>
+                <mtd><mn>1</mn></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow>
+                    <mo>&Sum;</mo>
+                    <msup><mfenced><mrow>
+                      <msub><mi>z</mi><mi>i</mi></msub><mo>-</mo><mn>0</mn>
+                    </mrow></mfenced><mn>2</mn></msup>
+                  </mrow>
+                  <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                </mfrac></mtd>
+              </mtr>
+              <mtr>
+                <mtd>
+                  <mo>&Sum;</mo><msup><msub><mi>z</mi><mi>i</mi></msub><mn>2</mn></msup>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mi>n</mi><mo>-</mo><mn>1</mn></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>You have the following set of data: 1,5,3,7,8. Find the median.</p>
+          <ol>
+            <li>5 &check;</li>
+            <li>4</li>
+            <li>7</li>
+            <li>3</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>For the median, the elements must be in ascending or descending order, so the set is 1,3,5,7,8. Since the size of the set is odd, the median is simply the middle value.</p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Which of the following is not true of the median?</p>
+          <ol>
+            <li>Multiplying all values by 5 multiplies the median by 5.</li>
+            <li>The value for combined groups cannot be determined from the sample sizes and group values of the individual groups</li>
+            <li>It is sensitive to outliers &check;</li>
+            <li>It is the middle value in a distribution</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>Outliers can affect the mean, but the median only takes the number of values into account and the central value.</p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Widgets are weighed on a scale that is accurate to the nearest 100 grams. A group of 50 widgets is weighed. The heaviest widget is recorded as 9000 grams, the lightest at 4000 grams. The inclusive range is the difference between the upper real limit and lower real limit for the data. What is the inclusive range for these data?</p>
+          <ol>
+            <li>5100 &check;</li>
+            <li>5001</li>
+            <li>5200</li>
+            <li>5050</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>If a widget weighs more than 3950 grams, it will register as 4000. Similiarly, if it weighs less than 9050 it will register as 9000, so the range for x is 3950 &lt; x &lt; 9050.</p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>You have a set of data that have a mean of 58 and a standard deviation of 12. You wish them to have a mean of 67 and a standard deviation of 11, while retaining the shape of the present distribution. What values of a and b in the linear transformation formula Y = aX + b will produce a new set of data with the desired mean and standard deviation?</p>
+          <ol>
+            <li>a = 0.916 67, b = 13.833 &check;</li>
+            <li>a = 1.833 3, b = 13.833</li>
+            <li>a = 1.090 9, b = 12.833</li>
+            <li>a = 0.916 67, b = 27.667</li>
+            <li>a = 1.916 7, b = -13.833</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The scale factor will be:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mi>a</mi><mo>=</mo>
+            <mfrac>
+              <mrow><mi>&sigma;</mi><mo>'</mo></mrow>
+              <mi>&sigma;</mi>
+            </mfrac>
+          </math>
+          <p>The shift is found by scaling the mean and comparing it to the needed mean:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mi>b</mi><mo>=</mo>
+            <mrow><mi>&mu;</mi><mo>'</mo></mrow><mo>-</mo>
+            <mi>&mu;</mi><mi>a</mi>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Suppose you have evenly spaced numbers, and the distance between adjacent numbers is k. It is well known that, if N = 3, the sample mean of the 3 numbers is the middle value and their sample variance is <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>k</mi><mn>2</mn></msup></math>. Suppose N = 5. Find an expression for the sample variance of the 5 numbers.</p>
+          <ol>
+            <li><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>5</mn><msup><mi>k</mi><mn>2</mn></msup></math></li>
+            <li><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>2</mn><msup><mi>k</mi><mn>2</mn></msup></math></li>
+            <li><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>k</mi><mn>2</mn></msup></math></li>
+            <li><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>2.5</mn><msup><mi>k</mi><mn>2</mn></msup></math> &check;</li>
+            <li>None of the above answers are correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>First, consider the sum of a sequence of numbers:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <munderover>
+                    <mo>&Sum;</mo>
+                    <mrow><mn>i</mn><mo>=</mo><mn>1</mn></mrow>
+                    <mi>k</mi>
+                  </munderover>
+                  <mi>i</mi>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mn>1</mn><mo>+</mo><mn>2</mn><mo>+</mo>&hellip;<mo>+</mo>
+                  <mfenced><mrow><mi>k</mi><mo>-</mo><mn>1</mn></mrow></mfenced><mo>+</mo>
+                  <mi>k</mi>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced><mrow><mn>1</mn><mo>+</mo><mi>k</mi></mrow></mfenced><mo>+</mo>
+                  <mfenced><mrow>
+                    <mn>2</mn><mo>+</mo><mfenced><mrow><mi>k</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                  </mrow></mfenced>
+                  <mo>+</mo>&hellip;<mo>+</mo>
+                  <mfenced><mrow>
+                    <mfrac><mrow><mi>k</mi><mo>-</mo><mn>1</mn></mrow><mn>2</mn></mfrac><mo>+</mo>
+                    <mi>k</mi><mo>-</mo>
+                    <mfenced><mrow>
+                      <mfrac><mrow><mi>k</mi><mo>-</mo><mn>1</mn></mrow><mn>2</mn></mfrac><mo>-</mo><mn>1</mn>
+                    </mrow></mfenced>
+                  </mrow></mfenced>
+                  <mo>+</mo><mfrac><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mn>2</mn></mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac><mrow><mi>k</mi><mo>-</mo><mn>1</mn></mrow><mn>2</mn></mfrac>
+                  <mfenced><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></mfenced><mo>+</mo>
+                  <mfrac><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mn>2</mn></mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow><msup><mi>k</mi><mn>2</mn></msup><mo>+</mo><mi>k</mi></mrow>
+                    <mn>2</mn>
+                  </mfrac>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The same basic logic produces:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <munderover>
+                    <mo>&Sum;</mo>
+                    <mrow><mn>i</mn><mo>=</mo><mn>1</mn></mrow>
+                    <mi>k</mi>
+                  </munderover>
+                  <msup><mi>i</mi><mn>2</mn></msup>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow>
+                    <msup><mi>k</mi><mn>3</mn></msup><mo>+</mo>
+                    <mn>2</mn><msup><mi>k</mi><mn>2</mn></msup>
+                  </mrow>
+                  <mn>2</mn>
+                </mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>This can be used in the expansion of <em>n</em> elements evenly spaced by <em>k</em> units:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <munderover>
+                    <mo>&Sum;</mo>
+                    <mrow><mn>i</mn><mo>=</mo><mn>1</mn></mrow>
+                    <mi>n</mi>
+                  </munderover>
+                  <msub><mi>x</mi><mi>i</mi></msub>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <msub><mi>x</mi><mn>1</mn></msub><mo>+</mo>
+                  <mfenced><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mi>k</mi></mrow></mfenced><mo>+</mo>
+                  <mfenced><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mn>2</mn><mi>k</mi></mrow></mfenced>
+                  <mo>+</mo>&hellip;<mo>+</mo>
+                  <mfenced>
+                    <mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo>
+                    <mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced><mi>k</mi></mrow>
+                  </mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mi>n</mi><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo>
+                  <mi>k</mi><mo>+</mo><mn>2</mn><mi>k</mi><mo>+</mo>&hellip;<mo>+</mo>
+                  <mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced><mi>k</mi>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mi>n</mi><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mi>k</mi>
+                  <munderover>
+                    <mo>&Sum;</mo>
+                    <mrow><mn>i</mn><mo>=</mo><mn>1</mn></mrow>
+                    <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                  </munderover>
+                  <mi>i</mi>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mi>n</mi><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo>
+                  <mi>k</mi>
+                  <mfrac>
+                    <mrow>
+                      <msup><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced><mn>2</mn></msup><mo>+</mo>
+                      <mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                    </mrow>
+                    <mn>2</mn>
+                  </mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mi>n</mi><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mi>k</mi>
+                  <mfrac>
+                    <mrow><msup><mi>n</mi><mn>2</mn></msup><mo>-</mo><mi>n</mi></mrow>
+                    <mrow><mn>2</mn></mrow>
+                  </mfrac>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>And again, through a similar process:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <munderover>
+                    <mo>&Sum;</mo>
+                    <mrow><mn>i</mn><mo>=</mo><mn>1</mn></mrow>
+                    <mi>n</mi>
+                  </munderover>
+                  <msubsup><mi>x</mi><mi>i</mi><mn>2</mn></msubsup>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mn>n</mn><msubsup><mi>x</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo>
+                  <mi>k</mi><msub><mi>x</mi><mn>1</mn></msub>
+                  <munderover>
+                    <mo>&Sum;</mo>
+                    <mrow><mn>i</mn><mo>=</mo><mn>1</mn></mrow>
+                    <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                  </munderover>
+                  <mi>i</mi><mo>+</mo>
+                  <msup><mi>k</mi><mn>2</mn></msup>
+                  <munderover>
+                    <mo>&Sum;</mo>
+                    <mrow><mn>i</mn><mo>=</mo><mn>1</mn></mrow>
+                    <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                  </munderover>
+                  <msup><mi>i</mi><mn>2</mn></msup>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mn>n</mn><msubsup><mi>x</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo>
+                  <mi>k</mi><msub><mi>x</mi><mn>1</mn></msub>
+                  <mfenced><mfrac>
+                    <mrow><msup><mi>n</mi><mn>2</mn></msup><mo>-</mo><mi>n</mi></mrow>
+                    <mn>2</mn>
+                  </mfrac></mfenced>
+                  <mo>+</mo><msup><mi>k</mi><mn>2</mn></msup>
+                  <mfenced><mfrac>
+                    <mrow>
+                      <msup><mi>n</mi><mn>3</mn></msup><mo>-</mo><msup><mi>n</mi><mn>2</mn></msup><mo>+</mo><mi>n</mi>
+                    </mrow>
+                    <mn>2</mn>
+                  </mfrac></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Consider then the mean:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd><mi>&mu;</mi></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow>
+                    <munderover>
+                      <mo>&Sum;</mo>
+                      <mrow><mn>i</mn><mo>=</mo><mn>1</mn></mrow>
+                      <mi>n</mi>
+                    </munderover>
+                    <msub><mi>x</mi><mi>i</mi></msub>
+                  </mrow>
+                  <mi>n</mi>
+                </mfrac></mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mi>k</mi>
+                  <mfrac>
+                    <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                    <mn>2</mn>
+                  </mfrac>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The variance then is:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtable>
+              <mtr>
+                <mtd><msup><mi>&sigma;</mi><mn>2</mn></msup></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow>
+                      <mo>&Sum;</mo>
+                      <msup>
+                        <mfenced><mrow>
+                          <msub><mi>x</mi><mi>i</mi></msub><mo>-</mo><mi>&mu;</mi>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                    </mrow>
+                    <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                  </mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow>
+                      <mo>&Sum;</mo>
+                      <mfenced><mrow>
+                        <msup><msub><mi>x</mi><mi>i</mi></msub><mn>2</mn></msup><mo>-</mo>
+                        <mi>&mu;</mi><msub><mi>x</mi><mi>i</mi></msub><mo>+</mo>
+                        <msup><mi>&mu;</mi><mn>2</mn></msup>
+                      </mrow></mfenced>
+                    </mrow>
+                    <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                  </mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow>
+                      <mo>&Sum;</mo><msup><msub><mi>x</mi><mi>i</mi></msub><mn>2</mn></msup><mo>-</mo>
+                      <mo>&Sum;</mo><mi>&mu;</mi><msub><mi>x</mi><mi>i</mi></msub><mo>+</mo>
+                      <mo>&Sum;</mo><msup><mi>&mu;</mi><mn>2</mn></msup>
+                    </mrow>
+                    <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                  </mfrac>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow>
+                      <mo>&Sum;</mo><msup><msub><mi>x</mi><mi>i</mi></msub><mn>2</mn></msup><mo>-</mo>
+                      <mi>&mu;</mi><mo>&Sum;</mo><msub><mi>x</mi><mi>i</mi></msub><mo>+</mo>
+                      <mi>n</mi><msup><mi>&mu;</mi><mn>2</mn></msup>
+                    </mrow>
+                    <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                  </mfrac>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p><em>ToDo: Finish this derivation.</em></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>The probability distribution shown below is</p>
+          <object type="image/svg+xml" data="normal_graph.svg"></object>
+          <ol>
+            <li>Symmetric and Bimodal</li>
+            <li>Positively Skewed</li>
+            <li>None of the above answers are correct</li>
+            <li>Negatively Skewed</li>
+            <li>Symmetric and Unimodal &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>For the following data array, compute <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mover><mi>X</mi><mo>_</mo></mover><mrow><mo>&bull;</mo><mn>3</mn></mrow></msub></math>.</p>
+          <table>
+            <tr><td>5</td><td>4</td><td>1</td><td>2</td></tr>
+            <tr><td>5</td><td>3</td><td>4</td><td>9</td></tr>
+            <tr><td>5</td><td>2</td><td>20</td><td>1</td></tr>
+            <tr><td>4</td><td>4</td><td>8</td><td>2</td></tr>
+          </table>
+          <ol>
+            <li>11.0</li>
+            <li>7.25</li>
+            <li>6.1875</li>
+            <li>8.25 &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <msub><mover><mi>X</mi><mo>_</mo></mover><mrow><mo>&bull;</mo><mn>j</mn></mrow></msub>
+            <mo>=</mo>
+            <mfrac>
+              <mrow>
+                <munderover>
+                  <mo>&Sigma;</mo>
+                  <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                  <mn>n</mn>
+                </munderover>
+                <msub><mi>X</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+              </mrow>
+              <mn>n</mn>
+            </mfrac>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>For the following data, compute <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>X</mi><mrow><mo>&bull;</mo><mo>&bull;</mo></mrow></msub></math>.</p>
+          <table>
+            <tr><td>7</td><td>7</td><td>1</td><td>2</td></tr>
+            <tr><td>7</td><td>3</td><td>7</td><td>14</td></tr>
+            <tr><td>5</td><td>2</td><td>49</td><td>0</td></tr>
+            <tr><td>4</td><td>4</td><td>14</td><td>5</td></tr>
+          </table>
+          <ol>
+            <li>32.75</li>
+            <li>8.1875</li>
+            <li>131 &check;</li>
+            <li>130</li>
+            <li>129</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>For the following frequency distribution of number of children for psychology faculty members at a major Eastern institution</p>
+          <table>
+            <tr><th>X</th><th>f</th></tr>
+            <tr><td>3</td><td>3</td></tr>
+            <tr><td>2</td><td>6</td></tr>
+            <tr><td>1</td><td>3</td></tr>
+            <tr><td>0</td><td>8</td></tr>
+          </table>
+          <p>Compute the sample mean</p>
+          <ol>
+            <li>4.8</li>
+            <li>1.2 &check;</li>
+            <li>1.0</li>
+            <li>2.2</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Group A is composed of a sample of 10 observations, and has a sample mean of 3 and a sample variance of 30. Group B is composed of a sample of 10 observations, and has a sample mean of 5 and a sample variance of 10. If A and B are combined to form one large group, what will be the variance of this combined group?</p>
+          <ol>
+            <li>27.11</li>
+            <li>24.0</li>
+            <li>20.0 &check;</li>
+            <li>4.4721</li>
+            <li>None of the above answers are correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Which of the following is not true?</p>
+          <ol>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <msub><mi>P</mi><mn>50</mn></msub><mo>=</mo>
+                <mfrac>
+                  <mrow><msub><mi>P</mi><mn>75</mn></msub><mo>+</mo><msub><mi>P</mi><mn>25</mn></msub></mrow>
+                  <mn>2</mn>
+                </mfrac>
+              </math>
+               &check;
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <msub><mi>P</mi><mn>50</mn></msub><mo>=</mo>
+                <msub><mi>Q</mi><mn>2</mn></msub>
+              </math>
+            </li>
+            <li>The 3rd decile is equal to <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>P</mi><mn>30</mn></msub></math></li>
+            <li><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>P</mi><mn>50</mn></msub></math> = Median</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>
+            Jamal took an exam where the class mean was
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mover><mi>X</mi><mo>_</mo></mover><mo>=</mo><mn>76</mn></math>
+            and the class standard deviation was
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>&sigma;</mi><mo>=</mo><mn>10</mn></math>.
+            What Z-score must Jamal exceed to have a grade that exceeds 75?
+          </p>
+          <ol>
+            <li>-0.31623</li>
+            <li>0.4</li>
+            <li>-0.1 &check;</li>
+            <li>-0.2</li>
+            <li>None of the above answers are correct.</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>In the frequency distribution below, what is the cumulative relative frequency of the value X = 1?</p>
+          <table>
+            <tr><th>X</th><th>f</th></tr>
+            <tr><td>3</td><td>7</td></tr>
+            <tr><td>2</td><td>7</td></tr>
+            <tr><td>1</td><td>7</td></tr>
+            <tr><td>0</td><td>4</td></tr>
+          </table>
+          <ol>
+            <li>72</li>
+            <li>0.83</li>
+            <li>0.44 &check;</li>
+            <li>0.16</li>
+            <li>None of the above answers are correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>The cumulative relative frequency is:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mfrac>
+              <mrow>
+                <munderover>
+                  <mo>&Sigma;</mo>
+                  <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                  <mn>k</mn>
+                </munderover>
+                <msub><mi>X</mi><mi>i</mi></msub>
+              </mrow>
+              <mrow>
+                <munderover>
+                  <mo>&Sigma;</mo>
+                  <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                  <mn>n</mn>
+                </munderover>
+                <msub><mi>X</mi><mi>i</mi></msub>
+              </mrow>
+            </mfrac>
+          </math>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>In a normal distribution with a mean of 60 and a standard deviation of 20, which of the following scores is at the 10th percentile?</p>
+          <ol>
+            <li>34.369 &check;</li>
+            <li>44.369</li>
+            <li>43.855</li>
+            <li>32.307</li>
+            <li>None of the above answers are correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>From the table in Glass &amp; Hopkins on page 615, r(-1.282) = .1. -1.282(20) + 60 = 34.36.</p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>IQ scores have a distribution that is approximately normal in shape, with a mean of 100 and a standard deviation of 15. What percentage of scores is at or above an IQ of 116?</p>
+          <ol>
+            <li>12.464</li>
+            <li>14.306 &check;</li>
+            <li>15.737</li>
+            <li>16.355</li>
+            <li>None of the above answers are correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>(116 - 100) / 15 &ape; 1.0666</p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Group A has a mean of 0 and a standard deviation of 1. Group B has a mean of 0 and a standard deviation of 1.11. The populations have a normal distribution. Consider the proportion of scores at or above 3.0 in Group B, and the proportion of scores at or above 3.0 for Group A? What is the ratio of these proportions?</p>
+          <ol>
+            <li>1.2738</li>
+            <li>3 5665</li>
+            <li>2.5475 &check;</li>
+            <li>3.057</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>You have a set of 11 numbers with a mean of 18. If you add an additional number to the original group, and that new number has a value of 23, what will be the mean of the new set of 12 numbers?</p>
+          <ol>
+            <li>20.258</li>
+            <li>22.1</li>
+            <li>12.892</li>
+            <li>18.417 &check;</li>
+            <li>None of the above answers are correct.</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p>(23 - 18) / 12 &ape; 0.417</p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Consider two columns of numbers, X and Y. The sum of cross-products of deviation scores of the numbers is equal to:</p>
+          <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+            <mtext>SCP</mtext><mo>=</mo>
+            <mo>&Sum;</mo>
+            <mfenced><mrow>
+              <msub><mi>x</mi><mi>i</mi></msub><mo>-</mo><mover><mi>x</mi><mo>_</mo></mover>
+            </mrow></mfenced>
+            <mfenced><mrow>
+              <msub><mi>y</mi><mi>i</mi></msub><mo>-</mo><mover><mi>y</mi><mo>_</mo></mover>
+            </mrow></mfenced>
+          </math>
+
+          <p>SCP is always equal to which of the following quantities:</p>
+
+          <ol>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mo>&Sum;</mo>
+                <mfenced><mrow>
+                  <msub><mi>x</mi><mi>i</mi></msub><mo>-</mo><mover><mi>x</mi><mo>_</mo></mover>
+                </mrow></mfenced>
+                <msub><mi>y</mi><mi>i</mi></msub>
+              </math>
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mo>&Sum;</mo>
+                <msub><mi>x</mi><mi>i</mi></msub>
+                <mfenced><mrow>
+                  <msub><mi>y</mi><mi>i</mi></msub><mo>-</mo><mover><mi>y</mi><mo>_</mo></mover>
+                </mrow></mfenced>
+              </math>
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mo>&Sum;</mo>
+                <msub><mi>x</mi><mi>i</mi></msub><msub><mi>y</mi><mi>i</mi></msub>
+                <mo>-</mo>
+                <mfrac>
+                  <mrow>
+                    <mo>&Sum;</mo><msub><mi>x</mi><mi>i</mi></msub>
+                    <mo>&Sum;</mo><msub><mi>x</mi><mi>i</mi></msub>
+                  </mrow>
+                  <mi>n</mi>
+                </mfrac>
+              </math>
+            </li>
+            <li>All 3 of the above are equal to SCP &check;</li>
+          </ol>
+        </div>
+        <div class="answer">
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>The table below, adapted from Glass and Hopkins, Table 5.1, shows the expected value of the range for random samples of size N from a normal distribution, when &sigma; = 1. Suppose heights of men in the general population have a mean of 69 and a standard deviation of 2.9, and have a distribution that is very closely approximated by a normal distribution. What is the expected value of the tallest man in a random sample of size 100?</p>
+          <table>
+            <tr><th>N</th><th>E(Range)</th></tr>
+            <tr><td>2</td><td>1.1</td></tr>
+            <tr><td>5</td><td>2.3</td></tr>
+            <tr><td>10</td><td>3.1</td></tr>
+            <tr><td>20</td><td>3.7</td></tr>
+            <tr><td>50</td><td>4.5</td></tr>
+            <tr><td>100</td><td>5.0</td></tr>
+            <tr><td>200</td><td>5.5</td></tr>
+            <tr><td>500</td><td>6.1</td></tr>
+            <tr><td>1000</td><td>6.5</td></tr>
+          </table>
+          <ol>
+            <li>78.425</li>
+            <li>68.625</li>
+            <li>83.875</li>
+            <li>76.25 &check;</li>
+            <li>None of the above answers are correct</li>
+          </ol>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>IQ scores have a distribution that is approximately normal in shape, with a mean of 100 and a standard deviation of 15 in the general population. Assuming a normal distribution is a good approximations, what proportion of the general population has IQ scores betweeen 81. 0 and 107. 0?</p>
+          <ol>
+            <li>0.67699</li>
+            <li>0.57699 &check;</li>
+            <li>0.63469</li>
+            <li>0.47699 </li>
+            <li>None of the above answers are correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Fred took an exam and got a Z-score of 1.76. For which of the following exam metrics will Fred get the highest raw score?</p>
+          <ol>
+            <li>Mean = 75.2, Standard Deviation = 11.3</li>
+            <li>Mean = 79.9, Standard Deviation = 10.1 &check;</li>
+            <li>Mean = 70.3, Standard Deviation = 11.0</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>You have 10 numbers with a mean of 11.0. You first add 5.0 to all the numbers, then divide them all by 3.0. What will the mean of the numbers be when you are finished?</p>
+          <ol>
+            <li>5.4333</li>
+            <li>5.3333 &check;</li>
+            <li>8.6667</li>
+            <li>5.2333</li>
+            <li>None of the above answers are correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>When we compare the stem-leaf diagram with a standard frequency histogram plot, we see:</p>
+          <ol>
+            <li>The stem-leaf diagram allows one to recover accurate estimates of summary statistics like the mean and variance more easily. &check;</li>
+            <li>The stem-leaf diagram does not allow one to see the basic shape of the distribution.</li>
+            <li>The frequency histogram is easier to construct with a typewriter</li>
+            <li>The stem-leaf diagram throws away information about the individual numbers, while the frequency histogram does not.</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Four distributions of 25 numbers have the identical shape, except that the X distribution has a mean of 100 and a standard deviation of 15, while the Y distribution has a mean of 20 and a standard deviation of 10, the W distribution a mean of 50, and a standard deviation of 20, and the K distribution a mean of 500 and a standard deviation of 100. Which of the following scores has the highest percentile rank in its respective distribution?</p>
+          <ol>
+            <li>A score of 70 in the W distribution.</li>
+            <li>A score of 30 in the Y distribution.</li>
+            <li>A score of 650 in the K distribution. &check;</li>
+            <li>A score of 119.5 in the X distribution.</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>After the first statistics exam, the professor posts the grades, and you compute your Z-score. It is +1.4. A day later, the professor announces that he forgot to scale the grades, and that he is linearly rescaling the grades so that the mean changes from 60 to 78, and the standard deviation changes from 10 to 12. What will your Z-score become?</p>
+          <ol>
+            <li>1.6</li>
+            <li>1.4 &check;</li>
+            <li>1.2</li>
+            <li>1.0</li>
+            <li>It is impossible to determine from the information given</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>The maximum value of the regression coefficient b in the linear regression equation y = bx + c is</p>
+          <ol>
+            <li>1. 00</li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>&rho;</mi><mfenced open="" close=""><mi>x</mi><mi>y</mi></mfenced></msub></math>
+            </li>
+            <li>
+              the ratio
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><msub><mi>&sigma;</mi><mi>x</mi></msub><msub><mi>&sigma;</mi><mi>y</mi></msub></mfrac></math>
+            </li>
+            <li>
+              the ratio
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><msub><mi>&sigma;</mi><mi>y</mi></msub><msub><mi>&sigma;</mi><mi>x</mi></msub></mfrac></math>
+              &check;
+            </li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Compute the correlation coefficient for the following data:</p>
+          <table>
+            <tr><td>1</td><td>4</td></tr>
+            <tr><td>2</td><td>5</td></tr>
+            <tr><td>4</td><td>4</td></tr>
+            <tr><td>5</td><td>3</td></tr>
+            <tr><td>2</td><td>6</td></tr>
+          </table>
+          <ol>
+            <li>-0.53403</li>
+            <li>-0.1268</li>
+            <li>0</li>
+            <li>-0.61382 &check;</li>
+            <li>-0.4329</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>X has a variance of 40. Y has a variance of 40. X and Y have a covariance of 21.6. Find the variance of X - Y.</p>
+          <ol>
+            <li>77.28</li>
+            <li>36.8 &check;</li>
+            <li>33.12</li>
+            <li>123.2</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Given three uncorrelated variables X, Y, and Z, all with means of 15 and variances of 100. Consider the linear combination W = 7X + 11Y + 9Z. What would be its mean?</p>
+          <ol>
+            <li>405 &check;</li>
+            <li>19683/50</li>
+            <li>2700</li>
+            <li>810</li>
+            <li>None of the above answers are correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Given three uncorrelated variables X, Y, and Z, all with means of 15 and variances of 100. Consider the linear combination W = 8X + 12Y - 10Z. What would be its variance?</p>
+          <ol>
+            <li>30799</li>
+            <li>30805</li>
+            <li>30800 &check;</li>
+            <li>30792</li>
+            <li>None of the above.</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>X has a variance of 40. Y has a variance of 54. X and Y have a covariance of 21.379. Find the correlation &rho;<sub>Y,X</sub>.</p>
+          <ol>
+            <li>0.46 &check;</li>
+            <li>0.414</li>
+            <li>9.8976 x 10<sup>-3</sup></li>
+            <li>0.506</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Suppose that you computed the covariance and the variances for 2 variables with N in the denominator of each of the 3 formulas, instead of N - 1, and you computed the correlation coefficient with these "new" definitions of sample variance and covariance. What effect would that have on the value of a positive correlation coefficient?</p>
+          <ol>
+            <li>It would make it lower</li>
+            <li>It would stay the same &check;</li>
+            <li>It is impossible to say</li>
+            <li>It would make it higher</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>
+          The correlation &rho;<sub>X,Y</sub> between X and Y is 0.67. The variance of X is 105. The variance of Y is 181.0. What is the variance
+          () of the predicted scores Y when Y is predicted from Y X?</p>
+          <ol>
+            <li>92. 626</li>
+            <li>70. 688</li>
+            <li>86. 938</li>
+            <li>81. 251 &check;</li>
+            <li>None of the above answers are correct</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>In a standard linear regression setup, you are predicting Y from X. The data are r X,Y = 0. 48, s 2 = 154. 0, s 2 = 121. 0, Y ∙ = 13. 0, X ∙ = 22. 0. In the linear regression X Y equation Y = bX + c for predicting Y from X, what are the values of b and c respectively?</p>
+          <ol>
+            <li>b = -0.54151, c = 1.0867</li>
+            <li>b = 0.61091, c = -0.44</li>
+            <li>b = 0.54151, c = 1.0867 &check;</li>
+            <li>b = 0.54151, c = -1.0867</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Melinda has a Z-score of 1. 0 on a standardized entrance exam used by a large university. The correlation between performance on this exam and first-year GPA at the university is 0. 67. At the university, first-year GPA’s average 2. 8 with a standard deviation of 0. 77. What is the predicted average GPA for students with the same score as Melinda on the entrance exam?</p>
+          <ol>
+            <li>3.6475</li>
+            <li>3.9791</li>
+            <li>3.3159 &check;</li>
+            <li>2.3211</li>
+            <li>None of the above answers are correct.</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Suppose W = bX + a, where b = &sigma;<sub>Y,X</sub>, the covariance between Y and X, and a is an unknown constant. In that case, what is the covariance of W and Y?</p>
+          <ol>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <msubsup>
+                  <mi>&sigma;</mi>
+                  <mfenced open="" close=""><mi>y</mi><mi>x</mi></mfenced>
+                  <mn>2</mn>
+                </msubsup>
+              </math>
+              &check;
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mn>2</mn>
+                <msubsup>
+                  <mi>&sigma;</mi>
+                  <mfenced open="" close=""><mi>y</mi><mi>x</mi></mfenced>
+                  <mn>2</mn>
+                </msubsup>
+              </math>
+            </li>
+            <li>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mn>2</mn>
+                <msubsup>
+                  <mi>&sigma;</mi>
+                  <mfenced open="" close=""><mi>y</mi><mi>x</mi></mfenced>
+                  <mn>2</mn>
+                </msubsup>
+                <mo>+</mo>
+                <mi>b</mi><mi>a</mi>
+              </math>
+            </li>
+            <li>The answer cannot be determined from the information provided.</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Which of the following expressions is a correct formula for the variance of W when W is obtained from X and Y from the formula W = 4X + 3Y?</p>
+          <ol>
+            <li>s 2 = 4s 2 + s 2 + 14s X,Y W X Y 2 2</li>
+            <li>s W = 16s X + 9s 2 + 24s X,Y Y 2 2 2 &check;</li>
+            <li>s W = 4s X + 9s Y</li>
+            <li>s 2 = 2s 2 + 9s 2 + 12s X,Y W X Y</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+      <li>
+        <div class="question">
+          <p>Suppose a large representative group of students in grade 7 were given a standardized intelligence test (X), and that the test was readministered (Y) in grade 8. On each occasion the mean was 100 and the standard deviation was 15. The correlation in this bivariate normal distribution was .80, and the linear regression error scores had a standard deviation of &sigma;<sub>E</sub> = 9. What percentage of examinees who scored 145 at grade 7 would be expected to do at least as well on the grade 8 test?</p>
+          <ol>
+            <li>50%</li>
+            <li>34%</li>
+            <li>16% &check;</li>
+            <li>5%</li>
+            <li>It is impossible to determine from the information given</li>
+          </ol>
+        </div>
+        <div class="answer">
+          <p></p>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

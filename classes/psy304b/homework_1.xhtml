@@ -1,0 +1,1241 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>PSY-304B Homework #1</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math, table + math, math + table { margin-top: .75em; }
+      .data td, .data th { text-align: center; padding: .25em; border: 1px solid; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY-304B: Quantitative Methods &amp; Experimental Design</h1>
+      <h2>Homework #1</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 14:35 Thrs., 31 January 2008</h2>
+    </div>
+    <blockquote>
+      <p>For all problems, unless otherwise indicated, assume a Type 1 error rate = .05.</p>
+    </blockquote>
+    <ol>
+      <li id="1">
+        <div class="question">
+          <p>An experiment is conducted in which behaviorally inhibited and behaviorally uninhibited children are exposed to an unfamiliar robot. The researcher quantifies heart rate responses in beats per minute (BPM) during exposure to the robot. The data are as follows:</p>
+
+          <table class="data">
+            <thead>
+            <tr>
+              <th>Subject Number</th>
+              <th>Group</th>
+              <th>Average Heart Rate (in BPM)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr><td>1</td><td>Uninhibited</td><td>66</td></tr>
+            <tr><td>2</td><td>Uninhibited</td><td>61</td></tr>
+            <tr><td>3</td><td>Uninhibited</td><td>67</td></tr>
+            <tr><td>4</td><td>Uninhibited</td><td>60</td></tr>
+            <tr><td>5</td><td>Uninhibited</td><td>71</td></tr>
+            <tr><td>6</td><td>Uninhibited</td><td>63</td></tr>
+            <tr><td>7</td><td>Uninhibited</td><td>67</td></tr>
+            <tr><td>8</td><td>Uninhibited</td><td>66</td></tr>
+            <tr><td>9</td><td>Inhibited</td><td>89</td></tr>
+            <tr><td>10</td><td>Inhibited</td><td>78</td></tr>
+            <tr><td>11</td><td>Inhibited</td><td>67</td></tr>
+            <tr><td>12</td><td>Inhibited</td><td>86</td></tr>
+            <tr><td>13</td><td>Inhibited</td><td>82</td></tr>
+            <tr><td>14</td><td>Inhibited</td><td>66</td></tr>
+            <tr><td>15</td><td>Inhibited</td><td>85</td></tr>
+            <tr><td>16</td><td>Inhibited</td><td>79</td></tr>
+            <tr><td>17</td><td>Inhibited</td><td>88</td></tr>
+            <tr><td>18</td><td>Inhibited</td><td>79</td></tr>
+            <tr><td>19</td><td>Inhibited</td><td>90</td></tr>
+            <tr><td>20</td><td>Inhibited</td><td>64</td></tr>
+            </tbody>
+          </table>
+
+          <p>The researcher is initially interested in testing the hypothesis that the inhibited group has more variable response times across subjects than the uninhibited group. (One could also assess variability on a within-subjects basis, but that is not the focus of the present study.) Using hand calculations test the hypothesis that the variability of heart rate within the behaviorally inhibited group is greater than the variability of heart rate within the behaviorally uninhibited group.</p>
+        </div>
+        <div class="answer">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>H</mi><mn>0</mn></msub></mtd>
+                <mtd><mo>:</mo></mtd>
+                <mtd><msubsup><mi>&sigma;</mi><mn>1</mn><mn>2</mn></msubsup></mtd>
+                <mtd><mo>&lt;</mo></mtd>
+                <mtd><msubsup><mi>&sigma;</mi><mn>2</mn><mn>2</mn></msubsup></mtd>
+              </mtr>
+            </mtable>
+          </math>
+                  
+          <p>A reasonable test when comparing variances is the two-tailed F-test. The F-test will fail to reject a two-tailed H<sub>0</sub> iff:</p>
+
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mmultiscripts>
+                    <mi>F</mi>
+                    <mfenced open="" close="">
+                      <mrow><msub><mi>n</mi><mn>1</mn></msub><mo>-</mo><mn>1</mn></mrow>
+                      <mrow><msub><mi>n</mi><mn>2</mn></msub><mo>-</mo><mn>1</mn></mrow>
+                    </mfenced>
+                    <none/>
+                    <mprescripts/>
+                    <mfrac><mi>&alpha;</mi><mn>2</mn></mfrac><none/>
+                  </mmultiscripts>
+                </mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd>
+                  <mfrac><msubsup><mi>s</mi><mn>1</mn><mn>2</mn></msubsup><msubsup><mi>s</mi><mn>2</mn><mn>2</mn></msubsup></mfrac>
+                </mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd>
+                  <mmultiscripts>
+                    <mi>F</mi>
+                    <mfenced open="" close="">
+                      <mrow><msub><mi>n</mi><mn>1</mn></msub><mo>-</mo><mn>1</mn></mrow>
+                      <mrow><msub><mi>n</mi><mn>2</mn></msub><mo>-</mo><mn>1</mn></mrow>
+                    </mfenced>
+                    <none/>
+                    <mprescripts/>
+                    <mrow><mn>1</mn><mo>-</mo><mfrac><mi>&alpha;</mi><mn>2</mn></mfrac></mrow><none/>
+                  </mmultiscripts>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <p>This particular F-test is one-tailed and so the measure is:</p>
+
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mfrac><msubsup><mi>s</mi><mn>1</mn><mn>2</mn></msubsup><msubsup><mi>s</mi><mn>2</mn><mn>2</mn></msubsup></mfrac>
+                </mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd>
+                  <mmultiscripts>
+                    <mi>F</mi>
+                    <mfenced open="" close="">
+                      <mrow><msub><mi>n</mi><mn>1</mn></msub><mo>-</mo><mn>1</mn></mrow>
+                      <mrow><msub><mi>n</mi><mn>2</mn></msub><mo>-</mo><mn>1</mn></mrow>
+                    </mfenced>
+                    <none/>
+                    <mprescripts/>
+                    <mrow><mn>1</mn><mo>-</mo><mi>&alpha;</mi></mrow><none/>
+                  </mmultiscripts>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <table class="data">
+            <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Group</th>
+              <th>Heart Rate</th>
+              <th><math xmlns="http://www.w3.org/1998/Math/MathML"><mover><mi>Y</mi><mo>_</mo></mover></math></th>
+              <th>
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><msup>
+                  <mfenced><mrow><mi>y</mi><mo>-</mo><mover><mi>Y</mi><mo>_</mo></mover></mrow></mfenced>
+                  <mn>2</mn>
+                </msup></math>
+              </th>
+              <th>
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <msubsup><mi>s</mi><mi>i</mi><mn>2</mn></msubsup><mo>=</mo>
+                  <mfrac>
+                    <mrow>
+                      <mo>&Sum;</mo>
+                      <msup>
+                        <mfenced><mrow>
+                          <msub><mi>y</mi><mi>i</mi></msub><mo>-</mo><mover><msub><mi>Y</mi><mi>i</mi></msub><mo>_</mo></mover>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                    </mrow>
+                    <mrow><msub><mi>n</mi><mi>i</mi></msub><mo>-</mo><mi>1</mi></mrow>
+                  </mfrac>
+                </math>
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>1</td>
+              <td>Uninhibited</td>
+              <td>66</td>
+              <td rowspan="8">65.125</td>
+              <td>0.766</td>
+              <td rowspan="8">12.982</td>
+            </tr>
+            <tr><td>2</td><td>Uninhibited</td><td>61</td><td>17.016</td></tr>
+            <tr><td>3</td><td>Uninhibited</td><td>67</td><td>3.516</td></tr>
+            <tr><td>4</td><td>Uninhibited</td><td>60</td><td>26.266</td></tr>
+            <tr><td>5</td><td>Uninhibited</td><td>71</td><td>5.641</td></tr>
+            <tr><td>6</td><td>Uninhibited</td><td>63</td><td>4.516</td></tr>
+            <tr><td>7</td><td>Uninhibited</td><td>67</td><td>3.516</td></tr>
+            <tr><td>8</td><td>Uninhibited</td><td>66</td><td>0.766</td></tr>
+            <tr>
+              <td>9</td>
+              <td>Inhibited</td>
+              <td>89</td>
+              <td rowspan="12">79.427</td>
+              <td>91.840</td>
+              <td rowspan="12">84.811</td>
+            </tr>
+            <tr><td>10</td><td>Inhibited</td><td>78</td><td>2.007</td></tr>
+            <tr><td>11</td><td>Inhibited</td><td>67</td><td>154.174</td></tr>
+            <tr><td>12</td><td>Inhibited</td><td>86</td><td>43.340</td></tr>
+            <tr><td>13</td><td>Inhibited</td><td>82</td><td>6.674</td></tr>
+            <tr><td>14</td><td>Inhibited</td><td>66</td><td>180.007</td></tr>
+            <tr><td>15</td><td>Inhibited</td><td>85</td><td>31.174</td></tr>
+            <tr><td>16</td><td>Inhibited</td><td>79</td><td>0.174</td></tr>
+            <tr><td>17</td><td>Inhibited</td><td>88</td><td>73.674</td></tr>
+            <tr><td>18</td><td>Inhibited</td><td>79</td><td>0.174</td></tr>
+            <tr><td>19</td><td>Inhibited</td><td>90</td><td>112.007</td></tr>
+            <tr><td>20</td><td>Inhibited</td><td>64</td><td>237.674</td></tr>
+          </tbody>
+          </table>
+
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mfrac><msubsup><mi>s</mi><mn>1</mn><mn>2</mn></msubsup><msubsup><mi>s</mi><mn>2</mn><mn>2</mn></msubsup></mfrac>
+                </mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mfrac><mn>12.928</mn><mn>84.811</mn></mfrac></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd><mn>0.153</mn></mtd>
+                <mtd><mo>&le;</mo></mtd>
+                <mtd><mn>0.21</mn></mtd>
+                <mtd><mo>&ape;</mo></mtd>
+                <mtd>
+                  <mmultiscripts>
+                    <mi>F</mi><mfenced open="" close=""><mn>7</mn><mn>11</mn></mfenced><none/>
+                    <mprescripts/><mn>.025</mn><none/>
+                  </mmultiscripts>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <mmultiscripts>
+                <mi>F</mi><mfenced open="" close=""><mn>7</mn><mn>11</mn></mfenced><none/>
+                <mprescripts/><mi>0.01</mi><none/>
+              </mmultiscripts>
+              <mo>&ape;</mo><mn>0.153</mn>
+            </math>,
+            the null hypothesis is rejected.
+          </p>
+        </div>
+      </li>
+      <li id="2">
+        <div class="question">
+          <p>A study involves testing the effects of three medications on the ability of phobics to approach a feared object. 30 individuals who are phobic of spiders are randomly assigned to receive one of 3 medications (Zoloft, Naltrexone, and Valium) (10 subjects per group). After ingesting the medication, each participant attempts to approach a live spider. The researcher measures the distance in feet of each participant from the spider. The raw data are below:</p>
+          <table class="data">
+            <tr><th>Zoloft</th><td>9</td><td>11</td><td>5</td><td>12</td><td>15</td><td>14</td><td>13</td><td>12</td><td>7</td><td>6</td></tr>
+            <tr><th>Naltrexone</th><td>15</td><td>16</td><td>12</td><td>12</td><td>18</td><td>19</td><td>23</td><td>20</td><td>13</td><td>17</td></tr>
+            <tr><th>Valium</th><td>9</td><td>11</td><td>12</td><td>5</td><td>13</td><td>15</td><td>11</td><td>8</td><td>6</td><td>9</td></tr>
+          </table>
+        </div>
+        <ol>
+          <li id="2a">
+            <div class="question">
+              <p>In order to assess whether medication condition has an effect on approach behavior, analyze these data using a one-way between subjects ANOVA. Please do the calculations by hand and show your work. Present the results in an ANOVA source table. Also be sure to indicate the statistical hypotheses (H<sub>0</sub> &amp; H<sub>1</sub>) that you are testing and whether or not you reject the null hypothesis.</p>
+            </div>
+            <div class="answer">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>H</mi><mn>0</mn></msub></mtd>
+                <mtd><mo>:</mo></mtd>
+                <mtd><mo>&ForAll;</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mi>i</mi></msub></mtd>
+                <mtd><mo>;</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mi>i</mi></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mi>j</mi></msub></mtd>
+                <mtd><mo>&rArr;</mo></mtd>
+                <mtd><msub><mi>H</mi><mn>0</mn></msub></mtd>
+                <mtd><mo>:</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mtext>zoloft</mtext></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mtext>naltrexone</mtext></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mtext>valium</mtext></msub></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>H</mi><mn>1</mn></msub></mtd>
+                <mtd><mo>:</mo></mtd>
+                <mtd><mo>&Exists;</mo></mtd>
+                <mtd><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></mtd>
+                <mtd><mo>&SuchThat;</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mi>i</mi></msub></mtd>
+                <mtd><mo>&ne;</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mi>j</mi></msub></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <table class="data">
+            <thead>
+            <tr>
+              <th rowspan="2">Drug</th>
+              <th rowspan="2">Sample</th>
+              <th>Mean</th>
+              <th><acronym title="sum of squares within">SSW</acronym></th>
+              <th><acronym title="mean square within">MSW</acronym></th>
+              <th><acronym title="sum of squares between">SSB</acronym></th>
+              <th><acronym title="mean square between">MSB</acronym></th>
+              <th>
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mfrac>
+                    <mtext><html:acronym title="Mean Square Between">MSB</html:acronym></mtext>
+                    <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                  </mfrac>
+                </math>
+              </th>
+            </tr>
+            <tr>
+              <th><math xmlns="http://www.w3.org/1998/Math/MathML"><mover><mi>Y</mi><mo>_</mo></mover></math></th>
+              <th>
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><msup>
+                  <mfenced><mrow><mi>y</mi><mo>-</mo><mover><mi>Y</mi><mo>_</mo></mover></mrow></mfenced>
+                  <mn>2</mn>
+                </msup></math>
+              </th>
+              <th>
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac>
+                  <mrow>
+                    <mo>&Sum;</mo>
+                    <msup>
+                      <mfenced><mrow>
+                        <msub><mi>y</mi><mi>i</mi></msub><mo>-</mo><mover><msub><mi>Y</mi><mi>i</mi></msub><mo>_</mo></mover>
+                      </mrow></mfenced>
+                      <mn>2</mn>
+                    </msup>
+                  </mrow>
+                  <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow>
+                </mfrac></math>
+              </th>
+              <th>
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <mi>n</mi>
+                  <msup>
+                    <mfenced><mrow>
+                      <mover><mi>Y</mi><mo>_</mo></mover><mo>-</mo><mover><mover><mi>Y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                    </mrow></mfenced>
+                    <mn>2</mn>
+                  </msup>
+                </math>
+              </th>
+              <th>
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac>
+                  <mrow>
+                    <mo>&Sum;</mo>
+                    <msub><mi>n</mi><mi>j</mi></msub>
+                    <msup>
+                      <mfenced><mrow>
+                        <msub><mover><mi>Y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo><mover><mover><mi>Y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                      </mrow></mfenced>
+                      <mn>2</mn>
+                    </msup>
+                  </mrow>
+                  <mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow>
+                </mfrac></math>
+              </th>
+              <th>
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac>
+                  <mfrac>
+                    <mrow>
+                      <mo>&Sum;</mo>
+                      <msub><mi>n</mi><mi>j</mi></msub>
+                      <msup>
+                        <mfenced><mrow>
+                          <msub><mover><mi>Y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo><mover><mover><mi>Y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                    </mrow>
+                    <mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow>
+                  </mfrac>
+                  <mfrac>
+                    <mrow>
+                      <mo>&Sum;</mo>
+                      <msup>
+                        <mfenced><mrow>
+                          <msub><mi>y</mi><mi>i</mi></msub><mo>-</mo><mover><msub><mi>Y</mi><mi>i</mi></msub><mo>_</mo></mover>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                    </mrow>
+                    <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow>
+                  </mfrac>
+                </mfrac></math>
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td rowspan="10">Zoloft</td>
+              <td>9</td>
+              <td rowspan="10">10.40</td>
+              <td>1.960</td>
+              <td rowspan="30">11.622</td>
+              <td rowspan="10">34.844</td>
+              <td rowspan="30">135.033</td>
+              <td rowspan="30">11.619</td>
+            </tr>
+            <tr><td>11</td><td>0.360</td></tr>
+            <tr><td>5</td><td>29.160</td></tr>
+            <tr><td>12</td><td>2.560</td></tr>
+            <tr><td>15</td><td>21.160</td></tr>
+            <tr><td>14</td><td>12.960</td></tr>
+            <tr><td>13</td><td>6.760</td></tr>
+            <tr><td>12</td><td>2.560</td></tr>
+            <tr><td>7</td><td>11.560</td></tr>
+            <tr><td>6</td><td>19.360</td></tr>
+            <tr>
+              <td rowspan="10">Naltrexone</td>
+              <td>15</td>
+              <td rowspan="10">16.50</td>
+              <td>2.250</td>
+              <td rowspan="10">179.211</td>
+            </tr>
+            <tr><td>16</td><td>0.250</td></tr>
+            <tr><td>12</td><td>20.250</td></tr>
+            <tr><td>12</td><td>20.250</td></tr>
+            <tr><td>18</td><td>2.250</td></tr>
+            <tr><td>19</td><td>6.250</td></tr>
+            <tr><td>23</td><td>42.250</td></tr>
+            <tr><td>20</td><td>12.250</td></tr>
+            <tr><td>13</td><td>12.250</td></tr>
+            <tr><td>17</td><td>0.250</td></tr>
+            <tr>
+              <td rowspan="10">Valium</td>
+              <td>9</td>
+              <td rowspan="10">9.90</td>
+              <td>0.810</td>
+              <td rowspan="10">56.011</td>
+            </tr>
+            <tr><td>11</td><td>1.210</td></tr>
+            <tr><td>12</td><td>4.410</td></tr>
+            <tr><td>5</td><td>24.010</td></tr>
+            <tr><td>13</td><td>9.610</td></tr>
+            <tr><td>15</td><td>26.010</td></tr>
+            <tr><td>11</td><td>1.210</td></tr>
+            <tr><td>8</td><td>3.610</td></tr>
+            <tr><td>6</td><td>15.210</td></tr>
+            <tr><td>9</td><td>0.810</td></tr>
+          </tbody>
+          </table>
+
+          <p>As an ANOVA source table, this is:</p>
+
+          <table class="data">
+            <tr><th>Source of Variation</th><th>Sum of Squares</th><th>df</th><th>Mean Square</th><th>F</th></tr>
+            <tr><td>Between</td><td>270.067</td><td>2</td><td>135.033</td><td rowspan="3">11.619</td></tr>
+            <tr><td>Within</td><td>313.80</td><td>27</td><td>11.622</td></tr>
+            <tr><td>Total</td><td>583.876</td><td colspan="2"></td></tr>
+          </table>
+
+          <p>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <mtable>
+                <mtr>
+                  <mtd>
+                    <mmultiscripts>
+                      <mi>F</mi><mfenced open="" close=""><mn>2</mn><mn>27</mn></mfenced><none/>
+                      <mprescripts/><mi>0.999</mi><none/>
+                    </mmultiscripts>
+                  </mtd>
+                  <mtd><mo>&ape;</mo></mtd>
+                  <mtd><mn>11.619</mn></mtd>
+                  <mtd><mo>&ge;</mo></mtd>
+                  <mtd><mn>3.35</mn></mtd>
+                  <mtd><mo>&ape;</mo></mtd>
+                  <mtd>
+                    <mmultiscripts>
+                      <mi>F</mi><mfenced open="" close=""><mn>2</mn><mn>27</mn></mfenced><none/>
+                      <mprescripts/><mi>0.95</mi><none/>
+                    </mmultiscripts>
+                  </mtd>
+                </mtr>
+              </mtable>
+            </math>,
+            the null hypothesis is rejected.
+          </p>
+
+          <!--
+          <hr />
+          <p><em>The next section is simply notes to aid in the comprehension of ANOVA for the uninitiated. In all honesty, anything that doesn't get into the computer gets lost to the mists of time for me&hellip;</em></p>
+
+          <p>Several adjectives are used to characterize this type of experiment:</p>
+          <ul>
+            <li>One-Way &mdash; There is a single characterisitic that is being experiementally examined, average heart rate.</li>
+            <li>Fixed-Effects &mdash; The effects are constrained to the point that they cre not seem to come from a continuous distribution, as they would with a random effect.</li>
+            <li>Between-Group &mdash; Each subject shows up in one and only one level of the factor as opposed to a within-group experiment where multiple measurements are taken from a subject.</li>
+          </ul>
+          <p>For a one-way fixed-effects between-group test where the experiemental hypothesis is that a factor changes variablility, an one-way fixed-effects between-group <acronym title="Analysis of Variance">ANOVA</acronym> can be performed.</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>H</mi><mn>0</mn></msub></mtd>
+                <mtd><mo>:</mo></mtd>
+                <mtd><mo>&ForAll;</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mi>i</mi></msub></mtd>
+                <mtd><mo>;</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mi>i</mi></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mi>j</mi></msub></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><msub><mi>H</mi><mn>0</mn></msub></mtd>
+                <mtd><mo>:</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mn>1</mn></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mn>2</mn></msub></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>H</mi><mn>1</mn></msub></mtd>
+                <mtd><mo>:</mo></mtd>
+                <mtd><mo>&Exists;</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mi>i</mi></msub></mtd>
+                <mtd><mo>&SuchThat;</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mi>i</mi></msub></mtd>
+                <mtd><mo>&ne;</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mi>j</mi></msub></mtd>
+                <mtd><mo>&iff;</mo></mtd>
+                <mtd><msub><mi>H</mi><mn>1</mn></msub></mtd>
+                <mtd><mo>:</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mn>1</mn></msub></mtd>
+                <mtd><mo>&ne;</mo></mtd>
+                <mtd><msub><mi>&mu;</mi><mn>2</mn></msub></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>
+            Consider the set of samples,
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>Y</mi></math>,
+            where
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+            </math>
+            is the
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>i</mi><mtext>th</mtext></msup></math>
+            sample from the
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>j</mi><mtext>th</mtext></msup></math>
+            group. For each population, there is a mean,
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>&mu;</mi><mi>j</mi></msub></math>.
+            Each sample,
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+              <mo>=</mo>
+              <msub><mi>&mu;</mi><mi>j</mi></msub><mo>+</mo>
+              <msub><mi>&epsilon;</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+            </math>
+            where
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <msub><mi>&epsilon;</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+            </math>
+            is the sampling error caused by the variance in population
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>j</mi></math>,
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><msubsup><mi>&sigma;</mi><mi>j</mi><mn>2</mn></msubsup></math>.
+          </p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msubsup><mi>&sigma;</mi><msub><mi>y</mi><mi>j</mi></msub><mn>2</mn></msubsup></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mo>Var</mo><mfenced><msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>Var</mo>
+                  <mfenced><mrow>
+                    <msub><mi>&mu;</mi><mi>j</mi></msub><mo>+</mo>
+                    <msub><mi>&epsilon;</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+                  </mrow></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>Var</mo><mfenced><msub><mi>&mu;</mi><mi>j</mi></msub></mfenced>
+                  <mo>+</mo>
+                  <mo>Var</mo><mfenced><msub><mi>&epsilon;</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub></mfenced>
+                  <mo>+</mo>
+                  <mn>2</mn>
+                  <mo>Covar</mo>
+                  <mfenced>
+                    <msub><mi>&mu;</mi><mi>j</mi></msub>
+                    <msub><mi>&epsilon;</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+                  </mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>Var</mo><mfenced><msub><mi>&epsilon;</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msubsup><mi>&sigma;</mi><msub><mi>&epsilon;</mi><mi>j</mi></msub><mn>2</mn></msubsup></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Consider two new quantities:</p>
+          <ul>
+            <li>
+              The mean of means or "the grand mean" (assuming equal sample sizes) &rArr;
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <msub><mi>&mu;</mi><mrow><mo>&bull;</mo><mo>&bull;</mo></mrow></msub>
+                <mo>=</mo>
+                <mover><mi>&mu;</mi><mo>_</mo></mover>
+                <mo>=</mo>
+                <mfrac><mrow><mo>&Sum;</mo><msub><mi>&mu;</mi><mi>i</mi></msub></mrow><mi>J</mi></mfrac>
+              </math>
+            </li>
+            <li>
+              The effect of population <em>j</em> &rArr;
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <msub><mi>&alpha;</mi><mi>j</mi></msub>
+                <mo>=</mo>
+                <msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo><mover><mi>&mu;</mi><mo>_</mo></mover>
+              </math>
+            </li>
+          </ul>
+          <p>These quantities can then be used to give a different conceptualization of a sample:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <msub><mi>&mu;</mi><mi>j</mi></msub><mo>+</mo>
+                  <msub><mi>&epsilon;</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <mover><mi>&mu;</mi><mo>_</mo></mover><mo>+</mo><msub><mi>&mu;</mi><mi>j</mi></msub><mo>-</mo>
+                  <mover><mi>&mu;</mi><mo>_</mo></mover><mo>+</mo>
+                  <msub><mi>&epsilon;</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd columnspan="3" class="eqn">
+                  <mover><mi>&mu;</mi><mo>_</mo></mover><mo>+</mo><msub><mi>&alpha;</mi><mi>j</mi></msub><mo>+</mo>
+                  <msub><mi>&epsilon;</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>There are two potential reasons that a sample mean will deviate from the grand mean: the variance of the sample population and an actual difference in population mean. Simply seeing that a mean differs from the grand mean is insufficient. Statistical inference however, can assign a probability to the likelihood that a given deviation arose solely from the sample variance.</p>
+          <p>This inference centers around computations involving:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                  <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced><mrow>
+                    <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo>
+                    <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                  </mrow></mfenced>
+                  <mo>+</mo>
+                  <mfenced><mrow>
+                    <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                    <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+                  <msup>
+                    <mfenced><mrow>
+                      <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                      <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                    </mrow></mfenced>
+                    <mn>2</mn>
+                  </msup>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+                  <msup>
+                    <mfenced open="[" close="]"><mrow>
+                      <mfenced><mrow>
+                        <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo>
+                        <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                      </mrow></mfenced>
+                      <mo>+</mo>
+                      <mfenced><mrow>
+                        <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                        <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub>
+                      </mrow></mfenced>
+                    </mrow></mfenced>
+                    <mn>2</mn>
+                  </msup>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+                  <mfenced open="[" close="]"><mrow>
+                    <msup>
+                      <mfenced><mrow>
+                        <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo>
+                        <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                      </mrow></mfenced>
+                      <mn>2</mn>
+                    </msup>
+                    <mo>+</mo>
+                    <msup>
+                      <mfenced><mrow>
+                        <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                        <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub>
+                      </mrow></mfenced>
+                      <mn>2</mn>
+                    </msup>
+                    <mo>+</mo>
+                    <mn>2</mn>
+                    <mfenced><mrow>
+                      <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo>
+                      <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                    </mrow></mfenced>
+                    <mfenced><mrow>
+                      <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                      <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub>
+                    </mrow></mfenced>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+                  <msup>
+                    <mfenced><mrow>
+                      <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo>
+                      <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                    </mrow></mfenced>
+                    <mn>2</mn>
+                  </msup>
+                  <mo>+</mo>
+                  <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+                  <msup>
+                    <mfenced><mrow>
+                      <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                      <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub>
+                    </mrow></mfenced>
+                    <mn>2</mn>
+                  </msup>
+                  <mo>+</mo>
+                  <mn>2</mn>
+                  <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+                  <mfenced><mrow>
+                    <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo>
+                    <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                  </mrow></mfenced>
+                  <mfenced><mrow>
+                    <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                    <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <munder><mo>&Sum;</mo><mi>i</mi></munder>
+                  <msub><mi>n</mi><mi>j</mi></msub>
+                  <msup>
+                    <mfenced><mrow>
+                      <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo>
+                      <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                    </mrow></mfenced>
+                    <mn>2</mn>
+                  </msup>
+                  <mo>+</mo>
+                  <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+                  <msup>
+                    <mfenced><mrow>
+                      <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                      <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub>
+                    </mrow></mfenced>
+                    <mn>2</mn>
+                  </msup>
+                  <mo>+</mo>
+                  <mn>2</mn>
+                  <munder><mo>&Sum;</mo><mi>j</mi></munder>
+                  <mfenced><mrow>
+                    <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo>
+                    <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                  </mrow></mfenced>
+                  <munder><mo>&Sum;</mo><mi>i</mi></munder>
+                  <mfenced><mrow>
+                    <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                    <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub>
+                  </mrow></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <munder><mo>&Sum;</mo><mi>i</mi></munder>
+                  <msub><mi>n</mi><mi>j</mi></msub>
+                  <msup>
+                    <mfenced><mrow>
+                      <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo>
+                      <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                    </mrow></mfenced>
+                    <mn>2</mn>
+                  </msup>
+                  <mo>+</mo>
+                  <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+                  <msup>
+                    <mfenced><mrow>
+                      <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                      <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub>
+                    </mrow></mfenced>
+                    <mn>2</mn>
+                  </msup>
+                  <mo>+</mo>
+                  <mn>2</mn>
+                  <munder><mo>&Sum;</mo><mi>j</mi></munder>
+                  <mfenced><mrow>
+                    <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo>
+                    <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                  </mrow></mfenced>
+                  <mfenced><mn>0</mn></mfenced>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd class="eqn">
+                  <munder><mo>&Sum;</mo><mi>i</mi></munder>
+                  <msub><mi>n</mi><mi>j</mi></msub>
+                  <msup>
+                    <mfenced><mrow>
+                      <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo>
+                      <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                    </mrow></mfenced>
+                    <mn>2</mn>
+                  </msup>
+                  <mo>+</mo>
+                  <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+                  <msup>
+                    <mfenced><mrow>
+                      <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                      <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub>
+                    </mrow></mfenced>
+                    <mn>2</mn>
+                  </msup>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>These quantities represent the idea that the deviation from the grand mean may be partitioned into the deviation of groups from the grand mean and the deviation of individual scores from the group mean. The quantities have specific names and abbreviations:</p>
+          <ul>
+            <li>
+              Sum of Squares Total (SST) &rArr; 
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+                <msup>
+                  <mfenced><mrow>
+                    <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                    <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                  </mrow></mfenced>
+                  <mn>2</mn>
+                </msup>
+              </math>
+            </li>
+            <li>
+              Sum of Squares Between (SSB) &rArr; 
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <munder><mo>&Sum;</mo><mi>i</mi></munder>
+                <msub><mi>n</mi><mi>j</mi></msub>
+                <msup>
+                  <mfenced><mrow>
+                    <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub><mo>-</mo>
+                    <mover><mover><mi>y</mi><mo>_</mo></mover><mo>_</mo></mover>
+                  </mrow></mfenced>
+                  <mn>2</mn>
+                </msup>
+              </math>
+            </li>
+            <li>
+              Sum of Squares Within (SSW) &rArr; 
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+                <msup>
+                  <mfenced><mrow>
+                    <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>-</mo>
+                    <msub><mover><mi>y</mi><mo>_</mo></mover><mi>j</mi></msub>
+                  </mrow></mfenced>
+                  <mn>2</mn>
+                </msup>
+              </math>
+            </li>
+          </ul>
+          -->
+            </div>
+          </li>
+          <li id="2b">
+            <div class="question">
+              <p>Replicate your results by doing an ANOVA using SAS. Turn in both the SAS program and your output.</p>
+            </div>
+            <div class="answer">
+              <p><a href="spider_analysis.sas">spider_analysis.sas</a> is a simple <acronym title="Statistical Analysis System">SAS</acronym> program to compute ANOVA on <a href="spider_data.csv">spider_data.csv</a>. More interestingly, <a href="homework_1.R">homework_1.R</a> is a R program to do the same thing.</p>
+              <p>The output from R is:</p>
+<pre>Response: Response
+          Df  Sum Sq Mean Sq F value    Pr(>F)    
+Drug       2 270.067 135.033  11.618 0.0002289 ***
+Residuals 27 313.800  11.622
+
+Signif. codes: 0 '***' 0.001 '**' 0.01 '**' 0.05 '.' 0.1 ' ' 1</pre>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li id="3">
+        <div class="question">
+          <p>One of the undergraduate students in your lab left the results of an ANOVA in your mailbox. Due to some really odd printer problem only some of the cells are legible. After unsuccessfully trying to contact the student you realize that you actually have enough information left to figure out what the missing cells have to be.</p>
+          <table class="data">
+            <tr><th>Source of Variation</th><th>Sum of Squares</th><th>df</th><th>Mean Square</th><th>F</th></tr>
+            <tr><td>Between</td><td></td><td>5</td><td></td><td rowspan="3">3.22</td></tr>
+            <tr><td>Within</td><td></td><td></td><td>10.60</td></tr>
+            <tr><td>Total</td><td>382.65</td><td></td><td></td></tr>
+          </table>
+        </div>
+        <ol>
+          <li id="3a">
+            <div class="question">
+              <p>Fill in the blanks.</p>
+            </div>
+            <div class="answer">
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac>
+                      <mtext><html:acronym title="Mean Square Between">MSB</html:acronym></mtext>
+                      <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                    </mfrac></mtd>
+                    <mtd><mo>~</mo></mtd>
+                    <mtd><msub>
+                      <mi>F</mi>
+                      <mfenced open="" close="">
+                        <mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow>
+                        <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow>
+                      </mfenced>
+                    </msub></mtd>
+                    <mtd><mo>&rArr;</mo></mtd>
+                    <mtd><mtext><html:acronym title="Mean Square Between">MSB</html:acronym></mtext></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mi>F</mi></mfenced>
+                      <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfenced><mn>3.22</mn></mfenced><mfenced><mn>10.60</mn></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>34.132</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mtext><html:acronym title="Mean Square Between">MSB</html:acronym></mtext></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mtext><html:acronym title="Sum of Squares Between">SSB</html:acronym></mtext>
+                      <mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mtext><html:acronym title="Sum of Squares Between">SSB</html:acronym></mtext>
+                      <msub><mi>df</mi><mtext><html:acronym title="Sum of Squares Between">SSB</html:acronym></mtext></msub>
+                    </mfrac></mtd>
+                    <mtd><mo>&rArr;</mo></mtd>
+                    <mtd><mtext><html:acronym title="Sum of Squares Between">SSB</html:acronym></mtext></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mtext><html:acronym title="Mean Square Between">MSB</html:acronym></mtext></mfenced>
+                      <msub><mi>df</mi><mtext><html:acronym title="Sum of Squares Between">SSB</html:acronym></mtext></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfenced><mn>34.132</mn></mfenced><mfenced><mn>5</mn></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>170.66</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mtext><html:acronym title="Sum of Squares Total">SST</html:acronym></mtext></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mtext><html:acronym title="Sum of Squares Between">SSB</html:acronym></mtext><mo>+</mo>
+                      <mtext><html:acronym title="Sum of Squares Within">SSW</html:acronym></mtext>
+                    </mtd>
+                    <mtd><mo>&rArr;</mo></mtd>
+                    <mtd><mtext><html:acronym title="Sum of Squares Within">SSW</html:acronym></mtext></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mtext><html:acronym title="Sum of Squares Total">SST</html:acronym></mtext><mo>-</mo>
+                      <mtext><html:acronym title="Sum of Squares Between">SSB</html:acronym></mtext>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>382.65</mn><mo>-</mo><mn>170.66</mn></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>211.99</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mtext><html:acronym title="Sum of Squares Within">SSW</html:acronym></mtext>
+                      <mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mtext><html:acronym title="Sum of Squares Within">SSW</html:acronym></mtext>
+                      <msub><mi>df</mi><mtext><html:acronym title="Sum of Squares Within">SSW</html:acronym></mtext></msub>
+                    </mfrac></mtd>
+                    <mtd><mo>&rArr;</mo></mtd>
+                    <mtd><msub><mi>df</mi><mtext><html:acronym title="Sum of Squares Within">SSW</html:acronym></mtext></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mtext><html:acronym title="Sum of Squares Within">SSW</html:acronym></mtext>
+                      <mtext><html:acronym title="Mean Square Within">MSW</html:acronym></mtext>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><mn>211.99</mn><mn>10.60</mn></mfrac></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>20</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <table class="data">
+                <tr><th>Source of Variation</th><th>Sum of Squares</th><th>df</th><th>Mean Square</th><th>F</th></tr>
+                <tr><td>Between</td><td>170.66</td><td>5</td><td>34.132</td><td rowspan="3">3.22</td></tr>
+                <tr><td>Within</td><td>211.99</td><td>20</td><td>10.60</td></tr>
+                <tr><td>Total</td><td>382.65</td><td></td><td></td></tr>
+              </table>
+            </div>
+          </li>
+          <li id="3b">
+            <div class="question">
+              <p>Indicate whether the results would lead to rejection of the null hypothesis.</p>
+            </div>
+            <div class="answer">
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mmultiscripts>
+                        <mi>F</mi>
+                        <mfenced open="" close=""><mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow><mrow><mi>N</mi><mo>-</mo><mi>J</mi></mrow></mfenced>
+                        <none/>
+                        <mprescripts/>
+                        <mi>&alpha;</mi>
+                        <none/>
+                      </mmultiscripts>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mmultiscripts>
+                        <mi>F</mi>
+                        <mfenced open="" close=""><mn>5</mn><mn>20</mn></mfenced>
+                        <none/>
+                        <mprescripts/>
+                        <mi>0.97</mi>
+                        <none/>
+                      </mmultiscripts>
+                    </mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>3.22</mn></mtd>
+                    <mtd><mo>&ge;</mo></mtd>
+                    <mtd><mn>2.71</mn></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mmultiscripts>
+                        <mi>F</mi>
+                        <mfenced open="" close=""><mn>5</mn><mn>20</mn></mfenced>
+                        <none/>
+                        <mprescripts/>
+                        <mi>0.95</mi>
+                        <none/>
+                      </mmultiscripts>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>This F-value would reject H<sub>0</sub> at the 95% confidence level.</p>
+            </div>
+          </li>
+          <li id="3c">
+            <div class="question">
+              <p>Assuming that the assumption of homogeneity of population variances is met here, present your best estimate of the variance within the populations.</p>
+            </div>
+            <div class="answer">
+              <p>When population variances are homogenous, the estimated value of the mean square within is an unbiased estimator of the population variance. For this data, the mean square within is 10.60.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li id="4">
+        <div class="question">
+          <p>
+            In some statistical computations it's helpful to know the variance of the sample variance: that is
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <mo>Var</mo><mfenced><msup><mover><mi>s</mi><mo>&Hat;</mo></mover><mn>2</mn></msup></mfenced>
+            </math>.
+            That is, consider the sampling distribution of the sample variance across a large number of random samples. The "variance of the sample variance" is the variance of this distribution and is an indicator of how variable the sample variance is likely to be from sample to sample. Prove:
+          </p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mo>Var</mo><mfenced><msup><mover><mi>s</mi><mo>&Hat;</mo></mover><mn>2</mn></msup></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfrac>
+                    <mrow><mn>2</mn><msup><mi>&sigma;</mi><mn>4</mn></msup></mrow><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                  </mfrac>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+        <div class="answer">
+          <hr />
+          <p>Begin with a well-known distribution involving the sample variance:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mfrac>
+                  <mrow>
+                    <mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                    <msup><mover><mi>s</mi><mo>&Hat;</mo></mover><mn>2</mn></msup>
+                  </mrow>
+                  <msup><mi>&sigma;</mi><mn>2</mn></msup>
+                </mfrac></mtd>
+                <mtd><mo>~</mo></mtd>
+                <mtd><msubsup><mi>&chi;</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow><mn>2</mn></msubsup></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>In order for the two distributions to be the same, their variances must be the same. The distribution of the chi-square is known:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mo>Var</mo>
+                  <mfenced><mfrac>
+                    <mrow>
+                      <mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                      <msup><mover><mi>s</mi><mo>&Hat;</mo></mover><mn>2</mn></msup>
+                    </mrow>
+                    <msup><mi>&sigma;</mi><mn>2</mn></msup>
+                  </mfrac></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mo>Var</mo>
+                  <mfenced>
+                    <msubsup><mi>&chi;</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow><mn>2</mn></msubsup>
+                  </mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>2</mn><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>Constant factors within a variance may be factored out, but their value must be squared. Both the population variance and number of samples are constant in relation to the sample variance:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <msup>
+                    <mfenced><mfrac>
+                      <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                      <msup><mi>&sigma;</mi><mn>2</mn></msup>
+                    </mfrac></mfenced>
+                    <mn>2</mn>
+                  </msup>
+                  <mo>Var</mo>
+                  <mfenced><msup><mover><mi>s</mi><mo>&Hat;</mo></mover><mn>2</mn></msup></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mn>2</mn><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced></mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The rest is simply algebra:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <mo>Var</mo>
+                  <mfenced><msup><mover><mi>s</mi><mo>&Hat;</mo></mover><mn>2</mn></msup></mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mn>2</mn><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced><msup><mi>&sigma;</mi><mn>4</mn></msup></mrow>
+                  <msup><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced><mn>2</mn></msup>
+                </mfrac></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><mn>2</mn><msup><mi>&sigma;</mi><mn>4</mn></msup></mrow>
+                  <mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow>
+                </mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

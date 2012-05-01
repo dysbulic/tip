@@ -1,0 +1,116 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>JBOT Language Summary</TITLE>
+</HEAD>
+<BODY>
+
+<U><FONT FACE="Arial" SIZE=6><P ALIGN="CENTER">JBOT Language Summary</P>
+</U></FONT><FONT FACE="Arial">
+<OL>
+
+<LI>Programming Model</LI></OL>
+
+<DIR>
+
+<P>The command parser is loosely modeled as a &quot;virtual&quot; CPU (see Figure 1).  </P>
+
+<P><IMG SRC="Image3.gif" WIDTH=479 HEIGHT=359></P>
+<P> </P>
+<P>The object <I>CommandInterpreter()</I> can be viewed as the control unit of a computer CPU.  <I>CommandInterpreter() </I>takes a string (the input script) as its argument.  This string is then broken (&quot;tokenized&quot;) into the separate lines of code to be processed; these lines can be thought of as residing in the address space shown in Figure 1 (they are also referenced by a line number).  As variables are initialized within the input script, they are assigned to positions in the variable registers (similar to internal registers in a CPU); similarly, line labels are stored in such an array (the &quot;Label Registers&quot; of Figure 1).  Finally, a one-bit status register is included; this denotes the status of the last condition tested.</P>
+</DIR>
+
+<OL START=2>
+
+<LI>General Syntax</LI>
+
+<P>As the JBOT command parser follows a CPU model, so is its language written in an assembly-style syntax, i.e.:</P>
+
+<P>&#9;<I>Command op1 op2 op3 … opn;</P>
+</I>
+<P>This syntax simplifies the parsing process; expressions are already postfixed and need not be rewritten into postfix at interpretation-time.</P>
+
+<P>The semi-colon is necessary for the command parser to find the end of a line, therefore, it must be included for proper functioning.  In general, commands and operators are separated by spaces.  Finally, in JBOT, all numeric values are explicity integers.</P>
+
+<LI>Variables</LI>
+
+<P>In an effort to simplify the parsing of the program, only a finite number of variables are allowed.  Inside <I>CommandInterpreter()</I>, all variables are stored in an array V[ ].  When programming, a new variable can be defined simply by typing the letter &quot;V&quot; followed by a number from 0 to 9, i.e., V0, V1, V2, etc.  (The number corresponds directly to the array location of that variable.)  Note that these are static locations that are always available, so they do not need to be declared.  Just use them.</P>
+
+<I><P>The variable MAX_VAR in CommandInterpreter() specifies the total number of available variables, initially 10.  If more are needed, MAX_VAR can be increased and the JBOT program re-compiled.</P>
+</I>
+<P>This variable design hampers readability, but makes the parsing routine much easier, and the script execution faster.  Further, this language was designed for short command scripts, so the functionality of user-nameable variables could be considered overkill. </P>
+
+<LI>LABEL Statements</LI>
+
+<P>A label is simply a marker for the interpreter to go back and repeat a section of code, or else to skip a section of code by jumping ahead.  Otherwise, the label statement does nothing.</P>
+
+<P>A LABEL statement has the following form:</P>
+
+<P>&#9;LABEL L&lt;number&gt;;</P>
+
+<P>Like variables in JBOT, all label references are stored in an array.  The script programmer would refer to them as L0, L1, L2, etc., up to L24.  Thus, if the programmer desires to branch on not true to label 3, he/she could use</P>
+
+<P>&#9;BNT L3;</P>
+
+<P> <I>MAX_LABELS in CommandInterpreter() specifies the total number of available labels that can be used, initially 25.  If more are needed, MAX_LABELS can be increased and the JBOT program re-compiled.</P>
+</I>
+<P>&nbsp;</P>
+<LI>The EQ Command</LI>
+
+<P>The EQ command tests if its two operands are equal, and sets the status register to &quot;true&quot; or &quot;false&quot; accordingly.  Its syntax is:</P>
+
+<P>&#9;EQ op1 op2;</P>
+
+<P>Both op1 and op2 may be either a numeric value or a variable.</P>
+
+<LI>The ADD Command</LI>
+
+<P>The ADD command takes two operands, adds them, and places the result in the first operand.  Its syntax is:</P>
+
+<P>&#9;ADD op1 op2;</P>
+
+<P>Op1 must be a variable (programmers take note!), as ADD has to have a place to put the result!  Op2 may be either a numeric value or a variable.</P>
+
+<LI>The SENSOR Command</LI>
+
+<P>The SENSOR command takes no arguments.  Its purpose is to poll the robot arm and determine if an object (perhaps the floor or a token to be grasped) have triggered the sensor at the tip of the claw.  The status register is set to &quot;true&quot; if this condition is met, &quot;false&quot; otherwise.  The syntax of the SENSOR command is simply:</P>
+
+<P>&#9;SENSOR;</P>
+
+<LI>The COPEN and CCLOSE Commands</LI>
+
+<P>COPEN and CCLOSE open and close, respectively, the claw of the robot arm by a specified percentage of its total range.  The interpreter checks to see if the number specified puts the claw outside its total range (i.e., the resulting claw position must always be between 0 and 99 percent).  If the result is less than 0 percent, it is set to 0 percent; likewise, if it is above 99 percent, it is set to 99 percent.  The syntax of the COPEN and CCLOSE commands are:</P>
+
+<P>&#9;COPEN op1;</P>
+<P>&#9;</P>
+<P>&#9;CCLOSE op2;</P>
+
+<P>Both op1 and op2 may be either variable or numeric values.</P>
+
+<P>9.  The ROTATE Command</P>
+
+<P>The ROTATE command specifies which joints of the arm are to move, and by how much.  Its syntax is:</P>
+
+<P>&#9;ROTATE Adeg Bdeg Cdeg;</P>
+
+<P>The operands Adeg, Bdeg, and Cdeg specify how far, in integer degrees, each joint is to rotate from its current position.  Figure 2 shows the arm and each joint.  Each joint is range-checked as follows (see Figure 2):</P>
+
+<P>Joint A:  180 degrees as shown.</P>
+<P>Joint B:  360 degrees as shown.</P>
+<P>Joint C:  360 degrees as shown.</P>
+
+<P><IMG SRC="Image4.gif" WIDTH=479 HEIGHT=359></P>
+
+<LI>The BRT and BNT Commands</LI></OL>
+
+<DIR>
+
+<P>BRT and BNT stand for &quot;Branch on True&quot; and &quot;Branch on False&quot;, respectively.  Each reads the condition bit (the only bit!) of the status register, and branches accordingly.  The syntax of each is:</P>
+
+<P>&#9;BRT op1;</P>
+<P>&#9;BNT op2;</P>
+
+<P>Both op1 and op2 must be label references, i.e., L&lt;number&gt;.</P></DIR>
+</FONT></BODY>
+</HTML>

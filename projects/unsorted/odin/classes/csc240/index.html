@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Edit Distance Between Strings</title>
+    <link rel="stylesheet" href="../../styles/main.css" type="text/css" />
+    <style type="text/css">
+      table {
+        border-collapse: collapse;
+        margin: auto;
+      }
+      .graph th, .graph td {
+        width: 2em;
+      }
+      th, td {
+        border: 2px solid;
+        padding-left: .5em;
+        padding-right: .5em;
+        text-align: center;
+      }
+      .cost {
+        background-color: green;
+      }
+      .mark {
+        text-decoration: underline;
+        color: white;
+        background-color: black;
+      }
+      .steps td {
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Minimum Edit Distance</h1>
+    <p>Back during my sophomore year of university (about six years ago now), I wrote some code to compute edit distances. This was unfortunately before I'd learned that fine art of commenting, so <a href="javadocs/">those classes</a> are a little difficult to understand. I'm pretty sure though I understand what's going on.</p>
+    <p>Th basic idea is edit distance which is a metric of the difference between two strings. There are four possible transformation operations:</p>
+    <ul>
+      <li>insert: add a character (exe. pubic &rarr; pub<i>l</i>ic)</li>
+      <li>delete: remove a character (exe. sling &rarr; sing)</li>
+      <li>replace: a combination remove and insert, but for the purpose of the metric it is distinct because if you are looking for typographic mistakes, hitting the wrong key is a distinct event (exe. start &rarr; s<i>m</i>art</li>
+      <li>match: do nothing</li>
+    </ul>
+    <p>Any string may be transformed to any other through a combination of these four operations. A value is assigned to each and the summation of those values is used to come up with the edit distance. For these examples we will use a uniform value of one for insert, remove and replace and zero for match. Some examples:</p>
+    <ul>
+      <li>switch &rarr; s<i>n</i>itch (1 repl)</li>
+      <li>this &rarr; th<i>a</i>s &rarr; tha<i>t</i> (2 repl)</li>
+      <li>roll &rarr; <i>f</i>roll &rarr; fro<i>m</i>l &rarr; from (1 ins + 1 repl + 1 del = 3)</li>
+    </ul>
+    <p>Another method of visialising the process is in a table. The source is on the y-axis and the destination on the x-axis. The process starts at the upper left corner and moves to the lower left. For each position there are each of the four possible operations as options:</p>
+    <ul>
+      <li>insert: move right in the table (add to the destination without progressing in the source)</li>
+      <li>delete: move down in the table</li>
+      <li>replace: move diagonally, but with a cost</li>
+      <li>match: move diagonally with no cost</li>
+    </ul>
+    <table class="graph">
+      <tr><th></th><th></th><th>f</th><th>r</th><th>o</th><th>m</th></tr>
+      <tr><th></th><td class="cost" title="insert f">&rarr;</td><td title="match r"><!--&rdarr;-->&#x2198;</td><td></td><td></td><td></td></tr>
+      <tr><th>r</th><td></td><td></td><td title="match o">&#x2198;</td><td></td><td></td></tr>
+      <tr><th>o</th><td></td><td></td><td></td><td class="cost" title="replace l/m">&#x2198;m&#x2198;</td><td></td></tr>
+      <tr><th>l</th><td></td><td></td><td></td><td></td><td class="cost" title="delete l">&darr;</td></tr>
+      <tr><th>l</th><td></td><td></td><td></td><td></td><td>&bull;</td></tr>
+    </table>
+    <p>There are three non-match operations there for a cost of three. There are other possible pathes, like:</p>
+    <table class="graph">
+      <tr><th></th><th></th><th>f</th><th>r</th><th>o</th><th>m</th></tr>
+      <tr><th></th><td class="cost">&darr;</td><td></td><td></td><td></td><td></td></tr>
+      <tr><th>r</th><td class="cost">&darr;</td><td></td><td></td><td></td><td></td></tr>
+      <tr><th>o</th><td class="cost">&darr;</td><td></td><td></td><td></td><td></td></tr>
+      <tr><th>l</th><td class="cost">&darr;</td><td></td><td></td><td></td><td></td></tr>
+      <tr><th>l</th><td class="cost">&rarr;</td><td class="cost">&rarr;</td><td class="cost">&rarr;</td><td class="cost">&rarr;</td><td>&bull;</td></tr>
+    </table>
+    <p>That is a cost of eight (four deletes and four inserts). When speaking of edit distance however, one is really speaking of <em>minimum</em> edit distance, or the lowest cost path throught the table.</p>
+    <p><a href="src/">This code</a> finds that path, but it is primarily concerned with another problem. Often, in situations like spell checking, you want the edit distance relative to a group of strings (to find the possible corrections). To find this fee thousands of times is too computationally expensize, so tables of counts of characters are built to estimate the possible edit distance. For example, for the word "test" this is the table:</p>
+    <table class="counts">
+      <tr><th></th> <th>t</th><th>e</th><th>s</th><th>t</th></tr>
+      <tr><th>t</th><td>2</td><td>1</td><td>1</td><td>1</td></tr>
+      <tr><th>e</th><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+      <tr><th>s</th><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+    </table>
+    <p>Each cell for column <i>i</i> and row <i>j</i> means that for the letter <i>j</i> there are <i>n</i> occurences of that letter at or after <i>i</i> in the string. For example the first cell is 2. The row begins with 't'. This means that there are two t's at or after the beginning of "test." The cell to the right is 1 because there is only one 't' after the first letter of "test."</p>
+    <p>This table can be used to put a lower bound on the edit distance. If the source has three t's after the current position and the destination has none then there will have to be at least three inserts or replaces to get those t's.</p>
+    <p><a href="src/">This code</a> is available <a href="src/">online</a> or as a <a href="EditDistance.jar">jar</a>.</p>
+  </body>
+</html>

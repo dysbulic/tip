@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>Screenless Multitouch Construction Overview</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <base href="http://odin.himinbi.org/classes/cs395/" />
+    <style type="text/css">
+      body { max-width: 800px; margin: 3em auto; }
+      object { max-height: 400px; width: 100%; display: block; }
+      #tmt { max-height: 260px; }
+      img { display: block; margin: auto; border: 1px solid; }
+      /* Fix printing splitting images */
+      #led_opened, #cameraS, #rectify, #config, #smoke { page-break-before: always; }
+      @media print { body { line-height: 2em; } }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-2592249-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS-395: Multimedia Systems</h1>
+      <h2>Screenless Multitouch Construction Overview</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Fall 2008</h2>
+    </div>
+
+    <h2>Multitouch Introduction</h2>
+    
+    <p>Multitouch systems are an interface modality that allow user to interact with systems using their fingers as styluses. The interface has seen amazing popularity as a part of Apple's iPhone and iPod Touch products and is moving into large commercial introduction with Microsoft's Surface product. This paper is concerned specifically with large multitouch interfaces using a camera/projector model.</p>
+
+    <p>This subject is discussed in some detail in a previous <a href="multitouch_survey.xhtml">survey of multitouch devices</a>, and the interested reader is encouraged to read that work if interested. For the purposes of this paper, it is sufficient to understand these basic interactions:</p>
+
+    <object type="image/svg+xml" data="di_explained.svg"></object>
+
+    <h2>Disconnected Screen Multitouch</h2>
+
+    <p>This basic technical setup can be used for simple experimentation without requiring the construction of a multitouch table. In a traditional setup, the user is touching the actual interface elements projected onto a screen. Though it is counter-intuitive to discuss a touchless touch interface, one can be created by decoupling away with the projection and illumination systems:</p>
+
+    <object id="tmt" type="image/svg+xml" data="tmt.svg"></object>
+    
+    <p>The user is no longer able to touch the elements on the screen, but he is able to run the basic demos and experiment with the conceptual components of the system with significantly less work.</p>
+
+    <h2>Light Source Preparation</h2>
+
+    <p>The illumination in multitouch displays is done in infrared because in the traditional setup the projector is displaying an image in the visual spectrum on the touch surface. If the touch image was done in the visual range, the image would confuse the software detecting blobs (the light reflected from user's fingers).</p>
+
+    <p>Because there is a constant light field, it is not strictly necessary to use an infrared light source. For proper blob detection, however, it is necessary to not only have a constant background, but also to have sufficient difference between the blobs and the surrounding illumination. For some environments, it is possible to simply turn off the lights and lower the brightness in software, but this is not workable for all areas. A more general solution is to simply use infrared as in a traditional multitouch.</p>
+
+    <p>For this demonstration, a generic LED illuminator available from Wal-Mart for $2.50 was used:</p>
+
+    <img src="led_untouched.jpg" alt="Untouched LED" />
+
+    <p>Once the cover is removed from the light, it's design is revealed to be simple and easily modifiable:</p>
+
+    <img id="led_opened" src="led_opened.jpg" alt="Opened LED" />
+    
+    <p>The leads of a LED are pressed against a pair of watch batteries when the user depresses the "switch." The normal LED is simply swapped for an infrared LED and the illuminator is now infrared.</p>
+
+    <p>Note that if this particular light is used, there is an insulating band around one leg of the LED that needs to be transferred.</p>
+
+    <img src="led_insulator.jpg" alt="LED Insulator" />
+
+    <p>Without this insulator the leg will make contact when the case is closed and though there will be no visible indication (since the replacement LED is infrared), it will be constantly on.</p>
+
+    <h2>Camera Preparation</h2>
+
+    <p>The camera preparation is simpler. It simply needs to be low pass filtered so that only infrared light will be detected. A simple low pass filtering material that is commonly available is exposed film negative. The camera lens is simply covered with this material:</p>
+
+    <img id="camera" src="filtered_camera.jpg" alt="Filtered Camera" />
+    
+    <h2>Alignment Construction</h2>
+
+    <p>The calibration of the multitouch software requires correlating a set of points on the interface with a set of points on the display. Since this display is detached from the area that the camera is sensing, something is needed to align the points properly and define the space.</p>
+
+    <p><em>Unfortunately, I do not have pictures for this part of the process, so they are represented with illustrations.</em></p>
+
+    <p>A cheap and simple material for building the alignment surface is paper. For this particular project, I decided to do a standard widescreen screen ratio of 16:9. At a reasonable distance from the camera, this translates to a 8'&times;4.5' paper surface:</p>
+
+    <object type="image/svg+xml" data="taped_paper.svg"></object>
+    
+    <p>The calibration program uses a 5&times;4 grid for calibration. On the paper, this is horizontal marks every 24 inches and vertical marks every 18 inches.</p>
+
+    <p><em>It is worth noting in retrospect that this grid could have been created out of nine pieces of string and would be much more manageable.</em></p>
+
+    <h2>Software Configuration</h2>
+
+    <p>The software being used for the system is the open source library <a href="http://www.nuigroup.com/touchlib/">Touchlib</a>. Touchlib includes pre-built binaries for Windows. To begin the configuration, simply run the <code>config.bat</code> file in the distribution. This will first bring up the filter stages ending with the rectify stage. After the filters are run, only the light from the illuminator should show up:</p>
+
+    <img id="rectify" src="touchlib_rectify_marked.jpg" alt="Touchlib Rectify" />
+    
+    <p>Once this is accomplished, the configuration interface can be started by pressing enter:</p>
+
+    <img id="config" src="touchlib_config.jpg" alt="Touchlib Configuration" />
+
+    <p>Once 'C' is pressed, the interface will enter active configuration and the illuminator is simply moved from point to point in the grid to align the camera to the space. Once this is completed for all twenty points, hitting escape will write a <code>config.xml</code> in the touchlib directory.</p>
+
+    <h2>Display</h2>
+
+    <p>This configuration is then used for all subsequent programs. The most interesting to run for this application is the smoke program: <code>demo_smoke</code> in the touchlib distribution. Each blob detected simply acts as a diffuse particle generator and they can interact:</p>
+
+    <img id="smoke" src="touchlib_smoke.jpg" alt="Touchlib Smoke" />
+
+    <p>The demo suite also includes software for manipulating the cursor using multitouch as well as a library for interfacing with flash applications. Given the imprecision of this the screenless interface, these methods are best instructional for understanding how a multitouch system works, but are not terribly useful.</p>
+  </body>
+</html>

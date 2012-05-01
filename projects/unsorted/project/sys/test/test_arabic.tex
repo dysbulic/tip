@@ -1,0 +1,38 @@
+\documentclass[a4paper,twoside]{article}      % Comments after  % are ignored
+\usepackage{amsmath,amssymb,amsfonts} % Typical maths resource packages
+
+\date{\today}
+\title{Testing Arabic Characters in \LaTeX}
+
+\author{Will Holcomb}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+In unicode there are certain characters called ``combining
+dicriticals'' and they do not produce a character directly, but rather
+combine with the previous character to produce a single character of
+output. For example, the letter é can be produced with the single
+character é or with the character e followed by the combining
+dicritical '.
+
+A character set for which these dicriticals is important is arabic.
+Arabic includes a set of dicriticals that allow one to precisly
+describe the pronounciation of a word. It is possible to write words
+without using these marks apparently, but you must recognize the word
+in order to know how to pronounce it.
+
+So, for someone working on a dirctionary in Arabic for example these
+marks are very important. I need to be able to produce them and right
+now I am unable to in mozilla in html under linux. I am hoping that
+perhaps \LaTeX has the ability.
+
+\end{abstract}
+
+\section{Testing}
+
+Beh is \x0628
+
+\end{document}

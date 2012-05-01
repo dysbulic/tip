@@ -1,0 +1,786 @@
+/*
+Theme Name: Vigilance
+Theme URI: http://thethemefoundry.com/vigilance/
+Description: A lean and clean WordPress theme featuring a customer header image, customizable colors, and front page alert box.
+Version: 1.5-wpcom
+Author: The Theme Foundry
+Author URI: http://thethemefoundry.com/
+Tags: fixed-width, two-columns, white, red, light, right-sidebar, theme-options, custom-header, custom-colors, sticky-post,  rtl-language-support, translation-ready, custom-menu, featured-images, blog, business, clean, conservative, corporate, light, minimal, modern
+*/
+
+/*
+	Copyright (C) 2008 - 2010 The Theme Foundry
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+/*Undo browser defaults
+------------------------------------------------------------ */
+:link,:visited {text-decoration: none;}
+ul,ol {list-style: none;}
+h1,h2,h3,h4,h5,h6,pre,code,p,caption,th,td {font-size: 1em;}
+ul,ol,dl,li,dt,dd,h1,h2,h3,h4,h5,h6,pre,form,body,html,p,blockquote,fieldset,input {margin: 0; padding: 0;}
+a img,:link img,:visited img {border: none;}
+address {font-style: normal;}
+
+/*Body & Links
+------------------------------------------------------------ */
+body {
+	font-size: 62.5%;
+	font-family: Georgia, "Times New Roman", Times, Serif;
+	line-height: 2.2em;
+	color: #333;
+	background-color: #fff;
+}
+a:link, a:visited { color: #772124; }
+a:hover {
+	text-decoration: underline;
+	color: #58181b;
+}
+/*Basic Structure
+------------------------------------------------------------ */
+#wrapper {
+	width: 920px;
+	margin: 0 auto;
+	text-align: left;
+}
+#content {
+	float: left;
+	width: 600px;
+	padding: 20px 20px 20px 0;
+}
+body.attachment #content {
+	width: 920px; /*full-width image template*/
+	padding: 20px 0;
+}
+#sidebar {
+	float: right;
+	width: 300px;
+	padding-bottom: 20px;
+}
+.thin-sidebar {
+	float: left;
+	width: 140px;
+}
+.spad { padding-right: 20px; }
+#footer {
+	clear: both;
+	padding-top: 5px;
+	border-top: 1px solid #eee;
+}
+.clear:after, li.comment:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+div.skip-content { display: none; }
+/*Header
+------------------------------------------------------------ */
+#header {
+	padding: 20px 0 0 0;
+	border-bottom: 5px solid #333;
+	position: relative;
+}
+#title {
+	height: 165px;
+	width: 920px;
+	overflow: hidden;
+	margin: 0;
+	font-size: 4.6em;
+	font-weight: bold;
+	line-height: 1.3em;
+	text-align: center;
+	vertical-align: middle;
+}
+#title a:link, #title a:visited {
+	display: block;
+	height: 100%;
+	overflow: auto;
+	font-size: 48px;
+	text-align: center;
+	vertical-align: middle;
+}
+#title a:hover {
+	color: #772124;
+	text-decoration: none;
+}
+#title span { position:relative; top:25%; }
+/*Description
+---------------------------------------*/
+#description {
+	float: left;
+	margin-top: 15px;
+}
+#description h2 {
+	font-size: 1.2em;
+	font-weight: normal;
+	color: #666;
+}
+/*Nav
+---------------------------------------*/
+#nav {
+	float: right;
+	font-size: 1.5em;
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans", Verdana, Arial, sans-serif;
+	margin: 15px 0 10px 0;
+}
+#nav ul {
+	padding: 0 0 0 20px;
+	position: relative;
+}
+#nav ul li {
+	position: relative;
+	float: left;
+	margin: 0 0 0 15px;
+}
+#nav li a {
+	padding-top: .1em;
+	color: #333;
+	text-decoration: none;
+}
+#nav ul li a:hover, #nav ul li:hover > a, #nav ul li.current_page_item > a, #nav ul li.current_page_parent > a, #nav ul li.current_page_ancestor > a, #nav ul li.current-cat > a, #nav ul li.current-menu-ancestor > a, #nav ul li.current-menu-item > a, #nav ul li.current-menu-parent a {
+	color: #772124;
+	text-decoration: none;
+	border-top: 4px solid #772124;
+}
+#nav ul ul :hover > a {
+	border-top: 0 !important;
+	padding-top: 4px;
+}
+#nav .children li, #nav .sub-menu li {
+	background: #fff;
+	margin: 0 0 0 11px;
+	padding-left: 4px;
+}
+#nav ul ul {
+	display: none;
+	position: absolute;
+	top: 22px;
+	left: 0;
+	float: left;
+	z-index: 99999;
+	padding: 0;
+}
+#nav ul ul li {
+	min-width: 85px;
+}
+#nav ul ul a {
+	width: 81px;
+	padding-right: 4px;
+}
+#nav ul li:hover > ul {
+	display: block;
+}
+
+/*Menu
+------------------------------------------------------------ */
+#menu { padding-bottom: 10px; }
+#menu img { border: 2px solid #eee; }
+.alert-box {
+  	background: #e9ebd9;
+	margin: 0 0 20px 0;
+	padding: 20px;
+	border: 1px solid #e3e1db;
+}
+/*Post Styling
+------------------------------------------------------------ */
+/*Post Header
+---------------------------------------*/
+.post-header {
+	border-bottom: 4px double #eee;
+	padding-bottom: 7px;
+}
+.post-header h1, .post-header h2 {
+	font-size: 2.6em;
+	line-height: 1.1em;
+}
+.post-header h1 a:link, .post-header h1 a:visited,.post-header h2 a:link, .post-header h2 a:visited  { color: #444; }
+.post-header h1 a:hover, .post-header h2 a:hover { color: #772124; }
+.post .date {
+	padding-top: 10px;
+	color: #757575;
+	font-size: 1.6em;
+	font-weight: normal;
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans", Verdana, Arial, sans-serif;
+	text-transform: uppercase;
+}
+.post .date span {
+	color: #ddd;
+	font-weight: bold;
+}
+/*Post Meta
+---------------------------------------*/
+.meta  {
+	margin: 10px 0 20px 0;
+	font-size: 1.2em;
+	color: #666;
+}
+.meta a:link, .meta a:visited {
+	color: #666;
+	font-style: normal;
+}
+.meta a:hover { color: #772124; }
+.tags {
+	float: right;
+	width: 400px;
+	text-align: right;
+	font-style: italic;
+}
+/*Post Body
+---------------------------------------*/
+.sticky .entry {
+	background-color: #eee;
+	padding: 10px;
+}
+.entry a:link, .entry a:visited, .alert-box a:link, .alert-box a:visited { font-weight: bold; }
+.entry { font-size: 1.3em; }
+.entry p { margin-bottom: 10px; }
+.entry p.notice {
+	padding: 15px;
+	background-color: #fffbcc;
+	border: 1px solid #f8f4c7;
+}
+.alert-box p { margin: 10px 0 0 0; }
+.entry h2, .entry h3, .entry h4 {
+	font-size: 1.3em;
+	padding: 15px 0 5px 0;
+}
+.entry h3 {
+	padding-top: 10px;
+	font-size: 1em;
+}
+.entry h4 {
+	padding-top: 10px;
+	font-size: .9em;
+}
+.alert-box h2, .alert-box h3, .alert-box h4 { margin: 0; padding: 0; }
+pre {
+	margin: 10px 0;
+	padding: 1em 10px;
+	overflow: auto;
+	background-color: #f3f3f3;
+	color: #000;
+}
+code {
+	padding: 2px 3px;
+	font: 1.1em Consolas, Courier New, sans-serif;
+	background-color: #f3f3f3;
+	color: #000;
+}
+pre code { font-size: 1.3em; }
+blockquote {
+	display: block;
+	padding: 20px 20px 10px 45px;
+	margin: 20px 0;
+	font-style: italic;
+	font-size: 14px;
+	color: #141310;
+	background: #e7e6e2 url(images/blockquote.gif) no-repeat top left;
+}
+.entry ul, .c-body ul { margin: 0 0 10px 10px; }
+.entry ul li, .c-body ul li {
+	display: block;
+	margin: 5px 0 0 0;
+	padding: 0 0 0 17px;
+	background: url(images/list-star.gif) no-repeat 0 .3em;
+}
+.entry ol, .c-body ol { margin: 0 0 15px 30px; }
+.entry ol li ol li, .c-body ol li ol li {
+	font-size: .9em;
+	list-style-type: lower-roman;
+}
+.entry ol li, .c-body ol li {
+	margin: 10px 0 0 0;
+	list-style-type: decimal;
+	list-style-position: outside;
+}
+.navigation {
+	padding: 10px 0;
+	font-size: 1.3em;
+}
+.navigation.index { padding: 0; }
+.navigation.single { margin-bottom: 10px; }
+.float-quote {
+	float: left;
+	width: 300px;
+	padding: 15px;
+	margin: 10px 10px 0 0;
+	background: #eaeaea;
+	border-top: 4px solid #333;
+	border-bottom: 4px solid #333;
+}
+.entry .float-quote p {
+	margin: 0;
+	padding: 0 0 0 40px;
+	font-size: 1.2em;
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans", Verdana, Arial, sans-serif;
+	line-height: 1.3em;
+	background: url(images/float-quote.gif) no-repeat top left;
+}
+.highlight-box {
+	float: right;
+	margin: 0 0 10px 10px;
+	width: 200px;
+	padding: 10px;
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans", Verdana, Arial, sans-serif;
+	border-top: 8px solid #000;
+	background: #772124;
+	color: #fff;
+}
+.highlight-box a:link, .highlight-box a:visited {
+	color: #fff;
+	text-decoration: underline;
+}
+.highlight-box a:hover { text-decoration: none; }
+.entry .highlight-box p {
+	margin: 10px 0;
+	line-height: 1.4em;
+	font-size: 1.1em;
+}
+.entry .highlight-box ul li {
+	font-size: 1.1em;
+	background: url(images/list-square.gif) no-repeat 0 .4em;
+}
+.entry .highlight-box h2, .entry .highlight-box h3, .entry .highlight-box h4 {
+	margin: 0;
+	padding: 0;
+	color: #fff;
+}
+.highlight-box h2 { text-transform: uppercase; }
+
+/*Post Footer
+---------------------------------------*/
+.post-footer {
+	width: 100%;
+	overflow: hidden;
+	padding-bottom: 2px;
+	margin: 10px 0 30px 0;
+	border-bottom: 1px solid #eee;
+}
+.comments {
+	float: left;
+	width: 200px;
+	font-size: 1.3em;
+	color: #757575;
+	text-transform: uppercase;
+}
+.comments a {
+	background: url(images/comments-bubble.gif) no-repeat 0 4px;
+	display: block;
+	padding: 0 0 0 25px;
+	color: #757575;
+}
+.comments a:hover {
+	background-position: 0 -24px;
+	color: #772124;
+}
+.categories {
+	float: right;
+	width: 400px;
+	text-align: right;
+	font-size: 1.1em;
+	font-style: italic;
+	color: #666;
+}
+.categories a:link, .categories a:visited {
+	color: #333;
+	font-style: normal;
+}
+.categories a:hover { color: #772124; }
+/*Pages
+---------------------------------------*/
+h1.pagetitle, h2.pagetitle {
+	margin-bottom: 20px;
+	padding-bottom: 7px;
+	font-size: 2.6em;
+	line-height: 1.1em;
+	border-bottom: 4px double #eee;
+}
+/*Archives List
+---------------------------------------*/
+img.archive-comment {
+	float: right;
+	margin: 0 .5em .5em 0;
+}
+.entries {
+	font-size: 1.3em;
+	clear: both;
+}
+.entries ul {
+	margin: 0;
+	padding: 0 0 1px 0;
+	background: transparent url(images/archives-dotted-line.gif) repeat-x bottom left;
+}
+.entries ul li {
+	padding-top: 1px;
+	background: transparent url(images/archives-dotted-line.gif) repeat-x top left;
+}
+.entries ul li a {
+	display: block;
+	margin: 0;
+	padding: 7px 0;
+}
+.entries ul li a:hover {
+	background-color: #F8F8F7;
+	text-decoration: none;
+}
+.entries span {
+	display: block;
+	text-align: right;
+}
+.entries span.archdate, .entries a:hover span.archdate  {
+	float: left;
+	margin-right: 3em;
+	padding-left: .5em;
+	width: 130px;
+	height: 28px;
+	color: #666;
+	text-align: left;
+}
+.entries span.comments_number{
+	float: right;
+	margin-right: .5em;
+	width: 130px;
+	color: #666;
+}
+/*Sidebar
+------------------------------------------------------------ */
+#sidebar-image { padding-top: 20px; }
+#sidebar-image { font-size: 1.3em; }
+#sidebar-image p {
+	margin-bottom: 15px;
+	line-height: 1.6em;
+}
+h2.widgettitle {
+	padding: 25px 0 3px 0;
+	font-size: 1.4em;
+	font-weight: normal;
+	text-transform: uppercase;
+	letter-spacing: 1.05pt;
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans", Verdana, Arial, sans-serif;
+	border-bottom: 1px solid #eee;
+}
+ul li.widget ul {
+	margin: 0;
+	font-size: 1.4em;
+}
+ul li.widget ul li ul {
+	margin-left: 5px;
+	font-size: 1em;
+}
+ul li.widget ul li {
+	padding: 6px 0;
+	border-bottom: 1px solid #eee;
+}
+ul li.widget ul li ul li { border-bottom: none; }
+ul li.widget ul li a {
+	display: block;
+	padding: 0 0 0 15px;
+	background: url(images/list-item.gif) no-repeat 0 6px;
+}
+ul li.widget ul li a:hover { background-position: 0 -136px; }
+ul li.widget ul#recentcomments li a {
+	padding: 0;
+	background: none;
+}
+div.textwidget p {
+	margin: 10px 0 0 0;
+}
+li.widget select { margin-top: 10px; }
+/*RSS Box
+---------------------------------------*/
+#rss-feed  { padding-top: 10px; }
+#rss-feed p {
+	font-size: 1.3em;
+	line-height: 1.6em;
+}
+#rss-feed a.rss, #rss-feed a.email, #rss-feed a.twitter {
+	float: left;
+	font-size: 1.3em;
+	margin: 10px 10px 0 0;
+	display: block;
+	padding: 0 0 0 19px;
+	background: url(images/feed-icon.png) no-repeat 0 .25em;
+}
+#rss-feed a.email {
+	padding: 0 0 0 25px;
+	background: url(images/mail-icon.png) no-repeat 0 .4em;
+}
+#rss-feed a.twitter {
+	margin-right: 0;
+	padding-left: 19px;
+	background: url(images/twitter-icon.png) no-repeat 0 .15em;
+}
+/*Search Box
+---------------------------------------*/
+#search_form input { margin: 10px 0 0 0; }
+#search_form input {
+	padding: 4px 2px;
+	width: 132px;
+	border: 2px solid #acacac;
+	border-bottom: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	background: #f4f4f4;
+	color: #888;
+}
+#search_form input:focus { background: #fff; }
+#search_form input#searchsubmit { padding: 2px 10px; }
+
+/*Comments
+------------------------------------------------------------ */
+/*Top
+---------------------------------------*/
+.comment-number {
+	display: block;
+	font-size: 1.3em;
+	padding: 0 0 10px 30px;
+	background: url(images/comments-bubble-big.gif) no-repeat 0 .1em;
+}
+.comment-number span {
+	font-size: 1.3em;
+	color: #777;
+}
+a#leavecomment { padding-left: 10px; }
+/*Body
+---------------------------------------*/
+li.comment { padding: 20px 0 0 0; }
+#comments ul.children {
+	margin: 10px 0 0 96px;
+	clear: both;
+}
+div.c-grav {
+	float: left;
+	width: 60px;
+	margin: 0 15px 0 0;
+	text-align: right;
+}
+div.c-grav img {
+	border: 4px solid #e3e3e3;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+}
+div.c-body {
+	margin-left: 95px;
+	font-size: 1.3em;
+	background: #f3f3f3;
+	padding: 20px 20px 10px 20px;
+	-moz-border-radius: 12px;
+	-webkit-border-radius: 12px;
+}
+div.c-body p { margin: 10px 0 0 0; }
+div.c-head { font-weight: bold; }
+span.asterisk {
+	float: right;
+	color: #772124;
+	font-size: 2.2em;
+}
+div.c-date {
+	color: #bbb;
+	font-size: .9em;
+	line-height: 0;
+	padding: 10px 0 5px 0;
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans", Verdana, Arial, sans-serif;
+	font-weight: bold;
+}
+.c-permalink a:link, .c-permalink a:visited {
+	margin-left: 5px;
+	color: #ccc;
+	font-size: .7em;
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans", Verdana, Arial, sans-serif;
+	text-transform: uppercase;
+}
+div.reply, div.cancel-comment-reply { float: right; }
+div.reply { padding: 10px 0; }
+div.reply a:link, div.reply a:visited {
+	color: #aaa;
+	font-size: .9em;
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans", Verdana, Arial, sans-serif;
+	text-transform: uppercase;
+	border-bottom: 1px dotted;
+}
+div.reply a:hover {
+	border-bottom: 1px solid;
+	text-decoration: none;
+}
+/*Form
+---------------------------------------*/
+form#commentform { margin-bottom: 20px; }
+#respond { font-size: 1.5em; }
+h4#postcomment,
+#reply-title {
+	margin: 20px 0;
+	padding: 0 0 5px 0;
+	font-size: 1.2em;
+	color: #555;
+	border-bottom: 1px solid #eee;
+}
+form#commentform label.comment-field {
+	display: block;
+	margin: 10px 0 5px 0;
+}
+.comment-notes {
+	margin-bottom: 12px;
+}
+.comment-notes,
+#respond .required {
+	font-size: 12px;
+}
+#respond label {
+	font-size: 12px;
+}
+#respond input[type="text"] {
+	display: block;
+	margin-bottom: 10px;
+}
+input.text-input,
+form#commentform textarea,
+#respond input[type="text"] {
+	padding: 7px;
+	background: #f8f8f8;
+	font-family: inherit;
+	font-size: .8667em;
+	border: 1px solid #E6E6E6;
+	width: 584px;
+}
+#respond textarea,
+#respond input[type="submit"] {
+	margin-bottom: 12px;
+}
+.form-allowed-tags {
+	display: none;
+}
+.children input.text-input,
+.children form#commentform textarea,
+.children input[type="text"]  { width: 99%; }
+input#author, input#email, input#url { width: 350px; }
+form#commentform input:focus, form#commentform textarea:focus { background: #fff; }
+form#commentform input#submit {
+	padding: 5px;
+	width: 150px;
+}
+form#commentform p.guidelines {
+	margin: 10px 0;
+	font-size: .8em;
+	color: #777;
+}
+p.subscribe-to-comments, p.comments-rss {
+	margin: 0 0 10px 0;
+	font-size: .9em;
+}
+p.comments-rss a {
+	padding: 0 0 0 19px;
+	background: url(images/feed-icon.png) no-repeat 0 .15em;
+}
+#comments object,
+#comments embed {
+	width: 100% !important;
+}
+/*Note
+---------------------------------------*/
+p.note {
+	font-style: italic;
+	font-size: 1.3em;
+}
+/*Pingbacks/Trackbacks
+---------------------------------------*/
+h3.pinghead {
+	font-size: 1.3em;
+	color: #444444;
+}
+ol.pinglist {
+	list-style-type: decimal;
+	list-style-position: inside;
+	margin: 0 0 10px 10px;
+	font-size: 1.3em;
+}
+
+/*Default Alignment and Images
+------------------------------------------------------------ */
+.entry .alignleft img, .entry .alignright img, .entry .aligncenter img { border: 1px solid #eee; } 
+.noborder { border: none; }
+.entry .alignright, .entry .alignright .float-quote { margin: 0 0 10px 15px; }
+.entry .alignleft, .entry .alignleft .highlight-box { margin: 0 15px 10px 0; }
+.wp-caption p, .wp-caption dd {
+	font-style: italic;
+	color: #888;
+}
+/*Footer
+------------------------------------------------------------ */
+#footer {
+	color: #666;
+	font-size: 1.1em;
+}
+#footer p.right { float: right; }
+#footer a:link, #footer a:visited { color: #666; text-decoration: underline; }
+#footer a:hover { color: #772124; }
+
+/* Import Stylesheets
+-----------------------------------------------------------*/
+/* @import url("functions/stylesheets/style-options.php"); */
+/* Can't import a PHP file on WordPress.com, so it's loaded via functions.php instead. */
+
+/* Required WordPress Classes, don't remove these.
+-----------------------------------------------------------*/
+.aligncenter {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+.alignleft { float: left; }
+.alignright { float: right; }
+
+/* WordPress.com
+---------------------------
+*/
+body .vp_wsbutton {
+	margin: auto !important;
+}
+ul li.widget_twitter ul li a {
+	display: inline;
+	padding: 0;
+	background: none;
+}
+ul li.widget_twitter ul li a:hover {
+	background: none;
+}
+ul li.widget_box { /* fixes titleless widget */
+	padding-top: 25px;
+}
+.entry, .widget {
+	word-wrap: break-word;
+}
+.gallery {
+	padding-bottom: 20px;
+}
+.widget_image {
+	padding: 15px 0 0;
+}
+/* Calendar widget */
+.widget_calendar table {
+	margin: .5em 0;
+	border: 0;
+	font-size: 1.4em;
+}
+.widget_calendar table tr {
+	border: 0;
+}
+.widget_calendar table th {
+	color: #737373;
+	text-transform: uppercase;
+}
+.widget_calendartable td, .widget_calendar table th {
+	padding: 5px 8px;
+	border: 0;
+}
+.thin-sidebar .widget_calendar table td, .thin-sidebar .widget_calendar table th {
+	padding: 0; /* display small calendar in thin sidebar */
+	font-size: 1em;
+}

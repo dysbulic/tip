@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-310 Homework #9</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math { margin-top: .75em; }
+      object { width: 100%; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 310: Design and Analysis of Algorithms</h1>
+      <h2>Homework #9</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 13:10 Mon., 28 April 2008</h2>
+    </div>
+    <blockquote><p>All work should be done on your own. If you discuss this assignment in any way with anyone else, or find help for getting the answer from any source, you must state so clearly at the top of your submission. There should be no working together except to understand the question.</p></blockquote>
+    <ol>
+      <li id="p1">
+        <div class="question">
+          <p>Suppose you are given a string of <em>n</em> characters. Design an O(<em>n</em><sup>2</sup>) algorithm to find the shortest subsequence which does not appear anywhere else in the string.</p>
+        </div>
+        <div class="answer">
+          <p>The usage of the word "anywhere else" is taken to mean that the subsequences are totally non-intersecting. So for the string "ababa" the sequence "aba" is a valid solution because even though it is repeated, there is a partial intersection.</p>
+          <p>
+            This means the maximum length of a non-repeating substring is
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>n</mi><mn>2</mn></mfrac></math>.
+          </p>
+          <p>One approach to this problem is one that is commonly used when attempting to avoid duplicated effort: dynamic programming.</p>
+          <p>Create a heap with all substrings of length 1. For each substring keep a list of indices in the string where this substring starts. If, after generating all strings, this list is length 1 then this is a non-repeated substring.</p>
+          <p>
+            Note that can be no more than
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>n</mi><mn>2</mn></mfrac></math>.
+            unique characters in the string or one will not be repeated (and will be a unique substring).
+          </p>
+          <p>If no unique substring of length 1 is found, generate all substrings of length 2 by appending the character after the index to the string. Continue with increasing lengths until a unique string is found. A hashing algorithm such as Rabin-Karp that allows generating a composite hash in constant time (f(a + b) = g(f(a), b)) should be used.</p>
+          <p>
+            There are
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>n</mi><mn>2</mn></mfrac></math>.
+            iterations of this algorithm that each perform <em>cn</em> operations which is O(<em>n</em><sup>2</sup>) overall.
+          </p>
+        </div>
+      </li>
+      <li id="p2">
+        <div class="question">
+          <p>A set of items is donated to charity. Each item is to be sold for one dollar. A set of people comes to the auction. Each person fills out a piece of paper saying the number of dollars s/he wants to spend, and a list of items they would be willing to buy. Either give an algorithm to determine whether all the buyers can be satisfied, or show that the problem is NP-complete. Note that the number of dollars a buyer wants to spend and the number of items they are willing to buy are not necessarily equal.</p>
+        </div>
+        <div class="answer">
+          <p>Representing this as a max flow problem is fairly straightforward.</p>
+          <object style="height:220px" id="tree_t1" type="image/svg+xml" data="charity_bipartite.svg"></object>
+          <p>The edges from the source to the producers (buyers) are weighted according to the amount of money each is willing to spend. The center links simply represent the preferences of the buyers for objects. The links from the objects to the terminal are equally weighted (since all objects are equally weighted.</p>
+          <p>The preference links used as max flow through this graph represent a set of purchases the buyers should make to maximize the money going to the charity. An augmenting path algorithm should be able to find an optimal solution in O(<em>mn</em>) time.</p>
+        </div>
+      </li>
+      <li id="p3">
+        <div class="question">
+          <p>You are given a directed graph of precedences between jobs. Jobs are of two types:</p>
+          <ul>
+            <li>Type 1 can run when at least one of its predecessors has finished</li>
+            <li>Type 2 can run once all its predecessors have finished</li>
+          </ul>
+          <p>Design and analyze an efficient algorithm to determine whether all jobs in the system can run. Note that these graphs can have cycles and still run to completion.</p>
+        </div>
+        <div class="answer">
+          <p>Represent the graph as an adjacency matrix or other form that allows the easy identification of nodes with no incoming edges. Nodes with incoming edges are inherently runnable.</p>
+          <ul>
+            <li>
+              For each node that is inherently runnable process each edge that is going out of that node.
+              <ul>
+                <li>If the edge goes into a Type 1 node then that edge is sufficient to allow running that node, so delete all edges incoming to that node.</li>
+                <li>If the edge goes into a Type 2 node then that edge does not constrain running, so it may be deleted.</li>
+              </ul>
+            </li>
+            <li>Repeat for each node with no incoming edges until all edges are deleted or there are no unexamined nodes with no incoming edges.</li>
+          </ul>
+          <p>If all edges are deleted then all nodes are runnable. Any nodes with remaining edges have unsatifiable constraints.</p>
+          <p>Each node is examinined once and each edge is deleted once, so the running time is O(<em>n</em> + <em>m</em>).</p>
+        </div>
+      </li>
+      <li id="p4">
+        <div class="question">
+          <p>In the double cover problem, the input is a set of subsets over a universe, <em>U</em>. The question is whether you can choose a set of subsets such that each element of <em>U</em> is in exactly two subsets. Show that the double cover problem is NP-complete. (<em>Hint: look for similar covering problems.</em>)</p>
+        </div>
+        <div class="answer">
+          <p>I posit there exists some configuration of clauses such that if I can solve the double cover problem I can also solve the three satisfiability problem, but I have not been able to find the proper configuration of clauses for the reduction.</p>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

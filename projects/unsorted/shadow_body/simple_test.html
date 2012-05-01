@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Simple Height Test</title>
+    <link rel="stylesheet" type="text/css" href="basic.css" />
+    <style type="text/css">
+      body { margin: 0; }
+      #content { width: 50%; }
+      #body { height: 0px; }
+      #navbar { float: left; height: 100%; background-color: #FED; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="body">
+      <div id="navbar">This is a test&hellip;</div>
+      <div id="content">
+        <h1>Sizing Elements to the Container's Height</h1>
+        <p>Three column layouts are all the rage nowadays. It's a great way to keep your navigation bits accessible and keep the content from getting really wide and looking all cluttered. Sometimes though you want to match the lengths of those columns. Say that you want the navigation bar to go all the way to the bottom of the page. The traditional wisdom is to <a href="100_percent_height.html">put 100% height on the navbar, body and html</a>. This works well enough so long as:</p>
+        <ol class="lettered">
+          <li>The content of the page is less than the height of the screen. If the content is longer than the screen, the <a href="100_percent_height_long_content.html">navbar stops at the edge of the screen</a>.</li>
+          <li>100% of the height is what you want. In a layout with a header or footer, the 100% high navbar will force scrolling regardless of the content's length.</li>
+        </ol>
+        <p>What I want is to be able to say, "this element should be the same height as the containing element." I was searching the internet for a method to do this and ran across this statement at <a href="http://www.quirksmode.org/css/100percheight.html">quirksmode</a>:</p>
+        <blockquote>
+          <p>"[I]f you want to make an element as high as the entire page (whatever this height may be) you're out of luck. Although it might seem simple the specs (and the browsers' unthinking conformance) make this completely impossible.</p>
+          <p>"The spec says: 'If the height of the containing block is not specified explicitly (i.e., it depends on content height), the value is interpreted like <code>auto</code>.'"</p>
+        </blockquote>
+        <p>This was pretty daunting. I like quirksmode and there's lots of good information over there. In fact, I gave up when I read that. Fortunately however I have a really bad memory. I was working on a site, ran across the problem and, before I remembered that I couldn't do it, fixed the problem.</p>
+        <p>As is often the case, the solutions are completely different for <acronym title="Internet Explorer">IE</acronym> and <acronym title="Cascading Style Sheet">CSS</acronym> compliant browsers. First I will deal with IE:</p>
+        <h2>Sizing to the Container's Height in IE</h2>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Calendar Mailer</title>
+    <link rel="stylesheet" href="../styles/main.css" type="text/css" />
+    <style type="text/css">
+      table {
+        width: 30%;
+      }
+      td {
+        text-align: center;
+        border: thin solid gray;
+      }
+    </style>
+    <script type="text/javascript">//<![CDATA[
+    //]]></script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body onload="">
+    <h1>Calendar Mailer</h1>
+    <p><a href="http://www.page-a-day.com">Page-a-day Calendars</a>
+    has a very nice online portal to access their daily calendars. The
+    one thing that I wanted though was to bypass the starting up a
+    browser and logging in, so I wrote a couple little programs to get
+    the calendars and mail them to me daily.</p>
+    <p>There are two shell scripts:</p>
+    <ul>
+      <li><a href="get_calendar.sh">get_calendar.sh</a>: to retrieve
+      the calendar pages</li>
+      <li><a href="mail_calendar.sh">mail_calendar.sh</a>: to package
+      them up in a mail message and send them on their way</li>
+    </ul>
+    <p>These are run from a crontab entry like:</p>
+    <pre>
+ 0  8 * * * ~/get_calendar/mail_calendar.sh -e will@himinbi.org -p pass -f -c ZENN -n "Zen" will@himinbi.org
+ 0  8 * * * ~/get_calendar/mail_calendar.sh -e will@himinbi.org -p pass -f -c DARW -n "Darwin Award" will@himinbi.org
+ 0  8 * * * ~/get_calendar/mail_calendar.sh -e will@himinbi.org -p pass -f -c MENS -n "Mensa Question" will@himinbi.org
+30 17 * * * ~/get_calendar/mail_calendar.sh -e will@himinbi.org -p pass -f -b -c MENS -n "Mensa Answer" will@himinbi.org
+    </pre>
+    <p>One thing that you might notice is that the Mensa calendar is
+    checked twice a day. This front page (with the question) comes in
+    at 8am and then both the front and back (with the answer) comes in
+    at 5:30pm.</p>
+    <hr />
+    <p>The programs are not terribly complex, but at the same time
+    non-trivial.</p>
+    <p>The retrieval program has to access multiple pages and store
+    session keys in order to access the site. This 50 lines of shell
+    script in a replacement for 200 lines of <a
+    href="GetCalendar.java">java</a> thanks to <a
+    href="http://curl.haxx.se">curl</a>.</p>
+    <p>The mailing program supports the fact that some calendar pages
+    have embedded images and cross multiple pages. It uses the
+    multipart/related and multipart/mixed sections respectively. It is
+    also sensitive to users with text email readers with
+    multipart/alternative sections. All this was fairly easy thanks to
+    the <a href="http://www.mhost.com/nmh/">nmh mail suite</a>.</p>
+  </body>
+</html>

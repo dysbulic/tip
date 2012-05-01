@@ -1,0 +1,12 @@
+RewriteEngine on
+RewriteOptions inherit
+
+RewriteCond %{REQUEST_URI} ^(.*/speeches)/(.*\.mp3)$
+
+RewriteRule .* %1/removal_notice.html?url=%2 [R]
+
+#<FilesMatch "\.mp3$">
+#  Order Deny,Allow
+#  Deny from all
+#  ErrorDocument 403 /speeches/removal_notice.html
+#</FilesMatch>

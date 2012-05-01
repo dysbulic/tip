@@ -1,0 +1,188 @@
+# I'm a fan of Coupling (http://www.bbc.co.uk/comedy/coupling/), but
+#  I live in the States and don't get it on TV, so I downloaded a
+#  torrent (http://www.bittorrent.com) of the seasons. Alas, the
+#  files were only playable in xine and ffplay.
+# I could watch them alright, but I want to send them to a friend
+#  in Africa and she is less computer savvy tham myself.
+# The uploader said it was because of the matroska wrapper, but both
+#  vlc and mplayer have matroska support and they couldn't play it.
+# So, this makefile is to try and reencode them despite the fact that
+#  I know diddly about encoding in general...
+
+# Make doesn't handle spaces well, so we use this:
+SOURCES = $(shell find -name "*.mkv" -not -name "*.h264.mkv" -printf '%f\t' | sed -e 's| |\\ |g')
+
+MPEGS = $(foreach file,$(SOURCES),$(file:%.mkv=%.mp4))
+MKVS = $(foreach file,$(SOURCES),$(file:%.mkv=%.h264.mkv))
+YUVS = $(foreach file,$(SOURCES),$(file:%.mkv=%.y4m))
+MKVSTATS = $(foreach file,$(SOURCES),$(file:%.mkv=%.h264.stats))
+MKVONE = $(foreach file,$(SOURCES),$(file:%.mkv=%.h264.1.mkv))
+MKVTWO = $(foreach file,$(SOURCES),$(file:%.mkv=%.h264.2.mkv))
+MKVPRINT = $(foreach file,$(MKVSTATS),$(file:%.stats=%.print))
+MPEGLOGS = $(foreach file,$(SOURCES),$(file:%.mkv=%.divx-0.log))
+
+.PHONY: clean cleanseconds
+.SECONDARY: $(MKVSTATS) $(MPEGLOGS) $(YUVS) $(MKVONE) $(MKVTWO)
+
+WIDTH = 688
+HEIGHT = 400
+
+# Using ffmeg with no options though produces a low quality file with
+#  a 1:.001 aspect ratio and the sound pitch kicked up.
+
+FFARGS = -aspect $(WIDTH):$(HEIGHT)
+
+# From: http://www.mplayerhq.hu/DOCS/HTML/en/menc-feat-x264.html
+# keyint - Solely for trading off file seekability against coding
+#  efficiency. By default, keyint is set to 250. In 25fps material,
+#  this guarantees the ability to seek to within 10 seconds precision.
+#  If you think it would be important and useful to be able to seek
+#  within 5 seconds of precision, set keyint=125; this will hurt
+#  quality/bitrate slightly.
+
+# From: http://www.digital-digest.com/articles/x264_options_page1.html
+# qp - High quantizer will equal a low quality (and smaller file
+#  size). A quantizer value between 20 (high quality) and 30 (low
+#  quality) should be used. Anime/cartoons or scenes with large patches
+#  of color or less details benefit from having a higher quantizer,
+#  typical movies require a lower quantizer.
+
+# From: http://gabe.5000megs.com/guide/DeathTheSheep_x264_VfW_guide.html he
+# qcomp - extent to which x264 can fluctuate the quantizers (quality) at the
+#  bitrate you specified. The lower this option is set, the more
+#  unstable and erratic the quantizer (quality) changes become. A value
+#  of 0, for example, would allow x264 to drastically change the
+#  quality of each frame: the drawback is that “easy” frames
+#  (low-detail, low-motion) frames will look spectacular at your
+#  selected bitrate, while other “complex” frames (high-detail,
+#  high-motion) look terrible because x264 can instantly lower their
+#  quality drastically to keep the desired bitrate, resulting in a very
+#  stable, constant bitrate.
+# cabac - Context Adaptive Binary Arithmetic Coding allows syntax
+#  elements of the video stream to be predicted by context. Basically,
+#  it increases compression efficiency at no quality loss (10-15%
+#  varying by video and by bitrate), though your decoding speed will
+#  suffer slightly
+# filter strength:threshold - The deblocking threshold determines how
+#  much of the material actually needs to be deblocked. What is a
+#  block? That's what the threshold attempts to figure out. The higher
+#  this is set, x264 will perceive more of the video as blocks, so the
+#  more the deblocker will act upon. The deblocking strength determines
+#  how strong of a deblocking effect is needed to eliminate the blocks
+#  where the threshold identified them. Naturally, if you don't wash
+#  (deblock) enough of the material, there will still be some stains
+#  (blocks) left, away from the washed area. Think of it like washing a
+#  shirt. If you don't wash (deblock) hard or strong enough, the stains
+#  (blocks) simply won't fade/disappear. However, if you wash too much
+#  material or scrub too hard, you'll ruin the shirt, because instead
+#  of stains, there will be the ugly lack of color where all the
+#  texture and detail rubbed out.
+# The standard deblocking (0:0) will lead to the highest quality
+#  balance block removal while maintaining detail. If, however, you
+#  find the result unsatisfying, look to these tips:
+# * For deblocking strength and threshold both, try not go out of
+#    bounds of the -3 to 2 range. Generally, any more than 2 will turn
+#    your result into mush while decreasing quality. Any less than -3 may
+#    cause the result to look a bit too sharp—not in a good sense,
+#    either, for any lack of texture will merely become more apparent as
+#    all smoothing is taken out.
+# * If you are encoding an animated source, heavier deblocking (1:1)
+#    is suggested to eliminate all blocks possible. The drawn content is
+#    more resistant to smearing due to the high-contrast edges. On the
+#    other hand, if you are encoding a "real-life" video, especially one
+#    with intricate textures and low/poor lighting, consider decreasing
+#    the deblocking to preserve such things without creating a washing
+#    effect.
+# * Try to keep a positive correlation between the two settings. That
+#    is, if you want heavier deblocking, make sure to increase the
+#    threshold so that more gets deblocked, and vise versa. Recall the
+#    comparison with the clothes washing: you don't want to heavily wash
+#    a small area while the rest remains unwashed; the unwashed areas
+#    will stand out more in stark vividness and provide an ugly visual
+#    effect.
+# * For maximum preservation of detail at high bitrates, I suggest
+#    -1:-1. However, 0 may still be optimal for one or both of the
+#    settings depending on source material (gradients, textures and
+#    contrasts), bitrate used, and personal preference.
+
+# I've read --me esa mostly just slows things down
+#
+X264ARGS = --progress --subme 7 --analyse all --me umh --8x8dct \
+           --qp 20 --qcomp 1 --min-keyint 12 --keyint 500 --bime \
+           --direct auto --ref 16 --mixed-refs --trellis 2 --cqm jvt \
+           --bframes 5 --b-pyramid --weightb --b-rdo --no-fast-pskip \
+           --filter 1:1
+
+all: $(MKVS)
+
+echo: $(MKVPRINT)
+
+echoonce:
+	echo $(MKVPRINT)
+
+%.print:
+	@echo "$@"
+
+# I'm using mpeg4 with two pass encoding
+%.mp4: %.divx-0.log
+	ffmpeg -i "$*.mkv" $(FFARGS) -pass 2 -passlogfile "$*.divx" -y "$@"
+
+%.divx-0.log: %.mkv
+	ffmpeg -i "$<" $(FFARGS) -pass 1 -passlogfile "$*.divx" -an "$*.mp4"
+
+# x264 was installed from: http://rpmfind.net/linux/rpm2html/search.php?query=x264
+# With the command "yum localinstall"
+
+%.h264.mkv: %.h264.2.mkv
+	x264 -o "$@" $(X264ARGS) --pass 3 --stats "$*.h264.x.stats" "$*.y4m" $(WIDTH)x$(HEIGHT)
+
+%.h264.2.mkv: %.h264.x.stats %.y4m
+	x264 -o "$@" $(X264ARGS) --pass 3 --stats "$<" "$*.y4m" $(WIDTH)x$(HEIGHT)
+
+%.h264.x.stats: %.h264.stats
+	cp "$<" "$@"
+
+%.h264.stats: %.y4m
+	x264 -o "$*.h264.1.mkv" $(X264ARGS) --pass 1 --stats "$@" "$<" $(WIDTH)x$(HEIGHT)
+
+# transcode -a 0            # extract audio[,video] track for encoding
+#           -b 128,0,0      # audio encoder bitrate kBits/s[,vbr[,quality[,mode]]]
+#           -w 1800,250,100 # encoder bitrate[,keyframes[,crispness]] (6000 for MPEG 1/2, 1800 for others)
+#           -A              # use AC3 as internal audio codec
+#           -N 0x2000       # export audio format (0x1 PCM, 0x50 MP2, 0x55 MP3, 0x2000 AC3, 0xfffe OGG)
+#           -M 2            # demuxer PES AV sync modes (0 Pass-through, 1 PTS only (def), 2 NTSC VOB stream synchronization)
+#           -Y 4,4,4,4      # select (encoder) frame region by clipping border
+#           -B 1,11,8       # resize to height-n*M rows [,width-m*M] columns
+#           -R 2,divx4.log  # enable multi-pass encoding
+#           -x vob          # video[,audio] import modules
+#           -y xvid4        # video[,audio] export modules
+#           -i movie.vob    # input file
+
+%.y4m: %.mkv
+	ffmpeg -i "$<" $(FFARGS) -f yuv4mpegpipe "$@"
+
+%.h264.vlc.mp4: %.mkv
+        vlc "$<" :sout="#transcode{vcodec=h264, vb=512, acodec=acc, ab=64, channel=2, audio-sync}:std{access=file, mux=mp4,url=\"$@\"}" \
+	                --sout-transcode-width=$(WIDTH) --sout-transcode-height=$(HEIGHT) --aspect-ratio=width:height
+%.avi: %.mkv
+	ffmpeg $(FFARGS) -i "$<" -vcodec rawvideo -an "$@"
+
+DVDDIR = dvd_master
+Coupling\ s2-s4.iso:
+	mkdir "$(DVDDIR)"
+	for file in *"Series "[234]*; do \
+	    short="$${file%-*}"; \
+	    short="$${short#*-}"; \
+	    series="$${short%-*}"; \
+	    episode="$${short#*-}"; \
+	    ln -s "../$$file" "$(DVDDIR)/Coupling s$${series#Series }e$${episode#Episode } - $${file##*-}"; \
+	done
+	ln -s "../$$(ls -1 ../vlc*.exe | tail -n1)" "$(DVDDIR)/"
+	ln -s "../$$(ls -1 ../ffdshow*.exe | tail -n1)" "$(DVDDIR)/"
+	mkisofs -J -r -f -p "$$(whoami)" -V "Coupling s2-s4" -o "$@" "$(DVDDIR)"
+
+clean:
+	$(RM) *.mp4 *.divx-0.log *.h264.mkv *.y4m *.h264.stats *~
+
+cleanseconds:
+	$(RM) *.divx-0.log *.y4m *.h264.stats *~

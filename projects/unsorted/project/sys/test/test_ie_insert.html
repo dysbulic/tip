@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Internet Explorer DOM Insert</title>
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+      function iesucks(testdiv) {
+        alert("Inserting div using variable name: " +
+              (testdiv ? "div" : "para"));
+        if(testdiv) {
+          var div = document.createElement("div");
+          div.appendChild(document.createTextNode("Testing"));
+          document.getElementsByTagName("body")[0].appendChild(div);
+        } else {
+          var para = document.createElement("div");
+          para.appendChild(document.createTextNode("Testing"));
+          document.getElementsByTagName("body")[0].appendChild(para);
+        }
+      }
+    </script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div class="content">
+    <p>Internet Explorer, if I am understanding correctly, will properly run the code:</p>
+    <pre>
+var div = document.createElement("p");
+div.appendChild(document.createTextNode("Testing"));
+document.getElementsByTagName("body")[0].appendChild(div);
+    </pre>
+    <p>But will die on this code:</p>
+    <pre>
+var para = document.createElement("div");
+para.appendChild(document.createTextNode("Also Testing"));
+document.getElementsByTagName("body")[0].appendChild(para);
+    </pre>
+    <form action="">
+      <p>Try it:
+       <input type="button" value="Div Test" onclick="location.href = location.pathname + '?div'"/>
+       <input type="button" value="Para Test" onclick="location.href = location.pathname + '?para'"/>
+      </p>
+    </form>
+    <p>Dammit all; it is doing it in my program, but not here... Why?</p>
+    <hr />
+    <script type="text/javascript">
+      if(location.search == "?div") {
+        iesucks(true);
+      } else if(location.search != "") {
+        iesucks(false);
+      } else {
+        var loadfunc = function () { iesucks(false) };
+        // Avoiding IE      
+        if(this.addEventListener || document.addEventListener) {
+          loadfunc();
+        } else if(this.attachEvent) {
+          this.attachEvent("onload", loadfunc);
+        }
+      }
+    </script>
+    <p>Ahh, it only happens when the page is loading and it only happens if all the content in the page is enclosed in &lt;div&gt;s. Now the variable name doesn't seem to matter... Damned IE...</p>
+    </div>
+  </body>
+</html>

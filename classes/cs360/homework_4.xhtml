@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-360 Homework #4</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      object { width: 100%; }
+      table { border-collapse: collapse; }
+      td, th { border: 1px solid; padding: .25em .5em; text-align: center; }
+      .plan { width: 1000px; }
+      #graph_plan { height: 600px; }
+      #partial_plan { height: 300px; }
+      #progression_plan, #regression_plan { height: 800px; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 360: Introduction to Artificial Intelligence</h1>
+      <h2>Homework #4</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>29 November 2007</h2>
+    </div>
+    <ol>
+      <li>
+        <div class="question">
+          <h2>STRIPS Planning</h2>
+          <p>Devise a plan for a robot to clean a kitchen. Consider the following:</p>
+          <ol>
+            <li>Cleaning the stove or the refrigerator causes the floor to get dirty.</li>
+            <li>To clean the oven, it is necessary to lock the oven shut and then set the dial to "clean."</li>
+            <li>Cleaning the refrigerator creates garbage and messes up the counters.</li>
+            <li>Washing the counters or the floor gets the sink dirty.</li>
+            <li>Before the floor can be washed, it must be swept.</li>
+            <li>Before the floor can be swept, the garbage must be taken out.</li>
+          </ol>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Write a set of STRIPS-style operator that might be used. When you describe the operators, take into consideration the information listed above (1-6). For each operator include the associated description (preconditions, delete list, add list).</p>
+	    </div>
+	    <div class="answer">
+	      <p>The term "stove" is ambiguous. In general, a stove consists of two parts: a range and an oven. For the purposes of these sentences, since oven is  anything that is taken to be true for a stove is also taken to be true for the range or oven.</p>
+	      <p>
+		<code>Stove</code>(<em>x</em>) &and; <em><code>Condition</code></em>(<em>x</em>) &Implies;
+		(<code>Range</code>(<em>x</em>) &or; <code>Oven</code>(<em>x</em>)) &and;
+		<em><code>Condition</code></em>(<em>x</em>)
+	      </p>
+	      <p>Planning in predicates are designed to be optional. It isn't possible to break the specification of actions across various predicates. For example, it would be convenient to do:</p>
+	      <ol>
+                <li>
+                  <p>Cleaning the stove or the refrigerator causes the floor to get dirty.</p>
+                  <ul>
+                    <li>
+                      <code>Action</code>(<code>Clean</code>(<em>d</em>)
+                      <ul>
+                        <li>
+                          <code>Precond</code>:
+                          (<code>Stove</code>(<em>d</em>) &or; <strong><code>Refrigerator</code>(<em>d</em>)</strong>)
+                          &and; <code>IsDirty</code>(<em>d</em>)
+                        </li>
+			<li>
+			  <code>Effect</code>: <code>IsClean</code>(<em>d</em>)
+			  &and; &not;<code>IsDirty</code>(<em>d</em>))
+			</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <p>Cleaning the refrigerator creates garbage and messes up the counters.</p>
+                  <ul>
+                    <li>
+                      <code>Action</code>(<code>Clean</code>(<em>d</em>)
+                      <ul>
+                        <li>
+                          <code>Precond</code>: <strong><code>Refrigerator</code>(<em>d</em>)</strong>
+                          &and; <code>Garbage</code>(<em>g</em>) &and; <code>Counter</code>(<em>c</em>)
+			</li>
+                        <li>
+                          <code>Effect</code>: <code>IsClean</code>(<em>d</em>) &and;
+                          &not;<code>IsEmpty</code>(<em>g</em>) &and; <code>IsDirty</code>(<em>c</em>))
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ol>
+	      <p>A system could theoretically combine and apply all applicable preconditions and effects, but that is beyond the expected complexity of a STRIPS planner. Another solution is to insert interim goals between <code>IsDirty</code> and <code>IsClean</code> to capture the different prerequisites. This would create an arbitrary ordering of requisites and effects which shouldn't preclude any otherwise achievable goals, but which would complicate the logistical structure.</p>
+	      <p>Another option is, rather than convert each sentence into a single predicate, first preprocess all of them to properly collect the prerequisites and effects for the cleaning of each element.</p>
+	      <p><em>For all elements it is assumed that <code>IsDirty</code> is a cleaning prerequisite and (<code>IsClean</code> &and; &not;<code>IsDirty</code>) as an effect.</em></p>
+	      <table>
+		<tr><th>Phrase</th><th>Kitchen Object</th><th>Cleaning Prerequisites</th><th>Cleaning Effects</th></tr>
+		<tr>
+		  <td rowspan="2">Cleaning the stove or the refrigerator causes the floor to get dirty. <em>(This is split across the range and oven since it holds true for both.)</em></td>
+		  <td><code>Stove</code>(<em>d</em>) &or; <code>Refrigerator</code>(<em>d</em>)</td>
+		  <td><code>Floor</code>(<em>f</em>)</td>
+		  <td><code>IsDirty</code>(<em>f</em>)</td>
+		</tr>
+		<tr>
+		  <td>
+		    <code>Oven</code>(<em>d</em>) &or; <code>Range</code>(<em>d</em>) &or;
+		    <code>Refrigerator</code>(<em>d</em>)
+		  </td>
+		  <td><code>Floor</code>(<em>f</em>)</td>
+		  <td><code>IsDirty</code>(<em>f</em>)</td>
+		</tr>
+		<tr>
+		  <td>To clean the oven, it is necessary to lock the oven shut and then set the dial to "clean."</td>
+		  <td><code>Oven</code>(<em>d</em>)</td>
+		  <td><code>IsLocked</code>(<em>d</em>) &and; <code>Setting</code>(<em>d</em>, 'clean')</td>
+		  <td></td>
+		</tr>
+		<tr>
+		  <td>Cleaning the refrigerator creates garbage and messes up the counters.</td>
+		  <td><code>Refrigerator</code>(<em>r</em>)</td>
+		  <td><code>Garbage</code>(<em>g</em>) &and; <code>Counter</code>(<em>c</em>)</td>
+		  <td>&not;<code>IsEmpty</code>(<em>g</em>) &and; <code>IsDirty</code>(<em>c</em>)</td>
+		</tr>
+		<tr>
+		  <td>Washing the counters or the floor gets the sink dirty.</td>
+		  <td><code>Counter</code>(<em>d</em>) &or; <code>Floor</code>(<em>d</em>)</td>
+		  <td><code>Sink</code>(<em>s</em>)</td>
+		  <td><code>IsDirty</code>(<em>s</em>)</td>
+		</tr>
+		<tr>
+		  <td>Before the floor can be washed, it must be swept. <em>(Washing is used as synonymous with cleaning for this situation.)</em></td>
+		  <td><code>Floor</code>(<em>f</em>)</td>
+		  <td><code>IsSwept</code>(<em>f</em>)</td>
+		  <td></td>
+		</tr>
+		<tr>
+		  <td>Cleaning any previously unlisted objects doesn't dirty anything else. (<em>Added for completeness.</em>)</td>
+		  <td><code>Sink</code>(<em>d</em>)</td>
+		  <td></td>
+		  <td></td>
+		</tr>
+	      </table>
+
+	      <p>The first step in condensing this table is to duplicate rows with &or;ed objects</p>
+	      <table>
+		<tr><th>Kitchen Object</th><th>Cleaning Prerequisites</th><th>Cleaning Effects</th></tr>
+		<tr>
+		  <td><code>Refrigerator</code>(<em>d</em>)</td>
+		  <td><code>Floor</code>(<em>f</em>)</td>
+		  <td><code>IsDirty</code>(<em>f</em>)</td>
+		</tr>
+		<tr>
+		  <td><code>Oven</code>(<em>d</em>)</td>
+		  <td><code>Floor</code>(<em>f</em>)</td>
+		  <td><code>IsDirty</code>(<em>f</em>)</td>
+		</tr>
+		<tr>
+		  <td><code>Range</code>(<em>d</em>)</td>
+		  <td><code>Floor</code>(<em>f</em>)</td>
+		  <td><code>IsDirty</code>(<em>f</em>)</td>
+		</tr>
+		<tr>
+		  <td><code>Oven</code>(<em>d</em>)</td>
+		  <td><code>IsLocked</code>(<em>d</em>) &and; <code>Setting</code>(<em>d</em>, 'clean')</td>
+		  <td></td>
+		</tr>
+		<tr>
+		  <td><code>Refrigerator</code>(<em>r</em>)</td>
+		  <td><code>Garbage</code>(<em>g</em>) &and; <code>Counter</code>(<em>c</em>)</td>
+		  <td>&not;<code>IsEmpty</code>(<em>g</em>) &and; <code>IsDirty</code>(<em>c</em>)</td>
+		</tr>
+		<tr>
+		  <td><code>Counter</code>(<em>d</em>)</td>
+		  <td><code>Sink</code>(<em>s</em>)</td>
+		  <td><code>IsDirty</code>(<em>s</em>)</td>
+		</tr>
+		<tr>
+		  <td><code>Floor</code>(<em>d</em>)</td>
+		  <td><code>Sink</code>(<em>s</em>)</td>
+		  <td><code>IsDirty</code>(<em>s</em>)</td>
+		</tr>
+		<tr>
+		  <td><code>Floor</code>(<em>f</em>)</td>
+		  <td><code>IsSwept</code>(<em>f</em>)</td>
+		  <td></td>
+		</tr>
+		<tr>
+		  <td><code>Sink</code>(<em>d</em>)</td>
+		  <td></td>
+		  <td></td>
+		</tr>
+	      </table>
+	      <p>Next, rows with the same object are combined by &and;ing their prerequisites and effects:</p>
+	      <table>
+		<tr><th>Kitchen Object</th><th>Cleaning Prerequisites</th><th>Cleaning Effects</th></tr>
+		<tr>
+		  <td><code>Refrigerator</code>(<em>d</em>)</td>
+		  <td>
+		    <code>Floor</code>(<em>f</em>) &and; <code>Garbage</code>(<em>g</em>)
+		    &and; <code>Counter</code>(<em>c</em>)
+		  </td>
+		  <td>
+		    <code>IsDirty</code>(<em>f</em>) &and; &not;<code>IsEmpty</code>(<em>g</em>)
+		    &and; <code>IsDirty</code>(<em>c</em>)
+		  </td>
+		</tr>
+		<tr>
+		  <td><code>Range</code>(<em>d</em>)</td>
+		  <td><code>Floor</code>(<em>f</em>)</td>
+		  <td><code>IsDirty</code>(<em>f</em>)</td>
+		</tr>
+		<tr>
+		  <td><code>Oven</code>(<em>d</em>)</td>
+		  <td>
+		    <code>Floor</code>(<em>f</em>) &and; <code>IsLocked</code>(<em>d</em>) &and;
+		    <code>Setting</code>(<em>d</em>, 'clean')
+		  </td>
+		  <td><code>IsDirty</code>(<em>f</em>)</td>
+		</tr>
+		<tr>
+		  <td><code>Counter</code>(<em>d</em>)</td>
+		  <td><code>Sink</code>(<em>s</em>)</td>
+		  <td><code>IsDirty</code>(<em>s</em>)</td>
+		</tr>
+		<tr>
+		  <td><code>Floor</code>(<em>d</em>)</td>
+		  <td><code>Sink</code>(<em>s</em>) &and; <code>IsSwept</code>(<em>d</em>)</td>
+		  <td><code>IsDirty</code>(<em>s</em>)</td>
+		</tr>
+		<tr>
+		  <td><code>Sink</code>(<em>d</em>)</td>
+		  <td></td>
+		  <td></td>
+		</tr>
+	      </table>
+	      <p>Each row in that table can be used to produce a <code>Clean</code> action by &and;ing the required object with the other prerequisites, and adding in the omitted <code>IsDirty</code> prerequisite and (<code>IsClean</code> &and; &not;<code>IsDirty</code>) effects. For example, the first one is:</p>
+              <ul>
+                <li>
+                  <code>Action</code>(<code>Clean</code>(<em>d</em>)
+                  <ul>
+                    <li>
+                      <code>Precond</code>: <code>Refrigerator</code>(<em>d</em>) &and; <code>IsDirty</code>(<em>d</em>)
+                      &and; <code>Floor</code>(<em>f</em>) &and; <code>Garbage</code>(<em>g</em>)
+                      &and; <code>Counter</code>(<em>c</em>)
+                    </li>
+                    <li>
+                      <code>Effect</code>: <code>IsDirty</code>(<em>f</em>) &and;
+                      &not;<code>IsEmpty</code>(<em>g</em>) &and; <code>IsDirty</code>(<em>c</em>)
+                      &and; <code>IsClean</code>(<em>d</em>) &and; &not;<code>IsDirty</code>(<em>d</em>))
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <p>The mapping to actions is straightforward enough that the listings for other objects is omitted. In addition to the <code>Clean</code> predicates, a few additional predicates are needed to provide for creating necessary states of the world:</p>
+	      <ol>
+		<li>
+		  <p>Before the floor can be swept, the garbage must be taken out. (<em>This is the original statement, however the actual meaning of the sentence is: "Before the floor can be swept, the garbage must be empty." It would not make sense to take out an empty garbage can.</em>)</p>
+		  <ul>
+		    <li>
+		      <code>Action</code>(<code>Sweep</code>(<em>f</em>)
+                      <ul>
+			<li>
+			  <code>Precond</code>: <code>Floor</code>(<em>f</em>)
+			  &and; <code>Garbage</code>(<em>g</em>) &and; <code>IsEmpty</code>(<em>g</em>)
+			</li>
+			<li><code>Effect</code>: <code>IsSwept</code>(<em>f</em>))</li>
+		      </ul>
+		    </li>
+		  </ul>
+		</li>
+		<li>
+		  <p>The garbage is emptied by taking it out.</p>
+		  <ul>
+		    <li>
+		      <code>Action</code>(<code>TakeOut</code>(<em>g</em>)
+		      <ul>
+			<li>
+			  <code>Precond</code>: <code>Garbage</code>(<em>g</em>)
+			  &and; &not;<code>IsEmpty</code>(<em>g</em>)
+			</li>
+			<li><code>Effect</code>: <code>IsEmpty</code>(<em>g</em>))</li>
+		      </ul>
+		    </li>
+		  </ul>
+		</li>
+		<li>
+		  <p>Locking the oven is an atomic action.</p>
+		  <ul>
+		    <li>
+		      <code>Action</code>(<code>Lock</code>(<em>o</em>)
+		      <ul>
+			<li><code>Precond</code>: <code>Oven</code>(<em>o</em>)</li>
+			<li><code>Effect</code>: <code>IsLocked</code>(<em>o</em>))</li>
+		      </ul>
+		    </li>
+		  </ul>
+		</li>
+		<li>
+		  <p>Setting the oven to "clean" is an atomic action.</p>
+		  <ul>
+		    <li>
+		      <code>Action</code>(<code>Set</code>(<em>o</em>, 'clean')
+		      <ul>
+			<li><code>Precond</code>: <code>Oven</code>(<em>o</em>)</li>
+			<li><code>Effect</code>: <code>Setting</code>(<em>o</em>, 'clean'))</li>
+		      </ul>
+		    </li>
+		  </ul>
+		</li>
+	      </ol>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Write a description of an initial state with a kitchen that has a dirty stove, dirty refrigerator, dirty counters and dirty floor. You can assume that the sink is clean and the garbage has been taken out. Also write a description of the goal state. The goal state should ensure that everything is clean and the garbage has been taken out.</p>
+            </div>
+            <div class="answer">
+	      <p>The ambiguity of "stove" has already been discussed. For this example, saying the stove is dirty is taken to mean the oven and range are both dirty.</p>
+	      <ol>
+		<li>
+		  <p>Initial State:</p>
+		  <ul>
+		    <li><code>Oven</code>('O') &and; <code>IsDirty</code>('O') &and;</li>
+                    <li><code>Range</code>('N') &and; <code>IsDirty</code>('N') &and;</li>
+		    <li><code>Refrigerator</code>('R') &and; <code>IsDirty</code>('R') &and;</li>
+		    <li><code>Counter</code>('C') &and; <code>IsDirty</code>('C') &and;</li>
+		    <li><code>Floor</code>('F') &and; <code>IsDirty</code>('F') &and;</li>
+		    <li><code>Sink</code>('S') &and; <code>IsClean</code>('S') &and;</li>
+		    <li><code>Garbage</code>('G') &and; <code>IsEmpty</code>('G')</li>
+		  </ul>
+		</li>
+		<li>
+		  <p>Goal State:</p>
+		  <ul>
+		    <li><code>Oven</code>('O') &and; <code>IsClean</code>('O') &and;</li>
+                    <li><code>Range</code>('N') &and; <code>IsClean</code>('N') &and;</li>
+		    <li><code>Refrigerator</code>('R') &and; <code>IsClean</code>('R') &and;</li>
+		    <li><code>Counter</code>('C') &and; <code>IsClean</code>('C') &and;</li>
+		    <li><code>Floor</code>('F') &and; <code>IsClean</code>('F') &and;</li>
+		    <li><code>Sink</code>('S') &and; <code>IsClean</code>('S') &and;</li>
+		    <li><code>Garbage</code>('G') &and; <code>IsEmpty</code>('G')</li>
+		  </ul>
+		</li>
+	      </ol>
+	    </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Give a solution plan to the problem that a STRIPS system might produce (working forward from the initial state to the goal state). Write your solution in the tree-like representation that was used for illustrating the blocks world problem in class.</p>
+            </div>
+            <div class="answer">
+              <object id="progression_plan" type="image/svg+xml" data="kitchen_progression_planning_tree.svg"></object>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Derive a plan using a regression planning approach. Again, write your solution using the tree-like representation that we used for the blocks world problems in class.</p>
+            </div>
+            <div class="answer">
+              <p>From the lecture notes for CS360 at Vanderbilt, the algorithm for STRIPS is:</p>
+              <p>STRIPS(&gamma;)</p>
+              <ul>
+                <li>&gamma; &mdash; the conjunctive goal formula</li>
+                <li>S &mdash; Current state, initially the start state description.</li>
+              </ul>
+              <ul>
+                <li>Repeat until till &gamma; &subset; S.
+                <ul>
+                  <li>Choose g &Element; &gamma; &SuchThat; g &NotElement; S. In means-end analysis terms, g is regarded as a "difference" that must be "reduced" to achieve the goal. More than one choice of g represents a backtracking point.</li>
+                  <li>Choose f &lArr; STRIPS rule whose add list contains the literal, &lambda;, that "unifies" with g using unifier s. f is an operator that is relevant to reducing the difference. More than one choice of f presents a backtracking point.</li>
+                  <li>f’ &lArr; fs. This is an instance of f after substitution s. f’ is not a ground instance and may therefore contain variables.</li>
+                  <li>p &lArr; precondition formula for f’</li>
+                  <li>STRIPS(p) (<em>Recursive call with new sub-goal.</em>)</li>
+                  <li>f’’ &lArr; a ground instance of f’ applicable in S</li>
+                  <li>S &lArr; result of applying f’’  to  S.</li>
+                </ul>
+                </li>
+              </ul>
+	      <p>To increasing the readability of the tree, the following immutable identity predicates that are present in both the start and goal will be omitted from the state descriptions: <code>Oven</code>, <code>Range</code>, <code>Refrigerator</code>, <code>Counter</code>, <code>Floor</code>, <code>Sink</code>, and <code>Garbage</code>.</p>
+              <object id="regression_plan" type="image/svg+xml" data="kitchen_regression_planning_tree.svg"></object>
+              <p>It is obvious to a human planner that in order to achieve an <code>IsClean</code> for the oven that the <code>Clean</code> action with <code>Oven</code> as a prerequisite must be chosen. STRIPS however only looks at one condition at a time and would not consider both <code>IsDirty</code> and <code>Oven</code> simultaneously. It will try each <code>Clean</code> action in turn and they would each eventually fail to bind and the algorithm will backtrack until the appropriate <code>Clean</code> action is chosen.</p>
+              <p>The tree structure described in class is difficult to use at times because it makes it difficult to represent the continually changing nature of the current state, S. Cleaning the counters, for example, dirties the sink. In the tree format from class the top level goal is divided into subgoals and the goal to work on is chosen only from those goals. In the description of the algorithm however, it says that the task chosen is one that exists in the goal but not the current state.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Derive the plan using the partial order planning scheme discussed in class.</p>
+            </div>
+            <div class="answer">
+              <object id="partial_plan" type="image/svg+xml" data="kitchen_partial_order.svg"></object>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Consider the problem of putting on one's shoes and socks:</p>
+              <ul>
+                <li><code>Init</code>()</li>
+                <li><code>Goal</code>(<code>RightShoeOn</code> &and; <code>LeftShoeOn</code>)</li>
+                <li>
+                  <code>Action</code>(<code>RightShoeOn</code>)
+                  <ul>
+                    <li><code>Precond</code>: <code>RightSockOn</code></li>
+                    <li><code>Effect</code>: <code>RightShoeOn</code></li>
+                  </ul>
+                </li>
+                <li>
+                  <code>Action</code>(<code>RightSock</code>)
+                  <ul>
+                    <li><code>Effect</code>: <code>RightSockOn</code></li>
+                  </ul>
+                </li>
+                <li>
+                  <code>Action</code>(<code>LeftShoeOn</code>)
+                  <ul>
+                    <li><code>Precond</code>: <code>LeftSockOn</code></li>
+                    <li><code>Effect</code>: <code>LeftShoeOn</code></li>
+                  </ul>
+                </li>
+                <li>
+                  <code>Action</code>(<code>LeftSock</code>)
+                  <ul>
+                    <li><code>Effect</code>: <code>LeftSockOn</code></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <ol>
+              <li>
+                <div class="question">
+                  <p>Apply <code>Graphplan</code> to this problem and show the solution obtained.</p>
+                </div>
+                <div class="answer">
+                  <object id="graph_plan" type="image/svg+xml" data="planning_graph.svg"></object>
+                  <p>One can see that the pattern between <em>S<sub>2</sub> and </em><em>S<sub>3</sub></em>, and between <em>S<sub>3</sub></em> and <em>S<sub>4</sub></em> is the same, meaning the graph has stabilized. Since there are no actions which remove a shoe or sock and it is not possible to put on a shoe or sock twice, any path through the graph that takes an action each time for four actions will arrive at a solution. So, <code>Graphplan</code> finds all six solutions.</p>
+                 </div>
+               </li>
+               <li>
+                 <div class="question">
+                   <p>Add actions for putting on a coat and a hat. Show the partial order plan that is a solution.</p>
+                 </div>
+                 <div class="answer">
+                   <object id="partial_plan" type="image/svg+xml" data="partial_order.svg"></object>
+                 </div>
+               </li>
+               <li>
+                 <div class="question">
+                   <p>Show there are 180 different linearizations of the partial-order plan.</p>
+                 </div>
+                 <div class="answer">
+                   <p>There are six positions to be filled with different actions. If they could be in any order then the number would simply be the number of permutations, <em>n</em>! = 6! = 720. Two of the pairs of elements however must be ordered.</p>
+                   <p>Knowing that there are 180 valid permutations it means that 3/4 of the permutations are invalid, so a probable solution will reduce the number by 1/2 twice. There are two ordered sets. I'm pretty sure that if all permutations are considered then half of them will put <code>LeftShoe</code> before <code>LeftSock</code> which removes those. Of the remaining ones, half will have <code>RightShoe</code> before <code>RightSock</code> which reduces the number to the known 180 valid linearlizations.</p>
+                  </div>
+                </li>
+                <li>
+                  <div class="question">
+                    <p>What is the minimum number of different planning graph solutions needed to represent all 180 linearizations?</p>
+                  </div>
+                  <div class="answer">
+                    <p>Each planning graph level, A<sub>i</sub>, a new action is added. There are six actions to be added in total so the graph will need six levels.</p>
+                  </div>
+                </li>
+              </ol>
+            </li>
+            <li>
+              <h2>Planning Graphs</h2>
+              <div class="question">
+                <p>We saw that planning graphs can handle only propositional actions. What if we want to use planning graphs for a problem with variables in the goal such as <code>At</code>(<em>P<sub>1</sub></em>,<em>x</em>) &and; <code>At</code>(<em>P<sub>2</sub></em>,<em>x</em>), where <em>x</em> ranges over a finite domain of locations? How could such a problem be encoded to work with planning graphs? (Recall the <code>Finish</code> action from POP planning. What preconditions should it have?)</p>
+              </div>
+              <div class="answer">
+                <p>A simple solution is to flatten the variables into a set of propositional predicates with one element for each possible value of the variable. {<code>At</code>(<em>P<sub>i</sub></em>,<em>X<sub>j</sub></em>)} &forall; 1 &le; <em>i</em> &le; |<em>P</em>|; 1 &le; <em>j</em> &le; |<em>X</em>|.</p>
+                <p>For the example, it would create <em>nk</em> predicates for <em>n</em> <em>P<sub>i</sub></em>s and |<em>x</em>| = <em>k</em>, but the growth of storage is linear (<em>mnk</em> for a planning graph of depth <em>m</em>) rather than polynomial, and so should be manageable unless <em>m</em>, <em>n</em> or <em>k</em> is extremely large.</p>
+                <p>A set of actions for going between each pair, <em>X<sub>i</sub></em> and <em>X<sub>j</sub></em> &SuchThat; i &ne; j for each <em>P<sub>k</sub></em> would need to be added as well.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>A consumable resource is a resource that is partially used up by an action. For example, attaching engines to cars requires screws. Once screws are used, they are not available for other attachments.</p>
+        </div>
+        <ol>
+          <li>
+            <div class="question">
+              <p>Given the following representation of a car assembly process:</p>
+              <ul>
+                <li>
+                  <code>Init</code>(<code>Chassis</code>(<em>C<sub>1</sub></em>) &and;
+                  <code>Chassis</code>(<em>C<sub>2</sub></em>) &and;
+                  <code>Engine</code>(<em>E<sub>1</sub></em>,<em>C<sub>1</sub></em>,30) &and;
+                  <code>Engine</code>(<em>E<sub>2</sub></em>,<em>C<sub>2</sub></em>,60) &and;
+                  <code>Wheels</code>(<em>W<sub>1</sub></em>,<em>C<sub>1</sub></em>,30) &and;
+                  <code>Wheels</code>(<em>W<sub>2</sub></em>,<em>C<sub>2</sub></em>,15) &and;
+                  <code>EngineHoists</code>(1) &and;
+                  <code>WheelStations</code>(1) &and;
+                  <code>Inspectors</code>(2))
+                </li>
+                <li>
+                  <code>Goal</code>(<code>Done</code>(<em>C<sub>1</sub></em>) &and;
+                  <code>Done</code>(<em>C<sub>2</sub></em>))
+                </li>
+                <li>
+                  <code>Action</code>(<code>AddEngine</code>(<em>e</em>,<em>c</em>))
+                  <ul>
+                    <li>
+                      <code>Precond:</code>
+                      <code>Engine</code>(<em>e</em>,<em>c</em>,<em>d</em>) &and;
+                      <code>Chassis</code>(<em>c</em>) &and;
+                      &not;<code>EngineIn</code>(<em>c</em>)
+                    </li>
+                    <li>
+                      <code>Effect:</code>
+                      <code>EngineIn</code>(<em>c</em>) &and;
+                      <code>Duration</code>(<em>d</em>)
+                    </li>
+                    <li>
+                      <code>Resource:</code><code>EngineHoists</code>(1)
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <code>Action</code>(<code>AddWheels</code>(<em>w</em>,<em>c</em>))
+                  <ul>
+                    <li>
+                      <code>Precond:</code>
+                      <code>Wheels</code>(<em>w</em>,<em>c</em>,<em>d</em>) &and;
+                      <code>Chassis</code>(<em>c</em>) &and;
+                      <code>EngineIn</code>(<em>c</em>) &and;
+                      &not;<code>WheelsOn</code>(<em>c</em>)
+                    </li>
+                    <li>
+                      <code>Effect:</code>
+                      <code>WheelsOn</code>(<em>c</em>) &and;
+                      <code>Duration</code>(<em>d</em>)
+                    </li>
+                    <li>
+                      <code>Resource:</code><code>WheelStations</code>(1)
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <code>Action</code>(<code>Inspect</code>(<em>c</em>))
+                  <ul>
+                    <li>
+                      <code>Precond:</code>
+                      <code>EngineIn</code>(<em>c</em>) &and;
+                      <code>WheelsOn</code>(<em>c</em>)
+                    </li>
+                    <li>
+                      <code>Effect:</code>
+                      <code>Done</code>(<em>c</em>) &and;
+                      <code>Duration</code>(10)
+                    </li>
+                    <li>
+                      <code>Resource:</code><code>Inspectors</code>(1)
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <p>Explain how to modify the following representation to contain:</p>
+              <ul>
+                <li>There are 100 screws initially</li>
+                <li>Engine E<sub>1</sub> requires 40 screws</li>
+                <li>Engine E<sub>2</sub> requires 50 screws</li>
+              </ul>
+              <p>The <code>+</code> and <code>-</code> function symbols may be used in effect literals for resources.</p>
+            </div>
+            <div class="answer">
+              <p>There simply needs to be an identity predicate <code>Screws</code> that represents the current number of screws. <code>Screws</code>(100) would be added to <code>Init</code>. The definition of <code>Engine</code> would be expanded to represent the number of screws required:</p>
+              <ul>
+                <li><code>Engine</code>(<em>E<sub>1</sub></em>,<em>C<sub>1</sub></em>,30,40)</li>
+                <li><code>Engine</code>(<em>E<sub>1</sub></em>,<em>C<sub>1</sub></em>,60,50)</li>
+                <li>
+                  <code>Action</code>(<code>AddEngine</code>(<em>e</em>,<em>c</em>))
+                  <ul>
+                    <li>
+                      <code>Precond:</code>
+                      <code>Engine</code>(<em>e</em>,<em>c</em>,<em>d</em>,<em>s</em>) &and;
+                      <code>Chassis</code>(<em>c</em>) &and; <code>Screws</code>(<em>w</em>) &and;
+                      <code>&ge;</code>(<em>s</em>,<em>w</em>) &and;
+                      &not;<code>EngineIn</code>(<em>c</em>)
+                    </li>
+                    <li>
+                      <code>Effect:</code>
+                      <code>EngineIn</code>(<em>c</em>) &and;
+                      <code>Duration</code>(<em>d</em>) &and;
+                      &not;<code>Screws</code>(<em>w</em>) &and;
+                      <code>Screws</code>(<em>w</em> - <em>s</em>)
+                    </li>
+                    <li>
+                      <code>Resource:</code><code>EngineHoists</code>(1)
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Explain how the definition of conflict between causal links and actions in partial-order planning must be modified to handle consumable resources.</p>
+            </div>
+            <div class="answer">
+              <p>A causal link in partial order planning asserts that a given action <em>A</em> provides a prerequisite, <em>p</em>, for another action <em>B</em>. An action conflicts with a causal link if it is inserted between <em>A</em> and <em>B</em> and has &not;<em>p</em> in its effects list. With consumable items, the effects that are protected are inequalities such as <code>&ge;</code>(<em>s</em>,<em>w</em>). This characteristic does not become false simply by being negated, but by an action that affects the identity predicates that define the quantities <em>s</em> and <em>w</em>.</p>
+              <p>The logic for determining if a conflict has occurred would be required to examine the predicates that bound the values in the inequality and see if inserting a given action between <em>A</em> and <em>B</em> would invalidate that inequality.</p>
+            </div>
+          </li>
+          <li>
+            <div class="question">
+              <p>Some actions &mdash; for example resupplying the factory with screws or refueling a car &mdash; can increase the availability of resources. A resources is monotonically non-increasing if no action increases it. Explain how to use this property to prune the search space.</p>
+            </div>
+            <div class="answer">
+              <p>A non-increasing property allows for removing all nodes that require a quantity of a given resource greater than the available quantity. All actions that depend on that action could be removed from consideration as well. Each time the quantity is reduced more nodes would be eliminated.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <div class="question">
+          <p>Some people say an advantage of Hierarchical Task Network (HTN) planning is that it can solve problems like "take a round trip from Los Angeles to New York and back" that are hard to express in non-HTN notations because the start and goal states would be the same (<code>At</code>('LA')). Can you think of a way to represent and solve this problem without HTNs?</p>
+        </div>
+        <div class="answer">
+          <p>Encoding discrete time steps into the world and allowing inequalities would be a possible solution, for example a requirements specification such as:</p>
+          <p>
+            <code>At</code>('LA',<em>i</em>) &and; <code>At</code>('NY',<em>j</em>) &and; <code>At</code>('LA',<em>k</em>) &and;
+            <code>&lt;</code>(<em>i</em>,<em>j</em>) &and; <code>&lt;</code>(<em>j</em>,<em>k</em>)
+          </p>
+          <p>The <code>Go</code> action would then increment the step number:</p>
+          <ul>
+            <li>
+              <code>Action</code>(<code>Go</code>(<em>f</em>,<em>t</em>)
+              <ul>
+                <li><code>Precond:</code> <code>At</code>(<em>f</em>,<em>i</em>)</li>
+                <li><code>Effect:</code> <code>At</code>(<em>t</em>,<em>i</em> + 1))</li>
+              </ul>
+            </li>
+          </ul>
+          <p>The predicates then go from being a representation of the current state to being a representation of all states up to the current one.</p>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

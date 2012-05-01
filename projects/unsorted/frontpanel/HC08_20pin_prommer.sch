@@ -1,0 +1,383 @@
+EESchema Schematic File Version 1
+LIBS:power,/home/will/mc68hc08jt8,device,conn,linear,regul,74xx,cmos4000,adc-dac,memory,xilinx,special,microcontrollers,microchip,analog_switches,motorola,intel,audio,interface,digital-audio,philips,display,cypress,siliconi,contrib
+EELAYER 23  0
+EELAYER END
+$Descr A4 11700 8267
+Sheet 1 1
+Title ""
+Date "28 jul 2006"
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+Text Notes 7450 7550 0    60   ~
+Motorola HC908 Programmer
+Wire Wire Line
+	3300 1550 3150 1550
+Wire Wire Line
+	3150 1550 3150 2950
+$Comp
+L GND #PWR?
+U 1 1 44C969B3
+P 3150 2950
+F 0 "#PWR?" H 3150 2950 30  0001 C C
+F 1 "GND" H 3150 2880 30  0001 C C
+	1    3150 2950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7000 2800 7000 2600
+Connection ~ 5450 1800
+Wire Wire Line
+	5450 1650 5450 1800
+Wire Wire Line
+	5450 1650 6800 1650
+Wire Wire Line
+	6800 1650 6800 2600
+Wire Wire Line
+	6800 2600 7400 2600
+Wire Wire Line
+	5250 3000 5250 3350
+Wire Wire Line
+	5250 2600 5250 1650
+Wire Wire Line
+	5250 1650 5050 1650
+$Comp
+L GND #PWR?
+U 1 1 44C968FF
+P 5250 3350
+F 0 "#PWR?" H 5250 3350 30  0001 C C
+F 1 "GND" H 5250 3280 30  0001 C C
+	1    5250 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L C 100n
+U 1 1 44C968FE
+P 5250 2800
+F 0 "100n" H 5300 2900 50  0000 L C
+F 1 "C" H 5300 2700 50  0000 L C
+	1    5250 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 44C9685E
+P 2300 2950
+F 0 "#PWR?" H 2300 2950 30  0001 C C
+F 1 "GND" H 2300 2880 30  0001 C C
+	1    2300 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 44C96858
+P 1700 2950
+F 0 "#PWR?" H 1700 2950 30  0001 C C
+F 1 "GND" H 1700 2880 30  0001 C C
+	1    1700 2950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2300 2550 2300 1900
+Wire Wire Line
+	2300 1900 2250 1900
+$Comp
+L C 22p
+U 1 1 44C96839
+P 2300 2750
+F 0 "22p" H 2350 2850 50  0000 L C
+F 1 "C" H 2350 2650 50  0000 L C
+	1    2300 2750
+	1    0    0    -1  
+$EndComp
+$Comp
+L C 22p
+U 1 1 44C96832
+P 1700 2750
+F 0 "22p" H 1750 2850 50  0000 L C
+F 1 "C" H 1750 2650 50  0000 L C
+	1    1700 2750
+	1    0    0    -1  
+$EndComp
+Connection ~ 1750 1900
+Connection ~ 2250 1900
+Connection ~ 2300 2150
+Connection ~ 1700 2150
+Wire Wire Line
+	1700 2550 1700 1900
+Wire Wire Line
+	1700 1900 1750 1900
+Wire Wire Line
+	1750 1900 1750 1700
+Wire Wire Line
+	1750 1700 3300 1700
+Wire Wire Line
+	3300 1800 2250 1800
+Wire Wire Line
+	2250 1800 2250 1900
+$Comp
+L CRYSTAL 6M
+U 1 1 44C967DE
+P 2000 2150
+F 0 "6M" H 2000 2250 60  0000 C C
+F 1 "CRYSTAL" H 2000 2000 60  0000 C C
+	1    2000 2150
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R
+U 1 1 44C9679B
+P 2000 1900
+F 0 "R" V 2050 1700 50  0000 C C
+F 1 "10M" V 2000 1900 50  0000 C C
+	1    2000 1900
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	3300 1950 3000 1950
+Wire Wire Line
+	3000 1950 3000 1100
+Wire Wire Line
+	3300 2050 2850 2050
+Wire Wire Line
+	2850 2050 2850 1100
+$Comp
+L VCC #PWR?
+U 1 1 44C96724
+P 2850 1100
+F 0 "#PWR?" H 2850 1200 30  0001 C C
+F 1 "VCC" H 2850 1200 30  0000 C C
+	1    2850 1100
+	1    0    0    -1  
+$EndComp
+$Comp
+L VREG #PWR?
+U 1 1 44C966E2
+P 6300 1150
+F 0 "#PWR?" H 6300 1250 30  0001 C C
+F 1 "VREG" H 6300 1250 30  0000 C C
+	1    6300 1150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Vreg #PWR?
+U 1 1 44C965CB
+P 3000 1100
+F 0 "#PWR?" H 3000 1200 30  0001 C C
+F 1 "Vreg" H 3000 1200 30  0000 C C
+	1    3000 1100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9000 1500 9600 1500
+Connection ~ 9400 2300
+Wire Wire Line
+	9400 3550 9400 2100
+Wire Wire Line
+	9400 2100 9000 2100
+Wire Wire Line
+	5050 3050 5050 3200
+$Comp
+L R R
+U 1 1 44C1D6AF
+P 5050 2800
+F 0 "R" V 5000 3000 50  0000 C C
+F 1 "2.2k" V 5050 2800 50  0000 C C
+	1    5050 2800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9100 3150 9100 2400
+$Comp
+L C C
+U 1 1 44C1D65F
+P 9100 3350
+F 0 "C" H 9150 3250 50  0000 L C
+F 1 "100n" H 9150 3450 50  0000 L C
+	1    9100 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 44C1D62B
+P 9400 3550
+F 0 "#PWR?" H 9400 3550 30  0001 C C
+F 1 "GND" H 9400 3480 30  0001 C C
+	1    9400 3550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9100 2400 9000 2400
+Wire Wire Line
+	9600 1900 9600 3200
+Wire Wire Line
+	9600 1500 9600 1150
+$Comp
+L C C?
+U 1 1 44C1D5A4
+P 7400 1700
+F 0 "C?" H 7450 1600 50  0000 L C
+F 1 "100n" H 7450 1800 50  0000 L C
+	1    7400 1700
+	1    0    0    -1  
+$EndComp
+Connection ~ 9600 1900
+Wire Wire Line
+	9600 1900 9000 1900
+Wire Wire Line
+	6200 3350 6200 2000
+Wire Wire Line
+	6200 2000 5950 2000
+Wire Wire Line
+	9600 3200 5050 3200
+$Comp
+L GND #PWR?
+U 1 1 44C1D4B1
+P 6200 3350
+F 0 "#PWR?" H 6200 3350 30  0001 C C
+F 1 "GND" H 6200 3280 30  0001 C C
+	1    6200 3350
+	1    0    0    -1  
+$EndComp
+Connection ~ 6300 1900
+Connection ~ 6300 1800
+Connection ~ 7000 2600
+$Comp
+L VCC #PWR?
+U 1 1 44C18777
+P 9600 1150
+F 0 "#PWR?" H 9600 1250 30  0001 C C
+F 1 "VCC" H 9600 1250 30  0000 C C
+	1    9600 1150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6300 1150 6300 2100
+Wire Wire Line
+	5050 2000 5450 2000
+$Comp
+L R R
+U 1 1 44C18756
+P 5700 2000
+F 0 "R" V 5750 1800 50  0000 C C
+F 1 "10k" V 5700 2000 50  0000 C C
+	1    5700 2000
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	6300 2100 5950 2100
+Wire Wire Line
+	5050 2100 5450 2100
+$Comp
+L R R
+U 1 1 44C18755
+P 5700 2100
+F 0 "R" V 5750 1900 50  0000 C C
+F 1 "10k" V 5700 2100 50  0000 C C
+	1    5700 2100
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	6300 1800 5950 1800
+Wire Wire Line
+	5450 1800 5050 1800
+$Comp
+L R R
+U 1 1 44C18751
+P 5700 1800
+F 0 "R" V 5750 1600 50  0000 C C
+F 1 "10k" V 5700 1800 50  0000 C C
+	1    5700 1800
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	6300 1900 5950 1900
+Wire Wire Line
+	5050 1900 5450 1900
+$Comp
+L R R
+U 1 1 44C186C1
+P 5700 1900
+F 0 "R" V 5750 1700 50  0000 C C
+F 1 "10k" V 5700 1900 50  0000 C C
+	1    5700 1900
+	0    -1   -1   0   
+$EndComp
+$Comp
+L C 100n
+U 1 1 44C18620
+P 7400 2200
+F 0 "100n" H 7450 2300 50  0000 L C
+F 1 "C" H 7450 2100 50  0000 L C
+	1    7400 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C
+U 1 1 44C185E1
+P 9600 1700
+F 0 "C" H 9650 1600 50  0000 L C
+F 1 "100n" H 9650 1800 50  0000 L C
+	1    9600 1700
+	1    0    0    -1  
+$EndComp
+$Comp
+L DB9 J?
+U 1 1 44C18358
+P 10300 2300
+F 0 "J?" H 10300 2850 70  0000 C C
+F 1 "DB9" H 10300 1750 70  0000 C C
+	1    10300 2300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9400 2300 9850 2300
+Wire Wire Line
+	9000 2800 9250 2800
+Wire Wire Line
+	9250 2800 9250 2500
+Wire Wire Line
+	9250 2500 9850 2500
+$Comp
+L GND #PWR?
+U 1 1 44C182A9
+P 9100 3550
+F 0 "#PWR?" H 9100 3550 30  0001 C C
+F 1 "GND" H 9100 3480 30  0001 C C
+	1    9100 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L MC68HC08JT8 U?
+U 1 1 44C18150
+P 4050 1900
+F 0 "U?" H 4150 1150 60  0000 C C
+F 1 "MC68HC08JT8" V 4050 1950 60  0000 C C
+	1    4050 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L DIODE D?
+U 1 1 44C169CF
+P 7200 2800
+F 0 "D?" H 7200 2900 40  0000 C C
+F 1 "DIODE" H 7200 2700 40  0000 C C
+	1    7200 2800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9000 2600 9850 2600
+$Comp
+L MAX232 U?
+U 1 1 44C16659
+P 8200 2200
+F 0 "U?" H 8200 3050 70  0000 C C
+F 1 "MAX232" H 8200 1350 70  0000 C C
+	1    8200 2200
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC

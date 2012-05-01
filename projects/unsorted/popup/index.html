@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Popups</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
+    <script type="text/javascript">
+      properties = "width=600,height=600,left=75,top=40,location=no,toolbar=no,menubar=no,scrollbars=yes,resizable=yes";
+      addListener(this, "load", function() { popupOnce("../fortune/", properties); show_visits(); });
+      function show_visits() {
+        var visit_count = getCookie()['visit_count'];
+        document.getElementById("visit_count").appendChild(document.createTextNode
+         ("You have visited this site " + visit_count + " time" + (visit_count == 1 ? "" : "s")));
+       }
+    </script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Javascript Popups</h1>
+    <p>Much as I dislike them and know them to be unprofessional, I have been tasked with popping up an unsolicited window. I figure I'll try and make it as painless as possible for the user.</p>
+    <p>This <a href="popup.js">popup code</a> creates a cookie that prevents the popup from appearing unless the user hasn't been on the site for 90 days. As a side effect, it tracks how many times they have been on the site.</p>
+    <p id="visit_count"></p>
+    <form action="">
+      <div>
+        <input type="button" onclick="javascript:setCookie({visit_count:''},-1);window.location.reload()" value="Remove Cookie"></input>
+      </div>
+    </form>
+  </body>
+</html>

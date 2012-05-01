@@ -1,0 +1,39 @@
+var InputStream = java.io.InputStream
+var InputStreamReader = java.io.InputStreamReader
+var BufferedReader = java.io.BufferedReader
+
+if( typeof load == 'undefined' ) {
+    function load( resource ) {
+	var stream = null
+	var reader = null
+	try {
+	    try {
+		stream = hostApplet.getResourceAsStream( resource )
+		if( stream == null ) {
+		    print( "Could not get: " + resource + "\n" );
+		} else {
+		    reader = new BufferedReader( new InputStreamReader( stream ) )
+		    var line = ""
+		    var text = ""
+		    while( ( line = reader.readLine() ) != null ) {
+			text += line
+		    }
+		    print( text + "\n" )
+		    eval( text )
+		}
+	    } finally {
+		if( reader != null ) {
+		    reader.close()
+		}
+		if( stream != null ) {
+		    stream.close()
+		}
+	    }
+	} catch( e ) {
+	    print( "Error: " + e + "\n" )
+	}
+    }
+}
+print( "typeof load = " + typeof load + "\n" )
+//load( '/lib/jquery/js' )
+//load( '/bin/hello/world/js' )

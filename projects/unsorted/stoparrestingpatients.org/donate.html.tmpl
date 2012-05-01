@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<tmpl:template xmlns="http://www.w3.org/1999/xhtml"
+               xmlns:tmpl="http://odin.himinbi.org/templ/0.1/">
+  <tmpl:var name="title">Donate to Michigan Coalition for Compassionate Care</tmpl:var>
+  <tmpl:var name="header">
+    <style type="text/css">
+      #paypal { width: 120px; text-align: center; border: 2px solid #777; padding: .5em; }
+      #paypal input.text { width: 60px; padding: .1em .3em; margin: .1em; border: 1px inset; }
+      #paypal input { margin: auto; }
+    </style>
+  </tmpl:var>
+  <tmpl:var name="content">
+    <h2>Donate to <acronym title="Michigan Coalition for Compassionate Care">MCCC</acronym></h2>
+
+    <p>Would you please help the campaign to pass a medical marijuana initiative in Michigan by contributing to our work?  We're relying on contributions from people like you to fund our work.</p>
+
+    <p>You can pay by credit card or PayPal below. Or, you can send a check or money order can to the address below. (Please note that Michigan law requires that we record the names and addresses of donors. If you would like to make a cash donation through the mail, please also note that Michigan law precludes us from accepting any single cash donation over $20. We can accept check, money order, credit card, and online donations of any amount.)</p>
+
+    <address>
+      <span>Michigan Coalition for Compassionate Care</span>
+      <span>P.O. Box 20489</span>
+      <span>Ferndale, MI 48220</span>
+    </address>
+
+     <form action="https://www.paypal.com/cgi-bin/webscr" method="post" id="donate">
+      <div id="paypal">
+        <img src="paypal_donate.png" alt="Paypal" style="width: 100px" />
+        <div>
+          <img src="visa_logo.small.png" alt="Visa" style="width: 50px" />
+          <img src="mastercard_logo.small.png" alt="MasterCard" style="width: 50px" />
+        </div>
+        <input name="cmd" type="hidden" value="_xclick"/>
+        <input name="business" type="hidden" value="donations@stoparrestingpatients.org"/>
+        <input name="item_name" type="hidden" value="Michigan Coalition for Compassionate Care Donation"/>
+        <input name="currency_code" type="hidden" value="USD"/>
+        <label>$</label><input class="text" name="amount" type="text" value=""/>
+        <input class="submit" value="Donate Now" name="submit" type="submit"/>
+        <p style="display: none" id="err"><em>You must specify a donation amount.</em></p>
+      </div>
+    </form>
+
+    <script type="text/javascript">
+      $("#donate").submit(function() {
+                  if($(this).find("[@name='amount']").val().length == 0) {
+                    $(this).find("#err").show("fast");
+                    return false;
+                  }
+                });
+    </script>
+
+    <p>Please also note that if you are contributing a total of $100 or more, Michigan campaign law also mandates that your employer, occupation, and business street address be noted.</p>
+
+    <p>Thank you for supporting the Michigan Coalition for Compassionate Care!</p>
+  </tmpl:var>
+</tmpl:template>

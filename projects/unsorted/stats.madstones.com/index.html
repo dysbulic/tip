@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Generating Web Statistics</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Generating <a href="http://awstats.sourceforge.net"><acronym title="Advanced Web Statistics">AWStats</acronym></a></h1>
+    <p>The way I maintain my website currently is I have a copy on my laptop that I edit and every so often I run <a href=""><code>rsync</code></a> to transfer any changes to <a href="http://illuminati.stderr.org">the server</a>.</p>
+    <p>This system generally works pretty well. One of the exceptions has to do with generating server statistics. I am running <a href="http://fedora.redhat.com">Fedora</a> and the server is running <a href="http://www.debian.org">Debian</a>. The names of directories is different as well as the format and naming convention for the log files. (I use <a href="http://httpd.apache.org">Apache</a> <code>combined</code> whereas the server uses <code>common</code>.)</p>
+    <p>The other issue with generating statistics is I have asked to have all scripts other than <a href="http://wwww.php.net">PHP</a> disabled. I have lots of code lying about in <a href="../">the graveyard</a> and as spiders were wandering across it, it was getting executed and getting me in trouble. This is fine, except <a href="http://awstats.sourceforge.net">awstats</a> is a perl script and I'd like to use it.</p>
+    <p>I don't really care about having up to the minute statistics, just a general idea, so using awstats' offline mode is fine. I would like to have a long term view though, and so I have to do something to save the monthly views.</p>
+    <ul>
+      <li><a href="generate_stats.sh"><code>generate_stats.sh</code></a>: a shell script which takes the name of a website, finds applicable log files, detects their type and generates statistics for the site. It puts the results in directory specific to the month</li>
+      <li><a href="generate_all.sh"><code>generate_all.sh</code></a>: simply calls <a href="generate_stats.sh"><code>generate_stats.sh</code></a> with my websites</li>
+      <li><a href="listindex.phps"><code>listindex.phps</code></a>: PHP script to index the existing reports and make them easier to browse</li>
+    </ul>
+    <p>Unfortunately the way that awstats searches for its configuration is a bit convoluted. The user supplies the hostname which then goes into a filename awstats.<em>hostname</em>.conf which is searched for in a set path. This means that either I need to be running this script in a particular place or I have to do some finagling. I decided to make some symlinks so that awstats would think it was in the same directory as the configuration.</p>
+    <ul>
+      <li><a href="awstats_links.sh"><code>awstats_links.sh</code></a>: shell script to check links needed to make awstats run</li>
+      <li><a href="awstats.common.conf"><code>awstats.common.conf</code></a>: common config used in generating a website</li>
+    </ul>
+    
+    <p>The <a href="generate_all.sh"><code>generate_all</code></a> is run in a <a href="http://en.wikipedia.org/wiki/Cron">cron</a> job once a day. <a href="http://stats.madstones.com">It works well enough.</a></p>
+  </body>
+</html>

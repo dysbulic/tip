@@ -1,0 +1,9 @@
+# iptables rules for http://odin.himinbi.org/firewall_setup/
+*nat
+:PREROUTING ACCEPT [3264317:197169821]
+:POSTROUTING ACCEPT [44602:3318356]
+:OUTPUT ACCEPT [42261:3194180]
+-A PREROUTING -d 192.168.2.176 -p tcp -m tcp --dport 138:139 -j DNAT --to-destination 192.168.99.20
+-A PREROUTING -d 192.168.2.176 -p udp -m udp --dport 138:139 -j DNAT --to-destination 192.168.99.20
+-A PREROUTING -d 192.168.2.176 -p tcp -m tcp --dport 80 -j DNAT --to-destination 192.168.99.20
+COMMIT

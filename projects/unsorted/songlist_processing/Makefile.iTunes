@@ -1,0 +1,183 @@
+# This is a little makefile to take a song list exported out of iTunes and
+# make more useful stuff out of it.
+
+# This controls whether the generation of compressed files reencodes VBR files.
+REENCODEALL = false
+
+# Relative path to the root, used when symlinking was done instead of hard linking.
+RELPATH = ../$(shell pwd | sed -e 's|/[^/]*|../|g')
+
+# Files with CBR rates greater than this will be reencoded
+THRESHOLD = 128
+
+# Options for LAME. The default quality is 4. This produces files around 128kbps.
+LAMEOPTS = -V5 --nohist
+
+# Maximum number of files to recompress.
+FILELIMIT = 800
+
+# requires port: lame id3lib
+
+.PHONY: mp3s
+
+#
+# The default behavior is to try and generate a song list
+#
+%:
+	make "$@.songs.txt"
+
+#
+# Convert from utf-16 and make the linebreaks work in Unix
+#
+%.utf8.txt: %.txt
+        # Comments can contain carriage returns which buggers everything
+        # OSX's sed doesn't seem to support \n to represent a newline
+        #  and including them in makefiles is problematic. Thus the perl
+        #  and not "tr '\r' '\n'"
+	iconv -f utf-16 -t utf-8 "$<" | perl -pe 's/(([^\t]*\t){23}[^\r]*)\r/$$1\n/g' | sed -e 's// - /g' -e '1d' -e '/^$$/d' > "$@"
+
+#
+# Make a utf-8 song/title list
+#
+%.songs.txt: %.utf8.txt
+	awk -F'\t' 'BEGIN { RS = "\n" } { printf("%s - %s\n", $$2, $$1) }' "$<" > "$@"
+
+#
+# Copy all the songs into a directory (generally to burn to DVD)
+#
+%-dir:  %.utf8.txt
+	-mkdir "$*" 2> /dev/null
+
+        # Symlink won't work with the DVD recorder. It changes their name to the linked file's name
+	perl -ne 'BEGIN { use File::Copy; }' \
+	     -e 'chomp; \
+	         @cols = split(/\t/); $$path = $$cols[26]; \
+	         $$path =~ s|Macintosh HD:||; $$path =~ s|:|/|g; \
+	         $$ext = $$path; $$ext =~ s|^.*\.||; \
+	         $$title = sprintf("%s%s%s", $$cols[1], $$cols[1] ? " - " : "",  $$cols[0]); \
+	         $$title =~ s|/|_|; \
+	         $$newfile = "$*/$$title.$$ext"; \
+	         if(-e $$newfile && -M $$newfile > -M "$(RELPATH)$$path") { \
+	           print "Newer version exists. Replacing: \"$$newfile\"\n"; \
+	           unlink $$newfile; \
+	         } \
+	         if(! -e $$newfile || "$(REENCODEALL)" eq "true") { \
+	           print "Linking \"$$path\" to \"$$newfile\"\n"; \
+	           link("$(RELPATH)$$path", $$newfile) or \
+	             print "No Link ($$title.$$ext) to: \"$$path\"\n"; \
+	         }' "$*".utf8.txt
+
+#
+# Make a HTML table of all the songs for me to stick in my livejournal (which only supports inline styles)
+#
+%.table.html: %.utf8.txt
+	echo '<html><head>' > "$@"
+	echo '<title>$*</title>' >> "$@"
+	echo '<style type="text/css">table { border-collapse: collapse; margin: auto; } th, td { border: 1px solid; padding: .25em .5em .25em .5em }</style>' >> "$@"
+	echo '</head><body><table>' >> "$@"
+	echo "<tr><th>Artist</th><th>Song</th></tr>" >> "$@"
+	awk -F'\t' '{ printf("<tr><td>%s</td><td>%s</td></tr>\n", $$2, $$1) }' "$<" >> "$@"
+	echo "</table></body></html>" >> "$@"
+
+#
+# All fixed frame songs greater than a certain threshold are reencoded as VBR to reduce space
+# This requires at least lame to be installed and, to preserve tags, id3lib
+# The tags written by id3cp are v2.3 and iTunes writes v2.2, so cover art disappears, but it
+#  is still in the file.
+#
+%-compressed: %-dir
+	@echo "Once you've done this, you need to select all the songs and 'Get Info' to reload iTunes Database"
+
+        # this only works for files with no ID3; a regular search leaves the possiblity of misidentifying,
+        #  but parsing the file is too much of a pain
+        # if [ "$$(hexdump -C -s 0x24 -n 4 "$$file" | head -n1 | sed -e 's|.\{61\}\(.\{4\}\).*|\1|')" != "Xing" ]; then
+
+        # because the hard links are run before the reencoding, you can't encode straight to the file or it
+        #  will overwrite the contents. I learned that lesson the hard way...
+	@for track in $(shell awk -F'\t' '{ if($$16 > $(THRESHOLD)) { track = $$2; \
+	                                                              if($$2 != "") track = track " - "; \
+	                                                              track = track $$1; \
+	                                                              gsub(/"/, "\\\"", track); \
+	                                                              printf("\"%s\"\n", track) } }' \
+	                      "$*".utf8.txt \
+	               | sed -e 's|/|_|g' \
+	               | head -n$(FILELIMIT)); do \
+	        file="$*/$$track.mp3"; \
+		if [ ! -e "$$file" ]; then \
+			echo "No file: \"$$file\""; \
+		else \
+			newfile="$*/$$track.new.mp3"; \
+			if [[ "$$(strings "$$file" | grep Xing)" != "Xing" || "$(REENCODEALL)" == "true" ]]; then \
+				lame $(LAMEOPTS) "$$file" "$$newfile"; \
+				id3cp "$$file" "$$newfile" > /dev/null; \
+				origsize=$$(du "$$file"); origsize=$${origsize%%	*}; \
+				newsize=$$(du "$$newfile"); newsize=$${newsize%%	*}; \
+				if [[ $$newsize -lt $$origsize ]]; then \
+					echo "$$track reduced from $$origsize to $$newsize ("$$(( $$origsize - $$newsize ))")"; \
+					mv -f "$$newfile" "$$file"; \
+				else \
+					echo "$$track got bigger: "$$(( $$newsize - $$origsize ))":"; \
+					rm "$$newfile"; \
+				fi; \
+			else \
+				echo "$$track is already VBR:"; \
+			fi; \
+		fi; \
+	done
+
+# DVD burning in OSX shortens the filenames. This expands them from the id3 tags
+%-fixnames:
+	for file in "$*/"*\.*; do \
+	    name="$$(id3info "$$file" | sed -e '/^=== TPE\{0,1\}1/!d' -e 's|[^:]*: *||' -e 's|/|_|g' | head -n1)"; \
+	    [ ! -z "$$name" ] && name="$$name - "; \
+	    name="$$name$$(id3info "$$file" | sed -e '/^=== TI\{0,1\}T2/!d' -e 's|[^:]*: *||' -e 's|/|_|g' | head -n1)"; \
+	    [ -z "$$name" ] && name="$$(echo $${file##*/} | perl -pe 's/\.[^\.]+$$//; s/\b(\w)/\U$$1/g;')"; \
+	    name="$*/$$name.$${file##*.}"; \
+	    [ "$$name" == "$$file" ] || mv -v "$$file" "$$name"; \
+	done
+
+#%-m3ucopy: %.m3u
+#	for file in $$(sed -e '/^#/d' -e "/^$$(pwd | sed -e 's|/|\\\/|g')/d" -e '/\//!d' -e 's/^\(.*\)$$/\1 /' "$<"); do \
+#	    echo "$$file"; \
+#	done
+
+NOBASE=true
+
+%.iso:
+	[ -d "dvd_master" ] || mkdir dvd_master
+	if [ -z "$(NOBASE)" ]; then \
+	    for file in *; do \
+	        [[ ! -d "$$file" && "$$file" != "Makefile" && ! -e "dvd_master/$$file" ]] && ln -s "../$$file" dvd_master/; \
+	    done; \
+	fi
+	-for file in *.m3u; do \
+	    dir="$${file%.m3u}"; \
+	    [ ! -d "dvd_master/$$dir" ] && mkdir -v "dvd_master/$$dir"; \
+	    while read line; do \
+	        line="$${line%%#*}"; \
+	        [ -z "$$line" ] && continue; \
+	        newfile="dvd_master/$$dir/$${line##*/}"; \
+	        [[ -e "dvd_master/$${line##*/}" && ! -e "$$newfile" ]] && ln -s "../../$${line##*/}" "$$newfile"; \
+	    done < "$$file"; \
+	done
+	mkisofs -J -r -f -p "$$(whoami)" -V "$*" -o "$@" dvd_master
+
+#MP4S = $(shell find . -name "*.m4a" -printf '%f\t' | sed -e 's| |\\ |g' -e 's|;|\\;|g')
+MP3S = $(foreach file,$(MP4S),$(file:%.m4a=%.mp3))
+
+mp3s: $(MP3S)
+
+%.mp3: %.m4a
+	mplayer -ao pcm -ao pcm:file="reencode.tmp.wav" "$<";
+	lame "reencode.tmp.wav" "$@"
+	{ \
+	mp4info "$*.m4a" | sed -e '/ Metadata/!d' -e 's/ Metadata //' | while read line; do \
+	    case "$${line%%:*}" in \
+	        ("Name") ARG="--song";; \
+	        ([Aa]rtist|[Aa]lbum|[Tt]rack|[Gg]enre|[Yy]ear) ARG="--$$(echo $${line%%:*} | tr '[A-Z]' '[a-z'])";; \
+	        (*) ARG="--comment=\"$${line%%:*}\"";; \
+	    esac; \
+	    eval id3tag -2 $$ARG="\"$${line#*: }\"" "\"$@\""; \
+	done; \
+	}
+	rm reencode.tmp.wav

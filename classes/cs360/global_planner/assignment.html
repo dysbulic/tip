@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-360 Programming Assignment #3</title>
+    <link rel="stylesheet" type="text/css" href="../../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 360: Introduction to Artificial Intelligence</h1>
+      <h2>Programming Assignment #3</h2>
+      <h2>Due: 24:00 Tues., Dec. 11, 2007</h2>
+    </div>
+    <h1>General Instructions:</h1>
+    <p>NOTE: This is an important part of this document; make sure you completely understand this paragraph. General Problem Solver (GPS) is a common project to be implemented in LISP; therefore it may be possible to find code on the Internet for this assignment.</p>
+    <p>This is already stated in the syllabus, however let us reiterate, <em>you are NOT allowed to use code or get assistance from anything found online, from other students (both current and previous), or from older assignments.</em> You and your partner are the only sources permitted for this assignment, other than the official textbook, the instructors and the TAs. This is being stated up front so that there is no confusion. Anyone caught violating the honor code for this assignment will be sent to the honor council as has been stated clearly prior to the assignment. If there are any questions, please direct them to the professors or the TAs.</p>
+    <p>You will work on this programming assignment in pairs. Keep the same partner that you had for programming assignment 2.</p>
+    <p>Be sure that your program is well documented, all your answers are clear and to the point, and everything is in one file. Please add <b>ALL</b> your Lisp code to the same file. You can submit your write-up either in the same file as a header commented out, or as a separate Microsoft Word document. You will be using Oak (or email directly to Larry Thomas) to submit your work.</p>
+    <h1>Problem Statement:</h1>
+    <p>In this programming assignment you will develop Lisp code for a problem-solving algorithm called the General Problem Solver (GPS). GPS was developed by Alan Newell and Herb Simon in 1957, and it embodied a grandiose vision: <i>a computer program that could solve any problem</i>, given a suitable description of the problem. GPS created quite a stir when it was announced, but it never lived up to its exaggerated claims.</p>
+    <p>The main methods of GPS embody the heuristic of means-end analysis. Means-end analysis is typified by the following kind of common sense argument:</p>
+    <blockquote>
+      <p>I want to take my son to nursery school. What's the difference between what I have and what I want? One of distance. What changes distance? My automobile. My automobile won't work. What is needed to make it work? A new battery. What has new batteries? An auto repair shop. I want the repair shop to put in a new battery; but the shop doesn't know I need one. What is the Difficulty? One of communication. What allows communication? A telephone, and so on&hellip;</p>
+    </blockquote>
+    <p>Why are we concerned about GPS? The STRIPS planner was based on the GPS problem-solving paradigm. The description from Newell and Simon above is not unlike a planning algorithm. First, we characterize <i>what we have</i> (initial state) and <i>what we want</i> (goal state). Then we try and eliminate the difference between <i>what we have</i> (initial state) and <i>what we want</i> (goal state). We do this by choosing operators (i.e., actions) that will help us reduce this difference. Some actions will require the solving of <i>preconditions</i> as subproblems. For example, before we drive the car, we must make sure that it is in working condition. Of course the car may already be in working condition, and, in that case we can drive the car directly to the destination. So problem solving requires direct application of an action, or solving to achieve the preconditions of an appropriate action so that the action may then be executed. It is clear that we need to develop a description of the relevant actions in a problem solving domain, along with their preconditions and effects (add and delete lists). Is this not beginning to sound very much like the <i>regression planner</i> version of STRIPS?</p>
+    <p>Your task in this programming assignment is to write a GPS function in Lisp that takes three arguments:</p>
+    <ol>
+      <li>initial state</li>
+      <li>goal state</li>
+      <li>list of operators</li>
+    </ol>
+    <p>The function produces a sequence of operators that solves the problem, and prints them out as the solution to the problem.   The table below summarizes the primary variables, data types and functions that make up the GPS program, along with some Common Lisp functions used to implement it. Note that this version of the planner works with prepositional statements – we do not use variables and predicates in the representation of state, and the precondition, add, and delete lists for the operator.</p>
+
+    <ul>
+      <li>Top-Level Function: GPS &mdash; Solve a goal from a state using a list of operators</li>
+      <li>Special Variables: *ops* &mdash; A list of available operators</li>
+      <li>Data Types: op &mdash; An operation (action) definition with preconditions, add list, and delete list</li>
+      <li>Major Functions:
+      <ul>
+        <li>achieve-all &mdash; Achieves a list of goals</li>
+        <li>achieve &mdash; Achieves an individual goal</li>
+        <li>appropriate-p &mdash; Decide if an operator is appropriate for a goal</li>
+        <li>apply-op &mdash; Apply operator to a current state</li>
+      </ul>
+      </li>
+      <li>Auxiliary Functions:
+      <ul>
+        <li>executing-p &mdash; Is a condition an executing form?</li>
+        <li>starts-with &mdash; Is the argument a list that starts with a given atom?</li>
+        <li>convert-op &mdash; Convert an operator to use the executing convention</li>
+        <li>op &mdash; Create an operator</li>
+        <li>use &mdash; Use a list of operators</li>
+        <li>member-equal &mdash; Test if an element is equal to a member of a list</li>
+        <li>find-all &mdash; A list of all matching elements</li>
+        <li>find-all-if &mdash; A list of all elements satisfying a predicate</li>
+      </ul>
+      </li>
+      <li>Selected Common Lisp Functions:
+      <ul>
+        <li>member &mdash; Test if an element is a member of a list</li>
+        <li>set-difference &mdash; All elements in one set and not in another</li>
+        <li>subsetp &mdash; Is one set wholly contained in another?</li>
+        <li>union &mdash; All elements in either of two sets</li>
+        <li>every &mdash; Test if every element of a list passes a test</li>
+        <li>some &mdash; Test if any element of a list passes a test</li>
+        <li>remove-if &mdash; Remove all items satisfying a test</li>
+      </ul>
+      </li>
+    </ul>
+    <p>Here is how you get started. Define two special variables, <code>*state*</code> and <code>*ops*</code>.</p>
+    <p>(defvar *state* nil  "The current state: a list of conditions.")</p>
+    <p>(defvar *ops* nil   "A list of available operators.")</p>
+    <p>Use <code>defstruct</code> to define a structure called an op, which has slots called action, preconds, addlist, and delete-list.</p>
+    <p>(defstruct op  "An operation"</p>
+    <p>(action nil) (preconds nil) (add-list nil) (del-list nil))</p>
+    <p>The defstruct form for op automatically defines the function make-op, which can be used to create specific operators in a problem domain. (This is not unlike structures in C). For example:</p>
+    <ul>
+      <li>(make-op
+      <ul>
+        <li>:action 'drive-son-to-school</li>
+        <li>:preconds '(son-at-home car-works)</li>
+        <li>:add-list '(son-at-school)</li>
+        <li>:del-list '(son-at-home))</li>
+      </ul></li>
+    </ul>
+    <p>The top-level function, <code>GPS</code> calls <code>achieve-all</code>, which either return <code>NIL</code> or a <code>valid state</code>. From this we remove all the atoms, which leaves only the elements of the final state that are lists, in other words, they are the actions of the form, <b>(executing operator)</b>. Thus the value of GPS itself is the list of actions taken to arrive at the final state.</p>
+ 
+    <pre>(defun GPS (state goals &amp;optional (*ops* *ops*))
+      "General Problem Solver (GPS): from state, achieves all goals using *ops*"
+     (remove-if #‟atom (achieve-all (cons '(start) state) goals nil)))</pre>
+     <p>Your task for this programming assignment is to implement the four primary functions:</p>
+     <ul>
+       <li><code>achieve-all</code></li>
+       <li><code>achieve</code></li>
+       <li><code>apply-op</code></li>
+       <li><code>appropriate-p</code></li>
+     </ul>
+     <p>Code for all the auxiliary functions will be provided.</p>
+     <p>You will test the implemented in code in two domains: (i) Getting son to school problem, and (ii) the monkeys and bananas problem. A more complete description of each problem domain, and the list of operators that you have to use in each domain will be provided in a separate handout. A list of scenarios, i.e., different initial states will also be provided.</p>
+     <p>You will solve and analyze results for the two problem domains for this assignment. You are required to analyze the output of the GPS program and discuss the performance of the system. You will answer questions, such as: (i) Could GPSS solve this problem? If not, why not?, (ii) If it did, did it find a good solution to the problem? Was the solution generated, an optimal solution to the problem? If not, why did GPS not generate the optimal solution? (iii) How efficient was GPS in generating its solutions? Come up with general statements of the class of problems that GPS can solve well, and those that it can't.</p>
+ 
+     <h1>Scenario Information:</h1>
+     <p>You are to test you code on each of the scenarios below.  Your submission should include complete definitions for the actions required to plan in each scenario. Each action is to be defined using the <b>make-op</b> structure including action name, preconditions, add list, and delete list.</p>
+
+     <h2>Drive son to school:</h2>
+     <blockquote>
+       <p>I want to take my son to nursery school. What's the difference between what I have and what I want? One of distance. What changes distance? My automobile. My automobile will not work. What is needed to make it work? A new battery. What has new batteries? An auto repair shop. I want the repair shop to put in a new battery; but the shop does not know I need one. What is the difficulty? One of communication. What allows communication? A telephone. I have a telephone but do not know the phone number. How do I find out the phone number?  I need a phone book.  I have a phone but I have to look up the number before I know it.</p>
+     </blockquote>
+     <p><b>Actions</b> required for this domain include: drive-son-to-school, shop-installs-battery, tellshop-problem, telephone-shop, look-up-number, and give-shop-money.</p>
+     <h2>Monkey and Bananas:</h2>
+     <blockquote>
+       <p>A hungry monkey is standing at the doorway to a room. In the middle of the room is a bunch of bananas suspended from the ceiling by a rope, well out of the monkey's reach. There is a chair near the door, which is light enough for the monkey to push and tall enough to reach the bananas. Assume the monkey is holding a toy ball and can only hold one thing at a time.</p>
+     </blockquote>
+     <p><b>Actions</b> required for this domain include: climb-on-chair, push-chair-from-door-to-middle-room, walk-from-door-to-middle-room, grasp-bananas, drop-ball, eat-bananas.</p>
+     <p>Good luck with the assignment.</p>
+     <p>Start early, and avoid last minute stress!</p>
+  </body>
+</html>

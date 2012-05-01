@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<tmpl:template xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+               xmlns:tmpl="http://odin.himinbi.org/templ/0.1/"
+               xmlns:kintera="http://www.kintera.com/kintera_cms/">
+  <tmpl:var name="title"><kintera:var name="bin_pagetitle" htmlremove="true" /></tmpl:var>
+  <tmpl:var name="header">
+    <link rel="stylesheet" type="text/css" href="http://stoparrestingpatients.org/kintera.css" />
+  </tmpl:var>
+  <tmpl:hook class="org.himinbi.templ.XSLTHook">
+    <xsl:template match="html:link|html:a">
+      <xsl:copy>
+        <xsl:copy-of select="@*[not(name() = 'href')]" />
+        <xsl:apply-templates select="@href" mode="relative"/>
+        <xsl:apply-templates />
+      </xsl:copy>
+    </xsl:template>
+    <xsl:template match="html:img|html:iframe|html:script">
+      <xsl:copy>
+        <xsl:copy-of select="@*[not(name() = 'src')]" />
+        <xsl:apply-templates select="@src" mode="relative"/>
+        <xsl:apply-templates />
+      </xsl:copy>
+    </xsl:template>
+    <xsl:template match="html:form[@name='links']//html:option">
+      <xsl:copy>
+        <xsl:copy-of select="@*[not(name() = 'value')]" />
+        <xsl:apply-templates select="@value" mode="relative"/>
+        <xsl:apply-templates />
+      </xsl:copy>
+    </xsl:template>
+    <xsl:template match="@*" mode="relative">
+      <xsl:attribute name="{name()}">
+        <xsl:choose>
+          <xsl:when test="substring(., 4, 3) = '://' or substring(., 5, 3) = '://'">
+            <!-- already an absolute url: do nothing -->
+            <xsl:value-of select="."/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>http://www.stoparrestingpatients.org/</xsl:text>
+            <xsl:if test=". != '.'">
+              <xsl:value-of select="."/>
+            </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+    </xsl:template>
+  </tmpl:hook>
+  <tmpl:var name="content">
+    <table>
+      <kintera:webFeature htmlBefore='' htmlAfter='' />
+    </table>
+  </tmpl:var>
+</tmpl:template>

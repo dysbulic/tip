@@ -1,0 +1,291 @@
+BLEN   = 80
+NLEN   = 20
+C1LEN  = 20
+C2LEN  = 7
+ERRORC = ^XFFFFFFFF
+EOFC   = ^XFFFFFFFE
+SPACE  = ^X20
+TAB    = ^X9
+PIPE   = ^X7C
+MINNUM = 1
+MAXNUM = 6
+
+.macro skip_whitespace buffer, ?next, ?incriment, ?end
+  next:
+    bwhitespace buffer, incriment
+    brb end
+  incriment:
+    incl buffer
+    brb next
+  end:
+.endm
+
+.macro bwhitespace char, branch, ?found, ?end
+    bequal (char), #SPACE, found
+    bequal (char), #TAB, found
+    brb end
+  found:
+    jmp branch
+  end:     
+.endm
+
+.macro skip_to_number buffer, ?next, ?end
+  next:
+    bdigit buffer, end
+    bequal (buffer), #0, end
+    bequal (buffer), #^A/-/, end
+    bequal (buffer), #^A/+/, end
+    incl buffer
+    brb next
+  end:
+.endm
+
+.macro bdigit char, branch, ?end
+    cmpb (char), #^A/0/
+    blss end
+    cmpb (char), #^A/9/
+    bgtr end
+    jmp branch
+  end:
+.endm
+
+.macro bequal one, two, branch, ?end
+    cmpb one, two
+    bneq end
+    jmp branch
+  end:
+.endm
+
+.macro bless one, two, branch, ?end
+    cmpl one, two
+    bgeq end
+    jmp branch
+  end:
+.endm
+
+.macro bgreater one, two, branch, ?end
+    cmpl one, two
+    bleq end
+    jmp branch
+  end:
+.endm
+
+.macro berror code, branch, ?end
+    cmpl code, #ERRORC
+    bneq end
+    jmp branch
+  end:
+.endm
+
+.macro beof code, branch, ?end
+    cmpl code, #EOFC
+    bneq end
+    jmp branch
+  end:
+.endm
+
+.macro copy_string in_length, in_string, fill_char, out_length, out_string
+  pushr #^m<R0, R1, R2, R3, R4, R5>
+  clrl R0
+  movb in_length, R0
+  movc5 R0, in_string, fill_char, out_length, out_string
+  popr #^m<R0, R1, R2, R3, R4, R5>
+.endm
+
+.macro copy_cstring in_string, fill_char, out_length, out_string
+  pushr #^m<R0, R1, R2, R3, R4, R5>
+  clrl R0
+  movb in_string, R0
+  incb R0
+  movc5 R0, in_string, fill_char, out_length, out_string
+  popr #^m<R0, R1, R2, R3, R4, R5>
+.endm
+
+.macro print_with_preface preface, string
+  pushr #^m<R3, R4, R5>
+  copy_cstring preface, #SPACE, #BLEN, temp_string
+  movab temp_string, R3
+  incl R3
+  clrl R4
+  movb preface, R4
+  addl R4, R3
+  clrl R5
+  movb string, R5
+  copy_string R5, string+1, #SPACE, R5, (R3)
+  addb string, temp_string
+  println temp_string
+  popr #^m<R3, R4, R5>
+.endm
+
+.macro blank_string buffer, length
+  copy_string #0, #0, #0, length, buffer
+.endm
+
+.macro println buffer
+  copy_string buffer, buffer+1, #SPACE, #BLEN, output_buffer
+  $put rab = output_rab
+.endm
+
+.macro add_to_output in, r_out, r_count
+  movb in, (r_out)+
+  incl r_count
+.endm
+
+.macro sgreater count, branch, ?end
+    decl count
+    bleq end
+    jmp branch
+  end:
+.endm
+
+.macro standardize line, output, -
+        ?get_letters, ?pad_name, ?begin_number, ?get_number_length, -
+        ?pad_number, ?get_number, ?end
+    pushr #^m<R3, R4, R5, R6, R7>
+    movab line, R3
+    incl R3
+    movab output, R4
+    incl R4
+    clrl R5
+    movl #C1LEN, R6
+
+  get_letters:
+    bdigit R3, pad_name
+    bequal (R3), #^A/+/, pad_name
+    bequal (R3), #^A/-/, pad_name
+    add_to_output (R3)+, R4, R5
+    sgreater R6, get_letters
+    brw begin_number
+  pad_name:
+    add_to_output #SPACE, R4, R5
+    sgreater R6, pad_name
+  begin_number:
+    skip_to_number R3
+    bequal (R3), #0, end
+    movl R3, R7
+    clrl R6
+  get_number_length:
+    incl R6
+    incl R7
+    bdigit R7, get_number_length
+    bequal (R7), #^A/+/, get_number_length
+    bequal (R7), #^A/-/, get_number_length
+    subl3 R6, #C2LEN, R6
+  pad_number:
+    add_to_output #SPACE, R4, R5
+    sgreater R6, pad_number
+  get_number:
+    add_to_output (R3)+, R4, R5
+    bdigit R3, get_number
+    bequal (R3), #^A/+/, get_number
+    bequal (R3), #^A/-/, get_number
+    skip_whitespace R3
+    brw begin_number
+  end:
+    movb R5, output
+    popr #^m<R3, R4, R5, R6, R7>
+.endm
+
+output_file:   $fab   fnm = <sys$output>, rat = cr
+output_buffer: .blkb  BLEN
+output_rab:    $rab   fab = output_file, rbf = output_buffer, rsz=BLEN
+
+input_buffer:  .blkb BLEN
+temp_string:   .blkb BLEN
+average_string:   .blkb NLEN
+remainder_string: .blkb NLEN
+
+error_message:        .ascic /Invalid line: <invalid characters>/
+minnum_error_message: .ascic /Invalid line: <too few numbers>/
+maxnum_error_message: .ascic /Invalid line: <too many numbers>/
+average_preface:      .ascic /The average is: /
+remainder_preface:    .ascic / with remainder: /
+
+get_input_call:
+  .long 1
+  .address input_buffer
+
+conversion_call:
+  .long 2
+  .long 0
+  .address temp_string
+
+.entry main, 0
+.show meb
+    $create   fab = output_file
+    $connect  rab = output_rab
+
+  nextline:
+    blank_string temp_string, #BLEN
+    println temp_string
+    callg get_input_call, get_input
+    movl R0, R4 ; holding for count
+    blank_string temp_string, #BLEN
+    println temp_string
+    beof   R4, end
+    berror R4, error
+    bequal input_buffer, #0, end
+    bless    R4, #MINNUM, min_error
+    bgreater R4, #MAXNUM, max_error
+    clrl R5     ; accumulate sum
+    movab input_buffer+1, R3
+
+  get_number:
+    skip_to_number R3
+    bequal (R3), #0, compute_average
+    movab temp_string, R6 ; beginning of number
+    incl R6               ; one skipped for count
+    clrl R7               ; to accumulate character count
+  build_number:
+    movb (R3)+, (R6)+
+    incl R7
+    bdigit R3, build_number
+    bequal (R3), #^A/+/, build_number
+    bequal (R3), #^A/-/, build_number
+    movb #0, (R6)+
+    movb R7, temp_string
+
+    callg conversion_call, string_to_int
+    addl R0, R5
+    brw get_number
+
+  compute_average:
+    clrl R6
+    bless R5, #0, negative_sum
+    ediv R4, R5, R5, R6
+    brw print
+  negative_sum:
+    mnegl R5, R5
+    ediv R4, R5, R5, R6
+    mnegl R5, R5
+  print:
+    movl R5, conversion_call+4  
+    callg conversion_call, int_to_string
+    copy_cstring temp_string, #SPACE, #NLEN, average_string
+    movl R6, conversion_call+4
+    callg conversion_call, int_to_string
+    copy_cstring temp_string, #SPACE, #NLEN, remainder_string
+  print_line:
+    standardize input_buffer, temp_string
+    println temp_string
+  print_output:
+    print_with_preface average_preface, average_string
+    print_with_preface remainder_preface, remainder_string
+    brw nextline
+
+  error:
+    println error_message
+    println input_buffer
+    brw nextline
+  min_error:
+    println minnum_error_message
+    println input_buffer
+    brw nextline
+  max_error:
+    println maxnum_error_message
+    println input_buffer
+    brw nextline
+  end:
+    $exit_s
+
+.end main

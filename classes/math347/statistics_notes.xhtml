@@ -1,0 +1,569 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Probability and Statistics Notes</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/main.css" />
+  </head>
+  <body>
+
+<!--
+  mn -> number
+  mi -> identifier
+  mo -> operator, fence, or separator
+  mrow -> subexpression
+  mfrac -> fraction
+-->
+  
+    <h1>Notes for Probability and Statistics</h1>
+    <p><strong>Sample mean</strong>: is a numerical average.</p>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mover>
+        <mi>x</mi>
+        <mo>_</mo>
+      </mover>
+      <mo>=</mo>
+      <munderover>
+        <mo>&sum;</mo>
+        <mrow>
+          <mi>i</mi>
+          <mo>=</mo>
+          <mn>1</mn>
+        </mrow>
+        <mi>n</mi>
+      </munderover>
+      <mfrac>
+        <msub>
+          <mi>x</mi>
+          <mi>i</mi>
+        </msub>
+        <mi>n</mi>
+      </mfrac>
+    </math>
+    <hr />
+    <p><strong>Sample median</strong>: is the midpoint in an ordered set of numbers.</p>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mtext>For</mtext>
+      <msub>
+        <mi>x</mi>
+        <mn>1</mn>
+      </msub>
+      <mo>,</mo>
+      <msub>
+        <mi>x</mi>
+        <mn>2</mn>
+      </msub>
+      <mo>,</mo>
+      <msub>
+        <mi>x</mi>
+        <mn>3</mn>
+      </msub>
+      <mo>,</mo>
+      <mo>...</mo>
+      <mo>,</mo>
+      <msub>
+        <mi>x</mi>
+        <mi>n</mi>
+      </msub>
+      <mtext>where</mtext>
+      <msub>
+        <mi>x</mi>
+        <mi>i</mi>
+      </msub>
+      <mo>&leq;</mo>
+      <msub>
+        <mi>x</mi>
+        <mrow>
+          <mi>i</mi>
+          <mo>+</mo>
+          <mn>1</mn>
+        </mrow>
+      </msub>
+    </math>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mover>
+        <mi>x</mi>
+        <mo>~</mo>
+      </mover>
+      <mo>=</mo>
+      <mrow>
+        <mo>{</mo>
+        <mtable>
+          <mtr>
+            <mtd columnalign="center">
+              <msub>
+                <mi>x</mi>
+                <mfrac>
+                  <mrow>
+                    <mi>n</mi>
+                    <mo>+</mo>
+                    <mn>1</mn>
+                  </mrow>
+                  <mn>2</mn>
+                </mfrac>
+              </msub>
+            </mtd>
+            <mtd columnalign="left">
+              <mo>;</mo>
+              <mi>n</mi>
+              <mo>=</mo>
+              <mi>k</mi>
+              <mi>c</mi>
+              <mo>+</mo>
+              <mn>1</mn>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd columnalign="center">
+              <mfrac>
+                <mrow>
+                  <msub>
+                    <mi>x</mi>
+                    <mfrac>
+                      <mi>n</mi>
+                      <mn>2</mn>
+                    </mfrac>
+                  </msub>
+                  <mo>+</mo>
+                  <msub>
+                    <mi>x</mi>
+                    <mrow>
+                      <mfrac>
+                        <mi>n</mi>
+                        <mn>2</mn>
+                      </mfrac>
+                      <mo>+</mo>
+                      <mn>1</mn>
+                    </mrow>
+                  </msub>
+                </mrow>
+                <mn>2</mn>
+              </mfrac>
+            </mtd>
+            <mtd columnalign="left">
+              <mo>;</mo>
+              <mi>n</mi>
+              <mo>=</mo>
+              <mi>k</mi>
+              <mi>c</mi>
+            </mtd>
+          </mtr>
+        </mtable>
+        <mi>k</mi>
+        <mo>&Element;</mo>
+        <mi>&Nopf;</mi>
+      </mrow>
+    </math>
+    <hr />
+    <p><strong>Permutations</strong>: is the number of ways to arrange a set of objects.</p>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mtext>The number of permutations of</mtext>
+      <mi>n</mi>
+      <mtext>distinct objects taken</mtext>
+      <mi>r</mi>
+      <mtext>at a time is</mtext>
+      <mo>=</mo>
+      <mfrac>
+        <mrow>
+          <mi>n</mi>
+          <mo>!</mo>
+        </mrow>
+        <mrow>
+          <mfenced>
+            <mrow>
+              <mi>n</mi>
+              <mo>-</mo>
+              <mi>r</mi>
+            </mrow>
+          </mfenced>
+          <mo>!</mo>
+        </mrow>
+      </mfrac>
+    </math>
+    <hr />
+    <p><strong>Combinations</strong>: is the number of ways to select objects.</p>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mtext>The number of combinations of</mtext>
+      <mi>n</mi>
+      <mtext>object taken</mtext>
+      <mi>r</mi>
+      <mtext>at a time is</mtext>
+      <mfenced>
+        <mfrac linethickness="0">
+          <mi>n</mi>
+          <mi>r</mi>
+        </mfrac>
+      </mfenced>
+      <mo>=</mo>
+      <mfrac>
+        <mrow>
+          <mi>n</mi>
+          <mo>!</mo>
+        </mrow>
+        <mrow>
+          <mi>r</mi>
+          <mo>!</mo>
+          <mfenced>
+            <mrow>
+              <mi>n</mi>
+              <mo>-</mo>
+              <mi>r</mi>
+            </mrow>
+          </mfenced>
+          <mo>!</mo>
+       </mrow>
+     </mfrac>
+    </math>
+    <hr />
+    <p><strong>Chebyshev's theorem</strong>:</p>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mi>P</mi>
+      <mfenced>
+        <mrow>
+          <mi>&mu;</mi>
+          <mo>-</mo>
+          <mi>k</mi>
+          <mi>&sigma;</mi>
+          <mo>&lt;</mo>
+          <mi>X</mi>
+          <mo>&lt;</mo>
+          <mi>&mu;</mi>
+          <mo>+</mo>
+          <mi>k</mi>
+          <mi>&sigma;</mi>
+        </mrow>
+      </mfenced>
+      <mo>&leq;</mo>
+      <mrow>
+        <mn>1</mn>
+        <mo>-</mo>
+        <mfrac>
+          <mn>1</mn>
+          <msup>
+            <mi>k</mi>
+            <mn>2</mn>
+          </msup>
+        </mfrac>
+      </mrow>
+    </math>
+    <hr />
+    <p>
+      <strong>Bernoulli process</strong>:
+      <ol>
+        <li>The experiment consists of n repeated trials</li>
+        <li>Each trial results in an outcome that may be classified a <em>success</em> or a <em>failure</em></li>
+        <li>The probability of a success, denoted by p, remains constant from trial to trial</li>
+        <li>The repeated trials are independant</li>
+      </ol>
+    </p>
+    <hr />
+    <p><strong>Binomial distribution</strong>: is the distribution of a <em>binomial random variable</em> which is the number of success in n Bernoulli trials.</p>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mrow>
+        <mi>b</mi>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+            <mo>;</mo>
+            <mi>n</mi>
+            <mo>,</mo>
+            <mi>p</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+      <mo>=</mo>
+      <mfenced>
+        <mfrac linethickness="0">
+          <mi>n</mi>
+          <mi>x</mi>
+        </mfrac>
+      </mfenced>
+      <msup>
+        <mi>p</mi>
+        <mi>x</mi>
+      </msup>
+      <msup>
+        <mi>q</mi>
+        <mrow>
+          <mi>n</mi>
+          <mo>-</mo>
+          <mi>x</mi>
+        </mrow>
+      </msup>
+      <mo>;</mo>
+      <mi>x</mi>
+      <mo>=</mo>
+      <mn>0</mn>
+      <mo>,</mo>
+      <mn>1</mn>
+      <mo>,</mo>
+      <mn>2</mn>
+      <mo>,</mo>
+      <mo>...</mo>
+      <mo>,</mo>
+      <mi>n</mi>
+    </math>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mi>&mu;</mi>
+      <mo>=</mo>
+      <mi>n</mi>
+      <mi>p</mi>
+    </math>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <msup>
+        <mi>&sigma;</mi>
+        <mn>2</mn>
+      </msup>
+      <mo>=</mo>
+      <mi>n</mi>
+      <mi>p</mi>
+      <mi>q</mi>
+    </math>
+    <hr />
+    <p>
+      <strong>Poisson process</strong>:
+      <ol>
+        <li>The number of outcomes occurring in one time interval or specified region is independant of the number that occurs in any other disjoint time interval or region of space</li>
+        <li>The outcome that a single outcome will occur during a very short time interval or in a small region is proportional to the length of the time interval or size of the region and does not depend on the number of outcomes occurring outside this time interval or region</li>
+        <li>The probability that more than one outcome will occur in such a short time interval or fall in such a small region is negligible</li>
+      </ol>
+    </p>
+    <hr />
+    <p><strong>Poisson distribution</strong>: is the distribution of a <em>Poisson random variable</em> which is the number of outcomes occuring in a Poisson experiment.</p>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mrow>
+        <mi>p</mi>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+            <mo>;</mo>
+            <mi>&lambda;</mi>
+            <mi>t</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+      <mo>=</mo>
+      <mfrac>
+        <mrow>
+          <msup>
+            <mn>e</mn>
+            <mrow>
+              <mo>-</mo>
+              <mi>&lambda;</mi>
+              <mi>t</mi>
+            </mrow>
+          </msup>
+          <msup>
+            <mfenced>
+              <mrow>
+                <mi>&lambda;</mi>
+                <mi>t</mi>
+              </mrow>
+            </mfenced>
+            <mi>x</mi>
+          </msup>
+        </mrow>
+        <mrow>
+          <mi>x</mi>
+          <mo>!</mo>
+        </mrow>
+      </mfrac>
+      <mo>,</mo>
+      <mrow>
+        <mi>x</mi>
+        <mo>=</mo>
+        <mn>0</mn>
+        <mo>,</mo>
+        <mn>1</mn>
+        <mo>,</mo>
+        <mn>2</mn>
+        <mo>,</mo>
+        <mo>...</mo>
+      </mrow>
+    </math>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mi>&mu;</mi>
+      <mo>=</mo>
+      <msup>
+        <mi>&sigma;</mi>
+        <mn>2</mn>
+      </msup>
+      <mo>=</mo>
+      <mi>&lambda;</mi>
+      <mi>t</mi>
+    </math>
+    <hr />
+    <p><strong>Normal distribution</strong>: is also called a <em>Gaussian distribution</em> and it is the distribution of a continuous random variable with a bell shaped distribution.</p>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mrow>
+        <mi>n</mi>
+        <mfenced>
+          <mrow>
+            <mi>x</mi>
+            <mo>;</mo>
+            <mi>&mu;</mi>
+            <mo>,</mo>
+            <mi>&sigma;</mi>
+          </mrow>
+        </mfenced>
+      </mrow>
+      <mo>=</mo>
+      <mfrac>
+        <mn>1</mn>
+        <mrow>
+          <msqrt>
+            <mn>2</mn>
+            <mi>&pi;</mi>     <!-- &pi; = &#x03C0; -->
+          </msqrt>
+          <mi>&sigma;</mi>    <!-- &sigma; = &#x03C3; -->
+        </mrow>
+      </mfrac>
+      <msup>
+        <mi>e</mi>
+        <mrow>
+          <mo>-</mo>
+          <mfrac>
+            <mn>1</mn>
+            <mn>2</mn>
+          </mfrac>
+          <msup>
+            <mfenced>
+              <mfrac>
+                <mrow>
+                  <mi>x</mi>
+                  <mo>-</mo>
+                  <mi>&mu;</mi> <!-- &mu; = &#x03BC; -->
+                </mrow>
+                <mi>&sigma;</mi>
+              </mfrac>
+            </mfenced>
+            <mn>2</mn>
+          </msup>
+        </mrow>
+      </msup>
+    </math>
+    <hr />
+    <p><strong>Gamma function</strong>:</p>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mi>&Gamma;</mi><mfenced><mi>&alpha;</mi></mfenced><mo>=</mo>
+      <msubsup><mo>&int;</mo><mn>0</mn><mn>&infin;</mn></msubsup>
+      <msup><mi>x</mi><mrow><mi>&alpha;</mi><mo>-</mo><mn>1</mn></mrow></msup>
+      <msup><mn>e</mn><mrow><mo>-</mo><mi>x</mi></mrow></msup><mi>dx</mi><mo>=</mo>
+      <mfenced><mrow><mi>&alpha;</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+      <mi>&Gamma;</mi><mfenced><mrow><mi>&alpha;</mi><mo>-</mo><mn>1</mn></mrow></mfenced>      
+    </math>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mi>&Gamma;</mi><mfenced><mi>n</mi></mfenced><mo>=</mo>
+      <mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced><mo>!</mo><mo>;</mo>
+      <mrow><mi>n</mi><mo>&Element;</mo><mi>&Nopf;</mi></mrow>
+    </math>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mi>&Gamma;</mi><mfenced><mfrac><mn>1</mn><mn>2</mn></mfrac></mfenced><mo>=</mo>
+      <msqrt><mn>&pi;</mn></msqrt>
+    </math>
+
+    <hr />
+    <p><strong>Gamma distribution</strong>: in the Poisson process, &lambda; is the mean number of events per interval. In the gamma distribution, &lambda; = 1 / &beta;. &beta; is the mean time between events. &alpha; is the number of events to occur.</p>
+    <p>For instance in the problem:
+      <div style="margin-left: .5in;">
+        Suppose the telephone calls arriving at a switchboard come at 5 per minute. What is the likelihood that up to a minute will elapse until 2 calls come in?
+      </div>
+      &lambda; = 5, &beta; = 1 / 5, &alpha; = 2
+    </p>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mrow>
+        <mi>f</mi>
+        <mfenced>
+          <mi>x</mi>
+        </mfenced>
+      </mrow>
+      <mo>=</mo>
+      <mo>{</mo>
+      <mfrac>
+        <mn>1</mn>
+        <mrow>
+          <msup>
+            <mi>&beta;</mi>
+            <mi>&alpha;</mi>
+          </msup>
+          <mrow>
+            <mi>&Gamma;</mi>
+            <mfenced>
+              <mi>&alpha;</mi>
+            </mfenced>
+          </mrow>
+        </mrow>
+      </mfrac>
+      <msup>
+        <mi>x</mi>
+        <mrow>
+          <mi>&alpha;</mi>
+          <mo>-</mo>
+          <mn>1</mn>
+        </mrow>
+      </msup>
+      <msup>
+        <mn>e</mn>
+        <mfrac>
+          <mrow>
+            <mo>-</mo>
+            <mi>x</mi>
+          </mrow>
+          <mi>&beta;</mi>
+        </mfrac>
+      </msup>
+      <mo>;</mo>
+      <mrow>
+        <mi>x</mi>
+        <mo>&gt;</mo>
+        <mn>0</mn>
+      </mrow>
+      <mo>,</mo>
+      <mrow>
+        <mi>&alpha;</mi>
+        <mo>&gt;</mo>
+        <mn>0</mn>
+      </mrow>
+      <mo>,</mo>
+      <mrow>
+        <mi>&beta;</mi>
+        <mo>&gt;</mo>
+        <mn>0</mn>
+      </mrow>
+    </math>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mi>&mu;</mi>
+      <mo>=</mo>
+      <mi>&alpha;</mi>
+      <mi>&beta;</mi>
+    </math>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+      <msup>
+        <mi>&sigma;</mi>
+        <mn>2</mn>
+      </msup>
+      <mo>=</mo>
+      <mi>&alpha;</mi>
+      <msup>
+        <mi>&beta;</mi>
+        <mn>2</mn>
+      </msup>
+    </math>
+    <hr />
+    <p><strong>Expodential distribution</strong>: is a gamma distribution with &alpha; = 1. This will give the probability of failure for a given time.</p>
+    <hr />
+    <p><strong>Chi-square distribution</strong>: is a gamma distribution with &beta; = 2 and &alpha; = v / 2 where v &Element; &Nopf; called the degrees of freedom.</p>
+    <hr />
+    <p><strong>Lognormal distribution</strong>: applies where when a natural log transformation of the random variable results in a normal distribution.</p>
+<!--
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+    </math>
+    <hr />
+    <p><strong></strong>:</p>
+    <math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+    </math>
+    <hr />
+-->
+  </body>
+</html>

@@ -1,0 +1,71 @@
+\documentclass[12pt,a4paper,twoside]{article}  % Comments after  % are ignored
+\usepackage{amsmath,amssymb,amsfonts}          % Typical maths resource packages
+\usepackage{hyperref}                          % For creating hyperlinks in cross references
+\usepackage{pstricks}
+
+\author{Will Holcomb}
+\title{Triangle Sides}
+\date{February 6, 2003}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+I have a right triangle with sides, $x$, $y$, and hypotenuse $l$. I
+don't know $x$ or $y$, but I do know their ratio, $m = \frac{y}{x}$.
+I would like to find the lengths of $x$ and $y$ with a minimum of
+computational complexity since this math will be done perhaps
+thousands of times a second in a program.
+
+\section{Trigonometry}
+
+The most straightforward method is to use the basic trigonometric
+identities based on the $\angle xl$:
+
+\begin{eqnarray}
+\cos{\theta} &=& \frac{x}{l} \\
+\sin{\theta} &=& \frac{y}{l} \\
+\tan{\theta} &=& \frac{y}{x} = m
+\end{eqnarray}
+
+\begin{eqnarray}
+\tan^{-1}{m} &=& \theta \\
+x            &=& l \cos{\theta} \\
+y            &=& l \sin{\theta}
+\end{eqnarray}
+
+The java implementations of these trigonometric functions are native,
+so judging their run time is difficult.
+
+\section{Pythagorean Theorem}
+
+By the Pythagorean theorem, $l^2 = x^2 + y^2$. By definition of the
+slope, $m = \frac{y}{x}$.
+
+\begin{eqnarray}
+m = \frac{y}{x} &\Rightarrow& y = mx \\
+l^2 &=& x^2 + y^2 = x^2 + (xm)^2 = x^2 (1 + m^2) \\
+l &=& x\sqrt{1 + m^2} \\
+x &=& \frac{l}{\sqrt{1 + m^2}}
+\end{eqnarray}
+
+\section{Results}
+
+I wrote a test java and C program that used each of these methods and
+gave them a whirl for 50 million iterations. It turns out that the
+Pythagorean theorem is about 10 times faster in C. Java was a little
+bit harder because the compiler seemed to be optimizing things out to
+give unrealistic results. In one test the identity method was 10 times
+faster than a for loop with nothing in it. It is a safe bet though
+that the Pythagorean method will be about 20 times faster, likely
+because a native function call is removed.
+
+Another interesting side effect of the test was that in java a for
+loop that counted up to the length of an array takes less time than
+one counting down by about 15\%. (There is no appreciable differnce in
+C.) This means that the optimizations of going from the length - 1 to
+0 can actually be a detriment if the length is not determined by a
+function.
+
+\end{document}

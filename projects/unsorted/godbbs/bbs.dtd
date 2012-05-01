@@ -1,0 +1,26 @@
+<!--
+  This is a test dtd to represent a bbs.
+  Written by: Will Holcomb
+  Date: 2001/01/21
+-->
+<!ELEMENT bbs (title, subtitle*, user*, forum*)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT subtitle (#PCDATA)>
+<!ELEMENT user (username, alias*, realname?)>
+<!ELEMENT username (#PCDATA)>
+<!ELEMENT alias (#PCDATA)>
+<!ELEMENT realname (#PCDATA)>
+<!ELEMENT forum (thread*)>
+<!ATTLIST forum name CDATA "Unnamed Forum">
+<!ELEMENT thread (post*)>
+<!ATTLIST thread name CDATA "Unnamed Thread">
+<!ELEMENT post (author, time, ((p*, quote*) | (quote* | p*)))>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT time (#PCDATA)>
+<!ELEMENT quote (p+)>
+<!--
+<!ELEMENT p (line* | #PCDATA)>
+-->
+<!ELEMENT p (#PCDATA)>
+<!ATTLIST p type (normal | pre) "normal">
+<!ELEMENT line (#PCDATA)>

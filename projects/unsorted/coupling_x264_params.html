@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Coupling x264 Encoding Parameters</title>
+    <link rel="stylesheet" type="text/css" href="styles/main.css" />
+    <style type="text/css">
+      table { margin: auto; min-width: 75%; border-collapse: collapse; }
+      th, td { border: 1px solid; padding: .25em .5em .25em .5em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p>I've got a copy of "<a href="http://www.bbc.co.uk/comedy/coupling/">Coupling</a>" I downloaded off the internet that is about 200mb for an hour long show. The problem is something is messed up in the file and it won't play in anything except <a href="http://xinehq.de">Xine</a>. I've been trying to produce a repaired copy and have even resorted to reencoding. The problem is both the MPEG-4 and H.264 files I have produced are over 400mb. This is really irritating since I know 200mb is possible. Well, I've been looking in the files headers and this is a comparison:</p>
+
+    <table>
+      <tr><th>Property</th><th>Original</th><th>Mine</th></tr>
+      <tr><td>Encoder</td><td>x264 - core 45 svn-458</td><td>x264 - core 47 svn-531</td></tr>
+      <tr><td>cabac</td><td colspan="2">1</td></tr>
+      <tr><td>ref</td><td colspan="2">1</td></tr>
+      <tr><td>deblock</td><td colspan="2">1:0:0</td></tr>
+      <tr><td>analyse</td><td>0x3:0x113</td><td>0x1:0x111</td></tr>
+      <tr><td>me</td><td>esa</td><td>hex</td></tr>
+      <tr><td>subme</td><td>6</td><td>5</td></tr>
+      <tr><td>brdo</td><td colspan="2">0</td></tr>
+      <tr><td>mixed_ref</td><td colspan="2">0</td></tr>
+      <tr><td>me_range</td><td colspan="2">16</td></tr>
+      <tr><td>chroma_me</td><td colspan="2">1</td></tr>
+      <tr><td>trellis</td><td colspan="2">0</td></tr>
+      <tr><td>8x8dct</td><td>0</td><td>1</td></tr>
+      <tr><td>chroma_qp_offset</td><td colspan="2">0</td></tr>
+      <tr><td>slices</td><td colspan="2">1</td></tr>
+      <tr><td>nr</td><td colspan="2">0</td></tr>
+      <tr><td>decimate</td><td><em>N/A</em></td><td>1</td></tr>
+      <tr><td>bframes</td><td colspan="2">0</td></tr>
+      <tr><td>keyint</td><td colspan="2">250</td></tr>
+      <tr><td>keyint_min</td><td colspan="2">25</td></tr>
+      <tr><td>scenecut</td><td colspan="2">40</td></tr>
+      <tr><td>rc</td><td colspan="2">cqp</td></tr>
+      <tr><td>qp</td><td>23</td><td>26</td></tr>
+      <tr><td>ip_ratio</td><td colspan="2">1.40</td></tr>
+    </table>
+
+    <p>The arguments I added are:</p>
+
+    <ul>
+      <li>--subme 7</li>
+      <li>--analyse all</li>
+      <li>--me esa</li>
+      <li>--8x8dct</li>
+      <li>--qp 23</li>
+    </ul>
+
+    <hr />
+
+    <p>So, I tried those modified parameters, and I now have:</p>
+    <table>
+      <tr><th>File Size</th><th>File Name</th></tr>
+      <tr><td>180071125</td><td>Coupling-Series 1-Episode 2-Size Matters.mkv</td></tr>
+      <tr><td>473184595</td><td>Coupling-Series 1-Episode 2-Size Matters.hex.h264.mkv</td></tr>
+      <tr><td>388362240</td><td>Coupling-Series 1-Episode 2-Size Matters.esa.h264.mkv</td></tr>
+    </table>
+
+    <p>That's better, but still a far sight from the original. I'm not currently using b-frames. I'm going to try adding those and see if that helps. Hell, while I'm at it, I figure a third pass couldn't hurt. I figure I'll trust <a href="http://forum.doom9.org/showthread.php?t=110047&amp;page=2">settings from the Doom9 forums</a>.</p>
+
+    <ul>
+      <li><code>--min-keyint 12</code></li>
+      <li><code>--keyint 600</code></li>
+      <li><code>--bime</code></li>
+      <li><code>--filter 1:1</code></li>
+      <li><code>--direct auto</code></li>
+      <li><code>--ref 16</code></li>
+      <li><code>--mixed-refs</code></li>
+      <li><code>--bframes 5</code></li>
+      <li><code>--b-pyramid</code> &bull; allow b-frames to be used as references</li>
+      <li><code>--weightb</code></li>
+      <li><code>--b-rdo</code></li>
+      <li><code>--trellis 2</code></li>
+    </ul>
+
+    <p>The last set of changes kicked the encoding time up to about ten hours from two. I suspect this will be worse&hellip;</p>
+
+    <hr />
+
+    <p>Umm, yeah, slow is a word for it. I'm getting about a half a frame per second. There's around 44000 frames per show. With three passes, that's 132000 frames, 264000 seconds or 73 hours. That's for each hour long show. It looks though like the size is at least going to be manageable. I ran a 60 second test:</p>
+
+    <table>
+      <tr><th>File Size</th><th>File Name</th></tr>
+      <tr><td>175509402</td><td>Coupling-Series 1-Episode 3-Sex, Death, and Nudity.mkv</td></tr>
+      <tr><td>5419267</td><td>Coupling-Series 1-Episode 3-Sex, Death, and Nudity.h264.1.mkv</td></tr>
+      <tr><td>5404368</td><td>Coupling-Series 1-Episode 3-Sex, Death, and Nudity.h264.2.mkv</td></tr>
+      <tr><td>5406493</td><td>Coupling-Series 1-Episode 3-Sex, Death, and Nudity.h264.3.mkv</td></tr>
+      <tr><td>619209060</td><td>Coupling-Series 1-Episode 3-Sex, Death, and Nudity.y4m</td></tr>
+    </table>
+
+    <p>The first interesting thing is the file got bigger between the second and third passes. The other is that 1500 frames is 5mb. This would make the 43825 frames in the source be around 150mb. (This is the intro which has I know isn't a good sample because it is a completely different type of animation, but I'm hoping it is close.) 150mb is just about exactly what I'm looking for since the original was 167mb and I've still got to remerge the audio which is 12mb.</p>
+  </body>
+</html>

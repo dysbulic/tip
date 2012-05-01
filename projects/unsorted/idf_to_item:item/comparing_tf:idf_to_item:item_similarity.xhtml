@@ -1,0 +1,1140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:m="http://www.w3.org/1998/Math/MathML"
+      xml:lang="en">
+  <head>
+    <title>Comparing TF-IDF and Item:Item Similarity</title>
+    <link rel="stylesheet" type="text/css" href="../styles/assignment.css" />
+    <style type="text/css">
+      .result th, .result td { padding: .25em .5em; text-align: center; border: 1px solid; }
+      object { width: 100% }
+    </style>
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-939849-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+  </head>
+  <body>
+    <h1>Comparing TF-IDF and Item:Item Similarity</h1>
+
+    <p><a href="http://developers.sun.com/learning/javaoneonline/2008/pdf/TS-5841.pdf">Project Aura</a> has been examining using a method from comparing documents for doing music recommendations. I have been tasked with comparing this result with results from more traditional collaborative filtering algorithms, specifically Amazon's item to item algorithm.</p>
+
+    
+    <p>This document is divided into the following sections:</p>
+    <ol>
+      <li>
+        <a href="#tfidf">Term Frequency-Inverse Document Frequency</a>
+        <ol>
+          <li><a href="#corpus">Corpus Definition</a></li>
+          <li><a href="#corpus_tuple">Corpus Tuple Definition</a></li>
+          <li><a href="#term_frequence">Term Frequence Definition</a></li>
+          <li><a href="#doc_frequence">Document Frequence Definition</a></li>
+          <li><a href="#tfidf_vector">TF-IDF Definition</a></li>
+        </ol>
+      </li>
+      <li><a href="#cosines">Cosine Similarity</a></li>
+      <li><a href="#vectors_as_tuples">From Vectors to Tuples</a></li> 
+      <li><a href="#tfidf_recs">TF-IDF Applied to Recommendations</a></li>
+      <li><a href="#sql">Computation in SQL</a></li>
+      <li><a href="#item_item">Item:Item Similarity</a></li>
+      <li><a href="#item_item_raw">Item:Item In SQL Using Raw Counts</a></li>
+      <li>
+        <a href="#data_test">Test Data Analysis</a>
+        <ol>
+          <li><a href="#listeners_per_artist">Listeners Per Artist</a></li>
+          <li><a href="#listens_per_listener">Listens Per Listener</a></li>
+          <li><a href="#low_pop_listens_per_listener">Low Popularity Listens Per Listener</a></li>
+          <li><a href="#unique_artists_per_listener">Unique Artists Per Listener</a></li>
+        </ol>
+      </li>
+     </ol>
+
+    <h2 id="tfidf">Term Frequency-Inverse Document Frequency</h2>
+
+    <p id="corpus"><a href="http://en.wikipedia.org/wiki/Tf-idf">Term Frequency-Inverse Document Frequency</a> (tf-idf) is a method for comparing the similarity of documents within a corpus.</p>
+
+    <ul>
+      <li>
+        a corpus 
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <mover><mi>d</mi><mo>&macr;</mo></mover>
+        </math>
+        &equiv; a large and structured set of documents &equiv;
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <mfenced open="{" close="}">
+            <msub><mi>d</mi><mn>1</mn></msub>
+            <mo>&hellip;</mo>
+            <msub><mi>d</mi><mi>n</mi></msub>
+          </mfenced>
+        </math>
+      </li>
+      <li>
+        a document
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <msub><mi>d</mi><mi>i</mi></msub>
+        </math>
+        &equiv; a tuple of terms &equiv;
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <mfenced>
+            <msub><mi>t</mi><mfenced open="" close=""><mi>i</mi><mn>1</mn></mfenced></msub>
+            <mo>&hellip;</mo>
+            <msub><mi>t</mi><mfenced open="" close=""><mi>i</mi><mi>n</mi></mfenced></msub>
+          </mfenced>
+        </math>
+      </li>
+    </ul>
+
+    <p id="corpus_tuple">TF-IDF is a "bag of words" approach, meaning that the positions of the words relative to each other is not important, only how frequently they are present in the document. For the sake of comparison, a master set of terms is defined which has each term present only once.</p>
+
+    <ul>
+      <li>
+        a corpus term tuple
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <mi>C</mi><mo>&equiv;</mo>
+          <mfenced>
+            <msub><mi>c</mi><mn>1</mn></msub>
+            <mo>&hellip;</mo>
+            <msub><mi>c</mi><mi>m</mi></msub>
+          </mfenced>
+          <mo>&SuchThat;</mo>
+          <msub><mi>c</mi><mi>i</mi></msub><mo>=</mo><msub><mi>t</mi><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></msub>
+          <mo>&and;</mo><mo>&nexist;</mo>
+          <msub><mi>t</mi><mfenced open="" close=""><mi>x</mi><mi>y</mi></mfenced></msub><mo>=</mo>
+          <msub><mi>t</mi><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></msub><mo>&SuchThat;</mo>
+          <mfenced separators="&or;" open="" close="">
+            <mrow><mi>x</mi><mo>&lt;</mo><mi>j</mi></mrow>
+            <mfenced separators="&and;">
+              <mrow><mi>x</mi><mo>=</mo><mi>j</mi></mrow>
+              <mrow><mi>y</mi><mo>&lt;</mo><mi>k</mi></mrow>
+            </mfenced>
+          </mfenced>
+        </math>
+      </li>
+    </ul>
+
+    <p>Consider a simple two sentence corpus: (<em>Some of the methods described will not have productive results because this corpus and documents are too short to see statistical trends in word distribution.</em>)</p>
+
+    <ul>
+      <li>You will know the truth and the truth will make you free.</li>
+      <li>The truth will set you free, but first it will piss you off.</li>
+    </ul>
+
+    <p>The corpus term tuple for this corpus would be:</p>
+    
+    <ul>
+      <li>
+        <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>C</mi></math>
+        = (you, will, know, the, truth, and, make, free, set, but, first, it, piss, off)
+      </li>
+    </ul>
+
+    <p>
+      A convenient metaphor then for conceptualizing documents is to think of the corpus term tuple as defining an n-dimensional space. For the example, one axis is the prevalence of the word "you," another axis is "will," and another "know." This idea allows for using similarity comparisons using concepts from geometry and physics. Documents are generally defined as vectors in
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>C</mi></math>.
+    </p>
+
+    <ul>
+      <li>
+        a document weight vector
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <msub><mover><mi>w</mi><mo>&rharu;</mo></mover><mi>i</mi></msub>
+          <mo>&equiv;</mo>
+          <mfenced open="&lang;" close="&rang;">
+            <msub><mi>w</mi><mfenced open="" close=""><mi>i</mi><mn>1</mn></mfenced></msub>
+            <mo>&hellip;</mo>
+            <msub><mi>w</mi><mfenced open="" close=""><mi>i</mi><mi>m</mi></mfenced></msub>
+          </mfenced>
+        </math>
+      </li>
+    </ul>
+
+    <p id="term_frequence">
+      A simple method for characterizing documents is to simply make
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msub><mi>w</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+      </math>
+      the percentage of words in
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msub><mi>w</mi><m>i</m></msub>
+      </math>
+      that are term
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msub><mi>c</mi><m>j</m></msub>
+      </math>.
+      This is called the "term frequence":
+    </p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <msub><mover><mi>f</mi><mo>&rharu;</mo></mover><mi>i</mi></msub><mo>&equiv;</mo>
+      <mfenced open="&lang;" close="&rang;">
+        <msub><mi>f</mi><mfenced open="" close=""><mi>i</mi><mn>1</mn></mfenced></msub>
+        <mo>&hellip;</mo>
+        <msub><mi>f</mi><mfenced open="" close=""><mi>i</mi><mi>m</mi></mfenced></msub>
+      </mfenced>
+      <mo>&SuchThat;</mo>
+      <msub><mi>f</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>=</mo>
+      <mfrac>
+        <mfenced open="|" close="|"><mfenced open="{" close="}"><mrow>
+          <mi>x</mi><mo>&SuchThat;</mo>
+          <mfenced open="" close="" separators="&and;">
+            <mrow><mi>x</mi><mo>=</mo><msub><mi>c</mi><mi>j</mi></msub></mrow>
+            <mrow><mi>x</mi><mo>&Element;</mo><msub><mi>d</mi><mi>i</mi></msub></mrow>
+          </mfenced>
+        </mrow></mfenced></mfenced>
+        <mfenced open="|" close="|"><msub><mi>d</mi><mi>i</mi></msub></mfenced>
+      </mfrac>
+    </math>
+
+    <p>Minion does not divide through by the number of words in the document. Since the proportions of the elements in the vector don't change by dividing through by a constant, this doesn't affect the angle between the vectors.</p>
+
+    <p>For the previous corpus, the term frequence vectors would be:</p>
+
+    <table class="result">
+      <tr>
+        <th>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display"><mi>C</mi></math>
+        </th>
+        <th>you</th><th>will</th><th>know</th><th>the</th><th>truth</th><th>and</th>
+        <th>make</th><th>free</th><th>set</th><th>but</th><th>first</th><th>it</th>
+        <th>piss</th><th>off</th>
+      </tr>
+      <tr>
+        <th>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <msub><mi>d</mi><mi>1</mi></msub>
+          </math>
+        </th>
+        <td colspan="14">(you, will, know, the, truth, and, the, truth, will, make, you, free)</td>
+      </tr>
+      <tr>
+        <th>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <msub><mover><mi>f</mi><mo>&rharu;</mo></mover><mn>1</mn></msub>
+          </math>
+        </th>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+      </tr>
+      <tr>
+        <th>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <msub><mi>d</mi><mi>2</mi></msub>
+          </math>
+        </th>
+        <td colspan="14">(the, truth, will, set, you, free, but, first, it, will, piss, you, off)</td>
+      </tr>
+      <tr>
+        <th>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <msub><mover><mi>f</mi><mo>&rharu;</mo></mover><mn>2</mn></msub>
+          </math>
+        </th>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>0</td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>0</td><td>0</td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+      </tr>
+    </table>
+
+    <p id="doc_frequence">
+      An issue with this approach is that these vectors tend to be dominated by general purpose frequently used terms like "the" and "an." TF-IDF weeds out commonly used words by using the "document frequence" of each element of
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mover><mi>C</mi><mo>&rharu;</mo></mover>
+      </math>
+      where document frequence is the proportion of documents where the term appears:
+    </p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mover><mi>F</mi><mo>&rharu;</mo></mover><mo>&equiv;</mo>
+      <mfenced open="&lang;" close="&rang;">
+        <msub><mi>F</mi><mn>1</mn></msub>
+        <mo>&hellip;</mo>
+        <msub><mi>F</mi><mi>m</mi></msub>
+      </mfenced>
+      <mo>&SuchThat;</mo>
+      <msub><mi>F</mi><mi>i</mi></msub><mo>=</mo>
+      <mfrac>
+        <mfenced open="|" close="|"><mfenced open="{" close="}"><mrow>
+          <msub><mi>d</mi><mi>i</mi></msub><mo>&SuchThat;</mo>
+          <mrow>
+            <msub><mi>c</mi><mi>i</mi></msub>
+            <mo>&Element;</mo><msub><mi>d</mi><mi>i</mi></msub>
+          </mrow>
+        </mrow></mfenced></mfenced>
+        <mfenced open="|" close="|"><mi>D</mi></mfenced>
+      </mfrac>
+    </math>
+
+    <p>For the example corpus, the document frequence vector is:</p>
+
+    <table class="result">
+      <tr>
+        <th>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display"><mi>C</mi></math>
+        </th>
+        <th>you</th><th>will</th><th>know</th><th>the</th><th>truth</th><th>and</th>
+        <th>make</th><th>free</th><th>set</th><th>but</th><th>first</th><th>it</th>
+        <th>piss</th><th>off</th>
+      </tr>
+      <tr>
+        <th>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mover><mi>F</mi><mo>&rharu;</mo></mover>
+          </math>
+        </th>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+      </tr>
+    </table>
+    
+    <p id="tfidf_vector">The document frequence can then be used to adjust the weight of the term frequencies. The exact proportion of how these terms are combined varies, but a common method is:</p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <msub><mi>w</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>=</mo>
+      <msub><mi>tfidf</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>=</mo>
+      <msub><mi>f</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+      <mo>log</mo><mfenced><msubsup><mi>F</mi><mi>j</mi><mn>-1</mn></msubsup></mfenced>
+    </math>
+
+    <p>Other weighting methods are also common. The method used in Aura is:</p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <msub><mi>w</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>=</mo>
+      <msub><mi>tfidf</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>=</mo>
+      <mo>log</mo>
+      <mfenced><msub><mi>f</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub></mfenced>
+      <mo>log</mo><mfenced><msubsup><mi>F</mi><mi>j</mi><mn>-1</mn></msubsup></mfenced>
+    </math>
+
+    <p>Note that as <em>F<sub>j</sub></em> &rarr; 1, log(<em>F<sub>j</sub></em>) &rarr; 0. So a term that is present in all documents is removed from consideration entirely.</p>
+
+    <p>The final result for the first example document in the corpus then is:</p>
+    
+    <table class="result">
+      <tr>
+        <th>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <msub><mi>d</mi><mi>1</mi></msub>
+          </math>
+        </th>
+        <td colspan="14">(you, will, know, the, truth, and, the, truth, will, make, you, free)</td>
+      </tr>
+      <tr>
+        <th>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display"><mi>C</mi></math>
+        </th>
+        <th>you</th><th>will</th><th>know</th><th>the</th><th>truth</th><th>and</th>
+        <th>make</th><th>free</th><th>set</th><th>but</th><th>first</th><th>it</th>
+        <th>piss</th><th>off</th>
+      </tr>
+      <tr>
+        <th>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <msub><mover><mi>f</mi><mo>&rharu;</mo></mover><mn>1</mn></msub>
+          </math>
+        </th>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+      </tr>
+      <tr>
+        <th>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mover><mi>F</mi><mo>&rharu;</mo></mover>
+          </math>
+        </th>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>2</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+          </math>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <msub><mover><mi>w</mi><mo>&rharu;</mo></mover><mn>1</mn></msub>
+          </math>
+        </th>
+        <td>0</td>
+        <td>0</td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mrow><mo>log</mo><mfenced><mn>2</mn></mfenced></mrow><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>0</td>
+        <td>0</td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mrow><mo>log</mo><mfenced><mn>2</mn></mfenced></mrow><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mfrac><mrow><mo>log</mo><mfenced><mn>2</mn></mfenced></mrow><mn>12</mn></mfrac>
+          </math>
+        </td>
+        <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+      </tr>
+    </table>
+
+    <p>Note again that this was an unnaturally small corpus with an intentionally homogeneous vocabulary, so the patterns in how the terms combined are not generalizable.</p>
+
+    <h2 id="cosines">Cosine Similarity</h2>
+
+    <p>The reason for mapping documents into a vector space is there are methods for comparing the "similarity" of elements. There are two commonly used methods:</p>
+
+    <ul>
+      <li>Euclidean Distance &mdash; How far apart are the the ends of the document vectors?</li>
+      <li>Cosine Distance &mdash; What is the cosine of the angle between the two vectors?</li>
+    </ul>
+
+    <p>Both of these concepts seem a bit strange for n-dimensional geometries, but for any two non-overlapping vectors there is a single 2D plane that contains both of them. For visualizing these properties, it is simpler to think of them as taking place in that plane.</p>
+
+    <p>Each method has advantages and disadvantages, and the method that is generally used with tfidf is the cosine distance. Two vectors have a similarity of 1 if the angle between them is 0&deg;, and -1 if the angle is 180&deg; (&pi; radians). The transition isn't linear, but it is constantly decreasing.</p>
+
+    <object type="image/svg" data="cosine.svg" style="height: 200px"></object>
+
+    <p>The cosine of the angle between two vectors can be derived from the dot product:</p>
+
+     <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+       <mover><mi>a</mi><mo>&rharu;</mo></mover><mo>&dot;</mo><mover><mi>b</mi><mo>&rharu;</mo></mover><mo>=</mo>
+       <mo>&Sum;</mo><msub><mi>a</mi><mi>i</mi></msub><msub><mi>b</mi><mi>i</mi></msub><mo>=</mo>
+       <mfenced open="|" close="|"><mover><mi>a</mi><mo>&rharu;</mo></mover></mfenced>
+       <mfenced open="|" close="|"><mover><mi>b</mi><mo>&rharu;</mo></mover></mfenced>
+       <mo>cos</mo><mfenced><mi>&theta;</mi></mfenced>
+       <mo>&iff;</mo>
+       <mo>cos</mo><mfenced><mi>&theta;</mi></mfenced><mo>=</mo>
+       <mfrac>
+         <mrow><mover><mi>a</mi><mo>&rharu;</mo></mover><mo>&dot;</mo><mover><mi>b</mi><mo>&rharu;</mo></mover></mrow>
+         <mrow>
+           <mfenced open="|" close="|"><mover><mi>a</mi><mo>&rharu;</mo></mover></mfenced>
+           <mfenced open="|" close="|"><mover><mi>b</mi><mo>&rharu;</mo></mover></mfenced>
+         </mrow>
+       </mfrac>
+       <mo>=</mo>
+       <mfrac>
+         <mrow><mo>&Sum;</mo><msub><mi>a</mi><mi>i</mi></msub><msub><mi>b</mi><mi>i</mi></msub></mrow>
+         <mrow>
+           <msqrt><mrow><mo>&Sum;</mo><msubsup><mi>a</mi><mi>i</mi><mn>2</mn></msubsup></mrow></msqrt>
+           <msqrt><mrow><mo>&Sum;</mo><msubsup><mi>b</mi><mi>i</mi><mn>2</mn></msubsup></mrow></msqrt>
+         </mrow>
+       </mfrac>
+    </math>
+
+    <h2 id="vectors_as_tuples">From Vectors to Tuples</h2>
+
+    <p>The basic idea of TF-IDF is as vectors, but the vectors tend to be very sparse (have lots of zeroes). That is particularly true in the type of recommendations we are doing based on rank or attention data. Our of the millions of songs in the world, most people have listened to a very few. A more efficient way of conceptualizing the data is as tuples.</p>
+
+    <p>In all these definitions, the following symbols are used:</p>
+
+    <ul>
+      <li>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <msub><mi>d</mi><mi>i</mi></msub>
+        </math>
+        &equiv; the <em>i</em><sup>th</sup> document in
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <mover><mi>d</mi><mo>&macr;</mo></mover>
+        </math>
+      </li>
+      <li>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <msub><mi>t</mi><mi>k</mi></msub>
+        </math>
+        &equiv; the <em>k</em><sup>th</sup> unique term in
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <mover><mi>d</mi><mo>&macr;</mo></mover>
+        </math>
+        (there are several potential mathematic unique orderings <a href="#corpus_tuple">one option was mentioned previously</a>)
+      </li>
+    </ul>
+    
+    <p>
+      Because we are unconcerned with the order of terms in a document, the corpus may be represented as
+       <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mover><mi>d</mi><mo>&macr;</mo></mover><mo>&equiv;</mo>
+        <mfenced open="{" close="}"><mfenced>
+          <msub><mi>d</mi><mi>i</mi></msub>
+          <msub><mi>t</mi><mi>k</mi></msub>
+          <mi>c</mi>
+        </mfenced></mfenced>
+      </math>
+      where:
+    </p>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mi>c</mi>
+      <mo>&equiv;</mo>
+      <mfenced open="|" close="|"><mfenced open="{" close="}"><mrow>
+        <msub><mi>t</mi><mi>k</mi></msub><mo>&Element;</mo>
+        <msub><mi>d</mi><mi>i</mi></msub>
+      </mrow></mfenced></mfenced>
+    </math>
+
+    <p>
+      Term frequence then is
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mover><mi>f</mi><mo>&macr;</mo></mover><mo>&equiv;</mo>
+        <mfenced open="{" close="}"><mfenced>
+          <msub><mi>d</mi><mi>i</mi></msub>
+          <msub><mi>t</mi><mi>k</mi></msub>
+          <mi>f</mi>
+        </mfenced></mfenced>
+      </math>
+      where:
+    </p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mi>f</mi><mo>&equiv;</mo>
+      <mfrac>
+        <mrow>
+          <munder><mo>&Sum;</mo><mi>c</mi></munder>
+          <mi>c</mi><mo>&SuchThat;</mo><mo>&Exists;</mo>
+          <mfenced><msub><mi>d</mi><mi>i</mi></msub><msub><mi>t</mi><mi>k</mi></msub><mi>c</mi></mfenced>
+          <mo>&Element;</mo><mover><mi>d</mi><mo>&macr;</mo></mover>
+        </mrow>
+        <mrow>
+          <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>t</mi><mi>c</mi></mfenced></munder>
+          <mi>c</mi><mo>&SuchThat;</mo><mo>&Exists;</mo>
+          <mfenced><msub><mi>d</mi><mi>i</mi></msub><mi>t</mi><mi>c</mi></mfenced>
+          <mo>&Element;</mo><mover><mi>d</mi><mo>&macr;</mo></mover>
+        </mrow>
+      </mfrac>
+    </math>
+
+    <p>
+      Document frequence is
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mover><mi>F</mi><mo>&macr;</mo></mover><mo>&equiv;</mo>
+        <mfenced open="{" close="}"><mfenced>
+          <msub><mi>t</mi><mi>k</mi></msub>
+          <mi>F</mi>
+        </mfenced></mfenced>
+      </math>
+      where:
+    </p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mi>F</mi><mo>&equiv;</mo>
+      <mfrac>
+        <mfenced open="|" close="|"><mfenced open="{" close="}"><mrow>
+          <mfenced><mi>d</mi><msub><mi>t</mi><mi>k</mi></msub><mi>c</mi></mfenced>
+          <mo>&Element;</mo><mover><mi>d</mi><mo>&macr;</mo></mover><mo>&ForAll;</mo>
+          <mfenced open="" close=""><mi>d</mi><mi>c</mi></mfenced>
+        </mrow></mfenced></mfenced>
+        <mfenced open="|" close="|"><mover><mi>d</mi><mo>&macr;</mo></mover></mfenced>
+      </mfrac>
+    </math>
+    
+    <p>
+      The TF-IDF vector components then can be computed as
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mover><mi>tfidf</mi><mo>&macr;</mo></mover><mo>&equiv;</mo>
+        <mfenced open="{" close="}"><mfenced>
+          <msub><mi>d</mi><mi>i</mi></msub>
+          <msub><mi>t</mi><mi>k</mi></msub>
+          <mi>w</mi>
+        </mfenced></mfenced>
+      </math>
+      where:
+    </p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mi>w</mi><mo>&equiv;</mo>
+      <mi>f</mi><mo>log</mo><mfenced><msup><mi>F</mi><mn>-1</mn></msup></mfenced>
+      <mo>&SuchThat;</mo><mo>&Exists;</mo>
+      <mfenced><msub><mi>d</mi><mi>i</mi></msub><msub><mi>t</mi><mi>k</mi></msub><mi>f</mi></mfenced>
+      <mo>&Element;</mo><mover><mi>f</mi><mo>&macr;</mo></mover>
+      <mo>&and;</mo>
+      <mfenced><msub><mi>t</mi><mi>k</mi></msub><mi>F</mi></mfenced>
+      <mo>&Element;</mo><mover><mi>F</mi><mo>&macr;</mo></mover>
+    </math>
+
+    <p>
+      Finally, the cosine similarity can be represented as:
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mover><mi>s</mi><mo>&macr;</mo></mover><mo>&equiv;</mo>
+        <mfenced open="{" close="}"><mfenced>
+          <msub><mi>d</mi><mi>x</mi></msub>
+          <msub><mi>d</mi><mi>y</mi></msub>
+          <mi>s</mi>
+        </mfenced></mfenced>
+      </math>
+      where:
+    </p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mi>s</mi><mo>&equiv;</mo>
+      <mfrac>
+        <mrow>
+          <munder><mo>&Sum;</mo><mi>t</mi></munder>
+          <msub><mi>w</mi><mn>x</mn></msub><msub><mi>w</mi><mn>y</mn></msub>
+        </mrow>
+        <mrow>
+          <msqrt><munder><mo>&Sum;</mo><mi>t</mi></munder><msubsup><mi>w</mi><mn>x</mn><mn>2</mn></msubsup></msqrt>
+          <msqrt><munder><mo>&Sum;</mo><mi>t</mi></munder><msubsup><mi>w</mi><mn>y</mn><mn>2</mn></msubsup></msqrt>
+        </mrow>
+      </mfrac>
+      <mo>&SuchThat;</mo><mo>&Exists;</mo>
+      <mfenced><msub><mi>d</mi><mi>x</mi></msub><mi>t</mi><msub><mi>w</mi><mi>x</mi></msub></mfenced>
+      <mo>&Element;</mo><mover><mi>tfidf</mi><mo>&macr;</mo></mover>
+      <mo>&and;</mo>
+      <mfenced><msub><mi>d</mi><mi>y</mi></msub><mi>t</mi><msub><mi>w</mi><mi>y</mi></msub></mfenced>
+      <mo>&Element;</mo><mover><mi>tfidf</mi><mo>&macr;</mo></mover>
+    </math>
+
+    <h2 id="tfidf_recs"><acronym title="Term Frequency-Inverse Document Frequency">TF-IDF</acronym> Applied to Recommendations</h2>
+    
+    <p>One of the possibilities that Aura is exploring is to leverage an existing TF-IDF implementation in <a href="https://minion.dev.java.net">minion</a>. There are a couple different mappings under consideration, but the one considered here is:</p>
+
+    <table class="result">
+      <tr><th>TF-IDF Term</th><th>TF-IDF Variable</th><th>Aura Mapping</th><th>Aura Variable</th><th>Explanation</th></tr>
+      <tr>
+        <td>term</td>
+        <td><m:math><m:mi>t</m:mi></m:math></td>
+        <td>listener</td>
+        <!-- &lscr; doesn't display on solarix firefox -->
+        <td><m:math><m:mi>&ell;</m:mi></m:math></td>
+        <td><m:math><m:mi>&ell;</m:mi></m:math> listens to music</td>
+      </tr>
+      <tr>
+        <td>document</td>
+        <td><m:math><m:mi>d</m:mi></m:math></td>
+        <td>artist</td>
+        <td><m:math><m:mi>a</m:mi></m:math></td>
+        <td><m:math><m:mi>a</m:mi></m:math> has created music</td>
+      </tr>
+      <tr>
+        <td>corpus</td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mover><mi>d</mi><mo>&macr;</mo></mover><mo>&equiv;</mo>
+            <mfenced open="{" close="}"><mfenced>
+              <msub><mi>d</mi><mi>i</mi></msub>
+              <msub><mi>t</mi><mi>k</mi></msub>
+              <mi>c</mi>
+            </mfenced></mfenced>
+          </math>
+        </td>
+        <td>all artists</td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mover><mi>a</mi><mo>&macr;</mo></mover><mo>&equiv;</mo>
+            <mfenced open="{" close="}"><mfenced>
+              <msub><mi>a</mi><mi>i</mi></msub>
+              <msub><mi>&ell;</mi><mi>k</mi></msub>
+              <mi>c</mi>
+            </mfenced></mfenced>
+          </math>
+        </td>
+        <td><m:math><m:msub><m:mi>&ell;</m:mi><m:mi>k</m:mi></m:msub></m:math> has listened to <m:math><m:msub><m:mi>a</m:mi><m:mi>i</m:mi></m:msub></m:math> <m:math><m:mi>c</m:mi></m:math> times</td>
+      </tr>
+      <tr>
+        <td>term frequence</td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mover><mi>f</mi><mo>&macr;</mo></mover><mo>&equiv;</mo>
+            <mfenced open="{" close="}"><mfenced>
+              <msub><mi>d</mi><mi>i</mi></msub>
+              <msub><mi>t</mi><mi>k</mi></msub>
+              <mi>f</mi>
+            </mfenced></mfenced>
+          </math>
+        </td>
+        <td>listener fanaticism</td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mover><mi>f</mi><mo>&macr;</mo></mover><mo>&equiv;</mo>
+            <mfenced open="{" close="}"><mfenced>
+              <msub><mi>a</mi><mi>i</mi></msub>
+              <msub><mi>&ell;</mi><mi>k</mi></msub>
+              <mi>f</mi>
+            </mfenced></mfenced>
+          </math>
+        </td>
+        <td><m:math><m:mi>f</m:mi></m:math> percent of the time <m:math><m:msub><m:mi>a</m:mi><m:mi>i</m:mi></m:msub></m:math> was listened to by <m:math><m:msub><m:mi>&ell;</m:mi><m:mi>k</m:mi></m:msub></m:math></td>
+      </tr>
+      <tr>
+        <td>document frequence</td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mover><mi>F</mi><mo>&macr;</mo></mover><mo>&equiv;</mo>
+            <mfenced open="{" close="}"><mfenced>
+              <msub><mi>t</mi><mi>k</mi></msub>
+              <mi>F</mi>
+            </mfenced></mfenced>
+          </math>
+        </td>
+        <td>listener promiscuity</td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mover><mi>F</mi><mo>&macr;</mo></mover><mo>&equiv;</mo>
+            <mfenced open="{" close="}"><mfenced>
+              <msub><mi>&ell;</mi><mi>k</mi></msub>
+              <mi>F</mi>
+            </mfenced></mfenced>
+          </math>
+        </td>
+        <td><m:math><m:msub><m:mi>&ell;</m:mi><m:mi>k</m:mi></m:msub></m:math> has listened to <m:math><m:mi>F</m:mi></m:math> percent of the artists</td>
+      </tr>
+      <tr>
+        <td>tf-idf</td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mover><mi>tfidf</mi><mo>&macr;</mo></mover><mo>&equiv;</mo>
+            <mfenced open="{" close="}"><mfenced>
+              <msub><mi>d</mi><mi>i</mi></msub>
+              <msub><mi>t</mi><mi>k</mi></msub>
+              <mi>w</mi>
+            </mfenced></mfenced>
+          </math>
+        </td>
+        <td>dedicated fanaticism</td>
+        <td>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mover><mi>df</mi><mo>&macr;</mo></mover><mo>&equiv;</mo>
+            <mfenced open="{" close="}"><mfenced>
+              <msub><mi>a</mi><mi>i</mi></msub>
+              <msub><mi>&ell;</mi><mi>k</mi></msub>
+              <mi>w</mi>
+            </mfenced></mfenced>
+          </math>
+        </td>
+        <td></td>
+      </tr>
+    </table>
+
+    <p>The basic reasoning here is: a user who is a big fan of a limited number of artists is more likely to be focused within similar artists.</p>
+
+    <p>The cosine similarity is identical since both methods produce the tuples (or vectors) with the same positional meanings. The question is how similar the results will be.</p>
+
+    <h2 id="sql">Computation in SQL</h2>
+
+    <p>One issue with system like this is scalability. Consider our example where each artist has a vector where the number of positions is the number of listeners. In a system with, say, 40 million users and 750,000 artists, the obvious m&times;n table for storing data would have 4&times;10<sup>7</sup>(7.5&times;10<sup>5</sup>) = 3&times;10<sup>13</sup> positions. At a byte per position, that's 30 terabytes of data. Even though modern drives can certainly provide that much storage, there are significant overhead and data access issues. It is also unnecessary because the bulk of the spaces in the matrix are empty. Most listeners will have listened to a few hundred artists and even a listener who has listened to 7,500 different artists will only have 1% filled.</p>
+
+    <p>This is why tuples end up being a more efficient method of storage. Not only does access to a 30tb indexed block of memory not have to be managed, but even if the storage space is tripled in converting to triples, if you drop the 99.5% empty space in the table, there should still be an order of magnitude of improvement.</p>
+
+    <p>Tuples as a computing method have been around for a while. Prolog is an old school example, but tuples are present in the cutting edge of data representation. <acronym title="Resource Description Framework">RDF</acronym> is an XML format making significant headway in the semantic web movement. Map-reduce is an algorithm pioneered by Google that leverages the parallelizability of tuple-based operations. Hadoop, an open source map-reduce implementation, recently <a href="http://www.dehora.net/journal/2008/07/06/3-12-minutes-to-sort-a-terabyte-hadoops-code-structure/">set a new speed record</a> sorting a terabyte of data in 3.5 minutes. The tuple technology I'm interested in however is perhaps the best established: <acronym title="Structured Query Language">SQL</acronym>.</p>
+
+    <p>Relational database systems are generally taught as connecting sets of tables, but that's not really where their idealogical roots lie. The literature and research into how these systems operate is almost exclusively in terms of relational algebra on sets of tuples. So, I am <a href="tfidf.sql">running my tests in SQL</a>.</p>
+    
+    <p>Running on our eight-core 2ghz machine with 32gb of RAM, this script took 0:27:43 to run. (Though it used an average of 5% of the processor time and 600mb of RAM, so I may be able to increase that significantly.) That's to compute the similarity for:</p>
+
+    <ul>
+      <li>Artists: 41,332</li>
+      <li>Users: 11,985</li>
+      <li>Artist/User Pairs: 598,168 (note that this is less than the expected 599250 because some users haven't listened to 50 artists)</li>
+      <li>Combined Artist/User Pairs: 598,034 (some artists are indistinguishable because of unicode errors)</li>
+    </ul>
+
+    <p>The final analysis produces 9,071,840 cosine similarities. If there was a similarity for every artist / artist pair there would be 41,332<sup>2</sup> = 1,708,334,224 pairs. Because this data is very sparse, similarity can only be computed for 0.5% of artists. This makes sense, since the of the original 495,364,020 potential meaningful datapoints (user / artist pairs), only 598,034 (~0.1%) were present.</p>
+
+    <h2 id="item_item">Item:Item Similarity</h2>
+
+    <p>Item to item similarity is a method popularized by Amazon for computing the similarity of items in its catalog. The reasoning is that item similarities are more static that user similarities and so in situations where finding the similarity requires extensive computation they have an advantage in robustness to infrequent updates. In the paper <a href="http://ieeexplore.ieee.org/iel5/4236/26323/01167344.pdf"><cite>Amazon.com Recommendations: Item-to-Item Collaborative Filtering</cite></a> the algorithm is applied to purchases, though I think conceptually it makes more sense to consider then in terms of pageviews. I'm not likely to purchase a bunch of similar items, but I am likely to look at a bunch of them consecutively while shopping.</p>
+
+    <p>The algorithm as described in the paper is:</p>
+
+    <ol>
+      <li>
+        For each item in product catalog, <em>I<sub>1</sub></em>
+        <ol>
+          <li>
+            For each customer <em>C</em> who purchased <em>I<sub>1</sub></em>
+            <ol>
+              <li>
+                For each item <em>I<sub>2</sub></em> purchased by <em>C</em>
+                <ol>
+                  <li>Record that <em>C</em> purchased <em>I<sub>1</sub></em> and <em>I<sub>2</sub></em></li>
+                </ol>
+              </li>
+            </ol>
+          </li>
+          <li>
+            For each item <em>I<sub>2</sub></em>
+            <ol>
+              <li>Compute the similarity between <em>I<sub>1</sub></em> and <em>I<sub>2</sub></em></li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+
+    <p>Converting this to artist and listeners is simple transliteration:</p>
+
+    <ol>
+      <li>
+        For each artist, <em>a<sub>1</sub></em>
+        <ol>
+          <li>
+             For each listener <em>&ell;</em> who listened to <em>a<sub>1</sub></em>
+            <ol>
+              <li>
+                For each artist <em>a<sub>2</sub></em> listened to by <em>&ell;</em>
+                <ol>
+                  <li>Record <em>how many times</em> <em>&ell;</em> listened to <em>a<sub>1</sub></em> and <em>a<sub>2</sub></em> respectively</li>
+                </ol>
+              </li>
+            </ol>
+          </li>
+          <li>
+            For each artist <em>a<sub>2</sub></em>
+            <ol>
+              <li>Compute the similarity between <em>a<sub>1</sub></em> and <em>a<sub>2</sub></em></li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+
+    <p>Since cosine similarity is being used, it is easiest to think of this initially as being about the construction of vectors. The algorithm could be rewritten as: "For each artist, construct a vector where each position in the vector represents a particular user. The similarity between any two artists is the cosine of the angle between those vectors."</p>
+
+    <p>In Amazon's system, either an item has been purchased, or it hasn't, so the vectors are boolean: either one or zero. For listen or pageview data however, the vector components can have more complex values. The question then becomes one of if and how those values should be altered to give the best results.</p>
+
+    <p>It is worth noting that TF-IDF as described here is simply one method for weighting the elements of those vectors. Analyzing the effectiveness of TF-IDF can be done by comparing the results of TF-IDF to the output of other methods. Even without a definitive ground truth as to which artists are more or less similar, it is possible to say that two systems of computing similarity are similar or dissimilar.</p>
+
+    <h2 id="item_item_raw">Item:Item In SQL Using Raw Counts</h2>
+    
+    <p>The simplest option is to just create the artist vectors from the raw tag counts without normalizing them at all. The <a href="raw_counts.sql">SQL to generate that comparison</a> took 0:24:07 to run.</p>
+
+    <h2 id="data_test">Test Data Analysis</h2>
+
+    <p>To test these ideas I loaded a dataset scraped from <a href="http://last.fm">LastFM</a> of users top 50 most listened to artists along with listen counts. I used <a href="load_lastfm_users.py">a simple python script</a> employing the <a href="http://mysql-python.sourceforge.net">python-mysqldb</a> package on Ubuntu.</p>
+
+    <p>The tables used are: (<em>I list the SQL because the language occasionally eludes me and these graphs might be flawed in some way.</em>)</p>
+
+    <pre>CREATE TABLE user
+   (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(32) UNIQUE)</pre>
+    <pre>CREATE TABLE artist
+   (id INT AUTO_INCREMENT PRIMARY KEY, name TEXT, mbid VARCHAR(48) UNIQUE)</pre>
+    <pre>CREATE TABLE listen
+   (user_id INT NOT NULL,
+   artist_id INT NOT NULL,
+   count INT NOT NULL DEFAULT 1,
+   FOREIGN KEY (user_id) REFERENCES user(id),
+   FOREIGN KEY (artist_id) REFERENCES artist(id))</pre>
+
+    <p>A rough look at the data is:</p>
+
+    <ul>
+      <li>Artists: 21858</li>
+      <li>Users: 11985</li>
+      <li>Artist/User Pairs: 598168 (note that this is less than the expected 599250 because some users haven't listened to 50 artists)</li>
+      <li>Listens: 83668000</li>
+    </ul>
+
+    <p id="listeners_per_artist">Truncating the data at 50 artists per user will likely affect the operation of the algorithm. Consider this <a href="listeners_per_artist.svg">number of listeners per artist plot</a> (<a href="lastfm_data_graphs.R">generated by R</a> and <a href="compress_pathes.py">compressed with python</a>):</p>
+
+    <pre>SELECT COUNT(user_id) AS user_count FROM listen
+   GROUP BY artist_id ORDER BY user_count DESC</pre>
+
+    <object type="image/svg" data="listeners_per_artist.svg" style="height: 400px"></object>
+
+    <p>This is pretty much impossible to see any differentiation in. Consider the same data <a href="log_listeners_per_artist.svg">plotted with a log scale</a>.</p>
+
+    <object type="image/svg" data="log_listeners_per_artist.svg" style="height: 400px"></object>
+
+    <p id="listens_per_listener">Note that over half (~60%) of the artists have only a single listener. The question then is how this will affect artists that were truncated. Truncating artists that are popular will cloud the results a bit, but truncating artists for which a user is the only listener means that artist is now removed from the system. The question then is whether less popular artists are listened to less frequently. This graph of <a href="listens_per_listener.svg">number of listens per number of listeners</a> shows a mostly random distribution with a slight trend:</p>
+
+    <pre>SELECT user_count, avg(count) as average FROM
+   (SELECT COUNT(user_id) AS user_count, avg(count) AS count
+    FROM listen GROUP BY artist_id) AS t1
+   GROUP BY user_count</pre>
+
+    <object type="image/svg" data="listens_per_listener.svg" style="height: 400px"></object>
+
+    <p id="low_pop_listens_per_listener">Consider, however, only <a href="low_pop_listens_per_listener.svg">artists with 10 or fewer listeners</a> (which is ~87% of artists):</p>
+
+    <pre>SELECT user_count, avg(count) as average FROM
+   (SELECT COUNT(user_id) AS user_count, avg(count) AS count
+    FROM listen GROUP BY artist_id) AS t1
+   WHERE user_count &lt;= 10 GROUP BY user_count</pre>
+
+    <object type="image/svg" data="low_pop_listens_per_listener.svg" style="height: 400px"></object>
+
+    <p>This means that there is likely a large percentage lower popularity artists which were truncated from the system entirely.</p>
+
+    <p id="unique_artists_per_listener">The one possibility that would avoid this is if there is a set of indie focused artists that are all listening to eclectic music and don't share any artists with anyone else. This would mean that unique artists (only a single listener) are not being pushed out by popular artists. The <a href="unique_artists_per_listener.svg">number of unique artists per user</a> should help see if this is the case:</p>
+    
+    <pre>SELECT COUNT(user_id) AS user_count FROM
+   (SELECT COUNT(user_id) as user_count, user_id FROM listen
+    GROUP BY artist_id HAVING user_count = 1) as t1
+   GROUP BY user_id ORDER BY user_count</pre>
+
+    <object type="image/svg" data="unique_artists_per_listener.svg" style="height: 400px"></object>
+
+    <p>So, the majority of users have a single or no unique artists, and there is only one person with 30.</p>
+  </body>
+</html>

@@ -1,0 +1,114 @@
+<html>
+<head><title>Methods of spam filtering</title></head>
+<body>
+<p>I'm trying to figure out exactly what your usage scenario is. Is it this:</p>
+
+<hr style="width: 50%" />
+
+<p>Bob has two email accounts: his work account (bob@work.com) and his personal account (bob@home.net). They are accessible via different methods:</p>
+
+<ul>
+  <li>bob@work.com
+    <ul>
+      <li>From within the corporate intranet accessible via IMAP</li>
+      <li>Via the internet only accessible via web interface</li>
+    </ul>
+  </li>
+  <li>bob@home.net
+    <ul>
+      <li>Accessible from the internet via POP/IMAP</li>
+      <li>Also accessible via the internet via a web interface</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Bob reads his mail primarily at three different places: on his desktop at home, via WiFi at the <a href="http://www.starbucks.com">Starbucks</a> where he reads his paper each morning, and at his workstation at work.</p>
+
+<p>The services that Bob would like to have in his email client program are:</p>
+
+<ul>
+  <li>mail filtering: messages for the various listservs of which Bob is a member are sorted automatically into separate folders</li>
+  <li>spam identification: spam messages are detected with a high rate of accuracy and sorted into a folder of their own</li>
+  <li>storage permanence: reading a message at one location should not cause it to be inaccessible from another</li>
+</ul>
+
+<hr style="width: 50%" />
+
+<blockquote style="border: thin solid">I want something like Eudora that I can use on my laptop, and at home, but I want to have all of my mail with me. I also like my Bayesian spam filter and have it very well trained, and while my webmail clients let me make filters, they don't have Bayesian spam filtering yet.</blockquote>
+
+<p>So, your proposal is Bob has some client program (hopefully a <a href="http://www.mozilla.org/products/thunderbird/">thunderbird</a> <a href="http://mozdev.org">extension</a>) that adds the ability to sync with another copy of the client. Bob has a copy of this program installed on all his computers. Ideally, wherever he is, he clicks a button and the client will efficiently get copies of any messages downloaded to either of the other machines. Additionally, it will improve it's spam recognition AI from what the others have learned.</p>
+
+<p>Problems for Bob with this theoretical program will be:</p>
+
+<ul>
+  <li>His work machine is not accessible from the internet, so he will not be able to sync to this machine</li>
+  <li>His home machine may likely not be accessible from the internet either (firewalled)</li>
+</ul>
+
+<p>The only way this program will work well for Bob is if he is carrying his laptop back and forth to work. This is entirely possible since he's got it each morning at Starbucks. This is also your usage scenario where you are carrying a laptop to and from school. For people without either internet accessible desktops or a laptop, how does your solution work?</p>
+
+<p>Another scenario is Bob's Belize vacation. He heads off to the Caribbean for three months and leaves his laptop behind. From the little Belizian cybercafés he can read all his mail via the web interfaces, but all the message filtering and spam identification is lost.</p>
+
+<blockquote style="border: thin solid"><lj user="Ivankara">'s argument with me is that I should have more access to a server and make use stuff like procmail, but I see no problem with not having a server: I hate being a sysadmin, and its really not what I would rather be doing with my time, and I don't have any place to legitimately colocate a server for a price I can afford.</blockquote>
+
+<p>This isn't about being a sysadmin. It's about being able to log into a server and do some basic configuration stuff. Editing a <a href="http://odin.himinbi.org/config/procmailrc">procmailrc</a> is far from black magic and it is available in the default install of most Linux distros.</p>
+
+<p>My proposed solution, to review for anyone listening in, is pretty close to my current setup. Mail coming in which is from various lists is sorted into folders by <a href="http://www.procmail.org">procmail</a>. Stuff that falls all the way through is sent through <a href="http://spamassassin.apache.org">spamassassin</a> which ranks it spam or not spam. Spam messages are put into a separate folder for my perusal.</p>
+
+<p>Spamassassin is a really good tool, as far as I can tell. It has a Bayesian filter, but a whole lot of it isn't AI. Here is the results header off of one of my messages: (entitled "impress your girl with your huge cumshot!")</p>
+
+<pre>
+Content analysis details:   (27.0 points, 5.0 required)
+
+ pts rule name              description
+---- ---------------------- --------------------------------------------------
+ 0.5 FROM_ENDS_IN_NUMS      From: ends in numbers
+ 0.1 FORGED_RCVD_HELO       Received: contains a forged HELO
+ 1.0 SPF_HELO_SOFTFAIL      SPF: HELO does not match SPF record (softfail)
+[SPF failed: Please see http://spf.pobox.com/why.html?sender=ivision.co.uk&amp;ip=68.75.105.203&amp;receiver=illuminati.stderr.org]
+ 1.7 CUM_SHOT               BODY: Possible porn - Cum Shot
+ 1.8 ALL_NATURAL            BODY: Spam is 100% natural?!
+ 0.0 MONEY_BACK             BODY: Money back guarantee
+ 1.5 RAZOR2_CF_RANGE_51_100 BODY: Razor2 gives confidence level above 50%
+                            [cf: 100]
+ 0.1 RAZOR2_CHECK           Listed in Razor2 (<a href="http://razor.sf.net">http://razor.sf.net/</a>)
+ 2.0 PYZOR_CHECK            Listed in Pyzor (<a href="http://pyzor.sf.net">http://pyzor.sf.net/</a>)
+ 0.1 RCVD_IN_SORBS_DUL      RBL: SORBS: sent directly from dynamic IP address
+                            [68.75.105.203 listed in dnsbl.sorbs.net]
+ 2.8 RCVD_IN_DSBL           RBL: Received via a relay in list.dsbl.org
+                            [&lt;<a href="http://dsbl.org/listing?68.75.105.203">http://dsbl.org/listing?68.75.105.203</a>&gt;]
+ 1.8 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in bl.spamcop.net
+               [Blocked - see &lt;<a href="http://www.spamcop.net/bl.shtml?68.75.105.203">http://www.spamcop.net/bl.shtml?68.75.105.203</a>&gt;]
+ 2.5 RCVD_IN_XBL            RBL: Received via a relay in Spamhaus XBL
+                            [68.75.105.203 listed in sbl-xbl.spamhaus.org]
+ 1.7 RCVD_IN_NJABL_DUL      RBL: NJABL: dialup sender did non-local SMTP
+                            [68.75.105.203 listed in combined.njabl.org]
+ 0.6 URIBL_SBL              Contains an URL listed in the SBL blocklist
+                            [URIs: dfbeky-wr.com]
+ 2.0 URIBL_AB_SURBL         Contains an URL listed in the AB SURBL blocklist
+                            [URIs: dfbeky-wr.com]
+ 0.5 URIBL_WS_SURBL         Contains an URL listed in the WS SURBL blocklist
+                            [URIs: dfbeky-wr.com]
+ 2.0 URIBL_OB_SURBL         Contains an URL listed in the OB SURBL blocklist
+                            [URIs: dfbeky-wr.com]
+ 3.9 URIBL_SC_SURBL         Contains an URL listed in the SC SURBL blocklist
+                            [URIs: dfbeky-wr.com]
+ 0.2 DIGEST_MULTIPLE        Message hits more than one network digest check
+</pre>
+
+<p>The Bayesian part of it is trained by <a href="http://wiki.apache.org/spamassassin/ResendingMailWithHeaders">bouncing back</a> false negatives to the server with an added header that causes them to be fed into the filter's learning algorithm.</p>
+
+<p>My server based system meets about half of Bob's requirements. If he were willing to forward all his work mail to the server then it would pretty much meet all of them. Most companies would likely not like this, so it isn't really satisfactory. So far as his personal mail though, it would have the filtering, spam id and permanence he wants. It also handles his Belize vacation with no problem since the whole process is done server side and works irrespective of the client.</p>
+
+<p>The main problems are:</p>
+
+<ul>
+  <li>Bob may not have his mail hosted on a Linux box</li>
+  <li>Bob may not have shell access to the mail server to set up procmail</li>
+  <li>Since all work is stored on the server, latency can be an issue</li>
+</ul>
+
+<blockquote style="border: thin solid">Of course, one of the reasons P2P stuff has taken off is that most people don't have access to servers, and considering the security issues in the modern environment, the fewer the servers the better, but if you use multiple computers you need to have something.</blockquote>
+
+<p>The reason for the rise in P2P is people don't like paying for stuff and individuals are much more difficult to pursue than centralized servers. I say this as a person kicked off a server for copyright violations. The thing is that you want an authoritative creation (set of mail and spam learning). You can create that authority through confederacies of peers or you can do it with an authoritative source. I can see advantages to your method, but only for the disenfranchised. If you've got a server whole bunches of issues of synchronization and conflict resolution disappear. This is a centralized problem anyhow, all your mail comes to one place (or it can, my <a href="http://www,tntech.edu">ttu</a> and <a href="http://www.gmail.com">gmail</a> accounts are forwarded).</p> 
+</body></html>

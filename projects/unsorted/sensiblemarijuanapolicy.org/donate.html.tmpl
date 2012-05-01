@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<tmpl:template xmlns="http://www.w3.org/1999/xhtml"
+               xmlns:tmpl="http://odin.himinbi.org/templ/0.1/">
+  <tmpl:var name="title">Donate to the Committee for Sensible Marijuana Policy</tmpl:var>
+  <tmpl:var name="header">
+    <style type="text/css">
+      #paypal { width: 120px; text-align: center; border: 2px solid #777; padding: .5em; }
+      #paypal input.text { width: 60px; padding: .1em .3em; margin: .1em; border: 1px inset; }
+      #paypal input { margin: auto; }
+    </style>
+  </tmpl:var>
+  <tmpl:var name="content">
+    <h2>Donate to <acronym title="Committee for Sensible Marijuana Policy">CSMP</acronym></h2>
+
+    <p>You can pay by credit card or PayPal below. Or, you can send a check or money order can to the address below. (Please note that Massachusetts law requires that we record the names and residential addresses of all donors.)</p>
+
+    <address>
+      <span>Committee for Sensible Marijuana Policy</span>
+      <span>P.O. Box 130151</span>
+      <span>Boston, MA 02113</span>
+    </address>
+
+     <form action="https://www.paypal.com/cgi-bin/webscr" method="post" id="donate">
+      <div id="paypal">
+        <img src="paypal_donate.png" alt="Paypal" style="width: 100px" />
+        <div>
+          <img src="visa_logo.small.png" alt="Visa" style="width: 50px" />
+          <img src="mastercard_logo.small.png" alt="MasterCard" style="width: 50px" />
+        </div>
+        <input name="cmd" type="hidden" value="_xclick"/>
+        <input name="business" type="hidden" value="MAdonations@mpp.org"/>
+        <input name="item_name" type="hidden" value="Committee for Sensible Marijuana Policy Donation"/>
+        <input name="currency_code" type="hidden" value="USD"/>
+        <label>$</label><input class="text" name="amount" type="text" value=""/>
+        <input class="submit" value="Donate Now" name="submit" type="submit"/>
+        <p style="display: none" id="err"><em>You must specify a donation amount.</em></p>
+      </div>
+    </form>
+
+    <script type="text/javascript">
+      $("#donate").submit(function() {
+                  if($(this).find("[@name='amount']").val().length == 0) {
+                    $(this).find("#err").show("fast");
+                    return false;
+                  }
+                });
+    </script>
+
+    <p>Please also note that if you are contributing a total of $200 or more, Massachusetts campaign law also mandates that your occupation and employer be noted.</p>
+
+    <p>Thank you for supporting the Committee for Sensible Marijuana Policy!</p>
+  </tmpl:var>
+</tmpl:template>

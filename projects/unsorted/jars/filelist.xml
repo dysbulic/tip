@@ -1,0 +1,101 @@
+<programlist name="Java Sample Programs">
+  <intro>
+    <p>These are various bits of java to do different things. If you are unable to see them in your browser, you may need the <a href="http://java.sun.com/products/plugin/">java plug-in</a>. Also, several are written using the <a href="http://java.sun.com/products/java-media/3D/">java 3d</a> which requires an additional install. There are also a couple using the <a href="http://java.sun.com/products/java-media/jmf/">java media framework</a>. Nothing very complicated but some are pretty and might perhaps good for a couple minutes entertainment. Also, some use <a href="http://logging.apache.org/log4j/">Log4j</a> for output.</p>
+    <hr/>
+  </intro>
+  <outro>
+    <hr/>
+    <p>This index and the individual program display pages were generated using an <a href="filelist.xml"><acronym title="eXtensible Markup Language">XML</acronym> descriptor</a> and an <a href="list-html.xslt"><acronym title="eXtensible StyLesheeTs">XSLT</acronym> stylesheet</a>. (You might notice that the stylesheet uses an <a href="http://xml.apache.org/xalan-j/">xalan</a> extension to generate the individual pages. This is handled correctly be xsltproc despite being listed as an extension.)</p>
+  </outro>
+  <program>
+    <name>Detach Test</name>
+    <size>
+      <height>550</height>
+      <width>550</width>
+    </size>
+    <run>org.himinbi.j3d.test.DetachTest</run>
+    <archive>Detach.jar</archive>
+    <description>
+      <p>This is probably my favorite; it shows a bunch of java3d color cubes rotating around a central point. The program was written to demonstrate a java3d bug dealing with the removal of objects from the scene, but it allows you to alter to rotations and seeing the patters that are formed can be fascinating.</p>
+    </description>
+    <usage>
+      <p>The mouse can be used to move the scene around and to zoom.</p>
+      <p><code>q, w, e, a, s, d, z, x, and c</code> will change to different axes of rotation.</p>
+      <p><code>r</code> will remove one block at a time from the scene. After they are all gone it will start putting them back; if you do it fast enough it will crash the program (and this is a bug, not my fault.)</p>
+      <p>The arrow keys will change the speed of the spin and the distance from the center.</p>
+      <p>If you like you can download the jar file and you can specify things like the number of cubes on the command line.</p>
+    </usage>
+  </program>
+  <program>
+    <name>Transformation Test</name>
+    <size>
+      <height>500</height>
+      <width>700</width>
+    </size>
+    <run>org.himinbi.util.ComponentViewer</run>
+    <param name="component_1">org.himinbi.ui.test.ScaleTest</param>
+    <archive>Spinners.jar</archive>
+    <description>
+      <p>This is a demonstration of basic usage of the java2d affine transformations. I was having trouble using them in one of my programs and so I wrote this to understand them better. Though you can't see it this also demonstrates another convenience class I wrote which just displays components either as an applet or a program depending on how it is run. (If you were to look at the source the applet is called ComponentViewer and it takes an argument, component_1, with a value of ScaleTest. ScaleTest is a subclass of panel which is what you are actually seeing.)</p>
+      <p>This program is perhaps one of the prettiest and it should work with nothing other than the java plug-in installed.</p>
+    </description>
+    <usage>
+      <p>This program is controlled completely by the mouse. Each action if done in a specific box will affect only that star, but if done in the space between boxes will affect them all.</p>
+      <p><code>Click</code> will toggle the running. If it is running it will stop and vice versa.</p>
+      <p><code>Alt-Click</code> will change the type of stroke used to draw the star and bounds.</p>
+      <p><code>Ctrl-Click</code> will change the number of lines in a star (sometime this is changed randomly to the same number it had before, but it dos change.)</p>
+      <p><code>Shift-Click</code> will change the angle that the star turns each time it changes. (Thus speeding or slowing its spin.)</p>
+    </usage>
+  </program>
+  <program>
+    <name>Label Spin Test</name>
+    <run>org.himinbi.util.ComponentViewer</run>
+    <param name="component_1">org.himinbi.ui.test.LabelRotationTest</param>
+    <archive>LabelRotation.jar</archive>
+    <description>
+      <p>While working on another program I was having trouble with the JLabel class. It worked fine under regular conditions, but if the font used was derived from another font passed through an affine transformation then it miscomputed the bounds and the label would get removed from the layout.</p>
+      <p>This is a class that allows the rotation for the text to be set and sets the correct bounds.</p>
+    </description>
+    <usage>
+      <p>The white box at the bottom is a text field. You can change the text that is spinning. Also the label is mouse sensitive and if you click on it then it will change the rotation to the angle that your click at relative to the center.</p>
+    </usage>
+  </program>
+  <program>
+    <name>Axes Test</name>
+    <run>org.himinbi.j3d.test.AxesTest</run>
+    <archive>Axes.jar</archive>
+    <description>
+      <p>This is a convenience class I wrote to make it quicker to add a set of axes to a java3d scene.</p>
+    </description>
+    <usage>
+      <p>The mouse can be used to manipulate the axes and flipping the <code>invisible</code> toggle will remove them from the scene.</p>
+    </usage>
+  </program>
+  <program>
+    <name>Line Test</name>
+    <run>org.himinbi.j3d.test.LineTest</run>
+    <archive>Star.jar</archive>
+    <description>
+      <p>I wanted to be able to change the color of a java3d line at run time and this is a simple test of that ability showing a 2d star which can be changed in part or in whole to black.</p>
+    </description>
+    <usage>
+      <p>The mouse can be used to rotate the star and moving the slider at the bottom will transition it from white to black.</p>
+    </usage>
+  </program>
+  <program>
+    <name>Behavior Test</name>
+    <run>org.himinbi.j3d.test.BehaviorTest</run>
+    <archive>Behavior.jar</archive>
+    <description>
+      <p>This is a test of a java3d behavior I was working on to orbit behavior a certain point. It is designed to control the camera, but this has a stationary camera and allows you to move a set of axes around a sphere. It was easier to see if it was working from this perspective.</p>
+    </description>
+  </program>
+  <program>
+    <name>Translation Test</name>
+    <run>org.himinbi.j3d.test.TranslationTest</run>
+    <archive>Translation.jar</archive>
+    <description>
+      <p>This is another java3d bug report program. It shows a simple satellite orbiting a sphere. A jitter appears and gets progressively worse as the translation away from the sphere gets greater and greater. It looks suspiciously like a loss of precision error and does not affect programs unless they have translations in the millions of meters (like missile flight simulations.)</p>
+    </description>
+  </program>
+</programlist>

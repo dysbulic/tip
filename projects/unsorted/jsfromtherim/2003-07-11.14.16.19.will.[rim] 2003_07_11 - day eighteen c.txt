@@ -1,0 +1,66 @@
+From will@himinbi.org Tue Jul 15 14:16:19 2003
+Received: from localhost.localdomain ([213.185.107.13])
+	by honors.tntech.edu (8.12.8/8.12.8) with ESMTP id h6FJEC4F019184
+	for <jsfromtherim@himinbi.org>; Tue, 15 Jul 2003 14:16:13 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by localhost.localdomain (8.12.8/8.12.8) with ESMTP id h6B7l1Su003138
+	for <jsfromtherim@himinbi.org>; Fri, 11 Jul 2003 07:47:02 GMT
+Date: Fri, 11 Jul 2003 07:47:01 +0000 (GMT)
+From: Will Holcomb <will@himinbi.org>
+X-X-Sender: will@localhost.localdomain
+To: Journals from Mauritania <jsfromtherim@himinbi.org>
+Message-ID: <Pine.LNX.4.44.0307110733280.2347-100000@localhost.localdomain>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Subject: [rim] 2003/07/11 - day eighteen c
+Sender: jsfromtherim-admin@holcomb.info
+Errors-To: jsfromtherim-admin@holcomb.info
+X-BeenThere: jsfromtherim@holcomb.info
+X-Mailman-Version: 2.0.13
+Precedence: bulk
+List-Unsubscribe: <http://holcomb.info/mailman/listinfo/jsfromtherim>,
+	<mailto:jsfromtherim-request@holcomb.info?subject=unsubscribe>
+List-Id: Will's journals from Mauritania <jsfromtherim.holcomb.info>
+List-Post: <mailto:jsfromtherim@holcomb.info>
+List-Help: <mailto:jsfromtherim-request@holcomb.info?subject=help>
+List-Subscribe: <http://holcomb.info/mailman/listinfo/jsfromtherim>,
+	<mailto:jsfromtherim-request@holcomb.info?subject=subscribe>
+List-Archive: <http://holcomb.info/pipermail/jsfromtherim/>
+
+Since it is a Friday and we do nothing all day I've got some time to 
+write. This is a little tech geeky note for anyone who might be traveling 
+in the future and might find it interesting.
+
+This is a PII 233mhz laptop. Pretty old and pretty slow. To say start Word 
+in Windows XP takes about 8 minutes. I really only had one priority 
+though: communication. I wanted to get and send email and I wanted to send 
+pictures and web stuff. It doesn't need to be pretty, it just needs to 
+work.
+
+So, it is running redhat 9 and booting into runlevel 3. Pretty much 
+everything is turned off except for sendmail which is listening on the 
+loopback. I just send my mail as normal and when I visit the cybercafe I 
+just take the patch cable from the machine I am on and plug in. They just 
+have static ips and so I set the adapter to use the one for the machine I 
+am on and bring it up. Sendmail then sends everything out.
+
+Really I didn't have to change anything other than telling the ethernet 
+adapter not to come on during boot and I changed the duration on the 
+sendmail retry and fail queues to 5 days and 30 days respectively (from 4 
+hours and 5 days.)
+
+I also did a sudo on the mailq command so I can check it from my user 
+account. And, I set up fetchmail to pull my mail down and set procmail on 
+the box where it arrives originally to save copies in case this machine 
+ever dies.
+
+No problems so far. It definitely maximizes the bandwidth utilization alot 
+better than reading mail via a browser.
+
+Anyhow, I was pretty happy with it, so I thought I would mention the setup 
+in case anyone else was ever in a similar situation.
+
+Love,
+Will
+
+

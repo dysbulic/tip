@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>PSY-351: Computational Methods &mdash; Homework #4</title>
+    <link rel="stylesheet" type="text/css" href="../../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math, table + math, math + table, table + table { margin-top: .75em; }
+      .data td, .data th { text-align: center; padding: .25em; border: 1px solid; }
+      td, th { padding: .25em .5em; border: 1px solid; }
+      .ellip td { text-align: center; }
+      table { margin: auto; }
+      .hl { background-color: #BBB; }
+      ol { margin-left: 0em; }
+      .answer { margin: 0em; }
+      object { height: 400px; width: 100%; }
+      .pair { width: 45%; height: auto; border: 1px solid; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY-351: Computational Methods</h1>
+      <h2>Homework #4</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 14:10 Wed., 24 September 2008</h2>
+    </div>
+    
+    <p>This homework assignment will ask you to fit various special cases of the similarity-choice model to experimental data from an identification-confusion experiment. The main aim of this homework assignment is to use what you learned about quantitatively contrasting what are called "nested models."</p>
+    
+    <p>The data are from an identification-confusion experiment using a layout of stimuli like we used in the last assignment:</p>
+    
+    <object type="image/svg+xml" class="pair" data="../homework_03/object_space.svg"></object>
+    <object type="image/svg+xml" class="pair" data="../homework_03/object_enumeration.svg"></object>
+    
+    <p>But in the experiment, subjects learn to assign a unique name to each of the 16 stimuli.</p>
+    
+    <p>The data are the frequencies with which stimulus <em>S<sub>i</sub></em> is identified with response <em>R<sub>j</sub></em>. It is important to note that because we will be using log-likelihood as a measure of fit, the data are frequencies, not probabilities.</p>
+    
+    <p>The data matrix is available on the course website: <a href="data.m">data.m</a></p>
+    
+    <p>This data matrix is organized with each stimulus <em>S<sub>1</sub></em>-<em>S<sub>16</sub></em> along the rows and each response <em>R<sub>1</sub></em>-<em>R<sub>16</sub></em> along the columns.</p>
+    
+    <p>For each of the models, find the maximum-likelihood parameter estimates. Do this by minimizing the negative log likelihood (i.e., minimizing the negative of a fit measure is the same as maximizing the fit measure, and minimizing the minus log likelihood gives you the same parameters as minimizing the minus likelihood).</p>
+    
+    <p>Here is the formula for the log likelihood:</p>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><mo>ln</mo><mfenced><mi>L</mi></mfenced></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd>
+            <munder><mo>&Sum;</mo><mi>i</mi></munder>
+            <mo>ln</mo><mfenced><mrow><msub><mi>N</mi><mi>i</mi></msub><mo>!</mo></mrow></mfenced>
+          </mtd>
+          <mtd><mo>-</mo></mtd>
+          <mtd>
+            <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+            <mo>ln</mo><mfenced><mrow><msub><mi>f</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub><mo>!</mo></mrow></mfenced>
+          </mtd>
+          <mtd><mo>+</mo></mtd>
+          <mtd>
+            <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+            <msub><mi>f</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+            <mo>ln</mo>
+            <mfenced><mrow>
+              <mo>P</mo><mfenced separators="|"><msub><mi>R</mi><mi>j</mi></msub><msub><mi>S</mi><mi>i</mi></msub></mfenced>
+            </mrow></mfenced>
+          </mtd>
+        </mtr>
+      </mtable>
+    </math>
+    
+    <p>Where:</p>
+    <ul>
+      <li><em>i</em> indices over stimuli</li>
+      <li><em>j</em> indices over responses</li>
+      <li><em>N<sub>i</sub></em> is the total number of presentations of stimulus <em>i</em></li>
+      <li><em>f<sub>i,j</sub></em> is the observed frequency with which stimulus <em>i</em> was identified with response <em>j</em></li>
+      <li>P(<em>R<sub>j</sub></em> | <em>S<sub>i</sub></em>) is the model predicted probability with which stimulus <em>i</em> is identified with response <em>j</em></li>
+    </ul>
+    
+    <p>In addition, report the sum of squared error (SSE) and the % variance accounted for.</p>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+      <mtable>
+        <mtr>
+          <mtd><mi>%Var</mi></mtd>
+          <mtd><mo>=</mo></mtd>
+          <mtd><mfrac>
+            <mrow><msub><mi>SSE</mi><mi>null</mi></msub><mo>-</mo><msub><mi>SSE</mi><mi>model</mi></msub></mrow>
+            <msub><mi>SSE</mi><mi>null</mi></msub>
+          </mfrac></mtd>
+        </mtr>
+      </mtable>
+    </math>
+    
+    <p>Where SSE<sub>null</sub> is the sum of square error for the Null Model (i.e., the "model" that assumes that the average of all the data is the prediction for each condition).</p>
+    
+    <ol>
+      <li id="p1">
+        <div class="question">
+          <p>Give the fit for the saturated perfect-fitting model (lnL, SSE, and %Var). This gives the upper bound on how well any model could fit the observed data. How many free parameters are there in the perfect-fitting models? Create a appropriately labeled plot of observed versus predicted identification frequencies.</p>
+        </div>
+        
+        <div class="answer">
+          <p>An important property to recall when attempting the calculation is:</p>
+
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>ln</mo><mfenced><mrow><mi>x</mi><mo>!</mo></mrow></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <munderover>
+                    <mo>&Sum;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>x</mi>
+                  </munderover>
+                  <mo>ln</mo><mfenced><mi>i</mi></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <p>This calculation then is performed in <a href="ln_likelihood.m">ln_likelihood.m</a> and <a href="lnfacsum.m">lnfacsum.m</a>. The result is:</p>
+
+          <pre>Saturated ln likelihood: -215.618177</pre>
+        
+          <p>For the saturated model, the predictions match the observations, so the <acronym title="Sum of Squares Error">SSE</acronym> will be 0.</p>
+
+          <p>Because the SSE<sub>model</sub> is 0, the percent variance accounted for will be 100%.</p>
+
+          <p>The saturated model has one parameter for each data point. One point will serve as a reference anchor and is discernible from the other points (and thus not free). So, for this data set the number of points is 16 * (16 - 1) = 240.</p>
+
+          <object type="image/svg+xml" data="homework_04.saturated.svg"></object>
+        </div>
+      </li>
+
+      <li id="p2">
+        <div class="question">
+          <p>Give the fit for the null model (lnL, SSE, and %Var). This does not really give the lower bound on how poorly any model could fit the data, but no candidate model would ever fit worse than this. How many free parameters are there in the null model? Create a appropriately labeled plot of observed versus predicted identification frequencies.</p>
+        </div>
+
+        <div class="answer">
+          <pre>Null ln likelihood: -4282.116767</pre>
+          <pre>Null SSE: 153219.687500</pre>
+
+          <p>There are no free parameters in the null model. The percentage variance accounted for is 0%.</p>
+
+          <object type="image/svg+xml" data="homework_04.null.svg"></object>
+        </div>
+      </li>
+
+      <li id="p3">
+        <div class="question">
+          <p>Now, fit the basic similarity-choice model to the observed data by maximizing lnL. Recall that for this model, there is a bias for every response <em>S<sub>j</sub></em>. And there is a similarity for each pair of stimuli <em>&nu;<sub>i,j</sub></em>, where <em>&nu;<sub>i,j</sub></em> = <em>&nu;<sub>j,i</sub></em> and <em>&nu;<sub>i,i</sub></em> = 1.</p>
+
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>P</mo><mfenced separators="|"><msub><mi>R</mi><mi>j</mi></msub><msub><mi>S</mi><mi>i</mi></msub></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><mfrac>
+                  <mrow><msub><mi>&beta;</mi><mi>i</mi></msub><msub><mi>&nu;</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub></mrow>
+                  <mrow>
+                    <munder><mo>&Sum;</mo><mrow><mi>k</mi><mo>&Element;</mo><mi>R</mi></mrow></munder>
+                    <msub><mi>&beta;</mi><mi>k</mi></msub><msub><mi>&nu;</mi><mfenced open="" close=""><mi>i</mi><mi>k</mi></mfenced></msub>
+                  </mrow>
+                </mfrac></mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <p>Recall that you implemented this function for the Week 2 Homework assignment. You can also use the SCM code that I provided as a solution as well.</p>
+          
+          <p>You will need to modify some of the code I used in class to fit models to data. You need to think about how many parameters there are so you can pass them to the hook() routine. You need to create your own "mymodel" routine that takes the passed parameters from hook as input, computes model predictions, calculates lnL, and returns -lnL as the fit value.</p>
+        </div>
+
+        <div class="answer">
+          <p>The code to unpack the column vector as supplied by <a href="hook.m">Hook and Jeeves</a> is <a href="fit_scm.m">fit_scm.m</a>.</p>
+        </div>
+
+        <div class="question">
+          <p>Report the maximum likelihood parameters found by using the Hooke and Jeeves hill-climbing algorithm. Report the fit values (lnL, SSE, and %Var).</p>
+        </div>
+
+        <div class="answer">
+          <pre>SCM Hook fit ln likelihood: 1755.744944</pre>
+          <pre>SCM Hook fit SSE: 42685.717740</pre>
+          <pre>SCM Hook fit % Variance: 0.721408</pre>
+        </div>
+
+        <div class="question">
+          <p>How many free parameters are there?</p>
+        </div>
+
+        <div class="answer">
+          <p>The similarity choice model has <em>n</em> free biases and <em>n<sup>2</sup></em> / 2 - <em>n</em> free similarities. For this data, that is 128.</p>
+        </div>
+
+        <div class="question">
+          <p>Does the similarity-choice model fit significantly worse than the saturated model?</p>
+        </div>
+
+        <div class="answer">
+          <p>It accounts for 72% of the variance. What qualifies as "significantly worse" is a function of the alternatives.</p>
+        </div>
+
+        <div class="question">
+          <p>Create a appropriately labeled plot of observed versus predicted identification frequencies.</p>
+        </div>
+ 
+        <div class="answer">
+          <object type="image/svg+xml" data="homework_04.scm.svg"></object>
+        </div>
+      </li>
+
+      <li id="p4">
+        <div class="question">
+          <p>Now, fit the MDS-choice model to the observed data. In this model, rather than having free similarity parameters, similarity is defined as an exponentially-decreasing function of distances between points. The point represent the locations of each object in psychological space. For this example, assume an unconstrained two-dimensional space. That is, each stimulus is represented by an (x,y) position in that space.</p>
+
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>&nu;</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd><msup>
+                  <mn>e</mn>
+                  <mrow>
+                    <mo>-</mo><mi>c</mi>
+                    <msup>
+                      <mfenced><mrow>
+                        <munder><mo>&Sum;</mo><mi>m</mi></munder>
+                        <msup>
+                          <mfenced open="|" close="|">
+                            <msub><mi>i</mi><mi>m</mi></msub><mo>-</mo><msub><mi>j</mi><mi>m</mi></msub>
+                          </mfenced>
+                          <mi>r</mi>
+                        </msup>
+                      </mrow></mfenced>
+                      <mfrac><mn>1</mn><mi>r</mi></mfrac>
+                    </msup>
+                  </mrow>
+                </msup></mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <p>Where <em>i<sub>m</sub></em> is the value of object <em>i</em> on dimension <em>m</em> and <em>j<sub>m</sub></em> is the value of object <em>j</em> on dimension <em>m</em>. You can set <em>c</em> equal to 1 without loss of generality. Assume <em>r</em> = 1.</p>
+ 
+          <p>You will need to modify your SCM code to create code for the MDS-choice model. You’ll also need to modify the code created for the previous part of this assignment since now you’re passing a different set of parameters (i.e., coordinates in 2D space for each stimulus rather than <em>s<sub>i,j</sub></em>’s for each pair of stimuli).</p>
+ 
+          <p>Report the maximum likelihood parameters found by using the Hooke and Jeeves hill-climbing algorithm. Report the fit values (lnL, SSE, and %Var). How many free parameters are there? Does the MDS-choice model fit significantly worse than the similarity-choice model? Create a appropriately labeled plot of observed versus predicted identification frequencies.</p>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

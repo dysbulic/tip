@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg id="thermometer"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.0"
+   width="100%"
+   height="100%"
+   viewBox="0 -775 575 2100"
+   xml:space="preserve"
+   sodipodi:version="0.32"
+   inkscape:version="0.44"
+   sodipodi:docname="thermometer.svg"
+   sodipodi:docbase="/Users/wholcomb/Public/sites/himinbi.org/odin/moneymeter">
+  <metadata>
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style type="text/css">
+      path { fill: none; stroke-width: 5; }
+      #bulb, #bulbrefl, #bodyrefl { stroke-width: 1.5; }
+      [class~=spurt] { display: none; }
+      .full .spurt { display: inherit; }
+      #tick rect, #bodyrefl { stroke: none; }
+      #body, #bulbrefl, #bodyrefl, #bulb, #tick { fill: white; }
+      path, .tick { stroke: #EB0000; }
+      #bulb, #body { stroke: darkred; }
+      rect, .full #bulb, .full #body, .full .spurt { fill: #EB0000; }
+      #rect.blue, .blue rect, .full.blue #bulb, .full.blue #body, .full.blue .spurt { fill: #009; }
+      .blue path, .blue .tick, .blue #bulb, .blue #body { stroke: #00A; }
+      svg:hover path, svg:hover #tick { stroke: blue; }
+      svg:hover #tick rect, svg.full:hover #bulb, svg.full:hover #body, svg:hover .spurt { fill: blue; }
+    </style>
+    <script type="text/ecmascript">
+      var url;
+      if(document.getURL) { url = document.getURL(); }
+      else if(window.location) { url = window.location.href; }
+      var className = document.documentElement.getAttribute("class");
+      if(className == null) className = "";
+      if(url.match(/full/)) { // either a ?full parameter or symlink named full
+        className += (className.length > 0 ? " " : "") + "full";
+      }
+      if(url.match(/blue/)) {
+        className += (className.length > 0 ? " " : "") + "blue";
+      }
+      document.documentElement.setAttribute("class", className);
+      // Batik doesn't fill this correctly
+      //document.getElementById("rect").setAttribute("class", className);
+    </script>
+  </defs>
+  <sodipodi:namedview id="base"
+   inkscape:window-height="768" inkscape:window-width="1178"
+   inkscape:pageshadow="2" inkscape:pageopacity="0.0"
+   guidetolerance="10.0" gridtolerance="10.0"
+   objecttolerance="10.0"
+   borderopacity="1.0" bordercolor="#666666"
+   pagecolor="#ffffff"
+   inkscape:zoom="0.25036088"
+   inkscape:cx="186.74406" inkscape:cy="1116.3099"
+   inkscape:window-x="0" inkscape:window-y="22"
+   inkscape:current-layer="thermometer"
+   width="156.18px" height="570.16px" />
+  <path id="body"
+        d="M 405.55582,-468.61279 C 404.50265,-532.60103 350.97844,-584.50051 283.63615,-584.50051 C 216.30538,-584.50051 161.72802,-532.61835 161.72802,-468.61279 C 161.72802,-468.61279 162.01519,926.04157 161.72802,939.33464 C 161.08584,969.06116 186.57026,992.80842 216.58187,993.16153 C 264.56842,993.72613 303.42165,994.43246 350.69043,993.16153 C 380.68947,992.36704 406.23838,969.04893 405.55582,939.33464 C 405.24488,925.79818 406.5282,-409.53298 405.55582,-468.61279 z "
+        sodipodi:nodetypes="csssssss" />
+  <g transform="matrix(3.763289,0,0,3.763289,-23.86717,-759.2396)">
+    <defs>
+      <rect id="bulbcrop" x="0" y="424.83301" width="163.692" height="129.73199" />
+    </defs>
+    <clipPath id="bulbclip">
+      <use xlink:href="#bulbcrop" x="0" y="0" width="570.90997" height="556.39697" />
+    </clipPath>
+    <g clip-path="url(#bulbclip)">
+      <path id="bulb"
+            d="M 155.958,484.683 C 155.958,521.676 123.009,551.661 82.369,551.661 C 41.729,551.661 8.782,521.676 8.782,484.683 C 8.782,447.696 41.728,417.708 82.368,417.708 C 123.008,417.708 155.958,447.696 155.958,484.683 z " />
+      <path id="bulbrefl"
+            d="M 146.14,476.874 C 145.289,510.084 118.009,536.753 84.456,536.753 C 59.1,536.753 37.324,521.521 27.829,499.742 C 34.996,524.326 58.345,542.346 86.062,542.346 C 119.485,542.346 146.581,516.149 146.581,483.839 C 146.581,481.482 146.419,479.161 146.14,476.874 z " />
+    </g>
+  </g>
+  <path id="spurt-1" class="spurt"
+   d="M 220.69392,-606.82663 C 220.69392,-606.82663 176.53173,-701.88723 127.86487,-679.76663 C 91.394837,-663.19313 114.60304,-633.35403 127.86487,-626.71933 C 141.12294,-620.08843 170.96582,-663.19313 220.69392,-606.82663 z " />
+  <path id="spurt-2" class="spurt"
+   d="M 267.11409,-603.51113 C 267.11409,-603.51113 257.16772,-686.39383 227.3286,-699.65563 C 197.48948,-712.92123 174.28128,-726.18303 177.59674,-746.07583 C 180.91219,-765.96853 263.79863,-789.18053 267.11409,-603.51113 z " />
+  <path id="spurt-3" class="spurt"
+   d="M 313.52673,-626.71933 C 313.52673,-626.71933 334.05923,-680.97093 373.20496,-673.13573 C 389.78602,-669.82033 406.36331,-656.55843 393.09771,-643.29663 C 371.48514,-621.68783 366.57781,-666.50483 313.52673,-626.71933 z " />
+  <path id="bodyrefl"
+   d="M 369.98987,836.38742 C 369.98987,836.38742 372.68701,-431.74925 372.10813,-452.22235 C 369.31209,-551.81485 199.85243,-588.55743 166.63666,-453.63452 C 204.73573,-621.62317 383.5032,-556.72258 383.40553,-452.22235 C 383.31579,-356.85832 379.16901,834.26916 379.16901,834.26916 L 369.98987,836.38742 z "
+   sodipodi:nodetypes="cscscc" />
+  <g transform="matrix(3.763289,0,0,3.763289,-23.86717,-759.2396)">
+    <defs>
+      <g id="tick">
+        <polygon points="114.745,81.012 87.155,83.28 86.902,80.499 114.488,78.23 114.745,81.012 " />
+        <rect id="rect" x="114.548" y="81.338997" width="27.691999" height="1.619" />
+      </g>
+    </defs>
+    <use class="tick" xlink:href="#tick" x="0" y="0" id="use3028" />
+    <use class="tick" xlink:href="#tick" x="0" y="57" id="use3030" />
+    <use class="tick" xlink:href="#tick" x="0" y="114" id="use3032" />
+    <use class="tick" xlink:href="#tick" x="0" y="171" id="use3034" />
+    <use class="tick" xlink:href="#tick" x="0" y="229" id="use3036" />
+    <use class="tick" xlink:href="#tick" x="0" y="286" id="use3038" />
+    <use class="tick" xlink:href="#tick" x="0" y="343" id="use3040" />
+  </g>
+</svg>

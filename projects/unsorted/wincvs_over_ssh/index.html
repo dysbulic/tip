@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>WinCVS 1.2 over Secure Shell</title>
+    <link rel="stylesheet" type="text/css" href="../styles/outline.css" />
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>WinCVS 1.2 with SSH</h1>
+    <p>Contents:</p>
+    <ol>
+      <li><a href="#intro">Introduction</a></li>
+      <li><a href="#wincvs-install">Install WinCVS</a></li>
+      <li><a href="#cygwin-install">Install Cygwin and OpenSSH</a></li>
+      <li><a href="#modify-path">Modify Your Path</a></li>
+      <li><a href="#set-home">Setup Your Home Directory</a></li>
+      <li><a href="#config-wincvs">Configuring WinCVS to use SSH</a></li>
+      <li><a href="#key-access">Key Based Access</a></li>
+      <li><a href="#tests">Tests</a>
+        <ol>
+          <li><a href="#test-assumptions">Assumptions</a></li>
+          <li><a href="#test-path">Modify Your Path</a></li>
+          <li><a href="#test-config-wincvs">Configuring WinCVS to use SSH</a></li>
+        </ol>
+      </li>
+    </ol>
+    <p>CVS and SSH are products that are fairly widely known in the UNIX world, but that Windows users might be less familiar with. The intended audience for this document is people that have little to no experience with CVS or SSH and it includes short explanations of many of the basic concepts. If you are already familiar, simply uninterested, or in a hurry you can safely skip everything except for the parts marked with <img src="/images/small_star.png" alt="[important]" />'s. Also the setup is different for different versions of Windows, so pay attention in each section for specific instructions. Finally, at the end there are a set <a href="#tests">tests</a> that you can try after each step to make sure that it succeeded.
+    </p>
+    <p><img src="/images/small_star.png" alt="[important]" /> This setup will work with any version of Windows, however there are issues that you should be aware of:</p>
+    <ul>
+      <li>Windows 95/98: There is an <a href="http://sources.redhat.com/ml/cygwin/2000-12/msg00470.html">issue</a> with how sockets are handled, that keeps the CVS program from knowing when the SSH connection is closed. This means that whenever you connect to the server when it is done you have to close the connection manually (by hitting Ctrl-C.)</li>
+    </ul>
+
+    <h3><a name="intro" />Introduction</h3>
+    <p><em>C</em>oncurrent <em>V</em>ersions <em>S</em>ystem (<a href="http://www.cvshome.org">CVS</a>) is a method of "version control"; that is tracking changes to computer files over time and allowing access to the different versions that have been created. CVS is commonly used for managing the development of source code, but is finding its place in other realms as well. Unlike its predecessor <em>R</em>evision <em>C</em>ontrol <em>S</em>ystem (<a href="http://www.gnu.org/software/rcs/rcs.html">RCS</a>) CVS allows multiple people to work on a project at a time as well as maintaining information about files in a directory structure (whereas RCS tracks changes solely on a per file basis.) <em>S</em>ecure <em>Sh</em>ell (<a href="http://www.openssh.org/">SSH</a>) is a method of accessing a computer remotely. Unlike its predecessors <em>R</em>emote <em>Sh</em>ell (<a href="http://www.everything2.com/index.pl?node_id=756676&amp;lastnode_id=756674">RSH</a>) and <a href="http://whatis.techtarget.com/definition/0,289893,sid9_gci213116,00.html">Telnet</a> all of the information passing between the computers is encrypted so that eavesdroppers cannot listen in.</p>
+    <p>One of the benefits of CVS is that the files can be stored in a central <em>repository</em> and people wishing to access it can connect to the central server and download a copy to their computer that they can change and then commit their changes back to the main repository. This collaboration can be done within a company network by a few people or it can be done by tens or hundreds of people working around the globe. As the distances that the information travels grows greater security becomes a greater concern. For this reason CVS has the ability to run over SSH. This protects the information stored in CVS and just as importantly it protects the passwords of the people accessing the repository.</p>
+    <p><img src="/images/small_star.png" alt="[important]" /> This is a document describing how to access secure CVS repositories on computers running SSH using <a href="http://www.wincvs.org">WinCVS</a> and <a href="http://www.cygwin.com">Cygwin</a>. It is based on an <a href="http://www.wincvs.org/ssh.html">earlier document</a> by <a href="mailto:frank@bookface.com">Frank Murphy</a> with updates for WinCVS version 1.2, specific issues with different versions of Windows, and bug fixes that now allow WinCVS to work with <a href="http://www.openssh.org">OpenSSH</a> and SSH2.</p>
+    <p><img src="/images/small_star.png" alt="[important]" /> This document assumes:</p>
+    <ul>
+      <li>A CVS repository has been set up on a machine called <code>cvshost.mydomain.com</code></li>
+      <li>You have an account on that computer that you can log into with the username <code>joeuser</code> and the password <code>pass</code></li>
+      <li>The CVS repository root on <code>cvshost.mydomain.com</code> is called <code>/home/cvs</code>. Every CVS repository has a root and if you do not know what yours is then you need to check with your administrator and find out. It is very likely <em>not</em> <code>/home/cvs</code>.</li>
+      <li>The CVS repository in <code>/home/cvs</code> contains a module named <code>myproject</code> that you are allowed to access</li>
+    </ul>
+    <p>The software used in writing and testing this document is: (If you have any trouble try upgrading to the latest versions. WinCVS will not work before version 1.2, OpenSSH will not work in Windows NT/2000 before 2.9p2 (p1 doesn't work.)</p>
+    <ul>
+      <li><a href="http://www.microsoft.com">Microsoft Windows</a>
+        <ul>
+          <li><a href="http://www.microsoft.com/ntworkstation/">Windows NT 4.0 (Service Pack 6)</a></li>
+          <li><a href="http://www.microsoft.com/windows98/">Windows 98 Second Edition</a></li>
+          <li><a href="http://www.microsoft.com/windows2000/professional/">Windows 2000 Professional</a></li>
+        </ul>
+      </li>
+      <li><a href="http://www.wincvs.org">WinCVS 1.2</a></li>
+      <li><a href="www.cygwin.com">Cygwin 1.3.1</a></li>
+      <li><a href="http://www.openssh.org">OpenSSH 2.9p2</a> (Cygwin port)</li>
+    </ul>
+    <p>The server being connected to is running:</p>
+    <ul>
+      <li><a href="http://www.redhat.com">Redhat Linux 7.1</a></li>
+      <li><a href="http://www.openssh.org">OpenSSH 2.9</a></li>
+      <li><a href="http://www.cvshome.org">CVS 1.11</a></li>
+    </ul>
+
+    <h3><a name="wincvs-install" />Install WinCVS</h3>
+    <p><img src="/images/small_star.png" alt="[important]" /> WinCVS is a Windows CVS client. The latest version can be downloaded from <a href="http://wincvs.org/download.html">http://WinCVS.org/download.html</a>. <em>Getting the latest version is highly recommended.</em> Just run the program <code>setup.exe</code> in the downloaded files and follow the instructions.</p>
+
+    <h3><a name="cygwin-install" />Install Cygwin and OpenSSH</h3>
+    <p>Windows does not have a SSH client by default. There are a variety available, however most are either not correctly suited for use with CVS or they <a href="http://www.ssh.com">cost money</a>. The version that is being used in this setup is provided by a group called <a href="http://openssh.org">OpenSSH</a> and it is a free implementation. It is not written for Windows however and in order for it to function correctly a library called <a href="http://www.cygwin.com">Cygwin</a> is necessary. Cygwin allows for programs written for UNIX to run on Windows computers. Cygwin is installed by a program that not only installs the library to allow UNIX programs to run, it also installs a set of UNIX programs that have been altered so as to work correctly with the library. The program that you run allows you to choose the programs that you want to install and where you want to install them from and it then downloads them and installs them.</p>
+    <p><img src="/images/small_star.png" alt="[important]" /> Get the Cygwin installer from <a href="http://www.cygwin.com/setup.exe">http://www.cygwin.com/setup.exe</a> or a copy is available <a href="cygwin-setup.exe">here</a>. The list of packages offered is fairly extensive, but the only ones that you need to install are Cygwin, OpenSSH, OpenSSL (used by OpenSSH to encrypt connection), ZLib (used by OpenSSH to compress connection), and bash (which manages your home directory.) Also for certain tests I will use the Cygwin version of CVS and it also needs GDBM for certain data access functions. If you are certain you will get it right the first time and will not need to do any testing you can skip CVS and GDBM, but I recommend installing them.</p>
+    <p><img src="/images/small_star.png" alt="[important]" /> Install the programs wherever you want, but hereafter I will treat it as though everything was installed in <code>c:\cygwin</code>. If you use a different directory then simply substitute the directory you used for <code>c:\cygwin</code>.</p>
+    <p>When installing you will get a long list of available packages. There is no way that I am aware of to unselect all of them other than to go down the <code>New</code> column and click once on each of the version numbers to change it to <code>Skip</code>. Also, when choosing a site to install from it is often better to use a site that is available via HTTP. HTTP allows for multiple files to be transferred over a single connection, whereas FTP requires a new connection for each file and so FTP servers are often more busy and more difficult to connect to. Also HTTP (web) servers usually do not have limits to the number of users in the way that FTP servers do.</p>
+
+    <h3><a name="modify-path" />Modify Your Path</h3>
+    <p>You now have all of the necessary software installed. It is now a matter of getting it all to work together. The first step is making it so that WinCVS can find the SSH program to run it. This is done by adding the directory that SSH is in to the set of directories that Windows searches through to find programs. This list of directories is called the path and it is controlled by an environment variable called PATH.</p>
+    <p><img src="/images/small_star.png" alt="[important]" /> Add the directory where Cygwin stores its programs (<code>C:\cygwin\bin</code>) to your path.</p>
+    <ul>
+      <li>Windows 95/98:
+        <ul>
+          <li>Edit the file: <code>c:\autoexec.bat</code></li>
+          <li>Add the line: <code>SET PATH=%PATH%;C:\cygwin\bin;</code></li>
+        </ul>
+      </li>
+      <li>Windows NT:
+        <ul>
+          <li>Open the <code>Control Panel</code></li>
+          <li>Select the <code>System</code> properties</li>
+          <li>Select the <code>Environment</code> tab</li>
+          <li>Find <code>path</code> entry in the <code>System Variables</code> list</li>
+          <li>Add <code>;C:\cygwin\bin;</code> to the end</li>
+          <li>Click <code>Set</code></li>
+        </ul>
+      </li>
+      <li>Windows 2000:
+        <ul>
+          <li>Open the <code>Control Panel</code></li>
+          <li>Select the <code>System</code> properties</li>
+          <li>Select the <code>Advanced</code> tab</li>
+          <li>Click <code>Environment Variables</code></li> 
+          <li>Find <code>path</code> entry in the <code>System Variables</code> list</li>
+          <li>Click <code>Edit</code></li>
+          <li>Add <code>;C:\cygwin\bin;</code> to the end</li>
+          <li>Click <code>OK</code></li>
+        </ul>
+      </li>
+    </ul>
+    <p>In order for your changes to take affect in Windows 95/98 you will have to restart. Changes should take affect immediately in NT or 2000.</p>
+
+    <h3><a name="set-home" />Setup Your Home Directory</h3>
+    <p>SSH uses public key cryptography in setting up a session. The computer you are connecting to has a <em>public key</em> that it gives to anyone it wants to communicate with. That party it is communicating with can then use that key to encrypt anything it wants using that public key and send securely back to the server. Information encoded with the public key can't be decoded again with the public key, it can only be decoded using the matching private key that the server keeps as a secret. Your computer gets the public key of the computer you are connecting to and then uses that to send back a symmetric key that is then used for symmetric key cryptography where both parties are using the same key. Symmetric key cryptography is faster the public key cryptography but it takes both parties knowing the key.</p>
+    <p>The symmetric key is generated randomly for each SSH session, but the private/public key combination that the server uses should always be the same. Your SSH programs remembers the server's public key and will tell you if it ever changes. If you are ever notified that a server's public key is not recognized (other than the first time you connect) you should contact the administrator for that machine and ask if they reinstalled SSH or for any reason regenerated the keys. The keys should not change for reasons other than that and if they do then it could mean that someone is listening in on your connection.</p>
+    <p>SSH needs a place to store the public keys that it gets from different servers. It uses a directory <code>.ssh</code> relative to your <em>home</em> directory to store them. Users on a UNIX system generally have a home directory where all of their personal files and settings are stored. SSH expects your home to be in <code>c:\cygwin\home\<em>joewinuser</em></code> and if that directory does not exist it will warn you every time that you connect that it does not recognize the computer that you are connecting to.</p>
+    <p><img src="/images/small_star.png" alt="[important]" /> Your home directory is expected to be relative to <code>c:\cygwin</code> so you need to create the appropriate structure. Installing bash with Cygwin should have created the structure, but it is wise to check that it exists.</p>
+    <ul>
+      <li>In <code>C:\cygwin\</code> create a directory named <code>home</code></li>
+      <li>In <code>C:\cygwin\home\</code> create a directory named the same as your Windows username. (If you installed bash with Cygwin this has already been done)</li>
+      <li>In <code>C:\cygwin\home\joewinuser\</code> create a directory named <code>.ssh</code></li>
+    </ul>
+    <p>Because these stored keys are an essential part of how computers using SSH communicate it is important to keep this information protected. Even if you are not going to set up key based access (allowing you to login without a password) you should read the information about <a href="#key-security">key security</a> in the <a href="#key-access">Key Based Access</a> section.</p>
+    <h3><a name="config-wincvs" />Configuring WinCVS to use SSH</h3>
+    <p>The CVS root tells WinCVS where to look when checking out and creating modules. All that is necessary is to set your CVS root so that it points to the appropriate place on the server hosting the repository. Also you need to tell CVS to use SSH.</p>
+    <p><img src="/images/small_star.png" alt="[important]" /> This setup is fairly simple:</p>
+    <ul>
+      <li>From the main menu select <code>Admin</code></li>
+      <li>Then select <code>Preferences</code></li>
+      <li>In the dialog that comes up:
+        <ul>
+          <li>Set the <code>CVSROOT</code> to <code>joeuser@cvshost.mydomain.com:/home/cvs</code></li>
+          <li>Set the <code>Authentication</code> to <code>SSH Server</code></li>
+        </ul>
+      </li>
+      <li>Click <code>OK</code></li>
+    </ul>
+
+    <h3><a name="key-access" />Key Based Access</h3>
+    <p>SSH can authenticate connections in a variety of ways. The simplest is to type in a password, but it also possible to have a pre-established matching set of keys that let a connecting program authenticate itself. With this setup it is not necessary for the user to enter a password repeatedly which can be useful if you are frequently accessing the CVS server. This covers creating a public/private key pair and then putting the public key on the server.</p>
+    <p><img src="/images/small_star.png" alt="[important]" /> There are two main versions of SSH that are not compatible with each other. SSH2 is a more robust protocol and deals with several issues that SSH1 had. SSH2 is not available everywhere though. To tell which version you are using look in the directory <code>C:\cygwin\home\<em>joewinuser</em>\.ssh</code> (SSH's data directory.) Assuming that you have logged in at least once already then SSH will have saved the public key of the server that you connected to. If that file is named <code>known_hosts</code> then you are using SSH1. If the file is called <code>known_hosts2</code> then you are using SSH2. If both files exist then you will have to look at their contents and see which one has a line beginning with <code>cvshost.mydomain.com</code>.</p>
+    <p><img src="/images/small_star.png" alt="[important]" /> The key generation differs based on the version of SSH. Both will require you to start a command prompt and switch to the directory <code>C:\cygwin\home\<em>joewinuser</em>\.ssh</code>. From there you are going to run the command <code>ssh-keygen</code> and when it asks you for a passphrase you will just hit <code>Enter</code>. If you use a passphrase then it will have to be entered any time you connect so there isn't really much of an improvement.</p>
+    <p>This process is described as a set of commands to be entered at the command prompt in the <em>Cygwin Bash Shell</em>. You should have installed bash along with SSH as a part of the <a href="#cygwin-install">Cygwin installation</a>. Each step will have specific instructions for the SSH version that you are using. Options where the command is the same use the form SSH1/2:</p>
+    <ul>
+      <li>SSH1/2: <code>cd ~/.ssh</code></li>
+    </ul>
+    <p>This will change your working directory to SSH's data directory.</p>
+    <ul>
+      <li>SSH1: <code>ssh-keygen -C <em>email_address</em></code></li>
+      <li>SSH2: <code>ssh-keygen -C <em>email_address</em> -t rsa</code></li>
+    </ul>
+    <p>This will generate a public/private key file pair.</p>
+    <ul>
+      <li>SSH1: identity and identity.pub</li>
+      <li>SSH2: id_rsa and id_rsa.pub</li>
+    </ul>
+    <p>(The file with the <code>.pub</code> extension is the public key and the other the private.) You now need to get the public key over to <code>cvshost.mydomain.com</code>. You will do this will the <em>S</em>ecure <em>C</em>o<em>p</em>y (scp) command:</p>
+    <ul>
+      <li>SSH1: <code>scp identity.pub joeuser@cvshost.mydomain.com:</code></li>
+      <li>SSH2: <code>scp id_rsa.pub joeuser@cvshost.mydomain.com:</code></li>
+    </ul>
+    <p>Now you need to connect to <code>cvshost.mydomain.com</code>. You can do this using SSH using the command:</p>
+    <ul>
+      <li>SSH1/2: <code>ssh -l joeuser cvshost.mydomain.com</code></li>
+    </ul>
+    <p>Once you are connected you should see the public key in your home directory. You now need to add it to the list of keys that you have authorized for key based access. This data should be stored in a directory called <code>.ssh</code> and if it doesn't exist then you can create it:</p>
+    <ul>
+      <li>SSH1/2: <code>mkdir .ssh</code></li>
+    </ul>
+    <p>Then to add the public key that you copied over to the list of allowed keys:</p>
+    <ul>
+      <li>SSH1: <code>cat identity.pub >> .ssh/authorized_keys</code></li>
+      <li>SSH2: <code>cat id_rsa.pub >> .ssh/authorized_keys2</code></li>
+    </ul>
+    <p>You should then remove the public key with the command:</p>
+    <ul>
+      <li>SSH1: <code>rm identity.pub</code></li>
+      <li>SSH2: <code>rm id_rsa.pub</code></li>
+    </ul>
+    <p>You should also make sure that you are the only person that can access the list of authorized keys with the command:</p>
+    <ul>
+      <li>SSH1/2: <code>chmod -R og= .ssh</code>.</li>
+    </ul>
+    <p>You should now be able to disconnect from <code>cvshost.mydomain.com</code> and reconnect without being prompted for a password.</p>
+    <p><a name="key-security" /><img src="/images/small_star.png" alt="[important]" /> It is very important to restrict access to <code>c:\cygwin\home\<em>joewinuser</em>\.ssh</code> on the computer where you are running WinCVS. This directory now contains your private key that will allow anyone having it to connect from anywhere without being prompted for a password. Even if you did not create a private key there are other keys used by SSH stored there and if a person is able to modify them it leaves you open to a variety of attacks. It is <em>very</em> important to try to protect this information. A cracker could easily use it to read through any of your files or mail and it could be someone's first step to breaking into more sensitive computers on your network.</p>
+    <p>Windows NT and 2000 allow you can change the security permissions so that you are the only person who is allowed to access a certain directory. You should access the security permissions on <code>c:\cygwin\home\<em>joewinuser</em>\.ssh</code> and remove all access for the <code>Everyone</code> group and add only access for yourself.</p>
+    <p>Windows 95/98 was not created with security in mind and there is no way to restrict access to particular files in any way. If you are sharing this computer with people that you do not trust or if it is publicly accessible then you should consider discussing alternate possibilities with your administrator before setting up key based usage. If you are not using key based access then it is not a very serious risk, but if you do have your own private key then you are creating a serious security risk by storing it on your computer.</p>
+    <p>In addition to protecting your private key you can also restrict how the server will let it be used by adding options to the <em>authorized_keys</em> file on the server. Possible options include:</p>
+    <ul>
+      <li><code>from="pattern-list"</code>: where the pattern list is hosts that are allowed to use the key. For instance if you are on mydomain.com you could put <code>from="*.mydomain.com"</code> and if someone from otherdomain.com stole your key and tried to use it they would be rejected. If you only plan on using WinCVS from one place then you can put that specific machine name or IP address in.</li>
+      <li><code>command="/usr/bin/cvs server"</code>: this will allow the connecting computer to run only the <code>cvs server</code> command when authenticating using the private key.</li>
+      <li><code>no-port-forwarding</code>: this keeps the key from being used to forward information from one computer to another.</li>
+      <li><code>no-X11-forwarding</code>: this keeps the key from being used to access the X-Windows system remotely.</li>
+      <li><code>no-agent-forwarding</code>: this keeps the key from being used in authentication agent forwarding.</li>
+      <li><code>no-pty</code>: this keeps the connection which starts the connection from being given access to a terminal. This can safely be done and WinCVS will still work.</li>
+    </ul>
+    <p>The line that I recommend that you enter before key all on one line is:</p>
+    <ul>
+      <li><code>from="*.mydomain.com",command="/usr/bin/cvs server",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty</code></li>
+    </ul>
+    <p>If you are using SSH for other purposes then this might be too restrictive for you, but if it you are only using CVS then this should not hinder your usage any and it will minimize the risk that you suffer from if your private key were ever stolen.</p>
+
+    <h3><a name="tests" />Tests</h3>
+    <p>This is a set of tests that you can do at different points in the setup to make sure that everything is configured correctly. They are incremental, so if you are stuck then you should be able to progress from the beginning to the point where the breakdown occurred.</p>
+    <h4><a name="test-assumptions" />Assumptions</h4>
+    <ol>
+      <li>A host named <code>cvshost.mydomain.com</code> exits and you can connect to it via SSH using the username <code>joeuser</code> and the password <code>pass</code>.
+        <ul>
+	  <li>Try to connect to the server. You can either use a <a href="http://www.openssh.org/windows.html">graphical SSH program</a> like <a href="http://www.zip.com.au/~roca/ttssh.html">Teraterm + SSH</a> or <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/">PUTTY</a>, or you can do the <a href="#cygwin-install">Cygwin setup</a> and use that SSH program. If you use Cygwin, the command will be:
+	    <ul>
+	      <li><code>C:\cygwin\bin\ssh -l joeuser cvshost.mydomain.com</code></li>
+	    </ul>
+	  </li>
+	</ul>
+      </li>
+      <li>On <code>cvshost.mydomain.com</code> there is a CVS repository in <code>/home/cvs</code> with a module that you are allowed to access called <code>myproject</code>.
+        <ul>
+	  <li>While logged in to the server issue the command:
+	    <ul>
+	      <li><code>cvs -d /home/cvs checkout myproject</code></li>
+	    </ul>
+	  </li>
+	</ul>
+      </li>
+      <li>You are able to access this module via SSH. (This should be a foregone conclusion if the previous two worked.) After you have installed <a href="#cygwin-install">Cygwin</a> you can try:
+        <ul>
+	  <li>From a command prompt on the computer you are setting up WinCVS on:
+	    <ul>
+	      <li><code>set CVS_RSH=ssh</code></li>
+	      <li><code>c:\cygwin\bin\cvs -d :ext:joeuser@cvshost.mydomain.com:/home/cvs checkout myproject</code></li>
+	    </ul>
+	  </li>
+	</ul>
+      </li>
+    </ol>
+    
+    <h4><a name="test-path" />Modify Your Path</h4>
+    <ol>
+      <li><code>C:\cygwin\bin</code> should now be listed in you path. To see the contents of you path, at a command prompt type:
+        <ul>
+	  <li><code>echo %PATH%</code></li>
+	</ul>
+      </li>
+      <li><code>C:\cygwin\bin</code> should be in the list. This should allow you to run any of the programs in <code>C:\cygwin\bin</code> from anywhere. To test this, at the command prompt in some directory other than <code>C:\cygwin\bin</code>, run:
+        <ul>
+	  <li><code>ssh -l joeuser cvshost.mydomain.com</code></li>
+	</ul>
+      </li>
+    </ol>        
+
+    <h4><a name="test-config-wincvs" />Configuring WinCVS to use SSH</h4>
+    <p>If you are running Windows NT or 2000 you will need to set up <a href="#key-access">key based access</a> before attempting this section.</p>
+    <ul>
+      <li>In WinCVS select <code>Create</code> from the main menu</li>
+      <li>Select <code>Checkout Module</code> from the <code>Create</code> menu</li>
+      <li>Enter the module <code>myproject</code></li>
+      <li>Click <code>OK</code></li>
+      <li>A window will come up in the background (you will have to switch to it) allowing you to communicate with the SSH program
+        <ul>
+          <li>If you have never connected to <code>cvshost.mydomain.com</code> using this SSH program then it will tell you that it does not recognize the public key from <code>cvshost.mydomain.com</code> and ask if you want to accept it. Type <code>yes</code>. (If you get this message repeatedly then you have likely not set your <a href="#set-home">home directory</a> correctly.)</li>
+          <li>If you have not set up <a href="#key-access">key based access</a> you will then be prompted for you password on <code>cvshost.mydomain.com</code>. Type in your pass and press <code>Enter</code>.</li>
+        </ul>
+      </li>
+      <li>If you are running Windows 98, once the transfer is complete the connection to the server will not close. You can bring up the window where you were asked for your password and hit Ctrl-C and it will close the connection.</li>
+    </ul>
+    <p>The module should now be checked out to you. You can make changes to the files and right click on them and select <code>Commit Selection</code> and have your changes committed. For more extensive information on the use of CVS see <a href="http://www.cvshome.org">http://www.cvshome.org</a> and <a href="http://www.wincvs.org">http://www.wincvs.org</a>.</p>
+
+    <hr />
+    <pre>    Copyright (c) 2001 <a href="mailto:will@himinbi.org">Will Holcomb</a>
+     Permission is granted to copy, distribute and/or modify this document
+     under the terms of the <a href="http://www.fsf.org/copyleft/fdl.html">GNU Free Documentation License</a>, Version 1.1
+     or any later version published by the Free Software Foundation.</pre>
+    <hr />
+    <div style="text-align: center;">
+      <a href="http://www.w3.org/Style/CSS/"><img src="/images/valid_css.png" alt="Made with CSS"/></a>
+      <a href="http://www.apache.org/"><img src="/images/apache_logo.png" alt="Apache Powered"/></a>
+      <a href="http://www.slashdot.org/"><img src="/images/linux_inside.png" alt="Linux Inside"/></a>
+      <a href="http://www.w3.org/TR/xhtml1/"><img src="/images/xhtml_validated.png" alt="Valid XHTML"/></a>
+      <a href="http://burnallgifs.org/"><img src="/images/burn_all_gifs.png" alt="Burn All Gifs"/></a>
+    </div>
+  </body>
+</html>

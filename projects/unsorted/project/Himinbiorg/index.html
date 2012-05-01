@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Will Holcomb</title>
+    <link rel="stylesheet" href=".../lib/JQuery/jCarousel/jcarousel.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href=".../lib/JQuery/jCarousel/skins/tango/skin.css" />
+    <link rel="stylesheet" href="himinbiorg.css" type="text/css" />
+    <!--
+    <link rel="shortcut icon" href="http://odin.himinbi.org/gallery/main.php?g2_view=core.DownloadItem&amp;g2_itemId=8950" />
+    -->
+    <style type="text/css">
+      .jcarousel-list li, .jcarousel-item { width: 125px !important; }
+      .jcarousel-item, .jcarousel-clip-horizontal { height: 125px !important; }
+      .jcarousel-prev-horizontal, .jcarousel-next-horizontal { top: 66px !important; }
+      .jcarousel-container-horizontal, .jcarousel-clip-horizontal { width: 540px !important; }
+      #display { position: relative; }
+      #display > div { position: absolute; }
+      .title { font-size: 15pt; margin-bottom: .5em; }
+    </style>
+    <!--[if lt IE 7]>
+    <style type="text/css">
+    </style>
+    <![endif]-->
+    <script type="text/javascript" src=".../lib/JQuery/1.3.2/compressed/js"></script>
+    <script type="text/javascript" src=".../lib/JQuery/jCarousel/compressed/js"></script>
+    <!--<script type="text/javascript" src=".../lib/JQuery/jCarousel/lib/jquery.jcarousel.js"></script>-->
+    <script type="text/javascript" src=".../lib/JQuery/cookie/js"></script>
+    <script type="text/javascript" src="load_carousel.js"></script>
+    <script type="text/javascript">//<![CDATA[
+      $(document).ready(function() {
+        var carouselList = '#projects ul';
+        prepItems(carouselList, '#display');
+        var index = $.cookie('list_index');
+        if(typeof(index) == "undefined" || index == null || index < 1) { index = 1; }
+        $(carouselList).jcarousel({
+          scroll: 1,
+          wrap: 'circular',
+          initCallback: initCallback,
+          start: index,
+          itemVisibleInCallback: { onBeforeAnimation: itemVisibleInCallback },
+          itemVisibleOutCallback: { onAfterAnimation: itemVisibleOutCallback }
+        });
+      });
+    //]]></script>
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-939849-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+  </head>
+  <body>
+    <div id="head">
+      <div id="name">
+        <h1>Will</h1><h1>Holcomb</h1>
+      </div>
+      <ul>
+        <li><a href="http://will.madstones.com">R&eacute;sum&eacute;</a></li>
+        <li><a href="http://hoenir.himinbi.org">Blog</a></li>
+        <li><a href="Odin">Projects</a></li>
+        <li><a href="mailto:Will%20Holcomb%20%3Cwill@dhappy.org%3E">E-Mail</a></li>
+      </ul>
+    </div>
+
+    <div id="display">
+      <div>
+        <div class="title">About Me</div>
+        <div class="description">
+          <p>I've been slinging code for over ten years now in a variety of languages. After a stint in academia, I'm back in the job market hunting for opportunities to put my skills to work.</p>
+          <p>This site highlights a few of the <a href="Odin/">projects</a> I've worked on over the years.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="projects">
+    <ul class="jcarousel-skin-tango">
+<!--
+      <li style="display: none;">
+        <div class="title head">Title</div>
+        <div class="time head">Date</div>
+        <div class="status head">% Done</div>
+        <div class="description head">Description</div>
+      </li>
+-->
+      <li>
+        <div class="image">
+          <a href="Odin/classes/hon402/"><img src="projects/sliding_rails.png" alt="Sliding Rails" /></a>
+        </div>
+        <div class="title"><a href="Odin/classes/hon402/">Sliding Rails Paradox</a></div>
+        <div class="time">2000</div>
+        <div class="description">
+          <p>According to relativity, as objects travel near the speed of light, they shrink. This leads to some strange situations since relativity also says that which object is moving (i.e. shrinking) depends on the observer.</p>
+          <p>This is an explanation of the sliding rails paradox I did for a spacetime class.</p>
+          <p>Tech: <acronym title="eXtensible Hypertext Markup Language">XHTML</acronym>, <acronym title="Math Markup Language">MathML</acronym>, <acronym title="Scalable Vector Graphics">SVG</acronym></p>
+        </div>
+      </li>
+      <li>
+        <div class="image">
+          <a href="Odin/alpha_link_hover/"><img src="projects/alpha_hover.png" alt="Alpha Hover Links" /></a>
+        </div>
+        <div class="title"><a href="Odin/alpha_link_hover/">Alpha Link Hover</a></div>
+        <div class="time">2007</div>
+        <div class="description">
+          <p>For one of their sites, <acronym title="Marijuana Policy Project">MPP</acronym> wanted sidebar links which colored the background when the cursor passed over them.</p>
+          <p>This is a discussion of different methods for producing the effect without requiring multiple versions of the background image.</p>
+          <p>Tech: <acronym title="Hypertext Markup Language">HTML</acronym>, <acronym title="Cascading Stylesheets">CSS</acronym>, <acronym title="Internet Explorer">IE</acronym> Behaviors</p>
+        </div>
+      </li>
+      <li>
+        <div class="image">
+          <a href="Odin/bingo_board/"><img src="projects/bingo.png" alt="Bingo" /></a>
+        </div>
+        <div class="title"><a href="Odin/bingo_board/">Bingo Board</a></div>
+        <div class="time">2005</div>
+        <div class="description">
+          <p>While teaching English in Mauritania, we would sometimes play bingo to help the students with their number recognition.</p>
+          <p>This is a program that generates random bingo boards with a few configurable parameters.</p>
+          <p>Tech: <acronym title="Hypertext Markup Language">HTML</acronym>, <acronym title="Cascading Stylesheets">CSS</acronym>, PHP</p>
+        </div>
+      </li>
+      <li>
+        <div class="image">
+          <a href="Odin/covers/"><img src="projects/cover.png" alt="Debian Label" /></a>
+        </div>
+        <div class="title"><a href="Odin/covers/">Debian CD Label</a></div>
+        <div class="time">1999</div>
+        <div class="description">
+          <p>While on co-op I gave out some Debian disks to my local <acronym title="Linux Users Group">LUG</acronym>. The label that I made ended up in the <acronym title="Frequently Asked Questions">FAQ</acronym> for other people to use.</p>
+          <p>This is a dynamically generated version of that image to be easily updatable as new versions come out.</p>
+          <p>Tech: <acronym title="Scalable Vector Graphics">SVG</acronym>, Javascript, PHP</p>
+        </div>
+      </li>
+      <li>
+        <div class="image">
+          <a href="Odin/boynton.mpp.org/"><img src="projects/beach.png" alt="MPP Party" /></a>
+        </div>
+        <div class="title"><a href="Odin/boynton.mpp.org/">Boynton Beach Party</a></div>
+        <div class="time">2007</div>
+        <div class="description">
+          <p>Working for the Marijuana Policy Project was one of the more rigorous jobs I've had. Custom campaign sites needed to be developed every couple weeks, frequently under hard deadlines that coordinated with other media events.</p>
+          <p>This is one of the simpler pages which is an invitation to a beach party.</p>
+          <p>Tech: <acronym title="Hypertext Markup Language">HTML</acronym>, <acronym title="Cascading Stylesheets">CSS</acronym></p>
+        </div>
+      </li>
+      <li>
+        <div class="image">
+          <a href="Odin/us_map/"><img src="projects/map.png" alt="US Map" /></a>
+        </div>
+        <div class="title"><a href="Odin/us_map/">US Map</a></div>
+        <div class="time">2007</div>
+        <div class="description">
+          <p><acronym title="Marijuana Policy Project">MPP</acronym> needed a state-by-state map for their campaign sites.</p>
+          <p>This is a set of scripts which generates an imagemap by rasterizing a <acronym title="Scalable Vector Graphics">SVG</acronym> map.</p>
+          <p>Tech: <acronym title="Scalable Vector Graphics">SVG</acronym>, Javascript, Python</p>
+        </div>
+      </li>
+      <li>
+        <div class="image">
+          <a href="Odin/moneymeter/"><img src="projects/money_meter.png" alt="Money Meter"/></a>
+        </div>
+        <div class="title"><a href="Odin/moneymeter/">Money Thermometer</a></div>
+        <div class="time">2007</div>
+        <div class="description">
+          <p>Another bit of <acronym title="Dynamic HTML">DHTML</acronym> for <acronym title="Marijuana Policy Project">MPP</acronym>, this is a method for producing easily updatable fund raising thermometers.</p>
+          <p>Tech: <acronym title="Hypertext Markup Language">HTML</acronym>, <acronym title="Cascading Stylesheets">CSS</acronym></p>
+        </div>
+      </li>
+      <li>
+        <div class="image">
+          <a href="Odin/idf_to_item:item/"><img src="projects/tf_idf.png" alt="item:item similarity"/></a>
+        </div>
+        <div class="title"><a href="Odin/idf_to_item:item/">Item:Item Similarity</a></div>
+        <div class="time">2008</div>
+        <div class="description">
+          <p>Collaborative filtering is the recommendation method pioneered by Amazon which maps user preferences to a n-dimensional vector for producing recommendations.</p>
+          <p>This is an explanation of the math and program structure I used to implement a collaborative filter efficiently on Sun's Caroline grid.</p>
+          <p>Tech: Java, JINI</p>
+        </div>
+      </li>
+      <li>
+        <div class="image">
+          <a href="Odin/fortune/"><img src="projects/fortune.png" alt="REST Fortune"/></a>
+        </div>
+        <div class="title"><a href="Odin/fortune/"><acronym title="Representational State Transfer">REST</acronym> Fortune</a></div>
+        <div class="time">2006</div>
+        <div class="description">
+          <p>The fortune program is a UNIX program for displaying random quotes that dates back to the '70s.</p>
+          <p>To practice creating and accessing <acronym title="Representational State Transfer">REST</acronym> services, I wrote this program to load fortunes in a page using <acronym title="Asynchronous JavaScript + XML">AJAX</acronym>.</p>
+          <p>Tech: Javascript, <acronym title="eXtensible Markup Language">XML</acronym>, <acronym title="Representational State Transfer">REST</acronym></p>
+        </div>
+      </li>
+      <li>
+        <div class="image">
+          <a href="Odin/set_trainer/"><img src="projects/set.png" alt="Set Trainer"/></a>
+        </div>
+        <div class="title"><a href="Odin/set_trainer/">Set Trainer</a></div>
+        <div class="time">2004</div>
+        <div class="description">
+          <p>I spent much of my time in Peace Corps getting beaten playing Set. This is a program I wrote with what proved to be the naive hope of improving my game.</p>
+          <p>Tech: <acronym title="Scalable Vector Graphics">SVG</acronym>, <acronym title="Cascading Stylesheets">CSS</acronym>, Javascript</p>
+        </div>
+      </li>
+    </ul>
+    </div>
+
+   </body>
+</html>

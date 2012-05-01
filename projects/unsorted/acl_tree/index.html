@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <link rel="stylesheet" href="../styles/main.css" type="text/css" />
+    <title>Access Control Lists in Trees</title>
+    <style type="text/css">
+      code {
+        /*white-space: pre;*/
+        font-family: sans-serif;
+        font-size: 12pt;
+      }
+      pre code {
+        font-family: fixed;
+        font-size: 11pt;
+      }
+      table {
+        border-collapse: collapse;
+        margin: auto;
+      }
+      th, td {
+        border: 2px solid;
+        width: 25%;
+        padding-left: 1em;
+        padding-right: 1em;
+      }
+      .object {
+        text-align: center;
+      }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Trees with Access Controls</h1>
+
+    <h2>Why?</h2>
+    <p>I have a website I'm working on to help <a href="http://www.pcvs.org"><acronym title="Peace Corps Volunteer">PCV</acronym>s</a> keep in touch. The project originates out of a <acronym title="eXtensible StyLesheeTs">XSLT</acronym> <a href="http://mr.pcvs.org/roster/">project</a> I developed to keep track of everyone's name, hometown and whatnot. The project was really useful and we are the only country in West Africa where volunteers can quickly look up the contact information of their compatriots.</p>
+    <p>I'm headed home and I have neither the time nor the intrest to keep updating the <acronym title="eXtensible Markup Language">XML</acronym> sources for the <a href="http://mr.pcvs.org/roster/">roster</a>. I would also like to make some of the things that I have developed available to volunteers in other countries.</p>
+
+    <h3>The Problems</h3>
+    <p>The main issue at this point is privacy. There are a couple of issues:</p>
+    <ul>
+      <li>Making your site assignment public is grounds for getting kicked out of the Peace Corps. (It is a security concern: the terrorists will surely come and end you if they but could find out where you were.) People have had website infractions cited in their administrative separations before<sup>[<a href="http://net.jasonpearce.com/peacecorps/">1</a>,<a href="http://www.americanidle.org">2</a>]</sup>.</li>
+      <li>Many people do not like having their email publicly accessible on the web as it can increase unwanted mail.</li>
+      <li>The pieces of information that people consider private varies. One volunteer did not want people to know his birthday. Another maintains two websites: one for his family and another, less formal one, for his personal enjoyment.</li>
+      <li>This information will not be maintained entierly by individuals. Rule #1 of organizing a large group of people is that a certain number of them are going to be lazy. This is particularly true in an environment where some people access the internet once every three weeks. There will have to be some administrators who add and update information for their region or the whole country.</li>
+    </ul>
+
+    <h3>The Solution</h3>
+
+    <p>I would like to give people control over the privacy of their information. Things that they would like to make public, let them make public. Things that they only want people in their country to know, let them do that as well.</p>
+    <p>The most logical way to do this would be a system of <acronym title="Access Control List">ACL</acronym>s. Let them group pieces of information and specify how public it is. The issue with ACLs is I could make a huge list of ACLs for every piece of information, but that would be a pain to manage and would take too much time to check.</p>
+    <p>ACLs are seen most frequently in filesystems. <acronym title="New Technology File System">NTFS</acronym> has them as do certain versions of <acronym title="third generation extended filesystem">ext3</acronym>. I attempted an earlier version of this same project attempting to use the ACLs already present in <acronym title="Lightweight Directory Protocol">LDAP</acronym>, but the implementation in <a href="http://www.openldap.org">OpenLDAP</a> proved too difficult to work with as well as placing to great a limit on where I could deploy the program.</p>
+
+    <h3>Hierarchies and Technology</h3>
+
+    <p>Much of this information is hierarchical. Concepts go from the broad to the specific. Consider a theoretical structure for Peace Corps information: <em>(which might not be optimal, but just for consideration)</em></p>
+    <ul>
+      <li>People<ul>
+        <li>Countries<ul>
+          <li>Country<ul>
+            <li>Name (<em>Mauritania</em>)</li>
+            <li>Staff<ul>
+              <li>Person<ul>
+                <li>First Name (<em>Obidiah</em>)</li>
+                <li>Last Name (<em>Shaw</em>)</li>
+                <li>Known As (<em>Obie</em>)</li>
+                <li>Position (<em>Country Director</em>)</li>
+              </ul></li>
+            </ul></li>
+            <li>Volunteers<ul>
+              <li>Person<ul>
+                <li>First Name (<em>William</em>)</li>
+                <li>Last Name (<em>Holcomb</em>)</li>
+                <li>Known As (<em>W</em>)</li>
+                <li>Sector (<em><acronym title="Information and Communications Technologies">ICT</acronym></em>)</li>
+                <li>User ID (<em>wholcomb</em>)</li>
+                <li>Status (<em>active</em>)</li>
+              </ul></li>
+              <li>Person<ul>
+                <li>First Name (<em>Miriam</em>)</li>
+                <li>Last Name (<em>Edwards</em>)</li>
+                <li>Known As (<em>Pussycat</em>)</li>
+                <li>Sector (<em><acronym title="Small Enterprise Development">SED</acronym></em>)</li>
+                <li>User ID (<em>mae</em>)</li>
+                <li>Status (<em>active</em>)</li>
+              </ul></li>
+            </ul></li>
+          </ul></li>
+        </ul></li>
+      </ul></li>
+    </ul>
+
+    <p>This allows the organization and grouping of pieces of data in a sensical manner.</p>
+    
+    <h2>Composite Trees</h2>
+
+    <p>So, I want to stick things in a tree and I want to give people control. One thing that becomes slightly more complex however is I want for these trees to be extremely flexible. If volunteer one wants the whole world to know their name, one wants to their middle name be private and another wants it all to be secret; I want to give them that freedom.</p>
+    <p>Given that the ACLs are going to be a part of the tree, this means that, for the name for example, either the whole name will be in a single node and I will do special checking on the node, or, more simply, each component of the name has its own node and ACLs operate at the node level.</p>
+    <p>This is how the current XML based implementation works which uses the <a href="rn:oasis:names:tc:ciq:xsdschema:xNL:2.0"><acronym title="extensible Naming Language">xNL</acronym> schema</a>. For example, in the XML sources my name is stored as:</p>
+    <pre><code>&lt;xnl:PersonName xmlns:xnl="rn:oasis:names:tc:ciq:xsdschema:xNL:2.0"&gt;
+  &lt;xnl:FirstName&gt;William&lt;/xnl:FirstName&gt;
+  &lt;xnl:MiddleName&gt;James&lt;/xnl:MiddleName&gt;
+  &lt;xnl:LastName&gt;Holcomb&lt;/xnl:LastName&gt;
+  &lt;xnl:KnownAs&gt;Will&lt;/xnl:KnownAs&gt;
+&lt;/xnl:PersonName&gt;</code></pre>
+    <p>Another advantage to putting each data item it its own node it is solves problems with quantities. For instance if the name is in a single table with the columns <code>first</code>, <code>middle</code> and <code>last</code>. What about people with no middle name? Let the column be null. Fine. What about people with two middle names? Put the names in a space searated list? Ok, fair enough, now add a nickname column. Now try to put in someone with two different nicknames. I can't just put them in there separated by spaces. I wouldn't be able to tell which words where a part of which name. I could add a special character like a newline to separate names. Now let's say that Bob has two nicknames: "Flash" and "Camel Fucker." The first he is fine with going in his contact info, but the second he only wants available to his friends. The combined field now fails whereas if the tree simply had multiple <code>MiddleName</code> nodes none of the problems appear in the first place.</p>
+    <p>XML preserves ordering of the children of a node, so the middle names of a person can be put in correct order and that will be maintained.</p>
+
+    <h2>Access Control</h2>
+    <p>So I now want to specify access to the tree. What sorts of access should be controllable?</p>
+    <ul>
+      <li>Data Nodes<ul>
+        <li><code>Read</code>:</li>
+        <li><code>Edit</code>:</li>
+        <li><code>Delete</code>:</li>
+      </ul></li>
+      <li>Grouping Nodes:<ul>
+        <li><code>Traversal</code>: can a user access the children of this node?</li>
+        <li><code>Browse</code>: can a user list the accessible children of this node? (Children that a user cannot read are invisible. This is how <a href="http://httpd.apache.org">Apache</a> does its directory indexes and it helps protect privacy. If my node had a <code>BoyfriendName</code> child, you don't need to know the fellow's name to figure out I'm gay.)</li>
+        <li><code>List</code>: can a user list all the children of this node? (implies <code>Browse</code>)</li>
+        <li><code>Edit</code>: can a user change the properties of this node?</li>
+        <li><code>Add</code>: can a user add children to this node?</li>
+        <li><code>Delete</code>: can a user delete children from this node?</li>
+      </ul></li>
+    </ul>
+    
+    <p>The other aspect is how to specify the groups of users that a permission applies to. What are the sorts of creiteria I might like?</p>
+    <ul>
+      <li>No one but Jane can read my birthday</li>
+      <li>Anyone who served in my country or any currently active Peace Corps volunteer can see my site site assignemnt</li>
+      <li>Anyone in the Peace Corps, either volunteers or staff, can see my email adddress</li>
+      <li>The whole world can see my first name</li>
+      <li>Any authenticated users can see my last name</li>
+      <li>Only my group of friends can see the address of my <a href="http://www.livejournal.com">LiveJournal</a></li>
+    </ul>
+
+    <p>The most common metaphor for managing permissions is to apply them either to specific users or static groups of users. That means either I have to write the program to automatically maintain lots of groups or I have to create an interface for users to do it. If I make it so users are responsible for it this goes against rule #1 as almost certainly there will be things that don't get done in a timely manner.</p>
+    <p>A much better idea is dynamic groups. This is used in certain LDAP servers where instead of having a group specified by a list, it is specified by a query. This is significantly more computationally expensive, but it increases flexibility by orders of magnitude.</p>
+    <p>So far as queries, the users are already going to be in a tree. I'll just put their username in there along with the other info rather than having a separate table for that information. So I need a query for selecting nodes from a tree. This query language already exists with several implmentations: <a href="http://www.w3.org/TR/xpath">XPath</a>.</p>
+    <p>First some conventions&hellip; The basic layout of the site tree would be:</p>
+
+    <p>I also need to be able to reference different nodes. <em>$self</em> is my user node, <em>$guest</em> is the person requesting access. Also, XPath is made to select <acronym title="eXtensible Markup Language">XML</acronym> nodes whose names may not contain spaces, so node names here will be converted by going to lowercase and putting underscores in the place of spaces.</p>
+    <p>The default permissions on the root which are inherited by all the children until they are overridden are: <code>Read: *, Write: /groups/group[@name = "Administrators"]/people</code>.</p>
+    <ul>
+      <li><code>Read: $guest[@user_id = "jane"]</code>: No one but Jane can read my birthday</li>
+      <li><code>Read: $guest/../local-name() = "volunteers" and ($self/../ or $guest[@status = "active"])</code>: Anyone who served in my country or any currently active Peace Corps volunteer can see my site assignment</li>
+      <li><code>Read: $self/../../*/*</code>: Anyone in the Peace Corps in my country, either volunteers or staff, can see my email adddress</li>
+      <li><code>Read: *</code>: The whole world can see my first name</li>
+      <li><code>Read: $guest[@user_id]</code>: Any authenticated users can see my last name</li>
+      <li><code>Read: $self/groups/group[@name = "Friends"]/people</code>: Only my group of friends can see the address of my <a href="http://www.livejournal.com">LiveJournal</a></li>
+    </ul>
+
+    <p>There are a couple different types of results:</p>
+    <ul>
+      <li><code>Node Sets</code>: <code>$guest[@user_id = "jane"]</code> or <code>$self/../</code>: these are queries which produce <code>node sets</code>. (The first produces a node set containing a single node.) These are considered successful matches if they contain the <code>$guest</code> node.</li>
+      <li><code>Booleans</code>: <code>$guest/../local-name() = "volunteers"</code>: this produces a boolean value, <code>true</code> or <code>false</code>. The criteia for its success should be apparent.</li>
+    </ul>
+
+    <p>The usage of attribute selectors is non-normative in these pathes. In normal XML a node has attributes associated with it. The nodes in this tree don't, so the normal attribute syntax is a selector for a child data node. For example <code>person[@first_name = "Will"]/user_id</code> is the same as <code>person/first_name[value() = "Will"]/../user_id</code>.</p>
+
+    <h3>Cascading</h3>
+    
+    <p>I want for access control to be inherited by children. The problem is I don't want all things to be inherited equally. For example, my two root permissions: <code>Read: *</code> and <code>Write: /groups/group[@name = "Administrators"]/people</code>. The read permission for everyone I want to be overridden by users permissions. The write permission for administrators however I don't want for users to be able to revoke.</p>
+    <p>The simplest mechanism I can come up with is to give rules a priority:</p>
+    <ol style="list-style-type: upper-roman">
+      <li><code>Authoritative</code>: Administrator assigned; these rules take precedence over any others</li>
+      <li><code>Important</code>: User assignable rules that are should be considered a priority. For example if I have a group of close friends I want to give read access to all my information regardless of the premissions I set</li>
+      <li><code>Normal</code>: The default priority level</li>
+      <li><code>Default</code>: <em>Not</em> the default level, rather rules that are applied as a default if no other pertinent rules could be found</li>
+    </ol>
+
+    <p>So my read rule would be a <code>default</code> and the write rule would be <code>authoritative</code>. My select would simply be to order the rules first by priority and second by their position on the way to the root. Then I just go through rules until I hit one whose selector matches.</p>
+    <p>One other property that rules will need is whether they are to <code>allow</code> or <code>deny</code> the matched permission.</p>
+
+    <h2>Trees</h2>
+
+    <p>So, I would like to do the same basic tree, but put it into a relational database. Take this org chart for example:</p>
+    <div class="object">
+      <object data="org_chart.svg" type="image/svg+xml" width="400" height="400">
+        <object data="org_chart.png" type="image/png">
+          <p>Your browser doesn't seem to handle the &lt;object&gt; tag</p>
+        </object>
+      </object>
+    </div>
+    
+    <h3>Basic Database</h3>
+
+    <p>Say I have all the employees in a database: (<em>These tests were run on <a href="http://mysql.org">MySQL</a>.</em>)</p>
+    <pre><code>create table employees (id int auto_increment primary key, name text);
+insert into employees values(DEFAULT, "Amy"),(DEFAULT, "Ben");
+insert into employees values(DEFAULT, "Bob"),(DEFAULT, "Barb");
+insert into employees values(DEFAULT, "Carl"),(DEFAULT, "Carol");
+insert into employees values(DEFAULT, "Dan");
+select * from employees;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>id</th><th>name</th></tr>
+      <tr><td>1</td><td>Amy</td></tr>
+      <tr><td>2</td><td>Ben</td></tr>
+      <tr><td>3</td><td>Bob</td></tr>
+      <tr><td>4</td><td>Barb</td></tr>
+      <tr><td>5</td><td>Carl</td></tr>
+      <tr><td>6</td><td>Carol</td></tr>
+      <tr><td>7</td><td>Dan</td></tr>
+    </table>
+
+    <h3>Adjacency Matrix</h3>
+    <p>The most basic way of doing a tree in a relational database is an adjacency matrix. For our example it would be:</p>
+    <pre><code>create table adjacency (parent int not null references employees(id),
+                        child int not null references employees(id));
+insert into adjacency values(1, 2),(1, 3),(1, 4);
+insert into adjacency values(3, 5),(3, 6),(6, 7);
+select * from adjacency;</code></pre>
+    <table>
+      <tr><th>parent</th><th>child</th></tr>
+      <tr><td>1</td><td>2</td></tr>
+      <tr><td>1</td><td>3</td></tr>
+      <tr><td>1</td><td>4</td></tr>
+      <tr><td>3</td><td>5</td></tr>
+      <tr><td>3</td><td>6</td></tr>
+      <tr><td>6</td><td>7</td></tr>
+    </table>
+
+    <h4>The Root</h4>
+    <p>I can now iterate my way through the table. To get the root of the table is is:</p>
+    <pre><code>select employees.*
+  from employees left join adjacency on employees.id = adjacency.child
+  where adjacency.child is null;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>id</th><th>name</th></tr>
+      <tr><td>1</td><td>Amy</td></tr>
+    </table>
+
+    <h4>Children</h4>
+    <p>To get the children just take the employee id we want the children of:</p>
+    <pre><code>select employees.*
+  from employees left join adjacency on employees.id = adjacency.child
+  where adjacency.parent = <b><acronym title="Amy">1</acronym></b>;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>id</th><th>name</th></tr>
+      <tr><td>2</td><td>Ben</td></tr>
+      <tr><td>3</td><td>Bob</td></tr>
+      <tr><td>4</td><td>Barb</td></tr>
+    </table>
+    
+    <h4>Parents</h4>
+    <p>To go the other direction is pretty much the same thing:</p>
+    <pre><code>select employees.*
+  from employees left join adjacency on employees.id = adjacency.parent
+  where adjacency.child = <b><acronym title="Ben">2</acronym></b>;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>id</th><th>name</th></tr>
+      <tr><td>1</td><td>Amy</td></tr>
+    </table>
+    
+    <h4>Limitations</h4>
+    <p>This representation has the advantage of being easy to conceptualize and update. It has the disadvantage of requiring many repeated queries to walk the tree if you are not starting at the root. (Normally this works best for applications where you return the entire tree and construct it in memory before displaying it.)</p>
+
+    <a name="nestedsets"></a>
+    <h2>Nested Sets</h2>
+    <p>A representation that is a bit more powerful at the cost of being more complex is called "nested sets" and comes from <a href="http://www.celko.com">Joe Celko</a>. In this represenation two numbers are associated with a node. To get the numbers you do a depth first traversal with a counter that is incremented at every step. The two numbers are the count when the node was entered and exited:</p>
+
+    <div class="object">
+      <object data="org_chart.svg?traversed" type="image/svg+xml" width="400" height="400">
+        <object data="org_chart_traversed.png" type="image/png">
+          <p>Your browser doesn't seem to handle the &lt;object&gt; tag</p>
+        </object>
+      </object>
+    </div>
+
+    <p>So to create this representation it would be:</p>
+    <pre><code>create table traversal (element_id int not null references employees(id),
+                        enter int unique, exit int unique);
+insert into traversal values(1, 1, 14),(2, 2, 3),(3, 4, 11),(4, 12, 13);
+insert into traversal values(5, 5, 6),(6, 7, 10),(7, 8, 9);
+select * from traversal;</code></pre>
+    <table>
+      <tr><th>element_id</th><th>enter</th><th>exit</th></tr>
+      <tr><td>1</td><td>1</td><td>14</td></tr>
+      <tr><td>2</td><td>2</td><td>3</td></tr>
+      <tr><td>3</td><td>3</td><td>11</td></tr>
+      <tr><td>4</td><td>4</td><td>13</td></tr>
+      <tr><td>5</td><td>5</td><td>6</td></tr>
+      <tr><td>6</td><td>7</td><td>10</td></tr>
+      <tr><td>7</td><td>8</td><td>9</td></tr>
+    </table>
+    <p>Doing the queries that are possible with the adjacency matrix are possible with this representation:</p>
+
+    <h4>The Root</h4>
+    <p>The root is just the element with the minimum enter count:</p>
+    <pre><code>select employees.* from employees join traversal on id = element_id
+  order by enter limit 1;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>id</th><th>name</th></tr>
+      <tr><td>1</td><td>Amy</td></tr>
+    </table>
+
+    <h4>Direct Children</h4>
+    <p>The strength of this algorithm is in getting branches of a tree. Getting the direct children is a little complicated:</p>
+    <pre><code>select employees.*
+  from traversal as t1, traversal as t2,
+       employees join traversal as t3 on id = t3.element_id,
+  where t3.enter between t1.enter and t1.exit
+  and t1.enter between t2.enter and t2.exit
+  and t2.element_id = <b><acronym title="Bob">3</acronym></b> group by id having count(*) = 2;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>id</th><th>name</th></tr>
+      <tr><td>5</td><td>Carl</td></tr>
+      <tr><td>6</td><td>Carol</td></tr>
+    </table>
+    <p>This query seems a bit complicated, well, this query is a bit complicated. It is actually a modified form of another interesting query:</p>
+
+    <a name="level"></a>
+    <h4>Levels</h4>
+    <p>This representation lets me easily see the tiers in the tree with this query:</p>
+    <pre><code>select employees.*, count(*) as level
+  from traversal as t1, employees join traversal as t2 on id = t2.element_id
+  where t2.enter between t1.enter and t1.exit group by id;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>id</th><th>name</th><th>level</th></tr>
+      <tr><td>1</td><td>Amy</td><td>1</td></tr>
+      <tr><td>2</td><td>Ben</td><td>2</td></tr>
+      <tr><td>3</td><td>Bob</td><td>2</td></tr>
+      <tr><td>4</td><td>Barb</td><td>2</td></tr>
+      <tr><td>5</td><td>Carl</td><td>3</td></tr>
+      <tr><td>6</td><td>Carol</td><td>3</td></tr>
+      <tr><td>7</td><td>Dan</td><td>4</td></tr>
+    </table>
+
+    <h4>Branches</h4>
+    <p>The real point to this representation is getting branches. For example to get all the people who work under Bob:</p>
+    <pre><code>select employees.*
+  from traversal as t1, employees join traversal as t2 on id = t2.element_id
+  where t2.enter between t1.enter and t1.exit and t1.element_id = <b><acronym title="Bob">3</acronym></b>;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>id</th><th>name</th></tr>
+      <tr><td>3</td><td>Bob</td></tr>
+      <tr><td>5</td><td>Carl</td></tr>
+      <tr><td>6</td><td>Carol</td></tr>
+      <tr><td>7</td><td>Dan</td></tr>
+    </table>
+    <p>If I have a tree where I will frequently be working from internal nodes and will be getting branches, this can significantly reduce the number of queries I do.</p>
+    
+    <h4>Direct Parent</h4>
+    <p>Getting the direct parent is easier than getting the children:</p>
+    <pre><code>select employees.*
+  from traversal as t1, employees join traversal as t2 on id = t2.element_id
+  where t2.enter &lt; t1.enter and t2.exit &gt; t1.exit and t1.element_id = <b><acronym title="Carl">5</acronym></b>
+  order by t2.enter desc limit 1;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>id</th><th>name</th></tr>
+      <tr><td>3</td><td>Bob</td></tr>
+    </table>
+
+    <h4>Path to Root</h4>
+    <p>In the theme of branches, getting the path to the root simply a matter of taking the limit off the previous statement:</p>
+    <pre><code>select employees.*
+  from traversal as t1, employees join traversal as t2 on id = t2.element_id
+  where t2.enter &lt;= t1.enter and t2.exit &gt;= t1.exit and t1.element_id = <b><acronym title="Carl">5</acronym></b>
+  order by t2.enter;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>id</th><th>name</th></tr>
+      <tr><td>1</td><td>Amy</td></tr>
+      <tr><td>3</td><td>Bob</td></tr>
+      <tr><td>5</td><td>Carl</td></tr>
+    </table>
+
+    <h4>Child Count</h4>
+    <p>One final interesting query is one which tells you how many children a node has. This can be done with a reversal of the query for <a href="#level">level</a>.</p>
+    <pre><code>select employees.*, count(*) - 1 as "child count"
+  from traversal as t1, employees join traversal as t2 on id = t2.element_id
+  where t1.enter between t2.enter and t2.exit group by id;</code></pre>
+  <p>If the indexes have been properly maintained they may also be used to get the child count. This eliminates the join and should be about as fast as possible:</p>
+    <pre><code>select employees.*, cast((exit - enter) / 2 as unsigned) as "child count"
+  from employees join traversal on id = element_id;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>id</th><th>name</th><th>child count</th></tr>
+      <tr><td>1</td><td>Amy</td><td>6</td></tr>
+      <tr><td>2</td><td>Ben</td><td>0</td></tr>
+      <tr><td>3</td><td>Bob</td><td>3</td></tr>
+      <tr><td>4</td><td>Barb</td><td>0</td></tr>
+      <tr><td>5</td><td>Carl</td><td>0</td></tr>
+      <tr><td>6</td><td>Carol</td><td>1</td></tr>
+      <tr><td>7</td><td>Dan</td><td>0</td></tr>
+    </table>
+
+    <h3>Database Representation</h3>
+    <p>How does this look in the database however? I'm pretty sure it should simply be a table for each leaf node that contains data and then some nodes which are only there for grouping. For example, my roommate and myself as an example:</p>
+    <ul>
+      <li>People<ul>
+        <li>Name<ul>
+          <li>First (<em>William</em>)</li>
+          <li>Middle (<em>James</em>)</li>
+          <li>Last (<em>Holcomb</em>)</li>
+        </ul></li>
+        <li>Name<ul>
+          <li>First (<em>Miriam</em>)</li>
+          <li>Middle (<em>Annette</em>)</li>
+          <li>Last (<em>Edwards</em>)</li>
+        </ul></li>
+      </ul></li>
+    </ul>
+    <pre><code>create table traversal (id int auto_increment primary key, name text,
+                        enter int unique, exit int unique);
+insert into traversal values(DEFAULT, "People", 1, 18);
+insert into traversal values(DEFAULT, "Name", 2, 9),(DEFAULT, "Name", 10, 17);
+create table first (id int primary key references traversal(id), name text);
+insert into traversal values(DEFAULT, "First", 3, 4);
+insert into first values (LAST_INSERT_ID(), "William");
+insert into traversal values(DEFAULT, "First", 11, 12);
+insert into first values (LAST_INSERT_ID(), "Miriam");
+create table middle (id int primary key references traversal(id), name text);
+insert into traversal values(DEFAULT, "Middle", 5, 6);
+insert into middle values (LAST_INSERT_ID(), "James");
+insert into traversal values(DEFAULT, "Middle", 13, 14);
+insert into middle values (LAST_INSERT_ID(), "Annette");
+create table last (id int primary key references traversal(id), name text);
+insert into traversal values(DEFAULT, "Last", 7, 8);
+insert into last values (LAST_INSERT_ID(), "Holcomb");
+insert into traversal values(DEFAULT, "Last", 15, 16);
+insert into last values (LAST_INSERT_ID(), "Edwards");
+select first.name as first, middle.name as middle, last.name as last
+  from traversal as t join (first, middle, last)
+       on (first.id = t.id or middle.id = t.id or last.id = t.id)
+  group by first.name, middle.name, last.name;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>first</th><th>middle</th><th>last</th></tr>
+      <tr><td>Miriam</td><td>Annette</td><td>Edwards</td></tr>
+      <tr><td>Miriam</td><td>Annette</td><td>Holcomb</td></tr>
+      <tr><td>Miriam</td><td>James</td><td>Edwards</td></tr>
+      <tr><td>Miriam</td><td>James</td><td>Holcomb</td></tr>
+      <tr><td>William</td><td>Annette</td><td>Edwards</td></tr>
+      <tr><td>William</td><td>Annette</td><td>Holcomb</td></tr>
+      <tr><td>William</td><td>James</td><td>Edwards</td></tr>
+      <tr><td>William</td><td>James</td><td>Holcomb</td></tr>
+    </table>
+    <p>Which is funny, but not especially useful&hellip; &#x263A; The actual select needs to keep the branches separate:</p>
+    <pre><code>select first.name as first, middle.name as middle, last.name as last
+  from traversal as t1 join first using(id),
+       traversal as t2 join middle using(id),
+       traversal as t3 join last on using(id), traversal as t4
+  where t1.enter between t4.enter and t4.exit
+    and t2.enter between t4.enter and t4.exit
+    and t3.enter between t4.enter and t4.exit and t4.id = <acronym title="Name">3</acronym>;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>first</th><th>middle</th><th>last</th></tr>
+      <tr><td>William</td><td>James</td><td>Holcomb</td></tr>
+    </table>
+    <p>That's really a long statement. The construction is very regular and doing it programatiacally is no problem, it cannot be scalable though. That is a four table join just for a simple representation of a name. I may add another couple fields for a name, then for an address there would be another five or six then other info&hellip; I'd easily have a fifty table join which is just absurd.</p>
+    <p>Actually, I'm not sure why I wanted to put each field in its own table. Why not do:</p>
+    <pre><code>create table node_types (id int auto_increment primary key, name text);
+create table traversal
+  (id int auto_increment primary key, type int not null references node_types(id),
+   enter int unique, exit int unique);
+insert into node_types values(DEFAULT, "People");
+insert into traversal values(DEFAULT, LAST_INSERT_ID(), 1, 18);
+insert into node_types values(DEFAULT, "Name");
+insert into traversal values(DEFAULT, LAST_INSERT_ID(), 2, 9),
+                            (DEFAULT, LAST_INSERT_ID(), 10, 17);
+create table strings (id int not null references traversal(id), value text);
+insert into node_types values(DEFAULT, "First Name");
+insert into traversal values(DEFAULT, LAST_INSERT_ID(), 3, 4);
+insert into strings values (LAST_INSERT_ID(), "William");
+insert into traversal values(DEFAULT,
+   (select id from node_types where name = "First Name"), 11, 12);
+insert into strings values (LAST_INSERT_ID(), "Miriam");
+insert into node_types values(DEFAULT, "Middle Name");
+insert into traversal values(DEFAULT, LAST_INSERT_ID(), 5, 6);
+insert into strings values (LAST_INSERT_ID(), "James");
+insert into traversal values(DEFAULT,
+   (select id from node_types where name = "Middle Name"), 13, 14);
+insert into strings values (LAST_INSERT_ID(), "Annette");
+insert into node_types values(DEFAULT, "Last Name");
+insert into traversal values(DEFAULT, LAST_INSERT_ID(), 7, 8);
+insert into strings values (LAST_INSERT_ID(), "Holcomb");
+insert into traversal values(DEFAULT,
+   (select id from node_types where name = "Last Name"), 15, 16);
+insert into strings values (LAST_INSERT_ID(), "Edwards");
+select t1.enter, t1.exit, node_types.name, strings.value
+  from traversal as t1, traversal as t2, node_types, strings
+  where t1.id = strings.id and t1.type = node_types.id
+    and t1.enter between t2.enter and t2.exit and t2.id = 2;</code></pre>
+    <p>Which produces:</p>
+    <table>
+      <tr><th>enter</th><th>exit</th><th>name</th><th>value</th></tr>
+      <tr><td>3</td><td>4</td><td>First Name</td><td>William</td></tr>
+      <tr><td>5</td><td>6</td><td>Middle Name</td><td>James</td></tr>
+      <tr><td>7</td><td>8</td><td>Last Name</td><td>Holcomb</td></tr>
+    </table>
+    <p>That looks pretty good to me. I will need to add additional tables for things like dates and numbers and whatnot, but this limits the profligation of tables to the number of data types.</p>
+    
+    <h3>Implementation: <em>Making It Happen</em></h3>
+
+    <p>Now comes that fatal step that is so often the death of my projects; coding. Not that I can't, just I often get distracted and wander off before finishing. One thing I know I don't feel like doing is an implmentation of <a href="http://www.w3.org/TR/xpath">XPath</a>; it is tedious string parsing bits for the most part and it is a pretty sophistocated language. Conveniently there is an existing <a href="http://www.php.net"><acronym title="Personal Home Pages">PHP</acronym></a> <a href="http://php-xpath.sourceforge.net">implementation</a>. It doesn't use a standard <a href=""><acronym title="Document Object Model">DOM</acronym></a> document (it is a very limited subset with some additions for performance), but it is constructed from a <a href=""><acronym title="Simple API for XML">SAX</acronym></a> parse and I can fake that pretty easily.</p>
+
+    <p>To start off with, I had to take the <a href="XPath.class.orig.phps">original class</a> and <a href="XPath.class.phps">reformat the comments</a>. They were too long for my screen and the wrapping made them pretty much unreadable. I started to reformat the comments for <a href="http://www.doxygen.org">Doxygen</a> and found that other than the initial comment they were already done.</p>
+
+    <p>Ugh, while generating <a href="xpath.orig.php-docs/">the documentation</a>, I realized this:</p>
+    <pre><code>6264  31980 276819 XPath.class.orig.php</code></pre>
+    <p>The file is over 6<acronym title="KiloLines Of Code">kloc</acronym>. That's huge for me. A big project for me is maybe 500 lines. Part of it is because the code is well commented and also because the three classes are all in the same file. The <code>XPathEngine</code> class however is 4300 lines. My brain is simply not big enough to work effectively with that much information at a time.</p>
+    <p>The class structure is also not especially condusive to work. As I mentioned there are three classes:</p>
+    <ol>
+      <li><a href="xpath.orig.php-docs/classXPathBase.html"><code>XPathBase</code></a>: provides utility functions (string parsing, message display, etc.)</li>
+      <li><a href="xpath.orig.php-docs/classXPathEngine.html"><code>XPathEngine</code></a>: handles parsing of the XML document, parsing of the XPath query and searching the tree</li>
+      <li><a href="xpath.orig.php-docs/classXPath.html"><code>XPath</code></a>: allows operations on the XML tree (inserts, deletes, replacements) based on XPath queries</li>
+    </ol>
+    <p>In my opinion the functions of these three classes are fairly distinct, but they are a single inheritance hierarchy: <code>XPathBase</code> &rarr; <code>XPathEngine</code> &rarr; <code>XPath</code>.</p>
+
+    <p>I think that if it is not too hard, I want to shuffle the functionality into:</p>
+    <ul>
+      <li><code>PHPXPathDocument</code>: Abstract class used to access the DOM document intersection used by the <code>XPathEngine</code></li>
+      <li><code>FileDocument</code>: Implementation of <code>PHPXPathDocument</code> from a file, since I will need to test</li>
+      <li><code>DatabaseDocument</code>: Implementation of <code>PHPXPathDocument</code> accessing my database tree</li>
+      <li><code>XPath</code>: An object representing an XPath. I don't know yet the extent this can be compiled to speed repetitions of the same query</li>
+      <li><code>XPathEngine</code>: Utility class taking an <code>XPath</code> and <code>PHPXPathDocument</code> and returning a <code>String</code>, <code>Number</code>, <code>Boolean</code> or <code>NodeSet</code></li>
+      <li><code>NodeSet</code>: The other return values of an <code>XPath</code> query are PHP literal types, but this will be an <code>Object</code> based on the DOM specification</li>
+    </ul>
+  </body>
+</html>

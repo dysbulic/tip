@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Sidebar Rotation</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+    <style type="text/css">
+      html, body { margin: 0; padding: 0; background-color: rgb(255, 241, 232); text-align: center; }
+      h1 { margin-top: 0; }
+      object { display: block; margin: 0 auto 0 auto; border: 1px solid; }
+      #bar { width: 300px; margin: 0 auto 0 auto; padding: 2em .5em 0 .5em; background-color: rgb(120, 114, 208); height: 100%; border: 2px; border-style: none solid none solid; text-align: center; }
+      ul { padding-left: .5em; }
+      p, ul { text-align: justify; margin: 0 .5em .5em .5em; }
+      a, a:visited { color: rgb(34, 31, 85); }
+      a:hover, a:focus { color: rgb(85, 15, 29); }
+      #symbols, #symbols li { padding: 0; margin: 0; list-style-type: none; padding: 0; }
+      h2 { border: 2px solid rgb(98, 101, 120); background-color: rgb(212, 209, 255); }
+      h3 { margin: .5em .5em .25em .5em; }
+    </style>
+    <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
+    <script type="text/javascript">//<![CDATA[
+      var visiblePause = 2000;
+      var url;
+      if(document.getURL) {
+        url = document.getURL();
+      } else if(window.location) {
+        url = window.location.href;
+      }
+      var params = url.substring(url.indexOf("?") + 1).split(/&/);
+      for(var i = 0; i < params.length; i++) {
+        params[i] = params[i].replace(/\+/gi, " ");
+        var equal_index = params[i].indexOf("=");
+        if(equal_index >= 0) {
+          eval(unescape(params[i].substring(0, equal_index)) + "="
+               + unescape(params[i].substring(equal_index + 1)));
+        }
+      }
+    //]]></script>
+    <script type="text/javascript" src="rotate_divs.js"></script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="bar">
+      <h1>Sidebar Rotation</h1>
+      <p><a href="http://www.mpp.org"><acronym title="The Marijuana Policy Project">MPP</acronym></a> wants a sidebar with sections whose content changes periodically. I figure this ought to be pretty since the page is not terribly currently.</p>
+      <p>I have seen other CSS crossfaders at <a href="http://www.brandspankingnew.net/archive/2006/09/javascript_css_crossfader.html">brand spanking new</a> and <a href="http://mikeomatic.net/?p=78">mike-o-matic</a>, but they weren't exactly what I needed. Specifically, the behaviors that I want are:</p>
+      <ul>
+        <li>sensitive to mouse hover
+        <ul>
+          <li>will not change while someone is hovered over the element</li>
+          <li>if someone moves their mouse over while fading out, the fade will reverse</li>
+        </ul>
+        </li>
+      </ul>
+      <p>It annoys me when I see something and want to click on it, but can't because it fades out too quickly.</p>
+      <hr />
+      <p><a href="rotate_divs.js"><code>rotate_divs.js</code></a></p>
+      <hr />
+
+      <h2>Animals</h2>
+      <div id="animals">
+        <div id="penguin">
+          <a href="baby_tux.svg">
+            <object data="baby_tux.svg" type="image/svg+xml" width="150" height="100">
+            </object>
+          </a>
+          <h3><a href="http://en.wikipedia.org/wiki/Penguin">Penguin</a></h3>
+          <p>One of about 40 species of <a href="http://en.wikipedia.org/wiki/Flightless_bird">flightless birds</a>. The 120km journey of the emperor penguin to mate was the subject of a 2005 film: <a href="http://wip.warnerbros.com/marchofthepenguins/">March of the Penguins</a>. Penguins have no external genitalia. Chromosome testing must be done in order to determine a penguin's sex.</p>
+        </div>
+        <div id="lion">
+          <a href="lion.svg">
+            <object data="lion.svg" type="image/svg+xml" width="150" height="100">
+            </object>
+          </a>
+          <h3><a href="http://en.wikipedia.org/wiki/Lion">Lion</a></h3>
+          <p>Second only to the tiger in size, <a href="http://ware.web.infoseek.co.jp/cgi-bin/ff001/1101081521.swf">lions</a> may cross breed with tigers to produce <a href="http://en.wikipedia.org/wiki/Liger">ligers</a> or <a href="http://en.wikipedia.org/wiki/Tigon">tigons</a>.</p>
+        </div>
+        <div id="scorpion">
+          <a href="scorpion.svg">
+            <object data="scorpion.svg" type="image/svg+xml" width="150" height="100">
+            </object>
+          </a>
+          <h3><a href="http://en.wikipedia.org/wiki/Scorpion">Scorpion</a></h3>
+          <p>Scorpion courtship consists of a <q>promenade &aacute; deux</q> where the male lays a <a href="http://en.wikipedia.org/wiki/Spermatophore">spermatophore</a> and guides the female over it to inseminate her. After a year long <a href="http://en.wikipedia.org/wiki/Viviparous">viviparous</a> gestation period, the scorplings are born. Scorpions fluoresce green under a blacklight.</p>
+        </div>
+      </div>
+      <script type="text/javascript">rotate_divs("animals", 5000, 10000 + Math.random() * 20000)</script>
+<!--
+      <h2>Symbols</h2>
+      <ul id="symbols">
+        <li>
+          <a href="jin_jang.svg">
+            <object data="jin_jang.svg" type="image/svg+xml" width="150" height="100">
+            </object>
+          </a>
+          <h3><a href="http://en.wikipedia.org/wiki/Yin_yang">Yin-Yang (&#x262F;)</a></h3>
+          <p>A <a href="http://en.wikipedia.org/wiki/Taoism">Taoist</a> symbol representing the duality of existence, the yin-yang is frequently used in the the design of <a href="http://en.wikipedia.org/wiki/Mandala">mandalas</a>.</p>
+        </li>
+        <li>
+          <a href="biohazard.svg">
+            <object data="biohazard.svg" type="image/svg+xml" width="150" height="100">
+            </object>
+          </a>
+          <h3><a href="http://en.wikipedia.org/wiki/Biological_hazard">Biohazard (&#x2623;)</a></h3>
+          <p><a href="http://en.wikipedia.org/wiki/Ebola">Ebola</a>, which was popularized by <a href="http://en.wikipedia.org/wiki/Richard_Preston">Richard Preston</a>'s <a href="http://en.wikipedia.org/wiki/The_Hot_Zone"><cite>The Hot Zone</cite></a>, has a US biohazard rating of IV and mortality rates as high as 90%.</p>
+        </li>
+      </ul>
+      <script type="text/javascript">rotate_divs("symbols")</script>
+-->
+    </div>
+  </body>
+</html>

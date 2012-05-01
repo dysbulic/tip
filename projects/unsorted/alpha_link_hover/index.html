@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Alpha Blending on Link Hover</title>
+
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+
+    <style type="text/css">
+      html, body { height: 100%; padding: 0; margin: 0; }
+      body { display: table; font-size: 13pt; }
+      a img { border: none; }
+      #sidebar, #content { display: table-cell; }
+      #sidebar {
+        background-image: url('dollars.jpg');
+        border-right: 2px solid #999;
+        width: 5em;
+      }
+      #sidebar img { display: block; }
+      #content, #sidebar {
+        padding: 1em 0 1.5em 1em;
+      }
+      #content * { max-width: 600px; }
+      #sidebar a {
+        display: block;
+        text-decoration: none;
+      }
+      #sidebar a:hover {
+        border: solid black;
+        border-width: 1px 0px 1px 4px;
+      }
+      #sidebar .link-1, #sidebar .link-2, #sidebar .link {
+        padding: 10px 30px 10px 15px; /* pixel padding is needed so as to adjust for the border */
+      }
+      #sidebar .link-1:hover, #sidebar .link-2:hover, #sidebar a:hover .link {
+        padding: 9px 30px 9px 11px; /* a.padding - a.border */
+      }
+      #sidebar .link-1:hover, #sidebar .link-4:hover, #sidebar .link-5:hover { background-image: url('75_red_alpha.png'); }
+      #sidebar .link { display: block; }
+    </style>
+    <!--[if lt IE 7]>
+    <style type="text/css">
+      img { behavior: url("../ie_png_behavior.htc"); }
+      #sidebar, #content {
+        padding-bottom: 3000px;
+        margin-bottom: -2990px;
+      }
+      #sidebar {
+        width: 250px;
+        float: left;
+      }
+      #content { margin-left: 260px; }
+      #sidebar .link-2, #sidebar .link-3, #sidebar .link-4, #sidebar .link-5, #sidebar .link {
+        zoom: 1;
+      }
+      #double-o { width: 91px; height: 22px; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale, src='009.png'); }
+      #double-o img { display: none; }
+      #sidebar .link-2:hover, #sidebar .link-4:hover, #sidebar .link-5:hover, #sidebar a:hover {
+        background: none;
+        filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale, src='75_red_alpha.png');
+      }
+    </style>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="body"><!-- to handle long columns in IE -->
+    <div id="sidebar">
+      <h1>Linx</h1>
+      <p><em>Each link is styled as described in its section, so they should look different and, other than the last two, may not render correctly.</em></p>
+      <a class="link-1" href="#link-1">Straight CSS</a>
+      <a class="link-2" href="#link-2"><code>AlphaImageLoader</code></a>
+      <a class="link-3" href="#link-3"><span class="link">:hover</span></a>
+      <a class="link-4" href="#link-4"><span class="link">Combined</span></a>
+      <a class="link-5" href="#link-5"><span class="link" id="double-o"><img src="009.png" alt="009" /></span></a>
+      <a class="link-5" href="#link-6"><span class="link"><img src="007.png" alt="007" /></span></a>
+    </div>
+    <div id="content">
+      <h1>Alpha Blending on Link Hover</h1>
+
+      <p>If you like, skip the process and see the <a href="#link-4">final stylesheet</a>.</p>
+
+      <p><a href="http://www.titivillus.net/users/wayne/">A friend of mine</a> was designing a site and using images to do rollovers for his navigation. I wanted to suggest to him that he go with plain text links to make the page easier to maintain. The tricky bit though is the rolled over images were alpha blended masks of the background (like Meyer's <a href="http://meyerweb.com/eric/css/edge/complexspiral/demo.html">complexspiral</a>). Meyer uses an alternate image and CSS positioning to make his demo work. I was hoping that opacity support in browsers was to the point that it wouldn't be necessary to do that (since that means any time you want to change your images of color scheme you have to muck about in photoshop).</p>
+
+      <a name="borderpad"></a>
+      <h2>Borders</h2>
+      <p>A basic trick that is shared by all these is borders that appear on hover. The problem with borders is that they change the width of an element, so the text will change positions. In standards-compliant browsers you can get around this by specifying <code>border-color: transparent</code> for the borders when you don't want to show them. This doesn't work in IE though and so a different type of finagling is needed. I'll mention this once though it is present on all the examples.</p>
+      <p>What is done is, in order to adjust to the extra width of the border, the element actually gets smaller. The CSS looks like this:</p>
+      <pre><code>a {
+  display: block;
+  padding: 10px 30px 10px 15px;
+}
+a:hover {
+  border: solid black;
+  border-width: 1px 0px 1px 4px;
+  padding: 9px 30px 9px 11px; /* a.padding - a.border */
+}</code></pre>
+      
+      <a name="link-1"></a>
+      <h2>Straight CSS</h2>
+      <p>The CSS3 spec is going to allow for alpha values on colors. Once it is implemented, it will be possible to do this:</p>
+      <pre><code>a { background-color: rgb<strong>a</strong>(255, 0, 0, <strong>.5</strong>) }</code></pre>
+      <p>Unfortunately those days are a ways off and for now it is necessary to use semi-transparent <acronym title="Portable Network Graphic">PNG</acronym>s. PNGs not only support transparency, like <acronym title="Graphics Interchange Format">GIF</acronym>s, but also alpha values. I went into the <a href="http://gimp.org"><acronym title="GNU Image Manipulation Program">gimp</acronym></a> and made a little <a href="75_red_alpha.png">1x1 maroon image</a> and made it 75% opaque. Making this the background for link hovers just took this CSS:</p>
+      <pre><code>a:hover { background-image: url('75_red_alpha.png') }</code></pre>
+      
+      <a name="link-2"></a>
+      <h2>PNG Support in IE</h2>
+      <p>The problem with this approach is that IE doesn't support alpha values on PNGs. The alpha value is just ignored and the image is displayed as opaque. There is a way around this using a bit of non-standard CSS however:</p>
+      <pre><code>&lt;!--[if lt IE 7]>
+&lt;style type="text/css">
+  a { zoom: 1; }
+  a:hover {
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader
+     (sizingMethod=scale, src='75_red_alpha.png');
+  }
+&lt;/style>
+&lt;![endif]--></code></pre>
+      <p>There are three IE specific bits here:</p>
+      <ul>
+        <li>The conditional comment which makes the style only visible to IE versions less than 7</li>
+        <li>The the <code>AlphaImageLoader</code> <code>filter</code> which will correctly load the alpha PNG. It loads over the background (which is opaque), so the background needs to be disabled as well</li>
+        <li>The <code>zoom: 1</code> with triggers <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/IETechCol/cols/dnexpie/expie20050831.asp">hasLayout</a> and causes the PNG to render</li>
+      </ul>
+
+      <a name="link-3"></a>
+      <h2>Block Anchors in IE</h2>
+      <p>The remaining problem with this in IE has nothing to do with the background. It has to do with the link. These are navigation links to go in the sidebar. Their <code>display</code> is set to <code>block</code>. Unfortunately, in IE the <code>:hover</code> style is only consistently triggered for these elements when the mouse is over the text of the link.</p>
+      <p>This is a function of the PNG. Note that the first link to the left is hoverable in the entire block (containing <q><code>Striaght CSS</code></q>). (It just lacks alpha blending.) The second link flashes except when the cursor is directly over the text of the link, <q><code>AlphaImageLoader</code></q>. This is because the loaded PNG apparently makes IE think the element is not hovered, so it takes the PNG away at which point it thinks it is hovered again and comes back, and repeat.</p>
+      <p>Dealing with this seems to require a modification of the HTML, like such:</p>
+      <pre><code>&lt;a href="&hellip;">&lt;span>&hellip;&lt;/span>&lt;/a></code></pre>
+      <p>The PNG can be shown in the <code>span</code> or the <code>a</code> and there are no hover issues. The CSS is the same as the <a href="#link-2">AlphaImageLoader</a> except the <a href="#borderpad">border padding</a> is applied to the <code>span</code> rather than the <code>a</code>.</p>
+
+      <a name="link-4"></a>
+      <h2>Combined Form</h2>
+      <p>A combined version that should work in IE and other browsers looks like:</p>
+      <pre><code>&lt;style type="text/css">
+#sidebar { padding-right: 0; }
+#sidebar a, #sidebar a span {
+  display: block;
+}
+#sidebar a:hover {
+  border: solid black;
+  border-width: 1px 0px 1px 4px;
+  background-image: url('75_red_alpha.png');
+}
+#sidebar a span { padding: 10px 30px 10px 15px; }
+#sidebar a:hover span { padding: 9px 30px 9px 11px; }
+&lt;/style>
+&lt;!--[if lt IE 7]>
+&lt;style type="text/css">
+#sidebar a, #sidebar a span { zoom: 1; }
+#sidebar #sidebar a:hover span {
+  background: none;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader
+   (sizingMethod=scale, src='75_red_alpha.png');
+}
+&lt;/style>
+&lt;![endif]--></code></pre>
+
+      <a name="link-5"></a>
+      <h2>PNGs in Links</h2>
+      <p>Sometimes you would like to have PNGs as the link as well as for the background. This is no problem in a decent browser, but it takes a workaround in IE6. What you actually do is use the filter subsystem to set the PNG with opacity as the background on the containing element and then hide the actual image. The code looks like this:</p>
+<pre><code>&lt;span class="link" id="double-o">
+  &lt;img src="009.png" alt="009" />
+&lt;/span></code></pre>
+      <p>Then the CSS looks like this:</p>
+      <pre><code>&lt;!--[if lt IE 7]>
+  #double-o {
+    width: 91px; height: 22px;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader
+     (sizingMethod=scale, src='009.png');
+  }
+  #double-o img { display: none; }
+&lt;![endif]--></code></pre>
+
+
+      <a name="link-6"></a>
+      <h2>Automating PNG Transparency in IE6</h2>
+      <p>Since hiding images and whatnot is tedious and you have to change the structure of the page, it is possible to do it with <a href="../ie_png_behavior.htc">javascript</a>. It simply removes the source element and sets the background on the actual img element to the filtered PNG.</p>
+      <pre><code>&lt;!--[if lt IE 7]>
+  &lt;style type="text/css">
+     img { behavior: url("<a href="../ie_png_behavior.htc">ie_png_behavior.htc</a>"); }
+  &lt;/style>
+&lt;![endif]--></code></pre>
+
+    </div>
+    </div>
+  </body>
+</html>

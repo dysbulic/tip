@@ -1,0 +1,257 @@
+\documentclass[12pt,a4paper,twoside]{article}  % Comments after  % are ignored
+\usepackage{amsmath,amssymb,amsfonts}          % Typical maths resource packages
+\usepackage{hyperref}                          % For creating hyperlinks in cross references
+\usepackage{pstricks}
+
+\pagestyle{headings}         % Option to put page headers
+                             % Needed \documentclass[a4paper,twoside]{article}
+
+\author{Will Holcomb \small{CSC445 - Homework \#4}}
+\title{Homework \#4}
+\date{October 25, 2002}
+
+\begin{document}
+\maketitle
+
+\section{Number 1}
+
+Show that the following are context-free:
+
+\begin{enumerate}
+
+\item $\{\textrm{a}^nw\textrm{c}w^R\textrm{a}^{5n+4} |
+  n \geq 0; w \in \{a,b\}\}$
+
+\begin{eqnarray}
+\textrm{L}        &\rightarrow& \textrm{AWaaaa} \\
+\textrm{A}        &\rightarrow& \textrm{aAaaaaa} | \lambda \\
+\textrm{W}        &\rightarrow& \textrm{aWa} | \textrm{bWb} | \textrm{c}
+\end{eqnarray}
+
+\item $\{\textrm{a}^i\textrm{b}^j\textrm{c}^k\textrm{d}^l |
+  i, j, k, l \geq 0; i \geq j; k \geq l\}$
+
+\begin{eqnarray}
+\textrm{L}        &\rightarrow& \textrm{AC} \\
+\textrm{A}        &\rightarrow& \textrm{aAb} | \textrm{aA} | \lambda \\
+\textrm{W}        &\rightarrow& \textrm{cCd} | \textrm{cC} | \lambda
+\end{eqnarray}
+
+\item $\{\textrm{a}^n\textrm{b}^{3n+7}\textrm{a}^{2m+3}\textrm{b}^{6m}
+  | n, m \geq 0\}$
+
+\begin{eqnarray}
+\textrm{L}        &\rightarrow& \textrm{AC} \\
+\textrm{A}        &\rightarrow& \textrm{Bbbbbbbb} \\
+\textrm{B}        &\rightarrow& \textrm{aBbbb} | \lambda \\
+\textrm{C}        &\rightarrow& \textrm{aaaD} \\
+\textrm{D}        &\rightarrow& \textrm{aaDbbbbbb} | \lambda
+\end{eqnarray}
+
+\item $\{\textrm{a}^n\textrm{b}^n | n \% 7 \not = 0\}$
+
+\begin{eqnarray}
+\textrm{L}        &\rightarrow& \textrm{ab} | \textrm{a}\textrm{A}_2\textrm{b} \\
+\textrm{A}_2      &\rightarrow& \textrm{ab} | \textrm{a}\textrm{A}_3\textrm{b} \\
+\textrm{A}_3      &\rightarrow& \textrm{ab} | \textrm{a}\textrm{A}_4\textrm{b} \\
+\textrm{A}_4      &\rightarrow& \textrm{ab} | \textrm{a}\textrm{A}_5\textrm{b} \\
+\textrm{A}_5      &\rightarrow& \textrm{ab} | \textrm{a}\textrm{A}_6\textrm{b} \\
+\textrm{A}_6      &\rightarrow& \textrm{ab} | \textrm{a}\textrm{A}_7\textrm{b} \\
+\textrm{A}_7      &\rightarrow& \textrm{aLb}
+\end{eqnarray}
+
+\end{enumerate}
+
+\section{Number 2}
+
+If T is regular and U is context free, what is true about TU?
+Why?\\\\
+TU is context free.\\\\
+Since $\lambda$ is regular, TU is trivially not regular.\\\\
+Since T can be simulated with a DFA and U with a PDA. A DFA is a
+degenerate case of a PDA where each time nothing is pushed or popped
+from the stack. To model TU with a PDA simply combine the PDA for T
+and U by making a $\lambda$ transition from each element in the final
+states of T to the start state of U. The resultant PDA will accept TU
+$\therefore$ TU is context free.
+
+\section{Number 3}
+
+If T is context free and U is regular, what is true about T - U?
+Why?\\\\
+T - U is context free.\\\\
+Since $\lambda$ is regular, T - U is trivially not regular.\\\\
+T - U = $\textrm{T} \cap \overline{\textrm{U}}$. Since U is regular,
+$\overline{\textrm{U}}$ is regular too. It is possible to create a pda
+which simulates T and $\overline{\textrm{U}}$ in parallel, accepting
+$\textrm{T} \cap \overline{\textrm{U}} \therefore$ T - U is context
+free.
+
+\section{Number 4}
+
+If $\textrm{X}^R$ is context free, is X context free?
+Why?\\\\
+Yes, X is context free if $\textrm{X}^R$ is context
+free. For a grammar X $\ni$
+\begin{eqnarray}
+\textrm{X} &=& \{P, \Sigma, S, R\} \\
+P          &\textrm{is}& \textrm{the set of nonterminals} \nonumber\\
+\Sigma     &\textrm{is}& \textrm{the input alphabet (terminals)} \nonumber\\
+S          &\in& P \textrm{ is the start state} \nonumber\\
+R          &\textrm{is}& \textrm{the set of rules} \nonumber\\
+           &=& \{(l, r) | l \in P, r \in \{P \cup \Sigma\}^*\}
+\end{eqnarray}
+
+There exists a grammar for $\textrm{X}^R = \{P, \Sigma, S, R^R\} \ni$
+\begin{equation}
+R^R = \{(l_R, r_R) | \forall (l, r) \in R; l_R = l, r_R = r^R\}
+\end{equation}
+
+\section{Number 5}
+
+Prove that $L = \{a^k | k = 2^m; m \in \mathbb{N}\}$ is not context
+free.\\\\
+Pick $w = a^k \ni k = 2^n$. $|w| = 2^n > n$ and $w \in L$, so the
+pumping lemma holds if L is context free $\therefore \exists w \in L;
+n \in \mathbb{N} \ni$
+\begin{eqnarray}
+w         &=&    uvxyz \\
+|w|       &\geq& n \\
+|vxy|     &\leq& n \\
+|v| + |y| &\geq& 1 \\
+w_i       &=&    uv^ixy^iz \in L \forall i \in \mathbb{N} \\
+|w_i|     &=& |u| + (i)|v| + |x| + (i)|y| + |z|
+\end{eqnarray}
+Since $1 \leq |v| + |y| \leq n$ from the pumping lemma,
+\begin{equation}
+2^n = |w_1| < |w_2| = |w_1| + |v| + |y| \leq 2^n + n < 2^{n + 1}
+\end{equation}
+So, $w_2 \not \in L \therefore$ L is not context free.
+
+\section{Number 6}
+
+Explain why $\textrm{T} =
+  \{\textrm{a}^i\textrm{b}^i\textrm{c}^j\textrm{d}^j | i, j \geq 0\}$
+  is context free.\\\\
+Because it can be described by the grammar:
+\begin{eqnarray}
+\textrm{L}        &\rightarrow& AC \\
+\textrm{A}        &\rightarrow& aAb | \lambda \\
+\textrm{C}        &\rightarrow& cCd | \lambda
+\end{eqnarray}
+
+\section{Number 7}
+
+Explain why $\textrm{U} =
+  \{\textrm{a}^i\textrm{b}^j\textrm{c}^j\textrm{d}^k | i, j, k \geq
+  0\}$ is context free.\\\\
+Because it can be described by the grammar:
+\begin{eqnarray}
+\textrm{L}        &\rightarrow& ABD \\
+\textrm{A}        &\rightarrow& aA | \lambda \\
+\textrm{B}        &\rightarrow& bBc | \lambda \\
+\textrm{D}        &\rightarrow& dD | \lambda
+\end{eqnarray}
+
+\section{Number 8}
+
+Explain why, for T and U from the previous problems, $\textrm{X} =
+\textrm{T} \cap \textrm{U}$ is not context free.
+\begin{eqnarray}
+\textrm{T} \cap \textrm{U} &=&
+  \{\textrm{a}^i\textrm{b}^j\textrm{c}^k\textrm{d}^l| i = j; k = l; j
+  = k\} \\
+                           &=&
+  \{\textrm{a}^i\textrm{b}^j\textrm{c}^k\textrm{d}^l| i = j = k = l\}
+\end{eqnarray}
+
+First define a homomorphism $h \ni$
+\begin{eqnarray}
+h(\textrm{a}) &=& a \\
+h(\textrm{b}) &=& b \\
+h(\textrm{c}) &=& c \\
+h(\textrm{d}) &=& \lambda
+\end{eqnarray}
+
+\begin{equation}
+\textrm{X}_h = h(\textrm{X}) = h(\textrm{T} \cap \textrm{U}) =
+  \{\textrm{a}^i\textrm{b}^i\textrm{c}^i | i \geq 0\}
+\end{equation}
+
+$\{\textrm{a}^i\textrm{b}^i\textrm{c}^i | i \in \mathbb{N}\}$ is one
+of the canonical non-context free grammars.
+
+\section{Number 9}
+
+Present a formal definition of a two stack push-down automata and a
+description of its language.\\\\
+A normal push-down automata is defined as follows:
+\begin{eqnarray}
+A      &=&           (\Sigma, Q, \Gamma, \delta, q_0, F) \\
+\Sigma &\textrm{is}& \textrm{an input alphabet} \nonumber\\
+Q      &\textrm{is}& \textrm{a set of states} \nonumber\\
+\Gamma &\textrm{is}& \textrm{a stack alphabet} \nonumber\\
+\delta &\textrm{is}& \textrm{a transition function} \nonumber\\
+\delta &\models& Q\times(\Sigma \cup\{\epsilon\})\times\Gamma
+                  \mapsto Q\times\Gamma^* \\
+q_0    &\in& Q \textrm{ is a start state} \nonumber\\
+F      &\subseteq& Q \textrm{ is a set of final states} \nonumber
+\end{eqnarray}
+
+To add another stack all that needs to be altered is the transition
+function since the basic idea doesn't change. Define a double stack
+pda, $A_d$ as:
+\begin{eqnarray}
+A_d      &=& (\Sigma, Q, \Gamma, \delta_d, q_0, F) \\
+\delta_d &\models& Q\times(\Sigma \cup\{\epsilon\})
+                   \times(\Sigma \cup\{\epsilon\})\times\Gamma
+                   \mapsto Q\times\Gamma^*
+\end{eqnarray}
+
+$\delta$ is defined as a function:
+\begin{eqnarray}
+\delta(q_i, \sigma, \gamma_o) &=& (q_j, \gamma_u) \\
+q_i  &\in& Q \textrm{ is an initial state} \nonumber\\
+\sigma &\in& \Sigma \textrm{ is an input character} \nonumber\\
+\gamma_o  &\in& \Gamma \textrm{ is a character to pop from the stack}
+  \nonumber\\
+q_j  &\in& Q \textrm{ is a resultant state} \nonumber\\
+\gamma_u  &\in& \Gamma \textrm{ is a character to push on the stack}
+  \nonumber
+\end{eqnarray}
+
+$\delta_d$ has the same basic definition as $\delta$ with a change in
+how the stack alphabet is handled:
+\begin{eqnarray}
+\delta_d(q_i, \sigma, \gamma_{o1}, \gamma_{o2}) &=& (q_j, \gamma_{u1},
+  \gamma_{u2}) \\
+\gamma_{oi} &\ni& i \in \{1,2\} \in \Gamma \nonumber\\
+            &\textrm{is}& \textrm{popped from the first and second
+  stack respectively} \nonumber\\ 
+\gamma_{ui} &\ni& i \in \{1,2\} \in \Gamma \nonumber\\
+            &\textrm{is}& \textrm{pushed on the first and second stack
+  respectively} \nonumber
+\end{eqnarray}
+
+\section{Number 10}
+
+Design a two stack PDA to accept $\textrm{T} \cup \textrm{U}$ from the
+previous problem.\\\\
+$\textrm{T} \cup \textrm{U} =
+\{\textrm{a}^i\textrm{b}^i\textrm{c}^i\textrm{d}^i | i \in
+\mathbb{N}\}$ can be generated by the following two stack pda:
+\begin{eqnarray}
+A_d    &=& (\Sigma, Q, \Gamma, \delta_d, q_0, F) \\
+\Sigma &=& \{\textrm{a}, \textrm{b}, \textrm{c}, \textrm{d}\} \\
+Q      &=& \{q_0, q_1, q_2, q_3\} \\
+\Gamma &=& \{1\} \\
+F      &=& \{q_3\} \\
+\delta_d(q_0, \textrm{a}, \lambda, \lambda) &=& (q_0, 1, \lambda) \\
+\delta_d(q_1, \textrm{b}, 1, \lambda) &=& (q_1, \lambda, 1) \\
+\delta_d(q_2, \textrm{c}, \lambda, 1) &=& (q_2, 1, \lambda) \\
+\delta_d(q_3, \textrm{d}, 1, \lambda) &=& (q_3, \lambda, \lambda) \\
+\delta_d(q_i, \lambda, \lambda, \lambda) &=& (q_{i+1}, \lambda, \lambda)
+  \ni i \in \{0, 1, 2\}
+\end{eqnarray}
+
+\end{document}

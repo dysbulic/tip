@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>The PC-RIM Cookbook</title>
+    <link rel="stylesheet" href="../styles/main.css" type="text/css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-2592249-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+  </head>
+  <body>
+    <h1>PC-RIM Cookbook</h1>
+    <p>Long ago the Peace Corps volunteers of Mauritania put together a <a href="http://mr.pcvs.org/cookbook/picture_index.html">cookbook</a>. Unfortunately the electronic version of this document was lost to the annals of time. I <a href="http://mr.pcvs.org/cookbook/picture_index.html">scanned in all the pages</a> and set about reconstructing it. A couple of volunteers at the time said that they were going to do the drudgery of collecting and typing in all the recipes. So, my task was to make it quick and easy to disseminate that information. Specifically, what were were looking for was:</p>
+    <ul>
+      <li>
+        Printable Format: Something pretty to print and keep in regional houses. This document should have:
+        <ul>
+          <li>Sections: Groupings of recipes by things such as Meats, Vegetables, Desserts, whatever</li>
+          <li>Table of Contents: Every recipe listed up front with the appropriate page numbers</li>
+          <li>Indexes: Alphabetical by name of dish and also groupings by main ingredients</li>
+        </ul>
+      </li>
+      <li>Online Format: Something if the print copy gets lost of if RPCVs want some hakko back in the States. This had the same basic requirements as the print version, but would ideally be in HTML</li>
+    </ul>
+    <p>The issue was I have little tolerance for maintaining things like indexes by hand. Particularly if I add a meat recipe halfway through the book and it shifts the following 25 recipes over a page. Not only is it a pain in the ass, it's really error prone.</p>
+    <p>So, I started on a project to take the recipes, collect them in some format and let the computer deal with making the documents. I made some progress before the project floundered for lack of time:</p>
+    <ul>
+      <li><a href="cookbook.docbook">cookbook.docbook</a> &mdash; This is the overarching document structure. Where to put the table of contents, how the sections are ordered, etc.</li>
+      <li><a href="recipes/">recipes/</a> &mdash; A collection of recipes in Recipe Markup Language. These are only new recipes not in the original cookbook because theoretically the other volunteers were reentering the old recipes.</li>
+      <li><a href="cookbook.xslt">cookbook.xslt</a> &mdash; XSLT program to take <a href="cookbook.docbook">cookbook.docbook</a> and generate a XSL:FO file. This can then be used to generate <a href="pdf/cookbook.pdf">printable PDF cookbook</a>.</li>
+      <li><a href="rml-fo.xslt">rml-fo.xslt</a> &mdash; XSLT program to generate <a href="pdf/">individual printable recipes</a> from the <a href="recipes/">RML recipes</a>.</li>
+      <li><a href="rml-xhtml.xslt">rml-xhtml.xslt</a> &mdash; XSLT program to generate <a href="html/">individual HTML recipes</a> from the <a href="recipes/">RML recipes</a>.</li>
+    </ul>
+  </body>
+</html>

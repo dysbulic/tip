@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>CS-310 Homework #5</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math { margin-top: .75em; }
+      .title { font-variant: small-caps; }
+      object { width: 100%; }
+      th, td { padding: .25em .5em; border: 1px solid; text-align: center; }
+      #p3 { page-break-before: always; }
+      .outer > tr > td { border: none; }
+      .ps th { width: 5em; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS 310: Design and Analysis of Algorithms</h1>
+      <h2>Homework #5</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 13:10 Wed., 27 February 2008</h2>
+    </div>
+    <blockquote><p>All work should be done on your own. If you discuss this assignment in any way with anyone else, or find help for getting the answer from any source, you must state so clearly at the top of your submission. There should be no working together except to understand the question.</p></blockquote>
+    <p><em>I discussed ideas for numbers 1 and 2 with Jeff Green. I also sent him a copy of the questions from the version I had transcribed into the computer. If there are any common misunderstandings in our submissions, it is because my original transciption of the assignment (which included minor edits for clarity) was incorrect.</em></p>
+    <ol>
+      <li id="p1">
+        <div class="question">
+          <p>You are working with a board with markings where it needs to be cut. The charge is $<em>k</em> to cut a board <em>k</em> feet long. Design an algorithm to minimize the total cost. For example, consider the following board:</p>
+          <object style="height:50px" id="cuts" type="image/svg+xml" data="board_cuts.svg"></object>
+          <p>If the cuts are made in the order A, B, C, the cost is $16 + $13 + $8 = $37. If the cuts are made in the order B, A, C, the cost is $16 + $8 + $8 = $32.</p>
+        </div>
+        <div class="answer">
+          <p>The board consists of a number of pieces:</p>
+          <object style="height:30px" id="cuts" type="image/svg+xml" data="board_pieces.svg"></object>
+          <p>Any set of cuts is going to include those pieces a varying number of times. The simplest cut is when there are two pieces. When there is only one piece, there is no cut. The counts can be represented as a matrix:</p>
+
+          <table class="outer">
+            <tr>
+              <td>{P}<sub>1</sub></td>
+              <td>=</td>
+              <td>
+          <table>
+            <tr><td></td><th>P<sub>1</sub></th></tr>
+            <tr><th>Inclusions</th><td>0</td></tr>
+          </table>
+              </td>
+            </tr>
+          </table>
+
+          <table class="outer">
+            <tr>
+              <td>{P}<sub>2</sub></td>
+              <td>=</td>
+              <td>
+          <table>
+            <tr><td></td><th>P<sub>1</sub></th><th>P<sub>2</sub></th></tr>
+            <tr><th>Inclusions</th><td>1</td><td>1</td></tr>
+          </table>
+              </td>
+            </tr>
+          </table>
+
+          <p>The process is iterative. Subsequent counts can be expressed as combinations of previous cuts plus a constant added to each entry. The base possibilities for {P}<sub>3</sub> are:</p>
+          <table class="outer">
+            <tr>
+              <td>{P}<sub>3</sub></td>
+              <td>=</td>
+              <td>
+          <table>
+            <tr class="ps"><td></td><th>P<sub>1</sub></th><th>P<sub>2</sub></th><th>P<sub>3</sub></th></tr>
+            <tr><th rowspan="2">Inclusions</th><td>1</td><td>2</td><td>2</td></tr>
+            <tr><td>2</td><td>2</td><td>1</td></tr>
+          </table>
+              </td>
+            </tr>
+          </table>
+
+          <p>For a given board, it could be the product of some previous number of cuts. An "added matrix" connotes the idea that a previous number of cots took place before a board was produced. For example, an added matrix based off {P}<sub>3</sub> would be:</p>
+
+          <table class="outer">
+            <tr>
+              <td>{P}<sub>3</sub> + 1</td>
+              <td>=</td>
+              <td>
+          <table>
+            <tr class="ps"><td></td><th>P<sub>1</sub></th><th>P<sub>2</sub></th><th>P<sub>3</sub></th></tr>
+            <tr><th rowspan="2">Inclusions</th><td>2</td><td>3</td><td>3</td></tr>
+            <tr><td>3</td><td>3</td><td>2</td></tr>
+          </table>
+              </td>
+            </tr>
+          </table>
+
+          <p>{P}<sub>3</sub> then can be expressed as:</p>
+
+          <table class="outer">
+            <tr>
+              <td>{P}<sub>3</sub></td>
+              <td>=</td>
+              <td>
+          <table>
+            <tr class="ps"><td></td><th>P<sub>1</sub></th><th>P<sub>2</sub></th><th>P<sub>3</sub></th></tr>
+            <tr><th rowspan="2">Inclusions</th><td>{P}<sub>1</sub> + 1</td><td colspan="2">{P}<sub>2</sub> + 1</td></tr>
+            <tr><td colspan="2">{P}<sub>2</sub> + 1</td><td>{P}<sub>1</sub> + 1</td></tr>
+          </table>
+              </td>
+            </tr>
+          </table>
+
+          <p>Four pieces, {P}<sub>4</sub>, then includes {P}<sub>3</sub> + 1 and {P}<sub>2</sub> + 1:</p>
+
+          <table class="outer">
+            <tr>
+              <td>{P}<sub>4</sub></td>
+              <td>=</td>
+              <td>
+          <table>
+            <tr class="ps"><td></td><th>P<sub>1</sub></th><th>P<sub>2</sub></th><th>P<sub>3</sub></th><th>P<sub>4</sub></th></tr>
+            <tr><th rowspan="5">Inclusions</th><td>{P}<sub>1</sub> + 1</td><td rowspan="2" colspan="3">{P}<sub>3</sub> + 1</td></tr>
+            <tr><td>{P}<sub>1</sub> + 1</td></tr>
+            <tr><td colspan="2">{P}<sub>2</sub> + 1</td><td colspan="2">{P}<sub>2</sub> + 1</td></tr>
+            <tr><td rowspan="2" colspan="3">{P}<sub>3</sub> + 1</td><td>{P}<sub>1</sub> + 1</td></tr>
+            <tr><td>{P}<sub>1</sub> + 1</td></tr>
+          </table>
+              </td>
+            </tr>
+          </table>
+
+          <table class="outer">
+            <tr>
+              <td>{P}<sub>5</sub></td>
+              <td>=</td>
+              <td>
+          <table>
+            <tr class="ps"><td></td><th>P<sub>1</sub></th><th>P<sub>2</sub></th><th>P<sub>3</sub></th><th>P<sub>4</sub></th><th>P<sub>5</sub></th></tr>
+            <tr><th rowspan="14">Inclusions</th><td>{P}<sub>1</sub> + 1</td><td rowspan="5" colspan="4">{P}<sub>4</sub> + 1</td></tr>
+            <tr><td>{P}<sub>1</sub> + 1</td></tr>
+            <tr><td>{P}<sub>1</sub> + 1</td></tr>
+            <tr><td>{P}<sub>1</sub> + 1</td></tr>
+            <tr><td>{P}<sub>1</sub> + 1</td></tr>
+            <tr><td colspan="2">{P}<sub>2</sub> + 1</td><td colspan="3" rowspan="2">{P}<sub>3</sub> + 1</td></tr>
+            <tr><td colspan="2">{P}<sub>2</sub> + 1</td></tr>
+            <tr><td colspan="3" rowspan="2">{P}<sub>3</sub> + 1</td><td colspan="2">{P}<sub>2</sub> + 1</td></tr>
+            <tr><td colspan="2">{P}<sub>2</sub> + 1</td></tr>
+            <tr><td rowspan="5" colspan="4">{P}<sub>4</sub> + 1</td><td>{P}<sub>1</sub> + 1</td></tr>
+            <tr><td>{P}<sub>1</sub> + 1</td></tr>
+            <tr><td>{P}<sub>1</sub> + 1</td></tr>
+            <tr><td>{P}<sub>1</sub> + 1</td></tr>
+            <tr><td>{P}<sub>1</sub> + 1</td></tr>
+          </table>
+              </td>
+            </tr>
+          </table>
+
+          <p>The issue that makes an efficient algorithm difficult is that for any row in {P}<sub><em>k</em></sub> there exists a set of lengths of pieces such that the optimal cutting produces those counts. A simple way to eliminate cuts is not readily apparent.</p>
+          <p>The width of the table of counts will always be the number of pieces. The height unfortunately grows more quickly, specifically:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><mo>H</mo><mfenced><mi>k</mi></mfenced></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <munderover><mo>&Sum;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mfrac><mi>k</mi><mn>2</mn></mfrac></munderover>
+                  <mn>2</mn><mo>H</mo><mfenced><mrow><mi>k</mi><mo>-</mo><mn>i</mn></mrow></mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>This is growing faster than 2<sup><em>n</em></sup>, so even though the generation of the table can incorporate some caching to be generated more quickly, to actual test the possibilities is &theta;(<em>n</em>2<sup><em>n</em></sup>).</p>
+          <p>The question then is how to properly choose the counts such that combination of weights and counts is minimized. Consider two very similar sets of pieces with different optimal cuttings:</p>
+          <object style="height:100px" id="cuts" type="image/svg+xml" data="4224_optimal_split.svg"></object>
+          <p>The graph represents the first split is between 2 and 2, then there are cuts between 2 and 4 on the ends. Consider a very similar set of pieces with a different optimal cutting:</p>
+          <object style="height:100px" id="cuts" type="image/svg+xml" data="5225_optimal_split.svg"></object>
+          <p>The difference between these is that the decision to make a cut increases the count for each of the two pieces on either side of the cut. (If those pieces are composites, the counts of each of the constituent pieces will increase in a regular recursive way as described above with the sets {P}<sub><em>k</em></sub>.) This set of possibilities does grow exponentially, but the trick is they don't all need to be computed.</p>
+          <p>Consider the idea of composite pieces, for example P<sub>1,2,3</sub> is the combination of the pieces P<sub>1</sub>, P<sub>2</sub> and P<sub>3</sub>. Assume for a moment that they are joined to form P<sub>1,2,3</sub> before P<sub>3</sub> is joined to P<sub>4</sub>. There is a cost for that join and it will vary depending on whether P<sub>1</sub> is joined with P<sub>2,3</sub> or if P<sub>3</sub> was joined to P<sub>1,2</sub>. (The two pieces that were joined previously will have their pieces counted twice.) The options are:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>P</mi><mfenced open="" close=""><mn>1</mn><mn>2</mn><mn>3</mn></mfenced></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced open="{" close="">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <msub><mi>P</mi><mn>1</mn></msub><mo>+</mo>
+                          <mn>2</mn><msub><mi>P</mi><mfenced open="" close=""><mn>2</mn><mn>3</mn></mfenced></msub>
+                        </mtd>
+                      </mtr>
+                      <mtr><mtd><mtext>or</mtext></mtd></mtr>
+                      <mtr>
+                        <mtd>
+                          <mn>2</mn><msub><mi>P</mi><mfenced open="" close=""><mn>1</mn><mn>2</mn></mfenced></msub><mo>+</mo>
+                          <msub><mi>P</mi><mn>3</mn></msub>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced open="{" close="">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <msub><mi>P</mi><mn>1</mn></msub><mo>+</mo>
+                          <mn>2</mn><mfenced><mrow><msub><mi>P</mi><mn>2</mn></msub><mo>+</mo><msub><mi>P</mi><mn>3</mn></msub></mrow></mfenced>
+                        </mtd>
+                      </mtr>
+                      <mtr><mtd><mtext>or</mtext></mtd></mtr>
+                      <mtr>
+                        <mtd>
+                          <mn>2</mn><mfenced><mrow><msub><mi>P</mi><mn>1</mn></msub><mo>+</mo><msub><mi>P</mi><mn>2</mn></msub></mrow></mfenced><mo>+</mo>
+                          <msub><mi>P</mi><mn>3</mn></msub>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </mfenced>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced open="{" close="">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <munderover><mo>&Sum;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>3</mn></munderover>
+                          <msub><mi>P</mi><mi>i</mi></msub><mo>+</mo>
+                          <msub><mi>P</mi><mfenced open="" close=""><mn>2</mn><mn>3</mn></mfenced></msub>
+                        </mtd>
+                      </mtr>
+                      <mtr><mtd><mtext>or</mtext></mtd></mtr>
+                      <mtr>
+                        <mtd>
+                          <munderover><mo>&Sum;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>3</mn></munderover>
+                          <msub><mi>P</mi><mi>i</mi></msub><mo>+</mo>
+                          <msub><mi>P</mi><mfenced open="" close=""><mn>1</mn><mn>2</mn></mfenced></msub>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <p>Both of these solutions don't need to be stored however. If, at some point in an optimal cutting strategy, P<sub>1,2,3</sub> is produced, the minimum cost strategy is the one that will be used to cut it apart. Therefore, for P<sub>1,2,3</sub> is is only necessary to store:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>P</mi><mfenced open="" close=""><mn>1</mn><mn>2</mn><mn>3</mn></mfenced></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <munderover><mo>&Sum;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>3</mn></munderover>
+                  <msub><mi>P</mi><mi>i</mi></msub><mo>+</mo>
+                  <mo>min</mo>
+                  <mfenced>
+                    <msub><mi>P</mi><mfenced open="" close=""><mn>1</mn><mn>2</mn></mfenced></msub>
+                    <msub><mi>P</mi><mfenced open="" close=""><mn>2</mn><mn>3</mn></mfenced></msub>
+                  </mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+          <p>The summation makes sense because each piece is included in the composite piece and then the constituent pieces need to be cut apart. This same strategy can be used to develop P<sub>1,2,3,4</sub>:</p>
+
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>P</mi><mfenced open="" close=""><mn>1</mn><mn>2</mn><mn>3</mn><mn>4</mn></mfenced></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <mfenced open="{" close="">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <munderover><mo>&Sum;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>4</mn></munderover>
+                          <msub><mi>P</mi><mi>i</mi></msub><mo>+</mo>
+                          <msub><mi>P</mi><mfenced open="" close=""><mn>1</mn></mfenced></msub><mo>+</mo>
+                          <msub><mi>P</mi><mfenced open="" close=""><mn>2</mn><mn>3</mn><mn>4</mn></mfenced></msub>
+                        </mtd>
+                      </mtr>
+                      <mtr><mtd><mtext>or</mtext></mtd></mtr>
+                      <mtr>
+                        <mtd>
+                          <munderover><mo>&Sum;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>4</mn></munderover>
+                          <msub><mi>P</mi><mi>i</mi></msub><mo>+</mo>
+                          <msub><mi>P</mi><mfenced open="" close=""><mn>1</mn><mn>2</mn></mfenced></msub><mo>+</mo>
+                          <msub><mi>P</mi><mfenced open="" close=""><mn>3</mn><mn>4</mn></mfenced></msub>
+                        </mtd>
+                      </mtr>
+                      <mtr><mtd><mtext>or</mtext></mtd></mtr>
+                      <mtr>
+                        <mtd>
+                          <munderover><mo>&Sum;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>4</mn></munderover>
+                          <msub><mi>P</mi><mi>i</mi></msub><mo>+</mo>
+                          <msub><mi>P</mi><mfenced open="" close=""><mn>1</mn><mn>2</mn><mn>3</mn></mfenced></msub><mo>+</mo>
+                          <msub><mi>P</mi><mn>4</mn></msub>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                  </mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <p>Which, by the same logic about optimal cuttings is:</p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>P</mi><mfenced open="" close=""><mn>1</mn><mn>2</mn><mn>3</mn><mn>4</mn></mfenced></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <munderover><mo>&Sum;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>4</mn></munderover>
+                  <msub><mi>P</mi><mi>i</mi></msub><mo>+</mo>
+                  <mo>min</mo>
+                  <mfenced>
+                    <mrow>
+                      <msub><mi>P</mi><mfenced open="" close=""><mn>1</mn></mfenced></msub><mo>+</mo>
+                      <msub><mi>P</mi><mfenced open="" close=""><mn>2</mn><mn>3</mn><mn>4</mn></mfenced></msub>
+                    </mrow>
+                    <mrow>
+                      <msub><mi>P</mi><mfenced open="" close=""><mn>1</mn><mn>2</mn></mfenced></msub><mo>+</mo>
+                      <msub><mi>P</mi><mfenced open="" close=""><mn>3</mn><mn>4</mn></mfenced></msub>
+                    </mrow>
+                    <mrow>
+                      <msub><mi>P</mi><mfenced open="" close=""><mn>1</mn><mn>2</mn><mn>3</mn></mfenced></msub><mo>+</mo>
+                      <msub><mi>P</mi><mn>4</mn></msub>
+                    </mrow>
+                  </mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <p>Where single span pieces are defined as having a weight of 0 (P<sub><em>i</em></sub> = P<sub><em>i</em>,<em>i</em></sub> = 0). This form can be generalized as:</p>
+
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd><msub><mi>P</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub></mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <munderover><mo>&Sum;</mo><mrow><mi>k</mi><mo>=</mo><mi>i</mi></mrow><mi>j</mi></munderover>
+                  <msub><mi>P</mi><mi>k</mi></msub><mo>+</mo>
+                  <mo>min</mo>
+                  <mfenced>
+                    <mfenced open="{" close="}">
+                      <mrow>
+                        <msub><mi>P</mi><mfenced open="" close=""><mi>i</mi><mo>&hellip;</mo><mi>k</mi></mfenced></msub><mo>+</mo>
+                        <msub><mi>P</mi><mfenced open="" close=""><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mo>&hellip;</mo><mi>j</mi></mfenced></msub>
+                        <mo>&ForAll;</mo><mi>k</mi><mo>&SuchThat;</mo>
+                        <mi>i</mi><mo>&le;</mo><mi>k</mi><mo>&lt;</mo><mi>j</mi>
+                      </mrow>
+                    </mfenced>
+                  </mfenced>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+
+          <p>These methods can be cached in a table which will ultimately derive the answer:</p>
+
+          <table>
+            <tr>
+              <td>P<sub>1,1</sub></td><td>P<sub>2,2</sub></td><td>P<sub>3,3</sub></td><td>P<sub>4,4</sub></td>
+              <td>&hellip;</td><td>P<sub>n-3,n-3</sub></td><td>P<sub>n-2,n-2</sub></td>
+              <td>P<sub>n-1,n-1</sub></td><td>P<sub>n,n</sub></td>
+            </tr>
+            <tr>
+              <td>P<sub>1,2</sub></td><td>P<sub>2,3</sub></td><td>P<sub>3,4</sub></td><td>P<sub>4,5</sub></td>
+              <td>&hellip;</td><td>P<sub>n-2,n-1</sub></td><td>P<sub>n-1,n</sub></td>
+              <td>P<sub>n-1,n</sub></td><td></td>
+            </tr>
+            <tr>
+              <td>P<sub>1,3</sub></td><td>P<sub>2,4</sub></td><td>P<sub>3,5</sub></td><td>P<sub>4,6</sub></td>
+              <td>&hellip;</td><td>P<sub>n-3,n-1</sub></td><td>P<sub>n-2,n</sub></td><td colspan="2"></td>
+            </tr>
+            <tr>
+              <td>P<sub>1,4</sub></td><td>P<sub>2,5</sub></td><td>P<sub>3,6</sub></td><td>P<sub>4,7</sub></td>
+              <td>&hellip;</td><td>P<sub>n-3,n</sub></td><td colspan="3"></td>
+            </tr>
+            <tr><td>&hellip;</td><td colspan="8"></td></tr>
+            <tr><td>P<sub>1,n</sub></td><td colspan="8"></td></tr>
+          </table>
+          
+          <p>At each level of the table it is necessary to track which combination was made to minimize the cut. This combination of <em>n</em> - 1 cuts is the solution.</p>
+
+          <p>
+            Also, the computation of 
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <munderover><mo>&Sum;</mo><mrow><mi>k</mi><mo>=</mo><mi>i</mi></mrow><mi>j</mi></munderover>
+              <msub><mi>P</mi><mi>k</mi></msub>
+            </math>
+            can be built in a table using dynamic programming.
+          </p>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+            <mtable>
+              <mtr>
+                <mtd>
+                  <munderover><mo>&Sum;</mo><mrow><mi>k</mi><mo>=</mo><mi>i</mi></mrow><mi>j</mi></munderover>
+                  <msub><mi>P</mi><mi>k</mi></msub>
+                </mtd>
+                <mtd><mo>=</mo></mtd>
+                <mtd>
+                  <munderover><mo>&Sum;</mo><mrow><mi>k</mi><mo>=</mo><mi>i</mi></mrow><mrow><mi>j</mi><mo>-</mo><mn>1</mn></mrow></munderover>
+                  <msub><mi>P</mi><mi>k</mi></msub><mo>+</mo><msub><mi>P</mi><mi>j</mi></msub>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+      </li>
+      <li id="p2">
+        <div class="question">
+          <p>In a variant of the minimum spanning tree problem, you want to create a spanning tree <em>T</em> for a graph <em>G</em> such that the largest edge in <em>T</em> is as small as possible. The sum of the edge weights is not a concern. Design an O(<em>m</em> + <em>n</em>) algorithm for this variant. (<em>Consider divide and conquer.</em>)</p>
+        </div>
+        <div class="answer">
+          <p>There are three main algorithms commonly employed for building minimum spanning trees:</p>
+          <ul>
+            <li>Kruskal's &mdash; Order the edges and go through them one at a time. For each one if it connects two edges otherwise unconnected by a previously examined edge then use it in the solution. Once n - 1 edges have been added there's a tree. This will run in O(<em>m</em> log <em>m</em>)</li>
+            <li>Prim's &mdash; Start with a node and grow a tree by iteratively adding a minimum cost edge connecting to the tree. This will run in O(<em>m</em> log <em>n</em>)</li>
+            <li>Bor&#x16f;vka's &mdash; For each node add the minimum edge and compact the resultant tree. Each iteration will combine at least half the nodes and so the algorithm will run in O(<em>m</em> log <em>n</em>)</li>
+          </ul>
+          
+          <p>Unfortunately none of these seems particularly well suited to solving this problem.</p>
+
+          <p>Another tact in trying to find a solution is looking at operations that are likely to be useful that can be done in constant time. Particularly when considering divide and conquer solutions, partitioning on the median is a common one. The basic algorithm is:</p>
+
+          <ol>
+            <li>Divide the list into sets of 5</li>
+            <li>Find the median for each set (O(<em>c</em>) = O(1))</li>
+            <li>Recursively find the median for the resultant set of medians</li>
+          </ol>
+
+          <p>The list can then be split around the median in O(<em>n</em>) time.</p>
+
+          <p>The question could also be considered as finding the minimum edge, <em>m<sub>i</sub></em>, that partitions the set of edges such that all edges with weight &le; <em>w<sub>i</sub></em> that edge contain a spanning tree. Using the median finding algorithm and a binary search, it is possible to find that partitioning edge in O(<em>m</em> log <em>m</em>) time.</p>
+
+          <p>At each iteration though it is necessary to determine if set <em>L<sub>i</sub></em> contains a spanning tree or not. An option for making this determination is a relaxed version of Bor&#x16f;vka's algorithm. One node at a time, union that node with a node connected to and compress those two elements into a single node. Then repeat on the results of that. This will have to be done at most log <em>n</em> times since each iteration joins at least half the trees. If the nodes will reduce to a single node, the edges used to form that node are a spanning tree. If the <span class="title">Union-Find</span> style tree with path compression is used, this operation can be performed in O(<em>n</em> &alpha;(<em>n</em>)) time.</p>
+
+          <p>Unfortunately this algorithm seems to be O(<em>m</em> log(<em>m</em>) <em>n</em> &alpha;(<em>n</em>)).</p>
+
+        </div>
+      </li>
+      <li id="p3">
+        <div class="question">
+          <p>Minimize the following deterministic finite autonoma using an O(<em>n</em> log <em>n</em>) algorithm.</p>
+          <object style="height:250px" id="base_dfa" type="image/svg+xml" data="base_dfa.svg"></object>
+        </div>
+        <div class="answer">
+          <p>An O(<em>n</em> log <em>n</em>) algorithm is partitioning. At each iteration the set of states is divided into meaningful non-intersecting subsets. When this is no longer possible the remaining states may be grouped into a minimal set of required states. The first step is to divide final and non-final states:</p>
+          <object style="height:50px" id="base_dfa" type="image/svg+xml" data="dfa_final_and_non.svg"></object>
+          <p>Now the algorithm will iterate to form partitions. The basis for a partition is a transition can be made to a distinguished state. There's only one patritionable set and one distinguished state currently, so transitions are considered there:</p>
+          <object style="height:100px" id="base_dfa" type="image/svg+xml" data="dfa_part_1.svg"></object>
+          <p>This forms a new partition:</p>
+          <object style="height:50px" id="base_dfa" type="image/svg+xml" data="dfa_part_2.svg"></object>
+          <p>Non-meaningful transitions are not shown. For example, B and H both go to G on 0, so that will not cause a partition. The separating transitions are:</p>
+          <object style="height:125px" id="base_dfa" type="image/svg+xml" data="dfa_part_3.svg"></object>
+          <p>Which produces a new partition:</p>
+          <object style="height:50px" id="base_dfa" type="image/svg+xml" data="dfa_part_4.svg"></object>
+          <p>At this point all states within a partition transition to the same external partition, so no further partitioning is possible and a minimum dfa is:</p>
+          <object style="height:250px" id="base_dfa" type="image/svg+xml" data="dfa_minimized.svg"></object>
+        </div>
+      </li>
+      <li id="p4">
+        <div class="question">
+          <p>To achieve the O(<em>n</em> log <em>n</em>) time bound for DFA minimization, we need to be able to perform the following operation. Consider the set of states <em>X</em> that have a transition to state <em>i</em> on input <em>a</em>. Divide each current set of states <em>S</em> in the current partition into <em>S</em> &cap; <em>X</em> and <em>S</em> - <em>X</em>. Describe the data structures necessary for storing sets of states and an algorithm that allows you to subdivide all current sets of states in the partition in O(|<em>X</em>|) time.</p>
+        </div>
+        <div class="answer">
+          <p>Store the sets of shallow trees of depth 2 where the root represents the partition and the leaves represent states in the dfa.</p>
+          <p>For a given set of states <em>X</em>, create a new partition and for each element of <em>X</em> if the parent of the state is <em>S</em> then move it to the new partition. At the end of this operation <em>S</em> will now be <em>S</em> - <em>X</em> and the new state will be <em>S</em> &cap; <em>X</em>.</p>
+          <p>This will take O(|<em>X</em>|) time.</p>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

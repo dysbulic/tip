@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>PSY-351: Computational Methods &mdash; Homework #7</title>
+    <link rel="stylesheet" type="text/css" href="../../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math, table + math, math + table, table + table { margin-top: .75em; }
+      .data td, .data th { text-align: center; padding: .25em; border: 1px solid; }
+      td, th { padding: .25em .5em; border: 1px solid; }
+      .ellip td { text-align: center; }
+      table { margin: auto; }
+      .hl { background-color: #BBB; }
+      ol { margin-left: 0em; }
+      .answer { margin: 0em; }
+      object { height: 400px; width: 100%; }
+      .pair { width: 45%; height: auto; border: 1px solid; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY-351: Computational Methods</h1>
+      <h2>Homework #7</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 14:10 Wed., 15 October 2008</h2>
+    </div>
+    
+    <p>This homework assignment will ask you to explore the diffusion model, examining its predictions regarding both response times and accuracy. This assignment will also give you a chance to examine various properties response time distributions.</p>
+    
+    <p>I want you to explore predictions of the diffusion model across a range of parameters. You will want to look the example code I used in class today (<a href="week7.m">week7.m</a>) as your starting point.</p>
+ 
+    <p>I want you to see how different parameters effect the response time distributions predicted by the diffusion model.</p>
+ 
+    <p>For each of these problems, I am going to ask you to compare predictions when varying particular parameter For each set of parameters, I want you to run 5000 iterations of the diffusion model. Note that this will take a few minutes per run.</p>
+ 
+    <p>When you create any graphs, please put all of the predictions on the same graph so that you can see how the predictions change with the changing parameters (pointer: "hold on" is a useful function to call when graphing. Some problems will ask you to plot cdf, others will ask you to plot pdfs, others will ask you to plot mean RT.</p>
+
+    <ol>
+      <li id="p1">
+        <div class="question">
+          <p>First, I want you to explore correct RTs and error RTs. In class today, I only looked at response time distributions when you hit the "a" boundary. These are correct responses. But I want you to compare RT distributions for correct ("a" boundary) and error ("0" boundary) responses.</p>
+
+          <p>First, try these parameters:</p>
+
+<pre>a   = 0.200;      % upper boundary (lower boundary is 0)
+z   = 0.100;      % starting point
+sz  = 0.0;        % variability in starting point from trial to trial
+nu  = 0.10;       % mean drift rate
+eta = 0.0;        % variability in drift rate from trial to trial
+Ter = 0.200;      % non-decisional time
+st  = 0.0;        % variabilit in TR from trial to trial
+s2  = .01;        % diffusion coeffient is amount of within-trial noise</pre>
+
+          <p>Plot the predicted cdf’s for correct RTs and error RTs on the same graph.</p>
+        </div>
+        <div class="answer">
+          <p>The data generated in this particular simulation was:</p>
+          <object type="image/svg+xml" data="homework_07.problem_1_paths.svg"></object>
+
+          <p>The cumulative probability distributions for correct and incorrect solutions is:</p>
+          <object type="image/svg+xml" data="homework_07.problem_1_cdf.svg"></object>
+
+          <p>The probability density distributions for correct and incorrect solutions is:</p>
+          <object type="image/svg+xml" data="homework_07.problem_1_pdf.svg"></object>
+        </div>
+      </li>
+      <li id="p2">
+        <div class="question">
+          <p>Next, try these parameters:</p>
+
+<pre>a   = 0.200;      % upper boundary (lower boundary is 0)
+z   = 0.100;      % starting point
+sz  = 0.0;        % variability in starting point from trial to trial
+nu  = 0.10;       % mean drift rate
+eta = 0.20;       % variability in drift rate from trial to trial
+Ter = 0.200;      % non-decisional time
+st  = 0.0;        % variabilit in TR from trial to trial
+s2  = .01;        % diffusion coeffient is amount of within-trial noise</pre>
+
+          <p>Plot the predicted cdf’s for correct RTs and error RTs on the same graph.</p>
+        </div>
+        <div class="answer">
+          <p>The data generated in this particular simulation was:</p>
+          <object type="image/svg+xml" data="homework_07.problem_2_paths.svg"></object>
+
+          <p>The cumulative probability distributions for correct and incorrect solutions is:</p>
+          <object type="image/svg+xml" data="homework_07.problem_2_cdf.svg"></object>
+
+          <p>The probability density distributions for correct and incorrect solutions is:</p>
+          <object type="image/svg+xml" data="homework_07.problem_2_pdf.svg"></object>
+        </div>
+      </li>
+      <li id="p3">
+        <div class="question">
+          <p>Finally, try these parameters:</p>
+
+<pre>a   = 0.200;      % upper boundary (lower boundary is 0)
+z   = 0.100;      % starting point
+sz  = 0.09;       % variability in starting point from trial to trial
+nu  = 0.10;       % mean drift rate
+eta = 0.0;        % variability in drift rate from trial to trial
+Ter = 0.200;      % non-decisional time
+st  = 0.0;        % variabilit in TR from trial to trial
+s2  = .01;        % diffusion coeffient is amount of within-trial noise</pre>
+
+          <p>Plot the predicted cdf’s for correct RTs and error RTs on the same graph.</p>
+ 
+          <p>Do you think parameter variability is important? Why?</p>
+ 
+          <p>You can check out the Ratcliff and Rouder (1998) paper for a discussion of the impact parameter variability has on correct and error response time predictions.</p>
+        </div>
+        <div class="answer">
+          <p>The data generated in this particular simulation was:</p>
+          <object type="image/svg+xml" data="homework_07.problem_3_paths.svg"></object>
+
+          <p>The cumulative probability distributions for correct and incorrect solutions is:</p>
+          <object type="image/svg+xml" data="homework_07.problem_3_cdf.svg"></object>
+
+          <p>The probability density distributions for correct and incorrect solutions is:</p>
+          <object type="image/svg+xml" data="homework_07.problem_3_pdf.svg"></object>
+        </div>
+      </li>
+      <li id="p4">
+        <div class="question">
+          <p>Now, I want you to explore changes in some parameters on the shape of the probability density function (pdf). You only need to examine correct RTs in this case because for the parameters you are going to use, there are very few predicted errors. For these examples, you only need to run 500 iterations per parameter set.</p>
+ 
+          <p>Use these parameters:</p>
+<pre>a   = 0.400;      % upper boundary (lower boundary is 0)
+z   = 0.200;      % starting point
+sz  = 0.05;       % variability in starting point from trial to trial
+eta = 0.200;      % variability in drift rate from trial to trial
+Ter = 0.200;      % non-decisional time
+st  = 0.05;       % variabilit in TR from trial to trial
+s2  = .01;        % diffusion coeffient is amount of within-trial noise</pre>
+
+          <p>Find the pdf for nu=.2, nu=.3, and nu=.5. Plot all three pdfs on the same graph.</p>
+        </div>
+        <div class="answer">
+          <object type="image/svg+xml" data="homework_07.problem_4_pdf.svg"></object>
+        </div>
+      </li>
+      <li id="p5">
+        <div class="question">
+          <p>Now I want you to explore the effects of the location of the decision boundaries on mean response time and accuracy.</p>
+ 
+          <p>Start with these parameters:</p>
+
+<pre>sz  = 0.01;       % variability in starting point from trial to trial
+nu  = 0.10;       % mean drift rate
+eta = 0.0;        % variability in drift rate from trial to trial
+Ter = 0.200;      % non-decisional time
+st  = 0.0;        % variabilit in TR from trial to trial
+s2  = .01;        % diffusion coeffient is amount of within-trial noise</pre>
+ 
+           <p>Evaluate mean correct response time and accuracy for the following values of a and z. Note that z equals a / 2 in all these cases. You can think of this as manipulating the speed-accuracy tradeoffs that subjects are making. In the case of a=.050 and z=.025, the person is going as fast as possible. In the case of a=.800 and z=.400, the person is stressing accuracy over speed.</p>
+
+           <table>
+             <tr><th>a</th><th>z</th></tr>
+             <tr><td>.050</td><td>.025</td></tr>
+             <tr><td>.100</td><td>.050</td></tr>
+             <tr><td>.200</td><td>.100</td></tr>
+             <tr><td>.400</td><td>.200</td></tr>
+             <tr><td>.800</td><td>.400</td></tr>
+           </table>
+
+           <p>Plot response time and accuracy as a function of the boundary size a.</p>
+        </div>
+      </li>
+      <li id="p6">
+        <div class="question">
+          <p>Rerun the above simulations but with eta = 0.1. Plot response time and accuracy as a function of boundary size a.</p>
+ 
+          <p>What is the effects of variability and drift on the predictions? So why is variability in drift rate important?</p>
+        </div>
+      </li>
+    </ol>
+  </body>
+</html>

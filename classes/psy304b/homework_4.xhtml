@@ -1,0 +1,1482 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xml:lang="en">
+  <head>
+    <title>PSY-304B Homework #4</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/assignment.css" />
+    <!-- <base href="http://odin.himinbi.org/classes/cs360/" /> -->
+    <style type="text/css">
+      [class~=eqn] { text-align: left; }
+      math + math, table + math, math + table, table + table { margin-top: .75em; }
+      .data td, .data th { text-align: center; padding: .25em; border: 1px solid; }
+      td, th { padding: .25em .5em; border: 1px solid; }
+      .ellip td { text-align: center; }
+      table { margin: auto; }
+      .hl { background-color: #BBB; }
+    </style>
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-939849-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>PSY-304B: Quantitative Methods &amp; Experimental Design</h1>
+      <h2>Homework #4</h2>
+      <h2><a href="http://himinbi.org">Will Holcomb</a></h2>
+      <h2>Due: 14:35 Thrs., 3 March 2008</h2>
+    </div>
+    <blockquote>
+      <p>For all problems, unless otherwise indicated, assume a Type 1 error rate = .05.</p>
+    </blockquote>
+    <ol>
+      <li id="p1">
+        <div class="question">
+          <p>A cognitive psychologist is studying the effects of different stimulus-exposure durations on visual search performance. He is also interested in whether such effects differ in middle-aged vs. older individuals. There are 3 levels of the Exposure factor (short, medium, long) and 2 levels of the Age factor (middle-age/old-age). There are 8 participants per group. The means and variances (unbiased estimates of population variance) on the visual search performance measure for the 6 cells of this design are as follows (higher scores on this measure indicate better performance):</p>
+
+          <table class="data">
+            <tr><td colspan="2" rowspan="2"></td><th colspan="4">Exposure</th></tr>
+            <tr><th>Short</th><th>Medium</th><th>Long</th><th>Marginal</th></tr>
+            <tr><th rowspan="3">Age</th><th>Middle</th><td>29</td><td>33</td><td>44</td><td>35.333</td></tr>
+            <tr><th>Old</th><td>25</td><td>29</td><td>36</td><td>30</td></tr>
+            <tr><th>Marginal</th><td>27</td><td>31</td><td>40</td><td>32.666</td></tr>
+          </table>
+
+          <table class="data">
+            <tr><th colspan="2" rowspan="2">s<sup>2</sup> (unbiased)</th><th colspan="3">Exposure Factor</th></tr>
+            <tr><th>Short</th><th>Medium</th><th>Long</th></tr>
+            <tr><th rowspan="2">Age Factor</th><th>Middle</th><td>105</td><td>102</td><td>108</td></tr>
+            <tr><th>Old</th><td>110</td><td>94</td><td>111</td></tr>
+          </table>
+        </div>
+        <ol>
+          <li id="p1">
+            <div class="question">
+              <p>Fill in the marginal means in the first table above.</p>
+            </div>
+            <div class="answer">
+              <p>This assignment will use a new notational shorthand to represent summations and averages:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>j</mi></mfenced></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munderover><mo>&Sum;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>n</mi><mi>i</mi></msub></munderover>
+                      <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>j</mi></mfenced></msub><mo>&macr;</mo></mover></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <munderover><mo>&Sum;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>n</mi><mi>i</mi></msub></munderover>
+                        <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+                      </mrow>
+                      <msub><mi>n</mi><mi>i</mi></msub>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub>
+                      <mrow><msub><mi>n</mi><mi>i</mi></msub><msub><mi>n</mi><mi>j</mi></msub></mrow>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <munderover><mo>&Sum;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>n</mi><mi>i</mi></msub></munderover>
+                        <munderover><mo>&Sum;</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>n</mi><mi>j</mi></msub></munderover>
+                        <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+                      </mrow>
+                      <mrow><msub><mi>n</mi><mi>i</mi></msub><msub><mi>n</mi><mi>j</mi></msub></mrow>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mrow>
+                        <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></munder>
+                        <msub><mi>y</mi><mfenced open="" close=""><mi>i</mi><mi>j</mi></mfenced></msub>
+                      </mrow>
+                      <mrow><msub><mi>n</mi><mi>i</mi></msub><msub><mi>n</mi><mi>j</mi></msub></mrow>
+                    </mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <p>The table then for two factors, <em>A</em> and <em>B</em>, represents the following information about the set of samples where sample y<sub>i,j,k</sub> is the i<sup>th</sup> samples from the j<sup>th</sup> group of factor <em>A</em> and k<sup>th</sup> group of factor <em>B</em>. Frequently, in the data table, the subscript for <em>i</em> is omitted.</p>
+
+              <table class="data">
+                <tr><td rowspan="2" colspan="2"></td><th colspan="7">Factor B</th></tr>
+                <tr>
+                  <th>B<sub>1</sub></th>
+                  <th>B<sub>2</sub></th>
+                  <th>&hellip;</th>
+                  <th>B<sub>k</sub></th>
+                  <th>&hellip;</th>
+                  <th>B<sub>n<sub>k</sub></sub></th>
+                  <th>Marginal</th>
+                </tr>
+                <tr>
+                  <th rowspan="7">Factor A</th>
+                  <th>A<sub>1</sub></th>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mn>1</mn><mn>1</mn></mfenced></msub><mo>&macr;</mo></mover>
+                      <mo>&equiv;</mo>
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mn>1</mn><mn>1</mn></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mn>1</mn><mn>2</mn></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>&hellip;</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mn>1</mn><mi>k</mi></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>&hellip;</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mn>1</mn><msub><mi>n</mi><mi>k</mi></msub></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mn>1</mn><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                      <mo>&equiv;</mo>
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mn>1</mn><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                </tr>
+                <tr>
+                  <th>A<sub>2</sub></th>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mn>2</mn><mn>1</mn></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mn>2</mn><mn>2</mn></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>&hellip;</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mn>2</mn><mi>k</mi></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>&hellip;</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mn>2</mn><msub><mi>n</mi><mi>k</mi></msub></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mn>2</mn><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                </tr>
+                <tr class="ellip">
+                  <th>&vellip;</th><td>&vellip;</td><td>&vellip;</td><td>&dtdot;</td><td>&vellip;</td><td>&dtdot;</td><td>&vellip;</td><td>&vellip;</td>
+                </tr>
+                <tr>
+                  <th>A<sub>j</sub></th>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mi>j</mi><mn>1</mn></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mi>j</mi><mn>2</mn></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>&hellip;</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>&hellip;</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover>
+                        <msub><mi>y</mi><mfenced open="" close=""><mi>j</mi><msub><mi>n</mi><mi>k</mi></msub></mfenced></msub>
+                        <mo>&macr;</mo>
+                      </mover>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mi>j</mi><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                </tr>
+                <tr class="ellip">
+                  <th>&vellip;</th><td>&vellip;</td><td>&vellip;</td><td>&dtdot;</td><td>&vellip;</td><td>&dtdot;</td><td>&vellip;</td><td>&vellip;</td>
+                </tr>
+                <tr>
+                  <th>A<sub>n<sub>j</sub></sub></th>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><msub><mi>n</mi><mi>j</mi></msub><mn>1</mn></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><msub><mi>n</mi><mi>j</mi></msub><mn>2</mn></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>&hellip;</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><msub><mi>n</mi><mi>j</mi></msub><mi>k</mi></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>&hellip;</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover>
+                        <msub><mi>y</mi><mfenced open="" close=""><msub><mi>n</mi><mi>j</mi></msub><msub><mi>n</mi><mi>k</mi></msub></mfenced></msub>
+                        <mo>&macr;</mo>
+                      </mover>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><msub><mi>n</mi><mi>j</mi></msub><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Marginal</th>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mn>1</mn></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mn>1</mn></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>&hellip;</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>k</mi></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>&hellip;</td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><msub><mi>n</mi><mi>k</mi></msub></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                  <td>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                      <mo>&equiv;</mo>
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                    </math>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </li>
+          <li id="p1">
+            <div class="question">
+              <p>Find the effects corresponding to each of the marginal means of the Age factor. That is, if we considered Age to be "Factor A" here and Exposure to be "Factor B", find <em>a<sub>1</sub></em> and <em>a<sub>2</sub></em>. Include the formula that you are using to determine the effects. Verify that the effects sum to 0.</p>
+            </div>
+            <div class="answer">
+              <p>Consider two population quantities:</p>
+              <ul>
+                <li>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mi>Middle</mi><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                  </math>
+                  &mdash; the average mean for middle aged subjects across different levels of exposure.
+                </li>
+                <li>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mi>Old</mi><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                  </math>
+                  &mdash; the average mean for old subjects across different levels of exposure.
+                </li>
+              </ul>
+              <p>To say that there is a "main effect" for age is to say that these two quantities vary and age in some way plays a part in the response to visual stimulus.</p>
+              <p><em>Note that this is not the only way for age to play a part. These two means could be equal, but with completely different distributions of scores. This situation would be captured by interaction effects.</em></p>
+              <p>If there is an actual population level effect for age, it is represented for each level of the factor (e.g. "Middle" and "Old") by a deviation from the grand mean:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>&alpha;</mi><mi>j</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mi>j</mi><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                      <mo>-</mo>
+                      <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>An unbiased estimate of this quantity is simply derived from the sample means:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mover><mi>&alpha;</mi><mo>&Hat;</mo></mover><mi>j</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mi>a</mi><mi>j</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>j</mi><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                      <mo>-</mo>
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>For the factor "Age," these quantities are:</p>
+              <ul>
+                <li>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mtable>
+                      <mtr>
+                        <mtd><msub><mi>a</mi><mi>Middle</mi></msub></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>Middle</mi><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                          <mo>-</mo>
+                          <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                        </mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>35.333</mn><mo>-</mo><mn>32.666</mn></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>2.666</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </li>
+                <li>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mtable>
+                      <mtr>
+                        <mtd><msub><mi>a</mi><mi>Old</mi></msub></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>Old</mi><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                          <mo>-</mo>
+                          <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                        </mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>30</mn><mo>-</mo><mn>32.666</mn></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mn>-2.666</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </li>
+              </ul>
+              <p>The set of effects for a factor will always sum to 0 (since they are simply the set of unweighted deviations from the mean). This can be easily verified with these two:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <munder><mo>&Sum;</mo><mrow><mi>j</mi><mo>&Element;</mo><mi>A</mi></mrow></munder>
+                      <msub><mi>a</mi><mi>j</mi></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mi>a</mi><mi>Middle</mi></msub><mo>+</mo><msub><mi>a</mi><mi>Old</mi></msub></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>2.666</mn><mo>+</mo><mfenced><mn>-2.666</mn></mfenced></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li id="p1">
+            <div class="question">
+              <p>Find the effects corresponding to each of the marginal means of the Exposure factor. Include the formula that you are using to determine the effects. Verify that the effects sum to 0.</p>
+            </div>
+            <div class="answer">
+              <p>The effects of the row-wise factor, called "Factor A," is represented with a variable <em>&alpha;</em>. The effects for the column-wise factor, called "Factor B," are conceptually identical, but represented with a variable <em>&beta;</em>. Likewise, the estimate of the effect of factor <em>A</em> is <em>a</em> and the estimate of the effect of factor <em>B</em> is <em>b</em>.</p>
+              <p>For exposure, the estimates of these effects are:</p>
+              <ul>
+                <li>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mtable>
+                      <mtr>
+                        <mtd><msub><mi>b</mi><mi>Short</mi></msub></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo><mi>Short</mi></mfenced></msub><mo>&macr;</mo></mover>
+                          <mo>-</mo>
+                          <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                        </mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>27</mn><mo>-</mo><mn>32.666</mn></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mn>-5.666</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </li>
+                <li>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mtable>
+                      <mtr>
+                        <mtd><msub><mi>b</mi><mi>Medium</mi></msub></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>31</mn><mo>-</mo><mn>32.666</mn></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mn>-1.666</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </li>
+                <li>
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mtable>
+                      <mtr>
+                        <mtd><msub><mi>b</mi><mi>Long</mi></msub></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>40</mn><mo>-</mo><mn>32.666</mn></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>7.333</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </li>
+              </ul>
+              <p>As expected, these effects also sum to zero:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <munder><mo>&Sum;</mo><mrow><mi>k</mi><mo>&Element;</mo><mi>B</mi></mrow></munder>
+                      <msub><mi>b</mi><mi>k</mi></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msub><mi>b</mi><mi>Short</mi></msub><mo>+</mo><msub><mi>b</mi><mi>Medium</mi></msub><mo>+</mo><msub><mi>b</mi><mi>Long</mi></msub>
+                    </mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mfenced><mn>-5.666</mn></mfenced><mo>+</mo><mfenced><mn>-1.666</mn></mfenced><mo>+</mo><mn>7.333</mn></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li id="p1">
+            <div class="question">
+              <p>Find the interaction effects, that is each of the (ab)<sub>j,k</sub> terms. Include the formula that you are using to determine the effects. Verify that the effects sum to 0 within each column and each row.</p>
+            </div>
+            <div class="answer">
+              <p>The main effects model described above measures the relationship of factorwise groups to the entire population. For example, the effects of being old as the main effects for age (<em>&alpha;<sub>Old</sub></em>) or the effect of short exposure (<em>&beta;<sub>Short</sub></em>). What the main effects model doesn't capture is the situation where being both old with short exposure, as opposed to say old and long exposure, has a particular effect on the outcome.</p>
+              <p>If exposure time and age are completely unrelated then to predict something about an old short-exposure person, one would only need the effect of being old and the effect of short exposure. If, however, there is some connection between these two characteristics then the factors are said to "interact." In order to properly make an estimate about old short-exposure people, one would then need to know an additional "interaction effect": <em>(&alpha;&beta;)<sub>Old,Short</sub></em>. The complete model is represented mathematically as:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd><msub>
+                      <mfenced separators=""><mi>&alpha;</mi><mi>&beta;</mi></mfenced><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced>
+                    </msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></msub><mo>-</mo>
+                      <mfenced><mrow>
+                        <mover><msub><mi>&mu;</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                        <mo>+</mo><msub><mi>&alpha;</mi><mi>j</mi></msub><mo>+</mo><msub><mi>&beta;</mi><mi>k</mi></msub>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The estimate of this term is (<em>ab</em>)<sub><em>j</em>,<em>k</em></sub>, and for this particular set of data, those estimates are:</p>
+
+              <table class="data">
+                <tr><td colspan="2" rowspan="2"></td><th colspan="3">Exposure</th><td></td></tr>
+                <tr><th>Short</th><th>Medium</th><th>Long</th><th>Sum</th></tr>
+                <tr><th rowspan="2">Age</th><th>Middle</th><td>-0.666</td><td>-0.666</td><td>1.333</td><td>0</td></tr>
+                <tr><th>Old</th><td>0.666</td><td>0.666</td><td>-1.333</td><td>0</td></tr>
+                <tr><td></td><th>Sum</th><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+              </table>
+              <p>Note that these values sum to zero both row-wise and column-wise.</p>
+            </div>
+          </li>
+          <li id="p1">
+            <div class="question">
+              <p>Express the mean of the old age/long exposure cell as a linear combination of the grand mean, the two marginal effects, and the interaction effect and verify that this model reproduces the cell mean.</p>
+            </div>
+            <div class="answer">
+              <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mo>&bull;</mo><mo>&bull;</mo></mfenced></msub><mo>&macr;</mo></mover>
+                      <mo>+</mo><msub><mi>a</mi><mi>Old</mi></msub><mo>+</mo><msub><mi>b</mi><mi>Long</mi></msub><mo>+</mo>
+                      <msub>
+                        <mfenced separators=""><mi>a</mi><mi>b</mi></mfenced><mfenced open="" close=""><mi>Old</mi><mi>Long</mi></mfenced>
+                      </msub>
+                    </mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mn>32.666</mn><mo>+</mo><mfenced><mn>-2.666</mn></mfenced><mo>+</mo><mn>7.333</mn><mo>+</mo><mfenced><mn>-1.3333</mn></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>36</mn></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>Old</mi><mo>Long</mo></mfenced></msub><mo>&macr;</mo></mover>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li id="p1">
+            <div class="question">
+              <p>Compute the following sums of squares:</p>
+            </div>
+            <ol>
+              <li id="p1">
+                <div class="question">
+                  <p>SS<sub>Age</sub></p>
+                </div>
+                <div class="answer">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mtable>
+                      <mtr>
+                        <mtd><msub><mi>SS</mi><mi>Age</mi></msub></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <munder><mo>&Sum;</mo><mrow><mo>j</mo><mo>&Element;</mo><mi>Age</mi></mrow></munder>
+                          <msub><mi>n</mi><mi>j</mi></msub><msubsup><mi>a</mi><mi>j</mi><mn>2</mn></msubsup>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mi>K</mi><mi>n</mi><munder><mo>&Sum;</mo><mrow><mo>j</mo><mo>&Element;</mo><mi>Age</mi></mrow></munder>
+                          <msubsup><mi>a</mi><mi>j</mi><mn>2</mn></msubsup>
+                        </mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd>
+                          <mn>3</mn><mfenced><mn>8</mn></mfenced>
+                          <mfenced><mrow><msup><mn>2.666</mn><mn>2</mn></msup><mo>+</mo>
+                          <msup><mfenced><mn>-2.666</mn></mfenced><mn>2</mn></msup></mrow></mfenced>
+                        </mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>341.163</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </div>
+              </li>
+              <li id="p1">
+                <div class="question">
+                  <p>SS<sub>Exposure</sub></p>
+                </div>
+                <div class="answer">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mtable>
+                      <mtr>
+                        <mtd><msub><mi>SS</mi><mi>Exposure</mi></msub></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <munder><mo>&Sum;</mo><mrow><mo>k</mo><mo>&Element;</mo><mi>Exposure</mi></mrow></munder>
+                          <msub><mi>n</mi><mi>k</mi></msub><msubsup><mi>b</mi><mi>k</mi><mn>2</mn></msubsup>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mi>J</mi><mi>n</mi><munder><mo>&Sum;</mo><mrow><mo>k</mo><mo>&Element;</mo><mi>Exposure</mi></mrow></munder>
+                          <msubsup><mi>b</mi><mi>k</mi><mn>2</mn></msubsup>
+                        </mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>1418.664</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </div>
+              </li>
+              <li id="p1">
+                <div class="question">
+                  <p>SS<sub>(Age &times; Exposure)</sub></p>
+                </div>
+                <div class="answer">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mtable>
+                      <mtr>
+                        <mtd><msub><mi>SS</mi><mfenced open="" close="" separators=":"><mi>Age</mi><mi>Exposure</mi></mfenced></msub></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <munder><mo>&Sum;</mo><mrow><mo>j</mo><mo>&Element;</mo><mi>Age</mi></mrow></munder>
+                          <munder><mo>&Sum;</mo><mrow><mo>k</mo><mo>&Element;</mo><mi>Exposure</mi></mrow></munder>
+                          <msub><mi>n</mi><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></msub>
+                          <msubsup>
+                            <mfenced separators=""><mi>a</mi><mi>b</mi></mfenced>
+                            <mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced>
+                            <mn>2</mn>
+                          </msubsup>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mi>n</mi>
+                          <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></munder>
+                          <msubsup>
+                            <mfenced separators=""><mi>a</mi><mi>b</mi></mfenced>
+                            <mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced>
+                            <mn>2</mn>
+                          </msubsup>
+                        </mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>42.6664</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </div>
+              </li>
+              <li id="p1">
+                <div class="question">
+                  <p>SS<sub>Within</sub> (remember that the contribution of each cell to the SSW can be computed as (n<sub>j,k</sub> - 1)s<sub>j,k</sub><sup>2</sup>)</p>
+                </div>
+                <div class="answer">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mtable>
+                      <mtr>
+                        <mtd><mtext><html:acronym title="Sum of Squares Within">SSW</html:acronym></mtext></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></munder>
+                          <mfenced><mrow>
+                            <msub><mi>n</mi><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></msub>
+                            <mo>-</mo><mn>1</mn>
+                          </mrow></mfenced>
+                          <msubsup>
+                            <mover><mi>s</mi><mo>&Hat;</mo></mover>
+                            <mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced>
+                            <mn>2</mn>
+                          </msubsup>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd>
+                          <mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                          <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></munder>
+                          <msubsup>
+                            <mover><mi>s</mi><mo>&Hat;</mo></mover>
+                            <mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced>
+                            <mn>2</mn>
+                          </msubsup>
+                        </mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mn>4410</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                </div>
+              </li>
+              <li id="p1">
+                <div class="question">
+                  <p>Conduct a two-way ANOVA (alpha = .05, 2-tailed) on these data testing for all relevant main effects and interactions. Show your results in an ANOVA source table. What do you conclude about the effects of Exposure and Age on visual search performance here?</p>
+                </div>
+                <div class="answer">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mtable>
+                      <mtr>
+                        <mtd><html:acronym title="Mean Square Within"><mtext>MSW</mtext></html:acronym></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <html:acronym title="Sum of Squares Within"><mtext>SSW</mtext></html:acronym>
+                          <msub><mi>df</mi><mi>Within</mi></msub>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mtext><html:acronym title="Sum of Squares Within">SSW</html:acronym></mtext>
+                          <mrow><mi>J</mi><mi>K</mi><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced></mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <mn>4410</mn>
+                          <mrow><mn>2</mn><mfenced><mn>3</mn></mfenced><mfenced><mrow><mn>8</mn><mo>-</mo><mn>1</mn></mrow></mfenced></mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mn>105</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mtable>
+                      <mtr>
+                        <mtd><html:acronym title="Mean Square Age"><msub><mi>MS</mi><mi>Age</mi></msub></html:acronym></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <html:acronym title="Sum of Squares Age"><msub><mi>SS</mi><mi>Age</mi></msub></html:acronym>
+                          <msub><mi>df</mi><mi>Age</mi></msub>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <html:acronym title="Sum of Squares Age"><msub><mi>SS</mi><mi>Age</mi></msub></html:acronym>
+                          <mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mfrac>
+                          <mn>341.163</mn>
+                          <mrow><mn>2</mn><mo>-</mo><mn>1</mn></mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mn>341.163</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mtable>
+                      <mtr>
+                        <mtd><html:acronym title="Mean Square Exposure"><msub><mi>MS</mi><mi>Exposure</mi></msub></html:acronym></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <html:acronym title="Sum of Squares Exposure"><msub><mi>SS</mi><mi>Exposure</mi></msub></html:acronym>
+                          <msub><mi>df</mi><mi>Exposure</mi></msub>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <html:acronym title="Sum of Squares Exposure"><msub><mi>SS</mi><mi>Exposure</mi></msub></html:acronym>
+                          <mrow><mi>K</mi><mo>-</mo><mn>1</mn></mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mfrac>
+                          <mn>1418.664</mn>
+                          <mrow><mn>3</mn><mo>-</mo><mn>1</mn></mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mn>709.332</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mtable>
+                      <mtr>
+                        <mtd><html:acronym title="Mean Square Age x Exposure Interaction">
+                          <msub><mi>MS</mi><mrow><mi>Age</mi><mo>&times;</mo><mi>Exposure</mi></mrow></msub>
+                        </html:acronym></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <html:acronym title="Sum of Squares Age x Exposure Interaction">
+                            <msub><mi>SS</mi><mrow><mi>Age</mi><mo>&times;</mo><mi>Exposure</mi></mrow></msub>
+                          </html:acronym>
+                          <msub><mi>df</mi><mrow><mi>Age</mi><mo>&times;</mo><mi>Exposure</mi></mrow></msub>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mfrac>
+                          <html:acronym title="Sum of Squares Age x Exposure Interaction">
+                            <msub><mi>SS</mi><mrow><mi>Age</mi><mo>&times;</mo><mi>Exposure</mi></mrow></msub>
+                          </html:acronym>
+                          <mrow>
+                            <mfenced><mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow></mfenced><mfenced><mrow><mi>K</mi><mo>-</mo><mn>1</mn></mrow></mfenced>
+                          </mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mfrac>
+                          <mn>42.6664</mn>
+                          <mrow>
+                            <mfenced><mrow><mn>3</mn><mo>-</mo><mn>1</mn></mrow></mfenced><mfenced><mrow><mn>2</mn><mo>-</mo><mn>1</mn></mrow></mfenced>
+                          </mrow>
+                        </mfrac></mtd>
+                        <mtd><mo>=</mo></mtd>
+                        <mtd><mn>21.332</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  
+                  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mtable>
+                      <mtr>
+                        <mtd>
+                          <mo>P</mo>
+                          <mfenced><mrow>
+                            <mfrac>
+                              <html:acronym title="Mean Square Age"><msub><mi>MS</mi><mi>Age</mi></msub></html:acronym>
+                              <html:acronym title="Mean Square Within"><mtext>MSW</mtext></html:acronym>
+                            </mfrac>
+                            <mo>~</mo>
+                            <msub>
+                              <mi>F</mi>
+                              <mfenced open="" close="">
+                                <mrow><mi>J</mi><mo>-</mo><mn>1</mn></mrow>
+                                <mrow><mi>J</mi><mi>K</mi><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced></mrow>
+                              </mfenced>
+                            </msub>
+                          </mrow></mfenced>
+                        </mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd>
+                          <mo>P</mo>
+                          <mfenced><mrow>
+                            <mfrac><mn>341.163</mn><mn>105</mn></mfrac>
+                            <mo>&nsim;</mo>
+                            <msub>
+                              <mi>F</mi>
+                              <mfenced open="" close="">
+                                <mrow><mn>2</mn><mo>-</mo><mn>1</mn></mrow>
+                                <mrow><mn>2</mn><mfenced><mn>3</mn></mfenced><mfenced><mrow><mn>8</mn><mo>-</mo><mn>1</mn></mrow></mfenced></mrow>
+                              </mfenced>
+                            </msub>
+                          </mrow></mfenced>
+                        </mtd>
+                        <mtd><mo>&ape;</mo></mtd>
+                        <mtd><mn>7.86%</mn></mtd>
+                      </mtr>
+                    </mtable>
+                  </math>
+                  <p>The same form is used for all the results and produces the following table:</p>
+                  <table class="data">
+                    <tr>
+                      <th>Term</th><th><acronym title="Degrees of Freedom">DoF</acronym></th>
+                      <th>Sum of Squares</th><th>Mean Square</th><th>F Value</th><th>P(>F)</th>
+                    </tr>
+                    <tr><td>age</td><td>1</td><td>341.33333</td><td>341.33333</td><td>3.2507937</td><td>0.9214333</td></tr>
+                    <tr><td>exposure</td><td>2</td><td>1418.66667</td><td>709.33333</td><td>6.7555556</td><td>0.9971407</td></tr>
+                    <tr><td>age:exposure</td><td>2</td><td>42.66667</td><td>21.33333</td><td>0.2031746</td><td>0.1830669</td></tr>
+                    <tr><td>Within</td><td>42</td><td>4410</td><td>105</td><td></td><td></td></tr>
+                  </table>
+
+                  <p>These results only support a significant main effect for exposure. Looking at the data, this means that longer exposure to visual stimulus data increased performance.</p>
+                </div>
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+      <li id="p1">
+        <div class="question">
+          <p>Consider the data from Maxwell and Delaney problem #9 on pp. 346-347. These data are from a study assessing the effects of 3 different treatments for phobias (Desensitization, Implosion, and Insight) and 2 differing levels of fear severity (mild and severe) on Behavioral Avoidance test scores among a group of phobics.</p>
+          <p>You can load in the data in R using the following statements:</p>
+          <pre>snake.phobia.n = 8
+data.frame(avoidance = c(16, 13, 12, 15, 11, 12, 14, 13, 16, 10, 11, 12, 6, 8, 14, 12,
+                         14, 16, 17, 15, 13, 17, 15, 16, 13, 7, 3, 10, 4, 2, 4, 9,
+                         15, 15, 12, 14, 13, 11, 11, 12, 15, 10, 11, 7, 5, 12, 6, 8),
+             therapy = rep(c("Desensitization", "Implosion", "Insight"),
+                           each = snake.phobia.n * 2),
+             phobia = rep(c("Mild", "Severe"), each = snake.phobia.n))</pre>
+          <p>Use R for the questions below that involve computations. At some points you may have to go beyond the R print-out and do hand calculations.</p>
+        </div>
+        <ol>
+          <li id="p1">
+            <div class="question">
+              <p>Conduct a two-way ANOVA on these data. Indicate whether each effect tested is statistically significant.</p>
+            </div>
+            <div class="answer">
+              <p>To start off with a general understanding of the data, a means table is useful:</p>
+              <table class="data">
+                <tr><th colspan="2" rowspan="2"></th><th colspan="3">Type of Therapy</th><th rowspan="2">Marginal</th></tr>
+                <tr><th>Desensitization</th><th>Implosion</th><th>Insight</th></tr>
+                <tr><th rowspan="2">Degree of Phobia</th><th>Mild</th><td>13.250</td><td>15.375</td><td>12.875</td><td>13.833</td></tr>
+                <tr><th>Severe</th><td>11.125</td><td>6.500</td><td>9.250</td><td>8.958</td></tr>
+                <tr><th colspan="2">Marginal</th><td>12.187</td><td>10.937</td><td>11.0625</td><td>11.396</td></tr>
+              </table>
+              <p>The higher the score, the less a person in afraid of snakes.</p>
+              <p>Looking at the data, we can guess at a general model for the types of therapies:</p>
+              <ul>
+                <li>Desensitization brings everyone to about the same point. For severe phobias it is the most effective.</li>
+                <li>Implosion therapy works particularly well for people with mild phobias, but for people with severe phobias it is not effective at all.</li>
+                <li>Insight therapy seems to be less effective overall, but the difference is possibly simply due to the particular samples taken.</li>
+              </ul>
+              <p>The answers to some of these questions depend on the variances:</p>
+              <table class="data">
+                <tr><th colspan="2" rowspan="2"></th><th colspan="3">Type of Therapy</th><th rowspan="2">Marginal</th></tr>
+                <tr><th>Desensitization</th><th>Implosion</th><th>Insight</th></tr>
+                <tr><th rowspan="2">Degree of Phobia</th><th>Mild</th><td>2.786</td><td>1.982</td><td>2.696</td><td>3.536</td></tr>
+                <tr><th>Severe</th><td>10.125</td><td>15.143</td><td>11.357</td><td>14.911</td></tr>
+                <tr><th colspan="2">Marginal</th><td>7.229</td><td>28.996</td><td>10.062</td><td title="MSW">7.348</td></tr>
+              </table>
+
+              <p><a href="homework_4.R">R</a> produces the following output for the ANOVA:</p>
+              <pre>               Df  Sum Sq Mean Sq F value    Pr(>F)
+therapy         2  15.167   7.583  1.0320  0.365152
+phobia          1 285.188 285.188 38.8104 1.855e-07
+therapy:phobia  2 100.500  50.250  6.8384  0.002686
+Residuals      42 308.625   7.348</pre>
+              <p>There are three experimental questions addressed here:</p>
+              <ul>
+                <li>
+                  <p>Main Effect for Therapy: Does the type of therapy have an effect on the effectiveness of treating a phobia of snakes?</p>
+                  <p>The data suggests there is a 36.5% chance that the differences in the scores from the differences in therapies were solely due to sampling error and not to a genuine difference in the mean. So the researcher would not be able to reject the hypothesis that there is a difference with greater than a 5% probability.</p>
+                </li>
+                <li>
+                  <p>Main Effect for Phobia: Does the severity of a phobia affect how strongly an individual will react to therapy?</p>
+                  <p>There is an extremely high probability (99.99999%) that the difference in the responses was from a genuine difference and not simply sampling error. So, the experimenter is able to reject the hypothesis and support the experimental belief that severity of phobia affects response to therapy. Because there are three types of therapy however, it is not possible to say simply with the ANOVA if all three differ or if one differs from the other two. To delve to that depth would require additional analysis; perhaps a contrast.</p>
+                </li>
+                <li>
+                  <p>Interaction Effect for Therapy &times; Phobia: Are certain therapies more effective for people who have stronger or weaker phobias?</p>
+                  <p>There is a 99.8% chance this data represents a significant interaction effect between the type therapy and strength of phobia. As before, it will take further analysis to determine specifically how this interaction takes place.</p>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li id="p1">
+            <div class="question">
+              <p>Conduct a Tukey HSD test assessing whether each of the three pairwise comparisons among the marginal means of the Therapy factor are significantly different. Set the familywise alpha for this set of contrasts at .05. Indicate the minimum mean difference necessary for a comparison to be judged significant and indicate whether each comparison is statistically significant.</p>
+            </div>
+            <div class="answer">
+              <p><a href="homework_4.R">R</a> produces the following output:</p>
+              <pre>  Tukey multiple comparisons of means
+    95% family-wise confidence level
+    factor levels have been ordered
+
+Fit: aov(formula = avoidance ~ 1 + therapy + phobia + therapy:phobia,
+         data = snake.phobia.frame)
+
+$therapy
+                           diff       lwr      upr     p adj
+Insight-Implosion         0.125 -2.203422 2.453422 0.9906676
+Desensitization-Implosion 1.250 -1.078422 3.578422 0.4007739
+Desensitization-Insight   1.125 -1.203422 3.453422 0.4751470</pre>
+              <p>All of the confidence intervals contain 0, so there is no significance in any of the interactions.</p>
+              <p>The minimum mean difference confirms these findings:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mrow>
+                        <msub><mover><mi>y</mi><mo>_</mo></mover><mi>max</mi></msub><mo>-</mo>
+                        <msub><mover><mi>y</mi><mo>_</mo></mover><mi>min</mi></msub>
+                      </mrow>
+                    </mtd>
+                    <mtd><mo>&ge;</mo></mtd>
+                    <mtd>
+                      <mmultiscripts>
+                        <mi>Q</mi>
+                        <mfenced open="" close="">
+                          <mi>J</mi>
+                          <mrow><mi>J</mi><mi>K</mi><mfenced><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></mfenced></mrow>
+                        </mfenced>
+                        <mi>R</mi>
+                        <mprescripts/><mrow><mn>1</mn><mo>-</mo><mi>&alpha;</mi></mrow><none/>
+                      </mmultiscripts>
+                      <msqrt><mfrac><html:acronym title="Mean Square Within">MSW</html:acronym><mi>n</mi></mfrac></msqrt>
+                    </mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mmultiscripts>
+                        <mi>Q</mi>
+                        <mfenced open="" close=""><mn>3</mn><mn>42</mn></mfenced><mi>R</mi>
+                        <mprescripts/><mn>0.95</mn><none/>
+                      </mmultiscripts>
+                      <msqrt><mfrac><mn>7.348</mn><mn>8</mn></mfrac></msqrt>
+                    </mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>1.90</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+            </div>
+          </li>
+          <li id="p1">
+            <div class="question">
+              <p>In general, would the Tukey HSD test be the optimal multiple comparison procedure for the planned pairwise comparisons you did in part b? If not, what would be the optimal procedure?</p>
+            </div>
+            <div class="answer">
+              <p>For any set of contrasts that have a maximum degree of freedom of two, the Fisher LSD is permissible and will be the most powerful analysis. For this particular data the Fisher LSD did not allow for any contrasts on the type of therapy because the main effect for Therapy from the ANOVA was not significant.</p>
+              <p>In general the Tukey should not succeed when the Fisher LSD fails regardless of the degrees of freedom. The reason for not using the Fisher LSD is not that other tests are more powerful, but that it does not adequately control for type I errors. The ANOVA has already said that there is no reason to believe that any of these means differ. To then use the Tukey to determine which of these non-differing means is different will, not surprisingly, generally (<em>always?</em>) fail.</p>
+            </div>
+          </li>
+          <li id="p1">
+            <div class="question">
+              <p>Using the Bonferroni procedure, conduct 3 planned interaction comparisons assessing whether the difference between Desensitization and Implosion is conditional upon severity, whether the difference between Desensitization and Insight is conditional upon severity, and whether the difference between Implosion and Insight is conditional upon severity. Set the familywise alpha level for this set of contrasts at .05. Indicate your relevant critical values t or F values for each comparison and whether each comparison is statistically significant.</p>
+            </div>
+            <div class="answer">
+              <p>The question of "is the effects of desensitization and implosion therapies conditional upon the severity phobia?" can be thought of mathematically as, "is there a difference between the difference of desensitization and implosion for mild phobics and the difference of those factors for severe phobics?" Or, mathematically:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>H</mi><mn>0</mn></msub></mtd>
+                    <mtd><mo>:</mo></mtd>
+                    <mtd>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mi>Implo</mi><mi>Mild</mi></mfenced></msub><mo>-</mo>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mi>Desen</mi><mi>Mild</mi></mfenced></msub>
+                      <mo>=</mo>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mi>Implo</mi><mi>Severe</mi></mfenced></msub><mo>-</mo>
+                      <msub><mi>&mu;</mi><mfenced open="" close=""><mi>Desen</mi><mi>Severe</mi></mfenced></msub>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&iff;</mo></mtd>
+                    <mtd>
+                      <mfenced><mn>1</mn></mfenced><msub><mi>&mu;</mi><mfenced open="" close=""><mi>Implo</mi><mi>Mild</mi></mfenced></msub>
+                      <mo>+</mo><mfenced><mn>-1</mn></mfenced><msub><mi>&mu;</mi><mfenced open="" close=""><mi>Desen</mi><mi>Mild</mi></mfenced></msub>
+                      <mo>+</mo><mfenced><mn>-1</mn></mfenced><msub><mi>&mu;</mi><mfenced open="" close=""><mi>Implo</mi><mi>Severe</mi></mfenced></msub>
+                      <mo>+</mo><mfenced><mn>1</mn></mfenced><msub><mi>&mu;</mi><mfenced open="" close=""><mi>Desen</mi><mi>Severe</mi></mfenced></msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>0</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>To make these contrasts easier to represent in a table, the combination of factors will be listed as a 1&times;6 matrix rather than a 2&times;3:</p>
+              <table class="data">
+                <tr>
+                  <th></th>
+                  <th>Desen:Mild</th><th>Desen:Sev</th>
+                  <th>Implo:Mild</th><th>Implo:Sev</th>
+                  <th>Insight:Mild</th><th>Insight:Sev</th>
+                </tr>
+                <tr>
+                  <td>desensitization v. implosion is conditional on severity</td>
+                  <td>-1</td><td>1</td><td>1</td><td>-1</td><td>0</td><td>0</td>
+                </tr>
+                <tr>
+                  <td>desensitization v. insight is conditional on severity</td>
+                  <td>-1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>-1</td>
+                </tr>
+                <tr>
+                  <td>implosion v. insight is conditional on severity</td>
+                  <td>0</td><td>0</td><td>-1</td><td>1</td><td>1</td><td>-1</td>
+                </tr>
+              </table>
+              <p>Each of these comparisons is done using a two-dimensional general form of the unbiased estimate:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></munder>
+                      <msub><mi>c</mi><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></msub>
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>j</mi><mi>k</mi></mfenced></msub><mo>&macr;</mo></mover>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msubsup><mi>&sigma;</mi><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mn>2</mn></msubsup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <html:acronym title="Mean Square Within">MSW</html:acronym>
+                      <munder><mo>&Sum;</mo><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></munder>
+                      <mfrac><msubsup><mi>c</mi><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced><mn>2</mn></msubsup>
+                      <msub><mi>n</mi><mfenced open="" close=""><mi>j</mi><mi>k</mi></mfenced></msub></mfrac>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>The distribution of the contrast remains the same:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac>
+                      <mover><mi>&Psi;</mi><mo>&Hat;</mo></mover>
+                      <msub><mi>&sigma;</mi><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover></msub>
+                    </mfrac></mtd>
+                    <mtd><mo>~</mo></mtd>
+                    <mtd><msub><mi>t</mi><msub><mi>df</mi><html:acronym title="Mean Square Within">MSW</html:acronym></msub></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><msub><mi>t</mi><mrow><mi>N</mi><mo>-</mo><mi>J</mi><mi>K</mi></mrow></msub></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>For the contrast of "the effectiveness of desensitization v. implosion is conditional on severity of phobia" these calculations are:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msub><mi>c</mi><mfenced open="" close=""><mi>Desen</mi><mi>Mild</mi></mfenced></msub>
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>Desen</mi><mi>Mild</mi></mfenced></msub><mo>&macr;</mo></mover>
+                      <mo>+</mo>
+                      <msub><mi>c</mi><mfenced open="" close=""><mi>Desen</mi><mi>Severe</mi></mfenced></msub>
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>Desen</mi><mi>Severe</mi></mfenced></msub><mo>&macr;</mo></mover>
+                      <mo>+</mo>
+                      <mo>&hellip;</mo>
+                      <mo>+</mo>
+                      <msub><mi>c</mi><mfenced open="" close=""><mi>Insight</mi><mi>Severe</mi></mfenced></msub>
+                      <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>Insight</mi><mi>Severe</mi></mfenced></msub><mo>&macr;</mo></mover>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mfenced><mn>-1</mn></mfenced><mfenced><mn>13.25</mn></mfenced>
+                      <mo>+</mo><mfenced><mn>1</mn></mfenced><mfenced><mn>11.125</mn></mfenced>
+                      <mo>+</mo><mfenced><mn>1</mn></mfenced><mfenced><mn>15.375</mn></mfenced>
+                      <mo>+</mo><mfenced><mn>-1</mn></mfenced><mfenced><mn>6.5</mn></mfenced>
+                      <mo>+</mo><mfenced><mn>0</mn></mfenced><mfenced><mn>12.875</mn></mfenced>
+                      <mo>+</mo><mfenced><mn>0</mn></mfenced><mfenced><mn>9.25</mn></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>6.75</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msubsup><mi>&sigma;</mi><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mn>2</mn></msubsup></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <html:acronym title="Mean Square Within">MSW</html:acronym>
+                      <mfenced><mfrac>
+                        <mrow>
+                          <msubsup><mi>c</mi><mfenced open="" close=""><mi>Desen</mi><mi>Mild</mi></mfenced><mn>2</mn></msubsup>
+                          <mo>+</mo>
+                          <msubsup><mi>c</mi><mfenced open="" close=""><mi>Desen</mi><mi>Severe</mi></mfenced><mn>2</mn></msubsup>
+                          <mo>+</mo>
+                          <mo>&hellip;</mo>
+                          <mo>+</mo>
+                          <msubsup><mi>c</mi><mfenced open="" close=""><mi>Insight</mi><mi>Severe</mi></mfenced><mn>2</mn></msubsup>
+                        </mrow>
+                        <mi>n</mi>
+                      </mfrac></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mn>7.348</mn>
+                      <mfenced><mfrac>
+                        <mrow>
+                          <msup><mfenced><mn>-1</mn></mfenced><mn>2</mn></msup>
+                          <mo>+</mo><msup><mfenced><mn>1</mn></mfenced><mn>2</mn></msup>
+                          <mo>+</mo><msup><mfenced><mn>1</mn></mfenced><mn>2</mn></msup>
+                          <mo>+</mo><msup><mfenced><mn>-1</mn></mfenced><mn>2</mn></msup>
+                          <mo>+</mo><msup><mfenced><mn>0</mn></mfenced><mn>2</mn></msup>
+                          <mo>+</mo><msup><mfenced><mn>0</mn></mfenced><mn>2</mn></msup>
+                        </mrow>
+                        <mn>8</mn>
+                      </mfrac></mfenced>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mn>3.674</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac>
+                      <mover><mi>&Psi;</mi><mo>&Hat;</mo></mover>
+                      <msub><mi>&sigma;</mi><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover></msub>
+                    </mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac>
+                      <mover><mi>&Psi;</mi><mo>&Hat;</mo></mover>
+                      <msqrt><msubsup><mi>&sigma;</mi><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover><mn>2</mn></msubsup></msqrt>
+                    </mfrac></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mfrac><mn>6.75</mn><msqrt><mn>3.674</mn></msqrt></mfrac></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>3.522</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mo>P</mo>
+                      <mfenced><mrow>
+                        <mfrac>
+                          <mover><mi>&Psi;</mi><mo>&Hat;</mo></mover>
+                          <msub><mi>&sigma;</mi><mover><mi>&Psi;</mi><mo>&Hat;</mo></mover></msub>
+                        </mfrac>
+                        <mo>&nsim;</mo>
+                        <msub><mi>t</mi><mrow><mi>N</mi><mo>-</mo><mi>J</mi><mi>K</mi></mrow></msub>
+                      </mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mo>P</mo>
+                      <mfenced><mrow>
+                        <mn>3.522</mn>
+                        <mo>&nsim;</mo>
+                        <msub><mi>t</mi><mrow><mn>48</mn><mo>-</mo><mfenced><mn>2</mn></mfenced><mfenced><mn>3</mn></mfenced></mrow></msub>
+                      </mrow></mfenced>
+                    </mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>0.999</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>Using this process, <a href="homework_4.R">R</a> produces the following result:</p>
+              <table class="data">
+                <tr><th></th><th>P(&lt; t)</th><th>P(&lt; F)</th></tr>
+                <tr><td>desensitization v. implosion is conditional on severity</td><td>0.9995</td><td>0.9990</td></tr>
+                <tr><td>desensitization v. insight is conditional on severity</td><td>0.7809</td><td>0.5617</td></tr>
+                <tr><td>implosion v. insight is conditional on severity</td><td>0.0045</td><td>0.9910</td></tr>
+              </table>
+              <p>
+                Recall that
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><msubsup><mi>t</mi><mi>df</mi><mn>2</mn></msubsup></math>
+                =
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>F</mi><mfenced open="" close=""><mn>1</mn><mi>df</mi></mfenced></msub></math>.
+                Also note that the t-test is two-tailed whereas the F-test is one-tailed. This is why the implosion v. insight comparison has an extremely small t-value probability and extremely high F-value probability.
+              </p>
+              <p>Because multiple comparisons are being performed it is necessary to correct for multiplicity. Recall that the Bonferroni simply reduces the per-comparison error rate sufficiently to bring the familywise error rate to the desired level. Specifically for <em>c</em> comparisons:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>&alpha;</mi><mi>pc</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><msub><mi>&alpha;</mi><mi>fw</mi></msub><mi>c</mi></mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><mn>.05</mn><mn>3</mn></mfrac></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>0.01667</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>This means that a test will be considered significant if the cumulative probability for the F-score is greater than 0.9833. Two of these contrasts are significant: "desensitization v. implosion is conditional on severity" and "implosion v. insight is conditional on severity."</p>
+              <p>Given the tests performed so far, what specific experimental beliefs are supported?</p>
+              <ul>
+                <li>Main Effects:
+                <ul>
+                  <li>There is no support to believe that in treating ophidiophobia that a specific therapy is more effective for a random person.</li>
+                  <li>When treating ophidiophobia, subjects with an initially mild phobia will finish the therapy with a lower degree of phobia than those that began with a severe phobia. (<em>This seems relatively intuitive.</em>)</li>
+                </ul>
+                </li>
+                <li>Interaction Effect:
+                <ul>
+                  <li>When treating ophidiophobia, the severity of the subjects phobia is meaningful as to which therapy is the most effective.</li>
+                </ul>
+                </li>
+                <li>Tukey Pairwise Contrasts on Type of Therapy:
+                <ul>
+                  <li>There is no support for the belief that a particular type of therapy is more effective than any other when treating ophidiophobia in general. (<em>This is simply an affirmation of the main effect for therapy.</em>)</li>
+                </ul>
+                </li>
+                <li>Interaction Contrasts:
+                <ul>
+                  <li>When comparing desensitization therapy to implosion therapy for treating ophidiophobia, the difference between the two methods is greater for people with a more severe phobia.</li>
+                  <li>When comparing desensitization therapy to insight therapy for treating ophidiophobia, there is no support for the idea that the severity of the subject's phobia is meaningful in choosing the most likely effective treatment.</li>
+                  <li>When comparing implosion therapy to insight therapy for treating ophidiophobia, &hellip; (<em>I'm not sure how to interpret this.</em>)</li>
+                </ul>
+                </li>
+              </ul>
+              <p>Consider the contrast "the effectiveness of desensitization v. implosion is conditional on severity of phobia" while examining the marginal means:</p>
+              <table class="data">
+                <tr><th colspan="2" rowspan="2"></th><th colspan="3">Type of Therapy</th><th rowspan="2">Marginal</th></tr>
+                <tr><th>Desensitization</th><th>Implosion</th><th>Insight</th></tr>
+                <tr><th rowspan="2">Degree of Phobia</th><th>Mild</th><td class="hl">13.250</td><td class="hl">15.375</td><td>12.875</td><td>13.833</td></tr>
+                <tr><th>Severe</th><td class="hl">11.125</td><td class="hl">6.500</td><td>9.250</td><td>8.958</td></tr>
+                <tr><th colspan="2">Marginal</th><td>12.187</td><td>10.937</td><td>11.0625</td><td>11.396</td></tr>
+              </table>
+              <p>All that the contrast says is that the degree of phobia affects the difference between these two therapies. For these particular numbers we can look at Desensitization:Severe (11.125) and Implosion:Severe (6.500) and say that there is likely a significant difference there. Perhaps there is one for mild phobics as well, or perhaps it is simply sampling error. Specifically, the contrast only really tells the experimenter that a difference exists dependent on severity. It does not say whether a particular therapy is more effective.</p>
+            </div>
+          </li>
+          <li id="p1">
+            <div class="question">
+              <p>Conduct two simple-effects analyses testing for overall (i.e., omnibus) differences among the three treatment groups at each of the two levels of severity. Indicate your relevant critical values and whether each simple-effect analysis is statistically significant.</p>
+            </div>
+            <div class="answer">
+              <p>Simple effects analysis is an alternative method for exploring interaction effects. It examines each of the two strengths of phobia and determines if there is a significant difference within that effect.</p>
+              <p>Because there are two degrees of freedom and the difference based on strength of phobia was supported by the ANOVA, these comparisons can be done with &alpha; = 0.05 by the reasoning of the Fisher LSD.</p>
+              <p>The sum of squares for a simple effect is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>SS</mi><mi>simp(k)</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>n</mi><munder><mo>&Sum;</mo><mi>j</mi></munder>
+                      <msup>
+                        <mfenced><mrow>
+                          <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>j</mi><mi>k</mi></mfenced></msub><mo>&macr;</mo></mover>
+                          <mo>-</mo>
+                          <mover><msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>&bull;</mi><mi>k</mi></mfenced></msub><mo>&macr;</mo></mover>
+                        </mrow></mfenced>
+                        <mn>2</mn>
+                      </msup>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>For mild phobics, this is:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>SS</mi><mi>simp(Mild)</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <mi>n</mi>
+                      <mfenced><mrow>
+                        <msup>
+                          <mfenced><mrow>
+                            <mover>
+                              <msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>Desen</mi><mi>Mild</mi></mfenced></msub><mo>&macr;</mo>
+                            </mover>
+                            <mo>-</mo>
+                            <mover>
+                              <msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>&bull;</mi><mi>Mild</mi></mfenced></msub><mo>&macr;</mo>
+                            </mover>
+                          </mrow></mfenced>
+                          <mn>2</mn>
+                        </msup>
+                        <mo>+</mo>
+                        <msup>
+                          <mfenced><mrow>
+                            <mover>
+                              <msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>Implo</mi><mi>Mild</mi></mfenced></msub><mo>&macr;</mo>
+                            </mover>
+                            <mo>-</mo>
+                            <mover>
+                              <msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>&bull;</mi><mi>Mild</mi></mfenced></msub><mo>&macr;</mo>
+                            </mover>
+                          </mrow></mfenced>
+                          <mn>2</mn>
+                        </msup>
+                        <mo>+</mo>
+                        <msup>
+                          <mfenced><mrow>
+                            <mover>
+                              <msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>Insight</mi><mi>Mild</mi></mfenced></msub><mo>&macr;</mo>
+                            </mover>
+                            <mo>-</mo>
+                            <mover>
+                              <msub><mi>y</mi><mfenced open="" close=""><mo>&bull;</mo><mi>&bull;</mi><mi>Mild</mi></mfenced></msub><mo>&macr;</mo>
+                            </mover>
+                          </mrow></mfenced>
+                          <mn>2</mn>
+                        </msup>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mn>8</mn>
+                      <mfenced><mrow>
+                        <msup><mfenced><mrow><mn>13.250</mn><mo>-</mo><mn>13.833</mn></mrow></mfenced><mn>2</mn></msup>
+                        <mo>+</mo><msup><mfenced><mrow><mn>15.375</mn><mo>-</mo><mn>13.833</mn></mrow></mfenced><mn>2</mn></msup>
+                        <mo>+</mo><msup><mfenced><mrow><mn>12.875</mn><mo>-</mo><mn>13.833</mn></mrow></mfenced><mn>2</mn></msup>
+                      </mrow></mfenced>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>29.053</mn></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>This is essentially an ANOVA done on these numbers. However, to get a better estimate of the population variance, the mean square within for the entire population is used rather than only for the samples being considered. Given this, the following distribution makes sense:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><msub><mi>MS</mi><mi>simp(k)</mi></msub></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><msub><mi>SS</mi><mi>simp(k)</mi></msub><msub><mi>df</mi><mi>simp(k)</mi></msub></mfrac></mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd><mfrac><msub><mi>SS</mi><mi>simp(k)</mi></msub><mrow><mi>K</mi><mo>-</mo><mn>1</mn></mrow></mfrac></mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac><msub><mi>MS</mi><mi>simp(k)</mi></msub><html:acronym title="Mean Square Within">MSW</html:acronym></mfrac></mtd>
+                    <mtd><mo>~</mo></mtd>
+                    <mtd>
+                      <msub>
+                        <mi>F</mi>
+                        <mfenced open="" close=""><msub><mi>df</mi><mi>simp(k)</mi></msub><msub><mi>df</mi><mi>MSW</mi></msub></mfenced>
+                      </msub>
+                    </mtd>
+                    <mtd><mo>=</mo></mtd>
+                    <mtd>
+                      <msub>
+                        <mi>F</mi>
+                        <mfenced open="" close="">
+                          <mrow><mi>K</mi><mo>-</mo><mn>1</mn></mrow>
+                          <mrow><mi>N</mi><mo>-</mo><mi>J</mi><mi>K</mi></mrow>
+                        </mfenced>
+                      </msub>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>For phobics, the two simple effects are:</p>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac>
+                      <mfrac><msub><mi>SS</mi><mi>simp(Mild)</mi></msub><mrow><mi>K</mi><mo>-</mo><mn>1</mn></mrow></mfrac>
+                      <mtext html:title="Mean Square Within">MSW</mtext>
+                    </mfrac></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mfrac><mfrac><mn>29.053</mn><mn>2</mn></mfrac><mn>7.348</mn></mfrac></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>1.977</mn></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mmultiscripts>
+                        <mi>F</mi>
+                        <mfenced open="" close=""><mn>2</mn><mn>42</mn></mfenced><none />
+                        <mprescripts/><mn>0.8488</mn><none/>
+                      </mmultiscripts>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <math xmlns="http://www.w3.org/1998/Math/MathML" mode="display">
+                <mtable>
+                  <mtr>
+                    <mtd><mfrac>
+                      <mfrac><msub><mi>SS</mi><mi>simp(Severe)</mi></msub><mrow><mi>K</mi><mo>-</mo><mn>1</mn></mrow></mfrac>
+                      <mtext html:title="Mean Square Within">MSW</mtext>
+                    </mfrac></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mfrac><mfrac><mn>86.58</mn><mn>2</mn></mfrac><mn>7.348</mn></mfrac></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd><mn>6.195</mn></mtd>
+                    <mtd><mo>&ape;</mo></mtd>
+                    <mtd>
+                      <mmultiscripts>
+                        <mi>F</mi>
+                        <mfenced open="" close=""><mn>2</mn><mn>42</mn></mfenced><none />
+                        <mprescripts/><mn>0.9956</mn><none/>
+                      </mmultiscripts>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </math>
+              <p>So, this decomposition lends breaks down a general belief that the strength of phobia affects the effectiveness of treatment into a more specific belief that for severe phobics there is a difference in the effectiveness of the type of phobia whereas for mild phobics there isn't evidence that this is the case.</p>
+            </div>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </body>
+</html>

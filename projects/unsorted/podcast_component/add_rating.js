@@ -1,0 +1,1 @@
+simplicity/js/add_rating.js

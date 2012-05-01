@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Test Form With Div</title>
+    <script type="text/javascript">
+      this.addEventListener("load", init, false);
+
+      function init() {
+        var elements_block = document.getElementById("elements");
+        if(!elements_block) {
+          alert("Could not find list to add to");
+        }
+        elements = document.createElement("ul");
+        elements_block.appendChild(elements);
+      }
+    </script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <form action="http://www.yahoo.com">
+      <div id="elements"></div>
+      <div><input type="submit" value="Submit" /></div>
+    </form>
+    <p>This page demonstrates a bug in mozilla as of 1.3a. The form
+     above contains a div into which an unordered list is inserted via
+     javascript at load time. When the button is clicked it will jump
+     down (along with anything else on the page) about an eigth of an
+     inch and not do anything. When it is clicked a second time it
+     does the submission.</p>
+    <p>The click needs to be at the top of the button in the part that
+     is not overlapped with the moved button or it will work
+     correctly.</p>
+    <p>If the button is tabbed to the space bar will cause it to go on
+     to the next page. Resizing the screen causes it to redraw
+     correctly.</p>
+    <p>As to why insert an empty &lt;ul&gt;, this script is part of
+     one that builds a list dynamically as part of a webapp and the
+     empty &lt;ul&gt; keeps the page from validating. (Validation
+     being one of the unit tests.)</p>
+  </body>
+</html>

@@ -1,0 +1,1 @@
+points_admin_test.php
