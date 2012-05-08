@@ -1,0 +1,161 @@
+$('body').append( $('<label/>').text( "Username:") )
+var $username = $('<input type="text"/>')
+$('body').append( $username )
+
+$('body').append( $('<label/>').text( "Password:") )
+var $password = $('<input type="password"/>')
+$('body').append( $password )
+
+var $status = $('<ol id="xmppstatus"/>')
+$('body').append( $status )
+
+var clickHandler = function() {
+    var File = java.io.File
+    var ConnectionConfiguration = Packages.org.jivesoftware.smack.ConnectionConfiguration
+    var XMPPConnection = Packages.org.jivesoftware.smack.XMPPConnection
+    var SASLAuthentication = Packages.org.jivesoftware.smack.SASLAuthentication
+    var Presence = Packages.org.jivesoftware.smack.packet.Presence
+
+    var config = {
+        'Google Login': {
+            server: 'talk.google.com',
+            port: 5222,
+            extension: 'gmail.com',
+        },
+        'Facebook Login': {
+            server: 'chat.facebook.com',
+            port: 5222,
+            extension: 'chat.facebook.com',
+        },
+    }[ $(this).attr( 'value' ) ]
+    
+    var connConfig = new ConnectionConfiguration( config.server, config.port, config.extension )
+    var connection = new XMPPConnection( connConfig )
+    
+    try {
+        connection.connect()
+        $status.append( $('<li/>').text( "Connected to " + connection.host ) )
+    } catch( ex ) {
+        $status.append( $('<li/>').text( ex.printStackTrace() ) )
+        $status.append( $('<li/>').text( "Failed to connect to " + connection.host + "\n" ) )
+    }
+    try {
+        SASLAuthentication.supportSASLMechanism( 'PLAIN', 0 )
+        
+        var username = $username.val()
+        if( username.indexOf( '@' ) < 0 ) {
+            username +=  "@" + config.extension
+        }
+
+        connection.login( username,
+                          $password.val(),
+                          'mimis/bot/' )
+        $status.append( $('<li/>').text( "Logged in as " + connection.getUser() + "\n" ) )
+        
+        var presence = new Presence( Presence.Type.available,
+                                     'Mimis Bot',
+                                     0, // priority -128 - 128
+                                     Presence.Mode.away )
+        connection.sendPacket( presence );
+    } catch( ex ) {
+        $status.append( $('<li/>').text( "Failed to log in as " + username + "\n" ) )
+    }
+
+    var MessageListener = Packages.org.jivesoftware.smack.MessageListener
+  
+    var chat = connection.getChatManager().createChat(
+        "will@dhappy.org",
+        new MessageListener( {
+            processMessage : function( chat, message ) {
+                $status.append( $('<li/>').text( "Received message: " + message ) )
+            },
+        } ) )
+
+    //chat.sendMessage("Howdy!")
+  
+    var $rosterTable = $('<table/>')
+    $rosterTable.append( $('<thead/>').append( $('<tr/>')
+                                               .append( $('<th/>').text( 'Presence' ) )
+                                               .append( $('<th/>').text( 'Username' ) )
+                                               .append( $('<th/>').text( 'Name' ) )
+                                               .append( $('<th/>').text( 'Status' ) ) ) )
+    var $roster = $('<tbody/>')
+    $rosterTable.append( $roster )
+
+    var rosterEntries = {}
+    function updateEntry( roster, entry ) {
+        var $entry = rosterEntries[ entry.user ]
+        if( typeof $entry == 'undefined' ) {
+            $entry = $('<tr/>')
+            $roster.append( $entry )
+        }
+        var presence = roster.getPresence( entry.user )
+        var mode = presence.type
+        if( mode == Presence.Type.available && presence.mode != null ) {
+            mode = presence.mode
+        }
+        var status = presence.status
+
+        $entry.attr( { presence: mode } )
+
+        $entry.empty()
+        $entry.append( $('<td/>').attr( { title: mode } ).text( '•' ) )
+            .append( $('<td/>').text( entry.user ) )
+            .append( $('<td/>').text( entry.name ) )
+            .append( $('<td/>').text( status ) )
+    }
+
+    $('body')
+        .append( $rosterTable )
+        .append( $('<input type="button" value="Roster"/>')
+                 .click( function() {
+                     $roster.empty()
+                     var roster = connection.getRoster()
+                     var entries = roster.getEntries()
+                     var iterator = entries.iterator()
+                     while( iterator.hasNext() ) {
+                         updateEntry( roster, iterator.next() )
+                     }
+                 } ) )
+
+    var MessageTypeFilter = org.jivesoftware.smack.filter.MessageTypeFilter
+    var Message = org.jivesoftware.smack.packet.Message
+    var PacketListener = org.jivesoftware.smack.PacketListener
+  
+    var msgListener = new PacketListener( {
+        processPacket : function( message ) {
+    /*
+            if( message.getBody() != null ) {
+                var out = new StringBuffer()
+                
+                var cmd = message.getBody().toLowerCase()
+                if( cmd.equals( "roster" ) ) {
+                    var roster = connection.getRoster()
+                    var entries = roster.getEntries()
+                    for( var entry in entries ) {
+                        out.append(entry + "\n")
+                    }
+                } else {
+                    out.append( "Unknown: \"" + cmd + "\"")
+                }
+                
+                var reply = new Message()
+                reply.setTo( message.getFrom() )
+                reply.setBody( out.toString() )
+                connection.sendPacket( reply )
+            }
+    */
+        }
+    } )
+
+    var filter = new MessageTypeFilter( Message.Type.chat )
+    try {
+        connection.addPacketListener( msgListener, filter )
+    } catch( ex ) {
+        $status.append( $('<li/>').text( "bin/xmpp/list/clickHandler/connection.addPacketListener: " + ex.message + "\n" ) )
+    }
+}
+
+$('body').append(
+    $('<input type="button" value="Google Login"/>')
+        .click( clickHandler ) )

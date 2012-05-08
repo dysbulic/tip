@@ -1,0 +1,67 @@
+var File = java.io.File
+
+var $crumbList = $('<ol id="breadcrumbs"/>')
+$('body').append( $crumbList )
+
+var $crumbLists = []
+
+var $fileList = $('<ol id="files"/>')
+$('body').append( $fileList )
+
+$log = $('<ol id="filelist"/>').addClass( 'log' )
+
+function list( path ) {
+    var root = new File( new String( path ) )
+
+    var $crumb =
+        $('<li/>')
+	.attr( {
+	    href : root.absolutePath,
+	} )
+        .click( function() {
+            var href = $(this).attr( 'href' )
+            while( $crumbLists.length >= this.idx ) {
+                var $list = $crumbLists.pop()
+                $list.remove()
+            }
+	    list( href )
+        } )
+        .text( root.name )
+    $crumbLists.push( $crumb )
+    $crumb.idx = $crumbLists.length
+    $crumbList.append( $crumb )
+    
+    $fileList.empty()
+    
+    var type
+    if( root.isFile() ) {
+        type = 'file'
+    } else {
+        type = 'directory'
+    }
+
+    $log.append( $('<li/>').text( "Listing: " + path ) )
+    var files = root.listFiles()
+    for( idx in files ) {
+        var file = files[ idx ]
+	var $item =
+            $('<li/>')
+	    .attr( {
+		href : file.absolutePath,
+                type : file.isDirectory() ? 'directory' : 'file',
+	    } )
+	    .click( function() {
+                var href = $(this).attr( 'href' )
+                $log.append( $('<li/>').text( "Clicked: " + href ) )
+		list( href )
+	    } )
+            .text( file.name )
+        $fileList.append( $item )
+    }
+}
+
+if( java.lang.System.getProperty("os.name").startsWith( "Windows" ) ) {
+    list( "c:\\" )
+} else {
+    list( "/" )
+}

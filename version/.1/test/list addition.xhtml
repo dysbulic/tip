@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC
+  "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>List Addition</title>
+  <script type="application/javascript" src=".../lib/jquery/jquery.js"/>
+  <script type="application/javascript" src=".../lib/tip/Array.each.js"/>
+  <script type="application/javascript" src=".../lib/tip/pointers.js"/>
+  <script type="application/javascript" src=".../lib/tip/List.js"/>
+  <script type="application/javascript" src=".../lib/tip/__.jquery"/>
+  <script type="application/javascript"><![CDATA[
+      $( function() {
+          var $list = $('<ul/>')
+          $.__.$('#').append( $list )
+
+          var obj = {
+              prop : 'prop',
+              valueOf : function() {
+                  return 4
+              },
+          }
+          $list.append( $('<li/>').text( 'obj = ' + obj ) )
+          $list.append( $('<li/>').text( 'obj.prop = ' + obj.prop ) )
+
+          try {
+              obj = {
+                  valueOf : function() {
+                      throw function() { return 4 }
+                  },
+              }
+          } catch( f ) {
+              $list.append( $('<li/>').text( 'caught obj init = ' + obj ) )
+          }
+          try {
+              $list.append( $('<li/>').text( 'obj = ' + obj ) )
+          } catch( f ) {
+              $list.append( $('<li/>').text( 'caught obj = ' + f ) )
+          }
+
+          var list = new List()
+          list.__.set( 'test.sublist.name', 'test' )
+          $list.append( $('<li/>').text( 'typeof list = ' + typeof list ) )
+          $list.append( $('<li/>').text( 'list.prototype = ' + list.prototype ) )
+          $list.append( $('<li/>').text( 'list.__.get( "test" ) = ' +
+                                         list.__.get( 'test' ) ) )
+          $list.append( $('<li/>').text( 'list.__.get( "test.sublist" ) = ' +
+                                         list.__.get( 'test.sublist' ) ) )
+          $list.append( $('<li/>').text( 'list.__.get( "test.sublist.name" ) = ' +
+                                         list.__.get( 'test.sublist.name' ) ) )
+
+          list.__.set( 'test', 'testing' )
+          $list.append( $('<li/>').text( 'list.test = ' +
+                                         list.test ) )
+
+          list.__.set( 'test.sub.sublist.name', 'test' )
+          $list.append( $('<li/>').text( 'list.test.sublist.name = ' +
+                                         list.test.sublist.name ) )
+
+          list.__.each( function( val, key ) {
+              $list.append( $('<li/>').text( 'list.' + key + ' = ' + val ) )
+          } )
+
+          var sublist = new List( {
+              type : 'list',
+              position : 2,
+          } )
+          $list.append( $('<li/>').text( 'sublist.__.get( "type" ) = ' +
+                                         sublist.__.get( 'type' ) ) )
+          $list.append( $('<li/>').text( 'sublist.type = ' +
+                                         sublist.type ) )
+          $list.append( $('<li/>').text( 'sublist.position = ' +
+                                         sublist.position ) )
+
+          list.__.add( sublist, 'sublist' )
+          $list.append( $('<li/>').text( 'list.sublist.type = ' +
+                                         list.sublist.type ) )
+
+          sublist = new List( { type : 'overwrite' } )
+          sublist = new List( { type : 'overwrite' } )
+          list.__.add( sublist, 'sublist' )
+          $list.append( $('<li/>').text( 'list.sublist.type = ' +
+                                         list.sublist.type ) )
+          $list.append( $('<li/>').text( 'list.sublist.position = ' +
+                                         list.sublist.position ) )
+          $list.append( $('<li/>').text( 'list.sublist = ' +
+                                         list.sublist ) )
+
+          try {
+              sublist = new List( { type : function() { return 'func' } } )
+          } catch( type ) {
+              $list.append( $('<li/>').text( 'caught sublist.type init = ' +
+                                             type ) )
+          }
+              
+          try {
+              list.__.add( sublist, 'sublist' )
+          } catch( type ) {
+              $list.append( $('<li/>').text( 'caught sublist add = ' +
+                                             type ) )
+          }
+
+          try {
+              $list.append( $('<li/>').text( 'sublist.type = ' +
+                                             sublist.type ) )
+          } catch( type ) {
+              $list.append( $('<li/>').text( 'caught sublist.type = ' +
+                                             type ) )
+          }
+
+          $list.append( $('<li/>').text( 'list.sublist.type = ' +
+                                         list.sublist.type ) )
+          $list.append( $('<li/>').text( 'list.sublist = ' +
+                                         list.sublist ) )
+
+      } )
+  ]]></script>
+</head>
+<body>
+  <p><em>In progress&hellip;</em></p>
+  <p>The ability to intercept <code>obj.<em>val</em></code> for undefined <em>val</em>s would be incredibly helpful.</p>
+  <p>The issue that I am struggling with currently is:</p>
+  <pre>var obj = { valueOf : function() { return 3 } }
+console.log( obj )</pre>
+  <p>prints <code>3</code> while:</p>
+  <pre>var obj = { valueOf : function() { return function() { return 3 } } }
+console.log( obj )</pre>
+  <p>prints <code>Object</code>.</p>
+  <p><code>valueOf</code> must return a primitive type or it is not evaluated.</p>
+</body>
+</html>

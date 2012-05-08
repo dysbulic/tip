@@ -1,1 +1,0 @@
-../himinbi.org/odin/javascript_compatability/compatability.js

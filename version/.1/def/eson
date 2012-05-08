@@ -1,0 +1,38 @@
+( function() {
+    var def = {
+        row : { height : 100 },
+        col : { width  : 100 },
+        pad : {
+            left : 10,
+            bottom : 10,
+        },
+    }
+    with( def ) {
+        mimis.x( def, {
+            rect : {
+                rx : 1,
+                ry : 1,
+                x : 0,
+                y : 0,
+                width  : col.width,
+                height : row.height,
+            },
+            use : {
+                width  : col.width,
+                height : row.height,
+            },
+            display : {
+                width : 3.75 * col.width,
+            },
+            indent : 10,
+            current : {
+                width : 4 *  col.width,
+            },
+            depth : {
+                above : 0,
+                below : 0,
+            },
+        } )
+    }
+    return def
+} )()

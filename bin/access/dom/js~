@@ -1,0 +1,16 @@
+
+var service = null
+try {
+    service = DOMService.getService( hostApplet )
+    var title = service.invokeAndWait( new DOMAction() {
+        function run(DOMAccessor accessor) {
+            var doc = accessor.getDocument( hostApplet )
+            return doc.getTitle()
+        } } )
+}
+catch (DOMUnsupportedException e1)
+{
+}
+catch (DOMAccessException e2)
+{
+}
