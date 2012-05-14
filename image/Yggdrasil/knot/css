@@ -1,0 +1,207 @@
+@import url('.../font/css');
+
+* {
+    transition : all 200ms ease-out;
+    -webkit-transition : all 200ms ease-out;
+}
+
+[pos='center'] [layer='base'] {
+    stroke-opacity : 0.4;
+            stroke : #521FFE;
+      stroke-width : 0.4;
+              fill : #FCDAC0;
+      fill-opacity : .75;
+}
+
+[pos='center'] [layer='breach'] {
+    stroke-opacity : 0.3;
+            stroke : black;
+      stroke-width : 0.4;
+}
+
+[type="branch"] {
+    stroke-opacity : 0.9;
+            stroke : #17120E;
+}
+
+  [idx="1"] {
+                fill : #B4B2BF;
+    background-color : #B4B2BF;
+} [idx="2"] {
+                fill : #6E0606;
+    background-color : #6E0606;
+} [idx="3"] {
+                fill : #D1480B;
+    background-color : #D1480B;
+} [idx="4"] {
+                fill : #093CCB;
+    background-color : #093CCB;
+} [idx="5"] {
+                fill : #06496E;
+    background-color : #06496E;
+} [idx="6"] {
+                fill : #AD2002;
+    background-color : #AD2002;
+} [idx="7"] {
+                fill : #880787;
+    background-color : #880787;
+} [idx="8"] {
+                fill : #078807;
+    background-color : #078807;
+} [idx="9"] {
+                fill : #6E6106;
+    background-color : #6E6106;
+} [idx="A"] {
+                fill : #071448;
+    background-color : #071448;
+} [idx="B"] {
+                fill : #071448 ! important;
+    background-color : #071448 ! important;
+} [idx="C"] {
+                fill : #071448;
+    background-color : #071448;
+}
+
+[part='animals'] [pos='bottom'] [idx='B'] * { fill: red }
+
+[func='¿marker?'] [idx="1"] line,
+[func='¿marker?'] [idx="1"] circle {
+    stroke : #6e6106;
+}
+[func='¿marker?'] [idx="2"] line,
+[func='¿marker?'] [idx="2"] circle {
+    stroke : #6e0606;
+}
+[func='¿marker?'] [idx="3"] line,
+[func='¿marker?'] [idx="3"] circle {
+    stroke : #D1480B;
+}
+[func='¿marker?'] [idx="4"] line,
+[func='¿marker?'] [idx="4"] circle {
+    stroke : #093CCB;
+}
+[func='¿marker?'] [idx="5"] line,
+[func='¿marker?'] [idx="5"] circle {
+    stroke : #06496E;
+}
+[func='¿marker?'] [idx="6"] line,
+[func='¿marker?'] [idx="6"] circle {
+    stroke : #AD2002;
+}
+[func='¿marker?'] [idx="7"] line,
+[func='¿marker?'] [idx="7"] circle {
+    stroke : #880787;
+}
+[func='¿marker?'] [idx="8"] line,
+[func='¿marker?'] [idx="8"] circle {
+    stroke : #078807;
+}
+[func='¿marker?'] [idx="9"] line,
+[func='¿marker?'] [idx="9"] circle {
+    stroke : #071448;
+}
+
+text {
+    font-family : Bellerose;
+      font-size : 13pt;
+    text-anchor : middle;
+}
+
+[func='¿marker?'] line,
+[func='¿marker?'] circle {
+        stroke-width : 3;
+      stroke-opacity : 1;
+    stroke-dasharray : 0;
+}
+
+[func='¿marker?'] line {
+    stroke-linecap : round;
+}
+
+svg:hover [func='¿marker?'] line { stroke-opacity: .25 }
+/*  */
+[state='hovered'] line { stroke-opacity: .75 }
+
+[func='¿marker?'] { }
+
+[state='not hovered'] text {
+      fill-opacity : .25;
+    stroke-opacity : .25;
+}
+
+/* ToDo: */
+[state='not hovered'],
+[state='not hovered'] circle {
+      fill-opacity : .1;
+    stroke-opacity : .1;
+}
+
+[func='label'] [idx],
+ [func='icon'] [idx] {
+      fill-opacity : 0;
+    stroke-opacity : 0;
+}
+
+[func='label'] [idx][state='hovered'],
+ [func='icon'] [idx][state='hovered'] {
+      fill-opacity : 1;
+    stroke-opacity : 1;
+}
+
+[func='label'] rect {
+            fill : #946C00;
+    fill-opacity : .5;
+}
+
+text {
+    font-family : 'Junius Unicode';
+    font-weight : bold;
+      font-size : 47pt;
+       position : relative;
+            top : 50px;
+}
+
+text {
+          stroke : #574000;
+    stroke-width : .75;
+}
+
+@namespace xlink 'http://www.w3.org/1999/xlink';
+
+svg:hover use[xlink|href='#9_worlds'],
+ svg:hover use[id="9 worlds rotated copy"] { opacity : .25 }
+
+/*
+svg > *:hover [pos='center'] [func='background'],
+ svg > [pos='center']:hover  [func='background'] {
+*/
+[pos='center'] [func='background'] {
+               stroke : #301800;
+     stroke-dasharray : 0.5 0.5;
+       stroke-linecap : round;
+      stroke-linejoin : round;
+       stroke-opacity : 0.4;
+         stroke-width : 0.5;
+                 fill : #FAF6E8;
+         fill-opacity : 0.25;
+}
+svg:hover [pos='center'] [func='background'] {
+         fill-opacity : 0.6;
+}
+
+p {
+            text-align : center;
+                border : 1.5px solid;
+               padding : 0em .5em;
+               display : table;
+                margin : auto;
+         border-radius : 3px;
+             font-size : 20pt;
+    background-opacity : .25;
+                 color : #111;
+           text-shadow : -1px  0px #BBB,
+                          1px  0px #BBB,
+                          0px -1px #BBB,
+                          0px  1px #BBB;
+               z-index : 3;
+}
