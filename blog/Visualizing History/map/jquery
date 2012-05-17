@@ -1,0 +1,202 @@
+( function() {
+    var slider = ( d3.select( 'body' )
+                   .append( 'div' )
+                   .css( {
+                       position : 'absolute',
+                       width : '100%',
+                   } ) )
+    var $slider = $(slider).slider()
+    //$('body').append( $slider )
+
+    $.fx.step[ 'slide' ] = function( fx ) {
+        if( ! fx.initialized ) {
+            fx.start = $slider.slider( 'value' )
+            fx.min = $slider.slider( 'option', 'min' )
+            fx.initialized = true
+        }
+        $slider.slider( 'value', fx.pos * ( fx.end - fx.min ) )
+    }
+
+    $slider.bind( 'slidechange', function( evt, ui ) {
+        setDate( ui.value )
+    } )
+
+    $slider.bind( 'dblclick', function( evt ) {
+        var end = $slider.slider( 'option', 'max' )
+        $slider.animate( { slide : end }, 30000 )
+    } )
+
+
+    // A sorted list of active locations
+    var opens = ( function() {
+        var opens = []
+        var concat = opens.concat
+        opens.concat = function() {
+            return ( concat
+                     .apply( opens, arguments )
+                     .sort( function( a, b ) {
+                         return a.date.open - b.date.open
+                     } ) )
+        }
+        return opens
+    } )()
+
+
+var svg = ( d3.select( 'body' )
+            .append( 'svg:svg' )
+            .attr( {
+                width : '100%',
+                height : '100%',
+                viewBox : [0, 0, 960, 500].join( ' ' ),
+            } ) )
+svg.append( 'svg:g' ).attr( 'id', 'states' )
+svg.append( 'svg:g' ).attr( 'id', 'state-centroids' )
+
+// Our projection.
+var xy = d3.geo.albersUsa()
+
+d3.json( '.../geo/usa/state/json',
+         function( collection ) {
+  svg.select( '#states' )
+    .selectAll( 'path' )
+      .data( collection.features )
+        .enter().append( 'svg:path' )
+          .attr( {
+              d : d3.geo.path().projection( xy ),
+              title : function( d ) {
+                  return d.name
+              },
+          } )
+} )
+
+/*
+d3.json( '.../geo/usa/state/centroid/json',
+         function(collection) {
+  svg.select( '#state-centroids' )
+    .selectAll( 'circle' )
+      .data(collection.features
+      .sort(function(a, b) { return b.properties.population - a.properties.population }))
+    .enter().append( 'svg:circle' )
+      .attr( {
+          'transform' : function(d) {
+              return "translate( " + xy( d.geometry.coordinates ) + " )"
+          },
+          r : 0,
+      } )
+    .transition()
+      .duration( 1000 )
+      .delay( function(d, i) { return i * 50 } )
+      .attr( 'r', function(d) { return r(d.properties.population) } )
+} )
+*/
+
+function addMarkers( locs ) {
+    // The radius scale for the centroids.
+    var r = ( d3.scale.sqrt()
+              .domain( [0, 1e6] )
+              .range( [0, 10] ) )
+
+    var idx = 0
+    svg.select( '#state-centroids' )
+        .selectAll( 'circle' )
+          .data( locs )
+          .enter()
+            .append( 'svg:circle' )
+              .attr( {
+                  transform : function( d ) {
+                      return "translate(" + xy( d.pos ) + ")"
+                  },
+                  r : 10,
+                  id : function() {
+                      return 'marker-' + idx++
+                  },
+              } )
+
+    console.log( "len: " + locs.length )
+    console.log( "idx: " + idx )
+
+    // Don't know how to get a reference to the circles
+    for( var i = 0; i < idx; i++ ) {
+        locs[i].$marker = $('#marker-' + i)
+    }
+/*
+            .transition()
+              .duration( 1000 )
+              .delay( function( d, i ) { return i * 50 } )
+              .attr( 'r', function( d ) { return 10 } )
+*/
+/*
+              .attr( {
+                  r : function( d ) { return 10 },
+              } )
+*/
+    opens = opens.concat( locs )
+    configSlider()
+}
+
+    function configSlider() {
+        $slider.slider( 'option', 'min', opens[0].date.open.valueOf() )
+        //label.date.$start.text( opens[0].date.open )
+        $slider.slider( 'option', 'max', opens[-1].date.open.valueOf() )
+        //label.date.$end.text( opens[-1].date.open )
+        setDate( new Date(  $slider.slider( 'value' ) ) )
+    }
+
+    function setDate( date ) {
+        $(opens).each( function( idx, loc ) {
+            loc.$marker.css( {
+                visibility : loc.date.open < date ? 'visible' : 'hidden',
+            } )
+        } )
+    }
+
+var service_url = 'http://api.freebase.com/api/service/mqlread'
+function retrieveLocations( mql, oncomplete, translator ) {
+    var handler = translator || function( data ) {
+        var locations = []
+        data.result[0].locations.each( function( location ) {
+            var addr = location[ 'mail:address' ]
+                
+            locations.push( {
+                name : location.name,
+                pos : ( function() {
+                    var loc = location[ 'geo:address' ].geolocation
+                    var pos = [ loc.longitude, loc.latitude ]
+                    pos = $.extend( pos, loc )
+                    return pos
+                } )(),
+                street : addr.street_address.value,
+                city : addr.citytown.name,
+                state : addr.state_province_region.name,
+                zip : addr.postal_code.name,
+                date : {
+                    open : ( function() {
+                        var date = new Date( location.opening_date )
+                        var toString = date.toString
+                        date.toString = function() {
+                            return toString.call( this, 'writtenDate' )
+                        }
+                        return date
+                    } )(),
+                    close : Date.parse( location.closing_date ),
+                },
+            } )
+        } )
+        arguments.callee.oncomplete.call( this, locations )
+    }
+    handler.oncomplete = handler.oncomplete || oncomplete
+
+    var query_envelope = { query : mql }
+    $.getJSON( service_url + '?callback=?',
+               { query : JSON.stringify( query_envelope ) },
+               handler )
+}
+
+var mqlURI = 'query/Wal-mart/locations/mql'
+mqlURI = 'http://loki/blog/query/Wal-mart/locations/mql'
+d3.json( mqlURI,
+         function( data ) {
+             retrieveLocations( data, addMarkers )
+         } )
+
+} )()

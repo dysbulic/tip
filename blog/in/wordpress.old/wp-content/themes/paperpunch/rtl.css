@@ -1,0 +1,221 @@
+/*
+Theme Name: Paperpunch
+RTL: Yoav Farhi, yoav@automattic.com
+*/
+
+/*Body & Links
+------------------------------------------------------------ */
+body {
+	font-family: Arial, sans-serif;
+}
+/* Typography
+---------------------------
+*/
+#title {
+	font-family: Arial, sans-serif;
+}
+.post-header h1, .post-header h2, #description, #navigation li a, .meta span, div.tags, .entry h2, .entry h3, .entry h4, div.category, div.entries ul li span, #sidebar h2.widgettitle, #sidebar li.widget_tag_cloud, div.comment-number h4, .c-head span, div.reply a, div#comments-rss, #footer div.widget h2 {
+	font-family: Arial, sans-serif;
+}
+/*Basic Structure
+------------------------------------------------------------ */
+#wrapper {
+	text-align: right;
+}
+#content {
+	float: right;
+}
+#sidebar {
+	float: left;
+}
+/*Header
+------------------------------------------------------------ */
+ul#follow {
+	float: left;
+	margin: 5px 0 0 30px;
+}
+ul#follow li {
+	float: right;
+	margin-right: 10px;
+	margin-left: 0;
+}
+#title {
+	float: right;
+	margin: 0 30px 0 0;
+}
+#description {
+	clear: right;
+	float: right;
+}
+/*Nav
+---------------------------------------*/
+#navigation {
+	background-position: bottom right;
+}
+#navigation .menu, #navigation .menu ul {
+	float: right;
+}
+#navigation .menu { padding: 15px 30px 7px 20px; }
+#navigation .menu a {
+	margin: 0 0 0 25px;
+}
+#navigation .menu li { float: right; }
+
+/*Using display:none instead of positioning to hide menus in RTL for browser compatability*/
+#navigation .menu ul {	display:none; }
+#navigation .menu li ul ul { margin: -37px 170px 0 0; }
+#navigation .menu li:hover ul ul, #navigation .menu li:hover ul ul ul, #navigation .menu li:hover ul ul ul ul, #navigation .menu li.sfhover ul ul, #navigation .menu li.sfhover ul ul ul, #navigation .menu li.sfhover ul ul ul ul { display:none; }
+#navigation .menu li:hover ul, #navigation .menu li li:hover ul, #navigation .menu li li li:hover ul, #navigation .menu li li li li:hover ul, #navigation .menu li.sfhover ul, #navigation .menu li li.sfhover ul, #navigation .menu li li li.sfhover ul, #navigation .menu li li li li.sfhover ul { display:block; }
+/*Post Styling
+------------------------------------------------------------ */
+/*Post Header
+---------------------------------------*/
+.meta {
+	text-align: left;
+}
+div.tags {
+	margin: 10px 30px 0 0;
+	padding: 0 24px 0 0;
+	background: url(images/tags-rtl.png) no-repeat 100% 1px;
+}
+/*Post Body
+---------------------------------------*/
+blockquote {
+	padding: 0 10px 0 0;
+	margin: 10px 10px 20px 0;
+	border-right: 1px solid #dedede;
+	border-left: none;
+}
+.entry ol, .c-body ol {
+	margin: 0 20px 15px 0;
+}
+p.note {
+	float: right;
+	margin: 20px 30px 0 0;
+	font-style: normal;
+}
+/*Post Footer
+---------------------------------------*/
+div.comments {
+	margin: 0 -9px 0 0;
+}
+div.comments a, div.comments div {
+	float: right;
+	background: url(images/comments-wrap-rtl.png) no-repeat 100% 0;
+}
+div.comments a strong, div.comments div strong {
+	right: 58px;
+	left: auto;
+}
+div.category {
+	float: left;
+	margin: 20px 0 0 30px;
+}
+
+/*Archives List
+---------------------------------------*/
+img.archive-comment {
+	float: left;
+	margin: 0 0 10px 30px;
+}
+.entries span {
+	text-align: left;
+}
+.entries span.archdate, .entries a:hover span.archdate {
+	float: right;
+	margin-left: 3em;
+	margin-right: 0;
+	padding-right: .5em;
+	padding-left: 0;
+}
+.entries span.comments_number {
+	float: left;
+	margin-left: 30px;
+	margin-right: 0;
+}
+/*Sidebar
+------------------------------------------------------------ */
+#sidebar h2.widgettitle {
+	padding: 10px 0 8px 10px;
+	text-align: left;
+}
+#sidebar ul li.widget ul li ul {
+	margin: 0 5px 0 0;
+}
+#sidebar ul li.widget ul li ul li {
+	margin-right: 5px;
+	margin-left: 0;
+}
+#sidebar table#wp-calendar caption {
+	text-align: right;
+}
+/*Search Box
+---------------------------------------*/
+#search_form input {
+	border-left: 1px solid #ccc;
+	border-right:none;
+}
+
+/*Comments
+------------------------------------------------------------ */
+/*Top
+---------------------------------------*/
+div.comment-number { margin: 30px 10px 20px 0; }
+div.comment-number span a:link, div.comment-number span a:visited {
+	margin: 0 20px 0 10px;
+}
+/*Body
+---------------------------------------*/
+#comments ul.children {
+	margin: 10px 96px 0 0;
+}
+div.c-grav {
+	float: right;
+	margin: 10px 30px 10px 0;
+}
+div.c-body {
+	float: left;
+	margin: 0 0 0 30px;
+}
+.c-head {
+	text-align: left;
+}
+#reply-title small { float: left; }
+div.reply { float: left; }
+/*Form
+---------------------------------------*/
+h3#reply-title {
+	padding: 10px 0 10px 20px;
+	text-align: left;
+}
+#commentform .comment-form-author label, #commentform .comment-form-email label, #commentform .comment-form-url label {
+	margin: 10px 0 5px 0;
+}
+div#comments-rss a {
+	padding: 0 21px 0 0;
+	background-position: 100% 1px;
+}
+p.comments-rss a {
+	padding: 0 19px 0 0;
+	background-position: 100% .15em;
+}
+/*Pingbacks/Trackbacks
+---------------------------------------*/
+ol.pinglist {
+	margin: 0 30px 10px 0;
+}
+
+/*Footer Columns
+---------------------------------------*/
+#footer .widget-container {
+	float: right;
+	margin-left: 30px;
+	margin-right: 0;
+}
+#footer .widget-container.first {
+	margin-right: 0;
+}
+
+/*Search
+---------------------------------------*/
+#search_form input#searchsubmit { margin: 0 5px 0 0; }

@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC
+ "+//ISBN 0-9673008-1-9//DTD OEB 1.0.1 Document//EN"
+ "http://openebook.org/dtds/oeb-1.0.1/oebdoc101.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:t="tip:"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<head profile="http://gmpg.org/xfn/11"> 
+<link rel="icon" type="image/svg+xml" href=".../revolution/Technoanarchist/logo/letter/" />
+<link rel="icon" type="image/png" href=".../revolution/Technoanarchist/logo/letter/png" />
+<link rel="stylesheet" type="text/css" href=".../style/blog/css"/>
+<link rel="stylesheet" type="text/css" href=".../lib/jquery/ui/css"/>
+<link rel="stylesheet" type="text/css" href="css"/>
+<title>Compression Trees</title>
+</head>
+<body>
+<section>
+<title>Compression Trees</title>
+
+<style type="text/cssx"><![CDATA[
+(* I'm going to write descriptors for tree decorators with the expectation that a team of programmers will adapt <is=.../lib/mimis/2. ̅0>Mìmís</> to apply these decorators. *)
+
+/ > section > title[ text() == 'Abstract' ] {
+}
+]]></style>
+
+<section>
+<title>Abstract</title>
+
+<p><a href=".../lib/mimis/">Mïmis</a> is a <acronym title="peer=to-peer">P2P</acronym> storage system. It intelligently combines contributions from all the nodes into the network into a navigable system. This is accomplished in part through an abstract representation of the local reseources as communicated to the network. This paper discusses the abstraction of the filesystem, specifically the efficient distributed invalidation of hash trees.</p>
+
+</section>
+
+<section>
+<title>Mïmis URIs</title>
+
+<ul>
+<li>A Public Search: <a href=".../book/by/Nancy Kress/Sleepless/">.../book/Sleepless/by/Nancy Kress/</a></li>
+<li>A <a href=".../blog/Compression Trees/">.../blog/Compression Trees/</a></li>
+</ul>
+
+</section>
+
+<section id=".../lib/mimis/1/structure/">
+<title>The Structure of Mïmis 1.0</title>
+
+<object style="height: 300px" data=".../lib/mimis/1/structure/"/>
+
+</section>
+
+<section id="fs">
+<title>Filesystem Tree</title>
+<p>A java program running in an applet is monitoring the filesystem and mirroring its structure to a neo4j instance. So, the filesystem:</p>
+
+<object style="height: 300px" data="filesystem/traditional/svg"/>
+
+<p>Becomes the graph:</p>
+
+<object style="height: 300px" data="filesystem/tree/mirror/0/"/>
+</section>
+
+<section>
+<title>Hash Function</title>
+
+<p>A hash function is a mathmatical operation that transforms a series of bits into a fixed-width hash code. So, for example, I can run a program that takes any file and performs a <acronym title="Simple Hashing Algorithm">sha</acronym>-256 hash of it. This will be a 256-bit <em>likely unique</em> identifier for that file.</p>
+</section>
+
+<section>
+<title>Converting Filesystems to Hash Trees</title>
+
+<p>Overlay graphs may now be built in Neo4j to align with the filesystem tree.</p>
+
+<ol>
+<li>
+<section>
+<title>Hash Files</title>
+<p>The first nodes to add are the sha-256 hashes for each of the files:</p>
+
+<object style="height: 400px" data="filesystem/tree/mirror/1/"/>
+</section>
+</li>
+
+<li>
+<section>
+<title>Order Contents</title>
+<p>Order the hash nodes within each directory:</p>
+
+<object style="height: 500px" data="filesystem/tree/mirror/1/sorted/"/>
+</section>
+</li>
+
+<li>
+<section>
+<title>Hash Hashes</title>
+<p>The bytes of the hash values for the files are then hashed to produce a new hash:</p>
+
+<object style="height: 600px" data="filesystem/tree/mirror/2/"/>
+</section>
+</li>
+
+<li>
+<section>
+<title>Order Contents</title>
+<p>The higher-level directory can then be ordered according to those entries:</p>
+
+<object style="height: 500px" data="filesystem/tree/mirror/2/sorted/"/>
+</section>
+</li>
+
+<li>
+<section>
+<title>Hash Hashes</title>
+<p>Repeat the process of ordering and hashing hashes recursively to produce a tree:</p>
+
+<object style="height: 700px" data="filesystem/tree/mirror/3/"/>
+</section>
+</li>
+
+<li>
+<section>
+<title>Data-Presence Trees</title>
+
+<p>This produces an isomorphic tree with a unique identifier for the state of each position in the directory tree:</p>
+
+<object style="height: 700px" data="filesystem/tree/mirror/3/mapped/"/>
+</section>
+</li>
+</ol>
+</section>
+
+<section>
+<title>Stub Names</title>
+
+<p>Filenames are decomposed into directories containing files whose names are what were previously the file extensions. For example, consider the contents of my <a href=".../image/">image collection</a>. When I started I had files like:</p>
+
+<ul>
+  <li><a href=".../image/kitten/head/svg">kitten_head.svg</a></li>
+  <li><a href=".../image/light bulb/svg">light bulb.svg</a></li>
+  <li><a href=".../image/flag/England/">Flag of England.svg</a></li>
+</ul>
+
+<p>Converting them to stub form they become:</p>
+
+<ul>
+  <li><a href=".../image/kitten/head/svg">kitten/head/svg</a></li>
+  <li><a href=".../image/light bulb/svg">light bulb/svg</a></li>
+  <li><a href=".../image/flag/England/">flag/England/svg</a></li>
+</ul>
+
+<p>The directories leading up to the file are a list of increasingly specific tags. Part of the point of stub links is to ease comprehensible of alternate paths. For example, the path: <code><a href=".../book/by/Nancy Kress/Beggars in Spain/">book/by/Nancy Kress/Beggars in Spain/</a></code>.</p>
+
+<ul>
+  <li></li>
+</ul>
+
+<p>The directory <code>Beggars in Spain</code> is also linked to from:</p>
+
+<ul>
+  <li><a href=".../book/by/Nancy Kress/Beggars in Spain/">magazine/Asimov's Science Fiction/1991/April/Nancy Kress/Beggars in Spain</a></li>
+  <li><a href=".../book/by/Nancy Kress/Beggars in Spain/">book/award/Hugo/winner/1992</a></li>
+  <li><a href=".../book/by/Nancy Kress/Beggars in Spain/">book/award/Nebula/winner/1992</a></li>
+  <li><a href=".../book/by/Nancy Kress/Beggars in Spain/">book/collection/The Year's Best Science Fiction/9th/Nancy Kress/Beggars in Spain</a></li>
+  <li><a href=".../book/by/Nancy Kress/Beggars in Spain/">book/collection/The Year's Best Science Fiction/9th/1</a></li>
+</ul>
+</section>
+
+<section>
+<title>Relative Roots</title>
+
+<p>Each directory contains a <code>...</code> subdirectory which is a symlink to <code>../...</code>. The one exception is the root of the filesystem where <code>...</code> is a link to <code>.</code>.</p>
+
+<p>Structurally this creates a tree that looks like:</p>
+
+<object id="fsdiagram" data=".../lib/mimis/tree/in/filesystem/svg"/>
+
+<p></p>
+
+</section>
+
+<section>
+<title>Indirected Binaries</title>
+
+<p>At some depth of <a href=".../lib/bebnf/">parsing</a>, information can be thought of as <q>coherent</q>, meaning that there is an inter-relationship between the constituent parts ∋ removing a part will disrupt the gestalt.</p>
+
+<p>For example, a <a href="http://stackoverflow.com/questions/1563883/decoding-a-jpeg-huffman-block-table">Huffman block</a> in a JPEG where changing any of the bits affects all of the decoded bits.</p>
+
+<p>In the filesystem model, these are represented as files and stored as links to <code>.../hashes/</code></p>
+</section>
+</section>
+</body>
+</html>
