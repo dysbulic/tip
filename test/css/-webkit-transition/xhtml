@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC
+ "+//ISBN 0-9673008-1-9//DTD OEB 1.0.1 Document//EN"
+ "http://openebook.org/dtds/oeb-1.0.1/oebdoc101.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<head profile="http://gmpg.org/xfn/11"> 
+<link rel="icon" type="image/svg+xml" href=".../revolution/Technoanarchist/logo/letter/" />
+<link rel="icon" type="image/png" href=".../revolution/Technoanarchist/logo/letter/png" />
+<link rel="stylesheet" type="text/css" href=".../style/blog/css"/>
+<link rel="stylesheet" type="text/css" href="css"/>
+<title>The -webkit-transition <acronym title="Cascading Stylesheets">CSS</acronym> Property</title>
+</head>
+<body>
+
+<p>Testing <a href="http://www.w3.org/TR/css3-transitions/">CSS transitions</a> in Webkit.</p>
+
+<section>
+<title><!--<Hypertext Markup Language>-->HTML<!--</>--></title>
+
+<div onmouseover="this.style.opacity = 0" onmouseout="this.style.opacity = 1" style="-webkit-transition: opacity 1s linear; background-color: #DDD; border: 5px solid black;"><p>This div will fade out when hovered over. In browsers that do not support this animation, there will be graceful degradation, as the div will simply fade out immediately.</p>
+<code><![CDATA[
+<div onmouseover="this.style.opacity = 0"
+      onmouseout="this.style.opacity = 1"
+   style="-webkit-transition: opacity .5s cubic;
+            background-color: #DDD;
+                      border: 5px solid black"/>]]></code>
+</div> 
+
+<div style="background-color: skyblue; border: 5px solid #DDD; -webkit-transition: -webkit-transform 2s ease-in-out" onmousedown="this.style.webkitTransform = 'rotate(+360deg)'" onmouseup="this.style.webkitTransform = 'rotate(0deg)'">
+<p>This div will spin when it is clicked!</p>
+<code><![CDATA[
+<div onmousedown="this.style.webkitTransform = 'rotate(+360deg)'"
+       onmouseup="this.style.webkitTransform = 'rotate(0deg)'"
+   style="background-color: skyblue;
+                    border: 5px solid #DDD;
+        -webkit-transition: -webkit-transform 2s ease-in-out"/>]]></code>
+</div>
+
+<link rel="stylesheet" type="text/css" href="%23activeSpin/css"/>
+<div id="activeSpin">
+<p>This div will spin when clicked.</p>
+
+<code><![CDATA[<div id="activeSpin"/>]]></code>
+
+<object disp="row" class="indent" style="height: 10em" data="%23activeSpin/css"/>
+</div>
+
+<div style="background-color: maroon; color: white; -webkit-transition: all 500ms linear; border: 10px solid black;" onmouseover="this.style.border = '20px solid blue'" onmouseout="this.style.border = '10px solid white'"> 
+<div style="-webkit-transition: all 500ms linear; border: 22px solid white;" onmouseover="this.style.border = '2px solid red'" onmouseout="this.style.border = '22px solid black'"> 
+<p>Borders can also be animated. This box has a simple border animation where the border will both grow in thickness and change color when the box is hovered.</p>
+<code><![CDATA[
+<div onmouseover="this.style.border = '20px solid blue'"
+      onmouseout="this.style.border = '10px solid white'"
+   style="background-color: maroon;
+                     color: white;
+        -webkit-transition: all 500ms linear;
+                    border: 10px solid black;"> 
+  <div onmouseover="this.style.border = '2px solid red'"
+        onmouseout="this.style.border = '22px solid black'"
+     style="-webkit-transition: all 500ms linear;
+                        border: 22px solid white;"/>
+</div>]]></code>
+</div>
+</div>
+
+<link rel="stylesheet" type="text/css" href="%23rotZ/css"/>
+<div id="rotZ">
+<p>This box should invert colors and rotate 10° along the z-axis when hovered.</p>
+<code><![CDATA[<div id="rotZ"/>]]></code>
+<object disp="row" class="indent" style="height: 15em" data="%23rotZ/css"/>
+</div>
+
+<link rel="stylesheet" type="text/css" href="%23demoButton/css"/>
+<div id="demoButton" style="border: 2px dashed #666; background-color: darkgreen; color: white;">
+<p>The transform can also be used for scaling:</p>
+<button>I scale!</button>
+<object disp="row" class="indent" style="height: 5em" data="%23demoButton/css"/>
+</div>
+
+<link rel="stylesheet" type="text/css" href="%23timingFunctions/css"/>
+<div id="timingFunctions" style="border: 2px dashed #666; background-color: darkorange; color: white;">
+<div>default »</div> 
+<div style="-webkit-transition-timing-function: linear">linear »</div> 
+<div style="-webkit-transition-timing-function: ease-in">ease-in »</div> 
+<div style="-webkit-transition-timing-function: ease-out">ease-out »</div> 
+<div style="-webkit-transition-timing-function: ease-in-out">ease-in-out »</div> 
+<div style="-webkit-transition-timing-function: cubic-bezier(0,1,1,0)">cubic-bezier(0,1,1,0) »</div> 
+<object disp="row" class="indent" data="%23timingFunctions/css"/>
+</div>
+
+<link rel="stylesheet" type="text/css" href="%23spinner/css"/>
+<div id="spinner" style="border: 2px dashed #666; background-color: #CCC;">
+
+<div/>
+
+<object disp="row" class="indent" data="%23spinner/css"/>
+</div>
+
+
+</section>
+
+<section>
+<title><acronym title="Scalable Vector Graphics">SVG</acronym></title>
+
+<p>This image should gradually change colors.</p>
+
+<object disp="row" style="height: 25em" data=".../emotion/happy/ideogram/1/"/>
+
+<object disp="row" class="indent" style="height: 25em" data=".../emotion/happy/ideogram/1/css"/>
+
+</section>
+</body>
+</html>

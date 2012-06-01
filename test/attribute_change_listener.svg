@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.0"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:html="http://www.w3.org/1999/xhtml"
+     xmlns:templ="tip:/sys/lib/templ/"
+     width="100%" height="100%" viewBox="0 0 500 500">
+  <title>Attribute Change Listener Test</title>
+  <defs>
+    <script type="text/javascript" xlink:href="jquery/dist/jquery.js" />
+    <script type="text/javascript" xlink:href="tip/src/draggable/svg/jquery" />
+    <script type="text/javascript">//<![CDATA[
+      $(function() {
+        $('circle').drag(function(event) {
+          $(this).attr({ cx: event.user.x, cy: event.user.y });
+        });
+        // The DOMAttrModified event is attached to the element rather than the attribute
+        $('circle').bind('DOMAttrModified', function(event) {
+          $('#' + event.attrName).text(Math.round(event.newValue));
+        });
+      });
+    //]]></script>
+    <style type="text/css">
+      circle { fill: #746999; stroke: #333; stroke-width: 2; }
+      text { text-anchor: left; font-size: 60px;}
+      path { fill: none; stroke: #DDD; stroke-width: 3; stroke-linejoin: round; }
+      rect { stroke: black; }
+      foreignObject { overflow: visible; }
+      table { border-collapse: collapse; }
+      th, td { border: 1px solid; padding: .25em; }
+      input { width: 100%; border: none; text-align: center; }
+    </style>
+  </defs>
+  <text y="1em"><tspan>(</tspan><tspan id="cx"/><tspan>,</tspan><tspan id="cy"/><tspan>)</tspan></text>
+  <circle cx="250" cy="250" r="50" />
+</svg>

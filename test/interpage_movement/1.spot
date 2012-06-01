@@ -1,0 +1,49 @@
+( function() {
+    var init = new IdentifiedStack();
+    init.add( __.directions.corporeal.up,
+              new IdentifiedStack( {
+                  up: '𝌠', down: '𝍎', left: '𝌾', right: '𝌾'
+              } ) );
+    init.add( __.directions.corporeal.down,
+              new IdentifiedStack( {
+                  up: '⚦', down: '⚥', left: '♀', right: '♂'
+              } ) );
+    init.add( __.directions.corporeal.left,
+              new IdentifiedStack( {
+                  up: '♛', down: '♕', left: '♔', right: '♚'
+              } ) );
+    init.add( __.directions.corporeal.right,
+              new IdentifiedStack( {
+                  up: '♔', down: '♚', left: '♛', right: '♕'
+              } ) );
+    init.add( __.coin.toss.head,
+              new IdentifiedStack( {
+                  up: '◓', down: '◒', left: '◐', right: '◑'
+              } ) );
+    init.add( __.coin.toss.tail,
+              new IdentifiedStack( {
+                  up: '◒', down: '◓', left: '◑', right: '◐'
+              } ) );
+
+    init.add( init.get( __.directions.corporeal.up ).get( 'down' ),
+              __.directions.corporeal );
+    init.add( init.get( __.directions.corporeal.down ).get( 'up' ),
+              __.directions.corporeal );
+
+    init.add( init.get( __.directions.corporeal.left ).get( 'right' ),
+              init.get( __.directions.corporeal.right ) );
+    init.add( init.get( __.directions.corporeal.left ).get( 'left' ),
+              init.get( __.directions.corporeal.right ) );
+    init.add( init.get( __.directions.corporeal.right ).get( 'right' ),
+              init.get( __.directions.corporeal.left ) );
+    init.add( init.get( __.directions.corporeal.right ).get( 'left' ),
+              init.get( __.directions.corporeal.left ) );
+    
+    __.coin.toss.each( function( val, key ) {
+        init.get( val ).each( function( ival, ikey ) {
+            init.add( ival, __.directions.corporeal );
+        } );
+    } );
+
+    __.dirs.merge( init );
+} ) ();

@@ -1,0 +1,236 @@
+// ∃ silent && ! silent && log = 'ૐ:helo'
+if( typeof silent != 'undefined' && ! silent
+    && typeof console != 'undefined' ) {
+    console.log( 'ૐ:load' );
+}
+
+function DocumentPort( base ) {
+    this.get = function( uid ) {
+        var key = new MutableString( uid );
+        var out = {};
+        var name, val, id;
+        if( key.chomp( 'xml:' ) ) {
+            var $elem;
+            if( key.chomp( '#' ) ) {
+                if( base.$ ) {
+                    $elem = base.$( base.document.rootElement );
+                }
+            }
+            if( key.chomp( '@' ) && ( name = key.chomp( /(\w+)/ ) ) ) {
+                if( $elem ) {
+                    val = $elem.attr( name ).toString();
+                }
+                console.log( 'ૐ:↻:@' + name + '=' + val );
+            }
+            if( key.chomp( ':' ) && ( id = key['('] ) ) {
+                var exp = key[ '()' ];
+                if( val ) {
+                    var ival = val.chomp( new RegExp( exp ) );
+                    if( ival ) {
+                        out[ id ] = ival;
+                    }
+                }
+            }
+        }
+        console.log( 'ૐ:↻:' + key );
+    }
+}
+
+( function() {
+    function window( win ) {
+        var id = String.fromCharCode( 'a'.charCodeAt( 0 )
+                                      + __.windows.offset++ );
+
+        __.windows[ win ] = win.stamp && __.windows[ win.stamp ] || win
+        if( ! ( win.stamp && __.points[ win.stamp ] ) ) {
+            __.entangle(new IdentifiedStack());
+            var point = __.entangle( {
+                set post( msg ) { win.postMessage( msg, "*" ) },
+                set msg( msg ) { this.send( msg ) },
+                listeners: [],
+                onMessage: function( l ) {
+                    this.listeners.push( l );
+                },
+                send: function( msg ) {
+                    msg = msg.data || msg;
+                    this.listeners.each( [ msg, point ] );
+                },
+                get asString() { return this.toString() },
+                toString: function() {
+                    return '⊛:' + id
+                },
+                log: function() {
+                    if( typeof win.console != 'undefined' ) {
+                        // Bug: chrome throws TypeError: Illegal invocation
+                        //win.console.log.apply( this, arguments );
+                        win.console.log( arguments[0] );
+                    }
+                },
+                get $() { return win.jQuery },
+                get __() { return win.__ },
+                get uid() { return win.stamp },
+                close: function() {
+                    ( point.asString + ':close' );
+                }
+            },
+                                     new IdentifiedStack() );
+            var get = point.get;
+            point.get = function( key ) {
+                var out = {};
+                var chunk;
+                while( chunk = key['::'] ) {
+                    out = out[ chunk ];
+                }
+                return out;
+            }
+
+            win.addEventListener( 'message', point.send, false );
+            __.points[ win.stamp ] = __.connect( point );
+        }
+        return __.points[ win.stamp ];
+    }
+    
+} )();
+
+(function() {
+DocumentPort.prototype.count = 0;
+function DocumentPort( base ) {
+    if( typeof Window != 'undefined' ) {
+        if ( ! base instanceof Window ) {
+            throw 'Unknown Base Type';
+        }
+    }
+    var win = base;
+
+    this.__defineGetter__( 'asString', function() {
+        return 'ૐ';
+    } );
+    
+    var point = __.windows.make( win );
+    var self = this;
+
+    var id = ( this.asString + ':'
+               + String.fromCharCode( 'a'.charCodeAt( 0 )
+                                      + DocumentPort.prototype.count++ ) + ':'
+               + userId + ":"
+               + __.timestamp );
+    point.log( id );
+
+    point.onMessage( function( msg, point ) {
+        var key = new MutableString( msg );
+        if( ! __.silent ) point.log( self.asString + ':msg:' + key.toString() );
+        
+        if( key.chomp( '^clear(:|$)' ) ) {
+            point.$('body').empty();
+        } else if( key.chomp( ':helo$' ) ) {
+            point.post = "test:helo";
+        } else if( key.chomp( 'id:' ) ) {
+            var id = key[':'];
+            var $id = point.$( '#' + id );
+            if( key.chomp( 'class:' ) ) {
+                $id.addClass( key.toString() );
+            } else if( key.chomp( 'go:' ) ) {
+                if( $id.data( 'go' ) === undefined ) {
+                    $id.data( 'go', new MutableString() );
+
+                    $id.click( function( evt ) {
+                        var path = point.$(this).data( 'go' ).clone;
+                        var id = point.$(this).attr( 'id' );
+                        point.log( 'ૐ:id:' + id + ':go:' + path );
+                        if( path.chomp( 'new:win:' ) ) {
+                            var newWin = window.open( '.' );
+                            newWin.__ = point.__;
+                            if( path.chomp( 'sep:' ) ) {
+                                window.opener = null;
+                            }
+                            var dest = 'start:' + path.asString;
+                            newWin.addEventListener( 'load', function( evt ) {
+                                //'#:☸:start'
+                                var newPort = __.ui( newWin );
+                                newPort.msg = dest;
+                            }, false );
+                        }
+                    } );
+                }
+                var go = $id.data( 'go' );
+                go.append( key );
+            } else if( key.chomp( 'pos:' ) ) {
+                var keys = {
+                    hor: key.chomp( /([+-]*\d+%?)/ ),
+                    ver: key.chomp( /,?([+-]*\d+%?)/ )
+                };
+                if( ! __.silent ) point.log( 'ૐ:pos:' + keys.hor + ',' + keys.ver );
+                var pos = { hor: keys.hor[1] == '-' ? 'right' : 'left',
+                            ver: keys.ver[1] == '-' ? 'bottom' : 'top' };
+                var css = new IdentifiedStack( {
+                    position: 'absolute'
+                } );
+
+                for( uid in keys ) {
+                    css.add( keys[ uid ].chomp( /^[+-]*(.*)/ ), pos[ uid ] );
+                }
+                if( ! __.silent ) point.log( 'ૐ:pos:css:' + css.asString );
+                $id.css( css.asMap );
+            } else if( key.chomp( 'css:' ) ) {
+                var css = new IdentifiedStack();
+                if( key[1] == '{' ) {
+                    css.merge( key['{}'] );
+                } else {
+                    while( pair = key.chomp( /^([^:]+:[^:]+)(:|$)/ ) ) {
+                        css.add( pair, pair[':'] );
+                    }
+                }
+                if( ! __.silent ) point.log( 'ૐ:css:' + css.asString );
+                $id.css( css.asMap );
+            }
+        } else if( key.chomp( 'start:' ) ) {
+            point[ 'start' ] = key.clone;
+            point.log( 'starting' );
+            point.msg = key;
+        } else if( key.chomp( 'add:' ) ) {
+            var json = key['{}'];
+            if( json ) {
+                point.log(json.asString);
+                var obj = JSON.parse( json.asString );
+                var $list = point.$('<ul/>');
+                for( prop in obj ) {
+                    var $item = $('<li/>').attr( 'id', prop )
+                                          .text( obj[ prop ] )
+                    $list.append( $item );
+                }
+                point.$('body').append( $list );
+            }
+        }
+    } );
+    point.msg = id + '::' + point + ':helo';
+    return point;
+}
+    
+    __.ui = DocumentPort;
+} );
+
+window.addEventListener( 'unload', function() {
+    if( window.__ && window.stamp && window.__.points
+        && window.__.points[ window.stamp ]
+        && ( typeof window.__.points[ window.stamp ].close
+             == "function" ) ) {
+        window.__.points[ window.stamp ].close();
+    }
+}, false );
+
+window.addEventListener( 'close', function() {
+    // No effect
+}, false );
+
+window.addEventListener( 'blur', function() {
+    //$('body').fadeOut();
+}, false );
+
+window.addEventListener( 'focus', function() {
+    //$('body').fadeIn();
+}, false );
+
+//func() { var id = args[-1].id }
+//var args = Array.prototype.slice.call( arguments );
+//args.push( { id: id } );
+//funcs[ id ].apply( this, args );

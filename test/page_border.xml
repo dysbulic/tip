@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Page Border Test</title>
+    <style type="text/css">
+      body { background-color: orange; padding: 3em; }
+    </style>
+    <script type="text/javascript">
+      function setBG() {
+        var stylesheet = document.styleSheets[document.styleSheets.length - 1];
+        var rules = stylesheet.cssRules;
+        stylesheet.insertRule('html { background-color: lightblue }', rules.length);
+      }
+    </script>
+  </head>
+  <body>
+    <p>In <code>text/xml</code> documents, the background color does not go to the edge of the window unless the style is applied to the <code>html</code> element.</p>
+    <ul>
+      <li><a href="page_border.xml">text/xml</a></li>
+      <li><a href="page_border.xhtml">application/xhtml+xml</a></li>
+      <li><a href="page_border.html">text/html</a></li>
+    </ul>
+    <p>In <code>html</code> documents, the <code>body</code> color will extend <em>unless</em> there's a <a href="javascript:setBG()">color set for <code>html</code></a>.</p>
+  </body>
+</html>

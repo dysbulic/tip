@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Div Test</title>
+    <style type="text/css">
+      body {
+        background-color: rgb(233, 222, 237);
+        font-size: 14pt;
+      }
+      .style {
+        white-space: pre;
+      }
+      body > div {
+        margin-bottom: .5em;
+        border: thin blue dashed;
+      }
+      div div {
+        border: thin gray dashed;
+      }
+      .one {
+        background-color: rgb(255, 222, 209);
+      }
+      div.one div {
+        width: 25%;
+      }
+      .two {
+        background-color: rgb(185, 255, 205);
+      }
+      div.two div {
+        float: right;
+      }
+      .three {
+        background-color: rgb(209, 222, 255);
+      }
+      div.three div {
+        display: compact;
+      }
+      .four {
+        background-color: rgb(255, 205, 139);
+      }     
+      div.four div {
+        display: inline;
+      }
+      div.four input {
+        width: 35%;
+        border: thin solid;
+      }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p>
+      There are four &lt;div&gt;'s in this page, each with four
+      &lt;div&gt;'s nested inside. A different style is used on
+      each. It was the behavior of the second one in <a
+      href="http://mozilla.org">mozilla</a> that confused me. When all
+      the elements were floated, it had no height. It turns out that
+      this is the prescribed behavior. (IE 6 follows the spec on the
+      height, unlike 5.5, but doesn't recognize the <code>&gt;</code>
+      direct child selector or the <code>white-space: pre</code>
+      property, so the page still isn't right there.) From the <a
+      href="http://www.w3.org/TR/REC-CSS2/visudet.html#q17">css
+      specification</a>:
+    </p>
+
+    <blockquote>Only children in the normal flow are taken into
+    account (i.e., floating boxes and absolutely positioned boxes are
+    ignored, and relatively positioned boxes are considered without
+    their offset). Note that the child box may be an anonymous
+    box.</blockquote>
+
+    <p>The behavior that I wanted I get from the fourth one using
+    <code>display: inline</code>.</p>
+    <hr />
+    <div class="one">
+      <div>One</div>
+      <div>Two</div>
+      <div>Three</div>
+      <div>Four</div>
+    </div>
+    <div class="two">
+      <div>One</div>
+      <div>Two</div>
+      <div>Three</div>
+      <div>Four</div>
+    </div>
+    <div class="three">
+      <div>One</div>
+      <div>Two</div>
+      <div>Three</div>
+      <div>Four</div>
+    </div>
+    <div class="four">
+      <div>One</div>
+      <div>Two</div>
+      <div>Three</div>
+      <div><input type="text" /></div>
+      <div><input type="submit" /></div>
+    </div>
+
+    <p class="style">      body {
+        background-color: rgb(233, 222, 237);
+        font-size: 14pt;
+      }
+      .style {
+        white-space: pre;
+      }
+      body > div {
+        margin-bottom: .5em;
+        border: thin blue dashed;
+      }
+      div div {
+        border: thin gray dashed;
+      }</p>
+    <p class="style one">      .one {
+        background-color: rgb(255, 222, 209);
+      }
+      div.one div {
+        width: 25%;
+      }</p>
+    <p class="style two">      .two {
+        background-color: rgb(185, 255, 205);
+      }
+      div.two div {
+        float: right;
+      }</p>
+    <p class="style three">      .three {
+        background-color: rgb(209, 222, 255);
+      }
+      div.three div {
+        display: compact;
+      }</p>
+    <p class="style four">      .four {
+        background-color: rgb(255, 205, 139);
+      }
+      div.four div {
+        display: inline;
+      }
+      div.four input {
+        width: 35%;
+        border: thin solid;
+      }</p>
+  </body>
+</html>

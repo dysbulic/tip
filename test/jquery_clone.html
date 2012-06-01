@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>jQuery Clone Test</title>
+    <link type="text/css" rel="stylesheet" href="javascript_test.css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.dump.js"></script>
+    <script type="text/javascript">//<![CDATA[
+      $(document).ready(function() {
+        var nums = [ 'zero', 'one', 'two', 'three' ];
+        var obj = { one: [ 1 ],
+                    two: [ 1, 2 ],
+                    three: [ 1, 2, 3 ] };
+        var shallow = $.extend({}, obj);
+        var deep = $.extend(true, {}, obj);
+        
+        $('body').append($('<h2/>').text('Original')).append($('<pre/>').text($.dump(obj)));
+
+        $.each(shallow, function(idx, val) {
+          $.each(val, function(iidx, ival) {
+            shallow[idx][iidx] = nums[ival];
+          });
+        });
+
+        $('body').append($('<h2/>').text('Modified Shallow Clone')).append($('<pre/>').text($.dump(shallow)));
+        $('body').append($('<h2/>').text('Original')).append($('<pre/>').text($.dump(obj)));
+        $('body').append($('<h2/>').text('Deep Clone')).append($('<pre/>').text($.dump(deep)));
+      });
+    //]]></script>
+  </head>
+  <body>
+    <h1>jQuery Clone Test</h1>
+    <p>Testing <a href="http://jquery.org">jQuery</a>'s deep clone.</p>
+  </body>
+</html>

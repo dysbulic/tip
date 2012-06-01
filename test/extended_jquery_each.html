@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Extended jQuery Each</title>
+    <link type="text/css" rel="stylesheet" href="javascript_test.css" />
+    <style type="text/css">
+    </style>
+<!--
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript"> google.load("jquery", "1.4") </script>
+-->
+    <script type="text/javascript" src="jquery/dist/jquery.js"></script>
+    <script type="text/javascript">//<![CDATA[
+      function OrderedHash() {
+      }
+      (function($) {
+        var each = $.each;
+        $.each = function() {
+          each.apply(this, arguments);
+        }
+      })(jQuery);
+      $(document).ready(function() {
+        var hash = new OrderedHash();
+        function list(obj) {
+          var list = $('<ul/>');
+          $(obj).each(function() {
+            var sublist = $('<ul/>');
+            $(Array.prototype.slice.call(arguments)).each(function(idx, name) {
+              sublist.append($('<li/>').text(name));
+            });
+            list.append($('<li/>').append($(typeof obj)).append(sublist));
+          });
+          $('body').append(list);
+        }
+        list(['one', 'two', 'three']);
+      });
+    //]]></script>
+  </head>
+  <body>
+    <h1>Extend jQuery's Each</h1>
+    
+    <p>For a project, I would like to have javascript objects that can be iterated over in a particular order. One way of accomplishing this is to extend <a href="http://jquery.org">jQuery</a>'s <code>each</code> function to recognize this new type and single it out. This is a test of that method.</p>
+
+    <p>It doesn't work because the extended method has functionality added to it. It isn't even necessary because jQuery uses the <code>length</code> argument to determine if something is an array or not, so I just have to have a <code>length</code> property to iterate as an array.</p>
+  </body>
+</html>

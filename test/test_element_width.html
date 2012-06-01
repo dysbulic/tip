@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Test Element Width</title>
+    <style type="text/css">
+      img { max-width: 200px; background-color: #FDF; display: block; }
+      .inner { background-color: #DFD; }
+      .outer { display: table; padding: 10px; background-color: #DDF; }
+      .baseline { border: 2px solid; width: 196px; text-align: center; font-size: 18px; height: 18px; }
+      #reference img { width: 200px; height: 200px; }
+    </style>
+    <!--[if lt IE 7]>
+    <style type="text/css">
+      #reference .outer { width: 220px; }
+      #reference .baseline { width: 200px; }
+    </style>
+    <![endif]-->
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Test Element Width</h1>
+    <p>In Opera, containing elements seem to be using the item's width even when it is restricted with <code>max-width</code> within an elmement with <code>table</code> <code>display</code>:</p>
+    <div class="outer"><div class="inner"><img src="placeholder.png" alt="x" /><div class="baseline">width: 200px</div></div></div>
+    <p>This is one of few examples that displays differently in every browser:</p>
+    <ul>
+      <li>Firefox: <code>img</code> is 200px x 200px; <code>#inner</code> is 200px x 224px</li>
+      <li>Safari: <code>img</code> is 200px x 300px; <code>#inner</code> is 200px x 324px</li>
+      <li>IE: <code>img</code> is 300px x 300px; <code>#inner</code> is 100% x 324px</li>
+      <li>Opera: <code>img</code> is 200px x 200px; <code>#inner</code> is 300px x 224px</li>
+    </ul>
+    <p>It should look like this:</p>
+    <div id="reference">
+      <div class="outer"><div class="inner"><img src="placeholder.png" alt="x" /><div class="baseline">width: 200px</div></div></div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Loading Variables Using Continuations</title>
+    <style type="text/css">
+    </style>
+<!--
+    <script type="application/javascript;version=1.7"
+            src="http://www.google.com/jsapi?key=ABQIAAAA70e1TrScvoeLHNzMa4BtIBS5CBWw3K3PbugkSJo66gbauGjNKRRIPzVtdxmhAaWS96QCWhtaQjwqIA"></script>
+    <script type="application/javascript;version=1.7"> google.load("jquery", "1.4") </script>
+-->
+    <script type="text/javascript" src="jquery/dist/jquery.js"></script>
+    <script type="application/javascript;version=1.7">//<![CDATA[
+      $(function() {
+        try {
+          function fib() {
+            var i = 0, j = 1;
+            while( true ) {
+              yield i;
+              var t = i;
+              i = j;
+              j += t;
+            }
+          }
+        } catch(e) {
+          $('body').append($('<p/>').text('Error: ' + e));
+          function fib() {
+            function Fib() {
+              var i = 0, j = 1;
+              this.next = function() {
+                var t = i;
+                i = j;
+                j += t;
+                return t;
+              }
+            }
+            return new Fib();
+          }
+        }
+
+        var g = fib();
+        var fibList = $('<ol/>');
+        for(var i = 0; i < 10; i++) {
+          fibList.append($('<li/>').text(g.next()));
+        }
+        $('body').append(fibList);
+      });
+    //]]></script>
+  </head>
+  <body>
+    <h1>Testing Continuations</h1>
+
+  </body>
+</html>
