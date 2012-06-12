@@ -17,7 +17,7 @@ function guidClicked( guid ) {
     if( handler != undefined ) {
         handler.call( $rets[ guid ] )
     } else {
-        print( "Couldn't get handler: " + guid + " : " + clickHandlers[3] + "\n" )
+        print( "Couldn't get handler: " + guid + " : " + clickHandlers.length + "\n" )
     }
 }
 
@@ -97,7 +97,7 @@ var $ = function( arg1 ) {
             },
             click: function( handler ) {
                 clickHandlers[ $ret.guid ] = handler
-                print( "/lib/jquery/indirect/$/click: " + guid + " : " + typeof clickHandlers[ guid ] + "\n" )
+                print( "/lib/jquery/indirect/$/click: " + guid + " : " + typeof clickHandlers[ guid ] + " : " + clickHandlers.length + "\n" )
                 $obj.call( 'clickByGUID', [ guid ] )
                 return $ret
             },
