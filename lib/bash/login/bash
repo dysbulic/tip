@@ -379,7 +379,7 @@ if [ -e "$BATIK_DIR/batik-rasterizer.jar" ]; then
 fi
 
 # Allow override use of sun's jdk
-for JDK in /usr/lib/kaffe/bin/ /usr/java/jdk*/bin/ /usr/lib/j2sdk*/bin/ "/cygdrive/c/Program Files/Java/jdk"*/bin/; do
+for JDK in /usr/lib/kaffe/bin/ /usr/java/jdk*/bin/ /usr/lib/jdk*/bin/ "/cygdrive/c/Program Files/Java/jdk"*/bin/; do
     if [[ -e "${JDK}java" || -e "${JDK}java.exe" ]]; then
         export PATH="$JDK:$PATH"
         break
