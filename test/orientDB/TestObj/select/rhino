@@ -1,0 +1,23 @@
+var System = java.lang.System
+var OSQLSynchQuery = Packages.com.orientechnologies.orient.core.sql.query.OSQLSynchQuery
+var ODatabaseDocumentTx = Packages.com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
+var ODocument = Packages.com.orientechnologies.orient.core.record.impl.ODocument
+var File = java.io.File
+
+var user_home = System.getProperty( "user.home" )
+var db_path = user_home + "/.testdb"
+var db_url = "local:" + db_path + File.separator + "db"
+if( ! new File( db_path ).exists() ) {
+    new File( db_path ).mkdirs()
+    new ODatabaseDocumentTx( db_url ).create()
+}
+var db = new ODatabaseDocumentTx( db_url ).open( "admin", "admin" )
+db.getStorage().getConfiguration().txSegment.setSynchRecord( true )
+
+print( 'Select From TestObj' )
+
+if( db.getMetadata().getSchema().getClass( 'TestObj' ) != null  ) {
+    var result = db.query( new OSQLSynchQuery( "select * from TestObj" ) )
+    print( "# of Entries: " + result.size() )
+}
+db.close()
