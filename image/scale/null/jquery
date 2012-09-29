@@ -4,7 +4,7 @@
     var block = {
         names : [ 'bTop', 'bBottom' ],
     }
-    block.names.each( function( name ) {
+    $.each( block.names, function( idx, name ) {
         block[ name ] = {
             min : parseFloat( $('#' + name).attr( 'y1' ) ),
             max : parseFloat( $('#' + name).attr( 'y2' ) ),
@@ -55,7 +55,7 @@
         $('#text').text( text )
         $('#bar').attr( 'y2', newY )
         
-        block.names.each( function( name ) {
+        $.each( block.names, function( idx, name ) {
             var $elem = $('#' + name)
             if( newY <= block[ name ].min || newY >= bar.max ) {
                 $elem.css( { display : 'none' } )
