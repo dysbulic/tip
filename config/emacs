@@ -111,6 +111,13 @@
   (setq auto-mode-alist
         (append '(("jquery|\\.js$" . c-mode)) auto-mode-alist)))
 
+(setq coffeescript-file "~/.../lib/emacs/mode/coffeescript/coffee-mode.el")
+(if (file-exists-p coffeescript-file)
+    (progn (load coffeescript-file)
+           (setq auto-mode-alist
+                 (append '(("\\(coffee\\)$" . coffee-mode)) auto-mode-alist))
+           (message "coffeescript mode loaded")))
+
 ;; Input control characters in hex
 (setq read-quoted-char-radix 16)
 

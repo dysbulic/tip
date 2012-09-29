@@ -1,9 +1,9 @@
 === IntenseDebate Comments ===
 Contributors: IntenseDebate, automattic, beaulebens
-Tags: widget, profile, community, avatars, spam, notification, email, threaded, comments, intense debate, intensedebate, intense, debate, comment system, moderation, wpmu
-Requires at least: 2.8
-Tested up to: 3.2
-Stable tag: 2.9.2
+Tags: widget, profile, community, avatars, spam, notification, email, threaded, comments, intense debate, intensedebate, intense, debate, comment system, moderation
+Requires at least: 3.0
+Tested up to: 3.3.2
+Stable tag: 2.9.4
 
 IntenseDebate comments enhance and encourage conversation on your blog.  Build your reader community, increase your comments, & boost pageviews.
 
@@ -30,20 +30,11 @@ In order for our plugin to work properly, our servers need to be able to get in 
 
 For further assistance, please contact IntenseDebate support at support@intensedebate.com
 
-
 = What is data synchronization? =
 Comments made in IntenseDebate are automatically backed-up to your WordPress comment system, while your existing WordPress comments are automatically imported into IntenseDebate. You always have all of your comments so uninstalling is a one-click process if you change your mind. Syncing your accounts enables auto-login so logging into WordPress automatically logs you into IntenseDebate. Profile sync also means that comments you make are synchronized to both profiles so you maintain ownership of your profile.
 
-
 = What about SEO? =
 IntenseDebate outputs the standard WordPress comments enabling your comments to still be indexed by search engines that ignore JavaScript, while ensuring that visitors surfing with JavaScript disabled will be able to interact with comments made in IntenseDebate. Readers with JS disabled can comment in the original WP system and those comments will be imported into IntenseDebate.
-
-
-= How do I use my OpenID? = 
-While you can use your OpenID to login and signup with IntenseDebate, using your OpenID to synchronize IntenseDebate and WordPress accounts is not currently supported.
-
-If you created your account using your OpenID you will need to access your IntenseDebate username and userkey. Your username and user key will allow you to sync your accounts. You will need to be logged into IntenseDebate in order to access your username and [user key](http://intensedebate.com/userkey).
-
 
 = How do I sync my accounts? = 
 After installing and activating the IntenseDebate plugin you will need to update your account settings in your Plugin Settings page and either create an IntenseDebate account or login to your IntenseDebate account. Your data synchronization and comment import will start as soon as you have successfully logged in.
@@ -60,6 +51,19 @@ Your comments may take several hours to import. The time of your import is depen
 6. Final step of the registration process - a few helpful links to get you started getting the most out of your new IntenseDebate comment system.
 
 == Changelog ==
+= 2.9.4 =
+* Remove some old compatibility code
+* Performance optimizations
+* Better support for loading via HTTPS
+
+= 2.9.3 =
+* Remove mentions of $wpmu which is deprecated
+* Bump requirement to WP3.0
+* Get rid of our JSON library
+* Remove Facebook xd receiver file
+* Remove no-longer-used reference to Facebook cross-domain receiver
+* Update .pot file
+
 = 2.9.2 =
 * Remove unnecessary reference to wp-admin/includes/template.php
 * Import all comments not marked as spam (handles custom statuses etc)

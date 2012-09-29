@@ -60,7 +60,7 @@ define('NONCE_SALT',       'o/LXUh1(AKoJ7W0E~(*&ZY;O:*Ep?z`&ML)"9hdaOn"RTcxjD&&0
  * prefix. Only numbers, letters, and underscores please!
  */
 $table_prefix  = 'wp_6dzxa7_';
-$table_prefix  = 'wp_u7vtwo_';
+//$table_prefix  = 'wp_u7vtwo_';
 
 /**
  * Limits total Post Revisions saved per Post/Page.

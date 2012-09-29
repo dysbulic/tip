@@ -3,15 +3,15 @@ Contributors: johndyer
 Donate link: http://mediaelementjs.com/
 Tags: html5, video, audio, player, flash, mp4, mp3, ogg, webm, wmv, captions, subtitles, websrt, srt, accessible, Silverlight, javascript, 
 Requires at least: 2.8
-Tested up to: 3.2
-Stable tag: 2.2.5
+Tested up to: 3.3
+Stable tag: 2.9.1
 
 MediaElement.js is an HTML5 video and audio player with Flash fallback and captions. Supports IE, Firefox, Opera, Safari, Chrome and iPhone, iPad, Android.
 
 == Description ==
 
 Video and audio plugin for WordPress built on the MediaElement.js HTML5 media player library. Provides Flash or Silverlight fallback players for non-HTML5 browsers. Supports iPhone, iPad, and Andriod.
-Supports MP4, OGG, WebM, WMV, MP3, WAV, WMA files as well as captions with WebSRT files.
+Supports MP4, OGG, WebM, WMV, MP3, WAV, WMA files as well as captions with WebSRT files.  
 
 Check out <a href="http://mediaelementjs.com/">mediaElementjs.com</a> for more information and examples.
 
@@ -155,6 +155,10 @@ View <a href="http://mediaelementjs.com/">MediaElementjs.com</a> for more inform
 3. Use the `[video]` or `[audio]` shortcode in your post or page with the options on the front page.
 
 == Changelog ==
+
+= 2.27.0 =
+* Update to 2.7.0 codebase
+* Lots of bug fixes and updates
 
 = 2.2.5 =
 * Update to 2.2.5 codebase

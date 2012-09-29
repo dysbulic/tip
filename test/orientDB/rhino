@@ -1,8 +1,8 @@
 var System = java.lang.System
-var Database = Packages.telehash.samples.simplechat.Database
 var OSQLSynchQuery = Packages.com.orientechnologies.orient.core.sql.query.OSQLSynchQuery
 var ODatabaseDocumentTx = Packages.com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
 var ODocument = Packages.com.orientechnologies.orient.core.record.impl.ODocument
+var OCommandSQL = Packages.com.orientechnologies.orient.core.sql.OCommandSQL
 var File = java.io.File
 
 function getDatabase() {
@@ -53,15 +53,15 @@ withDatabase( {
 print( 'Select From TestObj' )
 withDatabase( {
     doWithDatabase : function( db ) {
-        var result = db.query( new OSQLSynchQuery( "select * from TestObj" ) )
+        var result = db.query( new OSQLSynchQuery( "select * from TestObj" ), [] )
         print( "# of Entries: " + result.size() )
     }
 } )
 
-
 print( 'Deleting from TestObj' )
 withDatabase( {
     doWithDatabase : function( db ) {
-        db.query( new OSQLSynchQuery( 'delete from TestObj' ) )
+        var result = db.command( new OCommandSQL( 'delete from TestObj' ) ).execute( [] )
+        //db.query( new OSQLSynchQuery( 'delete from TestObj' ), [] )
     }
 } )

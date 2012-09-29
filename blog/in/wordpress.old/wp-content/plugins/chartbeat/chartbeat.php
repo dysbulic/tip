@@ -1,15 +1,15 @@
 <?php
 /*
 Plugin Name: Chartbeat
-Plugin URI: http://chartbeat.com/wordpress
+Plugin URI: http://chartbeat.com/wordpress/
 Description: Adds Chartbeat pinging to Wordpress.
-Version: 1.2
+Version: 1.4
 Author: Chartbeat
-Author URI: http://chartbeat.com
+Author URI: http://chartbeat.com/
 */
 
 /*
-Copyright 2009 Chartbeat Inc.
+Copyright 2009-2011 Chartbeat Inc.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -23,13 +23,9 @@ Copyright 2009 Chartbeat Inc.
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-add_option('chartbeat_userid');
-add_option('chartbeat_apikey');
-add_option('chartbeat_widgetconfig');
-
 
 function chartbeat_menu() {
-  add_options_page('chartbeat plugin options', 'Chartbeat', 'administrator',
+  add_options_page('chartbeat plugin options', 'Chartbeat', 'manage_options',
       'chartbeat-options', 'chartbeat_options_page');
 }
 
@@ -54,9 +50,21 @@ To enable tracking, you must enter your chartbeat user id. <a href="#" onclick="
 <br/>
 <table class="form-table">
 <tr><th scope="row">User ID</th>
-<td><input size="30" type="text" name="chartbeat_userid" value="<?php echo get_option('chartbeat_userid'); ?>" /></td>
-</tr></table>
+<td><input size="30" type="text" name="chartbeat_userid" value="<?php echo esc_attr( get_option('chartbeat_userid') ); ?>" /></td>
+</tr>
+
+<tr><th scope="row"><?php _e('Track visits by Site Admins?','chartbeat'); ?><br /><small>Administrators must be logged in to avoid tracking.</small></th>
+<td><input type="radio" name="chartbeat_trackadmins" value="1" <?php checked( get_option('chartbeat_trackadmins'), 1 ); ?> /> Yes <input type="radio" name="chartbeat_trackadmins" value="0" <?php checked( get_option('chartbeat_trackadmins'), 0 ); ?> /> No</td>
+</tr>
+
+<tr>
+    <th scope="row"><?php _e('Enable newsbeat?','chartbeat'); ?><br /><small>Sign up for <a href="http://chartbeat.com/newsbeat/">newsbeat</a>.</small></th>
+    <td><input type="radio" name="chartbeat_enable_newsbeat" value="1" <?php checked( get_option('chartbeat_enable_newsbeat'), 1 ); ?> /> Yes <input type="radio" name="chartbeat_enable_newsbeat" value="0" <?php checked( get_option('chartbeat_enable_newsbeat'), 0 ); ?> /> No</td>
+</tr>
+
+</table>
 <br/><br/>
+
 <script src="http://static.chartbeat.com/js/topwidgetv2.js" type="text/javascript" language="javascript"></script> 
 <script type="text/javascript" language="javascript"> 
 var themes = { 'doe':   { 'bgcolor': '', 'border': '#dde7d4', 'text': '#555' },
@@ -131,12 +139,10 @@ Sample:<br><br>
 In order for the widget to work, copy your API key into the space below.
 <table class="form-table">
 <tr><th scope="row">API key</th>
-<td><input size="30" type="text" name="chartbeat_apikey" value="<?php echo get_option('chartbeat_apikey'); ?>" /></td>
+<td><input size="30" type="text" name="chartbeat_apikey" value="<?php echo esc_attr( get_option('chartbeat_apikey') ); ?>" /></td>
 </tr></table>
 
-<input type="hidden" name="action" value="update" />
 <input type="hidden" id="chartbeat_widgetconfig" name="chartbeat_widgetconfig" value="{}" />
-<input type="hidden" name="page_options" value="chartbeat_userid,chartbeat_apikey,chartbeat_widgetconfig"/>
 
 <p class="submit">
 <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
@@ -149,10 +155,11 @@ In order for the widget to work, copy your API key into the space below.
 
 // Function to register settings and sanitize output. To be called later in add_action
 function chartbeat_register_settings() {
-	register_setting('chartbeat-options','chartbeat_userid');
-	register_setting('chartbeat-options','chartbeat_apikey');
-	register_setting('chartbeat-options','chartbeat_widgetconfig');
-	
+    register_setting('chartbeat-options','chartbeat_userid');
+    register_setting('chartbeat-options','chartbeat_apikey');
+    register_setting('chartbeat-options','chartbeat_widgetconfig');
+    register_setting('chartbeat-options','chartbeat_trackadmins'); // add trackadmin setting
+    register_setting('chartbeat-options','chartbeat_enable_newsbeat');
 }
 
 function add_chartbeat_head() {
@@ -162,9 +169,45 @@ function add_chartbeat_head() {
 function add_chartbeat_footer() {
   $user_id = get_option('chartbeat_userid');
   if ($user_id) {
+	if (current_user_can('manage_options') && get_option('chartbeat_trackadmins') == 0) {  // if visitor is admin AND tracking is off
+		// do not load chartbeat
+	} else {
+		// load chartbeat js
 ?>
+
+<!-- /// LOAD CHARTBEAT /// -->
 <script type="text/javascript">
-var _sf_async_config={uid:<?php print $user_id ?>};
+var _sf_async_config={};
+_sf_async_config.uid = <?php print intval( $user_id ); ?>;
+<?php $enable_newsbeat = get_option('chartbeat_enable_newsbeat');
+if ($enable_newsbeat) { ?>
+_sf_async_config.domain = '<?php echo esc_js( $_SERVER['HTTP_HOST'] ); ?>';
+<?php 
+// Only add these values on blog posts use the queried object in case there
+// are multiple Loops on the page.
+if (is_single()) {
+    $post = get_queried_object();
+
+    // Use the author's display name 
+    $author = get_the_author_meta('display_name', $post->post_author);
+    printf( "_sf_async_config.authors = '%s';\n", esc_js( $author ) );
+
+    // Use the post's categories as sections
+    $cats = get_the_terms($post->ID, 'category');
+    if ($cats) {
+        $cat_names = array();
+        foreach ($cats as $cat) {
+            $cat_names[] = '"' . esc_js( $cat->name ) . '"';
+        }
+    }
+    if ( count( $cat_names ) ) {
+        printf("_sf_async_config.sections = [%s];\n", 
+            implode(', ', $cat_names));
+    }
+}
+?>
+<?php } // if $enable_newsbeat ?>
+
 (function(){
   function loadChartbeat() {
     window._sf_endpt=(new Date()).getTime();
@@ -182,30 +225,35 @@ var _sf_async_config={uid:<?php print $user_id ?>};
 })();
 </script>
 <?php
+	}
   }
 }
 
-function widget_chartbeat($args) {
-  extract($args);
-  echo $before_widget;
-  if (get_option('chartbeat_apikey')) {
-?>
-<div id="cb_top_pages"></div>
+class Chartbeat_Widget extends WP_Widget {
 
-<script src="http://static.chartbeat.com/js/topwidgetv2.js" type="text/javascript" language="javascript"></script> 
-<script type="text/javascript" language="javascript"> 
-var options = { };
-new CBTopPagesWidget('<?php echo get_option('chartbeat_apikey')?>',
-                     <?php echo get_option('chartbeat_widgetconfig')?>);
-</script>
-<?php
-  }
-  echo $after_widget;
+        function __construct() {
+        	parent::__construct('chartbeat_widget', 'Chartbeat Widget',array( 'description' => __('Display your site\'s top pages')));
+        }
+
+	function widget( $args ) {
+		extract( $args );
+		echo $before_widget;
+		if ( get_option( 'chartbeat_apikey' ) ) : ?>
+			<div id="cb_top_pages"></div>
+			<script src="http://static.chartbeat.com/js/topwidgetv2.js" type="text/javascript" language="javascript"></script>
+			<script type="text/javascript" language="javascript">
+			var options = { };
+			new CBTopPagesWidget( '<?php echo esc_js( get_option('chartbeat_apikey') ); ?>', <?php echo get_option('chartbeat_widgetconfig'); ?> );
+			</script>
+		<?php
+		endif;
+		echo $after_widget;
+	}
 }
 
 
 function chartbeat_widget_init() {
-  register_sidebar_widget('chartbeat Widget', 'widget_chartbeat');
+  register_widget( 'Chartbeat_Widget' );
 }
 
 add_action('widgets_init', 'chartbeat_widget_init');
