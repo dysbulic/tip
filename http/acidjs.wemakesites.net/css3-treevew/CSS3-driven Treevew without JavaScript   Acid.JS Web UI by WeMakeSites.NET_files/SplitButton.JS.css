@@ -1,0 +1,228 @@
+/*
+	SplitButton.JS 1.0 Base Stylesheet
+	http://acidjs.wemakesites.net/split-button-xml.html
+*/
+
+/*html, body
+{
+    direction: rtl;
+}*/
+
+.split-button-js,
+.split-button-js *,
+.split-button-js li,
+.split-button-js ul
+{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    border: 0;
+    text-decoration: none;
+    font: normal 12px "Segoe UI", Tahoma, Arial;
+    outline: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.split-button-js,
+.split-button-js img,
+.split-button-js .split-button-js-header-wrapper a,
+.split-button-js .split-button-js-header-wrapper a b
+{
+    display: inline-block;
+}
+
+.split-button-js .split-button-js-list-wrapper
+{
+    position: relative;
+}
+
+.split-button-js ul,
+.split-button-js .split-button-js-header-wrapper
+{
+    width: 100%;
+    float: none;
+    clear: both;
+}
+
+.split-button-js ul,
+.split-button-js:not(.split-button-js-disabled):hover .split-button-js-header-wrapper
+{
+    -moz-box-shadow: 0 0 0 1px #dadada;
+    -webkit-box-shadow: 0 0 0 1px #dadada;
+    box-shadow: 0 0 2px 1px #dadada;
+}
+
+.split-button-js ul
+{
+    position: absolute;
+    left: -1px;
+    z-index: 100;
+    display: none;
+    padding: 4px;
+    margin: 4px 0 0 0;
+    background: #fff;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
+
+.split-button-js ul a,
+.split-button-js ul.split-button-js-list-visible,
+.split-button-js .split-button-js-header-wrapper span,
+.split-button-js .split-button-js-header-wrapper span b
+{
+    display: block;
+}
+
+.split-button-js ul a,
+.split-button-js .split-button-js-header-wrapper a,
+.split-button-js .split-button-js-header-wrapper span,
+.split-button-js .split-button-js-header-wrapper span b
+{
+    cursor: hand;
+    cursor: pointer;
+}
+
+.split-button-js ul a
+{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.split-button-js ul,
+.split-button-js .split-button-js-header-wrapper
+{
+    border-style: solid;
+    border-width: 2px;
+}
+
+.split-button-js .split-button-js-header-wrapper,
+.split-button-js .split-button-js-header-wrapper a b,
+.split-button-js .split-button-js-header-wrapper span,
+.split-button-js .split-button-js-header-wrapper span b,
+.split-button-js ul li a
+{
+    height: 24px;
+}
+
+.split-button-js .split-button-js-header-wrapper a b,
+.split-button-js .split-button-js-header-wrapper span,
+.split-button-js .split-button-js-header-wrapper span b,
+.split-button-js ul li a
+{
+    line-height: 24px;
+}
+
+.split-button-js .split-button-js-header-wrapper
+{
+    -moz-border-radius: 24px;
+    -webkit-border-radius: 24px;
+    border-radius: 24px;
+}
+
+.split-button-js .split-button-js-header-wrapper a
+{
+    -moz-border-radius: 24px 0 0 24px;
+    -webkit-border-radius: 24px 0 0 24px;
+    border-radius: 24px 0 0 24px;
+}
+
+.split-button-js img,
+.split-button-js .split-button-js-header-wrapper a b
+{
+    vertical-align: middle;
+}
+
+.split-button-js img
+{
+    height: 16px;
+    width: 16px;
+    margin: 0 0 0 4px;
+}
+
+.split-button-js .split-button-js-header-wrapper img
+{
+    margin: 0 0 0 12px;
+}
+
+.split-button-js .split-button-js-header-wrapper a b
+{
+    padding: 0 4px 0 12px;
+}
+
+.split-button-js .split-button-js-header-wrapper img + b
+{
+    padding-left: 4px;
+}
+
+.split-button-js .split-button-js-header-wrapper span,
+.split-button-js .split-button-js-header-wrapper span b
+{
+    float: right;
+    width: 24px;
+    -moz-border-radius: 0 24px 24px 0;
+    -webkit-border-radius: 0 24px 24px 0;
+    border-radius: 0 24px 24px 0;
+}
+
+.split-button-js ul li a,
+.split-button-js ul li b
+{
+    padding: 0 4px;
+}
+
+.split-button-js ul li a
+{
+    margin: 4px 0;
+    border: solid 1px #fff;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.split-button-js ul li a img
+{
+    margin-top: -2px;
+}
+
+.split-button-js ul li:first-child a
+{
+    margin-top: 0;
+}
+
+.split-button-js ul li:last-child a
+{
+    margin-bottom: 0;
+}
+
+.split-button-js.split-button-js-disabled
+{
+    -moz-opacity: .6;
+    -webkit-opacity: .6;
+    opacity: .6;
+    filter: alpha(opacity=60);
+}
+
+.split-button-js.split-button-js-disabled,
+.split-button-js.split-button-js-disabled *
+{
+    cursor: default !important;
+}
+
+html, body
+{
+    height: 100%;
+}
+
+* + html .split-button-js .split-button-js-header-wrapper a
+{
+    float: left;
+}
+
+* html .split-button-js .split-button-js-header-wrapper a
+{
+    float: left;
+}
