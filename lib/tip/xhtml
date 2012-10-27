@@ -3,16 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>Testing Tip</title>
-    <link rel="stylesheet" type="text/css" href=".../style/blog/" />
     <link rel="stylesheet" type="text/css" href="css" />
     <style type="text/css">
-      li:hover { color: orange; }
     </style>
-    <script type="text/javascript"
-	    src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js">
-    </script>
 
+    <script type="text/javascript" src=".../lib/jquery/js"></script>
     <script type="text/javascript" src="lib/jquery/indirect/js"></script>
+    <script type="text/javascript" src="jquery"></script>
 
     <script type="text/javascript">//<![CDATA[
       $( function() {
@@ -24,18 +21,10 @@
         */
 
         var $button = $('<button/>').text( 'Run' )
-        //var $button = $(document.createElementNS("http://www.w3.org/1999/xhtml", 'button')).text( 'Run' )
-        //var $button = $('<div/>')
-        //var $button = $(document.createElement('div')).text( 'run' )
-        //var $button = $('button')
-        console.log( $button )
-        //$('body').children().remove()
-        //$('body').text( 'test' )
-        $('body').append( $button )
+        //$('body').append( $button )
        
         $button.click( function() {
           var applet = $('applet').get(0)
-          console.log( applet.guidClicked )
           applet.eval( '/lib/jquery/indirect/rhino' ) // paired w/ js above
           applet.eval( '/lib/load/rhino' )
           applet.eval( '/bin/file/list/rhino' )
@@ -50,14 +39,19 @@
   <body>
     <h1>Tip</h1>
 
-    <object type="image/svg+xml" data=".../blog/Tip's Structure/diagram/software/svg" width="100%" height="500px"></object>
-
+    <div id="holder">
+      <div id="droparea">
+        Drop Files or Directories Here
+      </div>
+    </div>
 <!--
     <applet codebase="cache/agent/" archive="jar" code="org.dhappy.mimis.FileListApplet"
 	    width="100%" height="100">Tip</applet>
 -->
+<!--
     <applet codebase="cache/agent/" archive="jar" code="org.dhappy.mimis.ScriptRunnerApplet"
 	    width="100%" height="100" alt="">
       <param name="script" value="/bin/hello/world/js"/>Tip</applet>
+-->
   </body>
 </html>
