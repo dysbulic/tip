@@ -532,6 +532,7 @@ def main():
 
     if len(sys.argv) != 4:
         log.info("Usage: testbot <server[:port]> <channel> <nickname>")
+        log.info("  Exe: testbot irc.undernet.org bookz jeremy")
         sys.exit(1)
 
     s = sys.argv[1].split(":", 1)
