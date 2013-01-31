@@ -1,8 +1,0 @@
-DirectoryIndex git.php
-
-RewriteEngine on
-RewriteOptions inherit
-
-# Because of the DirectoryIndex, batik gets replaced with batik.php
-RewriteCond %{REQUEST_FILENAME} !git.phps?$
-RewriteRule ^(.*)$ git.php?url=$1

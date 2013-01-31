@@ -1,0 +1,67 @@
+var System = java.lang.System
+var OSQLSynchQuery = Packages.com.orientechnologies.orient.core.sql.query.OSQLSynchQuery
+var ODatabaseDocumentTx = Packages.com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
+var ODocument = Packages.com.orientechnologies.orient.core.record.impl.ODocument
+var OCommandSQL = Packages.com.orientechnologies.orient.core.sql.OCommandSQL
+var File = java.io.File
+
+function getDatabase() {
+    var user_home = System.getProperty( "user.home" )
+    var db_path = user_home + "/.testdb"
+    var db_url = "local:" + db_path + File.separator + "db"
+    print( "Database URL: " + db_url )
+    if( ! new File( db_path ).exists() ) {
+        new File( db_path ).mkdirs()
+        print( "Creating New Database" )
+        new ODatabaseDocumentTx( db_url ).create()
+    }
+    var db = new ODatabaseDocumentTx( db_url ).open( "admin", "admin" )
+    db.getStorage().getConfiguration().txSegment.setSynchRecord( true )
+    return db
+}
+
+function withDatabase( db_handler ) {
+    if (db_handler == null) {
+        throw new NullPointerException( "DatabaseHandler is NULL!" )
+    }
+    var db = getDatabase()
+    try {
+        return db_handler.doWithDatabase( db )
+    } finally {
+        db.close()
+    }
+}
+
+print( 'Adding TestObj' )
+withDatabase( {
+    doWithDatabase : function( db ) {
+        var doc = new ODocument( db, 'TestObj' )
+        doc.field( 'testobj', 'test' )
+        print( "typeof db: " + typeof db )
+        doc.field( 'created_at', System.currentTimeMillis() )
+        doc.save()
+    }
+} )
+
+print( 'Checking Class Existence' )
+withDatabase( {
+    doWithDatabase : function( db ) {
+        print( "TestObj Exists: " + ( db.getMetadata().getSchema().getClass( 'TestObj' ) != null ) )
+    }
+} )
+
+print( 'Select From TestObj' )
+withDatabase( {
+    doWithDatabase : function( db ) {
+        var result = db.query( new OSQLSynchQuery( "select * from TestObj" ), [] )
+        print( "# of Entries: " + result.size() )
+    }
+} )
+
+print( 'Deleting from TestObj' )
+withDatabase( {
+    doWithDatabase : function( db ) {
+        var result = db.command( new OCommandSQL( 'delete from TestObj' ) ).execute( [] )
+        //db.query( new OSQLSynchQuery( 'delete from TestObj' ), [] )
+    }
+} )

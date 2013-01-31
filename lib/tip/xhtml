@@ -1,9 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:tip="http://dhappy.org/tip/0.1/a"
-      xmlns:var="tip:core/var">
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>Testing Tip</title>
     <link rel="stylesheet" type="text/css" href=".../style/blog/" />
@@ -12,28 +9,48 @@
       li:hover { color: orange; }
     </style>
     <script type="text/javascript"
-	    src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
+	    src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js">
     </script>
-    <script type="text/javascript" src=".../lib/tip/lib/jquery/indirect/js"></script>
 
-    <script type="text/javascript">
-      console.log( 'Entered: xhtml' )
+    <script type="text/javascript" src="lib/jquery/indirect/js"></script>
+
+    <script type="text/javascript">//<![CDATA[
       $( function() {
-        var applet = $('applet').get(0)
-        applet.eval( '/lib/jquery/indirect/rhino' ) // paired w/ js above
-        applet.eval( '/lib/load/rhino' )
-        applet.eval( '/bin/file/list/rhino' )
-        applet.eval( '/bin/xmpp/list/rhino' )
-        applet.eval( '/bin/client/ip/rhino' )
+        console.log( 'Entered: xhtml' )
+        /*
+        $('applet').get(0).addEventListener( "ready", function() {
+          console.log( "applet loaded" )
+        } )
+        */
+
+        var $button = $('<button/>').text( 'Run' )
+        //var $button = $(document.createElementNS("http://www.w3.org/1999/xhtml", 'button')).text( 'Run' )
+        //var $button = $('<div/>')
+        //var $button = $(document.createElement('div')).text( 'run' )
+        //var $button = $('button')
+        console.log( $button )
+        //$('body').children().remove()
+        //$('body').text( 'test' )
+        $('body').append( $button )
+       
+        $button.click( function() {
+          var applet = $('applet').get(0)
+          console.log( applet.guidClicked )
+          applet.eval( '/lib/jquery/indirect/rhino' ) // paired w/ js above
+          applet.eval( '/lib/load/rhino' )
+          applet.eval( '/bin/file/list/rhino' )
+          applet.eval( '/bin/xmpp/list/rhino' )
+          applet.eval( '/bin/client/ip/rhino' )
+          //applet.eval( '/lib/console/log/rhino' )
+          //applet.eval( '/lib/db/neo4j/rhino' )
+        } )
       } )
-    </script>
+    //]]></script>
   </head>
   <body>
     <h1>Tip</h1>
 
-    <p>Tip was initially devised as a axial-tilt-based interface for handhelds. One would <q>tip</q> to slide between tiles. It was to use <a href="https://mtgox.com" title="Magic: The Gathering Online Exchange">bitcoin</a> gratuities based on consensus on value.</p>
-
-    
+    <object type="image/svg+xml" data=".../blog/Tip's Structure/diagram/software/svg" width="100%" height="500px"></object>
 
 <!--
     <applet codebase="cache/agent/" archive="jar" code="org.dhappy.mimis.FileListApplet"

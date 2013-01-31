@@ -1,0 +1,24 @@
+function() {
+    var attr = 'viewBox'
+    var str = $.__.$('#').attr( attr ).split( ' ' )
+    var viewbox = new List( {
+        x : parseFloat( str[0] ),
+        y : parseFloat( str[1] ),
+        width : parseFloat( str[2] ),
+        height : parseFloat( str[3] ),
+    } )
+    var view = { 
+        get tx() {
+            return $.__.$('#').attr( attr, viewbox.__.join( ' ' ) )
+        },
+    }
+    viewbox.__.each( function( val, prop ) {
+        view.__defineGetter__( prop, function() {
+            return viewbox.__.get( prop )
+        } )
+        view.__defineSetter__( prop, function( val ) {
+            return viewbox.__.set( prop, val )
+        } )
+    } )
+    return view
+}

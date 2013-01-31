@@ -1,1 +1,0 @@
-.../lib/bash/login/bash

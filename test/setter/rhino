@@ -1,0 +1,8 @@
+hostApplet.jvmDirectVar = 'test'
+var x
+hostApplet.__defineGetter__( 'jvmDynamicVar', function() {
+    return x++
+} )
+hostApplet.__defineSetter__( 'jvmDynamicVar', function( val ) {
+    return x = val
+} )

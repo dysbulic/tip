@@ -1,0 +1,703 @@
+/*
+Theme Name: Vostok
+Theme URI: http://www.vostoktheme.com/
+Description: A dark, elegant one-column theme with a widget-ready footer. Options include a custom header image, custom background image and color, custom header images (using featured images for posts and pages), and a full navigation menu in the header.
+Version: 1.1-wpcom
+Author: Javier Cañada and Rubén Lozano (CSS and images) and the WordPress team (PHP, HTML)
+Author URI: http://www.vostoktheme.com/
+Template: twentyten
+Tags: dark, light, black, gray, orange, white, one-column, fixed-width, custom-background, custom-colors, custom-header, custom-menu, featured-image-header, featured-images, microformats, rtl-language-support, sticky-post, theme-options, translation-ready, blog, clean, geometric, lifestream, minimal
+
+Adapted for WordPress.com by Automattic, April 2010
+*/
+
+/* Reset
+---------------------------
+*/
+body {
+	font-size: 62.5%;
+}
+a:link,a:visited {
+	text-decoration: none;
+}
+ul,ol {
+	list-style: none;
+}
+h1,h2,h3,h4,h5,h6,pre,code {
+	font-size: 1em;
+}
+ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,body,html,p,blockquote,fieldset,input {
+	margin: 0;
+	padding: 0;
+}
+a img,:link img,:visited img {
+	border: none;
+}
+address {
+	font-style: normal;
+}
+
+/* Text meant only for screen readers */
+.screen-reader-text {
+	position: absolute;
+	left: -9000px;
+}
+
+/* Layout
+---------------------------
+*/
+#wrapper {
+	width: 600px;
+	margin: 0 auto;
+}
+#header {
+	position: relative;
+	margin: 0;
+	padding: 5em 0 0 0;
+}
+#site-title {
+	margin: 0;
+	font-size: 1.615em; /* 21px */
+}
+#branding {
+	clear: both;
+	margin: 1em 0;
+}
+#branding img { /* This is the header image */
+	display: block;
+	margin: 1em 0 -1em 0;
+}
+.string {
+	margin: 47px 0 0 0;
+}
+.error {
+	margin: 2.6em 0;
+	line-height: 1.2em;
+}
+#main {
+	clear: both;
+}
+
+/* Menu
+---------------------------
+*/
+#access {
+	clear: both;
+	display: block;
+	width: 600px;
+	margin: 0 auto 47px auto;
+	border-top: 1px solid #3c3c3c;
+}
+#access:after {
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden;
+}
+#access .menu ul {
+	list-style: none;
+	margin: 0;
+}
+#access .menu li {
+	float: left;
+	position: relative;
+}
+#access a {
+	display: block;
+	padding: 0 10px;
+	color: #aaa;
+	line-height: 38px;
+	text-decoration: none;
+}
+#access ul ul {
+	display: none;
+	position: absolute;
+	top: 38px;
+	left: 0;
+	float: left;
+	box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+	-webkit-box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+	z-index: 99999;
+}
+#access ul ul ul {
+	top: 0;
+	left: 100%;
+}
+#access ul ul a {
+	background: #3c3c3c;
+	height: auto;
+	width: 130px;
+	padding: 10px;
+	line-height: 1em;
+}
+#access li:hover > a, #access ul ul :hover > a {
+	background: #3c3c3c;
+	color: #fff;
+}
+#access ul li:hover > ul {
+	display: block;
+}
+#header #access .current_page_item a {
+	color: #fff;
+}
+
+/* Main content
+---------------------------
+*/
+#content .hentry, #entry-author-info {
+	position: relative;
+	overflow: hidden;
+	width: 530px;
+	margin: 47px 0;
+	padding: 35px;
+}
+#content .hentry.attachment {
+	margin-top: 1em;
+}
+#content .not-found {
+	margin: 47px 0;
+}
+#content .page-title {
+	margin: 35px 0 0;
+}
+.attachment #content .page-title {
+	margin-top: 2.1em;
+}
+.page-link {
+	color: #ccc;
+	font-weight: bold;
+	word-spacing: .5em;
+}
+.page-link a:link, .page-link a:visited {
+	padding: 0.5em 0;
+	font-weight: normal;
+}
+.entry-content object, .entry-content embed {
+	display: block;
+	margin: 2em auto;
+}
+.entry-meta {
+	position: absolute;
+	right: 1em;
+	top: 1em;
+}
+.entry-title {
+	margin: 0 0 1em 0;
+}
+.entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5 {
+	margin: 2em 0 1em 0;
+}
+.entry-utility {
+	margin: 3.3em -1.7em -1.7em 0;
+	text-align: right;
+}
+.entry-content blockquote {
+	margin: 2em;
+	padding: .1em 1.5em;
+	position: relative;
+}
+.entry-content blockquote cite {
+	display: block;
+	text-align: right;
+}
+.entry-content ul {
+	list-style: none inside;
+	margin: 1em 0;
+	padding: 0 1em;
+}
+.entry-content ol {
+	list-style: decimal outside;
+	margin: 1em 0;
+	padding: 0 2.5em;
+}
+.entry-content ul ul, .entry-content ul ol,
+.entry-content ol ol, .entry-content ol ul {
+	margin: 0;
+}
+.entry-content ul li {
+	background: url(images/bullet.gif) 0 7px no-repeat;
+	margin: .5em 0;
+	padding: 0 0 0 1em;
+}
+.entry-content ol li {
+	margin: .5em 0;
+}
+#entry-author-info {
+	border-top: 2px solid #2f2f2f;
+	font-size: .9231em;
+}
+	.author #entry-author-info {
+		border-top: 0;
+	}
+	.post #entry-author-info {
+		margin: 30px 0;
+		padding: 20px 0;
+	}
+#entry-author-info #author-avatar {
+	float: left;
+	height: 60px;
+	width: 60px;
+	margin-right: 20px;
+}
+#entry-author-info #author-description {
+	float: left;
+}
+#entry-author-info h2 {
+	font-size: 1.154em;
+}
+.page .nocomments {
+	display: none;
+}
+#comments {
+	clear: both;
+}
+.comment, .pingback {
+	position: relative;
+	margin: 0 0 24px 0;
+	padding: 0 0 0 36px;
+}
+	.pingback {
+		padding-left: 0;
+	}
+.comment div {
+	padding: 1.8em 1.6em;
+}
+.comment div.comment-author, .comment div.comment-meta, .comment div.comment-body, .comment .reply {
+	padding: 0;
+}
+.comment-meta {
+	position: absolute;
+	top: 1.8em;
+	right: 0;
+}
+.commentlist .avatar {
+	position: absolute;
+	top: 1.8em;
+	left: 0;
+}
+#commentform {
+	margin: 35px 0 47px 0;
+	padding: 15px 35px;
+}
+#nav-above {
+	display: none;
+}
+.navigation {
+	overflow: hidden;
+	margin: -2.6em 0 47px 0;
+}
+	.hentry .navigation {
+		margin: 0 0 1em 0;
+	}
+.navigation div {
+	float: left;
+	margin: 0 2em 0 0;
+}
+.navigation div.nav-next {
+	float: right;
+	margin: 0 0 0 2em;
+}
+#primary {
+	clear: both;
+}
+#primary, #secondary { /* These are the two widgetized areas */
+	float: left;
+	width: 288px;
+	overflow: hidden;
+	padding: 1em 0;
+}
+#primary {
+	margin-right: 12px;
+}
+#secondary {
+	margin-left: 12px;
+}
+.xoxo li.widget-container {
+	width: 288px;
+	overflow: hidden;
+	padding: 1em 0;
+	word-wrap: break-word;
+}
+.widget-area .children li, .widget-area ul ul ul li, #footer .menu ul ul li {
+	padding-left: 1em;
+}
+.widget-area .email {
+	background: url(images/ico-mail.gif) 0 4px no-repeat;
+	padding: 0 0 0 1.8em;
+}
+.widget-area #rss li {
+	background: url(images/ico-rss.jpg) left center no-repeat;
+	padding: 0 0 0 1.8em;
+	margin: .5em 0;
+}
+#footer {
+	clear: both;
+	padding: 1em 0;
+}
+#colophon, #page-menu {
+	float: left;
+	width: 50%;
+	overflow: hidden;
+}
+#footer .menu {
+	padding-bottom: 47px;
+}
+
+/* Gallery
+---------------------------
+*/
+#content .gallery .gallery-item {
+	float: left;
+	margin-top: 10px;
+	text-align: center;
+	width: 33%;
+}
+#content .gallery .gallery-caption {
+	margin-left: 0;
+}
+#content .gallery dl {
+	margin: 0;
+}
+
+/* Images
+---------------------------
+*/
+.entry-content img {
+	max-width: 520px;
+	height: auto;
+}
+.alignleft, img.alignleft {
+	display: inline;
+	float: left;
+	margin-right: 24px;
+	margin-top: 4px;
+}
+.alignright, img.alignright {
+	display: inline;
+	float: right;
+	margin-left: 24px;
+	margin-top: 4px;
+}
+.aligncenter, img.aligncenter {
+	clear: both;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+img.alignleft, img.alignright, img.aligncenter {
+	margin-bottom: 12px;
+}
+#content .wp-caption {
+	text-align: center;
+	margin-bottom: 20px;
+	padding: 4px;
+}
+#content .wp-caption img {
+	margin: 5px;
+}
+#content .wp-caption p.wp-caption-text {
+	margin: 0 0 4px;
+}
+#content .wp-smiley {
+	margin: 0;
+}
+
+/* Text treatment
+---------------------------
+*/
+#wrapper {
+	font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+	font-size: 1.3em;
+	line-height: 1.5em;
+}
+p {
+	margin: 1em 0;
+}
+h1 {
+	font-size: 2.1em;
+	font-weight: normal;
+}
+#header .description {
+	font-size: 0.85em;
+}
+#header a {
+	text-decoration: none;
+}
+a.back {
+	text-decoration: underline;
+}
+.entry-title, #comments h3, #commentform h3, h1.page-title, .error {
+	font: normal 1.5384em/1.5em Helvetica, Arial, sans-serif;
+}
+.entry-title a {
+	text-decoration: none;
+}
+.entry-title {
+	line-height: 1.2em;
+}
+.entry-content h2 {
+	font: normal 1.4em/1.2em Helvetica, Arial, sans-serif;
+}
+.entry-content h3 {
+	font: normal 1.3em/1.2em Helvetica, Arial, sans-serif;
+}
+.entry-content h4 {
+	font: normal 1.2em/1.2em Helvetica, Arial, sans-serif;
+}
+.entry-content h5 {
+	font: normal 1.1em/1.2em Helvetica, Arial, sans-serif;
+}
+.entry-content blockquote cite {
+	font-style: normal;
+}
+.entry-meta, .entry-utility, .comment-meta {
+	font-size: .9231em;
+}
+.entry-utility a {
+	text-decoration: underline;
+}
+#comments h3 {
+	margin: 0 0 2em 0;
+}
+#commentform h3 {
+	margin: 0 0 1.5em 0;
+}
+.comment cite {
+	font-style: normal;
+}
+.comment cite a {
+	text-decoration: underline;
+}
+.navigation a {
+	text-decoration: underline;
+}
+.widget-area a {
+	text-decoration: none;
+}
+#footer a {
+	text-decoration: underline;
+}
+#footer p {
+	margin: 0;
+}
+
+/* Colors
+
+Greys
+--------------------------
+Very Dark #2f2f2f
+Dark #3c3c3c
+Regular #828282
+Light #999
+Very light #ccc
+
+Others
+--------------------------
+blue #09c
+orange #f90
+white #fff
+
+*/
+
+body {
+	background-color: #2f2f2f;
+}
+strong {
+	color: #ccc;
+}
+#wrapper {
+/*	background-color: #2f2f2f;*/
+	color: #999;
+}
+#header a:link,
+#header a:visited {
+	color: #09c;
+}
+#header a:hover,
+#header a:active,
+#header a:focus {
+	color: #fff;
+}
+.back:link,
+.back:visited {
+	color: #f90;
+}
+.back:hover,
+.back:active,
+.back:focus {
+	color: #fff;
+}
+#content .hentry, #entry-author-info {
+	background: #3c3c3c;
+}
+.entry-title, .error, .page-title {
+	color: #ccc;
+}
+.entry-title a:link, .entry-title a:visited {
+	color: #ccc;
+}
+.entry-title a:hover, .entry-title a:active, .entry-title a:focus {
+	color: #f90;
+}
+.entry-content blockquote {
+	background: #2f2f2f;
+}
+.entry-date {
+	color: #828282;
+}
+#content a:link, #content a:visited {
+	color: #f90;
+}
+#content a:focus {
+	color: #fff;
+}
+.entry-content img {
+	border: 5px solid #fff;
+}
+.entry-content img.wp-smiley {
+	border: 0;
+}
+#content .entry-utility a:link, #content .entry-utility a:visited {
+	color: #ccc;
+}
+#content .entry-utility a:hover, #content .entry-utility a:active, #content .entry-utility a:focus {
+	color: #f90;
+}
+#comments h3, #commentform h3 {
+	color: #ccc;
+}
+.comment {
+	border-top: 1px solid #3c3c3c;
+}
+.comment.bypostauthor {
+	border-top: 1px solid #f90;
+}
+.highlighted {
+	background: #3c3c3c;
+	border-top: 1px solid #2f2f2f;
+}
+.highlighted a:link, .highlighted a:visited {
+	color: #09c;
+}
+.comment blockquote {
+	background: #3c3c3c;
+	margin: .5em 0;
+	padding: .1em 1.5em;
+}
+.comment cite {
+	color: #ccc;
+}
+.comment .moderation {
+	color: #fff;
+}
+#commentform {
+	background: #3c3c3c;
+}
+#commentform a:link,
+#commentform a:visited {
+	color: #09c;
+}
+#commentform a:hover,
+#commentform a:active,
+#commentform a:focus {
+	color: #ccc;
+}
+.navigation {
+	color: #f90;
+}
+.page-title span {
+	color: #828282;
+}
+.navigation a:link, .navigation a:visited,
+.page-title a:link, .page-title a:visited {
+	color: #f90;
+}
+.navigation a:hover, .navigation a:active, .navigation a:focus,
+.page-title a:hover, .page-title a:active, .page-title a:focus {
+	color: #fff;
+}
+.widget-area {
+	color: #828282;
+}
+.widget-area a:link,
+.widget-area a:visited {
+	color: #C4C4C4;
+}
+.widget-area a:hover,
+.widget-area a:active,
+.widget-area a:focus {
+	color: #f90;
+}
+#footer {
+	border-top: 1px solid #3c3c3c;
+	color: #828282;
+}
+#footer a:link,
+#footer a:visited {
+	color: #09c;
+}
+#footer a:hover,
+#footer a:active,
+#footer a:focus {
+	color: #fff;
+}
+
+/* Forms
+---------------------------
+*/
+input, textarea {
+	padding: .3em;
+	font-size: 1em;
+	font-family: Helvetica,Arial,sans-serif;
+}
+label {
+	font-size: 1em;
+}
+.required {
+	color: #f90;
+}
+#respond .comment-form-author input, #respond .comment-form-email input, #respond .comment-form-url input {
+	display: block;
+	width: 75%;
+}
+#respond textarea {
+	display: block;
+	width: 98%;
+}
+#respond .form-allowed-tags dd {
+	margin-left: 0;
+}
+#searchform label {
+	position: absolute;
+	top: -9999px;
+}
+
+/* Attachments
+---------------------------
+*/
+.attachment .entry-content .nav-previous a:before {
+	content: '\2190\00a0';
+}
+.attachment .entry-content .nav-next a:after {
+	content: '\00a0\2192';
+}
+
+/* WordPress.com
+---------------------------
+*/
+#wpstats {
+	position: absolute;
+	margin: -1em;
+}
+.widget_flickr table, #flickr_badge_wrapper {
+	background-color: transparent !important;
+	border: 0 !important;
+}
+.comment .pd-rating {
+	padding: 1em 0 0;
+}
+.comment .pd-rating div {
+	padding: 0;
+}

@@ -1,0 +1,58 @@
+//!/bin/js
+
+// Symlinks don't work in the m$ jvm
+( typeof environment !== 'undefined'
+  && environment[ 'os.emulator' ] == 'cygwin' )
+    && load( 'C:\\Program Files\\Mimis\\js' )
+
+print( '!' )
+
+load( '.../lib/mimis/branch/rev-6/js' )
+
+;( function() {
+    var neo4j = mimis.load( mimis.base + 'neo4j/mimis' )
+    var db = new neo4j.Database( 'tmp/fs/neo4j/' )
+    var fs = mimis.load( mimis.base + 'file/set/rhino' )
+    
+    var tx = db.mk.tx
+    try {
+        var walker = new fs.FileSet( 'file/system/walker/default/fileset/xml' )
+
+/*
+        var node = { walker : db.mk.node }
+        var rel = { walker : db.mk.rel( 'filesystem walk' ) }
+        db.ref.rel.to( node.walker, rel.walker )
+*/
+        walker.files.each( function( file ) {
+            console.log( file )
+/*
+            node.sheet = db.mk.node
+            node.workbook.rel.to( node.sheet, rel.workbook )
+            node.workbook.rel.to( node.sheet, db.mk.rel( 'sheet' ) )
+            sheet.rows.each( function( row ) {
+                node.row = db.mk.node
+                node.sheet.rel.to( node.row, rel.workbook )
+                node.sheet.rel.to( node.row, db.mk.rel( 'row' ) )
+                node.row.prop( 'num', row.num )
+                row.cells.each( function( cell ) {
+                    node.cell = db.mk.node
+                    node.row.rel.to( node.cell, rel.workbook )
+                    node.row.rel.to( node.cell, db.mk.rel( 'cell' ) )
+                    node.cell.prop( 'val', cell.valueOf() )
+                } )
+            } )
+*/
+        } )
+        
+/*
+        db.ref.traverse( { rel : rel.workbook } )
+            .each( function( node ) {
+                console.log( node.prop( 'val' ) )
+            } )
+*/
+        tx.success
+    } finally {
+        tx.finish
+        db.shutdown
+    }
+} )()

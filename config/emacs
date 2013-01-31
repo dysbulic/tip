@@ -17,9 +17,9 @@
 (cond ((not running-xemacs)
 	(global-font-lock-mode t)))
 
-(set-background-color "#000000")
-(set-background-color "black")
-(set-face-background 'default "black")
+;;(set-background-color "#000000")
+;;(set-background-color "black")
+;;(set-face-background 'default "black")
 
 ;; Hilight the cursor line
 ; (global-hl-line-mode 1)
@@ -111,6 +111,13 @@
   (setq auto-mode-alist
         (append '(("jquery|\\.js$" . c-mode)) auto-mode-alist)))
 
+(setq coffeescript-file "~/.../lib/emacs/mode/coffeescript/coffee-mode.el")
+(if (file-exists-p coffeescript-file)
+    (progn (load coffeescript-file)
+           (setq auto-mode-alist
+                 (append '(("\\(coffee\\)$" . coffee-mode)) auto-mode-alist))
+           (message "coffeescript mode loaded")))
+
 ;; Input control characters in hex
 (setq read-quoted-char-radix 16)
 
@@ -136,13 +143,18 @@
 (defun word-count nil "Count words in buffer" (interactive)
   (shell-command-on-region (point-min) (point-max) "wc -w"))
 
-(setq nxml-file ".../lib/emacs/mode/nxml/rng-auto.el")
+(setq nxml-file "~/.../lib/emacs/mode/nxml/rng-auto.el")
 (if (file-exists-p nxml-file)
     (progn (load nxml-file)
            (message "nxml mode loaded")))
 
+(setq haml-file "~/.../lib/emacs/mode/haml/haml-mode.el")
+(if (file-exists-p haml-file)
+    (progn (load-file haml-file)
+           (message "haml mode loaded")))
+
 ( setq auto-mode-alist
-       ( cons '("\\(xml\\|xsl\\|html\\|rng\\|xhtml\\|xslt\\|rml\\|docbook\\|svg\\|tmpl\\)" . nxml-mode )
+       ( cons '("\\(xml\\|xsl\\|html\\|rng\\|xhtml\\|xslt\\|rml\\|docbook\\|svg\\|tmpl\\)$" . nxml-mode )
              auto-mode-alist ) )
 
 (setq auto-mode-alist
