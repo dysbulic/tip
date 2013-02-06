@@ -1,1 +1,27 @@
-console.log('hi')
+var cssNode = document.createElementNS( "http://www.w3.org/2000/svg", 'style' )
+cssNode.type = 'text/css'
+cssNode.rel = 'stylesheet'
+cssNode.media = 'screen'
+cssNode.title = 'dynamicSheet'
+document.getElementsByTagName("defs")[0].appendChild(cssNode)
+
+var ruleName = '#background'
+
+function randHexDuple() {
+    var num = Math.round( Math.random() * 255 ).toString( 16 )
+    if( num.length < 2 ) {
+        num = '0' + num
+    }
+    return num
+}
+var color = '#' + randHexDuple() + randHexDuple() + randHexDuple()
+
+if( cssNode.addRule ) {                    // Browser is IE?
+    cssNode.addRule( ruleName, null, 0 )   // Yes, add IE style
+} else if( cssNode.insertRule ) {          // Browser is not IE?
+    cssNode.insertRule( ruleName + ' { fill: ' + color + '; }', 0 ) // Yes, add Moz style.
+} else {
+    console.warn( 'CSS rules cannot be added' )
+    var bg = document.getElementById( 'background' )
+    bg.style.fill = color
+}
