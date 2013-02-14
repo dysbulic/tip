@@ -197,6 +197,11 @@ class DownloadBot(SingleServerIRCBot):
         log.info("Joining: " + self.channel)
         connection.join(self.channel)
 
+    def on_join(self, connection, event):
+        source = event.source()
+        log.info("Joined: " + source)
+        self.start_queue()
+
     def on_privmsg(self, connection, event):
         log.info("Privmsg: " + event.arguments()[0])
         self.do_command(event, event.arguments()[0])
@@ -395,7 +400,11 @@ class DownloadBot(SingleServerIRCBot):
         else:
             c = self.connection
             cmd = "@search %s" % search.phrase
-            chname, chobj = self.channels.items()[0]
+            log.info("self.channels.items() = %s" % self.channels.items())
+            if len(self.channels.items()) == 0:
+                chname = self.channel
+            else:
+                chname, chobj = self.channels.items()[0]
             log.info("Sending: '%s' to %s" % (cmd, chname))
             c.privmsg(chname, cmd)
 
@@ -532,7 +541,8 @@ def main():
 
     if len(sys.argv) != 4:
         log.info("Usage: testbot <server[:port]> <channel> <nickname>")
-        log.info("  Exe: testbot irc.undernet.org bookz jeremy")
+        log.info("  Exe: testbot irc.undernet.org \#bookz jeremy")
+        log.info("  Exe: testbot irc.irchighway.net \#ebooks jeremy")
         sys.exit(1)
 
     s = sys.argv[1].split(":", 1)
