@@ -197,6 +197,11 @@ class DownloadBot(SingleServerIRCBot):
         log.info("Joining: " + self.channel)
         connection.join(self.channel)
 
+    def on_join(self, connection, event):
+        source = event.source()
+        log.info("Joined: " + source)
+        self.start_queue()
+
     def on_privmsg(self, connection, event):
         log.info("Privmsg: " + event.arguments()[0])
         self.do_command(event, event.arguments()[0])
@@ -240,6 +245,14 @@ class DownloadBot(SingleServerIRCBot):
             log.info("%d results for %s" % (count, search_str))
             return
 
+        ident = re.match("\*\*\* Ident broken or disabled, to continue to connect you must type (.*)", msg)
+        if ident is not None:
+            command = ident.group(1)
+            #source = event.source().split('!')[0]
+            #log.info("Running connection command: '%s' on %s" % (command, source))
+            log.info("Running connection command: '%s' on %s" % (command))
+            connection.privmsg(command)
+
         welcome = re.match("\[#ebooks\] Welcome to #ebooks", msg)
         if welcome is not None:
             self.start_queue()
@@ -275,17 +288,20 @@ class DownloadBot(SingleServerIRCBot):
         peeraddress = ip_numstr_to_quad(args.group('ip'))
         peerport = int(args.group('port'))
         try:
+            log.info("DCC Connecting: %s:%s" % (peeraddress, peerport))
             dcc = self.dcc_connect(peeraddress, peerport, "raw")
             dcc.filename = os.path.basename(args.group('filename'))
 
-            search = re.match("^SearchBot_results_for_(?P<name>.*).txt.zip", dcc.filename)
+            search = re.match("SearchBot_results_for_\s*(?P<name>.*).txt.zip", dcc.filename)
             dcc.is_search = search is not None
             if dcc.is_search:
-                search_str = search.group('name')
+                search_str = search.group('name').replace("_", " ")
+                dcc.filename = "search results/%s" % dcc.filename
                 try:
                     dcc.search = searches.get(search_str)
                     log.info("Search Result: " + search_str)
                 except UnknownPhrase:
+                    # bug: bad filename
                     dcc.search = searches.add(Search(title=search_str))
                     log.error("Unknown Search: " + search_str)
             else:
@@ -310,6 +326,8 @@ class DownloadBot(SingleServerIRCBot):
                     count = count + 1
             dcc.file = open(dcc.filename, "w")
             dcc.received_bytes = 0
+        except OverflowError as err:
+            log.error("Overflow Error: " + str(err))
         except DCCConnectionError as err:
             log.error("Connect Error: " + str(err))
             log.info("CTCP Arg[1]: " + arg)
@@ -328,7 +346,7 @@ class DownloadBot(SingleServerIRCBot):
             self.process_search(connection.search)
         else:
             self.name_download(connection.search)
-        self.queue_next()
+        # self.queue_next()
                  
     def on_dccchat(self, connection, event):
         log.info("DCC Chat: " + event.arguments()[0])
@@ -387,15 +405,23 @@ class DownloadBot(SingleServerIRCBot):
     def search_for(self, search):
         searches.add(search)
         
-        previous = "SearchBot_results_for_%s.txt.zip" % search.phrase
+        previous = "search results/SearchBot_results_for_%s.txt.zip" % search.phrase
+        previousSpaced = "search results/SearchBot_results_for_ %s.txt.zip" % search.phrase
         if os.path.exists(previous):
             log.info("Using cached search: " + previous)
             search.filename = previous
             self.process_search(search)
+        if os.path.exists(previousSpaced):
+            log.info("Using cached search: " + previousSpaced)
+            search.filename = previousSpaced
+            self.process_search(search)
         else:
             c = self.connection
             cmd = "@search %s" % search.phrase
-            chname, chobj = self.channels.items()[0]
+            if len(self.channels.items()) == 0:
+                chname = self.channel
+            else:
+                chname, chobj = self.channels.items()[0]
             log.info("Sending: '%s' to %s" % (cmd, chname))
             c.privmsg(chname, cmd)
 
@@ -411,7 +437,8 @@ class DownloadBot(SingleServerIRCBot):
                                      + r"  (.*)\s+(?P<size>\d+(.\d+)?)\s*(?P<unit>[KkMm]?i?[Bb])",
                                      line)
                     if parts is None:
-                        log.error("Unknown Result Match: " + line)
+                        if len(line.strip()) > 0:
+                            log.error("Unknown Result Match: " + line)
                     else:
                         src = DownloadSource(parts.group('server'),
                                              parts.group('file'),
@@ -425,16 +452,24 @@ class DownloadBot(SingleServerIRCBot):
         search.source = searches.get_source(search)
         if search.source is None:
             log.error("No results for: " + search.phrase)
+            dir = search.filetitle
+            if not os.path.exists(dir):
+                log.info("Creating Placeholder: " + dir)
+                os.mkdir(dir)
             self.queue_next()
         else:
             searches.link(search.source.filename, search)
             c = self.connection
-            chname, chobj = self.channels.items()[0]
+            if len(self.channels.items()) == 0:
+                chname = self.channel
+            else:
+                chname, chobj = self.channels.items()[0]
             log.info("Sending: '%s' to %s" % (search.source.req, chname))
             c.privmsg(chname, search.source.req)
 
     def name_download(self, search):
         basename, extension = os.path.splitext(search.filename)
+        
         filename = "%s.%s%s" % (search.filetitle,
                                 search.source.type if search.source is not None else "html",
                                 extension)
@@ -443,9 +478,10 @@ class DownloadBot(SingleServerIRCBot):
             os.rename(search.filename, filename)
 
     def start_queue(self):
-        self.lock_check = PerpetualTimer(30.0, self.check_lock)
-        self.lock_check.start()
-        self.queue_next()
+        if not hasattr(self, 'lock_check'):
+            self.lock_check = PerpetualTimer(30.0, self.check_lock)
+            self.lock_check.start()
+            self.queue_next()
 
     def check_lock(self):
         """If it has been over a minute since the last queue entry, process one"""
@@ -532,7 +568,8 @@ def main():
 
     if len(sys.argv) != 4:
         log.info("Usage: testbot <server[:port]> <channel> <nickname>")
-        log.info("  Exe: testbot irc.undernet.org bookz jeremy")
+        log.info("  Exe: testbot irc.undernet.org \#bookz jeremy")
+        log.info("  Exe: testbot irc.irchighway.net \#ebooks jeremy")
         sys.exit(1)
 
     s = sys.argv[1].split(":", 1)
