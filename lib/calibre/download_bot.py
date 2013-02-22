@@ -290,12 +290,13 @@ class DownloadBot(SingleServerIRCBot):
         try:
             log.info("DCC Connecting: %s:%s" % (peeraddress, peerport))
             dcc = self.dcc_connect(peeraddress, peerport, "raw")
-            dcc.filename = os.path.basename("search results/%s" % args.group('filename'))
+            dcc.filename = os.path.basename(args.group('filename'))
 
             search = re.match("SearchBot_results_for_\s*(?P<name>.*).txt.zip", dcc.filename)
             dcc.is_search = search is not None
             if dcc.is_search:
                 search_str = search.group('name').replace("_", " ")
+                dcc.filename = "search results/%s" % dcc.filename
                 try:
                     dcc.search = searches.get(search_str)
                     log.info("Search Result: " + search_str)
