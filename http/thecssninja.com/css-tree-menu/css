@@ -6,7 +6,6 @@ body, form, ul, li, p, h1, h2, h3, h4, h5
 	margin: 0;
 	padding: 0;
 }
-body { background-color: #606061; color: #ffffff; margin: 0; }
 img { border: none; }
 p
 {
@@ -38,7 +37,6 @@ ol.tree
 		ol.tree li.file a
 		{
 			background: url('.../image/icon/Gnome/mimetypes/text-x-preview.svg') 0 0 no-repeat;
-			color: #fff;
 			padding-left: 21px;
 			text-decoration: none;
 			display: block;
@@ -59,13 +57,13 @@ ol.tree
 		width: 1em;
 		top: 0;
 	}
+		ol.tree li input + label + ol,
 		ol.tree li input + ol
 		{
-			background: url(toggle-small-expand.png) 40px 0 no-repeat;
 			margin: -0.938em 0 0 -44px; /* 15px */
 			height: 1em;
 		}
-		ol.tree li input + ol > li { display: none; margin-left: -14px !important; padding-left: 1px; }
+		ol.tree li input + ol > li, ol.tree li label + ol > li { display: none; margin-left: -14px !important; padding-left: 1px; }
 	ol.tree li label
 	{
 		background: url('.../image/icon/Gnome/places/folder.svg') 15px 1px no-repeat;
@@ -73,17 +71,25 @@ ol.tree
 		display: block;
 		padding-left: 37px;
 	}
-
-	ol.tree li input:before {
-            opacity: 1;
-            content: '-';
+	ol.tree li input:checked + label
+	{
+		background: url('.../image/icon/Gnome/status/folder-open.svg') 15px 1px no-repeat;
         }
+
+	ol.tree li input + label:before {
+            content: '+';
+	    margin: 0 30px 0 -40px;
+        }
+	ol.tree li input:checked + label:before {
+            content: '-';
+	    margin-left: -35px;
+        }
+	ol.tree li input:checked + label + ol,
 	ol.tree li input:checked + ol
 	{
-		background: url(toggle-small.png) 40px 5px no-repeat;
 		margin: -1.25em -1em 0 -44px; /* 20px */
 		padding: 1.563em 0 0 80px;
 		height: auto;
 	}
-		ol.tree li input:checked + ol > li { display: block; margin: 0 0 0.125em;  /* 2px */}
-		ol.tree li input:checked + ol > li:last-child { margin: 0 0 0.063em; /* 1px */ }
+		ol.tree li input:checked ~ ol > li { display: block; margin: 0 0 0.125em;  /* 2px */}
+		ol.tree li input:checked ~ ol > li:last-child { margin: 0 0 0.063em; /* 1px */ }
