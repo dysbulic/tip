@@ -153,6 +153,9 @@
     (progn (load-file haml-file)
            (message "haml mode loaded")))
 
+(setq auto-mode-alist
+      (append '(("\\(js\\|jquery\\|json\\|mql\\|tipscript\\|\\.?rhino\\|mimis\\)$" . javascript-mode)) auto-mode-alist))
+
 ( setq auto-mode-alist
        ( cons '("\\(xml\\|xsl\\|html\\|rng\\|xhtml\\|xslt\\|rml\\|docbook\\|svg\\|tmpl\\)$" . nxml-mode )
              auto-mode-alist ) )
