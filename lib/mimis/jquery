@@ -78,12 +78,23 @@ $( function() {
         .bind( 'dragleave', dragLeave )
 
     var $lastSelected
-    $(document).on( 'click', '#filelist, input, label', function() {
+    $(document).on( 'click', '#filelist, input, label', function( event ) {
         if( $lastSelected ) {
             $lastSelected.removeClass( 'selected' )
         }
         $(this).addClass( 'selected' )
         $lastSelected = $(this)
+        event.preventDefault()
     } )
 
+    $(document).on( 'dblclick', '#filelist, input, label', function( event ) {
+        var $item = $(event.target).prev()
+        // Is setting, but the page isn't updating
+        //$item.attr( 'checked', ! $item.attr( 'checked' ) )
+        if( $item.attr( 'checked' ) ) {
+            $item.get(0).removeAttribute( 'checked' )
+        } else {
+            $item.get(0).setAttribute( 'checked', 'checked' )
+        }
+    } )
 } )
