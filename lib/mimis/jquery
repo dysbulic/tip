@@ -1,35 +1,62 @@
+// From: http://ihatecode.blogspot.com/2008/10/simple-jquery-uid-plugin.html
+( function( $ ) {
+    $.fn.uid = function( prefix ) {  
+        if( ! prefix ) {
+            prefix = "uid"
+        }
+
+        var generate = function() {
+            var dt = new Date().getMilliseconds()
+            var num = Math.random()
+            var rnd = Math.round( num * 100000 )
+            return prefix + dt + rnd
+        }
+
+        return this.each( function() {  
+            this.id = generate()
+            return $
+        })
+    }
+})( jQuery );
+
 $( function() {
     $.event.props.push('dataTransfer')
 
     var drop = function( event ) {
-        console.log( event )
 	event.preventDefault()
-        var items = event.dataTransfer.items
-        for( var i = 0; i < items.length; i++ ) {
-            var item = items[i].webkitGetAsEntry()
-            var $new
 
-            if( item.isFile ) {
-                $new = $('<li/>').addClass( 'file' )
-                $new.append( $('<a/>').attr( { href: item.name } ).text( item.name ) )
+        function addEntry( entry, $parent ) {
+            var $new = $('<li/>')
+
+            if( entry.isFile ) {
+                $new.addClass( 'file' )
+                entry.file( function( file ) {
+                    var objectURL = window.URL.createObjectURL( file )
+                    var $link = $('<a/>').attr( { target: 'new', href: objectURL } ).text( file.name )
+                    $new.append( $link )
+                } )
             } else if( item.isDirectory ) {
-                $new = $('<li/>')
-                $new
-                    .append(
-                        $('<input/>').attr( {
-                            type: 'checkbox',
-                            id: 'folder1'
-                        } ) )
-                    .append( $('<label/>').attr( { 'for': 'folder1' } ).text( item.name ) )
-                console.log( "Directory:", item.name )
-                var dirReader = item.createReader()
+                var $input = $('<input/>').attr( { type: 'checkbox' } ).uid()
+                $new.append( $input )
+                    .append( $('<label/>').attr( { 'for': $input.attr( 'id' ) } ).text( entry.name ) )
+                
+                var $fileList = $('<ol/>')
+                $new.append( $fileList )
+
+                var dirReader = entry.createReader()
                 dirReader.readEntries( function( entries ) {
                     for( var i = 0; i < entries.length; i++ ) {
-                        console.log( entries[i].name )
+                        addEntry( entries[i], $fileList )
                     }
                 } )
             }
-        $(event.target).parent().find( 'ol' ).first().append( $new )
+            $parent.append( $new )
+        }
+
+        var items = event.dataTransfer.items
+        for( var i = 0; i < items.length; i++ ) {
+            var item = items[i].webkitGetAsEntry()
+            addEntry( item, $(event.target).parent().find( 'ol' ).first() )
         }
     }
 
@@ -44,112 +71,30 @@ $( function() {
     function dragLeave( e ) {
         e.stopPropagation()
     }
-
-    $('#filelist, label').bind( 'drop', drop )
+    
+    $(document).on( 'drop', '#filelist, input, label', drop )
         .bind( 'dragenter', dragEnter )
         .bind( 'dragover', dragOver )
         .bind( 'dragleave', dragLeave )
-} );
-/*
-$(function(){
-    var dropbox = $('#filelist'),
-    message = $('.message', dropbox);
-    
-    dropbox.filedrop({
-	// The name of the $_FILES entry:
-	paramname:'pic',
-	
-	maxfiles: 5,
-    	maxfilesize: 2,
-	url: 'post_file.php',
-	
-	uploadFinished:function(i,file,response){
-	    $.data(file).addClass('done');
-	    // response is the JSON object that post_file.php returns
-	},
-	
-    	error: function(err, file) {
-	    switch(err) {
-	    case 'BrowserNotSupported':
-		showMessage('Your browser does not support HTML5 file uploads!');
-		break;
-	    case 'TooManyFiles':
-		alert('Too many files! Please select 5 at most! (configurable)');
-		break;
-	    case 'FileTooLarge':
-		alert(file.name+' is too large! Please upload files up to 2mb (configurable).');
-		break;
-	    default:
-		break;
-	    }
-	},
-	
-	// Called before each upload is started
-	beforeEach: function(file){
-	    if(!file.type.match(/^image\//)){
-		alert('Only images are allowed!');
-		
-		// Returning false will cause the
-		// file to be rejected
-		return false;
-	    }
-	},
-	
-	uploadStarted:function(i, file, len){
-	    createImage(file);
-	},
-	
-	progressUpdated: function(i, file, progress) {
-	    $.data(file).find('.progress').width(progress);
-	}
-    	
-    });
-    
-    var template = '<div class="preview">'+
-	'<span class="imageHolder">'+
-	'<img />'+
-	'<span class="uploaded"></span>'+
-	'</span>'+
-	'<div class="progressHolder">'+
-	'<div class="progress"></div>'+
-	'</div>'+
-	'</div>'; 
-    
-    
-    function createImage(file){
-        
-	var preview = $(template), 
-	image = $('img', preview);
-	
-	var reader = new FileReader();
-	
-	image.width = 100;
-	image.height = 100;
-	
-	reader.onload = function(e){
-	    
-	    // e.target.result holds the DataURL which
-	    // can be used as a source of the image:
-	    
-	    image.attr('src',e.target.result);
-	};
-	
-	// Reading the file as a DataURL. When finished,
-	// this will trigger the onload function above:
-	reader.readAsDataURL(file);
-	
-	message.hide();
-	preview.appendTo(dropbox);
-	
-	// Associating a preview container
-	// with the file, using jQuery's $.data():
-	
-	$.data(file,preview);
-    }
-    
-    function showMessage(msg){
-	message.html(msg);
-    }
-    
-});
-*/
+
+    var $lastSelected
+    $(document).on( 'click', '#filelist, input, label', function( event ) {
+        if( $lastSelected ) {
+            $lastSelected.removeClass( 'selected' )
+        }
+        $(this).addClass( 'selected' )
+        $lastSelected = $(this)
+        event.preventDefault()
+    } )
+
+    $(document).on( 'dblclick', '#filelist, input, label', function( event ) {
+        var $item = $(event.target).prev()
+        // Is setting, but the page isn't updating
+        //$item.attr( 'checked', ! $item.attr( 'checked' ) )
+        if( $item.attr( 'checked' ) ) {
+            $item.get(0).removeAttribute( 'checked' )
+        } else {
+            $item.get(0).setAttribute( 'checked', 'checked' )
+        }
+    } )
+} )

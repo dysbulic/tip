@@ -6,6 +6,19 @@
     background-color: #533;
 }
 
-html, body, .container, .span8, #filelist, .row {
+#files {
+    overflow: auto;
+}
+
+html, body, .container, .span4, .span8, #files, #filelist, .row {
     height: 100%;
+}
+
+input, label {
+    display: block;
+}
+
+label:hover, label:active, input:hover, input:hover + label, input:active + label,
+.selected, .selected + label {
+    background-color: gray ! important;
 }
