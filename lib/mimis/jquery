@@ -1,3 +1,23 @@
+( function( $ ){  
+    $.fn.uid = function( prefix ) {  
+        if( ! prefix ) {
+            prefix = "uid"
+        }
+
+        var generate = function() {
+            var dt = new Date().getMilliseconds()
+            var num = Math.random()
+            var rnd = Math.round( num * 100000 )
+            return prefix + dt + rnd
+        }
+
+        return this.each( function() {  
+            this.id = generate()
+            return $
+        })
+    }
+})( jQuery );
+
 $( function() {
     $.event.props.push('dataTransfer')
 
@@ -13,19 +33,25 @@ $( function() {
                 $new = $('<li/>').addClass( 'file' )
                 $new.append( $('<a/>').attr( { href: item.name } ).text( item.name ) )
             } else if( item.isDirectory ) {
+                var $input = $('<input/>').attr( { type: 'checkbox' } ).uid()
                 $new = $('<li/>')
-                $new
-                    .append(
-                        $('<input/>').attr( {
-                            type: 'checkbox',
-                            id: 'folder1'
-                        } ) )
-                    .append( $('<label/>').attr( { 'for': 'folder1' } ).text( item.name ) )
-                console.log( "Directory:", item.name )
+                $new.append( $input )
+                    .append( $('<label/>').attr( { 'for': $input.attr( 'id' ) } ).text( item.name ) )
+                
+                var $fileList = $('<ol/>')
+                $new.append( $fileList )
+
                 var dirReader = item.createReader()
                 dirReader.readEntries( function( entries ) {
                     for( var i = 0; i < entries.length; i++ ) {
-                        console.log( entries[i].name )
+                        var $file = $('<li/>').addClass( 'file' )
+                        entries[i].file( function( file ) {
+                            console.log( entries[i] )
+                            var objectURL = window.URL.createObjectURL( file )
+                            var $link = $('<a/>').attr( { target: 'new', href: objectURL } ).text( file.name )
+                            $file.append( $link )
+                        } )
+                        $fileList.append( $file )
                     }
                 } )
             }
