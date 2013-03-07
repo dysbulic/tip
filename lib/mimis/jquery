@@ -7,11 +7,20 @@ $( function() {
         var items = event.dataTransfer.items
         for( var i = 0; i < items.length; i++ ) {
             var item = items[i].webkitGetAsEntry()
+            var $new
+
             if( item.isFile ) {
-                item.file( function( file ) {
-                    console.log( "File:", file.name )
-                } )
+                $new = $('<li/>').addClass( 'file' )
+                $new.append( $('<a/>').attr( { href: item.name } ).text( item.name ) )
             } else if( item.isDirectory ) {
+                $new = $('<li/>')
+                $new
+                    .append(
+                        $('<input/>').attr( {
+                            type: 'checkbox',
+                            id: 'folder1'
+                        } ) )
+                    .append( $('<label/>').attr( { 'for': 'folder1' } ).text( item.name ) )
                 console.log( "Directory:", item.name )
                 var dirReader = item.createReader()
                 dirReader.readEntries( function( entries ) {
@@ -20,6 +29,7 @@ $( function() {
                     }
                 } )
             }
+        $(event.target).parent().find( 'ol' ).first().append( $new )
         }
     }
 
@@ -35,7 +45,7 @@ $( function() {
         e.stopPropagation()
     }
 
-    $('#filelist').bind( 'drop', drop )
+    $('#filelist, label').bind( 'drop', drop )
         .bind( 'dragenter', dragEnter )
         .bind( 'dragover', dragOver )
         .bind( 'dragleave', dragLeave )
