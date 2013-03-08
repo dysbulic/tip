@@ -45,6 +45,7 @@ $( function() {
 
                 var dirReader = entry.createReader()
                 dirReader.readEntries( function( entries ) {
+                    $fileList.data( { 'file-entries': entries } )
                     for( var i = 0; i < entries.length; i++ ) {
                         addEntry( entries[i], $fileList )
                     }
@@ -54,10 +55,14 @@ $( function() {
         }
 
         var items = event.dataTransfer.items
+        var entries = []
+        var $list = $(event.target).parent().find( 'ol' ).first()
         for( var i = 0; i < items.length; i++ ) {
             var item = items[i].webkitGetAsEntry()
-            addEntry( item, $(event.target).parent().find( 'ol' ).first() )
+            addEntry( item, $list )
+            entries.push( item )
         }
+        //$list.data( { 'file-entries': entries } )
     }
 
     function dragEnter( e ) {
@@ -79,12 +84,53 @@ $( function() {
 
     var $lastSelected
     $(document).on( 'click', '#filelist, input, label', function( event ) {
+        event.preventDefault()
+
+        var $this = $(this)
+
         if( $lastSelected ) {
             $lastSelected.removeClass( 'selected' )
         }
-        $(this).addClass( 'selected' )
-        $lastSelected = $(this)
-        event.preventDefault()
+        $this.addClass( 'selected' )
+
+        $lastSelected = $this
+
+        function addRow( name, size, type ) {
+            $('#fileview').dataTable().fnAddData( [ name, size, type ] )
+        }
+
+        var entries = $this.parent().find( 'ol' ).first().data( 'file-entries' )
+        if( entries ) {
+            $('#fileview').dataTable().fnClearTable()
+            for( var i = 0; i < entries.length; i++ ) {
+                if( entries[i].isDirectory ) {
+                    var dirReader = entries[i].createReader()
+
+                    var onSuccess = function( files ) {
+                        addRow( arguments.callee.dirname, files.length, 'text/directory' )
+                    }
+                    onSuccess.dirname = entries[i].name
+
+                    dirReader.readEntries(
+                        onSuccess,
+                        function() {
+                            console.log( "Failed to read: " + entries[i].name )
+                        } )
+                } else {
+                    entries[i].file( function( file ) {
+                        addRow( file.name, file.size, file.type )
+                    } )
+                }
+            }
+        }
+    } )
+
+    $('#fileview').dataTable( {
+        sDom: "<'row'<'span4'l><'span4'f>r>t<'row'<'span4'i><'span4'p>>",
+        sPaginationType: 'bootstrap',
+        oLanguage: {
+            sLengthMenu: '_MENU_ per page'
+        }
     } )
 
     $(document).on( 'dblclick', '#filelist, input, label', function( event ) {
