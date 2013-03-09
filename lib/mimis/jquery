@@ -83,7 +83,7 @@ $( function() {
         .bind( 'dragleave', dragLeave )
 
     var $lastSelected
-    $(document).on( 'click', '#filelist, input, label', function( event ) {
+    $(document).on( 'click', 'input, label', function( event ) {
         event.preventDefault()
 
         var $this = $(this)
@@ -118,7 +118,9 @@ $( function() {
                         } )
                 } else {
                     entries[i].file( function( file ) {
-                        addRow( file.name, file.size, file.type )
+                        var objectURL = window.URL.createObjectURL( file )
+                        var $link = $('<a/>').attr( { target: 'new', href: objectURL } ).text( file.name )
+                        addRow( $link.prop( 'outerHTML' ), file.size, file.type )
                     } )
                 }
             }
@@ -126,7 +128,7 @@ $( function() {
     } )
 
     $('#fileview').dataTable( {
-        sDom: "<'row'<'span4'l><'span4'f>r>t<'row'<'span4'i><'span4'p>>",
+        sDom: "<'row-fluid'<'span4'l><'span4'f>r>t<'row-fluid'<'span3'i><'span5'p>>",
         sPaginationType: 'bootstrap',
         oLanguage: {
             sLengthMenu: '_MENU_ per page'

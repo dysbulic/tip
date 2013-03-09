@@ -3,14 +3,18 @@
 }
 
 #filelist:hover {
-    background-color: #EEE;
+    background-color: #F8F8F8;
+}
+
+li {
+    white-space: nowrap;
 }
 
 #files {
     overflow: auto;
 }
 
-html, body, .container, .span4, .span8, #files, #filelist, .row {
+html, body, .container, .span4, .span8, #files, #filelist, .row, .row-fluid {
     height: 100%;
 }
 
@@ -18,8 +22,17 @@ input, label {
     display: block;
 }
 
-label:hover, label:active, input:hover, input:hover + label, input:active + label,
 .selected, .selected + label {
     background-color: gray ! important;
     color: white;
+}
+
+label:hover, label:active, input:hover, input:hover + label, input:active + label,
+.file a:hover {
+    background-color: #F8F8F8 ! important;
+    color: black;
+}
+
+.container {
+    width: 100%;
 }
