@@ -1,0 +1,27 @@
+var query = [ { id: null, name: null, type: '/astronomy/planet' } ]
+
+query = {
+    'id|=': [ '/en/nebula_award', '/en/hugo_award' ],
+    type: '/award/award',
+    category: [ {
+        name: [],
+        winners: [ {
+            award_winner: [ { name: [] } ],
+            honored_for: [ {
+                name: [],
+                type: '/book/written_work',
+            } ],
+            limit: 5000,
+        } ]
+    } ]
+}
+
+var query_envelope = { query: query }
+var service_url = 'http://api.freebase.com/api/service/mqlread'
+var url = service_url  + '?callback=?&query=' + encodeURIComponent( JSON.stringify( query_envelope ) )
+$.getJSON( url, function( response ) {
+    console.log( response )
+    $('body').append( response.result.map( function( award ) {
+        return award.category.name
+    } ).toString() )
+})
