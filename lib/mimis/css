@@ -3,14 +3,18 @@
 }
 
 #filelist:hover {
-    background-color: #EEE;
+    background-color: #F8F8F8;
+}
+
+li {
+    white-space: nowrap;
 }
 
 #files {
     overflow: auto;
 }
 
-html, body, .container, .span4, .span8, #files, #filelist, .row {
+html, body, .container, .span4, .span8, #files, #filelist, .row, .row-fluid {
     height: 100%;
 }
 
@@ -18,8 +22,57 @@ input, label {
     display: block;
 }
 
-label:hover, label:active, input:hover, input:hover + label, input:active + label,
 .selected, .selected + label {
     background-color: gray ! important;
     color: white;
+}
+
+label:hover, label:active, input:hover, input:hover + label, input:active + label,
+.file a:hover {
+    background-color: #F8F8F8 ! important;
+    color: black;
+}
+
+.container {
+    width: 100%;
+}
+
+ol.tree li label[for=world] {
+    background: url('.../image/globe/svg') 15px 1px no-repeat ! important;
+}
+
+ol.tree li label[for=local] {
+    background: url('.../image/icon/computer/svg') 15px 1px no-repeat ! important;
+}
+
+ol.tree li label[for=sharing] {
+    background: url('.../image/icon/workgroup/svg') 15px 1px no-repeat ! important;
+}
+
+ol.tree li label[for=book] {
+    background: url('.../image/book/open/svg') 15px 1px no-repeat ! important;
+}
+
+ol.tree li label[for~='award'] {
+    background: url('.../image/ribbon/svg') 15px 1px no-repeat ! important;
+}
+
+ol.tree li label[for~='year'] {
+    background: url('.../image/icon/calendar/svg') 15px 1px no-repeat ! important;
+}
+
+ol.tree li label[for='book - award - Hugo'] {
+    background: url('.../image/book/award/Hugo/svg') 15px 1px no-repeat ! important;
+}
+
+ol.tree li label[for='book - award - Nebula'] {
+    background: url('.../image/planet/Saturn/svg') 5px 1px no-repeat ! important;
+}
+
+ol.tree li label[for=movie] {
+    background: url('.../image/icon/movie/svg') 15px 1px no-repeat ! important;
+}
+
+ol.tree li label[for='movie - award - Oscar'] {
+    background: url('.../image/movie/award/Oscar/svg') 5px 1px no-repeat ! important;
 }
