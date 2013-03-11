@@ -1,13 +1,23 @@
 var query = [ { id: null, name: null, type: '/astronomy/planet' } ]
 
 query = [ {
-    'id|=': [ '/en/nebula_award', '/en/hugo_award' ],
+    'id|=': [ '/en/hugo_award' ],
     type: '/award/award',
     category: [ {
         name: null,
         winners: [ {
             award_winner: [ { name: null } ],
+            year: null,
             honored_for: [ {
+                name: null,
+                type: '/book/written_work',
+            } ],
+            limit: 5000,
+        } ],
+        nominees: [ {
+            award_nominee: [ { name: null } ],
+            year: null,
+            nominated_for: [ {
                 name: null,
                 type: '/book/written_work',
             } ],
@@ -23,12 +33,34 @@ var url = service_url  + '?callback=?&query=' + encodeURIComponent( JSON.stringi
 $.getJSON( url, function( response ) {
     console.log( response )
     $('body').append( response.result.map( function( award ) {
-        var $parent = $('[id="book - by"] ~ ol')
-        console.log( $parent.size() )
+        var $parent = $('[id="book - award - Hugo"] ~ ol')
         award.category.map( function( cat ) {
-            $parent.append( $('<li/>').text( cat.name ) )
-            console.log( cat )
+            var name = cat.name.replace( 'Hugo Award for ', '' )
+            var $dir = addDirectory( { name: name }, $parent )
+            $.each( cat.winners, function( index, winner ) {
+                var $year = addDirectory( { name: winner.year }, $dir.find( 'ol' ).first() )
+                var author = winner.award_winner[0].name
+                var title = winner.honored_for[0].name
+                var $author = addDirectory( { name: author }, $year.find( 'ol' ) )
+                var $title = addDirectory( { name: title }, $author.find( 'ol' ) )
+            } )
         } )
         return award.category.name
     } ).toString() )
 })
+
+query = [ {
+    'id|=': [ '/en/nebula_award', '/en/hugo_award' ],
+    type: '/award/award',
+    category: [ {
+        name: null,
+        winners: [ {
+            award_winner: [ { name: null } ],
+            honored_for: [ {
+                name: null,
+                type: '/book/written_work',
+            } ],
+            limit: 5000,
+        } ]
+    } ]
+} ]

@@ -19,6 +19,41 @@
     }
 })( jQuery );
 
+function addFile( entry, $parent ) {
+    var $new = $('<li/>')
+    
+    $new.addClass( 'file' )
+    entry.file( function( file ) {
+        var objectURL = window.URL.createObjectURL( file )
+        var $link = $('<a/>').attr( { target: 'new', href: objectURL } ).text( file.name )
+        $new.append( $link )
+    } )
+    $parent.append( $new )
+    return $new
+}
+
+function addDirectory( entry, $parent ) {
+    var $new = $('<li/>')
+    var $input = $('<input/>').attr( { type: 'checkbox' } ).uid()
+    $new.append( $input )
+        .append( $('<label/>').attr( { 'for': $input.attr( 'id' ) } ).text( entry.name ) )
+    
+    var $fileList = $('<ol/>')
+    $new.append( $fileList )
+    
+    if( entry.createReader ) {
+        var dirReader = entry.createReader()
+        dirReader.readEntries( function( entries ) {
+            $fileList.data( { 'file-entries': entries } )
+            for( var i = 0; i < entries.length; i++ ) {
+                addEntry( entries[i], $fileList )
+            }
+        } )
+    }
+    $parent.append( $new )
+    return $new
+}
+
 $( function() {
     $.event.props.push('dataTransfer')
 
@@ -29,29 +64,10 @@ $( function() {
             var $new = $('<li/>')
 
             if( entry.isFile ) {
-                $new.addClass( 'file' )
-                entry.file( function( file ) {
-                    var objectURL = window.URL.createObjectURL( file )
-                    var $link = $('<a/>').attr( { target: 'new', href: objectURL } ).text( file.name )
-                    $new.append( $link )
-                } )
+                addFile( entry, $parent )
             } else if( item.isDirectory ) {
-                var $input = $('<input/>').attr( { type: 'checkbox' } ).uid()
-                $new.append( $input )
-                    .append( $('<label/>').attr( { 'for': $input.attr( 'id' ) } ).text( entry.name ) )
-                
-                var $fileList = $('<ol/>')
-                $new.append( $fileList )
-
-                var dirReader = entry.createReader()
-                dirReader.readEntries( function( entries ) {
-                    $fileList.data( { 'file-entries': entries } )
-                    for( var i = 0; i < entries.length; i++ ) {
-                        addEntry( entries[i], $fileList )
-                    }
-                } )
+                addDirectory( entry, $parent )
             }
-            $parent.append( $new )
         }
 
         var items = event.dataTransfer.items
