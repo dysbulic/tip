@@ -1,51 +1,4 @@
-var query = [ { id: null, name: null, type: '/astronomy/planet' } ]
-
-query = [ {
-    'id|=': [ '/en/hugo_award' ],
-    type: '/award/award',
-    category: [ {
-        name: null,
-        winners: [ {
-            award_winner: [ { name: null } ],
-            year: null,
-            honored_for: [ {
-                name: null,
-                type: '/book/written_work',
-            } ],
-            limit: 5000,
-        } ],
-        nominees: [ {
-            award_nominee: [ { name: null } ],
-            year: null,
-            nominated_for: [ {
-                name: null,
-                type: '/book/written_work',
-            } ],
-            limit: 5000,
-        } ]
-    } ]
-} ]
-
-var world = {
-    book: {
-        by: {},
-        year: {},
-        award: {
-            Hugo: {},
-            Nebula: {}
-        }
-    },
-    movie: {
-        year: {},
-        award: {
-            Oscar: {}
-        }
-    }
-}
-
-var query_envelope = { query: query }
-var service_url = 'http://api.freebase.com/api/service/mqlread'
-var url = service_url  + '?callback=?&query=' + encodeURIComponent( JSON.stringify( query_envelope ) )
+var world = {}
 
 function fillObject( object, path ) {
     $.each( path, function( index, prop ) {
@@ -56,46 +9,77 @@ function fillObject( object, path ) {
     } )
 }
 
-$.getJSON( url, function( response ) {
-    console.log( response )
-    response.result.map( function( award ) {
-        award.category.map( function( cat ) {
-            var category = cat.name.replace( 'Hugo Award for ', '' )
-            $.each( cat.winners, function( index, winner ) {
-                var author = winner.award_winner[0].name
-                var title = winner.honored_for[0].name
-                var year = winner.year
-                fillObject( world.book.by, [ author, title ] )
-                fillObject( world.book.year, [ year, author, title ] )
-                fillObject( world.book.award.Hugo, [year, category, 'winner', author, title ] )
-            } )
-            $.each( cat.nominees, function( index, nominee ) {
-                var author = nominee.award_nominee[0].name
-                var title = nominee.nominated_for[0].name
-                var year = nominee.year
-                fillObject( world.book.by, [ author, title ] )
-                fillObject( world.book.year, [ year, author, title ] )
-                fillObject( world.book.award.Hugo, [year, category, 'nominee', author, title ] )
-            } )
-        } )
-        addObject( world, $('#world ~ ol') )
-        return award.category.name
-    } )
-})
 
-query = [ {
-    'id|=': [ '/en/nebula_award', '/en/hugo_award' ],
-    type: '/award/award',
-    category: [ {
-        name: null,
-        winners: [ {
-            award_winner: [ { name: null } ],
-            honored_for: [ {
-                name: null,
-                type: '/book/written_work',
+function loadAward( awardName, type, freebaseId ) {
+    var query = [ {
+        'id|=': [ freebaseId ],
+        type: '/award/award',
+        category: [ {
+            name: null,
+            winners: [ {
+                award_winner: [ { name: null } ],
+                year: null,
+                honored_for: [ {
+                    name: null,
+                } ],
+                limit: 5000,
             } ],
-            limit: 5000,
+            nominees: [ {
+                award_nominee: [ { name: null } ],
+                year: null,
+                nominated_for: [ {
+                    name: null,
+                } ],
+                limit: 5000,
+            } ]
         } ]
     } ]
-} ]
+
+    var query_envelope = { query: query }
+    var service_url = 'http://api.freebase.com/api/service/mqlread'
+    var url = service_url  + '?callback=?&query=' + encodeURIComponent( JSON.stringify( query_envelope ) )
+
+    $.getJSON( url, function( response ) {
+        console.log( response )
+        response.result.map( function( award ) {
+            award.category.map( function( cat ) {
+                var category = cat.name.replace( awardName + ' Award for ', '' )
+                $.each( cat.winners, function( index, winner ) {
+                    var author = winner.award_winner[0].name
+                    var title = winner.honored_for[0].name
+                    var year = winner.year
+                    fillObject( world, [ type, 'by', author, title ] )
+                    fillObject( world, [ type, 'year', year, author, title ] )
+                    fillObject( world, [ type, 'award', awardName, year, category, 'winner', author, title ] )
+                } )
+                $.each( cat.nominees, function( index, nominee ) {
+                    var author = nominee.award_nominee[0].name
+                    var title = nominee.nominated_for[0].name
+                    var year = nominee.year
+                    fillObject( world, [ type, 'by', author, title ] )
+                    fillObject( world, [ type, 'year', year, author, title ] )
+                    fillObject( world, [ type, 'award', awardName, year, category, 'nominee', author, title ] )
+                } )
+            } )
+            return award.category.name
+        } )
+        $(world).trigger( 'update' )
+    } )
+}
+
+( function() {
+    var updateCount = 0
+    $(world).on( 'update', function() {
+        console.log( 'Updated:' + updateCount )
+        if( ++updateCount >= 3 ) {
+            var $parent = $('#world ~ ol')
+            $parent.empty()
+            addObject( world, $('#world ~ ol') )
+        }
+    } )
+} )()
+
+loadAward( 'Hugo', 'book', '/en/hugo_award' )
+loadAward( 'Nebula', 'book', '/en/nebula_award' )
+loadAward( 'Academy Award', 'movie', '/en/academy_awards' )
 
