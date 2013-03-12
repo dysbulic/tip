@@ -19,6 +19,71 @@
     }
 })( jQuery );
 
+function addFile( entry, $parent ) {
+    var $new = $('<li/>').addClass( 'file' )
+    if( entry.file ) {
+        entry.file( function( file ) {
+            var objectURL = window.URL.createObjectURL( file )
+            var $link = $('<a/>').attr( { target: 'new', href: objectURL } ).text( file.name )
+            $new.append( $link )
+        } )
+    } else {
+        var $link = $('<a/>').text( entry.name )
+        $new.append( $link )
+    }
+    $parent.append( $new )
+    return $new
+}
+
+function addDirectory( entry, $parent, id ) {
+    var $new = $('<li/>').attr( { id: id } )
+    var $input = $('<input/>').attr( {
+        type: 'checkbox',
+        id: id
+    } )
+    $new.append( $input )
+        .append( $('<label/>').attr( { 'for': $input.attr( 'id' ) } ).text( entry.name ) )
+    
+    var $fileList = $('<ol/>')
+    $new.append( $fileList )
+    
+    if( entry.createReader ) {
+        var dirReader = entry.createReader()
+        dirReader.readEntries( function( entries ) {
+            $fileList.data( { 'file-entries': entries } )
+            for( var i = 0; i < entries.length; i++ ) {
+                addEntry( entries[i], $fileList )
+            }
+        } )
+    }
+    $parent.append( $new )
+    return $new
+}
+
+function addObject( object, $parent, id ) {
+    if( ! id ) {
+        id = ''
+    }
+    if( id.length > 0 ) {
+        id += ' - '
+    }
+    for( prop in object ) {
+        var newId = id + prop
+        console.log( newId )
+        if( typeof object[ prop ] == 'object' ) {
+            var $prop = addDirectory( { name: prop }, $parent, newId )
+            addObject( object[ prop ], $prop.find( 'ol' ), newId )
+        } else {
+            addFile( {
+                name: prop,
+                value: object[ prop ]
+            },
+                     $parent,
+                     newId )
+        }
+    }
+}
+
 $( function() {
     $.event.props.push('dataTransfer')
 
@@ -29,29 +94,10 @@ $( function() {
             var $new = $('<li/>')
 
             if( entry.isFile ) {
-                $new.addClass( 'file' )
-                entry.file( function( file ) {
-                    var objectURL = window.URL.createObjectURL( file )
-                    var $link = $('<a/>').attr( { target: 'new', href: objectURL } ).text( file.name )
-                    $new.append( $link )
-                } )
+                addFile( entry, $parent )
             } else if( item.isDirectory ) {
-                var $input = $('<input/>').attr( { type: 'checkbox' } ).uid()
-                $new.append( $input )
-                    .append( $('<label/>').attr( { 'for': $input.attr( 'id' ) } ).text( entry.name ) )
-                
-                var $fileList = $('<ol/>')
-                $new.append( $fileList )
-
-                var dirReader = entry.createReader()
-                dirReader.readEntries( function( entries ) {
-                    $fileList.data( { 'file-entries': entries } )
-                    for( var i = 0; i < entries.length; i++ ) {
-                        addEntry( entries[i], $fileList )
-                    }
-                } )
+                addDirectory( entry, $parent )
             }
-            $parent.append( $new )
         }
 
         var items = event.dataTransfer.items
@@ -126,6 +172,14 @@ $( function() {
             }
         }
     } )
+
+    console.log( $('#movie ~ ol').size() )
+    addObject( {
+        test: {
+            'more testing': {
+                'deeper testing': 'value'
+            } } },
+               $('#world ~ ol') )
 
     $('#fileview').dataTable( {
         sDom: "<'row-fluid'<'span4'l><'span4'f>r>t<'row-fluid'<'span3'i><'span5'p>>",
