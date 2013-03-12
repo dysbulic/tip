@@ -67,19 +67,18 @@ function loadAward( awardName, type, freebaseId ) {
     } )
 }
 
+// After all three data sets are loaded, update the tree
 ( function() {
     var updateCount = 0
     $(world).on( 'update', function() {
-        console.log( 'Updated:' + updateCount )
         if( ++updateCount >= 3 ) {
             var $parent = $('#world ~ ol')
             $parent.empty()
-            addObject( world, $('#world ~ ol') )
+            addObject( world, $parent )
         }
     } )
 } )()
 
 loadAward( 'Hugo', 'book', '/en/hugo_award' )
 loadAward( 'Nebula', 'book', '/en/nebula_award' )
-loadAward( 'Academy Award', 'movie', '/en/academy_awards' )
-
+loadAward( 'Academy', 'movie', '/en/academy_awards' )
