@@ -26,6 +26,23 @@ query = [ {
     } ]
 } ]
 
+var world = {
+    book: {
+        by: {},
+        year: {},
+        award: {
+            Hugo: {},
+            Nebula: {}
+        }
+    },
+    movie: {
+        year: {},
+        award: {
+            Oscar: {}
+        }
+    }
+}
+
 var query_envelope = { query: query }
 var service_url = 'http://api.freebase.com/api/service/mqlread'
 var url = service_url  + '?callback=?&query=' + encodeURIComponent( JSON.stringify( query_envelope ) )
@@ -38,13 +55,21 @@ $.getJSON( url, function( response ) {
             var name = cat.name.replace( 'Hugo Award for ', '' )
             var $dir = addDirectory( { name: name }, $parent )
             $.each( cat.winners, function( index, winner ) {
-                var $year = addDirectory( { name: winner.year }, $dir.find( 'ol' ).first() )
                 var author = winner.award_winner[0].name
                 var title = winner.honored_for[0].name
+                if( ! world.book.by[author] ) {
+                    world.book.by[author] = {}
+                }
+                if( ! world.book.by[author][title] ) {
+                    world.book.by[author][title] = {}
+                }
+                console.log( world )
+                var $year = addDirectory( { name: winner.year }, $dir.find( 'ol' ).first() )
                 var $author = addDirectory( { name: author }, $year.find( 'ol' ) )
                 var $title = addDirectory( { name: title }, $author.find( 'ol' ) )
             } )
         } )
+        addObject( world, $('#world ~ ol') )
         return award.category.name
     } ).toString() )
 })
@@ -64,3 +89,4 @@ query = [ {
         } ]
     } ]
 } ]
+

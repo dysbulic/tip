@@ -20,21 +20,27 @@
 })( jQuery );
 
 function addFile( entry, $parent ) {
-    var $new = $('<li/>')
-    
-    $new.addClass( 'file' )
-    entry.file( function( file ) {
-        var objectURL = window.URL.createObjectURL( file )
-        var $link = $('<a/>').attr( { target: 'new', href: objectURL } ).text( file.name )
+    var $new = $('<li/>').addClass( 'file' )
+    if( entry.file ) {
+        entry.file( function( file ) {
+            var objectURL = window.URL.createObjectURL( file )
+            var $link = $('<a/>').attr( { target: 'new', href: objectURL } ).text( file.name )
+            $new.append( $link )
+        } )
+    } else {
+        var $link = $('<a/>').text( entry.name )
         $new.append( $link )
-    } )
+    }
     $parent.append( $new )
     return $new
 }
 
-function addDirectory( entry, $parent ) {
-    var $new = $('<li/>')
-    var $input = $('<input/>').attr( { type: 'checkbox' } ).uid()
+function addDirectory( entry, $parent, id ) {
+    var $new = $('<li/>').attr( { id: id } )
+    var $input = $('<input/>').attr( {
+        type: 'checkbox',
+        id: id
+    } )
     $new.append( $input )
         .append( $('<label/>').attr( { 'for': $input.attr( 'id' ) } ).text( entry.name ) )
     
@@ -52,6 +58,30 @@ function addDirectory( entry, $parent ) {
     }
     $parent.append( $new )
     return $new
+}
+
+function addObject( object, $parent, id ) {
+    if( ! id ) {
+        id = ''
+    }
+    if( id.length > 0 ) {
+        id += ' - '
+    }
+    for( prop in object ) {
+        var newId = id + prop
+        console.log( newId )
+        if( typeof object[ prop ] == 'object' ) {
+            var $prop = addDirectory( { name: prop }, $parent, newId )
+            addObject( object[ prop ], $prop.find( 'ol' ), newId )
+        } else {
+            addFile( {
+                name: prop,
+                value: object[ prop ]
+            },
+                     $parent,
+                     newId )
+        }
+    }
 }
 
 $( function() {
@@ -142,6 +172,14 @@ $( function() {
             }
         }
     } )
+
+    console.log( $('#movie ~ ol').size() )
+    addObject( {
+        test: {
+            'more testing': {
+                'deeper testing': 'value'
+            } } },
+               $('#world ~ ol') )
 
     $('#fileview').dataTable( {
         sDom: "<'row-fluid'<'span4'l><'span4'f>r>t<'row-fluid'<'span3'i><'span5'p>>",
