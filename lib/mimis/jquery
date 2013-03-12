@@ -67,9 +67,13 @@ function addObject( object, $parent, id ) {
     if( id.length > 0 ) {
         id += ' - '
     }
+    var props = []
     for( prop in object ) {
+        props.push( prop )
+    }
+    props = props.sort()
+    $.each( props, function( index, prop ) {
         var newId = id + prop
-        console.log( newId )
         if( typeof object[ prop ] == 'object' ) {
             var $prop = addDirectory( { name: prop }, $parent, newId )
             addObject( object[ prop ], $prop.find( 'ol' ), newId )
@@ -81,7 +85,7 @@ function addObject( object, $parent, id ) {
                      $parent,
                      newId )
         }
-    }
+    } )
 }
 
 $( function() {
@@ -172,14 +176,6 @@ $( function() {
             }
         }
     } )
-
-    console.log( $('#movie ~ ol').size() )
-    addObject( {
-        test: {
-            'more testing': {
-                'deeper testing': 'value'
-            } } },
-               $('#world ~ ol') )
 
     $('#fileview').dataTable( {
         sDom: "<'row-fluid'<'span4'l><'span4'f>r>t<'row-fluid'<'span3'i><'span5'p>>",
