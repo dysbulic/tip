@@ -3,33 +3,46 @@
      xmlns:xlink="http://www.w3.org/1999/xlink"
      viewBox="0 0 60 60">
   <defs>
+    <title>Loading Icon</title>
     <style type="text/css">
       rect {
         stroke: black;
-        stroke-width: 1;
-        fill: none;
+        stroke-width: .75;
+        fill: white;
       }
     </style>
     <rect id="bar" x="-3" y="9" rx="3" ry="3" width="6" height="20"/>
   </defs>
   <g transform="translate(30,30)">
     <g transform="rotate(0)">
-      <use xlink:href="#bar"/>
+      <rect id="rect1" x="-3" y="9" rx="3" ry="3" width="6" height="20">
+        <animateColor id="a1" attributeName="fill" values="white;black;white" dur=".5s" begin="0s;a6.end" />
+      </rect>
     </g>
     <g transform="rotate(60)">
-      <use xlink:href="#bar"/>
+      <rect id="rect2" x="-3" y="9" rx="3" ry="3" width="6" height="20">
+        <animateColor id="a2" attributeName="fill" values="white;black;white" dur=".5s" begin="a1.end" />
+      </rect>
     </g>
     <g transform="rotate(120)">
-      <use xlink:href="#bar"/>
+      <rect id="rect3" x="-3" y="9" rx="3" ry="3" width="6" height="20">
+        <animateColor id="a3" attributeName="fill" values="white;black;white" dur=".5s" begin="a2.end" />
+      </rect>
     </g>
     <g transform="rotate(180)">
-      <use xlink:href="#bar"/>
+      <rect id="rect4" x="-3" y="9" rx="3" ry="3" width="6" height="20">
+        <animateColor id="a4" attributeName="fill" values="white;black;white" dur=".5s" begin="a3.end" />
+      </rect>
     </g>
     <g transform="rotate(240)">
-      <use xlink:href="#bar"/>
+      <rect id="rect5" x="-3" y="9" rx="3" ry="3" width="6" height="20">
+        <animateColor id="a5" attributeName="fill" values="white;black;white" dur=".5s" begin="a4.end" />
+      </rect>
     </g>
     <g transform="rotate(300)">
-      <use xlink:href="#bar"/>
+      <rect id="rect6" x="-3" y="9" rx="3" ry="3" width="6" height="20">
+        <animateColor id="a6" attributeName="fill" values="white;black;white" dur=".5s" begin="a5.end" />
+      </rect>
     </g>
   </g>
 </svg>
