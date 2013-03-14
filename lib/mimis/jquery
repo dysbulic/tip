@@ -149,9 +149,10 @@ $( function() {
             $('#fileview').dataTable().fnAddData( [ name, size, type ] )
         }
 
+        $('#fileview').dataTable().fnClearTable()
+
         var entries = $this.parent().find( 'ol' ).first().data( 'file-entries' )
         if( entries ) {
-            $('#fileview').dataTable().fnClearTable()
             for( var i = 0; i < entries.length; i++ ) {
                 if( entries[i].isDirectory ) {
                     var dirReader = entries[i].createReader()
@@ -175,7 +176,12 @@ $( function() {
                 }
             }
         } else {
-            console.log( $(this).siblings( 'ol' ).size() )
+            $(this).siblings( 'ol' ).children( 'li' ).each( function( index, item ) {
+                var $item = $(item)
+                var $link = $('<a/>').text( $item.children( 'label' ).text() )
+                addRow( $link.prop( 'outerHTML' ), $item.children( 'ol' ).children().size(), 'text/directory' )
+            } )
+            //addRow( $link.prop( 'outerHTML' ), file.size, file.type )
         }
     } )
 
@@ -191,10 +197,12 @@ $( function() {
         var $item = $(event.target).prev()
         // Is setting, but the page isn't updating
         //$item.attr( 'checked', ! $item.attr( 'checked' ) )
-        if( $item.attr( 'checked' ) ) {
-            $item.get(0).removeAttribute( 'checked' )
-        } else {
-            $item.get(0).setAttribute( 'checked', 'checked' )
+        if( $item.size() > 0 ) {
+            if( $item.attr( 'checked' ) ) {
+                $item.get(0).removeAttribute( 'checked' )
+            } else {
+                $item.get(0).setAttribute( 'checked', 'checked' )
+            }
         }
     } )
 } )
