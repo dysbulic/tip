@@ -145,6 +145,9 @@ $( function() {
 
         $label.parent().parents().children( 'input' ).attr( { checked: 'checked' } )
 
+        // ToDo: Scoll selected item visible
+        //$('#files').animate( { scrollTop: $label.offset().top }, 'slow' )
+
         function addRow( name, size, type ) {
             $('#fileview').dataTable().fnAddData( [ name, size, type ] )
         }
@@ -187,8 +190,11 @@ $( function() {
     }
 
     $(document).on( 'click', 'label', function( event ) {
-        event.preventDefault()
-        selectLabel( $(this).attr( 'for' ) )
+        var forInput = $(this).attr( 'for' )
+        if( forInput ) {
+            event.preventDefault()
+            selectLabel( forInput )
+        }
     } )
 
     $(document).on( 'click', '#filelist a', function( event ) {
