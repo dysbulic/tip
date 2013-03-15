@@ -133,17 +133,17 @@ $( function() {
         .bind( 'dragleave', dragLeave )
 
     var $lastSelected
-    $(document).on( 'click', 'input, label', function( event ) {
-        event.preventDefault()
-
-        var $this = $(this)
+    function selectLabel( id ) {
+        var $label = $('[for="' + id + '"]')
 
         if( $lastSelected ) {
             $lastSelected.removeClass( 'selected' )
         }
-        $this.addClass( 'selected' )
+        $label.addClass( 'selected' )
 
-        $lastSelected = $this
+        $lastSelected = $label
+
+        $label.parent().parents().children( 'input' ).attr( { checked: 'checked' } )
 
         function addRow( name, size, type ) {
             $('#fileview').dataTable().fnAddData( [ name, size, type ] )
@@ -151,7 +151,7 @@ $( function() {
 
         $('#fileview').dataTable().fnClearTable()
 
-        var entries = $this.parent().find( 'ol' ).first().data( 'file-entries' )
+        var entries = $label.parent().find( 'ol' ).first().data( 'file-entries' )
         if( entries ) {
             for( var i = 0; i < entries.length; i++ ) {
                 if( entries[i].isDirectory ) {
@@ -176,13 +176,24 @@ $( function() {
                 }
             }
         } else {
-            $(this).siblings( 'ol' ).children( 'li' ).each( function( index, item ) {
+            $label.siblings( 'ol' ).children( 'li' ).each( function( index, item ) {
                 var $item = $(item)
-                var $link = $('<a/>').text( $item.children( 'label' ).text() )
+                var $label = $item.children( 'label' )
+                var $link = $('<a/>').attr( { 'ref-id': $label.attr( 'for' ) } ).text( $label.text() )
                 addRow( $link.prop( 'outerHTML' ), $item.children( 'ol' ).children().size(), 'text/directory' )
             } )
             //addRow( $link.prop( 'outerHTML' ), file.size, file.type )
         }
+    }
+
+    $(document).on( 'click', 'label', function( event ) {
+        event.preventDefault()
+        selectLabel( $(this).attr( 'for' ) )
+    } )
+
+    $(document).on( 'click', '#filelist a', function( event ) {
+        event.preventDefault()
+        selectLabel( $(this).attr( 'ref-id' ) )
     } )
 
     $('#fileview').dataTable( {
