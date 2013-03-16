@@ -143,7 +143,15 @@ $( function() {
 
         $lastSelected = $label
 
-        $label.parent().parents().children( 'input' ).attr( { checked: 'checked' } )
+        var $parent = $label.parent()
+        $parent.parents().children( 'input' ).attr( { checked: 'checked' } )
+
+        /*
+        pouchdb.get( { _id: id }, function( err, doc ) {
+            for( prop in doc ) {
+            }
+        } )
+        */
 
         // ToDo: Scoll selected item visible
         //$('#files').animate( { scrollTop: $label.offset().top }, 'slow' )
@@ -202,14 +210,6 @@ $( function() {
         selectLabel( $(this).attr( 'ref-id' ) )
     } )
 
-    $('#fileview').dataTable( {
-        sDom: "<'row-fluid'<'span4'l><'span4'f>r>t<'row-fluid'<'span3'i><'span5'p>>",
-        sPaginationType: 'bootstrap',
-        oLanguage: {
-            sLengthMenu: '_MENU_ per page'
-        }
-    } )
-
     $(document).on( 'dblclick', '#filelist, input, label', function( event ) {
         var $item = $(event.target).prev()
         // Is setting, but the page isn't updating
@@ -220,6 +220,14 @@ $( function() {
             } else {
                 $item.get(0).setAttribute( 'checked', 'checked' )
             }
+        }
+    } )
+
+    $('#fileview').dataTable( {
+        sDom: "<'row-fluid'<'span4'l><'span4'f>r>t<'row-fluid'<'span3'i><'span5'p>>",
+        sPaginationType: 'bootstrap',
+        oLanguage: {
+            sLengthMenu: '_MENU_ per page'
         }
     } )
 } )
