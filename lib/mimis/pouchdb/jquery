@@ -1,0 +1,10 @@
+var pouchdb
+Pouch( 'mimis', function( err, db ) {
+    pouchdb = db
+
+    db.post({ title: 'Cony Island Baby' }, function( err, response ) {
+        db.get( response.id, function( err, doc ) {
+            console.log( doc )
+        } )
+    })
+} )
