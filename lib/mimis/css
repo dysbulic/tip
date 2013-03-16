@@ -14,7 +14,7 @@ li {
     overflow: auto;
 }
 
-html, body, .container, .span4, .span8, #files, #filelist, .row, .row-fluid {
+html, body, .container, .fullheight .span4, .fullheight .span8, #files, #filelist, .fullheight.row, .fullheight.row-fluid {
     height: 100%;
 }
 
@@ -35,6 +35,25 @@ label:hover, label:active, input:hover, input:hover + label, input:active + labe
 
 .container {
     width: 100%;
+}
+
+.sorting:after {
+    content: ' \21F3';
+}
+
+.sorting_desc:after {
+    content: ' \21E7';
+}
+
+.sorting_asc:after {
+    content: ' \21E9';
+}
+
+#back-button a {
+    background-image: url('.../image/icon/go/previous/svg');
+    background-repeat: no-repeat;
+    padding: 6px 0px 4px 28px;
+    margin-top: 3px;
 }
 
 ol.tree li label {
