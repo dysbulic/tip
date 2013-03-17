@@ -1,0 +1,97 @@
+( function() {
+    var position = 0
+    
+    var bar = {
+        min : parseFloat( $('#bar').attr( 'x1' ) ),
+        max : parseFloat( $('#bar').attr( 'x2' ) ),
+    }
+
+    function setPosition( pos ) {
+        if( pos == undefined ) {
+            rotation = 0
+            color = 'black'
+            text = '\u2400'
+            newX = - parseFloat( $('#bar').attr( 'x1' ) )
+        } else {
+            pos = Math.max( pos, -1 ) // no less than -1
+            pos = Math.min( pos, 1 )  // no more than 1
+            
+            rotation = 100 * pos
+            
+            red = pos < 0 ? Math.round( 255 * -pos ) : 0
+            green = pos > 0 ? Math.round( 255 * pos ) : 0
+            blue = Math.round( 255 * ( 1 - Math.abs( pos ) ) )
+            color = "rgb(" + red + "," + green + "," + blue + ")"
+            
+            text = Math.round( pos * 100 ) / 100
+            
+            newX = ( pos * ( bar.max - bar.min ) )
+            
+            starColor = pos > 0 ? 'gold' : 'black'
+        }
+        $('#image').attr( 'transform', "rotate(" + rotation + ",0,30)")
+        $('#bar').css( { stroke : color } )
+        $('#marker').css( { fill : color } )
+
+        $('#text').text( text )
+        $('#bar').attr( 'x2', newX )
+        
+        position = pos
+    }
+    
+    var doc = document.rootElement ? document.rootElement : this;
+    var $doc = $(doc)
+    $doc.bind( 'keypress', keypress )
+    $doc.bind( 'mousedown', mousedown )
+    $doc.bind( 'mouseup', mouseup )
+    $doc.bind( 'mousemove', drag )
+
+    // For Opera
+    if(!Event.prototype.DOM_VK_LEFT)  Event.prototype.DOM_VK_LEFT = 37
+    if(!Event.prototype.DOM_VK_UP)    Event.prototype.DOM_VK_UP = 38
+    if(!Event.prototype.DOM_VK_RIGHT) Event.prototype.DOM_VK_RIGHT = 39
+    if(!Event.prototype.DOM_VK_DOWN)  Event.prototype.DOM_VK_DOWN = 40
+
+    var delta = .05
+    function keypress( evt ) {
+        if( position === undefined ) {
+            position = 0
+        }
+        switch( evt.keyCode ) {
+        case evt.DOM_VK_LEFT:
+            position -= delta
+            break
+        case evt.DOM_VK_RIGHT:
+            position += delta
+            break
+        case evt.DOM_VK_UP:
+            position = 0
+            break
+        case evt.DOM_VK_DOWN:
+            position = undefined
+            break
+        }
+        setPosition( position )
+        if( window.focus )
+            window.focus()
+    }
+    
+    var origX = null
+    var xWindow = 150
+
+    function mousedown( evt ) {
+      origX = evt.clientX - position * xWindow
+    }
+
+    function mouseup( evt ) {
+      origX = null
+    }
+
+    function drag( evt ) {
+      if( origX != null ) {
+        setPosition( ( evt.clientX - origX ) / xWindow )
+      }
+    }
+
+    setPosition(position)
+} )()
