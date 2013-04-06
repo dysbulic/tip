@@ -35,6 +35,7 @@
 
         $('#text').text( text )
         $('#bar').attr( 'x2', newX )
+        $('#barbg').attr( 'x2', newX )
         
         position = pos
 
@@ -98,21 +99,13 @@
       }
     }
 
-    $(document).on( 'value-update', function() {
-        //console.log( 'New Value' )
-    } )
-
-    $(document).data( 'test-data', { test: 'test' } )
-    document.value = 3
-
     function click( evt ) {
-        console.log( 'hi' )
         var doc = document.rootElement ? document.rootElement : this;
         var $doc = $(doc)
         $doc.trigger( 'value-update' )
         $(parent.document).trigger( 'value-update' )
-        console.log( parent )
         //$(document).trigger( 'value-update' )
+        console.log( $(window).width() )
     }
 
     setPosition(position)
