@@ -1,0 +1,17 @@
+$( function() {
+    $($('object').get( 0 ).contentDocument).on( 'value-update', function() {
+        console.log( 'New Value' )
+    } )
+    $(document).on( 'value-update', function() {
+        console.log( 'New Value' )
+    } )
+
+    $(document).click( function() {
+        console.log( $($('object').get( 0 ).contentDocument).data( 'test-data' ) )
+        console.log( $('object').get( 0 ).contentDocument.value )
+    } )
+
+    $('object').get( 0 ).contentDocument.value_updated = function( elem, newValue ) {
+        $('.value').text( Math.round( newValue * 100 ) / 100 )
+    }
+} )

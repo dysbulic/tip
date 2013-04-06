@@ -1,9 +1,25 @@
 ( function() {
     var position = 0
     
+    var block = {
+        names : [ 'bTop', 'bBottom' ],
+    }
+    $.each( block.names, function( idx, name ) {
+        block[ name ] = {
+            min : parseFloat( $('#' + name).attr( 'y1' ) ),
+            max : parseFloat( $('#' + name).attr( 'y2' ) ),
+        }
+    } )
+    console.log( block )
+
     var bar = {
-        min : parseFloat( $('#bar').attr( 'x1' ) ),
-        max : parseFloat( $('#bar').attr( 'x2' ) ),
+        min : block.bTop.min,
+        max : parseFloat( $('#bar').attr( 'y2' ) ),
+    }
+
+    var clip = {
+        x : parseFloat( $('#cliprect').attr( 'x' ) ),
+        width : parseFloat( $('#cliprect').attr( 'width' ) ),
     }
 
     function setPosition( pos ) {
@@ -11,12 +27,14 @@
             rotation = 0
             color = 'black'
             text = '\u2400'
-            newX = - parseFloat( $('#bar').attr( 'x1' ) )
+            newY = - parseFloat( $('#bar').attr( 'y1' ) )
+            newClipWidth = 0
+            newClipX = clip.x
         } else {
             pos = Math.max( pos, -1 ) // no less than -1
             pos = Math.min( pos, 1 )  // no more than 1
             
-            rotation = 100 * pos
+            rotation = 135 * pos
             
             red = pos < 0 ? Math.round( 255 * -pos ) : 0
             green = pos > 0 ? Math.round( 255 * pos ) : 0
@@ -25,31 +43,46 @@
             
             text = Math.round( pos * 100 ) / 100
             
-            newX = ( pos * ( bar.max - bar.min ) )
+            newY = bar.max - (1 - ( ( 1 - pos ) / 2 ) ) * ( bar.max - bar.min )
             
             starColor = pos > 0 ? 'gold' : 'black'
+            
+            newClipWidth = Math.abs( pos ) * clip.width;
+            newClipX = pos > 0 ? clip.x : clip.x + clip.width - newClipWidth;
         }
-        $('#image').attr( 'transform', "rotate(" + rotation + ",0,30)")
-        $('#bar').css( { stroke : color } )
-        $('#marker').css( { fill : color } )
-
+        $('#image').attr( 'transform', "rotate(" + rotation + ")")
+        $('#form').css( { stroke : color } )
         $('#text').text( text )
-        $('#bar').attr( 'x2', newX )
+        $('#bar').attr( 'y2', newY )
+        
+        $.each( block.names, function( idx, name ) {
+            var $elem = $('#' + name)
+            if( newY <= block[ name ].min || newY >= bar.max ) {
+                $elem.css( { display : 'none' } )
+            } else {
+                $elem.css( { display : 'inline' } )
+                $elem.attr( { y2 : Math.min( newY, block[ name ].max ) } )
+            }
+        } )
+        
+        $('#stars').css( {
+            fill : starColor,
+            stroke : starColor,
+        } )
+        $('#cliprect').attr( {
+            x : newClipX,
+            width : newClipWidth,
+        } )
         
         position = pos
-
-        if( document.value_updated ) {
-            document.value_updated( document, position )
-        }
     }
     
     var doc = document.rootElement ? document.rootElement : this;
     var $doc = $(doc)
-    $doc.on( 'keypress', keypress )
-    $doc.on( 'mousedown', mousedown )
-    $doc.on( 'mouseup', mouseup )
-    $doc.on( 'mousemove', drag )
-    $doc.on( 'click', click )
+    $doc.bind( 'keypress', keypress )
+    $doc.bind( 'mousedown', mousedown )
+    $doc.bind( 'mouseup', mouseup )
+    $doc.bind( 'mousemove', drag )
 
     // For Opera
     if(!Event.prototype.DOM_VK_LEFT)  Event.prototype.DOM_VK_LEFT = 37
@@ -96,23 +129,6 @@
       if( origX != null ) {
         setPosition( ( evt.clientX - origX ) / xWindow )
       }
-    }
-
-    $(document).on( 'value-update', function() {
-        //console.log( 'New Value' )
-    } )
-
-    $(document).data( 'test-data', { test: 'test' } )
-    document.value = 3
-
-    function click( evt ) {
-        console.log( 'hi' )
-        var doc = document.rootElement ? document.rootElement : this;
-        var $doc = $(doc)
-        $doc.trigger( 'value-update' )
-        $(parent.document).trigger( 'value-update' )
-        console.log( parent )
-        //$(document).trigger( 'value-update' )
     }
 
     setPosition(position)
