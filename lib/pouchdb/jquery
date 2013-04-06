@@ -1,25 +1,4 @@
-// From: http://ihatecode.blogspot.com/2008/10/simple-jquery-uid-plugin.html
-( function( $ ) {
-    $.fn.uid = function( prefix ) {  
-        if( ! prefix ) {
-            prefix = "uid"
-        }
-
-        var generate = function() {
-            var dt = new Date().getMilliseconds()
-            var num = Math.random()
-            var rnd = Math.round( num * 100000 )
-            return prefix + dt + rnd
-        }
-
-        return this.each( function() {  
-            this.id = generate()
-            return $
-        })
-    }
-})( jQuery );
-
-function addFile( entry, $parent ) {
+function addValue( entry, $parent ) {
     var $new = $('<li/>').addClass( 'file' )
     if( entry.file ) {
         entry.file( function( file ) {
@@ -28,7 +7,7 @@ function addFile( entry, $parent ) {
             $new.append( $link )
         } )
     } else {
-        var $link = $('<a/>').text( entry.name )
+        var $link = $('<a/>').attr( { target: 'new', href: entry.href } ).text( entry.name )
         $new.append( $link )
     }
     $parent.append( $new )
@@ -91,15 +70,47 @@ function addObject( object, $parent, id ) {
 $( function() {
     $.event.props.push('dataTransfer')
 
-    var drop = function( event ) {
+    var dropHandler = function( event ) {
 	event.preventDefault()
 
-        function addEntry( entry, $parent ) {
-            var $new = $('<li/>')
+        var path = []
+        function addEntry( entry ) {
+            var name = entry.name
+            path.push( name )
+            var id = path.join( ' - ' )
+            console.log( id )
 
             if( entry.isFile ) {
-                addFile( entry, $parent )
+                Pouch( 'mimis', function( err, db ) {
+                    db.put( {
+                        _id: id,
+                        'mimis:type': 'value',
+                        isAttachment: true,
+                    },
+                            function( err, res ) {
+                                entry.file( function( file ) {
+                                    console.log( file )
+                                    db.putAttachment( id + name, res.rev, file, file.type, function( err, res ) {} )
+                                } )
+                            } )
+                } )
             } else if( item.isDirectory ) {
+                var dirReader = entry.createReader()
+                dirReader.readEntries( function( entries ) {
+                    for( var i = 0; i < entries.length; i++ ) {
+                        addEntry( entries[i], $fileList )
+                    }
+                } )
+                Pouch( 'mimis', function( err, db ) {
+                    db.put( {
+                        _id: id,
+                        'mimis:type': 'value',
+                        isAttachment: true,
+                    },
+                            function( err, res ) {
+                            }
+                          )
+                    
                 addDirectory( entry, $parent )
             }
         }
@@ -127,10 +138,16 @@ $( function() {
         e.stopPropagation()
     }
     
-    $(document).on( 'drop', '#filelist, input, label', drop )
+    $(document).on( 'drop', '#filelist, input, label', dropHandler )
         .bind( 'dragenter', dragEnter )
         .bind( 'dragover', dragOver )
         .bind( 'dragleave', dragLeave )
+
+    if( typeof String.prototype.startsWith != 'function' ) {
+        String.prototype.startsWith = function ( str ) {
+            return this.slice( 0, str.length ) == str
+        }
+    }
 
     var $lastSelected
     function selectLabel( id ) {
@@ -146,54 +163,33 @@ $( function() {
         var $parent = $label.parent()
         $parent.parents().children( 'input' ).attr( { checked: 'checked' } )
 
-        /*
-        pouchdb.get( { _id: id }, function( err, doc ) {
-            for( prop in doc ) {
-            }
-        } )
-        */
-
         // ToDo: Scoll selected item visible
         //$('#files').animate( { scrollTop: $label.offset().top }, 'slow' )
 
-        function addRow( name, size, type ) {
-            $('#fileview').dataTable().fnAddData( [ name, size, type ] )
-        }
-
-        $('#fileview').dataTable().fnClearTable()
-
-        var entries = $label.parent().find( 'ol' ).first().data( 'file-entries' )
-        if( entries ) {
-            for( var i = 0; i < entries.length; i++ ) {
-                if( entries[i].isDirectory ) {
-                    var dirReader = entries[i].createReader()
-
-                    var onSuccess = function( files ) {
-                        addRow( arguments.callee.dirname, files.length, 'text/directory' )
+        Pouch( 'mimis', function( err, db ) {
+            db.get( id, function( err, doc ) {
+                for( prop in doc ) {
+                    if( ! prop.startsWith( '_' ) ) {
+                        if( doc[ 'mimis:type' ] == 'value' ) {
+                            if( doc.isAttachment ) {
+                                db.getAttachment( id + prop, function( err, res ) {
+                                    addFile( {
+                                        name: prop,
+                                        href: window.URL.createObjectURL( res )
+                                    },
+                                           $parent )
+                                } )
+                            }
+                        } else {
+                            addDirectory( {
+                                name: prop
+                            },
+                                        $parent )
+                        }
                     }
-                    onSuccess.dirname = entries[i].name
-
-                    dirReader.readEntries(
-                        onSuccess,
-                        function() {
-                            console.log( "Failed to read: " + entries[i].name )
-                        } )
-                } else {
-                    entries[i].file( function( file ) {
-                        var objectURL = window.URL.createObjectURL( file )
-                        var $link = $('<a/>').attr( { target: 'new', href: objectURL } ).text( file.name )
-                        addRow( $link.prop( 'outerHTML' ), file.size, file.type )
-                    } )
                 }
-            }
-        } else {
-            $label.siblings( 'ol' ).children( 'li' ).each( function( index, item ) {
-                var $item = $(item)
-                var $label = $item.children( 'label' )
-                var $link = $('<a/>').attr( { 'ref-id': $label.attr( 'for' ) } ).text( $label.text() )
-                addRow( $link.prop( 'outerHTML' ), $item.children( 'ol' ).children().size(), 'text/directory' )
             } )
-        }
+        } )
     }
 
     $(document).on( 'click', 'label', function( event ) {
@@ -219,14 +215,6 @@ $( function() {
             } else {
                 $item.get(0).setAttribute( 'checked', 'checked' )
             }
-        }
-    } )
-
-    $('#fileview').dataTable( {
-        sDom: "<'row-fluid'<'span4'l><'span4'f>r>t<'row-fluid'<'span3'i><'span5'p>>",
-        sPaginationType: 'bootstrap',
-        oLanguage: {
-            sLengthMenu: '_MENU_ per page'
         }
     } )
 } )
