@@ -1,0 +1,8 @@
+$.ajax( {
+    url: '.../gotu/navbar/xhtml',
+    async: false,
+    dataType: "html",
+    success: function( response ) {
+        $('script').last().parent().append( $(response) )
+    }
+} )
