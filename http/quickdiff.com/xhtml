@@ -6,263 +6,32 @@
     <meta name="google-site-verification" content="sqMVVP91TE8FbIaTEyrA3xCbA5_uqmCqkzqfA4H3IOQ" />
     <script type="text/javascript" src="js"> </script>
     <link rel="stylesheet" type="text/css" href="css"/>
-    <script>
-      function hideshow() {
-        if (document.getElementById('how_to_use').className=='hide')
-          document.getElementById('how_to_use').className='show'
-	else
-          document.getElementById('how_to_use').className='hide';
-      }
-      function init() {
-        document.getElementById('how_to_use').className='hide';
-      }
-    </script>
     <style type="text/css">
-      * { }
-      html, body { }
-      body {
-        color: #3E3E3C;
-        font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Helvetica, Arial, sans-serif;
-      }
-      #wrapper {
-        min-width: 700px;
-        margin: 0 auto;
-      }
-      h1 {
-      }
-      form p.links {
-        width: 50%;
-        float: left;
-      }
-      form p.rechts {
-        width: 49%;
-        float: right;
-      }
-      label {
-		display: block;
-		cursor: pointer;
-	}
-	
-	textarea {
-		width: 92%;
-		padding: 1em;
-	}
-	
-	p.button {
-		margin: 5px 0;
-	}
-	
-	/* new clearfix */
-	.clearfix:after {
-		visibility: hidden;
-		display: block;
-		font-size: 0;
-		content: " ";
-		clear: both;
-		height: 0;
-		}
-	* html .clearfix             { zoom: 1; } /* IE6 */
-	*:first-child+html .clearfix { zoom: 1; } /* IE7 */
-	
-	.awesome{
-		display: inline-block;
-		outline: none;
-		cursor: pointer;
-		text-align: center;
-		text-decoration: none;
-		line-height: 1;
-		padding: .5em 2em .55em;
-		text-shadow: 1px 1px 1px rgba(0,0,0,.3);
-		-webkit-border-radius: .5em;
-		-moz-border-radius: .5em;
-		border-radius: .5em;
-		-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
-		-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
-		box-shadow: 0 1px 2px rgba(0,0,0,.2);
-	}
-	
-	.awesome:hover {
-		text-decoration: none;
-	}
-	.awesome:active {
-		position: relative;
-		top: 1px;
-	}
-	
-	/* white */
-	.white {
-		border: solid 1px #b7b7b7;
-		background: #fff;
-		background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
-		background: -moz-linear-gradient(top,  #fff,  #ededed);
-		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed');
-	}
-	.white:hover {
-		background: #ededed;
-		background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dcdcdc));
-		background: -moz-linear-gradient(top,  #fff,  #dcdcdc);
-		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dcdcdc');
-	}
-	.white:active {
-		color: #999;
-		background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff));
-		background: -moz-linear-gradient(top,  #ededed,  #fff);
-		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff');
-	}
-	
-	table {
-		border-collapse: collapse;
-		margin-top: 10px;
-		width:100%;
-		font-family: 'Bitstream Vera Sans Mono', Courier, monospace;
-		border: 1px solid #CCC;
-	}
-	
-	thead tr {
-		font-weight: normal;
-		text-aling: left;
-		height: 2em;
-		border-bottom: 1px solid #DDD;
-		background-color: #ECECEC;
-		background: -webkit-gradient(linear, left top, left bottom, from(#FAFAFA), to(#ECECEC));
-		background: -moz-linear-gradient(top,  #FAFAFA,  #ECECEC);
-		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#FAFAFA', endColorstr='#ECECEC');
-	}
-	
-	td {
-		padding: 1px 2px;
-		white-space: pre;
-	}
-	
-	td.bredecode {
-		width: 100%;
-		padding-left: 4px;
-	}
-	
-	td.codekolom {
-		text-align: right;
-		min-width: 3em;
-		background-color: #ECECEC;
-		border-right: 1px solid #DDD;
-		color: #AAA;
-	}
-	
-	tr.add {
-		background: #DFD;
-	}
-	
-	tr.del {
-		background: #FDD;
-	}
     </style>
   </head>
   <body>
-    <h1 style="clear:both;">An Online Tool to do a 'quick and dirty' diff of two text or code fragments</h1>
-    <h2>Introduction - why use an online diff?</h2>
-    <div style="width: 500px; float: left;">
-      <p>In my course as a developer I find myself constantly examining the differences between two pieces of text.</p>
-      <p>Now, although pretty much every IDE (and various stand-alone products) have sophisticated diff utilities built in (like <a href="http://www.eclipse.org" target="eclipse">Eclipse</a>), my favourite,
-      I got very tired of having to create two files just to paste in fragments of code or other bits of texts just in order to perform a diff and see the differences highlighted.</p>
-      <p>This is why I made myself a quick online version that I have now decided to share with anyone else interested. (Update - Since the previous version of this tool stopped working,  this current version was created by Harmen Stoppels.)</p>
-
-      <h2><a href="javascript:;" onclick="hideshow()">Click here for instructions</a></h2>
-      <div id="how_to_use" class="hide">
-        <p>Simply paste your first text into the left text box and the other text into the right box and hit 'Submit' to see the results.</p>
-        <p>I have added the following options:</p>
-
-<dl>
-  <dt>Trim Lines</dt>
-  <dd>Trims empty spaces on the beginning and end of each line on both inputs prior to comparing</dd>
-  <dt>Remove Empty Lines</dt>
-  <dd>Removes empty lines on both inputs prior to comparing</dd>
-
-  <dt>Remove excess Whitespace</dt>
-  <dd>Removes any instances of two or more subsequent whitespaces and replaces it with a single one</dd>
-</dl>
-
-
-<p>I have also added the following options for diff algorithms:</p>
-
-<dl>
-  <dt>Side-by-side</dt>
-  <dd>Shows the differences side by side</dd>
-  <dt>Inline</dt>
-  <dd>Shows the differences inline, using the  <a href="http://www.pear.php.net/package/Text_Diff">Pear Diff Class</a></dd>
-</dl>
-
-<p>For long comparisons to avoid scrolling all the way up to do a follow-up comparison, I have also included a copy of the form on the bottom of the page after a submit has taken place.</p>
-</div>
-</div>
-<div style="width: 336px; float: left;"><script type="text/javascript">//<!--
-google_ad_client = "ca-pub-6782153124636312";
-/* quickdiff large rectangle */
-google_ad_slot = "8042191974";
-google_ad_width = 336;
-google_ad_height = 280;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script></div>
-<div style="clear:both;" id="wrapper">
-		
-		<form action="#" id="diffForm">
-			<div class="clearfix">
-				<p class="links">
-					<label for="een">Left</label>
-					<textarea name="een" id="een" cols="30" rows="10"></textarea>
-				</p>
-				<p class="rechts">
-					<label for="twee">Right</label>
-					<textarea name="twee" id="twee" cols="30" rows="10"></textarea>
-				</p>
-			</div>
-			<p class="button"><input type="submit" class="awesome white" value="Compare" /></p>
-		</form>
-		<table>
-			<thead>
-				<tr>
-					<th colspan="3">Output</th>
-				</tr>
-			</thead>
-			<tbody id="res"></tbody>
-		</table>
-	</div>
-    <div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-<div class="fb-like" data-href="http://www.quickdiff.com/" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
-    <div id="googleplusone"><!-- Place this tag where you want the +1 button to render -->
-<g:plusone annotation="inline"></g:plusone>
-<!-- Place this render call where appropriate -->
-<script type="text/javascript">
-  (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
-</script></div>
-<a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-<script src="//static.getclicky.com/js" type="text/javascript"></script>
-<script type="text/javascript">try{ clicky.init(66552872); }catch(e){}</script>
-<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/66552872ns.gif" /></p></noscript>
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-596377-26']);
-  _gaq.push(['_trackPageview']);
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
-<p>Check out my new project - <a href="http://convertable.com">100% free tool to track web leads and conversions</a></p>
-<p>Email me - <a href="mailto:quickdiff.com@gmail.com">quickdiff.com@gmail.com</a></p>
-</body>
+    <div style="clear:both;" id="wrapper">
+      <form action="#" id="diffForm">
+        <div class="clearfix">
+          <p class="links">
+            <label for="een">Left</label>
+            <textarea name="een" id="een" cols="30" rows="10"></textarea>
+          </p>
+          <p class="rechts">
+            <label for="twee">Right</label>
+            <textarea name="twee" id="twee" cols="30" rows="10"></textarea>
+          </p>
+        </div>
+        <p class="button"><input type="submit" class="awesome white" value="Compare" /></p>
+      </form>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="3">Output</th>
+          </tr>
+        </thead>
+        <tbody id="res"></tbody>
+      </table>
+    </div>
+  </body>
 </html>
