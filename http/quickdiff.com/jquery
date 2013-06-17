@@ -1,0 +1,124 @@
+( function( $ ) {
+    var $table
+
+    $.fn.diff = function( a1, a2 ) {
+        $table = this
+        $table.addClass( 'diff' )
+
+        var matrix = new Array( a1.length + 1 )
+	
+        for( var y = 0; y < matrix.length; y++ ) {
+	    matrix[y] = new Array( a2.length + 1 )
+	    
+	    for( var x = 0; x < matrix[y].length; x++ ) {
+	        matrix[y][x] = 0
+	    }
+        }
+
+        // matrix is now a a1.length × a2.length array of 0s
+	
+        for( var y = 1; y < matrix.length; y++ ) {
+	    for( var x = 1; x < matrix[y].length; x++ ) {
+	        if( a1[y - 1] === a2[x - 1] ) {
+		    matrix[y][x] = 1 + matrix[y - 1][x - 1]
+	        } else {
+		    matrix[y][x] = Math.max( matrix[y - 1][x], matrix[y][x - 1] )
+	        }
+	    }
+        }
+
+        // not sure what this does, reminds me of edit distance
+        
+        try {
+	    getDiff( matrix, a1, a2, x - 1, y - 1 )
+        } catch( e ) {
+	    alert( e )
+        }
+    }
+
+    function getDiff( matrix, a1, a2, x, y ) {
+        if( x > 0 && y > 0 && a1[y - 1] === a2[x - 1] ) {
+	    getDiff( matrix, a1, a2, x - 1, y - 1 )
+	    makeRij( x, y, ' ', a1[y - 1] )
+        } else {
+	    if( x > 0 && (y === 0 || matrix[y][x - 1] >= matrix[y - 1][x] ) ) {
+	        getDiff( matrix, a1, a2, x - 1, y )
+	        makeRij( x, '', '+', a2[x - 1] )
+	    } else if( y > 0 && ( x === 0 || matrix[y][x - 1] < matrix[y - 1][x] ) ) {
+	        getDiff( matrix, a1, a2, x, y - 1 )
+	        makeRij( '', y, '-', a1[y - 1], '' )
+	    }
+        }
+    }
+    
+    // To output only two matching lines at a time keep a queue of lines
+    var lines = []
+    var outputCount = 0
+
+    function makeRij( x, y, type, rij ) {
+        if( type !== ' ' || outputCount++ < 2 ) {
+            for( var i = 0; i < 2 && lines.length > 0; i++ ) {
+                line = lines.pop()
+                outputLine( line.x, line.y, line.type, line.rij )
+            }
+            lines = []
+            outputLine( x, y, type, rij )
+            if( type !== ' ' ) {
+                outputCount = 0
+            }
+        } else {
+            lines.push( { x: x, y: y, type: type, rij: rij } )
+        }
+    }
+    
+    function outputLine( x, y, type, rij ) {
+        var $tr = $('<tr/>')
+        if( type === '+' ) {
+	    $tr.addClass( 'add' )
+        } else if( type === '-' ) {
+	    $tr.addClass( 'del' )
+        }
+        
+        $tr.append( $('<td/>').addClass( 'column' ).text( y ) )
+        $tr.append( $('<td/>').addClass( 'column' ).text( x ) )
+        $tr.append( $('<td/>').addClass( 'code' ).text( type + ' ' + rij ) )
+
+        $table.append( $tr )
+    }
+} )( jQuery )
+
+$( function(){
+    $('#diffForm').submit( function( event ) {
+        event.preventDefault()
+	$('#res').empty().diff( $('#een').val().split( '\n' ), $('#twee').val().split( '\n' ) )
+	return false
+    } )
+} )
+
+$.diffURLs = function( oldURI, newURI ) {
+    var documents = {}
+    var docs = { old: oldURI, 'new': newURI }
+
+    var $table = $('<table/>').addClass( 'diff' )
+    $('body').append( $table )
+
+    function checkDiff() {
+        console.log( 'checkDiff: ', documents )
+        if( documents['old'] !== undefined && documents['new'] !== undefined ) {
+            console.log( 'Running diff' )
+            $table.diff( documents['old'].split( '\n' ), documents['new'].split( '\n' ) )
+        }
+    }
+
+    for( prop in docs ) {
+        var handler = function( data ) {
+            documents[arguments.callee.type] = data
+            checkDiff()
+        }
+        handler.type = prop
+        $.ajax( {
+            url: '/.../http/quickdiff.com/proxy.php?url=' + docs[prop],
+            success: handler
+        } )
+    }
+}
