@@ -45,11 +45,10 @@
 
     <p><strong><a href="https://github.com/wholcomb/stripe_example/blob/master/config/initializers/stripe.rb">config/initializers/stripe.rb</a></strong></p>
     
-    <blockquote>Rails.configuration.stripe = {
-        :publishable_key => ENV['STRIPE_PUBLISHABLE_KEY'] || "pk_test_lx08ICojucE57BHxppeWEBV0",
-        :secret_key      => ENV['STRIPE_SECRET_KEY']
-}
-      Stripe.api_key = Rails.configuration.stripe[:secret_key]</blockquote>
+    <script type="text/javascript">
+      $.diffURLs( 'http://raw.github.com/wholcomb/tip/master/cache/blank',
+                  'http://raw.github.com/wholcomb/stripe_example/master/config/initializers/stripe.rb' )
+    </script>
 
     <p>Using environment variables for your keys allows you to avoid recording them on disk. To specify them when starting a server do:</p>
 
