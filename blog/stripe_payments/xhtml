@@ -24,6 +24,21 @@
 
     <p><a href="http://stripe.com">Stripe</a> is an online credit card processing service. Stripe <a href="https://stripe.com/us/help/pricing">charges</a> 2.9% + 30¢ per charge. One of the primary advantages of Stripe is card verification takes place in the browser so the only information stored on the server is authentication tokens.</p>
 
+    <h2>Quick Start</h2>
+
+    <ul>
+      <li>git clone git://github.com/wholcomb/stripe_example.git</li>
+      <li>cd stripe_example</li>
+      <li>heroku apps:create</li>
+      <li>git push heroku master</li>
+      <li>heroku run rake --trace db:migrate</li>
+      <li><em>Sign up for <a href="http://stripe.com">Stripe</a></em></li>
+      <li>heroku config:set STRIPE_SECRET_KEY=sk_test_&hellip;</li>
+      <li>heroku config:set STRIPE_PUBLISHABLE_KEY=pk_test_&hellip;</li>
+    </ul>
+
+    <h2>Setup</h2>
+
     <p>First, sign up for a Stripe account. Under the "Your Account" menu in the upper right hand corner select "Account Settings." From there choose "API Keys" and this will give you the keys for accessing your account. Save these in an initializer:</p>
 
     <p><strong>config/initializers/stripe.rb</strong></p>
@@ -77,6 +92,13 @@ rails generate scaffold Payment stripe_token:string amount:float user:references
     <script type="text/javascript">
       $.diffURLs( 'http://raw.github.com/wholcomb/tip/master/cache/blank',
                   'http://raw.github.com/wholcomb/stripe_example/master/app/assets/javascripts/payments.js' )
+    </script>
+
+    <p>Finally is the controller to handle the charge creation logic.</p>
+        
+    <script type="text/javascript">
+      $.diffURLs( 'http://raw.github.com/wholcomb/stripe_example/0aad81de5a11a7f0d2a5bfdc05c3e9778fa29609/app/controllers/payments_controller.rb',
+                  'http://raw.github.com/wholcomb/stripe_example/master/app/controllers/payments_controller.rb' )
     </script>
   </body>
 </html>
