@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Stripe Payments in Rails</title>
+    <link rel="stylesheet" type="text/css" href=".../style/main/css" />
+    <style type="text/css">
+      blockquote { white-space: pre; }
+      iframe { width: 100%; border: none; }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Stripe Payments in Rails</h1>
+      <h2><a href="http://dhappy.org">Will Holcomb</a></h2>
+      <h2>12 June 2013</h2>
+    </div>
+    
+    <h2>Background</h2>
+
+    <p><a href="http://stripe.com">Stripe</a> is an online credit card processing service. Stripe <a href="https://stripe.com/us/help/pricing">charges</a> 2.9% + 30¢ per charge. One of the primary advantages of Stripe is card verification takes place in the browser so the only information stored on the server is authentication tokens.</p>
+
+    <p>First, sign up for a Stripe account. Under the "Your Account" menu in the upper right hand corner select "Account Settings." From there choose "API Keys" and this will give you the keys for accessing your account. Save these in an initializer:</p>
+
+    <p><strong>config/initializers/stripe.rb</strong></p>
+    
+    <blockquote>Rails.configuration.stripe = {
+        :publishable_key => ENV['STRIPE_PUBLISHABLE_KEY'] || "pk_test_lx08ICojucE57BHxppeWEBV0",
+        :secret_key      => ENV['STRIPE_SECRET_KEY']
+}
+      Stripe.api_key = Rails.configuration.stripe[:secret_key]</blockquote>
+
+    <p>Using environment variables for your keys allows you to avoid recording them on disk. To specify them when starting a server do:</p>
+
+    <blockquote>STRIPE_SECRET_KEY=sk_test_&hellip; rails s</blockquote>
+
+    <p>Next, include the javascript in your application and add error notifications.</p>
+
+    <iframe src="https://github.com/wholcomb/stripe_example/compare/eb28a07aeff8e2c3034a709ea692d84b6b883cab...HEAD#diff-10"
+            style="height: 300px" />
+
+    <p><strong>app/views/layouts/application.html.erb</strong></p>
+
+    <blockquote>&lt;%= javascript_include_tag "https://js.stripe.com/v1/", "application" %>
+&lt;%= javascript_tag "Stripe.publishableKey = '#{Rails.configuration.stripe[:publishable_key]}';" %>
+    </blockquote>
+
+    <p></p>
+    
+  </body>
+</html>
