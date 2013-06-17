@@ -103,9 +103,7 @@ $.diffURLs = function( oldURI, newURI ) {
     $('body').append( $table )
 
     function checkDiff() {
-        console.log( 'checkDiff: ', documents )
         if( documents['old'] !== undefined && documents['new'] !== undefined ) {
-            console.log( 'Running diff' )
             $table.diff( documents['old'].split( '\n' ), documents['new'].split( '\n' ) )
         }
     }
