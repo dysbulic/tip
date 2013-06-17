@@ -27,7 +27,7 @@
     <h2>Quick Start</h2>
 
     <ul>
-      <li>git clone git://github.com/wholcomb/stripe_example.git</li>
+      <li>git clone <a href="https://github.com/wholcomb/stripe_example">git://github.com/wholcomb/stripe_example.git</a></li>
       <li>cd stripe_example</li>
       <li>heroku apps:create</li>
       <li>git push heroku master</li>
@@ -37,11 +37,13 @@
       <li>heroku config:set STRIPE_PUBLISHABLE_KEY=pk_test_&hellip;</li>
     </ul>
 
+    <p>A sample of the application is running at <a href="http://synaptian-stripe-example.heroku.com">http://synaptian-stripe-example.heroku.com</a>.</p>
+
     <h2>Setup</h2>
 
     <p>First, sign up for a Stripe account. Under the "Your Account" menu in the upper right hand corner select "Account Settings." From there choose "API Keys" and this will give you the keys for accessing your account. Save these in an initializer:</p>
 
-    <p><strong>config/initializers/stripe.rb</strong></p>
+    <p><strong><a href="https://github.com/wholcomb/stripe_example/blob/master/config/initializers/stripe.rb">config/initializers/stripe.rb</a></strong></p>
     
     <blockquote>Rails.configuration.stripe = {
         :publishable_key => ENV['STRIPE_PUBLISHABLE_KEY'] || "pk_test_lx08ICojucE57BHxppeWEBV0",
@@ -55,7 +57,7 @@
 
     <p>Next, include the javascript in your application and add error notifications.</p>
 
-    <p><strong>app/views/layouts/application.html.erb</strong></p>
+    <p><strong><a href="https://github.com/wholcomb/stripe_example/blob/master/app/views/layouts/application.html.erb">app/views/layouts/application.html.erb</a></strong></p>
 
     <script type="text/javascript">
       $.diffURLs( 'http://raw.github.com/wholcomb/stripe_example/eb28a07aeff8e2c3034a709ea692d84b6b883cab/app/views/layouts/application.html.erb',
@@ -64,7 +66,7 @@
     
     <p>Next add the appropriate gems for authentication and Stripe.</p>
     
-    <p><strong>Gemfile</strong></p>
+    <p><strong><a href="https://github.com/wholcomb/stripe_example/blob/master/Gemfile">Gemfile</a></strong></p>
 
     <script type="text/javascript">
       $.diffURLs( 'http://raw.github.com/wholcomb/stripe_example/eb28a07aeff8e2c3034a709ea692d84b6b883cab/Gemfile',
@@ -73,14 +75,16 @@
 
     <p>After running <code>bundle install</code> the gems are installed. Next we run the following commands to set up the payments model.</p>
 
-    <blockquote>rails generate devise:install
-rails generate devise User
-rake db:migrate
-rails generate scaffold Payment stripe_token:string amount:float user:references</blockquote>
+    <ul>
+      <li>rails generate devise:install</li>
+      <li>rails generate devise User</li>
+      <li>rake db:migrate</li>
+      <li>rails generate scaffold Payment stripe_token:string amount:float user:references</li>
+    </ul>
 
     <p>This generates the product views. We begin by editing the payment form. This payment form includes saved card info.</p>
 
-    <p><strong>app/views/payments/_form.html.erb</strong></p>
+    <p><strong><a href="https://github.com/wholcomb/stripe_example/blob/master/app/views/payments/_form.html.erb">app/views/payments/_form.html.erb</a></strong></p>
 
     <script type="text/javascript">
       $.diffURLs( 'http://raw.github.com/wholcomb/stripe_example/0aad81de5a11a7f0d2a5bfdc05c3e9778fa29609/app/views/payments/_form.html.erb',
@@ -88,6 +92,8 @@ rails generate scaffold Payment stripe_token:string amount:float user:references
     </script>
 
     <p>Next we add javascript tp the page to handle authenticating cards.</p>
+
+    <p><strong><a href="https://github.com/wholcomb/stripe_example/blob/master/app/assets/javascripts/payments.js">app/assets/javascripts/payments.js</a></strong></p>
     
     <script type="text/javascript">
       $.diffURLs( 'http://raw.github.com/wholcomb/tip/master/cache/blank',
@@ -96,6 +102,8 @@ rails generate scaffold Payment stripe_token:string amount:float user:references
 
     <p>Finally is the controller to handle the charge creation logic.</p>
         
+    <p><strong><a href="https://github.com/wholcomb/stripe_example/blob/master/app/controllers/payments_controller.rb">app/controllers/payments_controller.rb</a></strong></p>
+
     <script type="text/javascript">
       $.diffURLs( 'http://raw.github.com/wholcomb/stripe_example/0aad81de5a11a7f0d2a5bfdc05c3e9778fa29609/app/controllers/payments_controller.rb',
                   'http://raw.github.com/wholcomb/stripe_example/master/app/controllers/payments_controller.rb' )
