@@ -84,9 +84,14 @@
 
     <p>A <a href="pubnub/test/js">simple script</a> from the <a href="https://github.com/pubnub/javascript#simple-example">docs</a> shows how it works. Opening multiple copies of this page and watching the console shows messages being sent. The question though is what identifying information do we need for peers to communicate to connect to each other over <a href="http://dev.w3.org/2011/webrtc/editor/webrtc.html#peer-to-peer-data-api">WebRTC</a>.</p>
 
-    <p>To figure it out, I cut up the <a href=".../http/simpl.info/rtcdatachannel/js">same-page DataChannel example</a> to make a <a href="peer/test/js">test script</a>.</p>
+    <p>Based on the <a href="http://cjb.github.io/serverless-webrtc/serverless-webrtc.html">serverless WebRTC example</a> there is an offer and an answer. This presents an issue as PubNub can send out the offer, but has no way to route back the answer.</p>
 
     <script type="text/javascript" src="peer/test/js"></script>
 
+    <p>This is solved in ShareIt using the <a href="https://github.com/ShareIt-project/SimpleSignaling">SimpleSignaling server</a> which uses <a href="http://en.wikipedia.org/wiki/WebSocket">websockets</a> to coordinate peers.</p>
+
+    <script type="text/javascript" src="SimpleSignaling/simpleSignaling.js"></script>
+    <script type="text/javascript" src="signaling/test/js"></script>
+    
   </body>
 </html>
