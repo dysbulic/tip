@@ -3,7 +3,7 @@
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
-    <title>Kademlia Over WebRTC</title>
+    <title>Ressurecting KadOH</title>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href=".../style/main/css" />
     <style type="text/css">
@@ -28,7 +28,7 @@
   </head>
   <body>
     <div class="header">
-      <h1>Kademlia Over WebRTC</h1>
+      <h1>Ressurecting KadOH</h1>
       <h2><a href="http://dhappy.org">Will Holcomb</a></h2>
       <h2>18 June 2013</h2>
     </div>
@@ -37,9 +37,11 @@
 
     <p>I've long been fascinated by distributed hash tables and with the integration of <acronym title="peer-to-peer">P2P</acronym> into the browser with WebRTC, I'd love to see an inplmentation of some <acronym title="distributed hash table">DHT</acronym> purely in the browser. I'd like to use it as the basis for a <a href="http://hoenir.himinbi.org/2013/02/distributed-eson/">distributed data store</a>.</p>
 
-    <p>There is an exisiting javascript <a href="http://en.wikipedia.org/wiki/Kademlia">Kademlia</a> implementation in <a href="http://jinroh.github.io/kadoh/"><acronym title="Kademlia Over HTTP">KadOH</acronym></a>. It is for <a href="http://nodejs.org">Node.js</a>.</p>
+    <p>There is an exisiting javascript <a href="http://en.wikipedia.org/wiki/Kademlia">Kademlia</a> implementation in <a href="http://jinroh.github.io/kadoh/"><acronym title="Kademlia Over HTTP">KadOH</acronym></a>. It is for <a href="http://nodejs.org">Node.js</a>, but using a <a href="https://github.com/substack/node-browserify">library to transform it to browser-runnable code</a>.</p>
 
-    <p>For the data channels a good place to start is <a href="http://simpl.info/rtcdatachannel/">this example with sender and receiver in a single page</a>. <em>(May require installing <a href="http://www.liberiangeek.net/2011/12/install-google-chrome-using-apt-get-in-ubuntu-11-10-oneiric-ocelot/">chromium-beta</a>.)</em></p>
+    <p>When the library loads you get access to <code>get</code> and <code>put</code> functions to access the data store. The issue is that there are two backends currently: <acronym title="User Datagram Protocol">udp</acronym> and <acronym title="eXtensible Message Passing Protocol">xmpp</acronym>. I'd like to convert it to use <a href="http://dev.w3.org/2011/webrtc/editor/webrtc.html#peer-to-peer-data-api">WebRTC</a>.</p>
+
+    <p>For <code>DataChannel</code>s a good place to start is <a href="http://simpl.info/rtcdatachannel/">this example with sender and receiver in a single page</a>. <em>(May require installing <a href="http://www.liberiangeek.net/2011/12/install-google-chrome-using-apt-get-in-ubuntu-11-10-oneiric-ocelot/">chromium-beta</a>.)</em></p>
 
     <div id="buttons">
       <button id="startButton" disabled="">Start</button>
@@ -86,12 +88,11 @@
 
     <p>Based on the <a href="http://cjb.github.io/serverless-webrtc/serverless-webrtc.html">serverless WebRTC example</a> there is an offer and an answer. This presents an issue as PubNub can send out the offer, but has no way to route back the answer.</p>
 
-    <script type="text/javascript" src="peer/test/js"></script>
-
-    <p>This is solved in ShareIt using the <a href="https://github.com/ShareIt-project/SimpleSignaling">SimpleSignaling server</a> which uses <a href="http://en.wikipedia.org/wiki/WebSocket">websockets</a> to coordinate peers.</p>
+    <p>As of the time of this writing, I get a <a href="">403</a> for Google's <a href="">AppRTC</a>. In ShareIt, this is solved by <a href="https://github.com/ShareIt-project/SimpleSignaling">SimpleSignaling server</a> which uses <a href="http://en.wikipedia.org/wiki/WebSocket">websockets</a> running on Node.js to coordinate peers.</p>
 
     <script type="text/javascript" src="SimpleSignaling/simpleSignaling.js"></script>
     <script type="text/javascript" src="signaling/test/js"></script>
     
+    <p>Unfortunately, <a href="">Heroku</a> <a href="">doesn't support websockets</a>. So for the purposes of this article we will use the testing server: <code><a href=""></a></code>.</p>
   </body>
 </html>
