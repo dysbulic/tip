@@ -88,11 +88,20 @@
 
     <p>Based on the <a href="http://cjb.github.io/serverless-webrtc/serverless-webrtc.html">serverless WebRTC example</a> there is an offer and an answer. This presents an issue as PubNub can send out the offer, but has no way to route back the answer.</p>
 
-    <p>As of the time of this writing, I get a <a href="">403</a> for Google's <a href="">AppRTC</a>. In ShareIt, this is solved by <a href="https://github.com/ShareIt-project/SimpleSignaling">SimpleSignaling server</a> which uses <a href="http://en.wikipedia.org/wiki/WebSocket">websockets</a> running on Node.js to coordinate peers.</p>
+    <p>Google's sample application is called <a href="https://code.google.com/p/webrtc/">AppRTC</a> and it provides a <a href="https://apprtc.appspot.com">video chat</a> via the <a href="https://developers.google.com/appengine/docs/python/channel/">Channel API</a>. For the sake of simplicity, I'm going to try ShareIt's <a href="https://github.com/ShareIt-project/SimpleSignaling">SimpleSignaling server</a> which uses <a href="http://en.wikipedia.org/wiki/WebSocket">websockets</a> running on Node.js to coordinate peers.</p>
 
     <script type="text/javascript" src="SimpleSignaling/simpleSignaling.js"></script>
     <script type="text/javascript" src="signaling/test/js"></script>
     
-    <p>Unfortunately, <a href="">Heroku</a> <a href="">doesn't support websockets</a>. So for the purposes of this article we will use the testing server: <code><a href=""></a></code>.</p>
+    <p>Unfortunately, <a href="http://heroku.com">Heroku</a> <a href="https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku">doesn't support websockets</a>. The app was apparently designed on <a href="https://www.dotcloud.com">dotCloud</a>.</p>
+    
+    <p>There is a testing server, <code><a href="wss://simplesignaling-piranna.dotcloud.com">wss://simplesignaling-piranna.dotcloud.com</a></code>, but when I use it the socket never opens. To run the server on localhost I ran:</p>
+
+    <ul>
+      <li><code>npm install ws</code></li>
+      <li><code>node server.js</code></li>
+    </ul>
+
+    <p>For the server I now use <code>ws://localhost:8080</code>.</p>
   </body>
 </html>

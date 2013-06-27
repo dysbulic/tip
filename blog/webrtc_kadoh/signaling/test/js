@@ -1,0 +1,142 @@
+$( function() {
+    var server = new SimpleSignaling( {
+        // ws_uri: 'ws://simplesignaling-piranna.dotcloud.com'
+        ws_uri: 'ws://localhost:8080',
+        room: 'broadcast-test'
+    } )
+    console.log( "Created server: " + server.uid() )
+
+    var pubnub = PUBNUB.init( {
+        publish_key   : 'pub-c-53cbf79b-27de-4cf9-999f-5e4d5ae417aa',
+        subscribe_key : 'sub-c-86defc0a-d85e-11e2-b1b2-02ee2ddab7fe'
+    } )
+
+    server.onmessage = function() {
+        console.log( 'onmessage', arguments )
+    }
+    server.onopen = function() {
+        console.log( 'onopen', arguments )
+        pubnub.publish( {
+            channel: "mimis/peer/broadcast",
+            message: server.uid()
+        } )
+    }
+    server.onerror = function() {
+        console.log( 'onerror', arguments )
+    }
+
+    pubnub.subscribe( {
+        channel : 'mimis/peer/broadcast',
+        message : function( msg ) {
+            var dest_uid = msg
+            if( server.uid() != dest_uid ) {
+                console.log( 'mimis/peer/broadcast', dest_uid )
+                server.send( 'from: ' + server.uid(), dest_uid, 'broadcast-test' )
+            }
+        },
+    } )
+    
+    function trace() {
+        var args = Array.prototype.slice.apply( arguments )
+        if( typeof args[0] == 'string' ) {
+            args[0] = ( performance.now() / 1000 ).toFixed( 3 ) + ': ' + args[0]
+        }
+        console.log.apply( console, args )
+    }
+
+    $( function() {
+        var servers = null;
+        var localPeerConnection = new webkitRTCPeerConnection( servers,
+                                                               { optional: [{ RtpDataChannels: true }] } )
+        trace( 'Created local peer connection object localPeerConnection' )
+    
+        function gotLocalCandidate( event ) {
+            trace( 'local ice callback' )
+            if( event.candidate ) {
+                remotePeerConnection.addIceCandidate( event.candidate )
+                trace( 'Local ICE candidate: \n' + event.candidate.candidate )
+            }
+        }
+
+        localPeerConnection.onicecandidate = gotLocalCandidate
+
+        var remotePeerConnection = new webkitRTCPeerConnection( servers,
+                                                                { optional: [{ RtpDataChannels: true }] } )
+        trace( 'Created remote peer connection object remotePeerConnection' )
+    
+        function gotRemoteIceCandidate(event) {
+            trace( 'remote ice callback' )
+            if( event.candidate ) {
+                localPeerConnection.addIceCandidate( event.candidate )
+                trace( 'Remote ICE candidate: \n ' + event.candidate.candidate )
+            }
+        }
+
+        remotePeerConnection.onicecandidate = gotRemoteIceCandidate
+
+        try {
+            // Reliable Data Channels not yet supported in Chrome
+            sendChannel = localPeerConnection.createDataChannel( "kadChannel",
+                                                                 { reliable: false } )
+            trace( 'Created send data channel' )
+        } catch (e) {
+            console.error( 'Failed to create data channel. ' +
+                           'You need Chrome M25 or later with RtpDataChannel enabled' )
+            trace( 'createDataChannel() failed with exception: ' + e.message )
+        }
+
+        var dataChannelSend = document.getElementById( "dataChannelSend" )
+        var dataChannelReceive = document.getElementById( "dataChannelReceive" )
+        
+        function handleSendChannelStateChange() {
+            var readyState = sendChannel.readyState;
+            trace('Send channel state is: ' + readyState);
+            if( readyState == "open" ) {
+                dataChannelSend.disabled = false
+                dataChannelSend.focus()
+                dataChannelSend.placeholder = ""
+                sendButton.disabled = false
+                closeButton.disabled = false
+            } else {
+                dataChannelSend.disabled = true
+                sendButton.disabled = true
+                closeButton.disabled = true
+            }
+        }
+
+        sendChannel.onopen = handleSendChannelStateChange
+        sendChannel.onclose = handleSendChannelStateChange
+        
+        function gotReceiveChannel( event ) {
+            trace( 'Receive Channel Callback' )
+            receiveChannel = event.channel
+            receiveChannel.onmessage = handleMessage
+            receiveChannel.onopen = handleReceiveChannelStateChange
+            receiveChannel.onclose = handleReceiveChannelStateChange
+        }
+    
+        remotePeerConnection.ondatachannel = gotReceiveChannel
+    
+        function gotLocalDescription( desc ) {
+            localPeerConnection.setLocalDescription( desc )
+            //trace( 'Offer from localPeerConnection \n' + desc.sdp )
+            trace( 'Offer from localPeerConnection', JSON.stringify( desc ) )
+            remotePeerConnection.setRemoteDescription(desc);
+            
+            function gotRemoteDescription(desc) {
+                remotePeerConnection.setLocalDescription(desc)
+                //trace('Answer from remotePeerConnection \n' + desc.sdp)
+                trace( 'Answer from remotePeerConnection', JSON.stringify( desc ) )
+                localPeerConnection.setRemoteDescription( desc )
+            }
+            
+            remotePeerConnection.createAnswer( gotRemoteDescription )
+        }
+        
+        localPeerConnection.createOffer( gotLocalDescription )
+
+        startButton.disabled = true
+        closeButton.disabled = false
+    } )
+
+} )
