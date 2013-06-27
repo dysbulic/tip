@@ -1,0 +1,20 @@
+#!/bin/bash
+
+function descend {
+    dir="$1"
+    pushd -- "$dir"
+    for file in *; do
+        if [ -d "$file" ]; then
+            descend "$file"
+        fi
+    done
+    [ ! -L ... ] && ln -sv ../...
+    popd
+}
+
+echo $#
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 <root directory>"
+else
+    descend "$1"
+fi
