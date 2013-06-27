@@ -60,8 +60,8 @@
                                                                  { reliable: false } )
             trace( 'Created send data channel' )
         } catch (e) {
-            alert( 'Failed to create data channel. ' +
-                   'You need Chrome M25 or later with RtpDataChannel enabled' )
+            console.error( 'Failed to create data channel. ' +
+                           'You need Chrome M25 or later with RtpDataChannel enabled' )
             trace( 'createDataChannel() failed with exception: ' + e.message )
         }
 
