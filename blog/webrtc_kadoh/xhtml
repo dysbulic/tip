@@ -88,10 +88,12 @@
 
     <p>Based on the <a href="http://cjb.github.io/serverless-webrtc/serverless-webrtc.html">serverless WebRTC example</a> there is an offer and an answer. This presents an issue as PubNub can send out the offer, but has no way to route back the answer.</p>
 
-    <p>Google's sample application is called <a href="https://code.google.com/p/webrtc/">AppRTC</a> and it provides a <a href="https://apprtc.appspot.com">video chat</a> via the <a href="https://developers.google.com/appengine/docs/python/channel/">Channel API</a>. For the sake of simplicity, I'm going to try ShareIt's <a href="https://github.com/ShareIt-project/SimpleSignaling">SimpleSignaling server</a> which uses <a href="http://en.wikipedia.org/wiki/WebSocket">websockets</a> running on Node.js to coordinate peers.</p>
+    <p>Google's sample application is called <a href="https://code.google.com/p/webrtc/">AppRTC</a> and it provides a <a href="https://apprtc.appspot.com">video chat</a> via the <a href="https://developers.google.com/appengine/docs/python/channel/">Channel API</a>. The <a href="https://webrtc-experiment.appspot.com/DataChannel/">DataChannel project</a> uses <a href="https://github.com/muaz-khan/WebRTC-Experiment/tree/master/socketio-over-nodejs">socketio over Node.js</a>.</p>
+
+    <p>For the sake of simplicity, I'm going to try ShareIt's <a href="https://github.com/ShareIt-project/SimpleSignaling">SimpleSignaling server</a> which uses <a href="http://en.wikipedia.org/wiki/WebSocket">websockets</a> running on Node.js to coordinate peers.</p>
 
     <script type="text/javascript" src="SimpleSignaling/simpleSignaling.js"></script>
-    <script type="text/javascript" src="signaling/test/js"></script>
+    <script type="text/javascript" src="SimpleSignaling/examples/wall.js"></script>
     
     <p>Unfortunately, <a href="http://heroku.com">Heroku</a> <a href="https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku">doesn't support websockets</a>. The app was apparently designed on <a href="https://www.dotcloud.com">dotCloud</a>.</p>
     
