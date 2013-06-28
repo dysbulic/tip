@@ -1,7 +1,7 @@
 $( function() {
     var connections = {} // connections[uuid] = RTCPeerConnection
-    var sendChannels = {}
-    var receiveChannels = {}
+    var channels = {}
+    var servers = null // Used in creating peer connections
 
     var server = new SimpleSignaling( {
         // ws_uri: 'ws://simplesignaling-piranna.dotcloud.com'
@@ -11,14 +11,58 @@ $( function() {
 
     console.log( "Created server: " + server.uid() )
 
+    server.onmessage = function( msg, uid, room ) {
+        console.log( 'onmessage', arguments )
+        if( msg.type == 'offer' ) {
+            onoffer( msg, uid )
+        } else if( msg.candidate ) {
+            //connections[uid].addIceCandidate( msg.candidate )
+            trace( 'Remote ICE candidate', msg.candidate.candidate )
+        } else {
+            console.warn( 'server.onmessage: Unknown message type', msg )
+        }
+    }
+
+    function onoffer( offer, uid ) {
+        connections[uid] = new webkitRTCPeerConnection( servers,
+                                                        { optional: [{ RtpDataChannels: true }] } )
+        
+        function gotRemoteDescription( desc ) {
+            connections[uid].setLocalDescription( desc )
+            //connections[uid].setRemoteDescription( desc )
+            server.send( desc, uid, server.room() )
+            trace( "Answer from: " + uid, desc )
+        }
+            
+        connections[uid].createAnswer( gotRemoteDescription )
+
+        function gotReceiveChannel( event ) {
+            trace( "Receive Channel Callback: " + uid )
+            channels[uid] = event.channel
+
+            function handleMessage( event ) {
+                trace('Received message from: ' + uid, event.data )
+            }
+            
+            channels[uid].onmessage = handleMessage
+
+
+            function handleReceiveChannelStateChange() {
+                var readyState = channels[uid].readyState;
+                trace( "Receive channel state is: " + readyState )
+            }
+
+            channels[uid].onopen = handleReceiveChannelStateChange
+            channels[uid].onclose = handleReceiveChannelStateChange
+        }
+    
+        connections[uid].ondatachannel = gotReceiveChannel
+    }
+
     var pubnub = PUBNUB.init( {
         publish_key   : 'pub-c-53cbf79b-27de-4cf9-999f-5e4d5ae417aa',
         subscribe_key : 'sub-c-86defc0a-d85e-11e2-b1b2-02ee2ddab7fe'
     } )
-
-    server.onmessage = function() {
-        console.log( 'onmessage', arguments )
-    }
 
     server.onopen = function() {
         console.log( 'onopen', arguments )
@@ -76,36 +120,10 @@ $( function() {
         sendChannels[uid].onopen = handleSendChannelStateChange
         sendChannels[uid].onclose = handleSendChannelStateChange
         
-        function gotReceiveChannel( event ) {
-            trace( 'Receive Channel Callback' )
-            receiveChannels[uid] = event.channel
-
-            function handleMessage( event ) {
-                trace('Received message from: ' + uid + ": " + event.data )
-            }
-            
-            receiveChannels[uid].onmessage = handleMessage
-            receiveChannels[uid].onopen = handleReceiveChannelStateChange
-            receiveChannels[uid].onclose = handleReceiveChannelStateChange
-        }
-    
-        // remotePeerConnection.ondatachannel = gotReceiveChannel
-    
         function gotLocalDescription( desc ) {
             connections[uid].setLocalDescription( desc )
-            trace( 'Offer from: ' + uid, JSON.stringify( desc ) )
+            trace( 'Offer from: ' + uid, desc )
             server.send( desc, uid, server.room() )
-            
-            /*
-            function gotRemoteDescription(desc) {
-                remotePeerConnection.setLocalDescription(desc)
-                //trace('Answer from remotePeerConnection \n' + desc.sdp)
-                trace( 'Answer from remotePeerConnection', JSON.stringify( desc ) )
-                localPeerConnection.setRemoteDescription( desc )
-            }
-            
-            remotePeerConnection.createAnswer( gotRemoteDescription )
-            */
         }
         
         connections[uid].createOffer( gotLocalDescription )
