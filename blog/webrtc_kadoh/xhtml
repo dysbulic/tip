@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Ressurecting KadOH</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href=".../style/main/css" />
+    <style type="text/css">
+      #send, #receive {
+        width: 50%;
+        float: left;
+      }
+      #sendReceive:after {
+        content: '';
+        display: block;
+        clear: both;
+      }
+      textarea {
+        width: 100%;
+        height: 6em;
+      }
+      #sendReceive h2 {
+        text-align: left;
+        margin-bottom: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Ressurecting KadOH</h1>
+      <h2><a href="http://dhappy.org">Will Holcomb</a></h2>
+      <h2>18 June 2013</h2>
+    </div>
+    
+    <h2>Background</h2>
+
+    <p>I've long been fascinated by distributed hash tables and with the integration of <acronym title="peer-to-peer">P2P</acronym> into the browser with WebRTC, I'd love to see an inplmentation of some <acronym title="distributed hash table">DHT</acronym> purely in the browser. I'd like to use it as the basis for a <a href="http://hoenir.himinbi.org/2013/02/distributed-eson/">distributed data store</a>.</p>
+
+    <p>There is an exisiting javascript <a href="http://en.wikipedia.org/wiki/Kademlia">Kademlia</a> implementation in <a href="http://jinroh.github.io/kadoh/"><acronym title="Kademlia Over HTTP">KadOH</acronym></a>. It is for <a href="http://nodejs.org">Node.js</a>, but using a <a href="https://github.com/substack/node-browserify">library to transform it to browser-runnable code</a>.</p>
+
+    <p>When the library loads you get access to <code>get</code> and <code>put</code> functions to access the data store. The issue is that there are two backends currently: <acronym title="User Datagram Protocol">udp</acronym> and <acronym title="eXtensible Message Passing Protocol">xmpp</acronym>. I'd like to convert it to use <a href="http://dev.w3.org/2011/webrtc/editor/webrtc.html#peer-to-peer-data-api">WebRTC</a>.</p>
+
+    <p>For <code>DataChannel</code>s a good place to start is <a href="http://simpl.info/rtcdatachannel/">this example with sender and receiver in a single page</a>. <em>(May require installing <a href="http://www.liberiangeek.net/2011/12/install-google-chrome-using-apt-get-in-ubuntu-11-10-oneiric-ocelot/">chromium-beta</a>.)</em></p>
+
+    <div id="buttons">
+      <button id="startButton" disabled="">Start</button>
+      <button id="sendButton">Send</button>
+      <button id="closeButton">Stop</button>
+    </div>
+    
+    <div id="sendReceive">
+      <div id="send">
+        <h2>Send</h2>
+        <textarea id="dataChannelSend"></textarea>
+      </div>
+      <div id="receive">
+        <h2>Receive</h2>
+        <textarea id="dataChannelReceive" disabled=""></textarea>
+      </div>
+    </div>
+    
+    <script type="text/javascript" src=".../http/simpl.info/rtcdatachannel/js"></script>
+
+    <p>From <a href="https://github.com/jinroh/kadoh">KadOH</a>, the class we want to be able to instantiate is <a href="https://github.com/jinroh/kadoh/blob/master/lib/node.js"><code>KadOH.Node</code></a>. The first obvious issue is the first line of the program:</p>
+
+    <p><code>var StateEventEmitter = require('./util/state-eventemitter')</code></p>
+
+    <p><code>require</code> is a Node.js convention, however there is <a href="https://github.com/substack/node-browserify">a library for browser support</a>. This is used by <a href="https://github.com/mde/jake">Jake</a> to build a <a href="https://github.com/jinroh/kadoh/blob/master/dist/KadOH.xmpp.js">browser distribution</a>.</p>
+
+    <script type="text/javascript" src="kadoh/dist/KadOH.xmpp.js"></script>
+    <script type="text/javascript">
+      var node = new KadOH.Node()
+    </script>
+    
+    <p>Loading that script and executing <code>var node = new KadOH.Node()</code> results in an error: <code>no bootstrap to join the network</code>.</p>
+
+    <p>A bootstrap is a peer that is already in the network that can be used to find other peers. From looking at <a href="https://github.com/jinroh/kadoh/blob/master/lib/node.js#L51">the code</a>, it is apparent that KadOH expects bootstrap peers to be passed in a configuration object.</p>
+
+    <p>I don't have a static peer running for it to use to bootstrap. Instead, I'm going to try something from <a href="https://shareit.5apps.com">ShareIt</a>: <a href="http://pubnub.com">PubNub</a>, which is a javascript based publish/subscribe network. You specify listeners and whenever a message is published to your channel all the listeners get called.</p>
+
+    <script type="text/javascript" src="http://cdn.pubnub.com/pubnub-3.5.1.min.js"></script>
+    <script type="text/javascript" src="pubnub/test/js"></script>
+
+    <p><button id="publish">Publish</button></p>
+
+    <p>A <a href="pubnub/test/js">simple script</a> from the <a href="https://github.com/pubnub/javascript#simple-example">docs</a> shows how it works. Opening multiple copies of this page and watching the console shows messages being sent. The question though is what identifying information do we need for peers to communicate to connect to each other over <a href="http://dev.w3.org/2011/webrtc/editor/webrtc.html#peer-to-peer-data-api">WebRTC</a>.</p>
+
+    <p>Based on the <a href="http://cjb.github.io/serverless-webrtc/serverless-webrtc.html">serverless WebRTC example</a> there is an offer and an answer. This presents an issue as PubNub can send out the offer, but has no way to route back the answer.</p>
+
+    <p>Google's sample application is called <a href="https://code.google.com/p/webrtc/">AppRTC</a> and it provides a <a href="https://apprtc.appspot.com">video chat</a> via the <a href="https://developers.google.com/appengine/docs/python/channel/">Channel API</a>. For the sake of simplicity, I'm going to try ShareIt's <a href="https://github.com/ShareIt-project/SimpleSignaling">SimpleSignaling server</a> which uses <a href="http://en.wikipedia.org/wiki/WebSocket">websockets</a> running on Node.js to coordinate peers.</p>
+
+    <script type="text/javascript" src="SimpleSignaling/simpleSignaling.js"></script>
+    <script type="text/javascript" src="signaling/test/js"></script>
+    
+    <p>Unfortunately, <a href="http://heroku.com">Heroku</a> <a href="https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku">doesn't support websockets</a>. The app was apparently designed on <a href="https://www.dotcloud.com">dotCloud</a>.</p>
+    
+    <p id="ec2-setup">There is a testing server, <code><a href="wss://simplesignaling-piranna.dotcloud.com">wss://simplesignaling-piranna.dotcloud.com</a></code>, but when I use it the socket never opens. To get the server running on a <a href="https://console.aws.amazon.com/ec2/home#s=Instances"><acronym title="Elastic Compute">ec</acronym>2 instance</a> I did:</p>
+
+    <ul>
+      <li><code>sudo apt-get install git nodejs npm</code></li>
+      <li><code>git clone https://github.com/wholcomb/SimpleSignaling</code></li>
+      <li><code>npm install ws</code></li>
+      <li><code>cd SimpleSignaling/</code></li>
+      <li><code>nodejs server.js</code></li>
+    </ul>
+
+    <p>For the server I now use <code>ws://ec2-54-242-188-68.compute-1.amazonaws.com:8080</code>.</p>
+  </body>
+</html>

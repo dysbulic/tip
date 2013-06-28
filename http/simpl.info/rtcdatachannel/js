@@ -80,7 +80,19 @@ function createConnection() {
     function gotReceiveChannel(event) {
         trace('Receive Channel Callback');
         receiveChannel = event.channel;
+
+        function handleMessage(event) {
+            trace('Received message: ' + event.data);
+            document.getElementById("dataChannelReceive").value = event.data;
+        }
+
         receiveChannel.onmessage = handleMessage;
+
+        function handleReceiveChannelStateChange() {
+            var readyState = receiveChannel.readyState;
+            trace('Receive channel state is: ' + readyState);
+        }
+
         receiveChannel.onopen = handleReceiveChannelStateChange;
         receiveChannel.onclose = handleReceiveChannelStateChange;
     }
@@ -133,14 +145,4 @@ function closeDataChannels() {
     dataChannelReceive.value = "";
     dataChannelSend.disabled = true;
     dataChannelSend.placeholder = "Press Start, enter some text, then press Send.";
-}
-
-function handleMessage(event) {
-    trace('Received message: ' + event.data);
-    document.getElementById("dataChannelReceive").value = event.data;
-}
-
-function handleReceiveChannelStateChange() {
-    var readyState = receiveChannel.readyState;
-    trace('Receive channel state is: ' + readyState);
 }
