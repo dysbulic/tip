@@ -95,13 +95,16 @@
     
     <p>Unfortunately, <a href="http://heroku.com">Heroku</a> <a href="https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku">doesn't support websockets</a>. The app was apparently designed on <a href="https://www.dotcloud.com">dotCloud</a>.</p>
     
-    <p>There is a testing server, <code><a href="wss://simplesignaling-piranna.dotcloud.com">wss://simplesignaling-piranna.dotcloud.com</a></code>, but when I use it the socket never opens. To run the server on localhost I ran:</p>
+    <p id="ec2-setup">There is a testing server, <code><a href="wss://simplesignaling-piranna.dotcloud.com">wss://simplesignaling-piranna.dotcloud.com</a></code>, but when I use it the socket never opens. To get the server running on a <a href="https://console.aws.amazon.com/ec2/home#s=Instances"><acronym title="Elastic Compute">ec</acronym>2 instance</a> I did:</p>
 
     <ul>
+      <li><code>sudo apt-get install git nodejs npm</code></li>
+      <li><code>git clone https://github.com/wholcomb/SimpleSignaling</code></li>
       <li><code>npm install ws</code></li>
-      <li><code>node server.js</code></li>
+      <li><code>cd SimpleSignaling/</code></li>
+      <li><code>nodejs server.js</code></li>
     </ul>
 
-    <p>For the server I now use <code>ws://localhost:8080</code>.</p>
+    <p>For the server I now use <code>ws://ec2-54-242-188-68.compute-1.amazonaws.com:8080</code>.</p>
   </body>
 </html>
