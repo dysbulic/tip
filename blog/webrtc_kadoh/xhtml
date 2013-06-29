@@ -35,7 +35,7 @@
     
     <h2>Background</h2>
 
-    <p>I've long been fascinated by distributed hash tables and with the integration of <acronym title="peer-to-peer">P2P</acronym> into the browser with WebRTC, I'd love to see an inplmentation of some <acronym title="distributed hash table">DHT</acronym> purely in the browser. I'd like to use it as the basis for a <a href="http://hoenir.himinbi.org/2013/02/distributed-eson/">distributed data store</a>.</p>
+    <p>I've long been fascinated by distributed hash tables and with the integration of <acronym title="peer-to-peer">P2P</acronym> into the browser with <a href="http://www.webrtc.org">WebRTC</a>, I'd love to see an implmentation of some <acronym title="distributed hash table">DHT</acronym> purely in the browser. I'd like to use it as the basis for a <a href="http://hoenir.himinbi.org/2013/02/distributed-eson/">distributed data store</a>.</p>
 
     <p>There is an exisiting javascript <a href="http://en.wikipedia.org/wiki/Kademlia">Kademlia</a> implementation in <a href="http://jinroh.github.io/kadoh/"><acronym title="Kademlia Over HTTP">KadOH</acronym></a>. It is for <a href="http://nodejs.org">Node.js</a>, but using a <a href="https://github.com/substack/node-browserify">library to transform it to browser-runnable code</a>.</p>
 
@@ -79,7 +79,7 @@
 
     <p>I don't have a static peer running for it to use to bootstrap. Instead, I'm going to try something from <a href="https://shareit.5apps.com">ShareIt</a>: <a href="http://pubnub.com">PubNub</a>, which is a javascript based publish/subscribe network. You specify listeners and whenever a message is published to your channel all the listeners get called.</p>
 
-    <script type="text/javascript" src="http://cdn.pubnub.com/pubnub-3.5.1.min.js"></script>
+    <script type="text/javascript" src="//cdn.pubnub.com/pubnub-3.5.1.min.js"></script>
     <script type="text/javascript" src="pubnub/test/js"></script>
 
     <p><button id="publish">Publish</button></p>
@@ -88,10 +88,12 @@
 
     <p>Based on the <a href="http://cjb.github.io/serverless-webrtc/serverless-webrtc.html">serverless WebRTC example</a> there is an offer and an answer. This presents an issue as PubNub can send out the offer, but has no way to route back the answer.</p>
 
-    <p>Google's sample application is called <a href="https://code.google.com/p/webrtc/">AppRTC</a> and it provides a <a href="https://apprtc.appspot.com">video chat</a> via the <a href="https://developers.google.com/appengine/docs/python/channel/">Channel API</a>. For the sake of simplicity, I'm going to try ShareIt's <a href="https://github.com/ShareIt-project/SimpleSignaling">SimpleSignaling server</a> which uses <a href="http://en.wikipedia.org/wiki/WebSocket">websockets</a> running on Node.js to coordinate peers.</p>
+    <p>Google's sample application is called <a href="https://code.google.com/p/webrtc/">AppRTC</a> and it provides a <a href="https://apprtc.appspot.com">video chat</a> via the <a href="https://developers.google.com/appengine/docs/python/channel/">Channel API</a>. The <a href="https://webrtc-experiment.appspot.com/DataChannel/">DataChannel project</a> uses <a href="https://github.com/muaz-khan/WebRTC-Experiment/tree/master/socketio-over-nodejs">socketio over Node.js</a>.</p>
+
+    <p>For the sake of simplicity, I'm going to try ShareIt's <a href="https://github.com/ShareIt-project/SimpleSignaling">SimpleSignaling server</a> which uses <a href="http://en.wikipedia.org/wiki/WebSocket">websockets</a> running on Node.js to coordinate peers.</p>
 
     <script type="text/javascript" src="SimpleSignaling/simpleSignaling.js"></script>
-    <script type="text/javascript" src="signaling/test/js"></script>
+    <script type="text/javascript" src="SimpleSignaling/examples/wall.js"></script>
     
     <p>Unfortunately, <a href="http://heroku.com">Heroku</a> <a href="https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku">doesn't support websockets</a>. The app was apparently designed on <a href="https://www.dotcloud.com">dotCloud</a>.</p>
     
