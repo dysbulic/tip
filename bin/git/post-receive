@@ -18,7 +18,7 @@ home=$(echo ~)
 local="${current#${home}/}"
 lib="repo"
 root="${local#${lib}/}"
-type="git"OA
+type="git"
 dir="${root%/${type}}"
 
 #exit -1
@@ -27,5 +27,5 @@ pushd ~/...
 pwd
 env -i git pull origin master
 env -i git remote | grep -q '^github$' && env -i git push github master
-env -i lib/repo/hooks/post-receive-email
+env -i bin/git/post-receive-email
 popd
