@@ -1,0 +1,13 @@
+$( function() {
+    var $divs = $('#messages, #peers')
+    setInterval(
+        function() {
+            $divs.each( function( index, elem ) {
+                var $elem = $(elem)
+                var pos = $elem.scrollTop()
+                $elem.scrollTop( pos + 10 )
+            } )
+        },
+        50
+    )
+} )
