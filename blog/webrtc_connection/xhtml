@@ -21,9 +21,27 @@
     
     <p><a href="//www.webrtc.org">WebRTC</a> is an extension to cutting-edge browsers that allows for <acronym title="Peer-to-Peer">P2P</acronym> connections. A popular example is <a href="//apprtc.appspot.com/?r=07296553">Google's AppRTC</a> which sets up a chat between two browser windows. Another interesting example is <a href="//www.sharefest.me">Sharefest</a> which allows drag and drop file sharing.</p>
 
-    <p>Even though the connections for these programs are between two browser windows, connection setup requires accessing servers at known locations on the internet. This intermediating server is known as a signaling server. It communicates <acronym title="Session Description Protocol">SDP</acronym> and <acronym title="Interactive Connectivity Establishment">ICE</acronym> messages back and forth to coordinate peers.</p>
+    <p>To run this example, you will need:</p>
 
-    <p>The application for this example is a <a href="//en.wikipedia.org/wiki/Wall_(Unix)">wall</a>. Open this page in multiple tabs in <a href="//www.liberiangeek.net/2011/12/install-google-chrome-using-apt-get-in-ubuntu-11-10-oneiric-ocelot/">chromium-beta</a> and you can send messages between them as well as anyone else in the world who has <a href="//wholcomb.github.io/SimpleSignaling/">a page</a> open and is using the <a href="//ec2-54-242-188-68.compute-1.amazonaws.com:8080">same signaling server</a>.</p>
+    <ul>
+      <li>
+        Ubuntu
+        <ul>
+          <li><a href="//www.liberiangeek.net/2011/12/install-google-chrome-using-apt-get-in-ubuntu-11-10-oneiric-ocelot/">Chrome 28</a></li>
+          <li><a href="http://support.mozilla.org/en-US/questions/924510">Firefox 24</a></li>
+        </ul>
+      </li>
+      <li>
+        Windows
+        <ul>
+          <li><em>ToDo</em></li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>Even though the connections for these programs are between two browser windows, connection setup requires accessing servers at known locations on the internet. This intermediating server is known as a signaling server. It communicates <acronym title="Session Description Protocol">SDP</acronym> and <acronym title="Interactive Connectivity Establishment">ICE</acronym> messages back and forth to establish peer connections.</p>
+
+    <p>The application for this example is a <a href="//en.wikipedia.org/wiki/Wall_(Unix)">wall</a>. Open this page in multiple tabs and you can send messages between them as well as anyone else in the world who has <a href="//wholcomb.github.io/SimpleSignaling/">a page</a> open and is using the <a href="//ec2-54-242-188-68.compute-1.amazonaws.com:8080">same signaling server</a>.</p>
 
     <link rel="stylesheet" type="text/css" href=".../github/ShareIt-project/SimpleSignaling/ui.css" />
 
@@ -38,7 +56,9 @@
       </div>
     </div>
 
-    <p>AppRTC uses the <a href="//developers.google.com/appengine/docs/python/channel/">Google Channel <acronym title="Application Programming Interface">API</acronym></a>. For the purposes of this example, we will be using <a href="//shareit.5apps.com">ShareIt</a>'s <a href="//github.com/ShareIt-project/SimpleSignaling">SimpleSignaling</a> which routes messages between <a href="//en.wikipedia.org/wiki/WebSocket">websockets</a> running on <a href="//nodejs.org">Node.js</a>.</p>
+    <p>The biggest outstanding issue with the example is <a href="http://stackoverflow.com/questions/17376804/onclose-and-onerror-not-getting-called-on-datachannel-disconnect"><code>onclose</code> and <code>onerror</code> aren't getting called</a> so peers never show as disconnected.</p>
+
+    <p>AppRTC uses the <a href="//developers.google.com/appengine/docs/python/channel/">Google Channel <acronym title="Application Programming Interface">API</acronym></a> for signaling. For the purposes of this example, we will be using <a href="//shareit.5apps.com">ShareIt</a>'s <a href="//github.com/ShareIt-project/SimpleSignaling">SimpleSignaling</a> which routes messages between <a href="//en.wikipedia.org/wiki/WebSocket">websockets</a> running on <a href="//nodejs.org">Node.js</a>.</p>
 
     <p>Unfortunately, <a href="//heroku.com">Heroku</a> <a href="//devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku">doesn't support websockets</a>. So, we will use an <a href="//console.aws.amazon.com/ec2/home#s=Instances"><acronym title="Elastic Compute">ec</acronym>2 instance</a> :</p>
 
