@@ -229,4 +229,22 @@ $( function() {
             sLengthMenu: '_MENU_ per page'
         }
     } )
+
+    var world = {}
+
+    // After all data sets are loaded, update the tree
+    ;( function() {
+        var updateCount = 0
+        $('#world').on( 'update', function() {
+            if( ++updateCount >= 2 ) {
+                var $parent = $('#world ~ ol')
+                $parent.empty()
+                addObject( world, $parent )
+            }
+        } )
+    } )()
+
+    loadAward( 'Hugo', 'book', '/en/hugo_award', world )
+    loadAward( 'Nebula', 'book', '/en/nebula_award', world )
+    //loadAward( 'Academy', 'movie', '/en/academy_awards' )
 } )

@@ -1,5 +1,3 @@
-var world = {}
-
 function fillObject( object, path ) {
     $.each( path, function( index, prop ) {
         if( ! object[ prop ] ) {
@@ -9,7 +7,7 @@ function fillObject( object, path ) {
     } )
 }
 
-function loadAward( awardName, type, freebaseId ) {
+function loadAward( awardName, type, freebaseId, obj ) {
     var query = [ {
         'id|=': [ freebaseId ],
         type: '/award/award',
@@ -49,17 +47,17 @@ function loadAward( awardName, type, freebaseId ) {
                     var author = winner.award_winner[0].name
                     var title = winner.honored_for[0].name
                     var year = winner.year
-                    fillObject( world, [ type, 'by', author, title ] )
-                    fillObject( world, [ type, 'year', year, author, title ] )
-                    fillObject( world, [ type, 'award', awardName, year, category, 'winner', author, title ] )
+                    fillObject( obj, [ type, 'by', author, title ] )
+                    fillObject( obj, [ type, 'year', year, author, title ] )
+                    fillObject( obj, [ type, 'award', awardName, year, category, 'winner', author, title ] )
                 } )
                 $.each( cat.nominees, function( index, nominee ) {
                     var author = nominee.award_nominee[0].name
                     var title = nominee.nominated_for[0].name
                     var year = nominee.year
-                    fillObject( world, [ type, 'by', author, title ] )
-                    fillObject( world, [ type, 'year', year, author, title ] )
-                    fillObject( world, [ type, 'award', awardName, year, category, 'nominee', author, title ] )
+                    fillObject( obj, [ type, 'by', author, title ] )
+                    fillObject( obj, [ type, 'year', year, author, title ] )
+                    fillObject( obj, [ type, 'award', awardName, year, category, 'nominee', author, title ] )
                 } )
             } )
             return award.category.name
@@ -67,19 +65,3 @@ function loadAward( awardName, type, freebaseId ) {
         $('#world').trigger( 'update' )
     } )
 }
-
-// After all data sets are loaded, update the tree
-( function() {
-    var updateCount = 0
-    $('#world').on( 'update', function() {
-        if( ++updateCount >= 2 ) {
-            var $parent = $('#world ~ ol')
-            $parent.empty()
-            addObject( world, $parent )
-        }
-    } )
-} )()
-
-loadAward( 'Hugo', 'book', '/en/hugo_award' )
-loadAward( 'Nebula', 'book', '/en/nebula_award' )
-//loadAward( 'Academy', 'movie', '/en/academy_awards' )
