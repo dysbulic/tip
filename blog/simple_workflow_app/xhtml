@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Simple Workflow Service</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href=".../style/main/css" />
+    <style type="text/css">
+      iframe { width: 100%; border: thin solid gray; }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Simple Workflow Service</h1>
+      <h2><a href="http://dhappy.org">Will Holcomb</a></h2>
+      <h2>31 July 2013</h2>
+    </div>
+
+    <p>One of the projects I'm working on involves scraping information from Amazon product listings. Currently it uses <a href="//github.com/tobi/delayed_job">delayed job</a>, but there's an issue with long-running processes dying off.</p>
+
+    <p>To deal with this we are considering a switch to Amazon's <a href="//aws.amazon.com/swf/">Simple Workflow Service</a>. It moves the task queue to Amazon's servers and client programs then poll for tasks.</p>
+
+    <p>For the purpose of this article I'm going to do a simplified version of the application that just pulls down prices. The data structures for that up are pretty straightforward:</p>
+
+    <ol>
+      <li><code>rails new swf_scraper</code></li>
+      <li><code>rails generate scaffold Product asin:string</code></li>
+      <li><code>rails generate scaffold Record price:float product_id:integer</code></li>
+    </ol>
+
+    <p>Connect the records to the products by adding <code>has_many</code> and <code>belongs_to</code> to the <a href="//github.com/wholcomb/swf_scraper/blob/master/app/models/product.rb">product</a> and <a href="//github.com/wholcomb/swf_scraper/blob/master/app/models/record.rb">record</a> models respectively.</p>
+
+    <p>Accessing the workflow service requires adding <code>aws-sdk</code> and <code>aws-flow</code> gems to the <code>Gemfile</code>.</p>
+
+    <p><acronym title="Simple Workflow Service">SWF</acronym> uses workflows to define the order of activity execution. The <a href="//github.com/wholcomb/swf_scraper/blob/master/lib/scrape_workflow.rb">workflow</a> for this project is:</p>
+
+    <pre class="prettyprint">class ScrapeWorkflow extend AWS::Flow::Workflows
+
+  workflow :queue_scrape do
+    {
+      :version => "1.1",
+      :task_list => SWF_WORKFLOW_TASK_LIST,
+      :execution_start_to_close_timeout => 10 * 60,
+    }
+  end
+
+  activity_client(:activity){ {:from_class => "ScrapeActivity"} }
+
+  def queue_scrape(asin)
+    scrape_future = Future.new.set
+    scrape_future = activity.send_async(:scrape, asin)
+    # wait_for_all(scrape_future)
+  end
+end</pre>
+
+    <p>There is just one task in this workflow: scrape the asin. The <a href="//github.com/wholcomb/swf_scraper/blob/master/lib/scrape_activity.rb">activity</a> is where the actual processing takes place:</p>
+
+    <pre class="prettyprint">class ScrapeActivity
+  extend AWS::Flow::Activities
+
+  activity :scrape  do
+    {
+      :version => "1.1",
+      :default_task_list => SWF_ACTIVITY_TASK_LIST,
+      :default_task_schedule_to_start_timeout => 10 * 60,
+      :default_task_start_to_close_timeout => 30,
+    }
+  end
+
+  def initialize
+    @count = 0
+  end
+    
+  def scrape(asin)
+    begin
+      @count += 1
+
+      url = "http://www.amazon.com/dp/" + asin
+      response = HTTParty.get(URI.encode(url))
+      doc = Nokogiri::HTML(response)
+
+      price_div = doc.at_css('.priceLarge')
+      price = (price_div.nil? or price_div.text[/[0-9\.,]+/].nil?) ? nil : price_div.text[/[0-9\.,]+/].gsub(/,/, '').to_f
+      
+      unless price
+        price_div = doc.at_css('.a-color-price.a-size-large')
+        price = (price_div.nil? or price_div.text[/[0-9\.,]+/].nil?) ? nil : price_div.text[/[0-9\.,]+/].gsub(/,/, '').to_f
+      end
+
+      if price
+        product = Product.find_by_asin(asin)
+        product.records.create( price: price )
+      end
+
+      puts "#{@count} Scraped: #{asin}: #{price}"
+    rescue => e
+      puts "Error: #{e.message}"
+    end
+  end
+end</pre>
+
+    <p>The last piece of the puzzle is actually queuing the jobs and running the workflow and activity. This is accomplished with a <a href="//github.com/wholcomb/swf_scraper/blob/master/lib/tasks/swf.rake">rake task</a>:</p>
+
+    <pre class="prettyprint">require "#{Rails.root}/app/helpers/application_helper"
+include ApplicationHelper
+
+require "#{ENV['GEM_HOME']}/gems/aws-flow-1.0.0/lib/aws/decider.rb"
+require "#{Rails.root}/config/initializers/swf.rb"
+require "#{Rails.root}/lib/scrape_activity.rb"
+require "#{Rails.root}/lib/scrape_workflow.rb"
+
+namespace :swf do
+  desc 'Start activity worker'
+  task :activity => :environment do
+    swf, domain = swf_domain
+    activity_worker = AWS::Flow::ActivityWorker.new(swf.client, domain, SWF_ACTIVITY_TASK_LIST, ScrapeActivity) { {:use_forking => false} }
+    activity_worker.start
+  end
+
+  desc 'Start workflow worker'
+  task :workflow => :environment do
+    swf, domain = swf_domain
+    worker = AWS::Flow::WorkflowWorker.new(swf.client, domain, SWF_WORKFLOW_TASK_LIST, ScrapeWorkflow)
+    worker.start
+  end
+
+  desc 'Queue activities'
+  task :scrape => :environment do
+    swf, domain = swf_domain
+    my_workflow_client = AWS::Flow::workflow_client(swf.client, domain) { {:from_class => "ScrapeWorkflow"} }
+
+    Product.all.each do |product|
+      $workflow_execution = my_workflow_client.start_execution(product.asin)
+    end
+  end  
+end</pre>
+
+    <p>Setting up the client and domain is done by a helper method:</p>
+
+    <pre class="prettyprint">module ApplicationHelper
+  def swf_domain
+    config_file = File.open("#{Rails.root}/config/aws.yml") { |f| f.read }
+    AWS.config(YAML.load(config_file))
+
+    @swf = AWS::SimpleWorkflow.new
+    begin
+      @domain = @swf.domains.create(SWF_DOMAIN, "10")
+    rescue AWS::SimpleWorkflow::Errors::DomainAlreadyExistsFault => e
+      @domain = @swf.domains[SWF_DOMAIN]
+    end
+    
+    return @swf, @domain
+  end
+end</pre>
+
+    <script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js" type="text/javascript"></script>
+  </body>
+</html>
