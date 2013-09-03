@@ -31,11 +31,14 @@
 
     <p>Connect the records to the products by adding <code>has_many</code> and <code>belongs_to</code> to the <a href="//github.com/wholcomb/swf_scraper/blob/master/app/models/product.rb">product</a> and <a href="//github.com/wholcomb/swf_scraper/blob/master/app/models/record.rb">record</a> models respectively.</p>
 
-    <p>Accessing the workflow service requires adding <code>aws-sdk</code> and <code>aws-flow</code> gems to the <code>Gemfile</code>.</p>
+    <p>Accessing the workflow service requires adding <code>aws-sdk</code> and <code>aws-flow</code> gems to the <a href="//github.com/wholcomb/swf_scraper/blob/master/Gemfile"><code>Gemfile</code></a>.</p>
+
+    <p></p>
 
     <p><acronym title="Simple Workflow Service">SWF</acronym> uses workflows to define the order of activity execution. The <a href="//github.com/wholcomb/swf_scraper/blob/master/lib/scrape_workflow.rb">workflow</a> for this project is:</p>
 
-    <pre class="prettyprint">class ScrapeWorkflow extend AWS::Flow::Workflows
+    <pre class="prettyprint">class ScrapeWorkflow
+  extend AWS::Flow::Workflows
 
   workflow :queue_scrape do
     {
@@ -136,13 +139,11 @@ namespace :swf do
   end  
 end</pre>
 
-    <p>Setting up the client and domain is done by a helper method:</p>
+    <p>Setting up the client and domain is done by a <a href="//github.com/wholcomb/swf_scraper/blob/master/app/helpers/application_helper.rb">helper method</a>:</p>
 
     <pre class="prettyprint">module ApplicationHelper
   def swf_domain
-    config_file = File.open("#{Rails.root}/config/aws.yml") { |f| f.read }
-    AWS.config(YAML.load(config_file))
-
+    
     @swf = AWS::SimpleWorkflow.new
     begin
       @domain = @swf.domains.create(SWF_DOMAIN, "10")
@@ -152,7 +153,8 @@ end</pre>
     
     return @swf, @domain
   end
-end</pre>
+end
+</pre>
 
     <script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js" type="text/javascript"></script>
   </body>
