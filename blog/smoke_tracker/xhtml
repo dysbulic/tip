@@ -3,271 +3,86 @@
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
-    <title>Freebase Calorie Counter</title>
+    <title>Android Smoke Tracker</title>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href=".../style/main/css" />
     <style type="text/css">
     </style>
-    <link rel="icon" type="image/png" href=".../image/icon/hat/chef/png" />
+    <link rel="icon" type="image/png" href=".../image/icon/cigarette/png" />
   </head>
   <body>
     <div class="header">
-      <h1>Freebase Calorie Counter</h1>
+      <h1>Android Smoke Tracker</h1>
       <h2><a href="http://dhappy.org">Will Holcomb</a></h2>
-      <h2>8 August 2013</h2>
+      <h2>4 September 2013</h2>
     </div>
 
-    <p><a href="//freebase.com">Freebase</a> is a massive graph-structured database. It is a computer-readable <a href="//wikipedia.org">Wikipedia</a>. Reads and writes are done through <acronym title="Javascript Object Notation">JSON</acronym> objects. For this article I explore some of the issues in creating a Freebase-backed <a href="//wholcomb.github.io/calorie_counter/">recipe builder</a>.</p>
-
-    <iframe src="//wholcomb.github.io/calorie_counter/" style="width: 100%; height: 500px; border: 1px darkgray;"></iframe>
-
-    <p>There are several Freebase functions that the app accesses. One of the simplest is the search dropdown that comes up when typing a recipe. This is the <a href="//developers.google.com/freebase/v1/search-widget">search widget</a>. To use it include the following in your page:</p>
-
-    <pre class="prettyprint">&lt;link rel="stylesheet" href="//www.gstatic.com/freebase/suggest/4_2/suggest.min.css" />
-&lt;script type="text/javascript" src="//www.gstatic.com/freebase/suggest/4_2/suggest.min.js">&lt;/script></pre>
-
-    <p>This is a <a href="//jquery.com">jQuery</a> plugin so you need to have it loaded. The code then to make an input into a suggestion box is:</p>
-    
-    <pre class="prettyprint">$('#recipe').suggest( {
-  key: API_KEY,
-  service_url: SERVICE_URL,
-  filter: '(all type:/m/05v2c_w)'
-} )</pre>
-
-    <p>To get an <acronym title="Application Programming Interface">API</acronym> key log into the <a href="https://code.google.com/apis/console/">Google API console</a>, create an application, and give it access to the Freebase service.</p>
-
-    <p>The <code>SERVICE_API</code> tells the plugin which version of Freebase to connect to. In addition to the canonical version, there is a sandbox that gets reloaded once a week. For testing purposes we will be using the sandbox.</p>
+    <p>I'm interested in tracking my behavior over time to help get a better sense of them. I've been using <a href="//play.google.com/store/apps/details?id=uk.amimetic.faillog">Fail Log</a> to keep track of my smoking habit. I like the app for a couple reasons:</p>
 
     <ul>
-      <li>Canonical = 'https://www.googleapis.com/freebase/v1'</li>
-      <li>Sandbox = 'https://www.googleapis.com/freebase/v1sandbox'</li>
+      <li>It includes a widget that allows logging an event with two clicks</li>
+      <li>There is rudimentary data analytics which include a heatmap showing usage through the week and a breakdown according to times</li>
+      <li>The list of activities is extensible</li>
     </ul>
 
-    <p>The filter tells the plugin which entries to restrict suggestions to. If I go to freebase.com and search for "recipe," I get <a href="//freebase.com/m/0p57p">this page</a>. That is the concept of recipe. I want data that is of a recipe type and that is found under <a href="//freebase.com/m/0p57p#/freebase">Equivalent Type</a>. That value, "<a href="//freebase.com/m/05v2c_w">/m/05v2c_w</a>, is what is used for the filter.</p>
+    <p>The app is less than ideal in that:</p>
 
-    <p>When a value is selected a <code>fb-select</code> event is fired. For the recipe that handler needs to query Freebase for the list of ingredients and populate the table with the date.</p>
+    <ul>
+      <li>All "failures" are lumped together for analytics purposes</li>
+      <li>Data is available only on the phone; no syncing with the internet</li>
+      <li>The analytics are largely textual</li>
+      <li>I'd like the name to be a bit more ambiguous. I'm looking to collect data to analyze and don't want to be so judgemental about it.</li>
+      <li>
+        My ideal application would conglomerate data from bunches of users and give me a display that says things like:
+        <ul>
+          <li>here are your likely health outcomes from smoking now</li>
+          <li>here are your outcomes if you wait 15 minutes</li>
+          <li>your ideal wait time given your past performance is <em>x</em> minutes</li>
+        </ul>
+      </li>
+    </ul>
 
-    <p>Freebase is read by constructing a JSON object that has <code>null</code>s where data should be filled in from the database. The read query for the ingredients is fairly extensive:</p>
+    <p>I'd like an application that provides a web interface for analyzing the data with more graphical elements. This blog post will cover the creation of such an application.</p>
 
-    <pre class="prettyprint">$('#recipe').bind( 'fb-select', function( evt, data ) {
-  var query = [{
-   id: data.id,
-   '/food/recipe/dish': {
-     id: null,
-     name: null
-   },
-   '/food/recipe/ingredients': [{
-     id: null,
-     ingredient: {
-       id: null,
-       name: null,
-       '/food/food/energy': null,
-       '/common/topic/image': {
-         id: null,
-         optional: true,
-         limit: 1
-       },
-       optional: true
-     },
-     unit: {
-       id: null,
-       name: null,
-       optional: true
-     },
-     quantity: null,
-     notes: null
-   }],
-   '/common/topic/description': null
- }]</pre>
+    <p>I'll be developing using <a href="//eclipse.org/">Eclipse</a>. To start out select "New" &rarr; "Android Application Project". The fields are filled out as follows:</p>
 
-    <p>At the root I specify the recipe I want by setting the <code>id</code> attribute from the event data. The first block then specifies I want the <code>id</code> and <code>name</code> of the dish that this is a recipe for. The next section is the list of ingredients. Because it is a list, an array is used around the object description.</p>
+    <ul>
+      <li>
+        New Android Application
+        <ul>
+          <li>Application Name: Smoking Tracker</li>
+          <li>Project Name: Smoking Tracker</li>
+          <li>Package Name: com.synaptian.smokingtracker</li>
+        </ul>
+      </li>
+      <li>
+        Configure Project
+        <ul>
+          <li><em>Use Defaults</em></li>
+        </ul>
+      </li>
+      <li>
+        Configure Launcher Icon
+        <ul>
+          <li>Image File: <a href="//lh5.googleusercontent.com/-MSlIF7pxWKw/UidyL0jQ8pI/AAAAAAAAAbU/-wdiRyulaYU/w117-h93-no/png">cigarette.png</a></li>
+        </ul>
+      </li>
+      <li>
+        Create Activity
+        <ul>
+          <li>Fullscreen Activity</li>
+        </ul>
+      </li>
+      <li>
+        Fullscreen Activity
+        <ul>
+          <li>Activity Name: LogActivity</li>
+          <li>Layout Name: activity_log</li>
+        </ul>
+      </li>
+    </ul>
 
-    <p>Each ingredients entry is a <a href="http://wiki.freebase.com/wiki/Compound_Value_Type"><acronym title="Compound Value Type">CVT</acronym></a>. It provides a collection of links to other values. The food energy is used to compute the caloric information.</p>
 
-    <p>The image shows two special properties: <code>optional</code> and <code>limit</code>. <code>Limit</code> is the same as <acronym title="Structured Query Language">SQL</acronym>; only one entry is returned. <code>Optional</code> specifies that the property doesn't have to be present for an entry to be valid. Without it entries without images would not be returned.</p>
-
-    <p>Images are stored on Google's <acronym title="Content Distribution Network">CDN</acronym>. The url is formed by appending the id to <code>'https://usercontent.googleapis.com/freebase/v1/image'</code>.</p>
-
-    <p>Units is a link to another type, so its <code>name</code> and <code>id</code> are specified whereas quantity is a property of the ingredients entry so <code>null</code> is used.</p>
-
-    <p>The instructions for the recipe are simply a text block. It is stored in the description.</p>
-
-    <p>The query is executed by sending a JSONP request to Freebase:</p>
-
-    <pre class="prettyprint">function freebase_query( query, handler ) {
-  var fb_url = SERVICE_URL + '/mqlread'
-  fb_url += "?query=" + encodeURIComponent( JSON.stringify( query ) )
-            
-  $.getJSON( fb_url, handler )
-}</pre>
-
-    <p>Another important read operation is setting up the units dialog. Rather than hard coding, all of the units and conversion factors are loaded from Freebase. There is a <a href="//github.com/wholcomb/calorie_counter/blob/gh-pages/units.json">JSON file</a> that specifies the names and Freebase ids of the available units. An array of ids is collected and the query object looks like:</p>
-
-    <pre class="prettyprint">[{
-  'id|=': ids,
-  id: null,
-  '/measurement_unit/mass_unit/weightmass_in_kilograms': null,
-  '/measurement_unit/volume_unit/volume_in_cubic_meters': null
-}]</pre>
-
-    <p>This demonstrates one of the postfixes that can be used on an identifier. <code>'|='</code> takes an array of ids and returns any of them that are found. By specifying a <code>null</code> id, we get the id and then the conversion factor. Both masses and volumes are looked up by the same query and subsequent code checks if the weight or volume is <code>null</code>.</p>
-
-    <p>The other half of the application is writing changes to a recipe back to Freebase. Authentication is handled via OAuth. This is done by constructing a <acronym title="Uniform Resource Locators">URL</acronym>:</p>
-    
-    <pre class="prettyprint"><![CDATA[var redirectURL = location.replace( /[^\/]*$/, '' ) + 'oauthcallback.html'
-var authURL = 'https://accounts.google.com/o/oauth2/auth'
-authURL += '?response_type=token'
-authURL += "&client_id=" + CLIENT_ID
-authURL += "&redirect_uri=" + redirectURL
-authURL += '&scope=https://www.googleapis.com/auth/freebase'
-authURL += '&approval_prompt=auto'
-
-var win = window.open( authURL, 'windowname1', 'width=800, height=600' )
-
-var pollTimer = window.setInterval( function() {
-  try {
-    var url = win.document.URL
-    if( url.indexOf( redirectURL ) != -1 ) {
-      window.clearInterval( pollTimer )
-      oauthToken = gup( url, 'access_token' )
-      tokenType = gup( url, 'token_type' )
-      expiresIn = gup( url, 'expires_in' )
-      win.close()
-
-      validateToken( oauthToken )
-    }
-  } catch( e ) {
-  }
-}, 100 )]]></pre>
-
-    <p>This pops up a login dialog. Once authentication is complete it forwards to the callback url. This must be from the same origin in order for the script to access it. The client id is obtained from the <a href="https://code.google.com/apis/console/">API console</a>.</p>
-
-    <p>The returned token must be validated. That is a relatively straightforward process:</p>
-
-    <pre class="prettyprint">var verificationURL = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="
-
-function validateToken( token ) {
-  $.ajax( {
-    url: verificationURL + token,
-    data: null,
-    success: function( response, responseText ) {  
-      if( responseText == 'success' ) {
-        saveRecipe()
-      }
-    },  
-    dataType: 'jsonp'
-  } )
-}</pre>
-
-    <p>The token is now ready to be used to make <acronym title="Metaweb Query Language">MQL</acronym> queries. A query object is an array of objects. The first step is to create the dish and recipe if they don't already exist:</p>
-
-    <pre class="prettyprint">if( ! $dishModal.dishId || ! $('#recipe').data( 'recipeId') ) {
-  query.push( {
-    create: 'unless_exists',
-    id: null,
-    name: $dishModal.dishName,
-    type: '/food/recipe/dish'
-  } )
-  query.push( {
-    create: 'unless_exists',
-    id: null,
-    name: $('#recipe').val(),
-    type: '/food/recipe'
-  } )
-}</pre>
-
-    <p>Doing the write is much like doing a read. Writes are done via a <acronym title="Javascript Object Notation with Padding">JSONP</acronym> request. Unfortunately those requests are limited to <acronym title="Hypertext Transfer Protocol">HTTP</acronym> GETs. This means they must be able to fit in a <acronym title="Uniform Resource Locator">URL</acronym> which may not be longer than 2000 characters. The write code breaks up the query into appropriate-sized chunks:</p>
-
-    <pre class="prettyprint"><![CDATA[function freebase_write( oauthToken, query, handler ) {
-  var toSend = []
-  while( query.length > 0 ) {
-      var test = toSend.slice( 0 )
-      test.push( query[0] )
-
-      if( test.length == 1 || encodeURIComponent( JSON.stringify( test ) ).length < 1900 ) {
-          toSend = test
-          query.shift()
-          if( query.length > 0 ) {
-              continue
-          }
-      }
-
-      var freebaseURL = SERVICE_URL + '/mqlwrite'
-      freebaseURL += "?oauth_token=" + oauthToken
-      freebaseURL += "&query=" + encodeURIComponent( JSON.stringify( toSend ) )
-                  
-      $.ajax( {
-          url: freebaseURL,
-          success: handler,
-          dataType: 'jsonp'
-      } )
-      
-      toSend = []
-  }
-}]]></pre>
-
-    <p>There are several writes for updating a recipe. The text of the recipe itself is stored in the <code>/common/topic/description</code> property. This property is allowed to have multiple values, so the old value has to be removed if a new one is added:</p>
-
-    <pre class="prettyprint">query.push( {
-  id: recipeId,
-  '/common/topic/description': {
-    connect: 'delete',
-    value: origRecipe,
-    lang: '/lang/en'
-  }
-} )
-
-query.push( {
-  id: recipeId,
-  '/common/topic/description': {
-    connect: 'insert',
-    value: newRecipe,
-    lang: '/lang/en'
-  }
-} )</pre>
-
-    <p>The ingredients may either be updated or created depending on whether they were loaded from the initial read:</p>
-
-    <pre class="prettyprint">$.each( rows, function( idx, row ) {
-  if( ! row.empty ) {
-      if( row.rowId ) {
-          query.push( {
-              id: recipeId,
-              '/food/recipe/ingredients': [{
-                  id: row.rowId,
-                  quantity: {
-                      connect: 'update',
-                      value: parseFloat( row.$quantity.val() )
-                  },
-                  unit: {
-                      connect: 'update',
-                      id: row.$units.val()
-                  },
-                  notes: {
-                      connect: 'update',
-                      value: row.$notes.val(),
-                      lang: '/lang/en'
-                  }
-              }]
-          } )
-      } else {
-          query.push( {
-              id: recipeId,
-              '/food/recipe/ingredients': {
-                  create: 'unless_exists',
-                  id: null,
-                  quantity: parseFloat( row.$quantity.val() ),
-                  unit: {
-                      id: row.$units.val()
-                  },
-                  ingredient: {
-                      id: row.ingredientId
-                  }
-              }
-          } )
-      }
-  }
-} )</pre>
 
     <script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js" type="text/javascript"></script>
   </body>
