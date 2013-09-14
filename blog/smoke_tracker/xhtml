@@ -44,45 +44,50 @@
 
     <p>I'd like an application that provides a web interface for analyzing the data with more graphical elements. This blog post will cover the creation of such an application.</p>
 
-    <p>I'll be developing using <a href="//eclipse.org/">Eclipse</a>. To start out select "New" &rarr; "Android Application Project". The fields are filled out as follows:</p>
+    <p>I'll be developing using <a href="//eclipse.org/">Eclipse</a>. To start out:</p>
+
+    <ol>
+      <li>Download the code from <a href="">github</a></li>
+      <li>In Eclipse: <code>File</code> &rarr; <code>Import</code></li>
+      <li>For import source use: <code>Android</code> &rarr; <code>Existing Android Code Into Workspace</code></li>
+    </ol>
+
+    <p>The basic workflow follows Fail Log:</p>
 
     <ul>
       <li>
-        New Android Application
+        A screen to list all habits
         <ul>
-          <li>Application Name: Smoking Tracker</li>
-          <li>Project Name: Smoking Tracker</li>
-          <li>Package Name: com.synaptian.smokingtracker</li>
+          <li>clicking on one saves a new instance</li>
+          <li>long pressing one brings up a menu allowing: listing of all instances, deleting</li>
         </ul>
       </li>
       <li>
-        Configure Project
-        <ul>
-          <li><em>Use Defaults</em></li>
-        </ul>
-      </li>
-      <li>
-        Configure Launcher Icon
-        <ul>
-          <li>Image File: <a href="//lh5.googleusercontent.com/-MSlIF7pxWKw/UidyL0jQ8pI/AAAAAAAAAbU/-wdiRyulaYU/w117-h93-no/png">cigarette.png</a></li>
-        </ul>
-      </li>
-      <li>
-        Create Activity
-        <ul>
-          <li>Fullscreen Activity</li>
-        </ul>
-      </li>
-      <li>
-        Fullscreen Activity
-        <ul>
-          <li>Activity Name: LogActivity</li>
-          <li>Layout Name: activity_log</li>
-        </ul>
+        A list of instances
       </li>
     </ul>
 
+    <p>Storing the data requires two tables:</p>
 
+    <ul>
+      <li>
+        habits
+        <ul>
+          <li>int id</li>
+          <li>string name</li>
+          <li>string description</li>
+        </ul>
+      </li>
+      <li>
+        habits
+        <ul>
+          <li>int id</li>
+          <li>int habit_id</li>
+          <li>int time</li>
+          <li>string description</li>
+        </ul>
+      </li>
+    </ul>
 
     <script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js" type="text/javascript"></script>
   </body>
