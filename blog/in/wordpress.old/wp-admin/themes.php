@@ -7,12 +7,14 @@
  */
 
 /** WordPress Administration Bootstrap */
-require_once('./admin.php');
+require_once( dirname( __FILE__ ) . '/admin.php' );
 
 if ( !current_user_can('switch_themes') && !current_user_can('edit_theme_options') )
 	wp_die( __( 'Cheatin&#8217; uh?' ) );
 
 $wp_list_table = _get_list_table('WP_Themes_List_Table');
+
+$_SERVER['REQUEST_URI'] = remove_query_arg( array( 's', 'features', '_ajax_fetch_list_nonce', '_wp_http_referer', 'paged' ), $_SERVER['REQUEST_URI'] );
 
 if ( current_user_can( 'switch_themes' ) && isset($_GET['action'] ) ) {
 	if ( 'activate' == $_GET['action'] ) {
@@ -20,7 +22,7 @@ if ( current_user_can( 'switch_themes' ) && isset($_GET['action'] ) ) {
 		$theme = wp_get_theme( $_GET['stylesheet'] );
 		if ( ! $theme->exists() || ! $theme->is_allowed() )
 			wp_die( __( 'Cheatin&#8217; uh?' ) );
-		switch_theme( $theme->get_template(), $theme->get_stylesheet() );
+		switch_theme( $theme->get_stylesheet() );
 		wp_redirect( admin_url('themes.php?activated=true') );
 		exit;
 	} elseif ( 'delete' == $_GET['action'] ) {
@@ -54,7 +56,7 @@ if ( current_user_can( 'install_themes' ) ) {
 	if ( is_multisite() ) {
 		$help_install = '<p>' . __('Installing themes on Multisite can only be done from the Network Admin section.') . '</p>';
 	} else {
-		$help_install = '<p>' . sprintf( __('If you would like to see more themes to choose from, click on the &#8220;Install Themes&#8221; tab and you will be able to browse or search for additional themes from the <a href="%s" target="_blank">WordPress.org Theme Directory</a>. Themes in the WordPress.org Theme Directory are designed and developed by third parties, and are compatible with the license WordPress uses. Oh, and they&#8217;re free!'), 'http://wordpress.org/extend/themes/' ) . '</p>';
+		$help_install = '<p>' . sprintf( __('If you would like to see more themes to choose from, click on the &#8220;Install Themes&#8221; tab and you will be able to browse or search for additional themes from the <a href="%s" target="_blank">WordPress.org Theme Directory</a>. Themes in the WordPress.org Theme Directory are designed and developed by third parties, and are compatible with the license WordPress uses. Oh, and they&#8217;re free!'), 'http://wordpress.org/themes/' ) . '</p>';
 	}
 
 	get_current_screen()->add_help_tab( array(
@@ -91,7 +93,7 @@ get_current_screen()->set_help_sidebar(
 wp_enqueue_script( 'theme' );
 wp_enqueue_script( 'customize-loader' );
 
-require_once('./admin-header.php');
+require_once( ABSPATH . 'wp-admin/admin-header.php' );
 ?>
 
 <div class="wrap"><?php
@@ -108,10 +110,8 @@ if ( ! validate_current_theme() || isset( $_GET['broken'] ) ) : ?>
 <div id="message1" class="updated"><p><?php _e('The active theme is broken. Reverting to the default theme.'); ?></p></div>
 <?php elseif ( isset($_GET['activated']) ) :
 		if ( isset( $_GET['previewed'] ) ) { ?>
-		<div id="message2" class="updated"><p><?php printf( __( 'Settings saved and theme activated. <a href="%s">Visit site</a>.' ), home_url( '/' ) ); ?></p></div>
-		<?php } elseif ( isset($wp_registered_sidebars) && count( (array) $wp_registered_sidebars ) && current_user_can('edit_theme_options') ) { ?>
-<div id="message2" class="updated"><p><?php printf( __('New theme activated. This theme supports widgets, please visit the <a href="%s">widgets settings</a> screen to configure them.'), admin_url( 'widgets.php' ) ); ?></p></div><?php
-		} else { ?>
+		<div id="message2" class="updated"><p><?php printf( __( 'Settings saved and theme activated. <a href="%s">Visit site</a>' ), home_url( '/' ) ); ?></p></div>
+		<?php } else { ?>
 <div id="message2" class="updated"><p><?php printf( __( 'New theme activated. <a href="%s">Visit site</a>' ), home_url( '/' ) ); ?></p></div><?php
 		}
 	elseif ( isset($_GET['deleted']) ) : ?>
@@ -141,12 +141,26 @@ $customize_title = sprintf( __( 'Customize &#8220;%s&#8221;' ), $ct->display('Na
 		<?php echo $ct->display('Name'); ?>
 	</h4>
 
+<?php
+if ( $ct->errors() && ( ! is_multisite() || current_user_can( 'manage_network_themes' ) ) ) {
+	echo '<p class="error-message">' . sprintf( __( 'ERROR: %s' ), $ct->errors()->get_error_message() ) . '</p>';
+}
+
+// Certain error codes are less fatal than others. We can still display theme information in most cases.
+if ( ! $ct->errors() || ( 1 == count( $ct->errors()->get_error_codes() )
+	&& in_array( $ct->errors()->get_error_code(), array( 'theme_no_parent', 'theme_parent_invalid', 'theme_no_index' ) ) ) ) : ?>
+
 	<div>
 		<ul class="theme-info">
 			<li><?php printf( __('By %s'), $ct->display('Author') ); ?></li>
 			<li><?php printf( __('Version %s'), $ct->display('Version') ); ?></li>
 		</ul>
 		<p class="theme-description"><?php echo $ct->display('Description'); ?></p>
+		<?php if ( $ct->parent() ) {
+			printf( ' <p class="howto">' . __( 'This <a href="%1$s">child theme</a> requires its parent theme, %2$s.' ) . '</p>',
+				__( 'http://codex.wordpress.org/Child_Themes' ),
+				$ct->parent()->display( 'Name' ) );
+		} ?>
 		<?php theme_update_available( $ct ); ?>
 	</div>
 
@@ -156,7 +170,7 @@ $customize_title = sprintf( __( 'Customize &#8220;%s&#8221;' ), $ct->display('Na
 	if ( is_array( $submenu ) && isset( $submenu['themes.php'] ) ) {
 		foreach ( (array) $submenu['themes.php'] as $item) {
 			$class = '';
-			if ( 'themes.php' == $item[2] || 'theme-editor.php' == $item[2] )
+			if ( 'themes.php' == $item[2] || 'theme-editor.php' == $item[2] || 'customize.php' == $item[2] )
 				continue;
 			// 0 = name, 1 = capability, 2 = file
 			if ( ( strcmp($self, $item[2]) == 0 && empty($parent_file)) || ($parent_file && ($item[2] == $parent_file)) )
@@ -169,7 +183,10 @@ $customize_title = sprintf( __( 'Customize &#8220;%s&#8221;' ), $ct->display('Na
 				else
 					$options[] = "<a href='{$submenu[$item[2]][0][2]}'$class>{$item[0]}</a>";
 			} else if ( current_user_can($item[1]) ) {
-				if ( file_exists(ABSPATH . 'wp-admin/' . $item[2]) ) {
+				$menu_file = $item[2];
+				if ( false !== ( $pos = strpos( $menu_file, '?' ) ) )
+					$menu_file = substr( $menu_file, 0, $pos );
+				if ( file_exists( ABSPATH . "wp-admin/$menu_file" ) ) {
 					$options[] = "<a href='{$item[2]}'$class>{$item[0]}</a>";
 				} else {
 					$options[] = "<a href='themes.php?page={$item[2]}'$class>{$item[0]}</a>";
@@ -193,11 +210,15 @@ $customize_title = sprintf( __( 'Customize &#8220;%s&#8221;' ), $ct->display('Na
 				<li><?php echo $option; ?></li>
 			<?php endforeach; ?>
 		</ul>
+		<?php
+		endif; // options
+		?>
 	</div>
 	<?php
-		endif; // options
 	endif; // options || edit_theme_options
 	?>
+
+<?php endif; // theme errors ?>
 
 </div>
 
@@ -205,7 +226,7 @@ $customize_title = sprintf( __( 'Customize &#8220;%s&#8221;' ), $ct->display('Na
 <?php
 if ( ! current_user_can( 'switch_themes' ) ) {
 	echo '</div>';
-	require( './admin-footer.php' );
+	require( ABSPATH . 'wp-admin/admin-footer.php' );
 	exit;
 }
 ?>
@@ -284,11 +305,9 @@ if ( ! is_multisite() && current_user_can('edit_themes') && $broken_themes = wp_
 		<th><?php _e('Description'); ?></th>
 	</tr>
 <?php
-	$alt = '';
 	foreach ( $broken_themes as $broken_theme ) {
-		$alt = ('class="alternate"' == $alt) ? '' : 'class="alternate"';
 		echo "
-		<tr $alt>
+		<tr>
 			 <td>" . $broken_theme->get('Name') ."</td>
 			 <td>" . $broken_theme->errors()->get_error_message() . "</td>
 		</tr>";
@@ -300,4 +319,4 @@ if ( ! is_multisite() && current_user_can('edit_themes') && $broken_themes = wp_
 ?>
 </div>
 
-<?php require('./admin-footer.php'); ?>
+<?php require( ABSPATH . 'wp-admin/admin-footer.php' ); ?>

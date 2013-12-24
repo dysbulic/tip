@@ -30,7 +30,7 @@ do_action($taxonomy . '_pre_edit_form', $tag, $taxonomy); ?>
 <?php screen_icon(); ?>
 <h2><?php echo $tax->labels->edit_item; ?></h2>
 <div id="ajax-response"></div>
-<form name="edittag" id="edittag" method="post" action="edit-tags.php" class="validate">
+<form name="edittag" id="edittag" method="post" action="edit-tags.php" class="validate"<?php do_action( $taxonomy . '_term_edit_form_tag' ); ?>>
 <input type="hidden" name="action" value="editedtag" />
 <input type="hidden" name="tag_ID" value="<?php echo esc_attr($tag->term_id) ?>" />
 <input type="hidden" name="taxonomy" value="<?php echo esc_attr($taxonomy) ?>" />
@@ -62,7 +62,7 @@ do_action($taxonomy . '_pre_edit_form', $tag, $taxonomy); ?>
 		<tr class="form-field">
 			<th scope="row" valign="top"><label for="description"><?php _ex('Description', 'Taxonomy Description'); ?></label></th>
 			<td><textarea name="description" id="description" rows="5" cols="50" class="large-text"><?php echo $tag->description; // textarea_escaped ?></textarea><br />
-			<span class="description"><?php _e('The description is not prominent by default, however some themes may show it.'); ?></span></td>
+			<span class="description"><?php _e('The description is not prominent by default; however, some themes may show it.'); ?></span></td>
 		</tr>
 		<?php
 		// Back compat hooks
@@ -91,3 +91,6 @@ submit_button( __('Update') );
 ?>
 </form>
 </div>
+<script type="text/javascript">
+try{document.forms.edittag.name.focus();}catch(e){}
+</script>
