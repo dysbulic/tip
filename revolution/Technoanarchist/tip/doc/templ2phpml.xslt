@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<!-- Author: Will Holcomb <will@technoanarchy.org>
+   - Date: July 2009
+   -
+   - XSLT stylesheet to convert from templ markup to php markup
+  -->
+<xsl:stylesheet version="1.0"
+                xmlns:php="tip:format:phpml"
+                xmlns:templ="tip:format:templ"
+                xmlns:redirect="http://xml.apache.org/xalan/redirect"
+                xmlns:str="http://exslt.org/strings"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                extension-element-prefixes="redirect str">
+  <xsl:output method="xml" standalone="no" indent="yes"/>
+  <xsl:variable name="templ_vars">_templ_vars</xsl:variable>
+
+  <xsl:template match="/">
+    <php:page>
+      <!--<xsl:comment>--> <!-- Strips tags -->
+      <php:require>XMLPrinter.php</php:require>
+      <php:var name="{$templ_vars}">new VariableLookup()</php:var>
+      <!--</xsl:comment>-->
+      <xsl:apply-templates/>
+    </php:page>
+  </xsl:template>
+
+  <xsl:template match="node()">
+    <xsl:variable name="allattrs"><xsl:apply-templates select="@*" mode="show"/></xsl:variable>
+    <xsl:choose>
+      <!--<xsl:when test="@templ:attr != 'off' and not(starts-with(name(), 'php:')) and contains($allattrs, '$')">-->
+      <xsl:when test="not(starts-with(name(), 'php:')) and contains($allattrs, '$')">
+        <xsl:element name="php:tag">
+          <xsl:attribute name="name"><xsl:value-of select="name()"/></xsl:attribute>
+          <xsl:apply-templates select="@*" mode="intag"/>
+          <xsl:apply-templates/>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy>
+          <xsl:apply-templates select="@*"/>
+          <xsl:apply-templates/>
+        </xsl:copy>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="@*">
+    <xsl:copy/>
+  </xsl:template>
+
+  <xsl:template match="@*" mode="show">
+    <xsl:value-of select="."/>
+  </xsl:template>
+
+  <xsl:template match="@*" mode="intag">
+    <php:attribute name="{name()}">
+      <xsl:apply-templates select="." mode="invar"/>
+    </php:attribute>
+  </xsl:template>
+
+  <xsl:template match="@*|*" mode="invar">
+    <xsl:variable name="value" select="."/>
+    <xsl:for-each select="str:split($value, '$')">
+      <xsl:choose>
+        <xsl:when test="(position() = 1 and starts-with($value, '$')) or position() &gt; 1">
+          <php:var name="{$templ_vars}" member="{.}"/>
+        </xsl:when>
+        <xsl:otherwise><xsd:string><xsl:value-of select="."/></xsd:string></xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template match="templ:browser">
+    <xsl:choose>
+      <xsl:when test="starts-with(@test, 'IE')">
+        <xsl:comment>
+          <xsl:text>[if </xsl:text><xsl:value-of select="@test"/><xsl:text>]></xsl:text>
+          <xsl:apply-templates/>
+          <xsl:text>&lt;![endif]</xsl:text>
+        </xsl:comment>
+      </xsl:when>
+      <xsl:when test="@test = '!IE'">
+        <xsl:comment><![CDATA[[if IE]><![if !IE]><![endif]]]></xsl:comment>
+        <xsl:apply-templates/>
+        <xsl:comment><![CDATA[[if IE]><![endif]><![endif]]]></xsl:comment>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="xsl:comment">
+    <xsl:comment><xsl:apply-templates/></xsl:comment>
+  </xsl:template>
+
+   <xsl:template match="templ:var" name="var">
+    <php:var name="{$templ_vars}" member="{@name}">
+      <xsl:apply-templates mode="invar"/>
+    </php:var>
+  </xsl:template>
+
+  <xsl:template match="templ:var" mode="invar">
+    <xsl:call-template name="var"/>
+  </xsl:template>
+  
+  <xsl:template match="text()" mode="invar">
+    <xsd:string><xsl:value-of select="."/></xsd:string>
+  </xsl:template>
+
+  <xsl:template match="xsl:text">
+    <xsl:value-of select="." disable-output-escaping="yes" />
+  </xsl:template>
+
+  <xsl:template match="templ:templ">
+    <xsl:element name="php:function">
+      <xsl:attribute name="name">
+        <xsl:choose>
+          <xsl:when test="not(@name)">_templ_default</xsl:when>
+          <xsl:otherwise><xsl:value-of select="@name" /></xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+</xsl:stylesheet>
