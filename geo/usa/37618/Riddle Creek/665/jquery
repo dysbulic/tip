@@ -3,35 +3,32 @@ $( function() {
         html: 'http://www.w3.org/1999/xhtml'
     }
 
-    function pullChildren( $root ) {
-        var $children = $root.children( '[inkscape\\:groupmode="layer"]' )
-        var $list = $(document.createElementNS( ns.html, 'ul' ))
+    function layersList( $root ) {
+        var $children = $($root[0].contextDocument).children( '[inkscape\\:groupmode="layer"]' )
+        var $list = $('<ul/>')
         $children.each( function() {
             var $layer = $(this)
             var $check =
-                $(document.createElementNS( ns.html, 'input' ))
+                $('<input/>')
                 .attr( {
                     type : 'checkbox',
-                    //checked : false, //! $this.is( ':visible' ),
-                    //'html:checked' : true, //! $this.is( ':visible' ),
+                    checked : false, //! $this.is( ':visible' ),
                 } )
                 .click( function() {
                     console.log( 'Checked: ' + $(this).is( ':checked' ) )
                     $layer.toggle( $(this).is( ':checked' ) )
                 } )
-            //$check.get(0).setAttributeNS( mimis.ns.html, 'checked', true )
-            //if( $this.is( ':visible' ) ) {
             if( $layer.css( 'display' ) != 'none' ) {
                 $check.attr( {
                     checked : true,
                 } )
             }
             var $text =
-                $(document.createElementNS( ns.html, 'span' ))
+                $('<span/>')
                 .text( $layer.attr( 'inkscape:label' ) )
             var $sub = pullChildren( $layer )
             var $item =
-                $(document.createElementNS( ns.html, 'li' ))
+                $('<li/>')
                 .append( $check )
                 .append( $text )
                 .append( $sub )
@@ -41,16 +38,8 @@ $( function() {
         return $list
     }
 
-    var $svg = $('svg')
-    var $list = pullChildren( $svg )
-    $svg.append(
-        $('<foreignObject/>')
-            .attr( {
-                x : 0,
-                y : 0,
-                height : '100',
-                width : '100',
-            } )
-            .append( $list )
-    )
+    console.log($('#map'))
+    console.log($('[inkscape\\:groupmode="layer"]', $('#map').first().contextDocument).size())
+    console.log($($('#map').first().contextDocument).find( '[inkscape\\:groupmode="layer"]' ).size())
+    $('nav').append( layersList( $('#map') ) )
 } )
