@@ -3,13 +3,6 @@ ul {
     padding-left: .75em;
 }
 
-foreignObject > ul {
-    padding: .25em 1em;
-    background-color: rgba( 200, 50, 50, .75);
-    border: 2px solid black;
-    border-radius: 10px;
-}
-
 html, body {
     height: 100%;
 }
@@ -17,4 +10,49 @@ html, body {
 #map {
     display: block;
     height: 100%;
+    width: 100%;
+}
+
+nav {
+    position: fixed;
+    left: -16em;
+    top: 0;
+    bottom: 0;
+    background-color: #654;
+    border-right: 20px solid #765;
+    box-shadow: 4px 0 5px rgba(0,0,0,0.2);
+    z-index: 1;
+    cursor: pointer;
+    overflow: auto;
+}
+ 
+nav:after {
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    right: -40px;
+    top: 50%;
+    border-width: 15px 10px;
+    border-style: solid;
+    border-color: transparent transparent transparent #765;
+}
+
+nav ul {
+    width: 14em;
+    list-style-type: none;
+    margin: 0;
+    padding: 1em;
+}
+
+nav, nav * {
+    -webkit-transition: all 600ms ease;
+    -moz-transition: all 600ms ease;
+    -ms-transition: all 600ms ease;
+    -o-transition: all 600ms ease;
+    transition: all 600ms ease;
+}
+
+nav:hover {
+    left: 0;
 }

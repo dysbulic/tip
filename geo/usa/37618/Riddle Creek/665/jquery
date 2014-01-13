@@ -3,6 +3,48 @@ $( function() {
         html: 'http://www.w3.org/1999/xhtml'
     }
 
+    function parseViewBox( value ) {
+        var viewBox = value.split(/[, ]+/);
+        viewBox = viewBox.map( function( val ) {
+            if( isNaN( val ) ) {
+                return 0
+            }
+            return  parseFloat( val )
+        } )
+        return viewBox
+    }
+
+    $.fx.step['viewBox'] = function( fx ) {
+        var attr = fx.elem.attributes.getNamedItem( 'viewBox' )
+        if( ! fx.set ) {
+            fx.start = parseViewBox( attr ? attr.nodeValue : '' )
+            var offset = fx.end
+            fx.end = parseViewBox( offset )
+            if( /^[+-]=/.exec( offset ) ) {
+                offset = offset.split( /[, ]+/ )
+                while( offset.length < 4 ) {
+                    offset.push( '0' )
+                }
+                for( var i = 0; i < 4; i++ ) {
+                    if( /^[+-]=/.exec( offset[i] ) ) {
+                        fx.end[i] = fx.start[i] + parseFloat( offset[i].replace( /=/, '' ) )
+                    }
+                }
+
+            }
+
+            fx.set = true
+        }
+
+        console.log( fx.start, fx.end )
+
+        var box = $.map( fx.start, function( n, i ) {
+            return ( fx.pos * ( fx.end[i] - n ) + n )
+        }).join(' ')
+
+        ;(attr ? attr.nodeValue = box : fx.elem.setAttribute( 'viewBox', box ) )
+    }
+
     function layersList( $root ) {
         var $children = $root.children( '[inkscape\\:groupmode="layer"]' )
         var $list = $('<ul/>')
@@ -26,6 +68,15 @@ $( function() {
             var $text =
                 $('<span/>')
                 .text( $layer.attr( 'inkscape:label' ) )
+            $text.click( function() {
+                var svg = $layer.get(0).ownerDocument
+                console.log( svg )
+                var bbox = $layer.get(0).getBBox()
+                var newBox = [bbox.x, bbox.y, bbox.width, bbox.height].join( ' ' )
+                $(svg.documentElement).animate( {
+                    viewBox: newBox
+                } )
+            } )
             var $sub = layersList( $layer )
             var $item =
                 $('<li/>')
@@ -44,4 +95,11 @@ $( function() {
         $('nav').append( layersList( $(svg.documentElement) ) )
     }, false)
 
+    var svgElem = document.getElementById("floors")
+    svgElem.addEventListener('load', function() {
+        var svg = this.contentDocument
+        $(svg).find('rect, #loft').click( function() {
+            console.log( 'h', this )
+        } )
+    }, false)
 } )
