@@ -36,8 +36,6 @@ $( function() {
             fx.set = true
         }
 
-        console.log( fx.start, fx.end )
-
         var box = $.map( fx.start, function( n, i ) {
             return ( fx.pos * ( fx.end[i] - n ) + n )
         }).join(' ')
@@ -53,36 +51,38 @@ $( function() {
             var $check =
                 $('<input/>')
                 .attr( {
-                    type : 'checkbox',
-                    checked : false, //! $this.is( ':visible' ),
+                    type: 'checkbox',
                 } )
                 .click( function() {
                     console.log( 'Checked: ' + $(this).is( ':checked' ) )
                     $layer.toggle( $(this).is( ':checked' ) )
                 } )
             if( $layer.css( 'display' ) != 'none' ) {
-                $check.attr( {
-                    checked : true,
-                } )
+                $check.attr( { checked: true } )
             }
+
             var $text =
                 $('<span/>')
                 .text( $layer.attr( 'inkscape:label' ) )
+
             $text.click( function() {
                 var svg = $layer.get(0).ownerDocument
-                console.log( svg )
                 var bbox = $layer.get(0).getBBox()
                 var newBox = [bbox.x, bbox.y, bbox.width, bbox.height].join( ' ' )
                 $(svg.documentElement).animate( {
                     viewBox: newBox
                 } )
             } )
+
             var $sub = layersList( $layer )
             var $item =
                 $('<li/>')
                 .append( $check )
                 .append( $text )
-                .append( $sub )
+           
+            if( $sub.children().size() > 0 ) {
+                $item.append( $sub )
+            }
             
             $list.append( $item )
         } )
@@ -99,7 +99,7 @@ $( function() {
     svgElem.addEventListener('load', function() {
         var svg = this.contentDocument
         $(svg).find('rect, #loft').click( function() {
-            console.log( 'h', this )
+            $('#floor-label').text( $(this).attr( 'id' ) )
         } )
     }, false)
 } )

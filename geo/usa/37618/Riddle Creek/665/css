@@ -31,8 +31,8 @@ nav:after {
     content: '';
     width: 0;
     height: 0;
-    right: -40px;
-    top: 50%;
+    right: -20px;
+    top: 10em;
     border-width: 15px 10px;
     border-style: solid;
     border-color: transparent transparent transparent #765;
@@ -42,7 +42,7 @@ nav ul {
     width: 14em;
     list-style-type: none;
     margin: 0;
-    padding: 1em;
+    padding-right: 1em;
 }
 
 nav, nav * {
@@ -53,6 +53,21 @@ nav, nav * {
     transition: all 600ms ease;
 }
 
-nav:hover {
+nav span {
+    display: inline-block;
+    max-width: 100%;
+    padding: .25em .5em;
+}
+
+nav span:hover {
+    background-color: #C2A366;
+}
+
+#nav-visible:checked ~ nav, nav:hover {
     left: 0;
+}
+
+#floors {
+    display: block;
+    width: 100%;
 }
