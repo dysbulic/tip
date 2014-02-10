@@ -92,14 +92,25 @@ $( function() {
     var svgElem = document.getElementById("map")
     svgElem.addEventListener('load', function() {
         var svg = this.contentDocument
-        $('nav').append( layersList( $(svg.documentElement) ) )
+        $('nav').append( layersList( $(svg.documentElement) ) ).mmenu()
     }, false)
 
-    var svgElem = document.getElementById("floors")
-    svgElem.addEventListener('load', function() {
-        var svg = this.contentDocument
-        $(svg).find('rect, #loft').click( function() {
-            $('#floor-label').text( $(this).attr( 'id' ) )
-        } )
-    }, false)
+    var id = 'dyn-visible'
+    var $nav = $('nav')
+    $nav
+        .prepend(
+            $('<label/>').attr( { for: id } )
+        )
+        .prepend(
+            $('<input/>')
+                .attr( {
+                    id: id,
+                    type: 'checkbox'
+                } )
+                .change( function() {
+                    $nav.css( {
+                        left: $(this).is( ':checked' ) ? 0 : ''
+                    } )
+                } )
+        )
 } )

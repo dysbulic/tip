@@ -23,7 +23,6 @@ nav {
     box-shadow: 4px 0 5px rgba(0,0,0,0.2);
     z-index: 1;
     cursor: pointer;
-    overflow: auto;
 }
  
 nav:after {
@@ -43,6 +42,11 @@ nav ul {
     list-style-type: none;
     margin: 0;
     padding-right: 1em;
+}
+
+nav > ul {
+    overflow: auto;
+    max-height: 100%;
 }
 
 nav, nav * {
@@ -70,4 +74,32 @@ nav span:hover {
 #floors {
     display: block;
     width: 100%;
+}
+
+[for="dyn-visible"], #dyn-visible {
+    position: absolute;
+    top: 50%;
+    right: -3em;
+}
+
+#dyn-visible {
+    display: none;
+}
+
+[for="dyn-visible"]:after {
+    content: '↦';
+    font-size: 15pt;
+    background-color: orange;
+    border-radius: .25em;
+    padding: .25em;
+    border: 1px solid;
+    z-index: 100;
+}
+
+[for="dyn-visible"]:hover:after {
+    background-color: darkorange;
+}
+
+#dyn-visible:checked ~ [for="dyn-visible"]:after {
+    content: '↤';
 }
