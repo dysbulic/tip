@@ -4,14 +4,10 @@ $( function() {
     }
 
     function parseViewBox( value ) {
-        var viewBox = value.split(/[, ]+/);
-        viewBox = viewBox.map( function( val ) {
-            if( isNaN( val ) ) {
-                return 0
-            }
-            return  parseFloat( val )
+        var viewBox = value.split(/[, ]+/)
+        return viewBox.map( function( val ) {
+            return isNaN( val ) ? 0 : parseFloat( val )
         } )
-        return viewBox
     }
 
     $.fx.step['viewBox'] = function( fx ) {
