@@ -44,19 +44,23 @@ $( function() {
         var $list = $('<ul/>')
         $children.each( function() {
             var $layer = $(this)
-            var $check =
-                $('<input/>')
-                .attr( {
-                    type: 'checkbox',
-                } )
-                .click( function() {
-                    console.log( 'Checked: ' + $(this).is( ':checked' ) )
-                    $layer.toggle( $(this).is( ':checked' ) )
-                } )
+            var $check = (
+                $('<label/>').append(
+                    $('<input/>')
+                        .attr( {
+                            class: 'layer-visible',
+                            type: 'checkbox',
+                        } )
+                        .click( function() {
+                            console.log( 'Checked: ' + $(this).is( ':checked' ) )
+                            $layer.toggle( $(this).is( ':checked' ) )
+                        } )
+                )
+            )
             if( $layer.css( 'display' ) != 'none' ) {
-                $check.attr( { checked: true } )
+                $check.children().attr( { checked: true } )
             }
-
+                
             var $text =
                 $('<span/>')
                 .text( $layer.attr( 'inkscape:label' ) )
@@ -88,7 +92,7 @@ $( function() {
     var svgElem = document.getElementById("map")
     svgElem.addEventListener('load', function() {
         var svg = this.contentDocument
-        $('nav').append( layersList( $(svg.documentElement) ) ).mmenu()
+        $('nav').append( layersList( $(svg.documentElement) ) )
     }, false)
 
     var id = 'dyn-visible'
