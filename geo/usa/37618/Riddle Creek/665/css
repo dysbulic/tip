@@ -104,11 +104,18 @@ nav span:hover {
     content: '↤';
 }
 
-.layer-visible {
-    background-image: url('.../image/icon/eye/');
+label.layer-visible {
+    display: inline-block;
+    background-image: url('.../image/icon/eye/xed/');
     background-repeat: no-repeat;
+    min-width: 1em;
+    min-height: 1em;
 }
 
-.layer-visible input {
-    visibility: hidden;
+input.layer-visible {
+    display: none;
+}
+
+input:checked ~ label.layer-visible {
+    background-image: url('.../image/icon/eye/');
 }

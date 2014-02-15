@@ -43,23 +43,29 @@ $( function() {
         var $children = $root.children( '[inkscape\\:groupmode="layer"]' )
         var $list = $('<ul/>')
         $children.each( function() {
+            var id = $.guid++
             var $layer = $(this)
-            var $check = (
+            var $label = (
                 $('<label/>')
-                    .addClass( 'layer-visible' )
-                    .append(
-                        $('<input/>')
-                            .attr( {
-                                type: 'checkbox',
-                            } )
-                            .click( function() {
-                                console.log( 'Checked: ' + $(this).is( ':checked' ) )
-                                $layer.toggle( $(this).is( ':checked' ) )
-                            } )
-                    )
+                    .attr( {
+                        class: 'layer-visible',
+                        for: id,
+                    } )
+            )
+            var $check = (
+                $('<input/>')
+                    .attr( {
+                        class: 'layer-visible',
+                        type: 'checkbox',
+                        id: id,
+                    } )
+                    .click( function() {
+                        console.log( 'Checked: ' + $(this).is( ':checked' ) )
+                        $layer.toggle( $(this).is( ':checked' ) )
+                    } )
             )
             if( $layer.css( 'display' ) != 'none' ) {
-                $check.children().attr( { checked: true } )
+                $check.attr( { checked: true } )
             }
                 
             var $text =
@@ -79,6 +85,7 @@ $( function() {
             var $item =
                 $('<li/>')
                 .append( $check )
+                .append( $label )
                 .append( $text )
            
             if( $sub.children().size() > 0 ) {
