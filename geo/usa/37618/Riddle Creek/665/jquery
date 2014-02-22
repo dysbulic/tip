@@ -45,14 +45,14 @@ $( function() {
         $children.each( function() {
             var id = $.guid++
             var $layer = $(this)
-            var $label = (
+            var $visibilityLabel = (
                 $('<label/>')
                     .attr( {
                         class: 'layer-visible',
                         for: id,
                     } )
             )
-            var $check = (
+            var $visibilityCheck = (
                 $('<input/>')
                     .attr( {
                         class: 'layer-visible',
@@ -84,8 +84,8 @@ $( function() {
             var $sub = layersList( $layer )
             var $item =
                 $('<li/>')
-                .append( $check )
-                .append( $label )
+                .append( $visibilityCheck )
+                .append( $visibilityLabel )
                 .append( $text )
            
             if( $sub.children().size() > 0 ) {
