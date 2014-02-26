@@ -14,21 +14,7 @@ $( function() {
         var attr = fx.elem.attributes.getNamedItem( 'viewBox' )
         if( ! fx.set ) {
             fx.start = parseViewBox( attr ? attr.nodeValue : '' )
-            var offset = fx.end
-            fx.end = parseViewBox( offset )
-            if( /^[+-]=/.exec( offset ) ) {
-                offset = offset.split( /[, ]+/ )
-                while( offset.length < 4 ) {
-                    offset.push( '0' )
-                }
-                for( var i = 0; i < 4; i++ ) {
-                    if( /^[+-]=/.exec( offset[i] ) ) {
-                        fx.end[i] = fx.start[i] + parseFloat( offset[i].replace( /=/, '' ) )
-                    }
-                }
-
-            }
-
+            fx.end = parseViewBox( fx.end )
             fx.set = true
         }
 
@@ -59,15 +45,47 @@ $( function() {
                         type: 'checkbox',
                         id: id,
                     } )
-                    .click( function() {
-                        console.log( 'Checked: ' + $(this).is( ':checked' ) )
-                        $layer.toggle( $(this).is( ':checked' ) )
+                    .change( function() {
+                        console.log( 'changed' )
+                        var visible = $(this).is( ':checked' )
+                        if( visible ) {
+                            $(this).closest( 'li' )
+                                .siblings()
+                                .children( '.controls' )
+                                .children( 'input.layer-visible' )
+                                .prop( 'checked', false )
+                                .change()
+                        }
+                        $layer.toggle( visible )
                     } )
             )
             if( $layer.css( 'display' ) != 'none' ) {
-                $check.attr( { checked: true } )
+                $visibilityCheck.attr( { checked: true } )
             }
-                
+
+            id = $.guid++
+
+            var $sub = layersList( $layer )
+
+            var $childrenLabel = (
+                $('<label/>')
+                    .attr( {
+                        class: 'children-visible',
+                        for: id,
+                    } )
+            )
+            var $childrenCheck = (
+                $('<input/>')
+                    .attr( {
+                        class: 'children-visible',
+                        type: 'checkbox',
+                        id: id,
+                    } )
+                    .click( function() {
+                        $sub.toggle( $(this).is( ':checked' ) )
+                    } )
+            )
+            
             var $text =
                 $('<span/>')
                 .text( $layer.attr( 'inkscape:label' ) )
@@ -79,17 +97,27 @@ $( function() {
                 $(svg.documentElement).animate( {
                     viewBox: newBox
                 } )
+
+                $(this).parents().children( '.controls' ).children( 'input.layer-visible' )
+                    .prop( 'checked', true )
+                    .change() // not fired
             } )
 
-            var $sub = layersList( $layer )
             var $item =
                 $('<li/>')
-                .append( $visibilityCheck )
-                .append( $visibilityLabel )
-                .append( $text )
+                .append(
+                    $('<div/>').addClass( 'controls' )
+                        .append( $childrenCheck )
+                        .append( $childrenLabel )
+                        .append( $visibilityCheck )
+                        .append( $visibilityLabel )
+                        .append( $text )
+                )
            
             if( $sub.children().size() > 0 ) {
                 $item.append( $sub )
+            } else {
+                $childrenLabel.addClass( 'empty' )
             }
             
             $list.append( $item )
@@ -100,11 +128,15 @@ $( function() {
     }
 
     var svgElem = document.getElementById("map")
-    svgElem.addEventListener('load', function() {
-        var svg = this.contentDocument
-        var $list = layersList( $(svg.documentElement) )
-        $('nav').append( $list )
-        $list.show()
+    var loaded = false
+    svgElem.addEventListener('load', function() { // Getting called 1-3 times
+        if( ! loaded ) {
+            loaded = true
+            var svg = this.contentDocument
+            var $list = layersList( $(svg.documentElement) )
+            $('nav').append( $list )
+            $list.show()
+        }
     }, false)
 
     var id = 'dyn-visible'

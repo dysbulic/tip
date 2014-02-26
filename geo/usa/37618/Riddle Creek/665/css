@@ -1,3 +1,23 @@
+nav {
+    background-color: #06F;
+    border-color: #36F;
+}
+
+span {
+    color: white;
+    font-family: sans-serif;
+    font-size: 17px;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; 
+}
+
+nav:after {
+    border-color: transparent transparent transparent #39F;
+}
+
+nav .controls:hover {
+    background-color: #39F;
+}
+
 ul {
     list-style: none;
     padding-left: .75em;
@@ -5,6 +25,7 @@ ul {
 
 html, body {
     height: 100%;
+    margin: 0;
 }
 
 #map {
@@ -18,11 +39,12 @@ nav {
     left: -16em;
     top: 0;
     bottom: 0;
-    background-color: #654;
-    border-right: 20px solid #765;
+    border-right-width: 20px;
+    border-right-style: solid;
     box-shadow: 4px 0 5px rgba(0,0,0,0.2);
     z-index: 1;
     cursor: pointer;
+    padding-top: 1.5em;
 }
  
 nav:after {
@@ -34,10 +56,9 @@ nav:after {
     top: 10em;
     border-width: 15px 10px;
     border-style: solid;
-    border-color: transparent transparent transparent #765;
 }
 
-nav ul {
+nav > ul {
     width: 14em;
     list-style-type: none;
     margin: 0;
@@ -58,13 +79,8 @@ nav, nav * {
 }
 
 nav span {
-    display: inline-block;
     max-width: 100%;
     padding: .25em .5em;
-}
-
-nav span:hover {
-    background-color: #C2A366;
 }
 
 #nav-visible:checked ~ nav, nav:hover {
@@ -105,17 +121,45 @@ nav span:hover {
 }
 
 label.layer-visible {
-    display: inline-block;
     background-image: url('.../image/icon/eye/xed/');
     background-repeat: no-repeat;
+    background-position: center;
     min-width: 1em;
     min-height: 1em;
+    margin-right: .5em;
 }
 
-input.layer-visible {
+input.layer-visible, input.children-visible {
     display: none;
 }
 
-input:checked ~ label.layer-visible {
+input:checked + label.layer-visible {
     background-image: url('.../image/icon/eye/');
+}
+
+label.children-visible:before {
+    content: '+';
+    font-face: monospace;
+    font-weight: bold;
+}
+
+input:checked + label.children-visible:before {
+    content: '-';
+}
+
+label.children-visible.empty:before {
+    content: '' ! important;
+}
+
+.controls {
+    display: table;
+    width: 100%;
+}
+
+label, input, span {
+    display: table-cell;
+}
+
+label {
+    width: 1em;
 }
