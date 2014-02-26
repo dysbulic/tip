@@ -19,7 +19,7 @@ $( function() {
         }
 
         var box = $.map( fx.start, function( n, i ) {
-            return ( fx.pos * ( fx.end[i] - n ) + n )
+            return ( n + fx.pos * ( fx.end[i] - n ) )
         }).join(' ')
 
         ;(attr ? attr.nodeValue = box : fx.elem.setAttribute( 'viewBox', box ) )
@@ -28,6 +28,7 @@ $( function() {
     function layersList( $root ) {
         var $children = $root.children( '[inkscape\\:groupmode="layer"]' )
         var $list = $('<ul/>')
+
         $children.each( function() {
             var id = $.guid++
             var $layer = $(this)
@@ -46,7 +47,6 @@ $( function() {
                         id: id,
                     } )
                     .change( function() {
-                        console.log( 'changed' )
                         var visible = $(this).is( ':checked' )
                         if( visible ) {
                             $(this).closest( 'li' )
@@ -91,10 +91,33 @@ $( function() {
                 .text( $layer.attr( 'inkscape:label' ) )
 
             $text.click( function() {
-                var svg = $layer.get(0).ownerDocument
-                var bbox = $layer.get(0).getBBox()
-                var newBox = [bbox.x, bbox.y, bbox.width, bbox.height].join( ' ' )
-                $(svg.documentElement).animate( {
+                var elem = $layer.get(0)
+                var svg = elem.ownerDocument.documentElement
+                var bbox = elem.getBBox()
+
+                console.log( 'tiny pause' )
+                
+                var tfm2elm = elem.getTransformToElement( svg )
+
+                var pad = 2
+
+                var origin = svg.createSVGPoint()
+                origin.x = bbox.x - pad
+                origin.y = bbox.y - pad
+
+                var dest = svg.createSVGPoint()
+                dest.x = origin.x + bbox.width + 2 * pad
+                dest.y = origin.y + bbox.height + 2 * pad
+
+                origin = origin.matrixTransform(tfm2elm)
+                dest = dest.matrixTransform(tfm2elm)
+
+                dest.x -= origin.x
+                dest.y -= origin.y
+
+                var newBox = [origin.x, origin.y, dest.x, dest.y].join( ' ' )
+
+                $(svg).animate( {
                     viewBox: newBox
                 } )
 
