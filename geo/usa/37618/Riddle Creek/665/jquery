@@ -97,7 +97,13 @@ $( function() {
                 var svg = elem.ownerDocument.documentElement
                 var bbox = elem.getBBox()
 
-                console.log( 'tiny pause' )
+
+                $(this).parents()
+                    .children( '.controls' )
+                    .children( 'input.layer-visible' )
+                    .not( '[auto-hide="false"]' )
+                    .prop( 'checked', true )
+                    .change() // not fired
                 
                 var tfm2elm = elem.getTransformToElement( svg )
 
@@ -122,13 +128,6 @@ $( function() {
                 $(svg).animate( {
                     viewBox: newBox
                 } )
-
-                $(this).parents()
-                    .children( '.controls' )
-                    .children( 'input.layer-visible' )
-                    .not( '[auto-hide="false"]' )
-                    .prop( 'checked', true )
-                    .change() // not fired
             } )
 
             var $item =
@@ -164,8 +163,6 @@ $( function() {
             var $list = layersList( $(svg.documentElement) )
             $('nav').append( $list )
             $list.show()
-
-            console.log( 'ah', $('[auto-hide="false"]').size() )
         }
     }, false)
 
