@@ -45,6 +45,7 @@ $( function() {
                         class: 'layer-visible',
                         type: 'checkbox',
                         id: id,
+                        'auto-hide': $layer.attr( 'auto-hide' ),
                     } )
                     .change( function() {
                         var visible = $(this).is( ':checked' )
@@ -53,6 +54,7 @@ $( function() {
                                 .siblings()
                                 .children( '.controls' )
                                 .children( 'input.layer-visible' )
+                                .not( '[auto-hide="false"]' )
                                 .prop( 'checked', false )
                                 .change()
                         }
@@ -121,7 +123,10 @@ $( function() {
                     viewBox: newBox
                 } )
 
-                $(this).parents().children( '.controls' ).children( 'input.layer-visible' )
+                $(this).parents()
+                    .children( '.controls' )
+                    .children( 'input.layer-visible' )
+                    .not( '[auto-hide="false"]' )
                     .prop( 'checked', true )
                     .change() // not fired
             } )
@@ -159,25 +164,30 @@ $( function() {
             var $list = layersList( $(svg.documentElement) )
             $('nav').append( $list )
             $list.show()
+
+            console.log( 'ah', $('[auto-hide="false"]').size() )
         }
     }, false)
 
     var id = 'dyn-visible'
     var $nav = $('nav')
+    var $navVisible = $('<input/>')
+        .attr( {
+            id: id,
+            type: 'checkbox'
+        } )
+        .change( function() {
+            $nav.css( {
+                left: $(this).is( ':checked' ) ? 0 : ''
+            } )
+        } )
+    
     $nav
-        .prepend(
-            $('<label/>').attr( { for: id } )
-        )
-        .prepend(
-            $('<input/>')
-                .attr( {
-                    id: id,
-                    type: 'checkbox'
-                } )
-                .change( function() {
-                    $nav.css( {
-                        left: $(this).is( ':checked' ) ? 0 : ''
-                    } )
-                } )
-        )
+        .prepend( $('<label/>').attr( { for: id } ) )
+        .prepend( $navVisible )
+        .click( function( event ) {
+            if( $nav.get(0) == event.target && ! $navVisible.is( ':checked' ) ) {
+                $navVisible.prop( 'checked', true ).change()
+            }
+        } )
 } )
