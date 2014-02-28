@@ -105,7 +105,14 @@ $( function() {
                     .prop( 'checked', true )
                     .change() // not fired
                 
-                var tfm2elm = elem.getTransformToElement( svg )
+                try {
+                    var tfm2elm = elem.getTransformToElement( svg )
+                } catch( e ) {
+                    console.error( e.message )
+                    if( window.confirm( "Loaded incorrectly. Reload?" ) ) {
+                        location.reload()
+                    }
+                }
 
                 var pad = 2
 
