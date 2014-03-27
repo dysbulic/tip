@@ -54,10 +54,10 @@
 } [idx="A"] {
                 fill : #071448;
     background-color : #071448;
-} [idx="B"] {
+} [idx="B"] { /*
                 fill : #071448 ! important;
     background-color : #071448 ! important;
-} [idx="C"] {
+*/ } [idx="C"] {
                 fill : #071448;
     background-color : #071448;
 }
@@ -101,6 +101,10 @@
     stroke : #071448;
 }
 
+[func='¿marker?'] {
+    display: none;
+}
+
 text {
     font-family : Bellerose;
       font-size : 13pt;
@@ -124,9 +128,20 @@ svg:hover [func='¿marker?'] line { stroke-opacity: .25 }
 
 [func='¿marker?'] { }
 
-[state='not hovered'] text {
-      fill-opacity : .25;
-    stroke-opacity : .25;
+[func='label'] p {
+    opacity: 0;
+}
+
+[func='label'] [state='hovered'] p {
+    opacity: 1;
+}
+
+image,
+[state='not hovered'] text,
+[state='not hovered'] image {
+      fill-opacity : 0;
+    stroke-opacity : 0;
+           display : none;
 }
 
 /* ToDo: */
@@ -148,6 +163,10 @@ svg:hover [func='¿marker?'] line { stroke-opacity: .25 }
     stroke-opacity : 1;
 }
 
+[func='icon'] [idx][state='hovered'] image {
+    display : inline;
+}
+
 [func='label'] rect {
             fill : #946C00;
     fill-opacity : .5;
@@ -156,7 +175,7 @@ svg:hover [func='¿marker?'] line { stroke-opacity: .25 }
 text {
     font-family : 'Junius Unicode';
     font-weight : bold;
-      font-size : 47pt;
+      font-size : 40pt;
        position : relative;
             top : 50px;
 }
