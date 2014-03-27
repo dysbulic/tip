@@ -3,7 +3,7 @@
 Plugin Name: IntenseDebate
 Plugin URI: http://intensedebate.com/wordpress
 Description: <a href="http://www.intensedebate.com">IntenseDebate Comments</a> enhance and encourage conversation on your blog or website.  Full comment and account data sync between IntenseDebate and WordPress ensures that you will always have your comments.  Custom integration with your WordPress admin panel makes moderation a piece of cake. Comment threading, reply-by-email, user accounts and reputations, comment voting, along with Twitter and friendfeed integrations enrich your readers' experience and make more of the internet aware of your blog and comments which drives traffic to you!  To get started, please activate the plugin and adjust your  <a href="./options-general.php?page=id_settings">IntenseDebate settings</a> .
-Version: 2.9.2
+Version: 2.9.4
 Author: IntenseDebate & Automattic
 Author URI: http://intensedebate.com
 */
@@ -11,10 +11,10 @@ Author URI: http://intensedebate.com
 // CONSTANTS
 	
 	// This plugin's version 
-	define( 'ID_PLUGIN_VERSION', '2.9.2' );
+	define( 'ID_PLUGIN_VERSION', '2.9.4' );
 	
 	// API Endpoints
-	define( 'ID_BASEURL', 'http://intensedebate.com' );
+	define( 'ID_BASEURL', ( is_ssl() ? 'https' : 'http' ) . '://intensedebate.com' );
 	define( 'ID_SERVICE', ID_BASEURL . '/services/v1/operations/postOperations.php' );
 	define( 'ID_USER_LOOKUP_SERVICE', ID_BASEURL . '/services/v1/users' );
 	define( 'ID_BLOG_LOOKUP_SERVICE', ID_BASEURL . '/services/v1/sites' );
@@ -26,7 +26,7 @@ Author URI: http://intensedebate.com
 	define( 'ID_APPKEY', 'wpplugin' );
 	
 	// Minimum tested version of WordPress for this version of the plugin
-	define( 'ID_MIN_WP_VERSION', '2.8' );
+	define( 'ID_MIN_WP_VERSION', '3.0' );
 	
 	// URL bases for linkage
 	define( 'ID_COMMENT_MODERATION_PAGE', ID_BASEURL . '/wpIframe.php?acctid=' );
@@ -54,38 +54,6 @@ Author URI: http://intensedebate.com
 	}
 	if ( !function_exists( 'wp_notify_moderator' ) ) {
 		function wp_notify_moderator() { }
-	}
-
-// JSON support
-
-	function id_got_json() {			
-		// WP 2.9+ handles everything for us
-		if ( version_compare( get_bloginfo( 'version' ), '2.9', '>=' ) )
-			return true;
-		
-		// Functions exists already, assume they're good to go
-		if ( function_exists( 'json_encode' ) && function_exists( 'json_decode' ) )
-			return true;
-		
-		// Load Services_JSON if we need it at this point
-		if ( !class_exists( 'Services_JSON' ) )
-			include_once( dirname( __FILE__ ) . '/class.json.php' );
-		
-		// This indicates that we need to define the functions.
-		// Services_JSON *is* available one way or another at this point
-		return false;
-	}
-
-	if ( !id_got_json() ) {
-		function json_encode( $data ) {
-	        $json = new Services_JSON();
-	        return( $json->encode( $data ) );
-	    }
-
-		function json_decode( $data ) {
-	        $json = new Services_JSON();
-	        return( $json->decode( $data ) );
-	    }
 	}
 	
 	function id_get_user_meta( $id, $val ) {
@@ -115,10 +83,8 @@ Author URI: http://intensedebate.com
 	
 // HOOK ASSIGNMENT
 	function id_activate_hooks() {
-		global $wpmu_version;
-		
 		// warning that we don't support this version of WordPress
-		if ( empty( $wpmu_version ) && version_compare( get_bloginfo( 'version' ), ID_MIN_WP_VERSION, '<' ) ) {
+		if ( version_compare( get_bloginfo( 'version' ), ID_MIN_WP_VERSION, '<' ) ) {
 			add_action( 'admin_head', 'id_wordpress_version_warning' );
 			return;
 		}
@@ -142,19 +108,13 @@ Author URI: http://intensedebate.com
 			
 			// add comment counts in best way available
 			if ( id_is_active() ) {
-				if ( version_compare( get_bloginfo( 'version' ), '2.8', '>=' ) )
-					add_action( 'admin_print_footer_scripts', 'id_get_comment_footer_script', 21 );
-				else
-					add_action( 'admin_footer', 'id_get_comment_footer_script', 100 );
+				add_action( 'admin_print_footer_scripts', 'id_get_comment_footer_script', 21 );
 			}
 		}
 		
 		if ( is_admin() ) {
 			// Always add comment moderation count in the admin area
-			if ( version_compare( get_bloginfo( 'version' ), '2.8', '>=' ) )
-				add_action( 'admin_print_footer_scripts', 'id_admin_footer', 21 );
-			else
-				add_action( 'admin_footer', 'id_admin_footer', 100 );
+			add_action( 'admin_print_footer_scripts', 'id_admin_footer', 21 );
 		}
 		
 		if ( id_is_active() ) {
@@ -227,26 +187,15 @@ Author URI: http://intensedebate.com
 		if ( id_is_active() && 0 == get_option( 'id_moderationPage' ) ) {
 			global $menu;
 			
-			if ( function_exists( 'add_object_page' ) ) { // WP 2.7+
-				unset( $menu[25] );
-				add_object_page(
-					__( 'Comments', 'intensedebate' ),
-					__( 'Comments', 'intensedebate' ),
-					'moderate_comments',
-					'intensedebate',
-					'id_moderate_comments',
-					WP_CONTENT_URL . '/plugins/intensedebate/comments.png'
-				);
-			} else { // < WP 2.7
-				unset( $menu[20] );
-				add_menu_page(
-					__( 'Comments', 'intensedebate' ),
-					__( 'Comments', 'intensedebate' ),
-					'moderate_comments',
-					'intensedebate',
-					'id_moderate_comments'
-				);
-			}
+			unset( $menu[25] );
+			add_object_page(
+				__( 'Comments', 'intensedebate' ),
+				__( 'Comments', 'intensedebate' ),
+				'moderate_comments',
+				'intensedebate',
+				'id_moderate_comments',
+				WP_CONTENT_URL . '/plugins/intensedebate/comments.png'
+			);
 		}
 		add_options_page(
 			__( 'IntenseDebate Settings', 'intensedebate' ), 
@@ -340,14 +289,7 @@ Author URI: http://intensedebate.com
 	
 	// blog option
 	function id_save_option( $name, $value ) {
-		global $wpmu_version;
-		
-		if ( false === get_option( $name ) && empty( $wpmu_version ) ) { // Avoid WPMU options cache bug
-			add_option( $name, $value, '', 'no' );
-		} else {
-			update_option( $name, $value );
-		}
-		
+		update_option( $name, $value );
 		id_debug_log( 'Save option: ' . $name . ' = ' . print_r( $value, true ) );
 	}
 
@@ -422,8 +364,8 @@ Author URI: http://intensedebate.com
 	function id_queue_not_empty() {
 		$queue = id_get_queue();
 		$queue->load();
-		if ( count( $queue->operations ) ) {
-			return true;
+		if ( $count = count( $queue->operations ) ) {
+			return $count;
 		}
 		else {
 			return false;
@@ -481,12 +423,22 @@ Author URI: http://intensedebate.com
 		} else {
 			$comment = new id_comment( array( 'comment_ID' => $comment_id ) );
 			$comment->loadFromWP();
-			if ( $status == "hold" )
+			switch ( (string) $status ) {
+			case '0' :
+			case 'hold' :
 				$comment->comment_approved = 0;
-			if ( $status == "approve" )
+				break;
+			case 'approve' :
+			case '1' :
 				$comment->comment_approved = 1;
-			if ( $status == "spam" )
+				break;
+			case 'spam' :
 				$comment->comment_approved = "spam";
+				break;
+			default :
+				return;
+			}
+
 			$queue = id_get_queue();
 			$queue->add( 'save_comment', $comment->export(), 'id_generic_callback' );
 		}
@@ -513,6 +465,18 @@ Author URI: http://intensedebate.com
 	}
 
 	function id_delete_post( $post_id ) {
+		// Core calls delete_post action twice per post.
+		static $post_ids = array();
+		if ( isset( $post_ids[$post_id] ) ) {
+			return;
+		}
+		$post_ids[$post_id] = true;
+
+		// Core calls delete_post for revisions too.
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
 		$packet = new stdClass;
 		$packet->post_id = $post_id;
 		$queue = id_get_queue();
@@ -1022,8 +986,6 @@ Author URI: http://intensedebate.com
 // REST SERVICE FUNCS
 	
 	function id_request_handler() {
-		global $wpmu_version;
-				
 		// Blanket protection against accidental access to edit-comments.php
 		$basename = basename( $_SERVER['REQUEST_URI'] );
 		if ( stristr( $basename, '?' ) )
@@ -1087,8 +1049,7 @@ Author URI: http://intensedebate.com
 	}
 	
 	function id_REST_ping() {
-		global $wpmu_version;
-		return array( 'id_plugin_version' => ID_PLUGIN_VERSION, 'wp_version' => ( !empty( $wpmu_version ) ? 'WPMU/' : '' ) . get_bloginfo( 'version' ) );
+		return array( 'id_plugin_version' => ID_PLUGIN_VERSION, 'wp_version' => get_bloginfo( 'version' ) );
 	}
 	
 	function id_REST_test_connection() {
@@ -1484,8 +1445,6 @@ Author URI: http://intensedebate.com
 	 * @param boolean $merge_moderation_strings Whether or not to request a merging (rather than overwrite) of moderation strings
 	**/
 	function id_discussion_settings_page( $merge_moderation_strings = false ) {
-		global $wpmu_version;
-		
 		if ( ( isset( $_POST['option_page'] ) && 'discussion' == $_POST['option_page'] ) || ( isset( $_POST['page_options'] ) && stristr( $_POST['page_options'], 'comment_moderation' ) ) ) {
 			$settings = array();
 			
@@ -1515,9 +1474,7 @@ Author URI: http://intensedebate.com
 				if ( get_option( 'wordpress_api_key' ) && is_plugin_active( 'akismet/akismet.php' ) )
 					$settings['akismet'] = get_option( 'wordpress_api_key' );
 				
-				// Need to handle like this to avoid older versions turning threading off
-				if ( version_compare( get_bloginfo( 'version' ), '2.7', '>=' ) )
-					$settings['show_threads'] = ( '1' == $_POST['thread_comments'] ? 'T' : 'F' );
+				$settings['show_threads'] = ( '1' == $_POST['thread_comments'] ? 'T' : 'F' );
 				
 				// Need to do some parsing to get moderation strings into the same format as ID
 				$mods = id_separate_tokens( $_POST['moderation_keys'] );
@@ -1559,9 +1516,7 @@ Author URI: http://intensedebate.com
 		if ( get_option( 'wordpress_api_key' ) && is_plugin_active( 'akismet/akismet.php' ) )
 			$settings['akismet'] = get_option( 'wordpress_api_key' );
 
-		// Need to handle like this to avoid older versions turning threading off
-		if ( version_compare( get_bloginfo( 'version' ), '2.7', '>=' ) )
-			$settings['show_threads'] = ( '1' == get_option( 'thread_comments' ) ? 'T' : 'F' );
+		$settings['show_threads'] = ( '1' == get_option( 'thread_comments' ) ? 'T' : 'F' );
 
 		// Need to do some parsing to get moderation strings into the same format as ID
 		$mods = id_separate_tokens( get_option( 'moderation_keys' ) );
@@ -1832,8 +1787,6 @@ Author URI: http://intensedebate.com
 	
 	// main settings page handler
 	function id_settings_page() {
-		global $wpmu_version;
-		
 		// errors & alerts
 		id_message();
 		
@@ -2148,7 +2101,7 @@ Author URI: http://intensedebate.com
 							<form id="id_close_box" action="options-general.php?page=id_settings&hideSettingsTop=true" method="POST">
 							</form>
 							<p style="margin: 20px 0 0;"><a href="javascript: document.getElementById('id_close_box').submit();"><?php _e( 'Close this box', 'intensedebate' ); ?></a></p>
-						<?php endif; ?>						
+						<?php endif; ?>
 					</div><!--/ idwp-install-main -->
 					<span class="idwp-clear"></span>
 				</div><!--/ idwp-install -->
@@ -2160,13 +2113,8 @@ Author URI: http://intensedebate.com
 					<form id="id_manual_settings" class="ui-tabs-panel" action="options.php" method="post">
 						<input type="hidden" name="action" value="update" />
 						<input type="hidden" name="option_page" value="intensedebate" />
-						<?php
-						if ( version_compare( get_bloginfo( 'version' ), '2.7', '<' ) && empty( $wpmu_version ) )
-							wp_nonce_field( 'update-options' );
-						else
-							wp_nonce_field( 'intensedebate-options' );
-						?>
-						
+						<?php wp_nonce_field( 'intensedebate-options' ); ?>
+
 						<table class="form-table">
 							<tbody>
 								<tr valign="top">

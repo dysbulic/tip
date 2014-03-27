@@ -124,9 +124,7 @@ function jetpack_shortcodes_more_info_connected() { ?>
 		'polldaddy' => 'http://support.polldaddy.com/wordpress-shortcodes/',
 	);
 
-	if ( version_compare( PHP_VERSION, 5, '>=' ) ) {
-		$codes['wpvideo (VideoPress)'] = 'http://en.support.wordpress.com/videopress/';
-	}
+	$codes['wpvideo (VideoPress)'] = 'http://en.support.wordpress.com/videopress/';
 
 	$available = '';
 	foreach ( $codes as $code => $url ) {
@@ -333,6 +331,7 @@ function jetpack_widgets_more_info() { ?>
 	
 	<p><strong><?php esc_html_e( 'The RSS Links Widget ', 'jetpack' ); ?></strong> <?php esc_html_e( "allows you to add links to your blog&#8217;s post and comment RSS feeds in your sidebar. This makes it easy for your readers to stay updated when you post new content or receive new comments.", 'jetpack' ) ?></p>
 	<p><strong><?php esc_html_e( 'The Twitter Widget ', 'jetpack' ); ?></strong> <?php esc_html_e( "shows your latest tweets within a sidebar on your theme. It&#8217;s an easy way to add more activity to your site. There are also a number of customization options.", 'jetpack' ) ?></p>
+	<p><strong><?php esc_html_e( 'The Facebook Like Box Widget ', 'jetpack' ); ?></strong> <?php esc_html_e( "shows your Facebook Like Box within a sidebar on your theme. It&#8217;s a great way to let your readers show their support.", 'jetpack' ) ?></p>
 	<p><strong><?php esc_html_e( 'The Image Widget ', 'jetpack' ); ?></strong><?php esc_html_e( "allows you to easily add images to widget areas in your theme. It&#8217;s an easy way to add more visual interest to your site.", 'jetpack' ) ?></p>
 
 <?php
@@ -348,6 +347,7 @@ function jetpack_widgets_more_info_connected() { ?>
 
 	<p><strong><?php esc_html_e( 'The RSS Links Widget', 'jetpack' ); ?></strong> <?php esc_html_e( 'lets you easily add post and comment RSS feeds to a sidebar on your theme.', 'jetpack' ) ?></p>
 	<p><strong><?php esc_html_e( 'The Twitter Widget', 'jetpack' ); ?></strong> <?php esc_html_e( 'shows your latest tweets within a sidebar on your theme.', 'jetpack' ) ?></p>
+	<p><strong><?php esc_html_e( 'The Facebook Like Box Widget', 'jetpack' ); ?></strong> <?php esc_html_e( 'shows your Facebook Like Box within a sidebar on your theme.', 'jetpack' ) ?></p>
 	<p><strong><?php esc_html_e( 'The Image Widget', 'jetpack' ); ?></strong> <?php esc_html_e( 'lets you easily add images to a sidebar on your theme.', 'jetpack' ) ?></p>
 
 	<p><?php esc_html_e( 'Each of these widgets has a number of customization options.', 'jetpack' ); ?>  <?php printf( __( 'To use the widgets, go to Appearance &#8594; <a href="%s">Widgets</a>. Drag them into one of your sidebars and configure away.', 'jetpack' ), admin_url( 'widgets.php' ) ); ?></p>
@@ -401,3 +401,61 @@ function jetpack_enhanced_distribution_more_link() {
 	echo '<a class="button more-info-link" href="http://en.wordpress.com/firehose/">' . esc_html__( 'Learn More', 'jetpack' ) . '</a>';
 }
 add_action( 'jetpack_learn_more_button_enhanced-distribution', 'jetpack_enhanced_distribution_more_link' );
+
+// Contact Form: START
+function jetpack_contact_form_learn_more_button() {
+    echo '<a class="button more-info-link" href="http://support.wordpress.com/contact-form/">' . __( 'Learn More', 'jetpack' ) . '</a>';
+}
+
+function jetpack_contact_form_more_info() {
+    echo '<div class="jp-info-img">';
+    echo '<a href="http://support.wordpress.com/contact-form/">';
+    echo '<img class="jp-info-img" src="' . plugins_url( basename( dirname( dirname( __FILE__ ) ) ) . '/_inc/images/contact-form.jpg' ) . '" alt="' . esc_attr__( 'Contact Form', 'jetpack' ) . '" width="194" height="148" />';
+    echo '</a>';
+    echo '</div>';
+
+    echo '<h4>' . esc_html__( 'Contact Form', 'jetpack' ) . '</h4>';
+
+    echo '<p>';
+    _e( 'A contact form is a great way to offer your readers the ability to get in touch, without giving out your personal email address.', 'jetpack' );
+    echo '</p>';
+
+    echo '<p>';    _e( 'Each contact form can easily be customized to fit your needs. When a user submits your contact form, the feedback will be filtered through <a href="http://akismet.com/">Akismet</a> (if it is active on your site) to make sure it’s not spam. Any legitimate feedback will then be emailed to you, and added to your feedback management area.', 'jetpack' );
+    echo '</p>';
+}
+
+add_action( 'jetpack_learn_more_button_contact-form', 'jetpack_contact_form_learn_more_button' );
+add_action( 'jetpack_module_more_info_contact-form', 'jetpack_contact_form_more_info' );
+add_action( 'jetpack_module_more_info_connected_contact-form', 'jetpack_contact_form_more_info' );
+// Contact Form: STOP
+
+// Jetpack Comments
+
+function jetpack_comments_learn_more_button() {
+    echo '<a class="button more-info-link" href="#">' . __( 'Learn More', 'jetpack' ) . '</a>';
+}
+
+function jetpack_comments_more_info() {
+?>
+	<div class="jp-info-img">
+		<img class="jp-info-img" src="<?php echo plugins_url( basename( dirname( dirname( __FILE__ ) ) ) . '/_inc/images/comments.png' ) ?>" alt="<?php esc_attr_e( 'Jetpack Comments Screenshot', 'jetpack' ) ?>" width="320" height="205" />
+	</div>
+
+	<h4><?php esc_html_e( 'Jetpack Comments', 'jetpack' ); ?></h4>
+
+	<p><?php esc_html_e( 'Jetpack Comments enables your visitors to use their WordPress.com, Twitter, or Facebook accounts when commenting on your site.', 'jetpack' ); ?></p>
+
+<?php	if ( 'jetpack_module_more_info_connected_comments' == current_filter() ) : ?>
+
+	<p><?php printf(
+		__( "Jetpack tries to match your site's color scheme automatically, but you can make manual adjustments at the bottom of the <a href='%s'>Discussion Settings</a> page.", 'jetpack' ),
+		admin_url( 'options-discussion.php#jetpack-comments-settings' )
+	); ?></p>
+
+<?php	endif; ?>
+<?php
+}
+
+add_action( 'jetpack_learn_more_button_comments', 'jetpack_comments_learn_more_button' );
+add_action( 'jetpack_module_more_info_comments', 'jetpack_comments_more_info' );
+add_action( 'jetpack_module_more_info_connected_comments', 'jetpack_comments_more_info' );

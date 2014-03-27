@@ -42,7 +42,7 @@ export CVS_RSH=ssh
 #which update-manager && update-manager -d
 
 # Include OSX specific pathes; and give them precedence
-for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin; do
+for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin ~/.../google/adt/sdk/platform-tools; do
     [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
@@ -388,6 +388,8 @@ done
 export JAVACMD=$(which java)
 #export JAVA_HOME=${JAVACMD%/*/*}
 #export JAVA_JARPATH=.../lib/java/lib
+
+export ANDROID_HOME=~/.../google/adt/sdk/
 
 alias pauseamarok="dcop --user $USER amarok player playPause"
 

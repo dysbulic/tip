@@ -1,7 +1,7 @@
 <?php
 /**
  * @package MediaElementJS
- * @version 2.2.5
+ * @version 2.9.1
  */
  
 /*
@@ -9,7 +9,7 @@ Plugin Name: MediaElement.js - HTML5 Audio and Video
 Plugin URI: http://mediaelementjs.com/
 Description: Video and audio plugin for WordPress built on MediaElement.js HTML5 video and audio player library. Embeds media in your post or page using HTML5 with Flash or Silverlight fallback support for non-HTML5 browsers. Video support: MP4, Ogg, WebM, WMV. Audio support: MP3, WMA, WAV
 Author: John Dyer
-Version: 2.2.5
+Version: 2.9.1
 Author URI: http://j.hn/
 License: GPLv3, MIT
 */
@@ -19,12 +19,14 @@ Adapted from: http://videojs.com/ plugin
 */
 
 $mediaElementPlayerIndex = 1;
+define('MEDIAELEMENTJS_DIR', plugin_dir_url(__FILE__).'mediaelement/');
 
 /* Runs when plugin is activated */
 register_activation_hook(__FILE__,'mejs_install'); 
 
 function mejs_install() {
 	add_option('mep_video_skin', '');
+	add_option('mep_script_on_demand', false);
 	
 	add_option('mep_default_video_height', 270);
 	add_option('mep_default_video_width', 480);
@@ -39,6 +41,7 @@ function mejs_install() {
 register_deactivation_hook( __FILE__, 'mejs_remove' );
 function mejs_remove() {
 	delete_option('mep_video_skin');
+	delete_option('mep_script_on_demand');
 
 	delete_option('mep_default_video_height');
 	delete_option('mep_default_video_width');
@@ -65,6 +68,7 @@ function mejs_create_menu() {
 function mejs_register_settings() {
 	//register our settings
 	register_setting( 'mep_settings', 'mep_video_skin' );
+	register_setting( 'mep_settings', 'mep_script_on_demand' );
 	
 	register_setting( 'mep_settings', 'mep_default_video_height' );
 	register_setting( 'mep_settings', 'mep_default_video_width' );
@@ -86,6 +90,18 @@ function mejs_settings_page() {
 <form method="post" action="options.php">
 <?php wp_nonce_field('update-options'); ?>
 
+	<h3 class="title"><span>General Settings</span></h3>
+
+	<table  class="form-table">
+		<tr valign="top">
+			<th scope="row">
+				<label for="mep_script_on_demand">Load Script on Demand (requires WP 3.3)</label>
+			</th>
+			<td >
+				<input name="mep_script_on_demand" type="checkbox" id="mep_script_on_demand" <?php echo (get_option('mep_script_on_demand') == true ? "checked" : "")  ?> />
+			</td>
+		</tr>
+	</table>
 
 	<h3 class="title"><span>Video Settings</span></h3>
 		
@@ -159,7 +175,7 @@ function mejs_settings_page() {
 	</table>
 
 	<input type="hidden" name="action" value="update" />
-	<input type="hidden" name="page_options" value="mep_default_video_width,mep_default_video_height,mep_default_video_type,mep_default_audio_type,mep_default_audio_width,mep_default_audio_height,mep_video_skin" />
+	<input type="hidden" name="page_options" value="mep_default_video_width,mep_default_video_height,mep_default_video_type,mep_default_audio_type,mep_default_audio_width,mep_default_audio_height,mep_video_skin,mep_script_on_demand" />
 
 	<p>
 		<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
@@ -175,17 +191,21 @@ function mejs_settings_page() {
 }
 
 
-define('MEDIAELEMENTJS_DIR', WP_PLUGIN_URL.'/media-element-html5-video-and-audio-player/mediaelement/');
-// Javascript 
+// Javascript
+
+// This is now handled by calling wp_enqueue_script inside the mejs_media_shortcode function by default. This means that MediaElement.js's JavaScript will only be called as needed
+if (!get_option('mep_script_on_demand')) {
 function mejs_add_scripts(){
-    if (!is_admin()){
-        // the scripts
-        wp_enqueue_script("mediaelementjs-scripts", MEDIAELEMENTJS_DIR ."mediaelement-and-player.min.js", array('jquery'), "2.1.3", false);
-    }
+	if (!is_admin()){
+		// the scripts
+		wp_enqueue_script("mediaelementjs-scripts", MEDIAELEMENTJS_DIR ."mediaelement-and-player.min.js", array('jquery'), "2.7.0", false);
+	}
 }
 add_action('wp_print_scripts', 'mejs_add_scripts');
+}
 
-// css
+// CSS
+// still always enqueued so it happens in the <head> tag
 function mejs_add_styles(){
     if (!is_admin()){
         // the style
@@ -198,42 +218,20 @@ function mejs_add_styles(){
 }
 add_action('wp_print_styles', 'mejs_add_styles');
 
-function mejs_add_header(){
-/*
-
-	$dir = WP_PLUGIN_URL.'/media-element-html5-video-and-audio-player/mediaelement/';
-	
-	echo <<<_end_
-<link rel="stylesheet" href="{$dir}mediaelementplayer.min.css" type="text/css"  />
-<script src="{$dir}mediaelement-and-player.min.js" type="text/javascript"></script>
-_end_;
-*/
-
-}
-
-// If this happens in the <head> tag it fails in iOS. Boo.
-function mejs_add_footer(){
-/*
-	$defaultVideoWidth = get_option('mep_default_video_width');
-	$defaultVideoHeight = get_option('mep_default_video_height');
-
-	echo <<<_end_
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-	$('video[class=mep],audio[class=mep]').mediaelementplayer({defaultVideoWidth:{$defaultVideoWidth},defaultVideoHeight:{$defaultVideoHeight}});
-});
-</script>
-_end_;
-*/
-}
-
-add_action('wp_head','mejs_add_header');
-add_action('wp_footer','mejs_add_footer');
-
 function mejs_media_shortcode($tagName, $atts){
 
+	
+	// only enqueue when needed
+	if (get_option('mep_script_on_demand')) {
+		wp_enqueue_script("mediaelementjs-scripts", MEDIAELEMENTJS_DIR ."mediaelement-and-player.min.js", array('jquery'), "2.7.0", false);
+	}	
+
 	global $mediaElementPlayerIndex;	
-	$dir = WP_PLUGIN_URL.'/media-element-html5-video-and-audio-player/mediaelement/';
+	$dir = MEDIAELEMENTJS_DIR;
+	$attributes = array();
+	$sources = array();
+	$options = array();
+	$flash_src = '';
 
 	extract(shortcode_atts(array(
 		'src' => '',  
@@ -264,12 +262,12 @@ function mejs_media_shortcode($tagName, $atts){
 	), $atts));
 
 	if ($type) {
-		$type_attribute = 'type="'.$type.'"';
+		$attributes[] = 'type="'.$type.'"';
 	}
 
 /*
 	if ($src) {
-		$src_attribute = 'src="'.htmlspecialchars($src).'"';
+		$attributes[] = 'src="'.htmlspecialchars($src).'"';
 		$flash_src = htmlspecialchars($src);
 	}
 */
@@ -278,7 +276,7 @@ function mejs_media_shortcode($tagName, $atts){
 	
 		// does it have an extension?
 		if (substr($src, strlen($src)-4, 1)=='.') {
-			$src_attribute = 'src="'.htmlspecialchars($src).'"';
+			$attributes[] = 'src="'.htmlspecialchars($src).'"';
 			$flash_src = htmlspecialchars($src);
 		} else {
 			
@@ -342,113 +340,97 @@ function mejs_media_shortcode($tagName, $atts){
 		}
 	}	
 	
-	
-
+	// <source> tags
 	if ($mp4) {
-		$mp4_source = '<source src="'.htmlspecialchars($mp4).'" type="'.$tagName.'/mp4" />';
+		$sources[] = '<source src="'.htmlspecialchars($mp4).'" type="'.$tagName.'/mp4" />';
 		$flash_src = htmlspecialchars($mp4);
 	}
-	
 	if ($mp3) {
-		$mp3_source = '<source src="'.htmlspecialchars($mp3).'" type="'.$tagName.'/mp3" />';
+		$sources[] = '<source src="'.htmlspecialchars($mp3).'" type="'.$tagName.'/mp3" />';
 		$flash_src = htmlspecialchars($mp3);
-	}	
-
+	}
 	if ($webm) {
-		$webm_source = '<source src="'.htmlspecialchars($webm).'" type="'.$tagName.'/webm" />';
+		$sources[] = '<source src="'.htmlspecialchars($webm).'" type="'.$tagName.'/webm" />';
 	}
-
 	if ($ogg) {
-		$ogg_source = '<source src="'.htmlspecialchars($ogg).'" type="'.$tagName.'/ogg" />';
+		$sources[] = '<source src="'.htmlspecialchars($ogg).'" type="'.$tagName.'/ogg" />';
 	}
-	
 	if ($flv) {
-		$flv_source = '<source src="'.htmlspecialchars($flv).'" type="'.$tagName.'/flv" />';
-	}	
-
+		$sources[] = '<source src="'.htmlspecialchars($flv).'" type="'.$tagName.'/flv" />';
+	}
 	if ($wmv) {
-		$wmv_source = '<source src="'.htmlspecialchars($wmv).'" type="'.$tagName.'/wmv" />';
+		$sources[] = '<source src="'.htmlspecialchars($wmv).'" type="'.$tagName.'/wmv" />';
 	}	
-
-
 	if ($captions) {
-		$captions_source = '<track src="'.$captions.'" kind="subtitles" srclang="'.$captionslang.'" />';
+		$sources[] = '<track src="'.$captions.'" kind="subtitles" srclang="'.$captionslang.'" />';
 	}  
 
+	// <audio|video> attributes
 	if ($width && $tagName == 'video') {
-		$width_attribute = 'width="'.$width.'"';
+		$attributes[] = 'width="'.$width.'"';
 	}
-
 	if ($height && $tagName == 'video') {
-		$height_attribute = 'height="'.$height.'"';
+		$attributes[] = 'height="'.$height.'"';
 	}    
-
 	if ($poster) {
-		$poster_attribute = 'poster="'.htmlspecialchars($poster).'"';
+		$attributes[] = 'poster="'.htmlspecialchars($poster).'"';
 	}
-
 	if ($preload) {
-		$preload_attribute = 'preload="'.$preload.'"';
+		$attributes[] = 'preload="'.$preload.'"';
 	}
-
 	if ($autoplay) {
-		$autoplay_attribute = 'autoplay="'.$autoplay.'"';
+		$attributes[] = 'autoplay="'.$autoplay.'"';
 	}
 
+	// MEJS JavaScript options
 	if ($loop) {
-		$loop_option = ', loop: ' . $loop;
+		$options[]  = 'loop: ' . $loop;
 	}
 
-	// CONTROLS
-	$controls_option = ",features: ['playpause'";
-	if ($progress == 'true')
-		$controls_option .= ",'current','progress'";
-	if ($duration == 'true')
-		$controls_option .= ",'duration'";
-	if ($volume == 'true')
-		$controls_option .= ",'volume'";
-	$controls_option .= ",'tracks'";
-	if ($fullscreen == 'true')
-		$controls_option .= ",'fullscreen'";		
-	$controls_option .= "]";
+	// CONTROLS array
+	$controls_option[] = '"playpause"';
+	if ($progress == 'true') {
+		$controls_option[] = '"current"';
+		$controls_option[] = '"progress"';
+	}
+	if ($duration == 'true') {
+		$controls_option[] = '"duration"';
+	}
+	if ($volume == 'true') {
+		$controls_option[] = '"volume"';
+	}
+	$controls_option[] = '"tracks"';
+	if ($fullscreen == 'true') {
+		$controls_option[] = '"fullscreen"';		
+	}
+	$options[] = '"features":[' . implode(',', $controls_option) . ']';
 	
-	// AUDIO SIZE
-	$audio_size = '';
+	// <audio> size
 	if ($tagName == 'audio') {
-		$audio_size = ',audioWidth:'.$width.',audioHeight:'.$height;
+		$options[] = '"audioWidth":'.$width;
+		$options[] = '"audioHeight":'.$height;
 	}
 	
-	// VIDEO class (skin)
-	$video_skin_attribute = '';
-	if ($skin != '' && $tagName == 'video') {
-		$video_skin_attribute = 'class="mejs-'.$skin.'"';
+	// <video> class (skin)
+	$skin_class = '';
+	if ($skin != '') {
+		$skin_class  = 'mejs-' . $skin;
 	}
+	
+	
+	// BUILD HTML
+	$attributes_string = !empty($attributes) ? implode(' ', $attributes) : '';
+	$sources_string = !empty($sources) ? implode("\n\t\t", $sources) : '';
+	$options_string = !empty($options) ? '{' . implode(',', $options) . '}' : '';
 
-	$mediahtml .= <<<_end_
-	<{$tagName} id="wp_mep_{$mediaElementPlayerIndex}" {$src_attribute} {$type_attribute} {$width_attribute} {$height_attribute} {$poster_attribute} controls="controls" {$preload_attribute} {$autoplay_attribute} $video_skin_attribute>
-		{$mp4_source}
-		{$mp3_source}
-		{$webm_source}
-		{$flv_source}
-		{$wmv_source}
-		{$ogg_source}
-		{$captions_source}
+	$mediahtml = <<<_end_
+	<{$tagName} id="wp_mep_{$mediaElementPlayerIndex}" controls="controls" {$attributes_string} class="mejs-player {$skin_class}" data-mejsoptions='{$options_string}'>
+		{$sources_string}
 		<object width="{$width}" height="{$height}" type="application/x-shockwave-flash" data="{$dir}flashmediaelement.swf">
 			<param name="movie" value="{$dir}flashmediaelement.swf" />
 			<param name="flashvars" value="controls=true&amp;file={$flash_src}" />			
 		</object>		
 	</{$tagName}>
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-	$('#wp_mep_$mediaElementPlayerIndex').mediaelementplayer({
-		m:1
-		{$loop_option}
-		{$controls_option}
-		{$audio_size}
-	});
-});
-</script>
-
 _end_;
 
 	$mediaElementPlayerIndex++;

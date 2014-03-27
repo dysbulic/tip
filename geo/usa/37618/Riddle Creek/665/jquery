@@ -1,0 +1,197 @@
+$( function() {
+    var ns = {
+        html: 'http://www.w3.org/1999/xhtml'
+    }
+
+    function parseViewBox( value ) {
+        var viewBox = value.split(/[, ]+/)
+        return viewBox.map( function( val ) {
+            return isNaN( val ) ? 0 : parseFloat( val )
+        } )
+    }
+
+    $.fx.step['viewBox'] = function( fx ) {
+        var attr = fx.elem.attributes.getNamedItem( 'viewBox' )
+        if( ! fx.set ) {
+            fx.start = parseViewBox( attr ? attr.nodeValue : '' )
+            fx.end = parseViewBox( fx.end )
+            fx.set = true
+        }
+
+        var box = $.map( fx.start, function( n, i ) {
+            return ( n + fx.pos * ( fx.end[i] - n ) )
+        }).join(' ')
+
+        ;(attr ? attr.nodeValue = box : fx.elem.setAttribute( 'viewBox', box ) )
+    }
+
+    function layersList( $root ) {
+        var $children = $root.children( '[inkscape\\:groupmode="layer"]' )
+        var $list = $('<ul/>')
+
+        $children.each( function() {
+            var id = $.guid++
+            var $layer = $(this)
+            var $visibilityLabel = (
+                $('<label/>')
+                    .attr( {
+                        class: 'layer-visible',
+                        for: id,
+                    } )
+            )
+            var $visibilityCheck = (
+                $('<input/>')
+                    .attr( {
+                        class: 'layer-visible',
+                        type: 'checkbox',
+                        id: id,
+                        'auto-hide': $layer.attr( 'auto-hide' ),
+                    } )
+                    .change( function() {
+                        var visible = $(this).is( ':checked' )
+                        if( visible ) {
+                            $(this).closest( 'li' )
+                                .siblings()
+                                .children( '.controls' )
+                                .children( 'input.layer-visible' )
+                                .not( '[auto-hide="false"]' )
+                                .prop( 'checked', false )
+                                .change()
+                        }
+                        $layer.toggle( visible )
+                    } )
+            )
+            if( $layer.css( 'display' ) != 'none' ) {
+                $visibilityCheck.attr( { checked: true } )
+            }
+
+            id = $.guid++
+
+            var $sub = layersList( $layer )
+
+            var $childrenLabel = (
+                $('<label/>')
+                    .attr( {
+                        class: 'children-visible',
+                        for: id,
+                    } )
+            )
+            var $childrenCheck = (
+                $('<input/>')
+                    .attr( {
+                        class: 'children-visible',
+                        type: 'checkbox',
+                        id: id,
+                    } )
+                    .click( function() {
+                        $sub.toggle( $(this).is( ':checked' ) )
+                    } )
+            )
+            
+            var $text =
+                $('<span/>')
+                .text( $layer.attr( 'inkscape:label' ) )
+
+            $text.click( function() {
+                var elem = $layer.get(0)
+                var svg = elem.ownerDocument.documentElement
+                var bbox = elem.getBBox()
+
+
+                $(this).parents()
+                    .children( '.controls' )
+                    .children( 'input.layer-visible' )
+                    .not( '[auto-hide="false"]' )
+                    .prop( 'checked', true )
+                    .change() // not fired
+                
+                try {
+                    var tfm2elm = elem.getTransformToElement( svg )
+                } catch( e ) {
+                    console.error( e.message )
+                    if( window.confirm( "Loaded incorrectly. Reload?" ) ) {
+                        location.reload()
+                    }
+                }
+
+                var pad = 2
+
+                var origin = svg.createSVGPoint()
+                origin.x = bbox.x - pad
+                origin.y = bbox.y - pad
+
+                var dest = svg.createSVGPoint()
+                dest.x = origin.x + bbox.width + 2 * pad
+                dest.y = origin.y + bbox.height + 2 * pad
+
+                origin = origin.matrixTransform(tfm2elm)
+                dest = dest.matrixTransform(tfm2elm)
+
+                dest.x -= origin.x
+                dest.y -= origin.y
+
+                var newBox = [origin.x, origin.y, dest.x, dest.y].join( ' ' )
+
+                $(svg).animate( {
+                    viewBox: newBox
+                } )
+            } )
+
+            var $item =
+                $('<li/>')
+                .append(
+                    $('<div/>').addClass( 'controls' )
+                        .append( $childrenCheck )
+                        .append( $childrenLabel )
+                        .append( $visibilityCheck )
+                        .append( $visibilityLabel )
+                        .append( $text )
+                )
+           
+            if( $sub.children().size() > 0 ) {
+                $item.append( $sub )
+            } else {
+                $childrenLabel.addClass( 'empty' )
+            }
+            
+            $list.append( $item )
+
+            $list.hide()
+        } )
+        return $list
+    }
+
+    var svgElem = document.getElementById("map")
+    var loaded = false
+    svgElem.addEventListener('load', function() { // Getting called 1-3 times
+        if( ! loaded ) {
+            loaded = true
+            var svg = this.contentDocument
+            var $list = layersList( $(svg.documentElement) )
+            $('nav').append( $list )
+            $list.show()
+        }
+    }, false)
+
+    var id = 'dyn-visible'
+    var $nav = $('nav')
+    var $navVisible = $('<input/>')
+        .attr( {
+            id: id,
+            type: 'checkbox'
+        } )
+        .change( function() {
+            $nav.css( {
+                left: $(this).is( ':checked' ) ? 0 : ''
+            } )
+        } )
+    
+    $nav
+        .prepend( $('<label/>').attr( { for: id } ) )
+        .prepend( $navVisible )
+        .click( function( event ) {
+            if( $nav.get(0) == event.target && ! $navVisible.is( ':checked' ) ) {
+                $navVisible.prop( 'checked', true ).change()
+            }
+        } )
+} )

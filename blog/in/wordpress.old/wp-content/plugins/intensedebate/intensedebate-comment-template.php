@@ -7,8 +7,6 @@ if ( 0 == get_option( 'id_revertMobile' ) && id_is_mobile() ) :
 	// Display the comments template from the active theme
 	id_get_original_comment_template();
 else :
-	$bits = parse_url( WP_PLUGIN_URL );
-	$xd_base = $bits['path'];
 ?>
 	<div id='idc-container'></div>
 	<div id="idc-noscript">
@@ -16,7 +14,6 @@ else :
 	</div>
 	<script type="text/javascript">
 	/* <![CDATA[ */
-	var idc_xd_receiver = '<?php echo $xd_base; ?>/intensedebate/xd_receiver.htm';
 	function IDC_revert() { document.getElementById('idc-loading-comments').style.display='none'; if ( !document.getElementById('IDCommentsHead') ) { document.getElementById('idc-noscript').style.display='block'; document.getElementById('idc-comment-wrap-js').parentNode.removeChild(document.getElementById('idc-comment-wrap-js')); } else { document.getElementById('idc-noscript').style.display='none'; } }
 	idc_ns = document.getElementById('idc-noscript');
 	idc_ns.style.display='none'; idc_ld = document.createElement('div');

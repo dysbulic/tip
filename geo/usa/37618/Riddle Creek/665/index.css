@@ -1,0 +1,165 @@
+nav {
+    background-color: #06F;
+    border-color: #36F;
+}
+
+span {
+    color: white;
+    font-family: sans-serif;
+    font-size: 17px;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; 
+}
+
+nav:after {
+    border-color: transparent transparent transparent #39F;
+}
+
+nav .controls:hover {
+    background-color: #39F;
+}
+
+ul {
+    list-style: none;
+    padding-left: .75em;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+#map {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+nav {
+    position: fixed;
+    left: -16em;
+    top: 0;
+    bottom: 0;
+    border-right-width: 20px;
+    border-right-style: solid;
+    box-shadow: 4px 0 5px rgba(0,0,0,0.2);
+    z-index: 1;
+    cursor: pointer;
+    padding-top: 1.5em;
+}
+ 
+nav:after {
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    right: -20px;
+    top: 10em;
+    border-width: 15px 10px;
+    border-style: solid;
+}
+
+nav > ul {
+    width: 14em;
+    list-style-type: none;
+    margin: 0;
+    padding-right: 1em;
+}
+
+nav > ul {
+    overflow: auto;
+    max-height: 100%;
+}
+
+nav, nav * {
+    -webkit-transition: all 600ms ease;
+    -moz-transition: all 600ms ease;
+    -ms-transition: all 600ms ease;
+    -o-transition: all 600ms ease;
+    transition: all 600ms ease;
+}
+
+nav span {
+    max-width: 100%;
+    padding: .25em .5em;
+}
+
+#nav-visible:checked ~ nav, nav:hover {
+    left: 0;
+}
+
+#floors {
+    display: block;
+    width: 100%;
+}
+
+[for="dyn-visible"], #dyn-visible {
+    position: absolute;
+    top: 50%;
+    right: -3em;
+}
+
+#dyn-visible {
+    display: none;
+}
+
+[for="dyn-visible"]:after {
+    content: '↦';
+    font-size: 15pt;
+    background-color: orange;
+    border-radius: .25em;
+    padding: .25em;
+    border: 1px solid;
+    z-index: 100;
+}
+
+[for="dyn-visible"]:hover:after {
+    background-color: darkorange;
+}
+
+#dyn-visible:checked ~ [for="dyn-visible"]:after {
+    content: '↤';
+}
+
+label.layer-visible {
+    background-image: url('http://dhappy.org/.../image/icon/eye/xed/');
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 1em;
+    min-height: 1em;
+    margin-right: .5em;
+}
+
+input.layer-visible, input.children-visible {
+    display: none;
+}
+
+input:checked + label.layer-visible {
+    background-image: url('http://dhappy.org/.../image/icon/eye/');
+}
+
+label.children-visible:before {
+    content: '+';
+    font-face: monospace;
+    font-weight: bold;
+}
+
+input:checked + label.children-visible:before {
+    content: '-';
+}
+
+label.children-visible.empty:before {
+    content: '' ! important;
+}
+
+.controls {
+    display: table;
+    width: 100%;
+}
+
+label, input, span {
+    display: table-cell;
+}
+
+label {
+    width: 1em;
+}

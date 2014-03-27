@@ -1,1 +1,0 @@
-../shadow_body/ie7_triple_columns.js

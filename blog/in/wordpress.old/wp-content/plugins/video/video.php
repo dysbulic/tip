@@ -4,7 +4,7 @@
  * @category video
  * @author Automattic Inc
  * @link http://automattic.com/wordpress-plugins/#videopress VideoPress
- * @version 1.5.2
+ * @version 1.5.3
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
@@ -15,8 +15,8 @@ Description: Upload new videos to <a href="http://videopress.com/?ref=plugin">Vi
 Author: Automattic, Niall Kennedy, Joseph Scott, Gary Pendergast
 Contributor: Hailin Wu
 Author URI: http://automattic.com/wordpress-plugins/#videopress
-Version: 1.5.2
-Stable tag: 1.5.2
+Version: 1.5.3
+Stable tag: 1.5.3
 License: GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
@@ -279,6 +279,8 @@ class VideoPress {
 		 */
 		if ( $freedom === false && (bool) get_option( 'video_player_freedom', false ) )
 			$freedom = true;
+			
+		$forcestatic = get_option( 'video_player_static', false );
 
 		$width = absint($w);
 		unset($w);
@@ -297,7 +299,8 @@ class VideoPress {
 		$options = array(
 			'freedom' => $freedom,
 			'force_flash' => (bool) $flashonly,
-			'autoplay' => (bool) $autoplay
+			'autoplay' => (bool) $autoplay,
+			'forcestatic' => $forcestatic
 		);
 		unset( $freedom );
 		unset( $flashonly );
@@ -844,8 +847,13 @@ class VideoPress_Player {
 			$content = '';
 		} elseif ( is_wp_error( $this->video ) ) {
 			$content = $this->error_message( $this->video );
-		} elseif ( ( isset( $this->video->restricted_embed ) && $this->video->restricted_embed === true ) || ( isset( $this->options['force_flash'] ) && $this->options['force_flash'] === true ) ) {
+		} elseif ( isset( $this->options['force_flash'] ) && $this->options['force_flash'] === true ) {
 			$content = $this->flash_object();
+		} elseif ( isset( $this->video->restricted_embed ) && $this->video->restricted_embed === true ) {
+			if( $this->options['forcestatic'] )
+				$content = $this->flash_object();
+			else
+				$content = $this->html5_dynamic();
 		} elseif ( isset( $this->options['freedom'] ) && $this->options['freedom'] === true ) {
 			$content = $this->html5_static();
 		} elseif ( ! in_the_loop() ) {

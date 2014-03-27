@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Building a Schedule with D3</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href=".../style/main/css" />
+    <style type="text/css">
+    </style>
+    <link rel="icon" type="image/png" href=".../image/icon/cigarette/png" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>Building a Schedule with D3</h1>
+      <h2><a href="http://dhappy.org">Will Holcomb</a></h2>
+      <h2>11 December 2013</h2>
+    </div>
+
+    <p>Recently the <a href="//oneacrecafe.org">One Acre Cafe</a> opened in Johnson City. It is a non-profit <a href="//oneworldeverybodyeatsfoundation.org">community café</a> and, due to budget constraints, they are without software to manage their volunteer staffing.</p>
+
+    <p>I thought I would do a <a href="//github.com/OneAcreCafe/volunteers">simple rails app</a> (<a href="//vols.herokuapp.com">live</a>) to try and address the problem. For rendering the calendar I decided to do it client-side using <a href="//d3js.org"><acronym title="Data-Driven Documents">D3</acronym></a>. My initial version was in <acronym title="Simple Vector Graphics">SVG</acronym>, based on the <a href="//bl.ocks.org/mbostock/4063318">Calendar View example</a>. The SVG layout relied on static block sizes, so I reimplemented it in <acronym title="Hypertext Markup Language">HTML</acronym>.</p>
+
+    <p>The data model is relatively straightforward. There are a set of tasks with a name and icon, then shifts are for a task with a start and end times. The program begins by downloading the list of tasks and restructuring them to be accessible by id:</p>
+
+    <pre class="prettyprint">d3.json( '/tasks.json', function( error, tasks ) {
+  var newTasks = {}
+  tasks.forEach( function( t ) { newTasks[t.id] = t } )
+  tasks = newTasks
+  ⋮</pre>
+
+    <p>The <code>json</code> method is much like <a href="//api.jquery.com/jQuery.getJSON/">jQuery's <code>getJSON</code> method</a> in that it does an asynchronous request and calls the handler with the parsed object.</p>
+
+    <p>There are two possible endpoints for the shifts: <code>shifts</code> which returns all shifts and <code>shifts/open</code> which returns only shifts in the future which still need workers. To get the appropriate set I used the <code>window.location.pathname</code>:</p>
+
+    <pre class="prettyprint"><![CDATA[var url = window.location.pathname
+  url = url.length <= 1 ? '/shifts/open' : url
+  if( url == '/shifts' || url == '/shifts/open' ) {
+    d3.json( url + '.json', function( error, shifts ) {
+    ⋮]]></pre>
+
+    <p>Dates are not automatically converted into javascript objects, so the first step is to parse them:</p>
+
+    <pre class="prettyprint"><![CDATA[for( var i = 0; i < shifts.length; i++ ) {
+  shifts[i].start = new Date( Date.parse(shifts[i].start ) )
+  shifts[i].end = new Date( Date.parse(shifts[i].end ) )
+}]]></pre>
+
+    <p>Next I used the <code>min</code> and <code>max</code> functions to find the range the calendar should cover. <a href="//github.com/mbostock/d3/wiki/Time-Intervals">D3's intervals</a> are inclusive, so they give all dates within a range. This means that to include the first shift, the start date needs to be moved back a week:</p>
+
+    <pre class="prettyprint">var start = new Date( d3.min( shifts, function( d ) { return d.start } ) )
+var end = new Date( d3.max( shifts, function( d ) { return d.end } ) )
+                
+start.setDate( start.getDate() - 7 )</pre>
+
+    <p>Note that <code>new Date</code> is used to clone the returned date. D3 returns a reference, so without the clone setting the date on the start would change the property of the shift.</p>
+
+    <p>The structure of the page is <code>div</code>s for each week with an ordered lists for each day. The first thing to do is generate the week <code>div</code>s. They are appended to a <code>div</code> with an id of <q>shifts</q> that is already in the page.</p>
+
+    <pre class="prettyprint">var weeks = d3.select( '#shifts' ).selectAll('.week')
+  .data( function( d ) { return d3.time.weeks( start, end ) } )
+  .enter()
+  .append( 'div' )
+  .attr( {
+    class: 'week',
+    week: week,
+    month: monthNumber,
+    year: year,
+   } )</pre>
+
+    <p>The <code>data</code> method specifies dataset to use to generate the elements. The <code>weeks</code> method returns an array of the the Sundays between <code>start</code> and <code>end</code>. The <code>enter</code> method calls the chained methods for each member of the dataset. Some additional information is encoded in the <code>div</code> attributes. They rely on <a href="//github.com/mbostock/d3/wiki/Time-Formatting">D3's format methods</a> which take a date and return a formatted string.</p>
+
+    <pre class="prettyprint">var week = d3.time.format( '%U' ),
+  monthNumber = d3.time.format( '%m' ),
+  year = d3.time.format( '%Y' )</pre>
+
+    <p>Adding the <code>div</code> for each day uses the <code>data</code> and <code>enter</code> methods again:</p>
+
+    <pre class="prettyprint">var days = weeks.selectAll( '.day' )
+  .data( function( d ) { return d3.time.days( d, nextWeek( d ) ) } )
+  .enter()
+  .append( 'div' )
+  .attr( {
+    class: 'day',
+    day: day,
+    weekday: weekday
+  } )</pre>
+
+    <p>The argument to the <code>data</code> method is each of the dates from the weeks. The <code>nextWeek</code> method simply adds a week to the given date:</p>
+    
+    <pre class="prettyprint">var nextWeek = function( d ) {
+  var nextWeek = new Date( d )
+  nextWeek.setDate( d.getDate() + 7 )
+  return nextWeek
+}</pre>
+
+    <p>There is a label for the months that is added to the weeks element after the day <code>div</code>:</p>
+
+    <pre class="prettyprint">weeks
+  .filter( function( d, i ) {
+    return i == 0 || ( month( d ) != month( nextWeek( d ) ) )
+  } )
+  .append( 'div' )
+  .classed( 'month', true )
+  .text( function( d ) { return month( nextWeek( d ) ) } )</pre>
+
+    <p>The <code>filter</code> method reduces the weeks array to elements to the first week and the weeks where a month begins. The <code>classed</code> method sets the class attribute to <q>month</q>. The month names are rotated to line up with the edge of the calendar with the following <acronym title="Cascading Stylesheet">CSS</acronym>:</p>
+
+    <pre class="prettyprint">.month {
+  transform: rotate(90deg);
+  transform-origin: bottom left;
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Safari and Chrome */
+  -webkit-transform-origin: bottom left;
+}</pre>
+
+    <p>Days also have a label which is simply the date. Generating those is simple:</p>
+
+    <pre class="prettyprint">var titles = days
+  .append( 'div' )
+  .classed( 'title', true )
+  .text( day )</pre>
+
+    <p>I want the schedule for each week to start and end based on the data for that week. The following code finds those bounds:</p>
+
+    <pre class="prettyprint">var weekBounds = d3.nest()
+  .key( function( d ) { return week( d.start ) } )
+  .rollup( function( d ) {
+    return {
+      start: d3.min( d, function( d ) { return d.start.getHours() } ),
+      end: d3.max( d, function( d ) { return d.end.getHours() } ),
+    }
+  } )
+  .map( shifts )</pre>
+
+    <p>The <code>key</code> functions groups the data and produces an array of objects with a <code>name</code> property set to the value returned by <code>key</code> and a <code>values</code> property that is an array of the matching entries. This code groups entries by the week number of the start time.</p>
+
+    <p>The <code>rollup</code> function compacts the array returned by <code>key</code>. It is called with the array from the <code>values</code> property. This code finds the minimum and maximum hours within the week.</p>
+
+    <p>Finding the hours for a given day looks like this:</p>
+
+    <pre class="prettyprint">var hoursForDay = function( d ) {
+  var start = new Date( d ),
+      end = new Date( d )
+  start.setHours( weekBounds[week( d )].start )
+  end.setHours( weekBounds[week( d )].end )
+                    
+  return d3.time.hours( start, end )
+}</pre>
+
+    <p>There is an unordered list for each hour. The structure should look familiar:</p>
+
+    <pre class="prettyprint">var hours = days
+  .filter( function( d ) { return week( d ) in weekBounds } )
+  .selectAll( '.hour' )
+  .data( hoursForDay )
+  .enter()
+  .append( 'ul' )
+  .attr( {
+    class: 'hour',
+    hour: hour
+  } )</pre>
+
+    <p>Shifts need to be added to the appropriate hours. To do this the data is again processed with the <code>key</code> and <code>rollup</code> methods:</p>
+
+    <pre class="prettyprint">var shiftStarts = d3.nest()
+  .key( function( d ) { return d.start } )
+  .rollup( function( d ) { return d } )
+  .map( shifts )</pre>
+
+    <p>The structure of each hour follows this basic template:</p>
+
+    <pre class="prettyprint"><![CDATA[<ul class="hour">
+  <li class="shift">
+    <label>
+      <input type="radio" name="shift[id]"/>
+      <img class="icon" src="//icon"/>
+    </label>
+  </li>
+  ⋮]]></pre>
+
+    <p>The list item and label are generated with the following code:</p>
+
+    <pre class="prettyprint">var shifts = hours
+  .filter( function( d ) { return d in shiftStarts } )
+  .classed( 'open', true )
+  .selectAll( '.shift' )
+  .data( function( d ) { return shiftStarts[d] } )
+  .enter()
+  .append( 'li' )
+  .classed( 'shift', true )
+  .classed( 'taken', function( d ) { return d.taken } )
+  .on( 'dblclick', function( d ) { window.location = d.url } )
+  .append( 'label' )</pre>
+
+    <p>This illustrates an alternate version of the <code>classed</code> method which only adds the <q>taken</q> class if the taken property of the shift is set. The <code>on</code> method operates much like <a href="//api.jquery.com/on/">jQuery's</a>.</p>
+    
+    <p>The last step is adding the radio button and image. That is a simple append:</p>
+
+    <pre class="prettyprint">shifts
+  .append( 'input' )
+  .attr( {
+    type: 'radio',
+    name: function( d ) { return 'shift[' + d.start + ']' } 
+  } )
+                
+shifts
+  .append( 'img' )
+  .classed( 'icon', true )
+  .attr( {
+    src: function( d ) {
+      return tasks[d.task_id] ? tasks[d.task_id].icon : null
+    }
+  } )</pre>
+
+    <script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js" type="text/javascript"></script>
+  </body>
+</html>

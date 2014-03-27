@@ -4,12 +4,14 @@ Plugin Name: VideoPress
 Tags: video, videopress, wpvideo, WordPress.com
 Text Domain: video
 Requires at least: 3.0
-Tested up to: 3.2
-Stable tag: 1.5.2
+Tested up to: 3.3
+Stable tag: 1.5.3
 
 Manage and embed videos hosted on VideoPress. Requires a WordPress.com blog with the VideoPress premium upgrade.
 
 == Description ==
+
+Once you've downloaded the plugin, head over to [VideoPress.com](http://videopress.com/?ref=plugpage "VideoPress WordPress.com upgrade") to sign up for an account.
 
 Add VideoPress videos stored on WordPress.com to your self-hosted WordPress.org site through the use of simple shortcodes. Edit video metadata directly from your blog's administrative interface.
 
@@ -24,7 +26,7 @@ You can specify the width and height of the video container with w= h= shortcode
 * `[videopress xyz h=300]` specifies the height of the video container to be 300px, while preserving the aspect ratio.
 * `[videopress xyz freedom=true]` display videos in only Freedom-loving formats (currently Ogg with Theora video and Vorbis audio).
 
-You will need an account on WordPress.com with the VideoPress upgrade in order to use this plugin. If you don't have already have a WordPress.com account signing up is easy and only takes a few minutes. Visit the "Upgrades" section of wp-admin on your new WordPress.com blog and purchase a [VideoPress upgrade](http://wordpress.com/products/#videopress "VideoPress WordPress.com upgrade").
+You will need an account on WordPress.com with the VideoPress upgrade in order to use this plugin. If you don't have already have a WordPress.com account signing up is easy and only takes a few minutes. Visit the "Upgrades" section of wp-admin on your new WordPress.com blog and purchase a [VideoPress upgrade](http://videopress.com/?ref=plugpage "VideoPress WordPress.com upgrade").
 
 Video preview elements and HTML5 video are directly inserted into your WordPress post or page, enabling custom styling through CSS or inclusion in your site statistics.
 
@@ -73,6 +75,11 @@ Some video publishers restrict video embedding and sharing features. HTML5 video
 5. Native HTML5 <video> playback demonstrated on iOS 5. Includes AirPlay support for sending videos to local compatible screens.
 
 == Changelog ==
+
+= 1.5.3 =
+* Added support for playing un-shared videos on iOS and other Flash-free devices. This can be disable if stronger protection from downloading is required.
+* Minor text changes
+* Updated wp-admin media upload icon
 
 = 1.5.2 =
 * Fixed compatibility with the latest version of Jetpack

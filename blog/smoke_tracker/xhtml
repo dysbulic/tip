@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Android Smoke Tracker</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href=".../style/main/css" />
+    <style type="text/css">
+    </style>
+    <link rel="icon" type="image/png" href=".../image/icon/cigarette/png" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>Android Smoke Tracker</h1>
+      <h2><a href="http://dhappy.org">Will Holcomb</a></h2>
+      <h2>4 September 2013</h2>
+    </div>
+
+    <p>I'm interested in tracking my behaviors over time to help get a better sense of them. I've been using <a href="//play.google.com/store/apps/details?id=uk.amimetic.faillog">Fail Log</a> to keep track of my smoking habit. I like the app for a couple reasons:</p>
+
+    <ul>
+      <li>It includes a widget that allows logging an event with two clicks</li>
+      <li>There is rudimentary data analytics which include a heatmap showing usage through the week and a breakdown according to times</li>
+      <li>The list of activities is extensible</li>
+    </ul>
+
+    <p>The app is less than ideal in that:</p>
+
+    <ul>
+      <li>Data is available only on the phone; no syncing with the internet</li>
+      <li>The analytics are largely textual</li>
+      <li>I'd like the name to be a bit more ambiguous. I'm looking to collect data to analyze and don't want to be so judgmental about it.</li>
+    </ul>
+
+    <p>I'd like an application that provides a web interface for analyzing the data with more graphical elements. This blog post will cover the creation of the initial data collection application.</p>
+
+    <p>The application is available as a <a href="//wholcomb.github.io/smoke_tracker/SmokingTracker.apk"><acronym title="Android Package">APK</acronym> on Github</a>. I'll be developing using <a href="//eclipse.org/">Eclipse</a>. To start developing:</p>
+
+    <ol>
+      <li>Download the code from <a href="//github.com/wholcomb/smoke_tracker">github</a></li>
+      <li>In Eclipse: <code>File</code> &rarr; <code>Import</code></li>
+      <li>For import source use: <code>Android</code> &rarr; <code>Existing Android Code Into Workspace</code></li>
+    </ol>
+
+    <p>The <acronym title="User Interface">UI</acronym> looks like:</p>
+
+    <img style="display: block; margin: auto;" alt="" src="//lh3.googleusercontent.com/-COMbt4lZqDw/UkM7EDR7mAI/AAAAAAAAAgc/7Opvsh1oNoY/w228-h405-no/Screenshot_2013-09-25-15-34-54.png"/>
+
+    <p>The tab layout is based on the <a href="//grepcode.com/file_/repository.grepcode.com/java/ext/com.google.android/android-apps/4.0.1_r1/com/example/android/supportv13/app/ActionBarTabsPager.java/?v=source">ActionBarTabsPager</a> application from the support v13 examples. The <a href="//github.com/wholcomb/smoke_tracker/blob/master/src/com/synaptian/smoketracker/habits/MainActivity.java">MainActivity</a> class handles switching between Fragments. The operable part of the class is:</p>
+
+    <pre class="prettyprint">protected void onCreate(Bundle savedInstanceState) {
+    ⋮
+    mTabsAdapter.addTab(bar.newTab().setText(R.string.habits_tab), HabitListFragment.class, null);
+    mTabsAdapter.addTab(bar.newTab().setText(R.string.events_tab), EventListFragment.class, null);
+    mTabsAdapter.addTab(bar.newTab().setText(R.string.goals_tab), GoalListFragment.class, null);
+    mTabsAdapter.addTab(bar.newTab().setText(R.string.statistics_tab), StatisticsFragment.class, null);</pre>
+
+    <p>The <code>R.string</code> entries are defined in <a href="//github.com/wholcomb/smoke_tracker/blob/master/res/values/strings.xml"><code>res/values/strings.xml</code></a> and the first tab loads an instance of <a href="//github.com/wholcomb/smoke_tracker/blob/master/src/com/synaptian/smoketracker/habits/HabitListFragment.java">HabitListFragment</a>. This is a subclass of <a href="//developer.android.com/reference/android/app/ListFragment.html">ListFragment</a> that shows the habit names and a timer from the last time that habit was recorded.</p>
+
+    <p>Data is stored in a <a href="//sqlite.org">SQLite</a> database. Rather that the data being accessed directly, queries are handled by a <a href="//github.com/wholcomb/smoke_tracker/blob/master/src/com/synaptian/smoketracker/habits/contentprovider/MyHabitContentProvider.java">ContentProvider</a> which receives a Uri and performs an operation. This method is useful for exposing data to other applications, but represents a risk for unauthorized access.</p>
+
+    <p>Each row in the list is an instantiation of <a href="//github.com/wholcomb/smoke_tracker/blob/master/res/layout/habit_row.xml">res/layout/habit_row.xml</a>. It includes two TextViews and a <a href="//github.com/wholcomb/smoke_tracker/blob/master/src/org/dhappy/android/widget/Timer.java">Timer</a> which shows the time offset from a point. Updating these various items is done with a ViewBinder:</p>
+
+    <pre class="prettyprint">public void onActivityCreated(Bundle savedInstanceState) {
+    ⋮
+    String[] from = new String[] { HabitTable.COLUMN_NAME, HabitTable.COLUMN_COLOR, EventTable.COLUMN_TIME };
+    int[] to = new int[] { R.id.label, R.id.color_block, R.id.timer };
+
+    mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.habit_row, null, from, to, 0);
+
+    mAdapter.setViewBinder(new ViewBinder() {
+        public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+            if(columnIndex == 2) { // Color
+                view.setBackgroundColor(Color.parseColor(cursor.getString(columnIndex)));
+                return true;
+            }
+
+            if(columnIndex == 3) { // Time
+                Timer timer = (Timer) view;
+                if(cursor.getType(columnIndex) == Cursor.FIELD_TYPE_NULL) {
+                    timer.setVisibility(View.GONE);
+                } else {
+                    long time = cursor.getInt(columnIndex);
+                    timer.setStartingTime(time * 1000);
+                }
+                return true;
+           }
+
+           return false;
+        }
+    });</pre>
+
+    <p>You'll note that in the above code there is no database query. The Cursor is not created when the Adapter is initialized, rather that is handled asynchronously by the LoaderManager. The method which creates the Cursor is:</p>
+
+    <pre class="prettyprint">static final String[] HABITS_PROJECTION = new String[] {
+    HabitTable.TABLE_HABIT + "." + HabitTable.COLUMN_ID,
+    HabitTable.COLUMN_NAME,
+    HabitTable.COLUMN_COLOR,
+    "MAX(" + EventTable.COLUMN_TIME + ") as " + EventTable.COLUMN_TIME
+};
+
+public Loader&lt;Cursor> onCreateLoader(int id, Bundle args) {
+    return new CursorLoader(getActivity(), MyHabitContentProvider.HABITS_URI, HABITS_PROJECTION, null, null, null);
+}</pre>
+
+    <p>There is also a <code>GROUP BY</code> statement in the <a href="//github.com/wholcomb/smoke_tracker/blob/master/src/com/synaptian/smoketracker/habits/contentprovider/MyHabitContentProvider.java">ContentProvider</a>.</p>
+
+    <p>When list rows are clicked a new event is created, the view is reloaded, and the visible tab switches to "Events":</p>
+
+    <pre class="prettyprint">public void onListItemClick(ListView l, View v, int position, long id) {
+    ContentValues values = new ContentValues();
+    values.put(EventTable.COLUMN_HABIT_ID, id);
+    values.put(EventTable.COLUMN_TIME, Math.floor(System.currentTimeMillis() / 1000));
+    getActivity().getContentResolver().insert(MyHabitContentProvider.EVENTS_URI, values);
+
+    Toast.makeText(getActivity(), "Added new event", Toast.LENGTH_LONG).show();
+
+    getLoaderManager().restartLoader(0, null, this);
+    mAdapter.notifyDataSetChanged();
+        
+    ((MainActivity) getActivity()).setActiveTab(1);
+}</pre>
+
+    <p>The <a href="//github.com/wholcomb/smoke_tracker/blob/master/src/com/synaptian/smoketracker/habits/EventListFragment.java">EventListFragment</a> is similar to the habits list:</p>
+
+    <img style="display: block; margin: auto;" alt="" src="//lh4.googleusercontent.com/-FYNU8I2AqcM/UkXfv-Q3mrI/AAAAAAAAAgs/LVUaD_dFvhg/w228-h405-no/Screenshot_2013-09-24-14-54-25.png"/>
+    
+    <p>The primary difference is the section headers showing days. This is handled by using an ArrayAdapter rather than a CursorAdapter. Rather than items being loaded directly from the Cursor, an array of <a href="//github.com/wholcomb/smoke_tracker/blob/master/src/org/dhappy/android/widget/ListItem.java">ListItem</a>s is created and <a href="//github.com/wholcomb/smoke_tracker/blob/master/src/org/dhappy/android/widget/HeaderedListAdapter.java">HeaderedListAdapter</a><sup><a href="//github.com/wholcomb/smoke_tracker/issues/1">*</a></sup> loads the appropriate view for each.</p>
+
+    <p>Also the <a href="//github.com/wholcomb/smoke_tracker/blob/master/src/com/synaptian/smoketracker/habits/EventDetailActivity.java">detail view</a> is more complex for events:</p>
+
+    <img style="display: block; margin: auto;" alt="" src="https://lh5.googleusercontent.com/-_6VsJih_UcE/Ukg8xg1JGtI/AAAAAAAAAjg/H75Cc1tO3jo/w219-h389-no/Screenshot_2013-09-29-10-43-50.png"/>
+
+    <p>It is not possible to set the position of a spinner from a database id, so the following code is necessary to set the spinner:</p>
+
+    <pre class="prettyprint">int habitId = cursor.getInt(cursor.getColumnIndexOrThrow(GoalTable.COLUMN_HABIT_ID));
+for(int pos = mAdapter.getCount(); pos >= 0; pos--) {
+  if(mAdapter.getItemId(pos) == habitId) {
+    mHabitSelect.setSelection(pos);
+    break;
+  }
+}</pre>
+
+    <p>The time is stored in the database in seconds rather than milliseconds, so the code for populating the date and time is:</p>
+
+    <pre class="prettyprint">long seconds = cursor.getInt(cursor.getColumnIndexOrThrow(EventTable.COLUMN_TIME));
+eventTime.setTimeInMillis(seconds * 1000);
+      
+mEventDate.updateDate(eventTime.get(Calendar.YEAR),
+                      eventTime.get(Calendar.MONTH),
+                      eventTime.get(Calendar.DAY_OF_MONTH));
+mEventTime.setCurrentHour(eventTime.get(Calendar.HOUR_OF_DAY));
+mEventTime.setCurrentMinute(eventTime.get(Calendar.MINUTE));</pre>
+
+    <p>The goal interface is essentially the same as the habits list and statistics aren't implemented yet.</p>
+
+    <script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js" type="text/javascript"></script>
+  </body>
+</html>

@@ -67,11 +67,11 @@ class VideoPress {
 		if ( ! function_exists( 'json_decode' ) )
 			return;
 
-			add_action( 'wp_head', array( &$this, 'html_head' ), -1 ); // load before enqueue_scripts action
+			add_action( 'wp_head', array( $this, 'html_head' ), -1 ); // load before enqueue_scripts action
 
 		//allow either [videopress xyz] or [wpvideo xyz] for backward compatibility
-		add_shortcode( 'videopress', array( &$this, 'shortcode' ) );
-		add_shortcode( 'wpvideo', array( &$this, 'shortcode' ) );
+		add_shortcode( 'videopress', array( $this, 'shortcode' ) );
+		add_shortcode( 'wpvideo', array( $this, 'shortcode' ) );
 
 		// set default values
 		$this->js_loaded = false;
@@ -157,7 +157,7 @@ class VideoPress {
 		rewind_posts();
 
 		if ( ! empty( $guid ) )
-			add_action( 'wp_enqueue_scripts', array( &$this, 'enqueue_scripts' ), 20 );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
 	}
 
 	/**
@@ -255,7 +255,7 @@ class VideoPress {
 		unset( $freedom );
 		unset( $flashonly );
 
-		add_action( 'wp_footer', array( &$this, 'print_scripts' ), -1 );
+		add_action( 'wp_footer', array( $this, 'print_scripts' ), -1 );
 
 		$player = new VideoPress_Player( $guid, $width, $options );
 		if ( $player instanceOf VideoPress_Player ) {
@@ -561,14 +561,7 @@ class VideoPress_Video {
 
 		// PHP 5.3.3 or newer can throw a warning on a bad input URI. catch that occurance just in case
 		try {
-			// use the component parameter of parse_url if current version of PHP supports
-			if ( version_compare(PHP_VERSION, '5.1.2', '>=') ) {
-				return parse_url( $url, PHP_URL_HOST );
-			} else {
-				$url_parts = parse_url( $url );
-				if ( $url_parts !== false && isset( $url_parts['host'] ) )
-					return $url_parts['host'];
-			}
+			return parse_url( $url, PHP_URL_HOST );
 		} catch (Exception $e){}
 		return false;
 	}

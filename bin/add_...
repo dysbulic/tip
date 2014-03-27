@@ -1,0 +1,27 @@
+#!/bin/bash
+
+function descend {
+    dir="$1"
+    pushd -- "$dir" > /dev/null
+    for file in *; do
+        if [ -d "$file" ]; then
+            descend "$file"
+        fi
+    done
+    [ ! -L ... ] && pwd && ln -s ../...
+    popd > /dev/null
+}
+
+if [ $# -lt 1 ]; then
+    cat <<EOF
+Adds ../... ⇒ ... symlinks to a directory and all its children.
+Expected to be combined with an anchor link . ⇒ ... somewhere below the directory.
+Allows .../style/page/css style references in pages accessing the repository.
+Avoids the use of relative paths, '..', for files that move around (or are accessible via symlink).
+Avoids absolule paths, '/', for projects that are hosted at multiple urls.
+
+ Usage: $0 <root directory>
+EOF
+else
+    descend "$1"
+fi
