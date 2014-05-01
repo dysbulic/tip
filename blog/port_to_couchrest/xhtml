@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Porting from ActiveRecord to CouchRest Model</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" type="text/css" href=".../style/main/css" />
+    <link rel="stylesheet" type="text/css" href="css" />
+    <style type="text/css">
+    </style>
+    <link rel="icon" type="image/png" href=".../image/icon/cigarette/png" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>Porting from ActiveRecord to CouchRest Model</h1>
+      <h2><a href="http://dhappy.org">Will Holcomb</a></h2>
+      <h2>1 May 2014</h2>
+      <hr style="width: 50%;" />
+    </div>
+
+    <p>I have been tasked with writing a mobile app for collecting data about gas wells. My forays into the field before showed me how difficult the synchronization of complex data is, so I wanted to use CouchDB for the data store. CouchDB has a pool of javascript objects, each with a guid so they can be copied with impunity, The server keeps track of a revision history as well as conflict history when there are conflicting writes.</p>
+
+    <p>The rails application that the mobile app will be syncing with is currently running on Postgresql. One solution would be maintaining separate databases and using CouchDB's continuous replication to listen for changes and push them to the rails app. This duplicates data and there's no simple mechanism for listening for changes to the rails database. A better solution would be if the rails app was using the same data store — enter <a href="https://github.com/couchrest/couchrest_model">CouchRest Model</a>.</p>
+
+    <p>The big limitation on CouchRest Model is there are no <code>find</code> or <code>where</code> methods since those rely on SQL. Also an unknown number of other gems rely on ActiveRecord as well. I'm going to chart my progress here.</p>
+
+    <h2>Setup</h2>
+
+    <p>Installing CouchRest Model is as simple as adding <code>gem 'couchrest_model'</code> to the <code>Gemfile</code> and running <code>bundle install</code>.</p>
+
+    <h2>Tests</h2>
+
+    <p>Fortunately, the rails developer added tests. To run just the model tests, I do:</p>
+
+    <ol>
+      <li><code>RAKE_ENV=test rake db:migrate:reset db:test:prepare</code></li>
+      <li><code>rspec spec/models</code></li>
+    </ol>
+
+    <p>And the client needs to be able to run SQL queries on the data, so nevermind&hellip;</p>
+  </body>
+</html>
