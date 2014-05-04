@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Syncing CouchDB to ActiveRecord</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" type="text/css" href=".../style/main/css" />
+    <link rel="stylesheet" type="text/css" href="css" />
+    <style type="text/css">
+    </style>
+    <link rel="icon" type="image/png" href=".../image/icon/cigarette/png" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>Syncing CouchDB to ActiveRecord</h1>
+      <h2><a href="http://dhappy.org">Will Holcomb</a></h2>
+      <h2>1 May 2014</h2>
+      <hr style="width: 50%;" />
+    </div>
+
+    <p>I have been tasked with writing a mobile app for collecting data about gas wells. My forays into the field before showed me how difficult the synchronization of complex data is, so I wanted to use CouchDB for the data store.</p>
+
+    <p>CouchDB has a pool of javascript objects, each with a guid so they can be copied with impunity, The server keeps track of a revision history as well as conflict history when there are conflicting writes.</p>
+
+    <p>Unfortunately, the client needs the capacity to run SQL queries on the data, so backing Rails with CouchRest Model isn't an option. This means running a process to synchronize the databases.</p>
+
+    <p>There are two <acronym title="Object Relational Mapper">ORM</acronym>s being used in the system: Ember data is being used to abstract the mobile data in CouchDB and ActiveRecord is being used to persist the Rails data in Postgresql. I would like to have access to both, but since one is in ruby and the other javascript, that's likely not possible. Scenarios I have imagined:</p>
+
+    <ul>
+      <li>Javascript running in the mobile app syncs using the Ember ORM and Rails JSON API.</li>
+      <li>Same as above, but running in a Node.js app.</li>
+      <li>Ruby listens to changes to the CouchDB app and syncs changes through ActiveRecord.</li>
+      <li>Ruby loads the Ember ORM in therubyracer and syncs changes through ActiveRecord.</li>
+    </ul>
+
+    <p>The last option leverages the ORM on both sides, so I am going to try it. It's unlikely to be efficient, but it should be maintainable.</p>
+
+    <p>ActiveRecord is apparently available in rake tasks, so I will try creating one at <code>lib/tasks/sync.rake</code>:</p>
+
+    <pre class="prettyprint">desc "Sync a couchdb instance with a rails app"
+
+namespace :sync do
+  desc "Sync ActiveRecord to CouchDB"
+  task couch: :environment do
+  end
+end</pre>
+
+    <p>Now I can run <code>rake sync:couch</code> to execute that code. The process that I want is change adapter triggers a javascript method which interfaces with ActiveRecord. The first thing I will test is simply creating a new ActiveRecord instance from javascript.</p>
+
+    <p>To begin, I add <code>therubyracer</code> to my <code>Gemfile</code>. </p>
+
+  </body>
+</html>
