@@ -49,7 +49,126 @@ end</pre>
 
     <p>Now I can run <code>rake sync:couch</code> to execute that code. The process that I want is change adapter triggers a javascript method which interfaces with ActiveRecord. The first thing I will test is simply creating a new ActiveRecord instance from javascript.</p>
 
-    <p>To begin, I add <code>therubyracer</code> to my <code>Gemfile</code>. </p>
+    <p>To begin, I add <code>therubyracer</code> to my <code>Gemfile</code>, do <code>bundle install</code>, and the rake task works.</p>
 
+    <p>I'm uncertain how Ember will react to being loaded outside a browser, so the first thing I will do is load the framework. The ember app is in a separate git repository. It would be nice if it were loaded and kept up to date with the other dependencies using <code>bundler</code>, but I've never created a gem before and don't want to take the time to learn. So, I will simply add it to the repo as a git submodule.</p>
+
+    <p><code>git submodule add git@github.com:synaptian/howlin-wolf-android.git lib/android</code> clones it, then because I'm my code isn't in the master branch <code>cd lib/android &amp;&amp; git checkout feature/ember-mockup</code>.</p>
+
+    <p>Now in my rake task I can add:</p>
+
+    <p><code>cxt.load(Rails.root.join('lib', 'android', 'www', 'js', 'libs', 'ember-1.5.1.js'))</code></p>
+
+    <p>When I run the task, I get an error: <code>window is not defined</code>. In looking through the code, there is generally a check if window is defined, but it is missing from line 202. So, the proper path is an update to Ember. Forking the project and <code>git submodule add git@github.com:wholcomb/ember.js.git lib/ember</code> adds it to my project.</p>
+
+    <p>Next I build it:</p>
+
+    <ol>
+      <li>bundle install</li>
+      <li>npm install</li>
+      <li>rake dist</li>
+    </ol>
+
+    <p>Next I change the code in my rake task to: <code>cxt.load(Rails.root.join('lib', 'ember', 'dist', 'ember.js')</code>. Now the error occurs on line 247. To find it, in the Ember directory I do, <code>git grep isChrome</code> to find it in the source and change the line to:</p>
+
+    <p><code>var isChrome = typeof window !== 'undefined' &amp;&amp; !!window.chrome &amp;&amp; !window.opera;</code></p>
+
+    <p>After rerunning <code>rake dist</code> and <code>rake sync:couch</code>, it now complains that Handlebars is missing, so I change the rake task to:</p>
+
+    <pre class="prettyprint">cxt.load(Rails.root.join('lib', 'android', 'www', 'js', 'libs', 'jquery-1.10.2.js'))
+cxt.load(Rails.root.join('lib', 'android', 'www', 'js', 'libs', 'handlebars-1.1.2.js'))
+cxt.load(Rails.root.join('lib', 'ember', 'dist', 'ember.js'))</pre>
+
+    <p>Handlebars loads ok, but jQuery dies trying to access the <code>window</code> object. Unlike Ember, it is not designed to load without it, so I will have to insert a shim. In <code>app/assets/javascripts/window.js</code>, I put <code>var window = {}</code> and add it to the beginning of the rake task.</p>
+
+    <p>Using the same process, to allow jQuery to load, eventually you end up with:</p>
+
+    <pre class="prettyprint">var window = {
+    document: {
+        documentElement: {},
+        createElement: function() {
+            return {
+                setAttribute: function() {},
+                getElementsByTagName: function() {
+                    return []
+                }
+            }
+        },
+        createDocumentFragment: function() {
+            return {
+                appendChild: function() {
+                    return {}
+                }
+            }
+        },
+        appendChild: function() {
+            return {}
+        },
+        addEventListener: function() {}
+    },
+    addEventListener: function() {}
+}</pre>
+
+    <p>This allows jQuery to load, but it isn't being found by Ember. To correct this, I add another shim after jQuery loads in <code>app/assets/javascripts/set_jquery.js</code> which is simply: <code>var jQuery = window.jQuery</code>.</p>
+
+    <p>As Ember loads more completely, there are a couple places it complains <code>document</code> isn't defined. I fixed those and Ember now loads without errors.</p>
+
+    <p>Currently the Ember app is just backed by the default data store. To switch it to CouchDB, I included the scripts from <a href="https://github.com/roundscope/ember-couchdb-kit/tree/master/dist">ember-couchbd-kit's distribution folder</a>. When I try loading the resultant page, I get a 404: <code>http://localhost:5984/wells/_design/reading/_view/all?include_docs=true&amp;key=%22reading%22</code>.</p>
+
+    <p>It is looking for a view named <code>all</code>, in a design named <code>reading</code>, and a database named <code>wells</code>. To create the database, I do: <code>curl -X PUT http://localhost:5984/wells</code>. The design document, then, is:</p>
+
+    <pre class="prettyprint">curl -X PUT http://localhost:5984/wells/_design/reading -H 'Content-Type: application/json' -d '
+{
+  "_id": "_design/reading",
+  "language": "javascript",
+  "views": {
+    "all": {
+      "map": "function(doc) { if( doc.type == \"reading\" ) emit(null, doc) }"
+    }
+  }
+}</pre>
+
+    <p>After I load this, I get an error that <code>No 'Access-Control-Allow-Origin' header is present</code>. To fix this I <a href="http://stackoverflow.com/questions/20897033/how-to-add-cors-in-couchdb-no-access-control-allow-origin-header-is-present#answer-20903845">edited <code>/etc/couchdb/local.ini</code></a> and the page loads.</p>
+
+    <p>I get an error when clicking on the wells tab and the solution is an adapted version of what it took for readings.</p>
+
+    <p>I can add a new well and when redirected to the wells page, it shows up. When I reload the page, however, it disappears and the list is empty. To check the database, I go to <a href="http://localhost:5984/_utils/database.html?wells"><code>http://localhost:5984/_utils/database.html?wells</code></a>. I see data, but there is no Type attribute to specify the type. I had assumed that the db adapter would do that for me.</p>
+
+    <p>To fix it, I add the following to my well model: <code>type: DS.attr('string', { defaultValue: 'well' } )</code>. That does correct it in the database, but it is still not showing up when the page is refreshed.</p>
+
+    <p>The structure that I am using to specify the model for a page is:</p>
+
+    <pre class="prettyprint">App.WellsRoute = Ember.Route.extend( {
+    model: function() {
+        return this.store.find( 'well' )
+    }
+} )</pre>
+
+    <p>In looking at the <a href="https://github.com/roundscope/ember-couchdb-kit/tree/master/example">CouchDB kit example</a>, they use <code>all</code> instead of <code>find</code>, but changing that doesn't fix it.</p>
+
+    <p>The data is in the system until I reload the page, so I created a well and a reading, which is associated with a well. Then I tried reloading and no data in either view. In looking at the network traffic, when the page loads there is a request for <code>http://localhost:5984/wells/_design/reading/_view/all?include_docs=true&amp;key=%22reading%22</code>. When I try the URL in the browser, I get:</p>
+
+    <p><code>{"total_rows":0,"offset":0,"rows":[]}</code></p>
+
+    <p>The issue is the <code>key</code>. The <code>all</code> view I used didn't emit a key. I need to change it to key on the document type. With CouchDB I have to specify the previous revision when creating an update, so the request looks like:</p>
+
+    <pre class="prettyprint">curl -X PUT http://localhost:5984/wells/_design/reading -H 'Content-Type: application/json' -d '
+{
+  "_id": "_design/reading",
+  "language": "javascript",
+  "views": {
+    "all": {
+      "map": "function(doc) { emit(doc.type, doc) }"
+    }
+  },
+  "_rev": "1-c4de9076711fc50aab2ec4a4695ac5c2"
+}'</pre>
+
+     <p>The reading now shows up. I can click and view a well. If I try to load the wells list directly, there is no network request and no data in the UI. That's a problem, but I'm not going to worry with it now.</p>
+
+     
+
+
+    <script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js" type="text/javascript"></script>
   </body>
 </html>
