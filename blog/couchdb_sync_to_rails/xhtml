@@ -309,7 +309,59 @@ end</pre>
   "_rev": "2-15e26d319dc99e2d1c10e0e9e439d3ed"
 }'</pre>
 
-    <p>The data did not load as expected and I would like to recreate the database. That is simply: <code>curl -X DELETE http://127.0.0.1:5984/wells</code> then recreating the db and views.</p>
+    <p>The data did not load as expected and I would like to recreate the database. To make this easier, I created a rake task:</p>
+
+    <pre class="prettyprint">namespace :couch do
+  desc "Reinitialize CouchDB"
+  task reset: :environment do
+    host = URI::encode "http://#{ENV['COUCH_USER']}:#{ENV['COUCH_PASS']}@127.0.0.1:5984"
+    begin
+      RestClient.delete "#{host}/wells"
+    rescue => ex
+      raise ex if ex.response.code != 404
+    end
+    RestClient.put "#{host}/wells", ''
+    RestClient.put("#{host}/wells/_design/well",
+                   '{
+                      "_id": "_design/well",
+                      "language": "javascript",
+                      "views": {
+                        "all": { "map": "function(doc) { emit(doc.type, doc) }" },
+                        "asset_ids": { "map": "function(doc) { if(doc.type == \"well\") emit(doc.asset_id, doc) }" }
+                      }
+                    }',
+                   content_type: 'application/json')
+    RestClient.put("#{host}/wells/_design/reading",
+                   '{
+                      "_id": "_design/reading",
+                      "language": "javascript",
+                      "views": {
+                        "all": { "map": "function(doc) { emit(doc.type, doc) }" },
+                        "rails_ids": { "map": "function(doc) { if(doc.type == \"reading\") emit(doc.rails_id, doc) }" }
+                      }
+                    }',
+                   content_type: 'application/json')
+  end
+end</pre>
+
+    <p>After fixing the import, there is too much data. With a few thosand entries, it takes a couple seconds for the page to load. With more than 8-9000 I get an error: <code>Uncaught RangeError: Maximum call stack size exceeded</code>. I need to paginate the results to deal with this.</p>
+
+    <p>CouchDB has <code>limit</code> and <code>offset</code> parameters, but there is a recommendation against using them because <code>offset</code> is inefficient. Instead an extra result is returned and that key is used as the start position for the next query.</p>
+
+    <p>To start with I am going to create a view that returns the readings sorted by time:</p>
+
+    <pre class="prettyprint">"by_time": { "map": "function(doc) { if(doc.type == \"reading\") { d = new Date(doc.time); emit([d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes()], doc) } }"</pre>
+
+    <p>Now I have to tell Ember to return items from this view, that looks like:</p>
+
+    <pre class="prettyprint">return this.store.findQuery( 'reading', {
+  designDoc: 'reading',
+  viewName: 'by_time',
+  options: {
+    descending: true
+  }
+} )</pre>
+
 
     <script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js" type="text/javascript"></script>
   </body>
