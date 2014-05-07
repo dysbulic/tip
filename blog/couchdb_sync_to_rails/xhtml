@@ -150,7 +150,7 @@ cxt.load(Rails.root.join('lib', 'ember', 'dist', 'ember.js'))</pre>
 
     <p><code>{"total_rows":0,"offset":0,"rows":[]}</code></p>
 
-    <p>The issue is the <code>key</code>. The <code>all</code> view I used didn't emit a key. I need to change it to key on the document type. With CouchDB I have to specify the previous revision when creating an update, so the request looks like:</p>
+    <p>The issue is the <code>key</code> parameter. The <code>all</code> view I used didn't emit a key. I need to change it to key on the document type. With CouchDB I have to specify the previous revision when creating an update, so the request looks like:</p>
 
     <pre class="prettyprint">curl -X PUT http://localhost:5984/wells/_design/reading -H 'Content-Type: application/json' -d '
 {
@@ -166,8 +166,150 @@ cxt.load(Rails.root.join('lib', 'ember', 'dist', 'ember.js'))</pre>
 
      <p>The reading now shows up. I can click and view a well. If I try to load the wells list directly, there is no network request and no data in the UI. That's a problem, but I'm not going to worry with it now.</p>
 
-     
+     <p>I need to decide on a sync direction to test first. Both have to be working before it can be deployed, so I will first push from the server to CouchDB since I can reset the database with impunity.</p>
 
+     <p>So the process is get the wells from ActiveRecord, pass them to therubyracer, create ember models from them and save them. First, I have to load ember-data and the adapter in the rake task:</p>
+
+     <p>I added the appropriate <code>load</code> statements to the rake task. When it tries to load I get errors that <code>EmberCouchDBKit</code> isn't defined. This is because it is declared a global variable by assigning it to the <code>window</code> object. That object exists, because of the shim for jQuery, but assigning to it has no special consequences. To fix that, I insert a script in the execution chain with:</p>
+
+     <pre class="prettyprint">var EmberCouchDBKit = window.EmberCouchDBKit
+var DS = window.DS</pre>
+
+    <p>The script now loads. I create the wells and insert them into the context like:</p>
+
+    <pre class="prettyprint">cxt['wells'] = Well.all.map do |well|
+  well_obj = cxt.eval 'new Object()'
+  well_obj[:name] = well.name
+  well_obj[:asset_id] = well.asset_id
+  well_obj
+end</pre>
+
+    <p>When I try to access the <code>store</code> to create a new record, however, it is not defined:</p>
+
+    <pre class="prettyprint">var store = App.__container__.lookup('store:main')</pre>
+
+    <p>A response to a <a href="http://stackoverflow.com/questions/23503500/not-able-to-load-store-in-ember-app-loaded-in-therubyracer">StackOverflow question</a> suggested that the store is only available once everything is loaded and that I should put the code in an <code>App.ready</code> function.</p>
+
+    <p>I did this and, not surprisingly, nothing happens. The document <code>load</code> event is almost certainly necessary for jQuery to switch to ready, and Ember likely relies on that. I use the following code in the jQuery shim to handle sending the load event:</p>
+
+    <pre class="prettyprint">addEventListener: function( name, listener ) {
+  if( name == 'load' ) {
+    window.loadListeners = window.loadListeners || []
+    window.loadListeners.push( listener )
+  }
+},
+removeEventListener: function() {},
+fireLoad: function() {
+  window.loadListeners.forEach( function( listener ) {
+    listener.call( window, {} )
+  } )
+}</pre>
+
+    <p>The <code>App.ready</code> listener still doesn't fire. Neither does a jQuery ready listner. In looking at the code, <code>promise</code>s are used and they can be executed. It might be possible the rake task is exiting before they have a chance to complete. To give them time, I will try a <code>sleep</code>.</p>
+
+    <p>That had no effect, so changed the <code>setTimeout</code> function to:</p>
+
+    <pre class="prettyprint">function setTimeout( fn ) { fn.call() }</pre>
+
+    <p>Now I get a stack overflow. The source is a recursive check for <code>document.body</code>, so I add that to the shim. Next I get an error: <code>Cannot read property 'childNodes' of undefined</code>.</p>
+
+    <p>I realized that I am loading the entirety of my Ember app, so it will try to render the UI. To prevent this, I isolated the models in a separate file and only loaded them.</p>
+
+    <p>That did not fix it, in looking more closely at the stack trace, I see it is coming from Ember's <code>testCheckboxClick</code> which inserts a checkbox into the document and tests it. I added document existence checks to a couple places they were needed in the initialization process.</p>
+
+    <p>And it doesnn't work. This code executes:</p>
+
+    <pre class="prettyprint">App.ready = function() {
+    var store = App.__container__.lookup('store:main')
+    wells.forEach( function( well ) {
+        store
+            .createRecord( 'well', {
+                asset_id: well.asset_id,
+                name: well.name
+            } )
+            .save()
+    } )
+}</pre>
+
+    <p>Nothing is saved to the database. Now that I think about it, none of the network infrastructure is there, so there's no way it can work. Damn.</p>
+
+    <p>So my options are either to figure out what network calls are being made and implement the needed functionality, or give up on using Ember. I hate to have wasted time, but the objects that are being created are very simple. I think I'll look into accesing Couch from ruby.</p>
+
+    <p>With rails, I can either use <a href="https://github.com/couchrest/couchrest">CouchRest</a> or <a href="https://github.com/couchrest/couchrest_model">CouchRest Model</a> and have a generated <acronym title="Object-Relational Map">ORM</acronym>. Since neither implements the changes API, I am going to avoid the extra complexity of the persistence layer.</p>
+
+    <p>The code that I used to create the wells in the database is just:</p>
+
+    <pre class="prettyprint">@db = CouchRest.database! 'http://127.0.0.1:5984/wells'
+Well.all.each do |well|
+  response = @db.save_doc( {
+                             name: well.name,
+                             asset_id: well.asset_id,
+                             type: 'well'
+                           } )
+end</pre>
+
+    <p>This creates the wells and they load in the mobile app. if it is run again, however, it will create all the wells a second time. I need to check if a well exists before adding it.</p>
+
+    <p>Each well has a unique asset id, so I can use that to look well up. The only query possible on a CouchDB is on the key used in for map/reduce, so I need to create a view for wells that is keyed on asset id.</p>
+
+    <pre class="prettyprint">curl -X PUT http://localhost:5984/wells/_design/well -H 'Content-Type: application/json' -d '
+{
+  "_id": "_design/well",
+  "language": "javascript",
+  "views": {
+    "all": { "map": "function(doc) { emit(doc.type, doc) }" },
+    "asset_ids": { "map": "function(doc) { emit(doc.asset_id, doc) }" }
+  },
+  "_rev": "4-8c76c4fac23a63ad4e8764551afb650a"
+}'</pre>
+
+    <p>I can now visit <a href="http://localhost:5984/wells/_design/well/_view/asset_ids?key=1010">http://localhost:5984/wells/_design/well/_view/asset_ids?key=1010</a> and view a single well entry. The query looks like:</p>
+
+    <pre class="prettyprint">Well.all.each do |well|
+  response = @db.view( 'well/asset_ids', { key: well.asset_id } )
+  if response['rows'].count == 0
+    ⋮</pre>
+
+    <p>Next I would like to sync the readings. In the Rails app these are called <code>WellVolume</code>s. Each has an associated well id, so I have to map between the Rails ids and those in Couch.</p>
+
+    <p>I collect that mapping as I check for the existence of wells:</p>
+
+    <pre class="prettyprint">db_ids = []
+
+Well.all.each do |well|
+  search_response = @db.view( 'well/asset_ids', { key: well.asset_id } )
+  wells = search_response['rows']
+  if wells.count > 1
+    puts "#{wells.count} wells found for asset id: #{well.asset_id}"
+  elsif wells.count == 1
+    db_ids[well.id] = wells[0]['id']
+  else
+    puts "Creating well in Couch: #{well.name}"
+    save_response = @db.save_doc( {
+                                    name: well.name,
+                                    asset_id: well.asset_id,
+                                    type: 'well'
+                                  } )
+    db_ids[well.id] = save_response['id']
+  end
+end</pre>
+
+    <p>It would be more efficient to load all the wells at once, but I'll leave that for later. Avoiding inserting data twice is more complex for readings because there is no inherent unique identifier. I have two options, either build a query on well and reading date, which should be unique, or store the rails id and use it.</p>
+
+    <p>The Rails id seems to be the most foolproof method, so I will use it. Accessing it means updating the readings view:</p>
+
+    <pre class="prettyprint">curl -X PUT http://localhost:5984/wells/_design/reading -H 'Content-Type: application/json' -d '
+{
+  "_id": "_design/reading",
+  "language": "javascript",
+  "views": {
+    "all": { "map": "function(doc) { emit(doc.type, doc) }" },
+    "rails_ids": { "map": "function(doc) { if(doc.type == \"reading\") emit(doc.rails_id, doc) }" }
+  },
+  "_rev": "2-15e26d319dc99e2d1c10e0e9e439d3ed"
+}'</pre>
+
+    <p>The data did not load as expected and I would like to recreate the database. That is simply: <code>curl -X DELETE http://127.0.0.1:5984/wells</code> then recreating the db and views.</p>
 
     <script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js" type="text/javascript"></script>
   </body>
