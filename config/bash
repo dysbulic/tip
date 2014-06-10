@@ -42,7 +42,7 @@ export CVS_RSH=ssh
 #which update-manager && update-manager -d
 
 # Include OSX specific pathes; and give them precedence
-for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin ~/.../google/adt/sdk/platform-tools; do
+for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin ~/.../google/adt/sdk/platform-tools ~/bin/adt-bundle-linux-*/sdk/tools/ ~/bin/adt-bundle-linux-*/sdk/platform-tools/; do
     [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
@@ -653,3 +653,6 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 git config --global user.name "Will Holcomb"
 git config --global user.email "will@dhappy.org"
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
