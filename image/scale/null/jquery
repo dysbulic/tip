@@ -10,7 +10,6 @@
             max : parseFloat( $('#' + name).attr( 'y2' ) ),
         }
     } )
-    console.log( block )
 
     var bar = {
         min : block.bTop.min,
@@ -77,12 +76,13 @@
         position = pos
     }
     
-    var doc = document.rootElement ? document.rootElement : this;
+    var doc = document.rootElement ? document.rootElement : this
     var $doc = $(doc)
-    $doc.bind( 'keypress', keypress )
-    $doc.bind( 'mousedown', mousedown )
-    $doc.bind( 'mouseup', mouseup )
-    $doc.bind( 'mousemove', drag )
+    $doc.on( 'keypress', keypress )
+    $doc.on( 'mousedown', mousedown )
+    $doc.on( 'mouseup', mouseup )
+    $doc.on( 'mousemove', drag )
+    $doc.on( 'swipe', swipe )
 
     // For Opera
     if(!Event.prototype.DOM_VK_LEFT)  Event.prototype.DOM_VK_LEFT = 37
@@ -110,8 +110,9 @@
             break
         }
         setPosition( position )
-        if( window.focus )
+        if( window.focus ) {
             window.focus()
+        }
     }
     
     var origX = null
@@ -129,6 +130,10 @@
       if( origX != null ) {
         setPosition( ( evt.clientX - origX ) / xWindow )
       }
+    }
+
+    function swipe( evt ) {
+        setPosition( evt.swipestart.coords[0] > evt.swipestop.coords[0] ? -1 : 1 )
     }
 
     setPosition(position)
