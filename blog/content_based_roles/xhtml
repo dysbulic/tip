@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC
+ "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+ "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd"
+ [ <!ENTITY mathml  "http://www.w3.org/1998/Math/MathML"> ]>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:math="http://www.w3.org/1998/Math/MathML" xml:lang="en">
+  <head>
+    <title>Content-Based Roles</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href=".../style/main/css" />
+    <style type="text/css">
+    </style>
+    <link rel="icon" type="image/png" href=".../image/icon/cigarette/png" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>Content-Based Roles</h1>
+      <h2><a href="http://dhappy.org">Will Holcomb</a></h2>
+      <h2>18 June 2014</h2>
+    </div>
+
+    <p>I'm working through the <a href="http://www.sciencedirect.com/science/article/pii/S0167923613002935">following paper</a>. I want to tease out some of the math and step through it to better understand.</p>
+
+    <p>The idea is that instead of looking at the graph of social connections to evaluate someone, you describe the content of their interactions and then cluster it.</p>
+
+    <p>The axises along which content is described are:</p>
+
+    <ul>
+      <li><strong>Personality</strong>: PE = (<em>number of friends</em>, <em>number of personal posts</em>, [<em>0</em> = public | <em>1</em> = private | <em>2</em> = secret])</li>
+      <li><strong>Behavior</strong>: BE = (<em>number of public posts</em>, <em>number of comments</em>, <em>number of likes</em>)</li>
+      <li><strong>Action Sequence</strong> AS = ([<em>s</em> = status) | <em>l</em> = link | <em>p</em> = photo | <em>v</em> = video]*) where each entry in the list describes the type of a post</li>
+      <li><strong>Affectivity</strong>: AF = (<em>positive score</em>, <em>negative score</em>) based on <a href="http://orbit.dtu.dk/en/publications/a-new-anew-evaluation-of-a-word-list-for-sentiment-analysis-in-microblogs(7a9eb1c9-5e5f-4508-8b6e-c5681655ca6d).html">emotional weightings assigned to words</a></li>
+      <li><strong>Recognition</strong>: RE = (<math xmlns="&mathml;"><mfrac><mtext>number of comments from other users</mtext><mtext>number of posts</mtext></mfrac></math>, <math xmlns="&mathml;"><mfrac><mtext>number of posts shared by other users</mtext><mtext>number of posts</mtext></mfrac></math>, <math xmlns="&mathml;"><mfrac><mtext>number of likes</mtext><mtext>number of posts</mtext></mfrac></math>)</li>
+    </ul>
+
+    <p>The vectors that result from concatenating these features are then clustered according to c-means fuzzy clustering. Fuzzy means that a vector belongs to all the clusters to varying extents.</p>
+
+    <p>A set of feature vectors for <em>n</em> users, \( X = \{ x_1, x_2, &hellip;, x_n \} \) are grouped into <em>c</em> clusters, \( \tilde{F} = \{ \tilde{F_1}, \tilde{F_2}, &hellip;, \tilde{F_c} \} \), by minimizing:</p>
+
+    <p>\begin{equation} J_m =\sum\limits_{j=1}^{n} \sum\limits_{i=1}^{c} (\mu_{ij})^m D(x_j, c_i) \end{equation}</p>
+
+    <p>Where:</p>
+
+    <ul>
+      <li>\begin{equation} \mu_{ij} = \left[ \sum\limits_{k=1}^{c} \left( \frac{D(x_i, c_i)}{D(x_i, c_k)} \right)^\frac{1}{m-1} \right]^{-1} \end{equation}</li>
+      <li>\begin{equation} \sum_{j=1}^{c} \mu_{ij} = 1 \end{equation}</li>
+      <li>\begin{equation}
+D(a, b) =
+\begin{cases}
+D_c = 1 - \frac{a &bull; b}{||a|| ||b||};&amp; PE, AF\\
+D_e = \sqrt{\sum_i (a_i - b_i)^2};&amp;\\
+D_c D_e;&amp; BE, RE\\
+\mbox{edit distance};&amp; AS
+\end{cases}
+      \end{equation}</li>
+      <li>\begin{equation} c_i = \frac{\sum_{j=1}^{n} (\mu_{ij})^m x_j}{\sum_{j=1}^{n} (\mu_{ij})^m} \end{equation}</li>
+    </ul>
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>
