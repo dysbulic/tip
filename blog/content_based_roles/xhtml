@@ -30,7 +30,7 @@
       <li><strong>Behavior</strong>: BE = (<em>number of public posts</em>, <em>number of comments</em>, <em>number of likes</em>)</li>
       <li><strong>Action Sequence</strong> AS = ([<em>s</em> = status) | <em>l</em> = link | <em>p</em> = photo | <em>v</em> = video]*) where each entry in the list describes the type of a post</li>
       <li><strong>Affectivity</strong>: AF = (<em>positive score</em>, <em>negative score</em>) based on <a href="http://orbit.dtu.dk/en/publications/a-new-anew-evaluation-of-a-word-list-for-sentiment-analysis-in-microblogs(7a9eb1c9-5e5f-4508-8b6e-c5681655ca6d).html">emotional weightings assigned to words</a></li>
-      <li><strong>Recognition</strong>: RE = (<math xmlns="&mathml;"><mfrac><mtext>number of comments from other users</mtext><mtext>number of posts</mtext></mfrac></math>, <math xmlns="&mathml;"><mfrac><mtext>number of posts shared by other users</mtext><mtext>number of posts</mtext></mfrac></math>, <math xmlns="&mathml;"><mfrac><mtext>number of likes</mtext><mtext>number of posts</mtext></mfrac></math>)</li>
+      <li><strong>Recognition</strong>: RE = (\( \frac{\mbox{number of comments from other users}}{\mbox{number of posts}} \), \( \frac{\mbox{number of posts shared by other users}}{\mbox{number of posts}} \), \( \frac{\mbox{number of likes}}{\mbox{number of posts}} \))</li>
     </ul>
 
     <p>The vectors that result from concatenating these features are then clustered according to c-means fuzzy clustering. Fuzzy means that a vector belongs to all the clusters to varying extents.</p>
@@ -53,11 +53,18 @@ D_c D_e;&amp; BE, RE\\
 \mbox{edit distance};&amp; AS
 \end{cases}
       \end{equation}</li>
-      <li>\begin{equation} c_i = \frac{\sum_{j=1}^{n} (\mu_{ij})^m x_j}{\sum_{j=1}^{n} (\mu_{ij})^m} \end{equation}</li>
+      <li>\begin{equation} c_i^\prime = \frac{\sum_{j=1}^{n} (\mu_{ij})^m x_j}{\sum_{j=1}^{n} (\mu_{ij})^m} \end{equation}</li>
       <li>\begin{equation} 1 &leq; m = \mbox{"fuzziness"} \end{equation}</li>
     </ul>
 
-    <p>You start out with random clusters and </p>
+    <p>The process is:</p>
+
+    <ol>
+      <li>Pick random cluster centers, \( c \)</li>
+      <li>Calculate the membership of each vector in each cluster, \( \mu_{ij} \)</li>
+      <li>Find the centroids of the clusters, \( c^\prime \)</li>
+      <li>Compare \( J_m \) and \( J_m^\prime \). if it is greater than \( \epsilon \), repeat using \( c^\prime \) as the centers</li>
+    </ol>
 
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   </body>
