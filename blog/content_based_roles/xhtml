@@ -28,14 +28,14 @@
     <ul>
       <li><strong>Personality</strong>: PE = (<em>number of friends</em>, <em>number of personal posts</em>, [<em>0</em> = public | <em>1</em> = private | <em>2</em> = secret])</li>
       <li><strong>Behavior</strong>: BE = (<em>number of public posts</em>, <em>number of comments</em>, <em>number of likes</em>)</li>
-      <li><strong>Action Sequence</strong> AS = ([<em>s</em> = status) | <em>l</em> = link | <em>p</em> = photo | <em>v</em> = video]*) where each entry in the list describes the type of a post</li>
+      <li><strong>Action Sequence</strong>: AS = ([<em>s</em> = status) | <em>l</em> = link | <em>p</em> = photo | <em>v</em> = video]*) where each entry in the list describes the type of a post</li>
       <li><strong>Affectivity</strong>: AF = (<em>positive score</em>, <em>negative score</em>) based on <a href="http://orbit.dtu.dk/en/publications/a-new-anew-evaluation-of-a-word-list-for-sentiment-analysis-in-microblogs(7a9eb1c9-5e5f-4508-8b6e-c5681655ca6d).html">emotional weightings assigned to words</a></li>
       <li><strong>Recognition</strong>: RE = (\( \frac{\mbox{number of comments from other users}}{\mbox{number of posts}} \), \( \frac{\mbox{number of posts shared by other users}}{\mbox{number of posts}} \), \( \frac{\mbox{number of likes}}{\mbox{number of posts}} \))</li>
     </ul>
 
     <p>The vectors that result from concatenating these features are then clustered according to c-means fuzzy clustering. Fuzzy means that a vector belongs to all the clusters to varying extents.</p>
 
-    <p>A set of feature vectors for <em>n</em> users, \( X = \{ x_1, x_2, &hellip;, x_n \} \) are grouped into <em>c</em> clusters, \( \tilde{F} = \{ \tilde{F_1}, \tilde{F_2}, &hellip;, \tilde{F_c} \} \), by minimizing:</p>
+    <p>A set of feature vectors for <em>n</em> users, \( X = \{ x_1, x_2, &hellip;, x_n \} \ni x_i = \{ PE, BE, AS, AF, RE \}, \) are grouped into <em>c</em> roles, \( \tilde{F} = \{ \tilde{F_1}, \tilde{F_2}, &hellip;, \tilde{F_c} \} \), by minimizing:</p>
 
     <p>\begin{equation} J_m =\sum\limits_{j=1}^{n} \sum\limits_{i=1}^{c} (\mu_{ij})^m D(x_j, c_i) \end{equation}</p>
 
@@ -60,11 +60,22 @@ D_c D_e;&amp; BE, RE\\
     <p>The process is:</p>
 
     <ol>
-      <li>Pick random cluster centers, \( c \)</li>
-      <li>Calculate the membership of each vector in each cluster, \( \mu_{ij} \)</li>
-      <li>Find the centroids of the clusters, \( c^\prime \)</li>
-      <li>Compare \( J_m \) and \( J_m^\prime \). if it is greater than \( \epsilon \), repeat using \( c^\prime \) as the centers</li>
+      <li>Pick \( c \) random cluster centers: \( C \)</li>
+      <li>Calculate the membership of user vector, \( i \), in each cluster, \( j \): \( \mu_{ij} \)</li>
+      <li>Find the centroids of the clusters, \( C^\prime \)</li>
+      <li>Compare \( J_m \) and \( J_m^\prime \), if the difference is greater than \( \epsilon \), repeat using \( C^\prime \) as the centers</li>
     </ol>
+
+    <p>The input set of massages is partitioned according to time, and for each a set of membership vectors can be generated, \( m_j = \{ \mu_{1j}, \mu_{2j}, &hellip;, \mu_{cj} \} \). These are then quantized to vectors \( \{ (r_1,q(\mu_{1j})), (r_2,q(\mu_{2j})), &hellip;, (r_c,q(\mu_{cj})) \} \) according to the following rule:</p>
+
+    <p>\begin{equation}
+q(x) =
+\begin{cases}
+L;&amp; 0 \leq x \le 0.25\\
+M;&amp; 0.25 \leq x \le 0.75\\
+H;&amp; 0.75 \leq x \leq 1
+\end{cases}
+\end{equation}</p>
 
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   </body>
