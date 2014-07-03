@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Adding Computed Relationships to CouchDB-Ember-Kit</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" type="text/css" href=".../style/main/css" />
+    <link rel="stylesheet" type="text/css" href="css" />
+    <link rel="icon" type="image/png" href=".../image/icon/cigarette/png" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>Adding Computed Relationships to CouchDB-Ember-Kit</h1>
+      <h2><a href="http://dhappy.org">Will Holcomb</a></h2>
+      <h2>26 June 2014</h2>
+      <hr style="width: 50%;" />
+    </div>
+
+    <p>I am working on a <a href="https://github.com/wholcomb/habit_tracker">habit tracking app</a>. I originally wrote it using the Android SDK, but syncing the device with a server was a horrible pain. So, I am working on a rewrite in Ember.js backed by Couchbase.</p>
+
+    <p>Unfortunately I am running into some performance issues. The landing page is just a list of habits and the last time a reading was recorded:</p>
+
+    <pre><![CDATA[<script type="text/x-handlebars" id="habits">
+  <div id="habits">
+    {{#each}}
+      <div class="row" {{action 'createEvent' id}}>
+        <div class="col-xs-1 color" {{bind-attr style=style}}></div>
+        <div class="col-xs-8">{{name}}</div>
+        <div class="col-xs-3" data-role="timer">{{format-time-numeric lastTime}}</div>
+      </div>
+    {{/each}}
+  </div>
+</script>]]></pre>
+
+    <p>The supporting model looks like:</p>
+
+    <pre><![CDATA[App.Selectable = DS.Model.extend( {
+    name: DS.attr( 'string' ),
+    color: DS.attr( 'string' ),
+    events: DS.hasMany( 'event', { async: true, defaultValue: [] } ),
+    style: function() {
+        return 'background-color: %@'.fmt( this.get( 'color' ) )
+    }.property( 'color' ),
+    lastTime: Ember.reduceComputed( 'events.@each.time', {
+        initialValue: -Infinity,
+        addedItem: function( accValue, event ) { 
+            return Math.max( accValue, event.get( 'time' ) )
+        },
+        removedItem: function( accValue, event ) { 
+            if( event.get( 'time' ) < accValue ) {
+                return accValue
+            }
+        }
+    } )
+} )
+
+App.Event = DS.Model.extend( {
+    type: DS.attr('string', { defaultValue: 'event' } ),
+    time: DS.attr( 'date' ),
+    weight: DS.attr( 'number' ),
+    origin: DS.belongsTo( 'selectable' )
+} )]]></pre>
+
+    <p>At issue is the <code>lastTime</code> property. Each <code>Selectable</code> has a list of <code>events</code>. This is stored in the database as an array of identifiers. When computing the <code>lastTime</code>, the program has to load all the events and add them to the list. For 500 events, this is taking 30 seconds.</p>
+
+    
+
+  </body>
+</html>
