@@ -1,0 +1,88 @@
+html, body { color: #403320; font-family: Tahoma, Verdana; font-size: 16px; line-height: 1.35em; }
+html, body, .dotlead .category, .dotlead .content { background-color: #EBF8F7; }
+
+@page { size: 8.5in 11in; margin: .5in .75in; }
+
+body { margin: 3em .5in 0; }
+h1, h2, h3, h4, p, ul, ol { max-width: 800px; }
+.fullwidth {  max-width: 100%; }
+h1 { font-size: 18pt; }
+h2 { font-size: 15pt; margin-top: 1.5em; }
+h1, h2 { font-weight: normal; }
+#header { margin-bottom: 1.5em; }
+#header h1, #header h2 { text-align: center; margin: 0 auto .5em; }
+hr { width: 30%; }
+a { text-decoration: none; color: #584315; border-bottom: 1px dotted; }
+a:hover { color: purple; }
+.footnote { margin-left: 1.5em; text-indent: -1em; }
+table { border-collapse: collapse; }
+table.bordered th, table.bordered td { border: 1px solid; padding: .1em .5em; }
+
+.dotlead li:after { content: ''; display: block; clear: both; }
+.dotlead li { border-bottom: 1px dotted; height: .9em; line-height: 1em; margin-bottom: .4em; }
+.dotlead .category, .dotlead .content { display: block; }
+.dotlead .category { float: left; padding-right: .25em; }
+.dotlead .content { float: right; text-align: right; padding-left: .1em; }
+
+ol { list-style-type: decimal; margin-left: 1em; padding-left: 1em; }
+ol ol { list-style-type: upper-alpha; }
+ol ol ol { list-style-type: lower-alpha; }
+ol ol ol ol { list-style-type: lower-roman; }
+
+ol.outline { list-style-type: upper-roman; }
+ol.outline ol { list-style-type: upper-alpha; }
+ol.outline ol ol { list-style-type: lower-alpha; }
+ol.outline ol ol ol { list-style-type: lower-roman; }
+ol.outline ol ol ol ol { list-style-type: decimal; }
+
+ul ul { padding-left: .25em; margin-left: 1.5em; }
+
+iframe { width: 100%; border: 2px solid; }
+
+.question { font-family: sans-serif; margin-bottom: 1.5em; }
+.answer { margin-left: 2em; }
+.answer > ol { padding-left: 0; }
+.question:after, .answer:after { content: ''; clear: both; display: block; }
+
+.figure { text-align: center; }
+.figure .caption { margin-top: 0; }
+
+table.data th, table.data td { border: 1px soild; }
+
+.header * { text-align: center; margin: .5em auto; }
+
+@media print {
+  body, p a, li a { color: black; font-size: 10pt; }
+  a, acronym { text-decoration: none; border: none; }
+  body { margin-left: 0; margin-right: 0; }
+}
+
+p, ul, ol, h2, h3 {
+    margin: auto;
+}
+
+h2, h3 {
+    text-align: center;
+    padding: 1em;
+}
+
+.videos {
+    margin: auto;
+    text-align: center;
+}
+
+.videos object {
+    display: inline-block;
+}
+
+.diagram {
+    min-height: 10em;
+}
+
+body > ol {
+    margin-top: 1.5em;
+}
+
+.diagram, .videos {
+    margin: 1.5em auto;
+}
