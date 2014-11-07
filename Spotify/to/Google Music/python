@@ -2,7 +2,13 @@
 
 # sudo pip install gmusicapi
 
-from gmusicapi import Musicmanager
+from gmusicapi import Mobileclient
 
-manager = Musicmanager()
-manager.perform_oauth()
+client = Mobileclient()
+
+logged_in = client.login( 'will@dhappy.org', 'FuckOff!' )
+
+print logged_in
+
+for playlist in client.get_all_playlists():
+    print playlist
