@@ -13,7 +13,7 @@ $( function() {
         $('defs').append( $grad )
         $grads.push( $grad )
 
-        var steps = 10
+        var steps = 1
         var $stops = []
         for( var j = 1; j <= steps; j++ ) {
             var $stop =
@@ -33,12 +33,17 @@ $( function() {
         } )
     }
 
+    var count = 10
+    var index = 1
     var loop = function() {
         $.each( $grads, function( idx, $grad ) {
-            console.log( $grad )
+            var $stops = $grad.data( '$stops' )
+            $stops.first().attr( { offset: index / count * 100 + "%" } )
+            if( index-- > count ) {
+                setTimeout( loop, 500 )
+            }
         } )
     }
     
     loop()
-    setTimeout( loop, 5000 )
 } )
