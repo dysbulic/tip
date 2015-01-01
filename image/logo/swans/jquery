@@ -1,3 +1,18 @@
 $( function() {
     console.log( 'h' )
+    var $grads = []
+    for( var i = 1; i <= 2; i++ ) {
+        var $grad = $('<radialGradient/>').attr( {
+            id: "grad" + i,
+            cx: '50%',
+            cy: '50%',
+            r: '50%'
+        } )
+        $('defs').append( $grad )
+        $grads.push( $grad )
+        $("#swan" + i).css( {
+            fill: "url('#grad" + i + "')"
+        } )
+    }
+    
 } )
