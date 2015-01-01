@@ -13,7 +13,7 @@ $( function() {
         $('defs').append( $grad )
         $grads.push( $grad )
 
-        var steps = 3
+        var steps = 4
         var $stops = []
         for( var j = 1; j <= steps; j++ ) {
             var $stop =
@@ -26,6 +26,9 @@ $( function() {
             $stops.push( $stop )
             $grad.append( $stop )
         }
+
+        $stops[$stops.length - 1].attr( { offset: '100%' } )
+        
         $grad.data( { $stops: $stops } )
 
         $("#swan" + i).css( {
@@ -42,10 +45,22 @@ $( function() {
             $stops[0].attr( { offset: + ( pos - 10 ) + "%" } )
             $stops[1].attr( { offset: + pos + "%" } )
             $stops[2].attr( { offset: + ( pos + 10 ) + "%" } )
+            $stops[3].attr( { offset: + 100 + "%" } )
         } )
-        if( index++ < count ) {
-            setTimeout( loop, 20 )
+        if( index++ > count ) {
+            $.each( $grads, function( idx, $grad ) {
+                var $stops = $grad.data( '$stops' )
+                $.each( $stops.slice( 0, $stops.length - 1 ), function( idx, $stop ) {
+                    $stop
+                        .attr( { offset: 0 } )
+                        .css( {
+                                'stop-color': "rgb(" + Math.round( 255 * Math.random() ) + "," + Math.round( 255 / steps * idx ) + "," + 200 + ")",
+                        } )
+                } )
+            } )
+            index = 0
         }
+        setTimeout( loop, 20 )
     }
     
     loop()
