@@ -2,14 +2,29 @@ $( function() {
     console.log( 'h' )
     var $grads = []
     for( var i = 1; i <= 2; i++ ) {
-        var $grad = $('<radialGradient/>').attr( {
-            id: "grad" + i,
-            cx: '50%',
-            cy: '50%',
-            r: '50%'
-        } )
+        var $grad =
+            $(document.createElementNS( 'http://www.w3.org/2000/svg', 'radialGradient' ))
+            .attr( {
+                id: "grad" + i,
+                cx: '50%',
+                cy: '50%',
+                r: '50%'
+            } )
         $('defs').append( $grad )
         $grads.push( $grad )
+
+        var steps = 10
+        for( var j = 1; j <= steps; j++ ) {
+            var $stop =
+                $(document.createElementNS( 'http://www.w3.org/2000/svg', 'stop' ))
+                .attr( { offset: j / steps * 100 + "%" } )
+                .css( {
+                    'stop-color': "rgb(" + Math.round( 255 * Math.random() ) + "," + Math.round( 255 / steps * j ) + "," + 200 + ")",
+                    'stop-opacity': 1
+                } )
+            
+            $grad.append( $stop )
+        }
         $("#swan" + i).css( {
             fill: "url('#grad" + i + "')"
         } )
