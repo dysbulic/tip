@@ -14,6 +14,7 @@ $( function() {
         $grads.push( $grad )
 
         var steps = 10
+        var $stops = []
         for( var j = 1; j <= steps; j++ ) {
             var $stop =
                 $(document.createElementNS( 'http://www.w3.org/2000/svg', 'stop' ))
@@ -22,12 +23,22 @@ $( function() {
                     'stop-color': "rgb(" + Math.round( 255 * Math.random() ) + "," + Math.round( 255 / steps * j ) + "," + 200 + ")",
                     'stop-opacity': 1
                 } )
-            
+            $stops.push( $stop )
             $grad.append( $stop )
         }
+        $grad.data( { $stops: $stops } )
+
         $("#swan" + i).css( {
             fill: "url('#grad" + i + "')"
         } )
     }
+
+    var loop = function() {
+        $.each( $grads, function( idx, $grad ) {
+            console.log( $grad )
+        } )
+    }
     
+    loop()
+    setTimeout( loop, 5000 )
 } )
