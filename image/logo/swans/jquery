@@ -75,8 +75,14 @@ $( function() {
     
     loop()
 
-    $(document).scroll( function( event ) {
-        console.log( event )
-        timeout = Math.max( 0, timeout * .9 )
+    $(document).click( function( event ) {
+        switch( event.which ) {
+        case 1:
+            timeout = timeout * .9
+            break
+        case 2:
+            timeout = timeout * 1.1
+            break
+        }
     } )
 } )
