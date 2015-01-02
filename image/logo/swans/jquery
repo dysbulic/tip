@@ -8,7 +8,9 @@ $( function() {
                 id: "grad" + i,
                 cx: '50%',
                 cy: '50%',
-                r: '60%'
+                r: '60%',
+                fx: '50%',
+                fy: i == 1 ? '55%' : '25%'
             } )
         $('defs').append( $grad )
         $grads.push( $grad )
@@ -36,7 +38,7 @@ $( function() {
         } )
     }
 
-    var count = 10
+    var count = 100
     var index = 0
     var loop = function() {
         $.each( $grads, function( idx, $grad ) {
@@ -47,23 +49,28 @@ $( function() {
             $stops[2].attr( { offset: + ( pos + 5 ) + "%" } )
             $stops[3].attr( { offset: + 100 + "%" } )
         } )
-        $('#count').text( index )
+        //$('#count').text( index )
         if( index++ > count ) {
             $.each( $grads, function( idx, $grad ) {
                 var $stops = $grad.data( '$stops' )
                 $stops[3].css( { 'stop-color': $stops[0].css( 'stop-color' ) } )
-                $stops[2].css( { 'stop-color': $stops[0].css( 'stop-color' ) } )
+                $stops[2]
+                    .attr( { offset: 0 } )
+                    .css( { 'stop-color': $stops[0].css( 'stop-color' ) } )
                 $.each( $stops.slice( 0, $stops.length - 2 ), function( idx, $stop ) {
                     $stop
                         .attr( { offset: 0 } )
                         .css( {
-                                'stop-color': "rgb(" + Math.round( 255 * Math.random() ) + "," + Math.round( 255 / steps * idx ) + "," + 200 + ")",
+                                'stop-color': "rgb("
+                                + Math.round( 255 * Math.random() ) + ","
+                                + Math.round( 255 / steps * idx ) + ","
+                                + Math.round( 255 * Math.random() ) + ")",
                         } )
                 } )
             } )
             index = 0
         }
-        //setTimeout( loop, 20 )
+        setTimeout( loop, 30 )
     }
     
     loop()
