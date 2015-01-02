@@ -1,6 +1,8 @@
 $( function() {
-    var timeout = 25
+    var timeout = 20
     var $grads = []
+    var paused = false
+
     for( var i = 1; i <= 2; i++ ) {
         var $grad =
             $(document.createElementNS( 'http://www.w3.org/2000/svg', 'radialGradient' ))
@@ -18,11 +20,18 @@ $( function() {
         var steps = 4
         var $stops = []
         for( var j = 1; j <= steps; j++ ) {
+            var color = tinycolor( {
+                h: Math.random(),
+                s: Math.random(),
+                l: $grads.length == 1
+                    ? 1 - .25 * Math.random()
+                    : .25 * Math.random()
+            } )
             var $stop =
                 $(document.createElementNS( 'http://www.w3.org/2000/svg', 'stop' ))
                 .attr( { offset: "0%" } )
                 .css( {
-                    'stop-color': "rgb(" + Math.round( 255 * Math.random() ) + "," + Math.round( 255 / steps * j ) + "," + 200 + ")",
+                    'stop-color': color.toHexString(),
                     'stop-opacity': 1
                 } )
             $stops.push( $stop )
@@ -38,39 +47,47 @@ $( function() {
         } )
     }
 
+    var currentGrad = 0
+
     var count = 100
     var index = 0
     var loop = function() {
-        $.each( $grads, function( idx, $grad ) {
-            var $stops = $grad.data( '$stops' )
-            var pos = Math.round( index / count * 100 )
-            $stops[0].attr( { offset: + ( pos - 5 ) + "%" } )
-            $stops[1].attr( { offset: + pos + "%" } )
-            $stops[2].attr( { offset: + ( pos + 5 ) + "%" } )
-            $stops[3].attr( { offset: + 100 + "%" } )
-        } )
+        var $grad = $grads[currentGrad]
+        var $stops = $grad.data( '$stops' )
+        var pos = Math.round( index / count * 100 )
+        $stops[0].attr( { offset: + ( pos - 5 ) + "%" } )
+        $stops[1].attr( { offset: + pos + "%" } )
+        $stops[2].attr( { offset: + ( pos + 5 ) + "%" } )
+        $stops[3].attr( { offset: + 100 + "%" } )
+
         //$('#count').text( index )
+
         if( index++ > count ) {
-            $.each( $grads, function( idx, $grad ) {
-                var $stops = $grad.data( '$stops' )
-                $stops[3].css( { 'stop-color': $stops[0].css( 'stop-color' ) } )
-                $stops[2]
-                    .attr( { offset: 0 } )
-                    .css( { 'stop-color': $stops[0].css( 'stop-color' ) } )
-                $.each( $stops.slice( 0, $stops.length - 2 ), function( idx, $stop ) {
-                    $stop
-                        .attr( { offset: 0 } )
-                        .css( {
-                                'stop-color': "rgb("
-                                + Math.round( 255 * Math.random() ) + ","
-                                + Math.round( 255 / steps * idx ) + ","
-                                + Math.round( 255 * Math.random() ) + ")",
-                        } )
+            var $stops = $grad.data( '$stops' )
+            $stops[3].css( { 'stop-color': $stops[0].css( 'stop-color' ) } )
+            $stops[2]
+                .attr( { offset: 0 } )
+                .css( { 'stop-color': $stops[0].css( 'stop-color' ) } )
+            $.each( $stops.slice( 0, $stops.length - 2 ), function( idx, $stop ) {
+                var color = tinycolor( {
+                    h: Math.random(),
+                    s: Math.random(),
+                    l: currentGrad == 0
+                        ? 1 - .25 * Math.random()
+                        : .1 + .25 * Math.random()
                 } )
+                $stop
+                    .attr( { offset: 0 } )
+                    .css( {
+                        'stop-color': color.toHexString()
+                    } )
             } )
             index = 0
+            currentGrad = ++currentGrad % 2
         }
-        setTimeout( loop, timeout )
+        if( ! paused ) {
+            setTimeout( loop, timeout )
+        }
     }
     
     loop()
@@ -78,10 +95,11 @@ $( function() {
     $(document).click( function( event ) {
         switch( event.which ) {
         case 1:
-            timeout = timeout * .9
+            paused = ! paused
+            loop()
             break
         case 2:
-            timeout = timeout * 1.1
+            timeout = timeout * .9
             break
         }
     } )

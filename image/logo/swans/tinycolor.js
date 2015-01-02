@@ -1,0 +1,1 @@
+bower_components/tinycolor/tinycolor.js
