@@ -36,21 +36,23 @@ $( function() {
         } )
     }
 
-    var count = 50
+    var count = 10
     var index = 0
     var loop = function() {
         $.each( $grads, function( idx, $grad ) {
             var $stops = $grad.data( '$stops' )
             var pos = Math.round( index / count * 100 )
-            $stops[0].attr( { offset: + ( pos - 10 ) + "%" } )
+            $stops[0].attr( { offset: + ( pos - 5 ) + "%" } )
             $stops[1].attr( { offset: + pos + "%" } )
-            $stops[2].attr( { offset: + ( pos + 10 ) + "%" } )
+            $stops[2].attr( { offset: + ( pos + 5 ) + "%" } )
             $stops[3].attr( { offset: + 100 + "%" } )
         } )
         if( index++ > count ) {
             $.each( $grads, function( idx, $grad ) {
                 var $stops = $grad.data( '$stops' )
-                $.each( $stops.slice( 0, $stops.length - 1 ), function( idx, $stop ) {
+                $stops[3].css( { 'stop-color': $stops[0].css( 'stop-color' ) } )
+                $stops[2].css( { 'stop-color': $stops[0].css( 'stop-color' ) } )
+                $.each( $stops.slice( 0, $stops.length - 2 ), function( idx, $stop ) {
                     $stop
                         .attr( { offset: 0 } )
                         .css( {
@@ -60,8 +62,13 @@ $( function() {
             } )
             index = 0
         }
-        setTimeout( loop, 20 )
+        //setTimeout( loop, 20 )
     }
     
     loop()
+
+    $(document).click( function() {
+        console.log( 'f' )
+        loop()
+    } )
 } )
