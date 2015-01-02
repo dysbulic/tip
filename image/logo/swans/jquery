@@ -1,5 +1,5 @@
 $( function() {
-    console.log( 'h' )
+    var timeout = 25
     var $grads = []
     for( var i = 1; i <= 2; i++ ) {
         var $grad =
@@ -70,13 +70,13 @@ $( function() {
             } )
             index = 0
         }
-        setTimeout( loop, 30 )
+        setTimeout( loop, timeout )
     }
     
     loop()
 
-    $(document).click( function() {
-        console.log( 'f' )
-        loop()
+    $(document).scroll( function( event ) {
+        console.log( event )
+        timeout = Math.max( 0, timeout * .9 )
     } )
 } )
