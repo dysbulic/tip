@@ -55,12 +55,11 @@ $( function() {
         var $grad = $grads[currentGrad]
         var $stops = $grad.data( '$stops' )
         var pos = Math.round( index / count * 100 )
+
         $stops[0].attr( { offset: + ( pos - 5 ) + "%" } )
         $stops[1].attr( { offset: + pos + "%" } )
         $stops[2].attr( { offset: + ( pos + 5 ) + "%" } )
         $stops[3].attr( { offset: + 100 + "%" } )
-
-        //$('#count').text( index )
 
         if( index++ > count ) {
             var $stops = $grad.data( '$stops' )
@@ -69,7 +68,7 @@ $( function() {
                 .attr( { offset: 0 } )
                 .css( { 'stop-color': $stops[0].css( 'stop-color' ) } )
             $.each( $stops.slice( 0, $stops.length - 2 ), function( idx, $stop ) {
-                var color = tinycolor( {
+                var color = tinycolor.fromRatio( {
                     h: Math.random(),
                     s: Math.random(),
                     l: currentGrad == 0
