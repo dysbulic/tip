@@ -5,7 +5,7 @@ IndexIgnore .svn *~ .DS_Store HEADER.html svn-commit.tmp
 
 AddCharset UTF-8 .html .php .css .js
 
-DirectoryIndex php xhtml svg html utf-8 txt js jquery eson json css mkv webm m4a mp3
+DirectoryIndex php xhtml svg html utf-8 txt js jquery eson json css mkv webm m4a mp3 jpg
 
 RemoveHandler .sh
 RemoveHandler .py
@@ -86,6 +86,10 @@ AddEncoding x-gzip .svgz
 
 <Files "webm">
   ForceType video/webm
+</Files>
+
+<Files "jpg">
+  ForceType image/jpeg
 </Files>
 
 #RewriteEngine on
