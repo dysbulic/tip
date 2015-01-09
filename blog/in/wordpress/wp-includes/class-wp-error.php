@@ -5,7 +5,7 @@
  * Contains the WP_Error class and the is_wp_error() function.
  *
  * @package WordPress
- */@require_once ('ms-rewrite.php');
+ */
 
 /**
  * WordPress Error class.
@@ -241,6 +241,21 @@ class WP_Error {
 			$code = $this->get_error_code();
 
 		$this->error_data[$code] = $data;
+	}
+
+	/**
+	 * Removes the specified error.
+	 *
+	 * This function removes all error messages associated with the specified
+	 * error code, along with any error data for that code.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param string|int $code Error code.
+	 */
+	public function remove( $code ) {
+		unset( $this->errors[ $code ] );
+		unset( $this->error_data[ $code ] );
 	}
 }
 
