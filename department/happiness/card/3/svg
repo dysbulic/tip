@@ -33,7 +33,22 @@
       #plans-text {
         text-transform: lowercase;
       }
+      * {
+        transition: all 0.5s ease;
+      }
     </style>
+    <script type="application/javascript">
+      var create = document.createElement
+      document.createElement = function( name ) {
+        if( name == 'div' ) {
+          return document.createElementNS( 'http://www.w3.org/2000/svg', 'g' )
+        } else {
+          return create.apply( document, arguments )
+        }
+      }
+    </script>
+    <script type="application/javascript" xlink:href=".../lib/jquery/2.1.3/min/js"/>
+    <script type="application/javascript" xlink:href="jquery"/>
     <path
        sodipodi:nodetypes="ssscccccccccccc"
        inkscape:connector-curvature="0"
@@ -3247,7 +3262,7 @@
     <a
        xlink:href=".../department/happiness/division/comms/"
        transform="translate(-97.375003,-236.95199)"
-       id="comms"
+       id="Comms"
        style="display:inline">
       <circle
          d="M 12.5,0 C 12.5,6.9035594 6.9035594,12.5 0,12.5 -6.9035594,12.5 -12.5,6.9035594 -12.5,0 c 0,-6.9035594 5.5964406,-12.5 12.5,-12.5 6.9035594,0 12.5,5.5964406 12.5,12.5 z"
@@ -3326,7 +3341,7 @@
     <a
        xlink:href=".../department/happiness/division/money/"
        transform="translate(-97.375003,-236.95199)"
-       id="money"
+       id="Money"
        style="display:inline">
       <circle
          id="circle4951"
@@ -3357,7 +3372,7 @@
        id="current_in9"
        transform="matrix(0,-0.5279129,-0.58911601,0,121.00303,191.67148)">
       <a
-         id="logistics"
+         id="Plans"
          href=".../department/happiness/logistics/">
         <circle
            d="M 12.5,0 C 12.5,6.9035594 6.9035594,12.5 0,12.5 -6.9035594,12.5 -12.5,6.9035594 -12.5,0 c 0,-6.9035594 5.5964406,-12.5 12.5,-12.5 6.9035594,0 12.5,5.5964406 12.5,12.5 z"
@@ -3429,7 +3444,7 @@
          id="g6673">
         <a
            transform="matrix(0.89163032,0,0,0.89163032,-278.1127,-106.17912)"
-           id="health"
+           id="Health"
            xlink:href="http://bump.dhappy.org">
           <g
              transform="matrix(0,-0.59207598,-0.66071779,0,556.76231,566.6468)"
@@ -3465,7 +3480,7 @@
          id="g5826">
         <a
            xlink:href=".../department/happiness/division/gear/"
-           id="gear">
+           id="Gear">
           <g
              transform="matrix(0,-0.59207598,-0.66071779,0,556.83473,533.49055)"
              id="current_in13"
@@ -3509,7 +3524,7 @@
         <a
            xlink:href=".../department/happiness/division/law/"
            transform="matrix(0.89163032,0,0,0.89163032,-278.1127,-106.17912)"
-           id="law">
+           id="Law">
           <g
              transform="matrix(0,-0.59207598,-0.66071779,0,523.49277,566.32868)"
              id="current_out4"
