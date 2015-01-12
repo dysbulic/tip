@@ -33,7 +33,22 @@
       #plans-text {
         text-transform: lowercase;
       }
+      * {
+        transition: all 0.5s ease;
+      }
     </style>
+    <script type="application/javascript">
+      var create = document.createElement
+      document.createElement = function( name ) {
+        if( name == 'div' ) {
+          return document.createElementNS( 'http://www.w3.org/2000/svg', 'g' )
+        } else {
+          return create.apply( document, arguments )
+        }
+      }
+    </script>
+    <script type="application/javascript" xlink:href=".../lib/jquery/2.1.3/min/js"/>
+    <script type="application/javascript" xlink:href="jquery"/>
     <path
        sodipodi:nodetypes="ssscccccccccccc"
        inkscape:connector-curvature="0"
@@ -3247,7 +3262,7 @@
     <a
        xlink:href=".../department/happiness/division/comms/"
        transform="translate(-97.375003,-236.95199)"
-       id="a6639"
+       id="Comms"
        style="display:inline">
       <circle
          d="M 12.5,0 C 12.5,6.9035594 6.9035594,12.5 0,12.5 -6.9035594,12.5 -12.5,6.9035594 -12.5,0 c 0,-6.9035594 5.5964406,-12.5 12.5,-12.5 6.9035594,0 12.5,5.5964406 12.5,12.5 z"
@@ -3258,8 +3273,9 @@
          cx="0"
          cy="0"
          r="12.5"
-         style="fill:#ffffff;stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         style="stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          id="circle4931"
+         class='button'
          transform="matrix(0,-0.5279129,-0.58911601,0,188.64933,428.33983)" />
       <path
          id="comms-alt"
@@ -3323,13 +3339,14 @@
          id="circle4948" />
     </g>
     <a
-       xlink:href="money"
+       xlink:href=".../department/happiness/division/money/"
        transform="translate(-97.375003,-236.95199)"
-       id="a3529"
+       id="Money"
        style="display:inline">
       <circle
          id="circle4951"
-         style="fill:#ffffff;stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         class='button'
+         style="stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          r="12.5"
          cy="0"
          cx="0"
@@ -3343,14 +3360,6 @@
          transform="matrix(0.04647088,0,0,0.04647088,178.97931,359.62425)"
          style="stroke:#000701;stroke-width:6.15675879;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          id="Bitcoin_Logo">
-        <rect
-           id="Background"
-           display="none"
-           width="420"
-           height="420"
-           x="0"
-           y="0"
-           style="fill:#ffffff;stroke:#000701;stroke-width:6.15675879;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:none" />
         <path
            id="Bitcoin"
            d="m 260.217,206.682 c 4.801,-5.566 7.789,-12.738 7.789,-20.68 0,-25 -15,-40 -40,-40 h 0.016 l -0.016,-30 c 0,-1.105 -0.895,-2 -2,-2 h -12 c -1.078,0 -1.941,0.855 -1.984,1.922 v 30.078 h -16 l -0.016,-30 c 0,-1.105 -0.895,-2 -2,-2 h -12 c -1.078,0 -1.941,0.855 -1.984,1.922 v 30.078 l -34.029,0.008 c -1.102,0 -1.992,0.891 -1.998,1.99 v 12 c 0.037,1.072 0.924,2 2.006,2 h 2 c 8.836,0 16,7.164 16,16 l 0.021,64 c 0,8.362 -6.417,15.228 -14.596,15.939 -0.849,0.073 -1.56,0.679 -1.767,1.505 l -3.029,12.068 c -0.15,0.598 -0.016,1.231 0.363,1.718 0.379,0.485 0.961,0.77 1.577,0.77 h 33.452 v 30.078 c 0.043,1.07 0.906,1.922 1.984,1.922 h 12 c 1.105,0 2,-0.891 2,-2 l 0.016,-30 h 16 v 30.078 c 0.043,1.07 0.906,1.922 1.984,1.922 h 12 c 1.105,0 2,-0.891 2,-2 l 0.016,-30 h 7.984 c 25,0 40,-15 40,-40 0,-11.711 -6.387,-21.779 -15.789,-27.318 z m -64.211,-36.681 h 24 c 8.836,0 16,7.164 16,16 0,8.836 -7.164,16 -16,16 h -24 v -32 z m 32,79.999 h -32 v -32 h 32 c 8.836,0 16,7.164 16,16 0,8.836 -7.164,16 -16,16 z"
@@ -3363,8 +3372,8 @@
        id="current_in9"
        transform="matrix(0,-0.5279129,-0.58911601,0,121.00303,191.67148)">
       <a
-         id="a4399"
-         href="logistics/">
+         id="Plans"
+         href=".../department/happiness/logistics/">
         <circle
            d="M 12.5,0 C 12.5,6.9035594 6.9035594,12.5 0,12.5 -6.9035594,12.5 -12.5,6.9035594 -12.5,0 c 0,-6.9035594 5.5964406,-12.5 12.5,-12.5 6.9035594,0 12.5,5.5964406 12.5,12.5 z"
            sodipodi:ry="12.5"
@@ -3374,7 +3383,7 @@
            cx="0"
            cy="0"
            r="12.5"
-           style="fill:#ffffff;stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+           style="stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
            id="circle4966" />
         <path
            sodipodi:nodetypes="cssssssscssssssscsssssssssssssssssssccsssssssssssssssccsssssscsscsssssssssssssscsssssssssssscsssssssssssssssccsssssssssssssssss"
@@ -3428,22 +3437,20 @@
     </g>
     <a
        style="display:inline"
-       xlink:href="http://bump.dhappy.org"
-       id="a6679"
+       xlink:href="http://fück.net"
+       id="Health"
        transform="translate(-97.375003,-236.95199)">
       <g
          id="g6673">
-        <a
-           transform="matrix(0.89163032,0,0,0.89163032,-278.1127,-106.17912)"
-           id="a5546"
-           xlink:href="http://bump.dhappy.org">
+        <g
+           transform="matrix(0.89163032,0,0,0.89163032,-278.1127,-106.17912)">
           <g
              transform="matrix(0,-0.59207598,-0.66071779,0,556.76231,566.6468)"
              id="current_in11"
              style="stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
             <circle
                id="circle4976"
-               style="fill:#ffffff;stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+               style="stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
                r="12.5"
                cy="0"
                cx="0"
@@ -3453,7 +3460,7 @@
                sodipodi:ry="12.5"
                d="M 12.5,0 C 12.5,6.9035594 6.9035594,12.5 0,12.5 -6.9035594,12.5 -12.5,6.9035594 -12.5,0 c 0,-6.9035594 5.5964406,-12.5 12.5,-12.5 6.9035594,0 12.5,5.5964406 12.5,12.5 z" />
           </g>
-        </a>
+        </g>
         <path
            style="fill:#ff8fbc;fill-opacity:1;stroke:#62002a;stroke-width:0.51191664;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
            d="m 215.99904,396.13749 c -1.11178,0.014 -2.08329,0.63387 -2.44132,1.69018 -0.61166,2.74696 2.79304,3.92392 4.66096,5.57853 1.64556,-1.89286 4.84411,-2.36617 4.70467,-5.18062 -0.13421,-0.62826 -0.52179,-1.14132 -1.04381,-1.50357 -0.69949,-0.48604 -1.67743,-0.65734 -2.51626,-0.37418 -0.44863,0.13903 -0.8581,0.38269 -1.1651,0.70699 -0.52523,-0.58783 -1.35975,-0.92891 -2.19914,-0.91733 z"
@@ -3471,14 +3478,14 @@
          id="g5826">
         <a
            xlink:href=".../department/happiness/division/gear/"
-           id="a5554">
+           id="Gear">
           <g
              transform="matrix(0,-0.59207598,-0.66071779,0,556.83473,533.49055)"
              id="current_in13"
              style="stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
             <circle
                id="circle4986"
-               style="fill:#ffffff;stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+               style="stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
                r="12.5"
                cy="0"
                cx="0"
@@ -3488,9 +3495,6 @@
                sodipodi:ry="12.5"
                d="M 12.5,0 C 12.5,6.9035594 6.9035594,12.5 0,12.5 -6.9035594,12.5 -12.5,6.9035594 -12.5,0 c 0,-6.9035594 5.5964406,-12.5 12.5,-12.5 6.9035594,0 12.5,5.5964406 12.5,12.5 z" />
           </g>
-        </a>
-        <a
-           id="a5550">
           <g
              id="g3518"
              transform="matrix(0.0257225,0,0,0.0230502,550.08719,528.04544)"
@@ -3502,6 +3506,9 @@
                inkscape:connector-curvature="0"
                style="fill:#6b9125;stroke:#000007;stroke-width:15.23247147;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.84018273;stroke-dasharray:none;stroke-dashoffset:162" />
           </g>
+        </a>
+        <a
+           id="a5550">
         </a>
       </g>
     </a>
@@ -3515,14 +3522,14 @@
         <a
            xlink:href=".../department/happiness/division/law/"
            transform="matrix(0.89163032,0,0,0.89163032,-278.1127,-106.17912)"
-           id="a5822">
+           id="Law">
           <g
              transform="matrix(0,-0.59207598,-0.66071779,0,523.49277,566.32868)"
              id="current_out4"
              style="stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
             <circle
                id="circle4941"
-               style="fill:#ffffff;stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+               style="stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
                r="12.5"
                cy="0"
                cx="0"
@@ -3690,25 +3697,12 @@
        width="1"
        height="1"
        style="fill:none;stroke:#000000;stroke-width:0.02238118;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
-    <a
-       transform="translate(-45.099595,-397.13257)"
-       id="a6639-0"
-       style="display:inline"
-       xlink:href="/home/will/.../department/happiness/division/comms/" />
   </g>
   <g
      inkscape:groupmode="layer"
-     id="layer1"
+     id="AoF"
      inkscape:label="Army of Fun"
      style="display:inline">
-    <rect
-       style="opacity:0;fill:#ffffff;stroke:#000000;stroke-width:1.59061027;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="background"
-       x="-248.50961"
-       y="70.274323"
-       width="174.11925"
-       height="71.069084"
-       transform="matrix(0,-1,1,0,0,0)" />
     <g
        style="stroke:#000000;stroke-width:4.47623682;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="current_out1"

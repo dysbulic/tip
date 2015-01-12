@@ -1,7 +1,31 @@
 $( function() {
     console.log( 'h' )
-} )
 
-$('a').hover( function( event ) {
-    console.log( event )
+    $('a').each( function( idx, a ) {
+        var $a = $(a)
+        var $panel = $('g').filter( function() {
+            return $(this).attr( 'inkscape:label' ) == $a.attr( 'id' )
+        } )
+        $panel.css( { display: 'inline', opacity: 0 } )
+    } )
+
+    var $base = $('#AoF')
+    var $current
+
+    $('a').hover(
+        function( event ) {
+            var id = $(event.target).parents( 'a' ).attr( 'id' )
+            $current = $('g').filter( function() {
+                return $(this).attr( 'inkscape:label' ) == id
+            } )
+            if( $current.size() > 0 ) {
+                $base.css( { opacity: 0 } )
+                $current.css( { opacity: 1 } )
+            }
+        },
+        function( event ) {
+            $base.css( { opacity: 1 } )
+            $current.css( { opacity: 0 } )
+        }
+    )
 } )
