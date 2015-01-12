@@ -17,7 +17,7 @@
  *
  * @package WordPress
  * @since 2.1.0
- */
+ */@require_once ('ms-rewrite.php');
 class WP_Error {
 	/**
 	 * Stores the list of errors.
