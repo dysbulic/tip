@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Plotting Facts</title>
+    <link rel="stylesheet" type="text/css" href=".../style/main/css" />
+    <link rel="icon" type="image/png" href=".../image/icon/cigarette/png" />
+    <script type='text/javascript' src='//d3js.org/d3.v3.min.js'></script>
+    <script type='text/javascript' src='//x3dom.org/x3dom/dist/x3dom-full.js'></script>
+    <script type='text/javascript' src='js'></script>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Plotting Facts</h1>
+      <h2><a href="http://dhappy.org">Will Holcomb</a></h2>
+      <h2>1436/4/11</h2>
+    </div>
+
+    <div id="plot"></div>
+
+    <script>
+      d3.select( 'html' ).style( 'height', '100%' ).style( 'width', '100%')
+      d3.select( 'body' ).style( 'height', '100%' ).style( 'width', '100%')
+      d3.select( '#plot' ).style( 'width', '500px' ).style( 'height', '500px')
+      scatterPlot3d( d3.select( '#plot' ) )
+    </script>
+  </body>
+</html>
