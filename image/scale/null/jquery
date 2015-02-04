@@ -51,6 +51,10 @@
         }
         $('#image').attr( 'transform', "rotate(" + rotation + ")")
         $('#form').css( { stroke : color } )
+	text = String( text ).replace( /^(-?)0\./, '$1.' )
+	if( ( text[0] == '-' && text.length == 3 ) || ( text[0] == '.' && text.length == 2 ) ) {
+	    text += '0'
+	}
         $('#text').text( text )
         $('#bar').attr( 'y2', newY )
         
