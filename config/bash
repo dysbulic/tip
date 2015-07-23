@@ -28,15 +28,22 @@ alias src='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -
 alias srceach='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0 | xargs -0'
 
 function t() {
-    echo 'hi'
-    echo "\"$*\""
     git commit -am "$*"
 }
 
-function fit() {
-    EXPR=
-    git status -v | egrep '^\+' | egrep 'fit\s*{|focus:|binding.pry|^\+\+\+'
-    git diff | egrep '^\+' | egrep 'fit\s*\{|focus:|binding.pry|^\+\+\+'
+function f() {
+    EXPR='\sfit\s|\sfocus:\s*true\s|\sbinding.pry[[:space:]]|^\+\+\+'
+    git status -v | egrep '^\+' | egrep "$EXPR"
+    git diff | egrep '^\+' | egrep "$EXPR"
+}
+
+function s() {
+    git status
+}
+
+function d() {
+    git status -v
+    git diff
 }
 
 # Ignore hidden files in tab completion
@@ -281,8 +288,8 @@ shopt -s globstar
 # Replace cd with p (pushd) and d (pushd^-1)
 # Put in Himinbiorg/shell
 alias p=pushd
-alias d=popd
-alias r=rm
+#alias d=popd
+alias r='rm -f'
 alias l=ls
 alias v=start
 alias e=emacs
