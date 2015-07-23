@@ -28,9 +28,15 @@ alias src='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -
 alias srceach='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0 | xargs -0'
 
 function t() {
-    #echo 'hi'
-    #echo "\"$*\""
-    #echo git commit -am "\"$*\""
+    echo 'hi'
+    echo "\"$*\""
+    git commit -am "$*"
+}
+
+function fit() {
+    EXPR=
+    git status -v | egrep '^\+' | egrep 'fit\s*{|focus:|binding.pry|^\+\+\+'
+    git diff | egrep '^\+' | egrep 'fit\s*\{|focus:|binding.pry|^\+\+\+'
 }
 
 # Ignore hidden files in tab completion
