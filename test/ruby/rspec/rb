@@ -31,7 +31,10 @@ describe URI('/api/users'), type: :model, api: true do
   context Request::PutTo('/test/parent') do
     subject { putout(2, :subject, nil, described_class) }
     
-    before { putout(2, :before, subject, described_class) }
+    before do
+      binding.pry
+      putout(2, :before, subject, described_class)
+    end
 
     it { putout(2, :it, subject, described_class) }
 
@@ -40,6 +43,35 @@ describe URI('/api/users'), type: :model, api: true do
       let!(:early) { putout(3, :let!, subject, described_class) }
 
       before { putout(3, :before, subject, described_class) }
+
+      shared_examples 'examples' do
+        let(:var) { 'example' }
+
+        it { putout(4, :shared, var, subject, described_class) }
+      end
+      
+      it { putout(4, :it, subject, described_class) }
+
+      it_should_behave_like 'examples' do
+        let(:var) { 'late' }
+      end
+
+      it_should_behave_like 'examples' do
+        let!(:var) { 'early' }
+      end
+    end
+  end
+end
+
+describe URI('/api/users/2'), type: :model, api: true do
+  it { putout(1, :it, subject, described_class) }
+    
+  context Request::PutTo('/test/2/parent') do
+    it { putout(2, :it, subject, described_class) }
+
+    context Request::PutTo('/test') do
+      let(:late) { putout(3, :let, subject, described_class) }
+      let!(:early) { putout(3, :let!, subject, described_class) }
 
       shared_examples 'examples' do
         let(:var) { 'example' }
