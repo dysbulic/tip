@@ -23,22 +23,21 @@ module Request
   end
 end
 
-describe URI('/api/users'), type: :model, api: true do
+describe URI('/api/users/1'), type: :model, api: true do
   before { putout(1, :before, subject, described_class) }
 
   it { putout(1, :it, subject, described_class) }
 
-  context Request::PutTo('/test/parent') do
+  context Request::PutTo('/test/2') do
     subject { putout(2, :subject, nil, described_class) }
     
     before do
-      binding.pry
       putout(2, :before, subject, described_class)
     end
 
     it { putout(2, :it, subject, described_class) }
 
-    context Request::PutTo('/test') do
+    context Request::PutTo('/test/3') do
       let(:late) { putout(3, :let, subject, described_class) }
       let!(:early) { putout(3, :let!, subject, described_class) }
 
@@ -60,6 +59,10 @@ describe URI('/api/users'), type: :model, api: true do
         let!(:var) { 'early' }
       end
     end
+  end
+
+  def putout(depth, place, *args)
+    puts %Q[#{' '*depth}##{depth}: #{(["#{place}:"] + args).map{|a|"(#{a})"}.join("\n"+' '*(depth+1))}]
   end
 end
 
