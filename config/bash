@@ -37,14 +37,15 @@ function f() {
     git diff | egrep '^\+' | egrep "$EXPR"
 }
 
-function s() {
-    git status
-}
+alias s='git status'
+alias r='rescue rails'
 
 function d() {
     git status -v
     git diff
 }
+
+alias l='git log'
 
 # Ignore hidden files in tab completion
 bind 'set match-hidden-files off' 
@@ -288,9 +289,9 @@ shopt -s globstar
 # Replace cd with p (pushd) and d (pushd^-1)
 # Put in Himinbiorg/shell
 alias p=pushd
-#alias d=popd
-alias r='rm -f'
-alias l=ls
+# alias d=popd
+# alias r='rm -fv'
+# alias l=ls
 alias v=start
 alias e=emacs
 
