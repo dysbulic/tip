@@ -22,7 +22,7 @@ module Request
   end
 end
 
-RSpec.describe Array do
+RSpec.describe Array, type: :request do
   before { puts "Root:\n  #{subject}\n  #{described_class}" }
 
   context Hash do
@@ -31,17 +31,18 @@ RSpec.describe Array do
     it { puts "#3a:\n  #{subject}\n  #{described_class}" }
 
     context Request::PutTo('/test') do
-      let!(:test) { puts 'let!' }
+      let(:late) { puts '  let' }
+      let!(:early) { puts '  let!' }
 
       before { puts "#3b:\n  #{subject}\n  #{described_class}" }
 
       shared_examples 'examples' do
         let(:var) { 'example' }
 
-        it { puts var }
+        it { puts "  #{var}" }
       end
       
-      it { puts "#4:  #{subject}\n  #{described_class}" }
+      it { puts "#4:\n  #{subject}\n  #{described_class}" }
 
       it_should_behave_like 'examples' do
         let(:var) { 'late' }
