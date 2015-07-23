@@ -1,0 +1,31 @@
+RSpec.describe Array do
+  before { puts "Root:\n  #{subject.inspect}\n  #{described_class.inspect}" }
+
+  context Hash do
+    before { puts "#2:\n  #{subject.inspect}\n  #{described_class.inspect}" }
+
+    it { puts "#3a:\n  #{subject.inspect}\n  #{described_class.inspect}" }
+    
+    context RSpec do
+      let!(:test) { puts 'let!' }
+
+      before { puts "#3b:\n  #{subject.inspect}\n  #{described_class.inspect}" }
+
+      shared_examples 'examples' do
+        let(:var) { 'example' }
+
+        it { puts var }
+      end
+      
+      it { puts "#4:  #{subject.inspect}\n  #{described_class.inspect}" }
+
+      it_should_behave_like 'examples' do
+        let(:var) { 'late' }
+      end
+
+      it_should_behave_like 'examples' do
+        let!(:var) { 'early' }
+      end
+    end
+  end
+end
