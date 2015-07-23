@@ -1,15 +1,39 @@
+require 'net/http'
+
+module Request
+  module PutTo
+    def self.new
+      PutRequest.new(path)
+    end
+  end
+
+  def PutTo(path)
+    PutRequest.new(path)
+  end
+  
+  module_function :PutTo
+
+  class PutRequest
+    def initialize(path)
+      @req = Net::HTTP::Put.new(path)
+    end
+    
+    define_method(:to_s) { "#{@req.method} to #{@req.path}" }
+  end
+end
+
 RSpec.describe Array do
-  before { puts "Root:\n  #{subject.inspect}\n  #{described_class.inspect}" }
+  before { puts "Root:\n  #{subject}\n  #{described_class}" }
 
   context Hash do
-    before { puts "#2:\n  #{subject.inspect}\n  #{described_class.inspect}" }
+    before { puts "#2:\n  #{subject}\n  #{described_class}" }
 
-    it { puts "#3a:\n  #{subject.inspect}\n  #{described_class.inspect}" }
-    
-    context RSpec do
+    it { puts "#3a:\n  #{subject}\n  #{described_class}" }
+
+    context Request::PutTo('/test') do
       let!(:test) { puts 'let!' }
 
-      before { puts "#3b:\n  #{subject.inspect}\n  #{described_class.inspect}" }
+      before { puts "#3b:\n  #{subject}\n  #{described_class}" }
 
       shared_examples 'examples' do
         let(:var) { 'example' }
@@ -17,7 +41,7 @@ RSpec.describe Array do
         it { puts var }
       end
       
-      it { puts "#4:  #{subject.inspect}\n  #{described_class.inspect}" }
+      it { puts "#4:  #{subject}\n  #{described_class}" }
 
       it_should_behave_like 'examples' do
         let(:var) { 'late' }
