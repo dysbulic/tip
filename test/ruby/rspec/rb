@@ -1,4 +1,5 @@
 require 'net/http'
+begin; require 'spec_helper'; rescue LoadError; end
 
 module Request
   module PutTo
@@ -22,10 +23,12 @@ module Request
   end
 end
 
-RSpec.describe Array, type: :request do
+describe URI('/api/users'), type: :model, api: true do
   before { puts "Root:\n  #{subject}\n  #{described_class}" }
 
-  context Hash do
+  context Request::PutTo('/test/parent') do
+    subject { " #2: #{described_class}" }
+    
     before { puts "#2:\n  #{subject}\n  #{described_class}" }
 
     it { puts "#3a:\n  #{subject}\n  #{described_class}" }
