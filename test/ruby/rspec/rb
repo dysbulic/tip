@@ -24,28 +24,30 @@ module Request
 end
 
 describe URI('/api/users'), type: :model, api: true do
-  before { puts "Root:\n  #{subject}\n  #{described_class}" }
+  before { putout(1, :before, subject, described_class) }
+
+  it { putout(1, :it, subject, described_class) }
 
   context Request::PutTo('/test/parent') do
-    subject { " #2: #{described_class}" }
+    subject { putout(2, :subject, nil, described_class) }
     
-    before { puts "#2:\n  #{subject}\n  #{described_class}" }
+    before { putout(2, :before, subject, described_class) }
 
-    it { puts "#3a:\n  #{subject}\n  #{described_class}" }
+    it { putout(2, :it, subject, described_class) }
 
     context Request::PutTo('/test') do
-      let(:late) { puts '  let' }
-      let!(:early) { puts '  let!' }
+      let(:late) { putout(3, :let, subject, described_class) }
+      let!(:early) { putout(3, :let!, subject, described_class) }
 
-      before { puts "#3b:\n  #{subject}\n  #{described_class}" }
+      before { putout(3, :before, subject, described_class) }
 
       shared_examples 'examples' do
         let(:var) { 'example' }
 
-        it { puts "  #{var}" }
+        it { putout(4, :shared, var, subject, described_class) }
       end
       
-      it { puts "#4:\n  #{subject}\n  #{described_class}" }
+      it { putout(4, :it, subject, described_class) }
 
       it_should_behave_like 'examples' do
         let(:var) { 'late' }
@@ -55,5 +57,9 @@ describe URI('/api/users'), type: :model, api: true do
         let!(:var) { 'early' }
       end
     end
+  end
+
+  def putout(depth, place, *args)
+    puts %Q[#{' '*depth}##{depth}: #{(["#{place}:"] + args).map{|a|"(#{a})"}.join("\n"+' '*(depth+1))}]
   end
 end
