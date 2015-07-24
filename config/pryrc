@@ -1,26 +1,30 @@
+# coding: utf-8
+require 'binding_of_caller'
+
 Pry.commands.alias_command 'c', 'continue'
 Pry.commands.alias_command 's', 'step'
 Pry.commands.alias_command 'n', 'next'
 Pry.commands.alias_command 'q', 'quit'
 Pry.commands.alias_command 'w', 'whereami'
 Pry.commands.alias_command 'b', 'pry-backtrace'
-Pry.commands.alias_command 'bex', '_ex_.backtrace' # last exception
+Pry.commands.alias_command 'm', 'my-backtrace'
+# Pry.commands.alias_command 'bex', '_ex_.backtrace' # last exception
 
-Pry::Commands.command /^$/, "repeat last command" do
+Pry::Commands.block_command /^$/, "repeat last command" do
   _pry_.run_command Pry.history.to_a.last
 end
 
-class Pry
-  class Command::MyPryBacktrace < Pry::ClassCommand
-    match 'my-backtrace'
-    group 'Context'
-    description 'Show entries for my code in the backtrace.'
+module Kernel
+  define_method(:p) { Pry.start(binding.of_caller(1)) }
+end
 
-    def process
-      p
-      _pry_.pager.page text.bold('Backtrace:') << "\n--\n" << _pry_.backtrace.join("\n")
-    end
-  end
-
-  Pry::Commands.add_command(Pry::Command::MyPryBacktrace)
+Pry::Commands.block_command 'my-backtrace', 'me in the backtrace' do
+  _pry_.pager.page(
+    [
+      text.bold('Source Files in the Backtrace:'),
+      "―――",
+      _pry_.backtrace.reject{ |line| line.include? '/gems/' }.join("\n")
+    ]
+    .join("\n")
+  )
 end
