@@ -27,7 +27,8 @@ export EDITOR='emacs -nw'
 alias src='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0'
 alias srceach='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0 | xargs -0'
 
-function t() { git commit -am "$*"; }
+function t() { echo git commit -am "${*}"; }
+function tt() { git commit -am "$*"; }
 
 FIT_EXPR='\sfit\s|\sfocus:\s*true\s|\sbinding.pry[[:space:]]|^\+\+\+'
 function f() {
@@ -42,7 +43,9 @@ alias s='git status'
 alias r='rescue rspec'
 alias gg='git grep "$*"'
 alias gp='git push'
+alias aa='git add .'
 alias p='pushd'
+alias f='fortune'
 #alias '-'='popd'
 alias q='popd'
 function l() { git commit --amend -m "$*"; }
