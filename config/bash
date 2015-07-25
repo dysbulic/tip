@@ -42,23 +42,26 @@ function ff() {
     find -type f -name \*rb -print0 | xargs -0 egrep -e $EXPR -v --color
 }
 
-alias s='git status'
 alias r='rescue rspec'
+
 alias gg='git grep "$*"'
 alias gp='git push'
 alias aa='git add .'
-alias p='pushd'
+
 alias f='fortune -a'
+
 #alias '-'='popd'
 alias q='popd'
+alias p='pushd'
+
 function l() { git commit --amend -m "$*"; }
 function pp() { dir="$(pwd)"; popd; pushd "$dir"; cd "$@"; }
 
-function d() {
-    git status -v
-    git diff
-}
+alias eb='e .../config/bash'
+alias rb='source .../config/bash'
 
+alias s='git status'
+alias d='git status -v; git diff'
 alias l='git log'
 
 # Ignore hidden files in tab completion
