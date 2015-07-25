@@ -27,18 +27,22 @@ export EDITOR='emacs -nw'
 alias src='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0'
 alias srceach='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0 | xargs -0'
 
-function t() {
-    git commit -am "$*"
-}
+function t() { git commit -am "$*"; }
 
+FIT_EXPR='\sfit\s|\sfocus:\s*true\s|\sbinding.pry[[:space:]]|^\+\+\+'
 function f() {
-    EXPR='\sfit\s|\sfocus:\s*true\s|\sbinding.pry[[:space:]]|^\+\+\+'
-    git status -v | egrep '^\+' | egrep "$EXPR"
-    git diff | egrep '^\+' | egrep "$EXPR"
+    git status -v | egrep '^\+' | egrep "$FIT_EXPR"
+    git diff | egrep '^\+' | egrep "$FIT_EXPR"
+}
+function ff() {
+    find -type f -name \*rb -print0 | xargs -0 egrep -e $EXPR -v --color
 }
 
 alias s='git status'
 alias r='rescue rspec'
+alias gg='git grep "$*"'
+alias p='git push'
+function pp() { pushd "$@"; cd "$@"; }
 
 function d() {
     git status -v
@@ -288,7 +292,7 @@ shopt -s globstar
 
 # Replace cd with p (pushd) and d (pushd^-1)
 # Put in Himinbiorg/shell
-alias p=pushd
+# alias p=pushd
 # alias d=popd
 # alias r='rm -fv'
 # alias l=ls
