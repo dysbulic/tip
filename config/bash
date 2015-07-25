@@ -42,7 +42,7 @@ alias s='git status'
 alias r='rescue rspec'
 alias gg='git grep "$*"'
 alias p='git push'
-function pp() { pushd "$@"; cd "$@"; }
+function pp() { dir="$(pwd)"; popd; pushd "$dir"; cd "$@"; }
 
 function d() {
     git status -v
