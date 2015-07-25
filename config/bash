@@ -27,7 +27,7 @@ export EDITOR='emacs -nw'
 alias src='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0'
 alias srceach='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0 | xargs -0'
 
-function t() { echo git commit -am "${*}"; }
+function t() { echo git commit -am "${*:-$(fortune)}"; }
 function tt() { git commit -am "$*"; }
 
 FIT_EXPR='\sfit\s|\sfocus:\s*true\s|\sbinding.pry[[:space:]]|^\+\+\+'
