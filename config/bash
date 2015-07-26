@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# If not running interactively, don't do anything
-[[ "$-" != *i* ]] && return
+[[ "$-" != *i* ]] && return # If not running interactively, don't do anything
 
 if [ "$PS1" ]; then
     host=$(hostname)
@@ -47,16 +46,9 @@ alias r='rescue rspec'
 alias gg='git grep "$*"'
 alias gp='git push'
 alias aa='git add .'
+alias ...='p ...'
 
 alias f='fortune -a'
-
-# I've been thinking about the possibility that persistent patterns
-# exist in electrical fields, but that they are too ephemeral to
-# persist around the strengths that our reality functions at. I
-# thought that perhaps the writings of Castaneda described
-# interactions with these beings. That only when our biochemical
-# processes aren't driven by our consciousness are they able to
-# impenge.
 
 #alias '-'='popd'
 alias q='popd'
@@ -72,13 +64,15 @@ alias s='git status'
 alias d='git status -v; git diff'
 alias l='git log'
 
-# Ignore hidden files in tab completion
-bind 'set match-hidden-files off' 
+bind 'set match-hidden-files off' # Ignore hidden files in tab completion
 
-#function cd() {
-    # [ $# -eq 0 ] && { echo 'a'; false; } || { echo 'b'; }
-#    [ $# -eq 0 ] && { command cd ~/.../; } || { command cd "$@"; }
-#}
+# I've been thinking about the possibility that persistent patterns
+# exist in electrical fields, but that they are too ephemeral to
+# persist around the strengths that our reality functions at. I
+# thought that perhaps the writings of Castaneda described
+# interactions with these beings. That only when our biochemical
+# processes aren't driven by our consciousness are they able to
+# impenge.
 
 export RSYNC_RSH=ssh
 export CVS_RSH=ssh
