@@ -1,0 +1,22 @@
+RSpec.describe '/api/v2/users/' do
+  let(:current_user) { Fabricate(:user) }
+  
+  context 'PATCH to /memberships' do
+    let(:request) { {} }
+    
+    before do
+      puts 'before'
+      #patch '/api/v2/users/meberships', request.to_json, auth_headers(current_user)
+    end
+
+    shared_examples 'a valid response' do
+      specify { pending }
+    end
+    
+    context 'test context' do
+      let!(:credential) { puts 'cred' }
+
+      it_should_behave_like 'a valid response'
+    end
+  end
+end
