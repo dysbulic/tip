@@ -43,9 +43,11 @@ function ff() {
 
 alias r='rescue rspec'
 
-alias gg='git grep "$*"'
+function gg() { git grep "$*"; }
 alias gp='git push'
 alias aa='git add .'
+alias go='git remote add origin'
+
 alias ...='p ...'
 
 alias f='fortune -a'
@@ -54,13 +56,14 @@ alias f='fortune -a'
 alias q='popd'
 alias p='pushd'
 
-function l() { git commit --amend -m "$*"; }
+function t-() { git commit --amend -m "$*"; }
 function pp() { dir="$(pwd)"; popd; pushd "$dir"; cd "$@"; }
 
 alias eb='e .../config/bash'
 alias rb='source .../config/bash'
 
 alias s='git status'
+alias b='git branch'
 alias d='git status -v; git diff'
 alias l='git log'
 
@@ -556,7 +559,7 @@ fi
 
 alias groupdini="cx ssh -s 'API' -e staging Bluejay"
 alias c="ssh wjholcomb@himinbi.org"
-alias c="ssh wjholcomb@madstones.com"
+alias c="ssh wjholcomb@dhappy.org"
 alias connect_loki="ssh will@loki"
 alias fenrir="ssh will@fenrir.himinbi.org"
 alias loki="ssh will@loki.himinbi.org"
