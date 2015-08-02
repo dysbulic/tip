@@ -31,6 +31,7 @@ function t() {
     git commit -am "${*:-$fortune}";
 }
 function tt() { git commit -am "$*"; }
+alias u='git reset --soft HEAD~1'
 
 FIT_EXPR='\sfit\s|\sfocus:\s*true\s|\sbinding.pry[[:space:]]|^\+\+\+'
 function f() {
@@ -40,13 +41,15 @@ function f() {
 function ff() {
     find -type f -name \*rb -print0 | xargs -0 egrep -e $EXPR -v --color
 }
+alias fp="gg -E '\sp\$|\sp\s|\sp\;|binding\.pry' -- '*.rb'"
 
 alias r='rescue rspec'
 
-function gg() { git grep "$*"; }
+function gg() { git grep --line-number "$@"; }
 alias gp='git push'
 alias aa='git add .'
 alias go='git remote add origin'
+alias stash='git stash --include-untracked'
 
 alias ...='p ...'
 
@@ -56,18 +59,32 @@ alias f='fortune -a'
 alias q='popd'
 alias p='pushd'
 
+alias g='grep --color'
+
 function t-() { git commit --amend -m "$*"; }
 function pp() { dir="$(pwd)"; popd; pushd "$dir"; cd "$@"; }
 
 alias eb='e .../config/bash'
 alias sb='source .../config/bash'
+alias eb='e ~/.bashrc'
+alias sb='source ~/.bashrc'
 
 alias rb='ruby'
 
 alias s='git status'
 alias b='git branch'
-alias d='git status -v; git diff'
-alias l='git log'
+function d() {
+    git status -v
+    git diff
+    for file in $(git ls-files --others --exclude-standard); do
+        echo -e "\x1B[0;31mUntracked:\x1B[0m \x1B[1;33m$file\x1B[0m"
+        awk '{ print "  " $0 }' "$file"
+    done
+}
+alias l='git log -p'
+
+alias rc='rails console'
+alias routes='rake routes'
 
 bind 'set match-hidden-files off' # Ignore hidden files in tab completion
 
