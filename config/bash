@@ -41,7 +41,7 @@ function f() {
 function ff() {
     find -type f -name \*rb -print0 | xargs -0 egrep -e $EXPR -v --color
 }
-alias fp="gg -E '\sp\$|\sp\s|\sp\;|binding\.pry' -- '*.rb'"
+alias fp="gg -E '\sp\$|\sp\s|\sp\;|binding\.pry|\sspecify\!' -- '*.rb'"
 
 alias r='rescue rspec'
 
@@ -83,7 +83,7 @@ function d() {
 }
 alias l='git log -p'
 
-alias rc='rails console'
+alias c='rails console'
 alias routes='rake routes'
 
 bind 'set match-hidden-files off' # Ignore hidden files in tab completion
@@ -577,8 +577,8 @@ if [ -r "$XSLTTRANS" ]; then
 fi
 
 alias groupdini="cx ssh -s 'API' -e staging Bluejay"
-alias c="ssh wjholcomb@himinbi.org"
-alias c="ssh wjholcomb@dhappy.org"
+alias himinbiorg="ssh wjholcomb@himinbi.org"
+alias dhappy="ssh wjholcomb@dhappy.org"
 alias connect_loki="ssh will@loki"
 alias fenrir="ssh will@fenrir.himinbi.org"
 alias loki="ssh will@loki.himinbi.org"
