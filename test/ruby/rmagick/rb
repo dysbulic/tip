@@ -10,11 +10,11 @@ xml = <<XML
 </svg>
 XML
 
-File.open('source.svg', File::WRONLY | File::CREAT | File::EXCL){ |file| file.write(xml) }
+File.open('source.svg', 'w'){ |file| file.write(xml) }
 
 Magick::Image.from_blob(xml) do
   self.format = 'SVG'
-  #self.background_color = 'transparent'
+  self.background_color = 'transparent'
 end.tap do |images|
   image = images.first
   
