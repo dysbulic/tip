@@ -1,0 +1,38 @@
+$(function() {
+    MathJax.Hub.Config( {
+        tex2jax: {
+            inlineMath: [ ['$','$'] ],
+            processEscapes: true
+        }
+    } )
+
+    var url = URI(window.location.href).query(true)['markdown'] // $.uri().param('markdown')
+    url = (url !== undefined) ? url : 'https://rawgit.com/wiki/oakscastle/event/Pricing.md'
+
+    $('title').text( "Rendering: " + url )
+    
+    $.get(
+        url,
+        function( data ) {
+            var $out = $('<div/>')
+            $out.attr( { id: 'out' } )
+            $('body').append( $out )
+            
+            $out.html( marked( data ) )
+
+            /*
+            MathJax.Hub.Register.MessageHook(
+                'End Process',
+                function( message ) {
+                    console.log( 'a', arguments )
+                    console.log( 'o', $out.html() )
+                    console.log( 'm', marked( $out.html() ) )
+                    $out.html( marked( $out.html() ) )
+                }
+            )
+            */
+
+            MathJax.Hub.Queue( ['Typeset', MathJax.Hub, $out.get(0)] )
+        }
+    )
+})
