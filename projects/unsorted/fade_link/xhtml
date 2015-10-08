@@ -1,12 +1,4 @@
-<?php
-$xhtml = preg_match("'application/xhtml\+xml'", $_SERVER['HTTP_ACCEPT']);
-if($xhtml) {
-  header("Content-type: application/xhtml+xml");
-}
-?>
-<?php print '<?xml version="1.0" encoding="UTF-8" standalone="yes"?' . ">\n" ?>
-<?php if($xhtml): ?>
-<!-- "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" -->
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE html PUBLIC
  "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
  "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd"
@@ -14,7 +6,6 @@ if($xhtml) {
    <!ENTITY hellip  "&#x2026;">
    <!ENTITY lang    "&#9001;">
    <!ENTITY rang    "&#9002;"> ]>
-<?php endif; ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
       xmlns:xml="http://www.w3.org/XML/1998/namespace" lang="en">
   <head>
@@ -26,7 +17,7 @@ if($xhtml) {
       urchinTracker();
     </script>
 
-    <link rel="stylesheet" href="../styles/main.css" type="text/css" />
+    <link rel="stylesheet" href=".../style/main/css" type="text/css" />
     <style type="text/css">
       .cell {
         height: 2em;
@@ -65,7 +56,7 @@ if($xhtml) {
       }
     </style>
     <script type="text/javascript" src="../javascript_compatability/compatability.js"></script>
-    <script type="text/javascript" src="../colortable/colortable.js"></script>
+    <script type="text/javascript" src=".../tool/colortable/colortable.js"></script>
     <script type="text/javascript" src="fadelink.js"></script>
     <script type="text/javascript" src="fadedemo.js"></script>
   </head>

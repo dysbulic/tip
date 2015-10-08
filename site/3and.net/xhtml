@@ -1,11 +1,4 @@
-<?php
-$xhtml = preg_match("'application/xhtml\+xml'", $_SERVER['HTTP_ACCEPT']);
-if($xhtml) {
-  header("Content-type: application/xhtml+xml");
- }
-?>
-<?php print '<?xml version="1.0" encoding="UTF-8" standalone="yes"?' . ">\n" ?>
-<?php if($xhtml) { ?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE html PUBLIC
  "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN" "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd"
  [ <!ENTITY mathml  "http://www.w3.org/1998/Math/MathML">
@@ -13,7 +6,6 @@ if($xhtml) {
    <!ENTITY bull    "&#x7E6;">
    <!ENTITY Pi      "&#x3A0;">
    <!ENTITY deg     "&#xB0;"> ]>
-<?php } ?>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:math="&mathml;">
   <head>
