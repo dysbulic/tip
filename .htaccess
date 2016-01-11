@@ -1,11 +1,14 @@
 # Options +Indexes
+
 HeaderName .apache.header.html
+Header set Access-Control-Allow-Origin "*"
+
 IndexOptions Charset=UTF-8 NameWidth=* DescriptionWidth=* FancyIndexing FoldersFirst ScanHTMLTitles SuppressHTMLPreamble XHTML HTMLTable -SuppressIcon
 IndexIgnore .svn *~ .DS_Store HEADER.html svn-commit.tmp
 
-AddCharset UTF-8 .html .php .css .js
+AddCharset UTF-8 .html .php .css .js json
 
-DirectoryIndex php xhtml svg html utf-8 txt js jquery eson json css mkv webm m4a mp3 jpg
+DirectoryIndex php xhtml svg webm html utf-8 txt js jquery eson json css mkv m4a mp3 jpg
 
 RemoveHandler .sh
 RemoveHandler .py
@@ -53,7 +56,7 @@ AddEncoding x-gzip .svgz
 </FilesMatch>
 
 <FilesMatch "(mql|json)">
-  ForceType application/json
+    ForceType application/json
 </FilesMatch>
 
 <FilesMatch "eson">

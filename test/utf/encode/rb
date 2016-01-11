@@ -1,0 +1,7 @@
+require 'iconv'
+
+ARGV.each do |arg|
+  File.open(arg, 'rb') do |file|
+    STDOUT.write Iconv.iconv('utf-32', 'utf-8', file.read.unpack('S*').pack('L*'))
+  end
+end

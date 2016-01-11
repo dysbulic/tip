@@ -1,0 +1,22 @@
+RSpec.describe URI('/api/v2/users/'), type: :request do
+  let(:current_user) { Fabricate(:user) }
+  let(:org) { Fabricate(:organzantion)
+  
+  context 'PATCH to /memberships' do
+    let(:request) { {} }
+    
+    before do
+      patch '/api/v2/users/meberships', request.to_json, auth_headers(current_user)
+    end
+
+    shared_examples 'a valid response' do
+      specify { controller.should respond_with :created }
+    end
+    
+    context 'as an organization owner' do
+      let!(:credential) { Fabricate(:credential, user: user, organization: org, role: :owner) }
+      
+      it_should_behave_like 'a valid response'
+    end
+  end
+end

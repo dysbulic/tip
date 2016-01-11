@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Reversing Bézier Curves</title>
+    <link rel="stylesheet" type="text/css" href=".../style/main/css" />
+    <style type="text/css">
+      object { width: 100%; }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Reversing Bézier Curves</h1>
+    <p>This is just a quick note on reversing the direction of bézier curves to produce the same curve with the start and end points reversed.</p>
+
+    <hr />
+
+    <p>The situation where this came up is the <a href="http://www.w3.org">SVG</a> map for <a href="http://www.ecodev.mr">ECODev</a>'s page. I already had the basic outline, but I needed the different regions outlined so that people could click on them. I used <a href="">Sodipodi</a> to draw the internal borders, but that was just different lines. The lines needed to be combined before they'd make shapes. And all the lines were a part of two different shapes: the border between the Brakna and Gorgol is a part of the outlines for both regions.</p>
+
+    <p>The problem is in how a SVG shape is filled. Take these two examples:</p>
+
+    <object data="uniform_beziers.svg" type="image/svg+xml" height="400"></object>
+
+    <p>Both shapes are made of two bézier curves, for the top one the curves are going opposite directions and so make a circle. In the bottom one the curves are going the same way and so to make a contiguous shape it is necessary to jump back. This is what causes the crossing shape in the fill.</p>
+
+    <p>To avoid this it is necessary at times to reverse the direction of curves. For static curves it is pretty easy:</p>
+
+    <div style="float: left; width: 15em">
+      <div>M S<sub>x</sub>,S<sub>y</sub></div>
+      <div>
+        C P1<sub>x</sub>,P1<sub>y</sub>
+        P2<sub>x</sub>,P2<sub>y</sub>
+        P3<sub>x</sub>,P3<sub>y</sub>
+      </div>
+      <div>
+        C Q1<sub>x</sub>,Q1<sub>y</sub>
+        Q2<sub>x</sub>,Q2<sub>y</sub>
+        Q3<sub>x</sub>,Q3<sub>y</sub>
+      </div>
+      <div>
+        C R1<sub>x</sub>,R1<sub>y</sub>
+        R2<sub>x</sub>,R2<sub>y</sub>
+        R3<sub>x</sub>,R3<sub>y</sub>
+      </div>
+    </div>
+
+    <div style="float: left; width: .9em; font-size: 4em;">&rarr;</div>
+
+    <div style="float: left; width: 19em;">
+      <div>M R3<sub>x</sub>,R3<sub>y</sub></div>
+      <div>
+        C R2<sub>x</sub>,R2<sub>y</sub>
+        R1<sub>x</sub>,R1<sub>y</sub>
+        Q3<sub>x</sub>,Q3<sub>y</sub>
+      </div>
+      <div>
+        C Q2<sub>x</sub>,Q2<sub>y</sub>
+        Q1<sub>x</sub>,Q1<sub>y</sub>
+        P3<sub>x</sub>,P3<sub>y</sub>
+      </div>
+      <div>
+        C P2<sub>x</sub>,P2<sub>y</sub>
+        P1<sub>x</sub>,P1<sub>y</sub>
+        S<sub>x</sub>,S<sub>y</sub>
+      </div>
+    </div>
+
+    <p style="clear: both; padding-top: 1.5em;">Relative curves are a bit more complex, though easily manageable: <br /> (for the notation here, &lt;R2&gt; - &lt;R3&gt; = &lt;R2<sub>x</sub>,R2<sub>y</sub>&gt; - &lt;R3<sub>x</sub>,R3<sub>y</sub>&gt; = &lt;R2<sub>x</sub> - R3<sub>x</sub>,R2<sub>y</sub> - R3<sub>y</sub>&gt;)</p>
+
+    <div style="float: left; width: 14em">
+      <div>M S<sub>x</sub>,S<sub>y</sub></div>
+      <div>
+        c P1<sub>x</sub>,P1<sub>y</sub>
+        P2<sub>x</sub>,P2<sub>y</sub>
+        P3<sub>x</sub>,P3<sub>y</sub>
+      </div>
+      <div>
+        c Q1<sub>x</sub>,Q1<sub>y</sub>
+        Q2<sub>x</sub>,Q2<sub>y</sub>
+        Q3<sub>x</sub>,Q3<sub>y</sub>
+      </div>
+      <div>
+        c R1<sub>x</sub>,R1<sub>y</sub>
+        R2<sub>x</sub>,R2<sub>y</sub>
+        R3<sub>x</sub>,R3<sub>y</sub>
+      </div>
+    </div>
+
+    <div style="float: left; width: .9em; font-size: 4em;">&rarr;</div>
+
+    <div style="float: left; width: 20em;">
+      <div>M &lt;S&gt; + &lt;P3&gt; + &lt;Q3&gt; + &lt;R3&gt;</div>
+      <div>
+        c &lt;R2&gt; - &lt;R3&gt;, 
+        &lt;R1&gt; - &lt;R3&gt;, 
+        -&lt;R3&gt;
+      </div>
+      <div>
+        c &lt;Q2&gt; - &lt;Q3&gt;, 
+        &lt;Q1&gt; - &lt;Q3&gt;, 
+        -&lt;Q3&gt;
+      </div>
+      <div>
+        c &lt;P2&gt; - &lt;P3&gt;, 
+        &lt;P1&gt; - &lt;P3&gt;, 
+        -&lt;P3&gt;
+      </div>
+    </div>
+    
+    <hr style="clear: both;" />
+  </body>
+</html>

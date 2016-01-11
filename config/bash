@@ -31,6 +31,8 @@ function t() {
     git commit -am "${*:-$fortune}";
 }
 function tt() { git commit -am "$*"; }
+alias u='git reset --soft HEAD~1'
+alias hardr='git reset --hard'
 
 FIT_EXPR='\sfit\s|\sfocus:\s*true\s|\sbinding.pry[[:space:]]|^\+\+\+'
 function f() {
@@ -40,13 +42,21 @@ function f() {
 function ff() {
     find -type f -name \*rb -print0 | xargs -0 egrep -e $EXPR -v --color
 }
+alias fp="gg -E '\sp\$|\sp\s|\sp\;|binding\.pry|\sspecify\!' -- '*.rb'"
 
 alias r='rescue rspec'
 
-function gg() { git grep "$*"; }
+function gg() { git grep --line-number "$@"; }
 alias gp='git push'
+alias pull='git pull'
 alias aa='git add .'
+function mit() { git commit -m "$*"; }
 alias go='git remote add origin'
+alias co='git checkout'
+alias mb='git checkout -b'
+alias stash='git stash --include-untracked'
+alias grate='rake db:migrate'
+alias clean='git clean'
 
 alias ...='p ...'
 
@@ -56,16 +66,33 @@ alias f='fortune -a'
 alias q='popd'
 alias p='pushd'
 
+alias g='grep --color'
+
 function t-() { git commit --amend -m "$*"; }
 function pp() { dir="$(pwd)"; popd; pushd "$dir"; cd "$@"; }
 
 alias eb='e .../config/bash'
-alias rb='source .../config/bash'
+alias sb='source .../config/bash'
+alias eb='e ~/.bashrc'
+alias sb='source ~/.bashrc'
+
+alias rb='ruby'
+alias rb='source ~/.bashrc'
 
 alias s='git status'
 alias b='git branch'
-alias d='git status -v; git diff'
-alias l='git log'
+function d() {
+    git status -v
+    git diff
+    for file in $(git ls-files --others --exclude-standard); do
+        echo -e "\x1B[0;31mUntracked:\x1B[0m \x1B[1;33m$file\x1B[0m"
+        awk '{ print "  " $0 }' "$file"
+    done
+}
+alias l='git log -p'
+
+alias c='rails console'
+alias routes='rake routes'
 
 bind 'set match-hidden-files off' # Ignore hidden files in tab completion
 
@@ -312,7 +339,7 @@ shopt -s globstar
 # Put in Himinbiorg/shell
 # alias p=pushd
 # alias d=popd
-# alias r='rm -fv'
+alias rm='rm -v'
 # alias l=ls
 alias v=start
 alias e=emacs
@@ -558,8 +585,9 @@ if [ -r "$XSLTTRANS" ]; then
 fi
 
 alias groupdini="cx ssh -s 'API' -e staging Bluejay"
-alias c="ssh wjholcomb@himinbi.org"
-alias c="ssh wjholcomb@dhappy.org"
+alias groupdinip="cx ssh -s 'Groupdini API' -e production Bison"
+alias himinbiorg="ssh wjholcomb@himinbi.org"
+alias dhappy="ssh wjholcomb@dhappy.org"
 alias connect_loki="ssh will@loki"
 alias fenrir="ssh will@fenrir.himinbi.org"
 alias loki="ssh will@loki.himinbi.org"
@@ -578,9 +606,9 @@ alias connect_vandy_cluster="ssh holcomwj@vmplogin.accre.vanderbilt.edu"
 alias connect_vandy_lab="ssh holcomwj@hmtcomp-7.vuse.vanderbilt.edu"
 
 alias monitorsleep="sleep 1 && xset dpms force off"
-alias rm="rm -i"
-alias mv="mv -i"
-alias cp="cp -i"
+# alias rm="rm -i"
+# alias mv="mv -i"
+# alias cp="cp -i"
 
 if [ "${BASH_VERSINFO[5]/apple/}" != "${BASH_VERSINFO[5]}" ]; then # in OSX
     alias dir="ls -G"
@@ -699,3 +727,6 @@ git config --global user.email "will@dhappy.org"
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
+
+export NVM_DIR="/home/will/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
