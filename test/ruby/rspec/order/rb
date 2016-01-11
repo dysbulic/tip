@@ -1,0 +1,15 @@
+RSpec.describe 'describe' do
+  context 'overarching' do
+    before { puts 'overarching before' }
+
+    shared_examples 'a valid response' do
+      specify { true }
+    end
+    
+    context 'test context' do
+      let!(:credential) { puts 'let!' }
+      
+      it_should_behave_like 'a valid response'
+    end
+  end
+end

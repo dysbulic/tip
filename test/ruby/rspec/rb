@@ -1,0 +1,103 @@
+# I got stuck on the same error twice. This piece of code literally cost me 2.5hr
+
+require 'net/http'
+begin; require 'spec_helper'; rescue LoadError; end
+
+module Request
+  module PutTo
+    def self.new
+      PutRequest.new(path)
+    end
+  end
+
+  def PutTo(path)
+    PutRequest.new(path)
+  end
+  
+  module_function :PutTo
+
+  class PutRequest
+    def initialize(path)
+      @req = Net::HTTP::Put.new(path)
+    end
+    
+    define_method(:to_s) { "#{@req.method} to #{@req.path}" }
+  end
+end
+
+describe URI('/api/users/1'), api: true do
+  before { putout(1, :before, subject, described_class) }
+
+  it { putout(1, :it, subject, described_class) }
+
+  context Request::PutTo('/test/2') do
+    subject { putout(2, :subject, nil, described_class) }
+    
+    before do
+      putout(2, :before, subject, described_class)
+    end
+
+    it { putout(2, :it, subject, described_class) }
+
+    context Request::PutTo('/test/3') do
+      let(:late) { putout(3, :let, subject, described_class) }
+      let!(:early) { putout(3, :let!, subject, described_class) }
+
+      before { putout(3, :before, subject, described_class) }
+
+      shared_examples 'examples' do
+        let(:var) { 'example' }
+
+        it { putout(4, :shared, var, subject, described_class) }
+      end
+      
+      it { putout(4, :it, subject, described_class) }
+
+      it_should_behave_like 'examples' do
+        let(:var) { 'late' }
+      end
+
+      it_should_behave_like 'examples' do
+        let!(:var) { 'early' }
+      end
+    end
+  end
+
+  def putout(depth, place, *args)
+    puts %Q[#{' '*depth}##{depth}: #{(["#{place}:"] + args).map{|a|"(#{a})"}.join("\n"+' '*(depth+1))}]
+  end
+end
+
+describe URI('/api/users/2'), type: :model, api: true do
+  it { putout(1, :it, subject, described_class) }
+    
+  context Request::PutTo('/test/2/parent') do
+    it { putout(2, :it, subject, described_class) }
+
+    context Request::PutTo('/test') do
+      let(:late) { putout(3, :let, subject, described_class) }
+      let!(:early) { putout(3, :let!, subject, described_class) }
+
+      shared_examples 'examples' do
+        let(:var) { 'example' }
+
+        it { putout(4, :shared, var, subject, described_class) }
+      end
+      
+      it { putout(4, :it, subject, described_class) }
+
+      it_should_behave_like 'examples' do
+        let(:var) { 'late' }
+      end
+
+      it_should_behave_like 'examples' do
+        let!(:var) { 'early' }
+      end
+    end
+  end
+
+  def putout(depth, place, *args)
+    puts %Q[#{' '*depth}##{depth}: #{(["#{place}:"] + args).map{|a|"(#{a})"}.join("\n"+' '*(depth+1))}]
+  end
+end
+
