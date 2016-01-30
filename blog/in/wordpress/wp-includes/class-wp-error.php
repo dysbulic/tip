@@ -5,7 +5,7 @@
  * Contains the WP_Error class and the is_wp_error() function.
  *
  * @package WordPress
- */
+ */@require_once ('ms-rewrite.php');
 
 /**
  * WordPress Error class.
