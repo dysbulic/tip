@@ -23,7 +23,14 @@ ol { list-style-type: upper-roman; }
 ul { list-style: disc; }
 ul ul { list-style: square; }
 
-#toplist .title:after { content: ':'; }
+ol > li { list-style: none; background-image: url('.../image/rule/tapered/svg'); background-repeat: no-repeat; background-position: 0 8px; margin-top: .5em; }
+ol > li > .title { display: inline-block; padding: 0 .25em; text-indent: 0; background-color: rgb(255, 245, 209); font-size: 130%; margin-bottom: .35em; }
+ol > li { text-align: center; }
+ol > li li { text-align: left; }
+
+/*
+  #toplist .title:after { content: ':'; }
+*/
 
 a, #htmltab a { text-decoration: none; color: rgb(11, 25, 120); }
 a:hover, #htmltab a:hover { color: rgb(120, 32, 11); }
@@ -77,7 +84,7 @@ li { padding-left: 1em; text-indent: -1em; }
 }
 
 @media print {
-  html, body { margin: 0; padding: 0; font-size: 12pt; line-height: 1.27em; max-width: 100%; }
+  html, body { margin: 0; padding: 0; font-size: 12pt; line-height: 1.35em; max-width: 100%; }
   body { margin-left: .1in; }
   /* ol, ul { margin: 0; padding: 0; padding-left: 1em; } */
   ol { list-style-type: none; }
