@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:html="http://www.w3.org/1999/xhtml"
+   width="100%" height="100%"
+   version="1.0" id="doh_logo"
+   viewBox="0 0 300 150">
+  <defs>
+    <style type='text/css'>
+      #center {
+        stroke: black;
+        stroke-width: 2;
+        fill: #eeeffd;
+      }
+      #titleline, #blurbline {
+        fill: none;
+        /*stroke: red;*/
+      }
+      #textbg {
+        stroke: black;
+        stroke-width: 20;
+        fill: none;
+      }
+      #title, #blurb {
+        fill: #F0EEFD;
+        font-size: 15px;
+        font-weight: bold;
+        text-anchor: middle;
+        text-align: center;
+      }
+      #title {
+        font-size: 21px;
+        font-variant: small-caps;
+        letter-spacing: -.25px;
+      }
+      div {
+        display: block;
+        right: -35px;
+        top: 15%;
+      }
+      p {
+        font-size: 8px;
+        text-align: justify;
+      }
+    </style>
+  </defs>
+  <circle id='center' cx="75" cy="50%" r='50'/>
+  <circle id='textbg' cx="75" cy="50%" r="64"/>
+  <path id='titleline' d='m 74.5,131 a 56,-56 0 1 1 1,0'/>
+  <path id='blurbline' d='m 5,75 a 70,70 0 0 0 140,0'/>
+  <text id="blurb">
+    <textPath
+        startOffset="50%"
+        xlink:href="#blurbline">totus custodez</textPath>
+  </text>
+  <text id="title">
+    <textPath
+        startOffset="50%"
+        xlink:href="#titleline">Department of Happiness</textPath>
+  </text>
+  <use xlink:href='.../image/kitten/head/svg#root' x='40' y='35' width='65' height='100'/>
+
+  <foreignObject x="155" y="10" height="150" width="150">
+    <html:div id='doh'>
+      <html:p>The Department of Happiness is a central actor in <html:cite>The Technoanarchist Revolution</html:cite>: a sci-fi story detailing a progression to post-scarcity society.</html:p>
+      <html:p>The DoH is grounded in a recommendation engine that uses a comprehensive model of the world to deliver real-time recommendations for activities.</html:p>
+    </html:div>
+    <html:div id='mimis'>
+      <html:p>Mimis is the data store backing many of the DoH's operations.</html:p>
+    </html:div>
+  </foreignObject>
+  <script type='text/javascript'>
+    var elem = document.getElementById('mimis')
+    console.log(elem.scrollTop)
+  </script>
+
+</svg>
