@@ -15,9 +15,21 @@ $(function() {
 			$blind.append($line)
 		}
 		return $blind
-	}	
+	}
+
+	var $top = $('#text').clone()
+	$top.attr({
+		'clip-path': "url(#top)"
+	})
+	$('svg').append($top)
+
+	var $bottom = $('#text').clone()
+	$bottom.attr({
+		transform: 'scale(-1,1) translate(-400)',
+		'clip-path': "url(#bottom)"
+	})
+	$('svg').append($bottom)
 
 	$('defs').append(clipBlind('top', function(c) { return c * lineHeight * 2 }))
-	$('defs').append(clipBlind('bottom', function(c) { return c * lineHeight * 2 + 1 }))
-
+	$('defs').append(clipBlind('bottom', function(c) { return 	c * lineHeight * 2 + lineHeight }))
 })
