@@ -1,19 +1,23 @@
 $(function() {
-	var lineHeight = 22
-	var $top = $(document.createElement('clipPath'))
-	$top.attr({ id: 'top' })
-	console.log($top)
-	$('defs').append($top)
-	for(var count = 0; count < 10; count++) {
-		var $line = $(document.createElement('rect'))
-		$line.attr({
-			x: 0,
-			y: count * lineHeight * 2,
-			width: '100%',
-			height: lineHeight
-		})
-		$top.append($line)
-	}
-//      <rect x="0" y="35" width="400" height="22"/>
-//      <rect x="0" y="75" width="400" height="22"/>
+	var lineHeight = 18
+
+	function clipBlind(id, fy) {
+		var $blind = $(document.createElementNS('http://www.w3.org/2000/svg', 'clipPath'))
+		$blind.attr({ id: id })
+		for(var count = 0; count < 10; count++) {
+			var $line = $(document.createElementNS('http://www.w3.org/2000/svg', 'rect'))
+			$line.attr({
+				x: 0,
+				y: fy(count),
+				width: '100%',
+				height: lineHeight
+			})
+			$blind.append($line)
+		}
+		return $blind
+	}	
+
+	$('defs').append(clipBlind('top', function(c) { return c * lineHeight * 2 }))
+	$('defs').append(clipBlind('bottom', function(c) { return c * lineHeight * 2 + 1 }))
+
 })
