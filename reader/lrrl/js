@@ -1,35 +1,70 @@
-$(function() {
-	var lineHeight = 22
+var activeCallback = $.Callbacks()
+WebFontConfig = {
+    google: { families: ['Open+Sans:400italic,400,300,600:latin'] },
+    active: function () { activeCallback.fire(); }
+}
 
-	function clipBlind(id, fy) {
-		var $blind = $(document.createElementNS('http://www.w3.org/2000/svg', 'clipPath'))
-		$blind.attr({ id: id })
-		for(var count = 0; count < 100; count++) {
-			var $line = $(document.createElementNS('http://www.w3.org/2000/svg', 'rect'))
-			$line.attr({
-				x: 0,
-				y: fy(count),
-				width: '100%',
-				height: lineHeight
-			})
-			$blind.append($line)
-		}
-		return $blind
+var lineHeight = 30
+
+var once = false
+
+function redrawBlinds() {
+    $topBlind.empty()
+    $bottomBlind.empty()
+
+    //if(once) { return }
+    once = true
+    
+    var lineNumber = 0
+    var displayCount = 0
+    
+    $('p').each(function() {
+	var $p = $(this)
+	offset = $p.offset().top
+	
+	console.log('p', offset)
+
+	for(var count = 0; count < ($p.height() / lineHeight); count++) {
+	    var $line = $(document.createElementNS('http://www.w3.org/2000/svg', 'rect'))
+	    $line.attr({
+		x: 0,
+		y: ++lineNumber * lineHeight,
+		width: '100%',
+		height: lineHeight
+	    })
+	    if(++displayCount % 2 == 0) {
+		$bottomBlind.append($line)
+		$line.attr({ y: parseFloat($line.attr('y')) }) 
+	    } else {
+		$topBlind.append($line)
+		$line.attr({ y: parseFloat($line.attr('y')) - lineHeight }) 
+	    }
 	}
+	console.log($p.height() / lineHeight, $p.height(), $p.prop('scrollHeight'), ++lineNumber)
+    })
+    $('body')[0].style.display = 'none'
+    $('body')[0].offsetHeight
+    $('body')[0].style.display = ''
+}
 
-	var $top = $('#text').clone()
-	$top.attr({
-		'clip-path': "url(#top)"
-	})
-	$('svg').append($top)
+$(document).click(function() {
+    console.log('click')
+    redrawBlinds()
+})
 
-	var $bottom = $('#text').clone()
-	$bottom.attr({
-		transform: 'scale(-1,1) translate(-400)',
-		'clip-path': "url(#bottom)"
-	})
-	$('svg').append($bottom)
+$(function() {
+    $topBlind = $(document.createElementNS('http://www.w3.org/2000/svg', 'clipPath'))
+    $bottomBlind = $(document.createElementNS('http://www.w3.org/2000/svg', 'clipPath'))
+    
+    $topBlind.attr({ id: 'top' })
+    $bottomBlind.attr({ id: 'bottom' })
+    
+    $('defs').append($topBlind)
+    $('defs').append($bottomBlind)
 
-	$('defs').append(clipBlind('top', function(c) { return c * lineHeight * 2 }))
-	$('defs').append(clipBlind('bottom', function(c) { return 	c * lineHeight * 2 + lineHeight }))
+    var $rev = $('#text').clone()
+    $rev.attr({ id: 'reverse' })
+    $('body').append($rev)
+
+    redrawBlinds()
 })
