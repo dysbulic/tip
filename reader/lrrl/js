@@ -6,29 +6,24 @@ WebFontConfig = {
 
 var lineHeight = 30
 
-var once = false
-
 function redrawBlinds() {
     $topBlind.empty()
     $bottomBlind.empty()
 
-    //if(once) { return }
-    once = true
-    
     var lineNumber = 0
     var displayCount = 0
-    
-    $('p').each(function() {
-	var $p = $(this)
-	offset = $p.offset().top
-	
-	console.log('p', offset)
 
+    console.log('ps', $('#text p').size(), $('p').size())
+    
+    $('#text p').each(function() {
+	var $p = $(this)
+	offset = $p.offset().top + 4
+	
 	for(var count = 0; count < ($p.height() / lineHeight); count++) {
 	    var $line = $(document.createElementNS('http://www.w3.org/2000/svg', 'rect'))
 	    $line.attr({
 		x: 0,
-		y: ++lineNumber * lineHeight,
+		y: offset + ((count - 1) * lineHeight),
 		width: '100%',
 		height: lineHeight
 	    })
@@ -37,11 +32,37 @@ function redrawBlinds() {
 		$line.attr({ y: parseFloat($line.attr('y')) }) 
 	    } else {
 		$topBlind.append($line)
-		$line.attr({ y: parseFloat($line.attr('y')) - lineHeight }) 
+		$line.attr({ y: parseFloat($line.attr('y')) }) 
 	    }
 	}
-	console.log($p.height() / lineHeight, $p.height(), $p.prop('scrollHeight'), ++lineNumber)
     })
+
+    $('#text h1').each(function() {
+	var $h = $(this)
+	console.log('h', $h.height(), $h.offset().top)
+	var $line = $(document.createElementNS('http://www.w3.org/2000/svg', 'rect'))
+	$line.attr({
+	    x: 0,
+	    y: $h.offset().top - 5,
+	    width: '100%',
+	    height: $h.height() - 12
+	})
+	$topBlind.append($line)
+    })
+
+    $('#text h2').each(function() {
+	var $h = $(this)
+	console.log('h', $h.height(), $h.offset().top)
+	var $line = $(document.createElementNS('http://www.w3.org/2000/svg', 'rect'))
+	$line.attr({
+	    x: 0,
+	    y: $h.offset().top - 18,
+	    width: '100%',
+	    height: $h.height() - 6
+	})
+	$topBlind.append($line)
+    })
+
     $('body')[0].style.display = 'none'
     $('body')[0].offsetHeight
     $('body')[0].style.display = ''
