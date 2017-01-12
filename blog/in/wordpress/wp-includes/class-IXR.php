@@ -168,7 +168,7 @@ class IXR_Value {
     {
         $expected = 0;
         foreach ($array as $key => $value) {
-            if ((string)$key != (string)$expected) {
+            if ((string)$key !== (string)$expected) {
                 return true;
             }
             $expected++;
@@ -201,7 +201,6 @@ class IXR_Message
     var $_value;
     var $_currentTag;
     var $_currentTagContents;
-    var $_valueHasType = false;
     // The XML parser
     var $_parser;
 
@@ -250,7 +249,7 @@ class IXR_Message
         $element_limit = 30000;
         if ( function_exists( 'apply_filters' ) ) {
             /**
-             * Filter the number of elements to parse in an XML-RPC response.
+             * Filters the number of elements to parse in an XML-RPC response.
              *
              * @since 4.0.0
              *
@@ -274,7 +273,7 @@ class IXR_Message
         $chunk_size = 262144;
 
         /**
-         * Filter the chunk size that can be used to parse an XML-RPC reponse message.
+         * Filters the chunk size that can be used to parse an XML-RPC reponse message.
          *
          * @since 4.4.0
          *
@@ -325,8 +324,6 @@ class IXR_Message
                 $this->_arraystructstypes[] = 'struct';
                 $this->_arraystructs[] = array();
                 break;
-            case 'value':
-                $this->_valueHasType = false;
         }
     }
 
@@ -358,8 +355,8 @@ class IXR_Message
                 break;
             case 'value':
                 // "If no type is indicated, the type is string."
-                if ( !$this->_valueHasType ) {
-                    $value = trim( $this->_currentTagContents );
+                if (trim($this->_currentTagContents) != '') {
+                    $value = (string)$this->_currentTagContents;
                     $valueFlag = true;
                 }
                 break;
@@ -390,8 +387,6 @@ class IXR_Message
         }
 
         if ($valueFlag) {
-            $this->_valueHasType = true;
-				
             if (count($this->_arraystructs) > 0) {
                 // Add value to struct or array
                 if ($this->_arraystructstypes[count($this->_arraystructstypes)-1] == 'struct') {
