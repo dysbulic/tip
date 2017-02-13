@@ -27,11 +27,11 @@ export EDITOR='emacs -nw'
 alias src='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0'
 alias srceach='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0 | xargs -0'
 
-function t() {
+function tt() {
     fortune="$(fortune -s)"
     git commit -am "${*:-$fortune}";
 }
-function tt() { git commit -am "$*"; }
+function t() { git commit -am "$*"; }
 alias u='git reset --soft HEAD~1'
 alias hardr='git reset --hard'
 
@@ -62,7 +62,7 @@ alias clean='git clean'
 
 alias ...='p ...'
 
-alias f='fortune -a'
+alias fortune='fortune -a'
 
 #alias '-'='popd'
 alias q='popd'
@@ -504,6 +504,7 @@ function suspend() {
 function settitle() {
     echo -n $'\033']0\;$@$'\007'
 }
+alias st='settitle'
 
 function mp3reencode() {
     newfile="${1%mp3}new.mp3";
@@ -518,7 +519,7 @@ function mp3oggify() {
 }
 
 function wmaoggify() {
-    artist=${1% - *};
+
     track=${1#* - };
     newfile="${1%wma}ogg";
     mplayer -ao pcm -ao pcm:file="$newfile.temp" "$1";
