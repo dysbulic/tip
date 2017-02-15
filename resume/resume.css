@@ -23,6 +23,19 @@ ol { list-style-type: upper-roman; }
 ul { list-style: disc; }
 ul ul { list-style: square; }
 
+.role:before { content: '\2022'; padding: .5em; }
+.role:after { content: '\2014'; padding: .5em; font-family: serif; font-weight: bold; }
+
+.location:before {
+    content: '(';
+}
+.location:after {
+    content: ')';
+}
+.location {
+    font-style: italic;
+}
+
 ol > li { list-style: none; background-image: url('.../image/rule/tapered/svg'); background-repeat: no-repeat; background-position: 0 8px; margin-top: .5em; }
 ol > li > .title { display: inline-block; padding: 0 .25em; text-indent: 0; background-color: rgb(255, 245, 209); font-size: 130%; margin-bottom: .35em; }
 ol > li { text-align: center; }
