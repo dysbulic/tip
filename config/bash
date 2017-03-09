@@ -32,6 +32,8 @@ function tt() {
     git commit -am "${*:-$fortune}";
 }
 function t() { git commit -am "$*"; }
+
+alias m='git merge'
 alias u='git reset --soft HEAD~1'
 alias hardr='git reset --hard'
 
@@ -59,7 +61,7 @@ alias mb='git checkout -b'
 alias gs='git stash --include-untracked'
 alias pop='git stash pop'
 alias grate='rake db:migrate'
-alias rdb='rake db:drop db:create db:migrate'
+alias rdb='rake db:reset'
 alias clean='git clean'
 
 alias ...='p ...'
