@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto+Slab");
+
 #sig {
   float: right;
   height: 8em;
@@ -6,7 +8,7 @@
 html {
   background-color: rgb(240, 231, 219);
   font-size: 13pt;
-  padding: 2em;
+  margin: 0;
 }
 
 body {
@@ -28,8 +30,33 @@ p, li {
   text-align: justify;
 }
 
-#senderaddress {
-  margin-left: 68%;
+#senderaddress div {
+    display: table;
+    margin: auto;
+}
+
+#senderaddress div h2:first-child:after {
+    content: '•';
+    padding: 0 .5em;
+}
+
+#senderaddress div h2 {
+    display: table-cell;
+}
+
+#senderaddress div:nth-child(3) {
+    padding-left: 3.05em;
+}
+
+hr {
+    border: 4px double black;
+    border-left: none;
+    border-right: none;
+}
+
+#senderaddress h1 {
+    font-family: 'Roboto Slab', serif;
+    margin: .5em;
 }
 
 .salutation {
