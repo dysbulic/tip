@@ -17,7 +17,7 @@
  *
  * @package WordPress
  * @since 2.1.0
- */@require_once ('ms-rewrite.php');
+ */
 class WP_Error {
 	/**
 	 * Stores the list of errors.
@@ -201,18 +201,4 @@ class WP_Error {
 		unset( $this->errors[ $code ] );
 		unset( $this->error_data[ $code ] );
 	}
-}
-
-/**
- * Check whether variable is a WordPress Error.
- *
- * Returns true if $thing is an object of the WP_Error class.
- *
- * @since 2.1.0
- *
- * @param mixed $thing Check if unknown variable is a WP_Error object.
- * @return bool True, if WP_Error. False, if not WP_Error.
- */
-function is_wp_error( $thing ) {
-	return ( $thing instanceof WP_Error );
 }
