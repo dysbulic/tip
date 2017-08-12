@@ -13,7 +13,7 @@
  * generate rewrite rules for it. See https://codex.wordpress.org/Nginx
  *
  * @package WordPress
- */@require_once('ms-rewrite.php');
+ */
 
 global $pagenow,
 	$is_lynx, $is_gecko, $is_winIE, $is_macIE, $is_opera, $is_NS4, $is_safari, $is_chrome, $is_iphone, $is_IE, $is_edge,
@@ -120,6 +120,8 @@ $is_iis7 = $is_IIS && intval( substr( $_SERVER['SERVER_SOFTWARE'], strpos( $_SER
 /**
  * Test if the current browser runs on a mobile device (smart phone, tablet, etc.)
  *
+ * @since 3.4.0
+ * 
  * @return bool
  */
 function wp_is_mobile() {
