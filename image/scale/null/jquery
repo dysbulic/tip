@@ -86,8 +86,10 @@
     $doc.on( 'mousedown', mousedown )
     $doc.on( 'mouseup', mouseup )
     $doc.on( 'mousemove', drag )
-    $doc.on( 'swipe', swipe )
-
+    $doc.on( 'touchstart', mousedown )
+    $doc.on( 'touchmove', drag )
+    $doc.on( 'touchend', mouseup )
+ 
     // For Opera
     if(!Event.prototype.DOM_VK_LEFT)  Event.prototype.DOM_VK_LEFT = 37
     if(!Event.prototype.DOM_VK_UP)    Event.prototype.DOM_VK_UP = 38
@@ -123,7 +125,9 @@
     var xWindow = 150
 
     function mousedown( evt ) {
-      origX = evt.clientX - position * xWindow
+      if( origX == null ) {
+        origX = clientX( evt ) - position * xWindow
+      }
     }
 
     function mouseup( evt ) {
@@ -131,13 +135,23 @@
     }
 
     function drag( evt ) {
-      if( origX != null ) {
-        setPosition( ( evt.clientX - origX ) / xWindow )
-      }
+        if( origX != null ) {
+          setPosition( ( clientX( evt ) - origX ) / xWindow )
+        }
     }
 
     function swipe( evt ) {
         setPosition( evt.swipestart.coords[0] > evt.swipestop.coords[0] ? -1 : 1 )
+    }
+
+    function clientX( evt ) {
+      var clientX = evt.clientX;
+
+      if( typeof clientX == 'undefined' ) {
+        clientX = evt.originalEvent.touches[0].clientX
+      }
+
+      return clientX
     }
 
     setPosition(position)
