@@ -1,5 +1,23 @@
 <html>
 	<head>
+		<title>13-Sign Solar Calendar</title>
+		<meta charset="utf-8"/>
+		<style>
+#date {
+	font-family: 'Times New Roman';
+	text-align: center;
+	font-size: 10em;
+}
+		</style>
+	</head>
+	<body>
+		<div id="date">
+			<span id='year'>-1</span>
+			/
+			<span id='month'></span>
+			/
+			<span id='day'></span>
+		</div>
 		<script type='application/javascript'>
 var months = [
   {
@@ -86,9 +104,11 @@ console.log(now);
 while(months.length > 0 && now.getMonth() > months[0].ends.getMonth()) {
 	months.shift();
 }
-console.log(months);
+var currentSign = months[0];
+console.log(currentSign, document.getElementById('month'));
+document.getElementById('month').innerHTML = currentSign.symbol;
+console.log();
+document.getElementById('day').innerHTML = currentSign.ends.getDate() - now.getDate();
 		</script>
-	</head>
-	<body>
 	</body>
 </html>
