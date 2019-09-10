@@ -25,7 +25,6 @@ body {
 			<span id='day'></span>
 		</div>
     <div id='time'>
-      -
       <span id='hour'></span>
       :
       <span id='minute'></span>
@@ -115,6 +114,13 @@ var months = [
   },
 ];
 
+// https://stackoverflow.com/questions/6220693/string-format-in-javascript
+function zeroPad(nr, base){
+  base = 10;
+  var len = (String(base).length - String(nr).length) + 1;
+  return len > 0 ? new Array(len).join('0') + nr : nr;
+}
+
 function step() {
   var now = new Date();
   while(months.length > 0 && now.getMonth() > months[0].ends.getMonth()) {
@@ -140,9 +146,9 @@ function step() {
   document.getElementById('hour').innerHTML = altHours;
   altSeconds -= altHours * 100 * 100;
   let altMinutes = Math.floor(altSeconds / 100);
-  document.getElementById('minute').innerHTML = altMinutes;
+  document.getElementById('minute').innerHTML = zeroPad(altMinutes);
   altSeconds -= altMinutes * 100;
-  document.getElementById('second').innerHTML = Math.floor(altSeconds);
+  document.getElementById('second').innerHTML = zeroPad(Math.floor(altSeconds));
 
   window.requestAnimationFrame(step);
 }
