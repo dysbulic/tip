@@ -3,11 +3,17 @@
 		<title>13-Sign Solar Calendar</title>
 		<meta charset="utf-8"/>
 		<style>
-#date {
-	font-family: 'Times New Roman';
+#date, #time {
 	text-align: center;
-	font-size: 10em;
+	font-size: 16em;
 }
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 		</style>
 	</head>
 	<body>
@@ -18,6 +24,14 @@
 			/
 			<span id='day'></span>
 		</div>
+    <div id='time'>
+      <span id='hour'></span>
+      :
+      <span id='minute'></span>
+      .
+      <span id='second'></span>
+    </div>
+
 		<script type='application/javascript'>
 var months = [
   {
