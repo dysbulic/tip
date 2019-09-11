@@ -1,0 +1,160 @@
+<html>
+	<head>
+		<title>13-Sign Solar Calendar</title>
+		<meta charset="utf-8"/>
+    <link rel="shortcut icon" href="favicon.png" />
+		<style>
+#date, #time {
+	text-align: center;
+	font-size: 16em;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+		</style>
+	</head>
+	<body>
+		<div id="date">
+			<span id='year'>-1</span>
+			/
+			<span id='month'></span>
+			/
+			<span id='day'></span>
+		</div>
+    <div id='time'>
+      <span id='hour'></span>
+      :
+      <span id='minute'></span>
+      .
+      <span id='second'></span>
+    </div>
+
+		<script type='application/javascript'>
+var months = [
+  {
+    name: 'Capricorn',
+    symbol: '♑',
+    starts: new Date('2021/01/21 17:15'),
+    ends: new Date('2021/02/16 17:47'),
+  },
+  {
+    name: 'Aquarius',
+    symbol: '♒',
+    starts: new Date('2021/02/16 17:47'),
+    ends: new Date('2021/03/11 17:47'),
+  },
+  {
+    name: 'Pisces',
+    symbol: '♓',
+    starts: new Date('2021/03/11 17:47'),
+    ends: new Date('2021/04/18 17:45'),
+  },
+  {
+    name: 'Aries',
+    symbol: '♈',
+    starts: new Date('2021/04/18 17:45'),
+    ends: new Date('2021/05/13 17:45'),
+  },
+  {
+    name: 'Taurus',
+    symbol: '♉',
+    starts: new Date('2021/05/13 17:45'),
+    ends: new Date('2021/06/21 17:45'),
+  },
+  {
+    name: 'Gemini',
+    symbol: '♊',
+    starts: new Date('2021/06/21 17:45'),
+    ends: new Date('2021/07/20 17:45'),
+  },
+  {
+    name: 'Cancer',
+    symbol: '♋',
+    starts: new Date('2021/07/20 17:45'),
+    ends: new Date('2021/08/10 17:45'),
+  },
+  {
+    name: 'Leo',
+    symbol: '♌',
+    starts: new Date('2021/08/10 17:45'),
+    ends: new Date('2021/09/16 17:45'),
+  },
+  {
+    name: 'Virgo',
+    symbol: '♍',
+    starts: new Date('2021/09/16 17:45'),
+    ends: new Date('2021/10/30 17:45'),
+  },
+  {
+    name: 'Libra',
+    symbol: '♎',
+    starts: new Date('2021/10/30 17:45'),
+    ends: new Date('2021/11/23 17:45'),
+  },
+  {
+    name: 'Scorpio',
+    symbol: '♏',
+    starts: new Date('2021/11/23 17:45'),
+    ends: new Date('2021/11/29 17:45'),
+  },
+  {
+    name: 'Ophiuchus',
+    symbol: '⛎',
+    starts: new Date('2021/11/29 17:45'),
+    ends: new Date('2021/12/27 17:45'),
+  },
+  {
+    name: 'Sagittarius',
+    symbol: '♐',
+    starts: new Date('2021/12/27 17:45'),
+    ends: new Date('2022/01/20 17:45'),
+  },
+];
+
+// https://stackoverflow.com/questions/6220693/string-format-in-javascript
+function zeroPad(nr, base){
+  base = 10;
+  var len = (String(base).length - String(nr).length) + 1;
+  return len > 0 ? new Array(len).join('0') + nr : nr;
+}
+
+function step() {
+  var now = new Date();
+  while(months.length > 0 && now.getMonth() > months[0].ends.getMonth()) {
+  	months.shift();
+  }
+
+  // ToDo: Handle case where month is the same, but the day is too late
+
+  var currentSign = months[0];
+  let monthElem = document.getElementById('month')
+  monthElem.innerHTML = currentSign.symbol;
+  monthElem.setAttribute('title', currentSign.name);
+  document.getElementById('day').innerHTML = currentSign.ends.getDate() - now.getDate();
+
+  // ToDo: Hours begin counting from sunrise. For simplcity's sake, everything is from sunrise at the American Meridian in Washington, DC January 20, 2021: 6:18ᴀᴍ.
+
+  let percentDay = now.getHours() / 24;
+  percentDay += now.getMinutes() / (24 * 60);
+  percentDay += now.getSeconds() / (24 * 60 * 60);
+
+  let altSeconds = (10 * 100 * 100) * (1 - percentDay);
+  let altHours = Math.floor(altSeconds / (100 * 100));
+  document.getElementById('hour').innerHTML = altHours;
+  altSeconds -= altHours * 100 * 100;
+  let altMinutes = Math.floor(altSeconds / 100);
+  document.getElementById('minute').innerHTML = zeroPad(altMinutes);
+  altSeconds -= altMinutes * 100;
+  document.getElementById('second').innerHTML = zeroPad(Math.floor(altSeconds));
+
+  window.requestAnimationFrame(step);
+}
+
+window.requestAnimationFrame(step);
+		</script>
+	</body>
+</html>
