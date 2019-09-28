@@ -37,6 +37,8 @@ alias m='git merge'
 alias u='git reset --soft HEAD~1'
 alias hardr='git reset --hard'
 
+alias servehere='ruby -run -e httpd . -p 9999'
+
 FIT_EXPR='\sfit\s|\sfocus:\s*true\s|\sbinding.pry[[:space:]]|^\+\+\+'
 function f() {
     git status -v | egrep '^\+' | egrep "$FIT_EXPR"
@@ -49,6 +51,8 @@ alias fp="gg -E '\sp\$|\sp\s|\sp\;|binding\.pry|\sspecify\!' -- '*.rb'"
 
 alias r='rescue rspec'
 alias rspec='rspec --tag focus'
+
+source /etc/bash_completion.d/git-prompt
 
 function gg() { git grep --line-number "$@"; }
 alias gp='git push'
@@ -505,8 +509,9 @@ function suspend() {
     echo "Suspending in 30 seconds"
 }
 
+export PROMPT_COMMAND='' # will override the title
 function settitle() {
-    echo -n $'\033']0\;$@$'\007'
+    printf "\033]0;$*\007";
 }
 alias st='settitle'
 
