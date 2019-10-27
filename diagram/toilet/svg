@@ -11,15 +11,18 @@
     <html:audio id="flush" src=".../toilet/flush/ogg" />
     <script>
       function play() {
-        let elem = document.getElementById('flush')
-        elem.play()
+        let audio = document.getElementById('flush')
+        audio.play()
+
+        let anim = document.getElementById("water-desc")
+        anim.beginElement()
      }
     </script>
     <animateTransform
       xlink:href="#water"
       attributeName="transform" 
       attributeType="XML"
-      id="ani-circle"
+      id="water-desc"
       type="rotate"
       from="0 38.501500725746155 38.4994986653327945"
       to="360 38.501500725746155 38.4994986653327945" 
