@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.0"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="100%" height="100%" viewBox="0 0 100 100">
+  <title>Line Outline Test</title>
+  <defs>
+    <style>
+      line, path {
+        stroke-width: 2px;
+        stroke: black;
+        stroke-linecap: square;
+      }
+      text { text-anchor: middle; }
+      path { fill: none; }
+    </style>
+    <filter id="outline" x='-50%' y='-50%' width='200%' height='200%'>
+      <feFlood flood-color="#32DFEC" flood-opacity="1" result="PINK"></feFlood>
+      <feFlood flood-color="#FFF" flood-opacity="1" result="WHITE"></feFlood>
+      <feFlood flood-color="#D00" flood-opacity="1" result="RED"></feFlood>
+      <feMorphology in="SourceAlpha" result="OUTSIDE" operator="dilate" radius="2"></feMorphology>
+      <feComposite in="PINK" in2="OUTSIDE" operator="in" result="OUTLINE"></feComposite>
+      <feMorphology in="SourceAlpha" result="SPACE" operator="dilate" radius="1"></feMorphology>
+      <feComposite in="RED" in2="SPACE" operator="in" result="CENTER"></feComposite>
+
+      <feMerge>
+        <feMergeNode in="OUTLINE" />
+        <feMergeNode in="CENTER" />-->
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="outline-2">
+      <feFlood flood-color="#32DFEC" flood-opacity="1" result="PINK"></feFlood>
+      <feOffset in="SourceAlpha" dx="-1" dy="1" result="off-1"/>
+      <feOffset in="SourceAlpha" dx="1" dy="-1" result="off-2"/>
+      <feOffset in="SourceAlpha" dx="-1" dy="-1" result="off-3"/>
+      <feOffset in="SourceAlpha" dx="1" dy="1" result="off-4"/>
+      <feComposite in="PINK" in2="off-1" operator="in" result="colored-1"></feComposite>
+      <feComposite in="PINK" in2="off-2" operator="in" result="colored-2"></feComposite>
+      <feComposite in="PINK" in2="off-3" operator="in" result="colored-3"></feComposite>
+      <feComposite in="PINK" in2="off-4" operator="in" result="colored-4"></feComposite>
+
+      <feOffset in="SourceAlpha" dx="-2" dy="0" result="off-5"/>
+      <feOffset in="SourceAlpha" dx="0" dy="-2" result="off-6"/>
+      <feOffset in="SourceAlpha" dx="2" dy="0" result="off-7"/>
+      <feOffset in="SourceAlpha" dx="0" dy="2" result="off-8"/>
+      <feComposite in="PINK" in2="off-5" operator="in" result="colored-5"></feComposite>
+      <feComposite in="PINK" in2="off-6" operator="in" result="colored-6"></feComposite>
+      <feComposite in="PINK" in2="off-7" operator="in" result="colored-7"></feComposite>
+      <feComposite in="PINK" in2="off-8" operator="in" result="colored-8"></feComposite>
+
+      <feMerge>
+        <feMergeNode in="colored-1" />
+        <feMergeNode in="colored-2" />
+        <feMergeNode in="colored-3" />
+        <feMergeNode in="colored-4" />
+        <feMergeNode in="colored-5" />
+        <feMergeNode in="colored-6" />
+        <feMergeNode in="colored-7" />
+        <feMergeNode in="colored-8" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id='outline-3'>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.5"/>
+      <!-- select just the blur - not the original stroke. -->
+      <feComposite operator="out" in2="outline-only"/>
+      <!-- select just the blur that overlaps the original content -->
+      <feComposite operator="out" in2="SourceGraphic" />
+      <!-- increase its opacity to 100% except the most blurred - to fake anti-aliasing -->
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"/>
+      </feComponentTransfer>
+    </filter>
+    <filter id='outline-4' x='-50%' y='-50%' width='200%' height='200%' color-interpolation-filters="sRGB">
+      <feConvolveMatrix
+       order="3,3"
+       kernelMatrix="
+        1 1 1 
+        1 1 1
+        1 1 1
+      "/>
+    </filter> 
+  </defs>
+
+  <path d='M50,50 l 5,-5 -5,-5 -10,10 m 5,5 l 5,5 15,-15 -15,-15 -20,20 5,0 m 5,0 5,0 0,5 -5,0 0,-5' filter='url(#outline-3)'/>
+</svg>
