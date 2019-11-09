@@ -6,7 +6,7 @@
 		<style>
 #date, #time {
 	text-align: center;
-	font-size: 16em;
+	font-size: 22vh;
 }
 
 body {
@@ -15,11 +15,20 @@ body {
   justify-content: center;
 }
 #phase {
-  display: flex;
+  white-space: nowrap;
   overflow: hidden;
 }
 #phase img {
-  max-height: 35vh;
+  display: inline-block;
+  width: 25vh;
+}
+
+#months {
+  display: flex;
+}
+
+#months {
+  font-size: 10vh;
 }
 		</style>
 	</head>
@@ -43,22 +52,21 @@ body {
       <img src='.../moon/phase/2/svg.svg'/>
       <img src='.../moon/phase/4/svg.svg'/>
       <img src='.../moon/phase/6/svg.svg'/>
-      <img src='.../moon/phase/0/svg.svg'/>
-      <img src='.../moon/phase/1/svg.svg'/>
-      <img src='.../moon/phase/2/svg.svg'/>
-      <img src='.../moon/phase/3/svg.svg'/>
-      <img src='.../moon/phase/4/svg.svg'/>
-      <img src='.../moon/phase/5/svg.svg'/>
-      <img src='.../moon/phase/6/svg.svg'/>
-      <img src='.../moon/phase/7/svg.svg'/>
-      <img src='.../moon/phase/0/svg.svg'/>
-      <img src='.../moon/phase/1/svg.svg'/>
-      <img src='.../moon/phase/2/svg.svg'/>
-      <img src='.../moon/phase/3/svg.svg'/>
-      <img src='.../moon/phase/4/svg.svg'/>
-      <img src='.../moon/phase/5/svg.svg'/>
-      <img src='.../moon/phase/6/svg.svg'/>
-      <img src='.../moon/phase/7/svg.svg'/>
+      <div id='months'>
+        <span title='Capricorn'>♑</span>
+        <span title='Aquarius'>♒</span>
+        <span title='Pisces'>♓</span>
+        <span title='Aries'>♈</span>
+        <span title='Taurus'>♉</span>
+        <span title='Gemini'>♊</span>
+        <span title='Cancer'>♋</span>
+        <span title='Leo'>♌</span>
+        <span title='Virgo'>♍</span>
+        <span title='Libra'>♎</span>
+        <span title='Scorpio'>♏</span>
+        <span title='Ophiuchus'>⛎</span>
+        <span title='Sagittarius'>♐</span>
+      </div>        
     </div>
 
 		<script type='application/javascript'>
@@ -151,17 +159,18 @@ function zeroPad(nr, base){
 }
 
 function step() {
-  var now = new Date();
-  while(months.length > 0 && now.getMonth() > months[0].ends.getMonth()) {
-  	months.shift();
+  const now = new Date()
+  let idx = 0
+  while(months.length > idx && now.getMonth() > months[idx].ends.getMonth()) {
+    idx++
   }
 
   // ToDo: Handle case where month is the same, but the day is too late
 
-  var currentSign = months[0];
+  var currentSign = months[idx];
   let monthElem = document.getElementById('month')
-  monthElem.innerHTML = currentSign.symbol;
-  monthElem.setAttribute('title', currentSign.name);
+  monthElem.innerHTML = idx
+  monthElem.setAttribute('title', `${currentSign.symbol}: ${currentSign.name}`)
   document.getElementById('day').innerHTML = currentSign.ends.getDate() - now.getDate();
 
   // ToDo: Hours begin counting from sunrise. For simplcity's sake, everything is from sunrise at the American Meridian in Washington, DC January 20, 2021: 6:18ᴀᴍ.
@@ -183,6 +192,16 @@ function step() {
 }
 
 window.requestAnimationFrame(step);
+
+let secPerLunarMonth = 2.55 * Math.pow(10, 6)
+let epoch = new Date(2021, 01, 13) // New Moon @ Midnight
+let now = new Date()
+now = new Date(2021, 01, 27) // New Moon @ Midnight
+let offset = now.getTime() - epoch.getTime()
+let relOff = offset % secPerLunarMonth
+if(relOff < 0) relOff = secPerLunarMonth + relOff
+let percent = relOff / secPerLunarMonth
+console.info('R', percent)
 		</script>
 	</body>
 </html>
