@@ -23,10 +23,14 @@ The known commands are:
     dcc -- Let the bot invite you to a DCC CHAT connection.
 """
 
-from ircbot import SingleServerIRCBot
-from irclib import (nm_to_n, nm_to_h, irc_lower,
-                    ip_numstr_to_quad, ip_quad_to_numstr,
-                    DCCConnectionError)
+from irc.bot import SingleServerIRCBot
+
+import irc.strings
+from irc.client import ip_numstr_to_quad, ip_quad_to_numstr
+
+# from irc.lib import (nm_to_n, nm_to_h, irc_lower,
+#                     ip_numstr_to_quad, ip_quad_to_numstr,
+#                     DCCConnectionError)
 
 import os, re, glob
 import struct

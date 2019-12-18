@@ -1,0 +1,19 @@
+The eventual goal is a mind of sorts. There are pieces of data with lots of different paths to them.
+
+The data I want to start with is the Hugo and Nebula Award winners and nominees. Once upon a time, [this program](http://dhappy.org/.../lib/calibre/download_bot.py) downloaded the title and author information from Freebase, then connected to an irc channel, searched for the books, unzipped the contents, and put them in a particularly structured filesystem.
+
+I have, from that endeavor perhaps 150 works from a total I can no longer calculate because Freebase is gone.
+
+The first step is to get back a dataset of works to search for. Fortunately, <a href="http://www.thehugoawards.org">the Hugo Awards</a> has a regular set of pages for the years.
+
+So, I ran <code>wget -mk http://www.thehugoawards.org/hugo-history/</code> and wrote [a ruby script to consume those files](slurp/rb) and dump the info to Postgresql using ActiveRecord from Rails.
+
+Next I generated a set of scaffolds for a basic HTML interface and edited them to display various subsets of the data.
+
+My previous program drawing from Wikidata only downloaded winners, so there are lots of holes.
+
+In looking to fill those I discovered the file lists from the OmwnServe bots in #ebooks. The old program searched for each title then downloaded from the search result.
+
+The new one will search from the lists of available files. Both massively more efficient and I can see all the options.
+
+I'm still enamored with the bicameral nerual network.

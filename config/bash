@@ -56,7 +56,7 @@ source /etc/bash_completion.d/git-prompt
 
 function gg() { git grep --line-number "$@"; }
 alias gp='git push'
-alias pull='git pull'
+alias pull='git pull --allow-unrelated-histories'
 alias aa='git add .'
 function mit() { git commit -m "$*"; }
 alias go='git remote add origin'
@@ -89,7 +89,14 @@ alias sb='source ~/.bashrc'
 alias rb='ruby'
 alias rb='source ~/.bashrc'
 
-alias s='git status'
+alias 25pwin="sh -c 'xprop -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY $(printf 0x%x $((0xffffffff * 25 / 100)))'"
+alias 50pwin="sh -c 'xprop -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY $(printf 0x%x $((0xffffffff * 50 / 100)))'"
+alias 75pwin="sh -c 'xprop -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY $(printf 0x%x $((0xffffffff * 75 / 100)))'"
+alias 80pwin="sh -c 'xprop -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY $(printf 0x%x $((0xffffffff * 80 / 100)))'"
+alias 95pwin="sh -c 'xprop -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY $(printf 0x%x $((0xffffffff * 95 / 100)))'"
+alias 99pwin="sh -c 'xprop -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY $(printf 0x%x $((0xffffffff * 99 / 100)))'"
+
+alias s='git -c color.status=always status | less -REX'
 alias b='git branch'
 function d() {
     git status -v
@@ -222,6 +229,8 @@ mirror="origin"
 
 alias pub="git push '$mirror' master"
 alias sub="git pull '$mirror' master"
+
+alias ka='killall'
 
 function dump-home-to-media() {
     DIR=/media/home/
