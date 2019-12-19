@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+
+require 'pry'
+require 'nokogiri'
+require 'json'
+
+PREFIX = 'www.thehugoawards.org/hugo-history'
+
+years = {}
+
+Dir.glob("#{PREFIX}/*-hugo-awards").each do |dir|
+  pg = File.open("#{dir}/index.html") {
+    |f| Nokogiri::XML(f)
+  }
+  awards = pg.css('.entry-content')
+
+  year = 'Unknown'
+  dir.match(/#{PREFIX}\/(....)/) do |match|
+    year = match[1]
+  end
+
+  out = {}
+
+  awards[0].children.each_with_index do |c, idx|
+    next if c.node_type == 3 # text
+
+    if c.node_name == 'ul'
+      sib = awards[0].children[idx - 2]
+      if sib.node_type === 3
+        sib = awards[0].children[idx - 3]
+      end
+      
+      award = sib.text.strip
+
+      out[award] = []
+
+      c.children.each do |entry|
+        next if entry.node_type == 3 # text
+        raw = entry.text
+        obj = {raw: raw}
+        raw.match(/^“?(.*?),?”? (?:written (?:and directed )?)?by (.*?) [\[\(](.*)[\]\)]$/) do |m|
+          obj[:title] = m[1]
+          obj[:author] = m[2]
+          obj[:publisher] = m[3]
+        end
+        if entry.classes.include?('winner')
+          obj[:won] = true
+        end
+
+        out[award].push(obj)
+      end
+    end
+
+    years[year] = out
+  end
+end
+
+puts JSON.pretty_generate(years)
