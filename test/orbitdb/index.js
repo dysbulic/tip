@@ -1,5 +1,6 @@
 const NPP = require('./newpieceplease')
 NPP.onready = async () => {
+  console.log('node.id:', (await NPP.node.id()).id)
   console.log('orbitdb.id:', NPP.orbitdb.id)
   console.log('orbitdb.identity.id:', NPP.orbitdb.identity.id)
   console.log('pieces.id:', NPP.pieces.id)
@@ -51,4 +52,7 @@ NPP.onready = async () => {
   let data = { this: { is: { a: 'test' } } } // can be any JSON-serializable value
   const hash = "QmXG8yk8UJjMT6qtE2zSxzz3U7z5jSYRgVWLCUFqAVnByM";
   await NPP.sendMessage(hash, data)
+
+  NPP.oncompaniononline = console.log
+  NPP.oncompanionnotfound = () => { throw(e) }
 }
