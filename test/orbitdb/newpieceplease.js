@@ -1,5 +1,6 @@
 class NewPiecePlease {
   constructor (IPFS, OrbitDB) {
+    this.IPFS = IPFS
     this.OrbitDB = OrbitDB
 
     const _init = async (ipfs) => {
@@ -19,19 +20,51 @@ class NewPiecePlease {
         'nodeId': peerInfo.id
       })
 
+      this.node.libp2p.on('peer:connect', this.handlePeerConnected.bind(this))
+      await this.node.pubsub.subscribe(peerInfo.id, this.handleMessageReceived.bind(this))
+
       this.onready()
     }
 
     IPFS.create({
-      preload: { enabled: false },
+      // preload: { enabled: false }, // offline
+      relay: { enabled: true, hop: { enabled: true, active: true } },
       repo: './ipfs',
       EXPERIMENTAL: { pubsub: true },
-      config: {
-        Bootstrap: [],
-        Addresses: { Swarm: [] }
-      }
+      // config: { Bootstrap: [], Addresses: { Swarm: [] } } // offline
     }).then(_init.bind(this))
     .catch(e => { throw e })
+  }
+
+  async getIpfsPeers() {
+    return await this.node.swarm.peers()
+  }
+
+  async connectToPeer(multiaddr, protocol = '/p2p-circuit/ipfs/') {
+    try {
+      await this.node.swarm.connect(protocol + multiaddr)
+    } catch(e) {
+      throw (e)
+    }
+  }
+
+  handlePeerConnected(ipfsPeer) {
+    const ipfsId = ipfsPeer.id.toB58String()
+    if(this.onpeerconnect) this.onpeerconnect(ipfsId)
+  }
+
+  async sendMessage(topic, message) {
+    try {
+      const msgString = JSON.stringify(message)
+      const messageBuffer = this.IPFS.Buffer.from(msgString)
+      await this.node.pubsub.publish(topic, messageBuffer)
+    } catch (e) {
+      throw (e)
+    }
+  }
+
+  handleMessageReceived (msg) {
+    if(this.onmessage) this.onmessage(msg)
   }
 
   async addNewPiece(hash, instrument = 'Piano') {
