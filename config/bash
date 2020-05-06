@@ -31,13 +31,21 @@ function tt() {
     fortune="$(fortune -s)"
     git commit -am "${*:-$fortune}";
 }
-function t() { git commit -am "$*"; }
+function t() { git commit -S -am "$*"; }
+
+function zview() {
+    zlib-flate -uncompress < "$*"
+}
 
 alias m='git merge'
 alias u='git reset --soft HEAD~1'
 alias hardr='git reset --hard'
 
 alias servehere='ruby -run -e httpd . -p 9999'
+alias portprogs='sudo ss -l -A inet -p'
+
+alias idg='ipfs dag get'
+alias ils='ipfs ls'
 
 FIT_EXPR='\sfit\s|\sfocus:\s*true\s|\sbinding.pry[[:space:]]|^\+\+\+'
 function f() {
@@ -57,7 +65,7 @@ source /etc/bash_completion.d/git-prompt
 source /usr/share/bash-completion/completions/git
 
 function gg() { git grep --line-number "$@"; }
-alias gp='git push'
+alias gp='git push --tags'
 __git_complete gp _git_push
 alias pull='git pull --allow-unrelated-histories'
 __git_complete pull _git_pull
@@ -141,9 +149,6 @@ done
 
 [[ -s "/usr/local/rvm/scripts/rvm" ]] && source /usr/local/rvm/scripts/rvm
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
-[ -d ~/bin ] && export PATH=~/bin:$PATH && export GOBIN=~/bin
-export GOPATH=~/go
 
 export LANG="en_US.UTF-8"
 export LC_ALL=$LANG
@@ -762,7 +767,7 @@ alias print="eval echo \$OUT"
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 git config --global user.name "Will Holcomb"
-git config --global user.email "will@dhappy.org"
+git config --global user.email "dys@dhappy.org"
 [ $(hostname) = 'M1600261' ] && git config --global user.email "c_holcomb.william@cerner.com"
 
 ### Added by the Heroku Toolbelt
@@ -774,3 +779,6 @@ export NVM_DIR="/home/will/.nvm"
 
 ### Added by homebrew
 [ -d "/home/linuxbrew/.linuxbrew/" ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
+[ -d ~/bin ] && export PATH=~/bin:$PATH && export GOBIN=~/bin
+export GOPATH=~/go
