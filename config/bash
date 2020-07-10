@@ -2,6 +2,8 @@
 
 [[ "$-" != *i* ]] && return # If not running interactively, don't do anything
 
+EMAIL='dys@dhappy.org'
+
 if [ "$PS1" ]; then
     host=$(hostname)
     [ "$host" = "OPT980-4s7g9p1" ] && host="jhu"
@@ -27,19 +29,9 @@ export EDITOR='emacs -nw'
 alias src='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0'
 alias srceach='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0 | xargs -0'
 
-function tt() {
-    fortune="$(fortune -s)"
-    git commit -am "${*:-$fortune}";
-}
-function t() { git commit -S -am "$*"; }
-
 function zview() {
     zlib-flate -uncompress < "$*"
 }
-
-alias m='git merge'
-alias u='git reset --soft HEAD~1'
-alias hardr='git reset --hard'
 
 alias servehere='ruby -run -e httpd . -p 9999'
 alias portprogs='sudo ss -l -A inet -p'
@@ -64,25 +56,46 @@ alias spk='rspec --tag focus --tag ~focus'
 source /etc/bash_completion.d/git-prompt
 source /usr/share/bash-completion/completions/git
 
+function commit-for-chrissake() {
+    fortune="$(fortune -s)"
+    git commit -am "${*:-$fortune}";
+}
+function t() { git commit -S -am "$*"; }
+
+alias m='git merge'
+__git_complete m _git_merge
+alias u='git reset --soft HEAD~1'
+alias hardr='git reset --hard'
+
 function gg() { git grep --line-number "$@"; }
 alias gp='git push --tags'
 __git_complete gp _git_push
 alias pull='git pull --allow-unrelated-histories'
 __git_complete pull _git_pull
 alias aa='git add .'
-function mit() { git commit -m "$*"; }
+function mit() { git commit -S -m "$*"; }
 alias co='git checkout'
 __git_complete co _git_checkout
 alias mb='git checkout -b'
 alias gs='git stash --include-untracked'
 alias sp='git stash pop'
+alias ggraph='git log --decorate --graph --oneline --all'
+alias ggraph="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ci) %C(bold blue)<%an>%Creset'"
+
 alias grate='rake db:migrate'
 alias rdb='rake db:reset'
 alias clean='git clean'
 
+alias sysstart='systemctl list-units --type service'
+
+
 alias ...='p ...'
 
 alias fortune='fortune -a'
+
+alias mykey='gpg --export --sender $EMAIL'
+#alias mykeys
+alias mypkey=''
 
 #alias '-'='popd'
 alias q='popd'
@@ -170,6 +183,13 @@ export VERBOSE="t"
 export MIMIS_ORIGIN="$REMOTE"
 
 alias nopasswd="( export d=~/.ssh; [ -e $d/id_rsa.pub ] || { mkdir -p $d; cd $d; ssh-keygen -t rsa; }; ssh-copy-id \$REMOTE )"
+alias isotime='date +%Y-%m-%d@%H:%M:%S%:z'
+function rlog() {
+    log="log/$1.$(isotime).log"
+    echo "Logging rake $1 | $log"
+    rake $1 2>&1 >> "$log" &
+    tail -f "$log"
+}
 
 function dmprecord() {
     base="$(echo ~/tip/.../journal)"
@@ -389,10 +409,6 @@ function ipnspub() {
 # Always create intermediate directories
 alias mkdir="mkdir -p"
 
-export AWS_ACCESS_KEY_ID=0BRVRK6FWACPYQ6BCSR2
-export AWS_SECRET_ACCESS_KEY=DXbUDzUdDIvyA9x3jajgDoM4/szI783MIujFp39E
-export S3_BUCKET_NAME=saver-assets
-
 # Not set by OSX'S X server
 #[ -z "$DISPLAY" ] && export DISPLAY=":0"
 
@@ -525,6 +541,8 @@ function clip() {
         dcop klipper klipper setClipboardContents "$*"
     fi
 }
+
+alias hornetlog='journalctl -u hornet.service -f'
 
 # Power down the monitor and unpause Amarok for exiting music on a blog post
 function timeblog() {
@@ -767,7 +785,7 @@ alias print="eval echo \$OUT"
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 git config --global user.name "Will Holcomb"
-git config --global user.email "dys@dhappy.org"
+git config --global user.email $EMAIL
 [ $(hostname) = 'M1600261' ] && git config --global user.email "c_holcomb.william@cerner.com"
 
 ### Added by the Heroku Toolbelt
@@ -780,5 +798,12 @@ export NVM_DIR="/home/will/.nvm"
 ### Added by homebrew
 [ -d "/home/linuxbrew/.linuxbrew/" ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
-[ -d ~/bin ] && export PATH=~/bin:$PATH && export GOBIN=~/bin
+[ -d ~/bin ] && export PATH=~/bin:"$PATH" && export GOBIN=~/bin
+[ -d ~/.cargo/bin ] && export PATH="$PATH":~/.cargo/bin
+[ -d /opt/ibm/java-x86_64-80/jre/bin/ ] && export PATH=/opt/ibm/java-x86_64-80/jre/bin/:$PATH # for neo4j
 export GOPATH=~/go
+
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+eval "$(direnv hook bash)"
