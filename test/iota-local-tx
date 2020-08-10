@@ -1,0 +1,47 @@
+#!/usr/bin/env node
+
+const crypto = require('crypto');
+const { composeAPI, generateAddress } = require('@iota/core')
+const { asciiToTrytes, trytesToAscii } = require('@iota/converter')
+
+const genSeed = (length = 81) => {
+  const alphabet = '9ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  let seed = ''
+  do {
+    const bytes = crypto.randomBytes(1)
+    if(bytes[0] < 243) { // 243 % 27 == 0
+      seed += alphabet[bytes[0] % alphabet.length]
+    }
+  } while(seed.length < length)
+  return seed
+}
+
+const main = async () => {
+  const seed = genSeed()
+  let index = 1
+  const security = 2
+  const checksum = false
+  const addr = generateAddress(seed, index, security, checksum)
+  //const IOTA = composeAPI({ provider: 'https://altnodes.devnet.iota.org:443' })
+  const IOTA = composeAPI({ provider: 'http://localhost:14265' })
+
+  const transfers = [{
+    value: 0,
+    address: addr,
+    tag: 'IPFS9REPO99999ANNOUNCE9LINK',
+    message: asciiToTrytes(JSON.stringify({ test: 'data' })),
+  }]
+  console.debug('Transfers:')
+  console.debug(transfers)
+
+  const prepared = await IOTA.prepareTransfers(seed, transfers)
+  console.debug('Prepared:')
+  console.debug(prepared)
+
+  const depth = 3 // milestones back to start the random walk
+  const minWeightMagnitude = 14 /* devnet */
+  const txs = await IOTA.sendTrytes(prepared, depth, minWeightMagnitude)
+  console.debug(txs)
+}
+
+main()

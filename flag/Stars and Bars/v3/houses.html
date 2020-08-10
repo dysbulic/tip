@@ -1,48 +1,406 @@
 <html>
   <head>
     <title>The Technoanarchy's Houses</title>
+    <style type='text/css'>
+      body {
+        max-width: 50em;
+        margin: 2em auto;
+        font-size: 1.5rem;
+      }
+      body > ul {
+        list-style: none;
+      }
+      body > ul > li, .page {
+        min-height: 100vh;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
+      }
+      body > ul ul:nth-of-type(2) li {
+        margin: 0.5em;
+      }
+      li h1 {
+        font-size: 10rem;
+      }
+      li h1::first-letter {
+        padding: 0.05em 0.25em 0.5em 0.25em;
+        margin-right: calc(-0.25em - 4px);
+      }
+      body > ul > li > ul:first-of-type {
+        margin-top: -5.5em;
+        margin-left: 7.5em;
+        list-style: none;
+      }
+      li p {
+        max-width: 75%;
+        border: 2px solid black;
+        padding: 0.5em;
+        margin: 1em auto; 
+      }
+      #force h1::first-letter {
+        background: orangered;
+        border: 4px solid rgba(0, 0, 255, 0.5);
+      }
+      #force .color {
+        color: orangered;
+      }
+      #coersion h1::first-letter {
+        background: silver;
+        border: 4px solid rgba(255, 0, 255, 0.5);
+      }
+      #coersion .color {
+        color: silver;
+      }
+      #shelter h1::first-letter {
+        background: rgba(0, 0, 0, 0.5);
+        border: 4px solid rgba(255, 0, 0, 0.5);
+      }
+      #shelter .color {
+        color: black;
+      }
+      #touch h1::first-letter {
+        background: pink;
+        border: 4px solid rgba(255, 0, 0, 0.5);
+      }
+      #touch .color {
+        color: pink;
+      }
+      #perishables h1::first-letter {
+        background: green;
+        border: 4px solid rgba(255, 0, 0, 0.5);
+      }
+      #perishables .color {
+        color: green;
+      }
+      #establishment h1::first-letter {
+        background: gold;
+        border: 4px solid rgba(0, 0, 255, 0.5);
+      }
+      #establishment .color {
+        color: gold;
+      }
+      #housekeeping h1::first-letter {
+        background: #c99f32;
+        border: 4px solid rgba(255, 0, 255, 0.5);
+      }
+      #housekeeping .color {
+        color: #c99f32;
+      }
+      #vpship h1::first-letter {
+        background: #f5c389;
+        border: 4px solid rgba(255, 0, 255, 0.5);
+      }
+      #vpship .color {
+        color: #f5c389;
+      }
+      #substances h1::first-letter {
+        background: white;
+        border: 4px solid rgba(255, 0, 0, 0.5);
+      }
+      #substances .color {
+        color: rgba(0, 0, 0, 0.25);
+      }
+      #travel h1::first-letter {
+        background: brown;
+        border: 4px solid rgba(255, 0, 0, 0.5);
+      }
+      #travel .color {
+        color: brown;
+      }
+      #admin h1::first-letter {
+        background: cyan;
+        border: 4px solid rgba(255, 0, 255, 0.5);
+      }
+      #admin .color {
+        color: cyan;
+      }
+      #therapy h1::first-letter {
+        background: yellow;
+        border: 4px solid rgba(0, 0, 255, 0.5);
+      }
+      #therapy .color {
+        color: yellow;
+      }
+      #bob h1::first-letter {
+        background: violet;
+        border: 4px solid rgba(0, 0, 255, 0.5);
+      } 
+      #bob .color {
+        color: violet;
+      }
+      #force {
+        background-image: url('spade.svg');
+      }
+      #therapy {
+        background-image: url('club.svg');
+      }
+      #bob {
+        background-image: url('heart.svg');
+      }
+      #establishment {
+        background-image: url('diamond.svg');
+      }
+      #perishables {
+        background-image: url('cup.svg');
+      }
+      #substances {
+        background-image: url('wand.svg');
+      }
+      #touch {
+        background-image: url('pentacle.svg');
+      }
+      #shelter {
+        background-image: url('sword.svg');
+      }
+      #coersion {
+        background-image: url('king.svg');
+      }
+      #travel {
+        background-image: url('ace.svg');
+      }
+      #housekeeping {
+        background-image: url('queen.svg');
+      }
+      #vpship {
+        background-image: url('jack.svg');
+      }
+
+      .next {
+        background-color:rgba(0, 0, 0, 0.25);
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        font-size: 3rem;
+        border-radius: 0.5rem;
+        margin-top: 3rem;
+        padding: 0.5em 10em;
+        position: absolute;
+        bottom: 1em;
+        left: calc(50% - 10em);
+      }
+      .next:hover {
+        background-color:rgba(0, 0, 0, 0.75);
+        color: white;
+      }
+    </style>
   </head>
   <body>
-    <h1>The Technoanarchy's Houses</h1>
+    <div class='page' id='home'>
+      <h1>The Technoanarchy's Houses</h1>
+
+      <p>One of the big issues with cryptocurrency currently is the inability to exchange it for something useful. The goal with the houses is to provide 13 areas that cover the things people might desire.</p>
+
+      <p>The Houses represent thirteen basic areas of desire. The eventual goal is to enable provisioning from all of them via crypto in some form.</p>
+
+      <a class='next' href='#substances'>↓</a>
+    </div>
     <ul>
-      <li class='force'>
-        <p>🔵 <b>Force:</b> the ability to call someone capable of presenting a physical threat with recording devices to your location.</p>
+      <li id='force'>
+        <h1>Force</h1>
         <ul>
-          <li><b>Silver</b> is supposed to correlate to the capacity to physically incapacitate someone.</li>
-          <li>Recordings may be </li>
+          <li>Month: ♐ – Sagittarius</li>
+          <li>Color: <b class='color'>Blaze</b></li>
+          <li>Realm: ᚫ ― Ásgarðr: Heroes</li>
+          <li>Alliance: 🔵</li>
         </ul>
+        <p>The ability to enlist someone capable of presenting a physical threat with recording devices to your location.</p>
+        <ul>
+          <li><b>Blaze Cred Tokens</b> are supposed to correlate to the capacity to physically incapacitate someone without harming them.</li>
+          <li>The certification network could include distribution through dojos for various trainings and proofs of capacity.</li>
+          <li>Ideally the recording would be streamed from the camera directly into the cloud where it rests encrypted by keys avaialble to the participants.</li>
+          <li>I believe reactions to a uniform skew officers perceptions of how much submission they should expect. I want for Blaze memebers to be able to unsheath an RFID card that proves their credentials at a distance.</li>
+        </ul>
+        <a class='next' href='#coersion'>↓</a>
       </li>
-      <li class='coersion'>
-        <p>⚪ <b>Coersion:</b> the ability to call a covert threat mitigation to your team to observe and coordinate with silver, only to intervene under specfic circumstances. Physical coersion being primary amounst them.</p>
+      <li id='coersion'>
+        <h1>Coersion:</h1>
+        <ul>
+          <li>Month: ♓ – Pisces</li>
+          <li>Color: <b class='color'>Silver</b></li>
+          <li>Realm: 🦅 ― Veðrfölnir: Hawk sitting on an eagle perched on Yggdrasil</li>
+          <li>Alliance: ⚪</li>
+        </ul>
+        <p>The ability to enlist a covert threat mitigation to your team to observe and coordinate with Blaze, only to intervene under specfic circumstances.</p>
+        <ul>
+          <li>Silver's on the lookout for long term threats and they give feedback into the reputation system.</li>
+        </ul>
+        <a class='next' href='#shelter'>↓</a>
       </li>
-      • Shetler: the abiltiy to be given very short time leases (hours or days) selected from a virtual map of all game-controlled properties. (🔴)
-      • Touch: the ability to view profiles and negoatite satisfying and nurturing physical encounters. (🔴)
-      • Perishables: the ability to find things to consume depending on your want be it food, fire, or libations. (🔵)
+      <li id='shelter'>
+        <h1>Shetler</h1> 
+        <ul>
+          <li>Month: ♈ – Aries</li>
+          <li>Color: <b class='color'>Black</b></li>
+          <li>Realm: ᛊ ― Múspellsheimr: Fire</li>
+          <li>Alliance: 🔴</li>
+        </ul>
+        <p>The abiltiy to be given very short time leases (hours or days) selected from a virtual map of all game-controlled properties.</p>
+        <ul>
+          <li>Black ostensibly controls land. One goal is to transfer as much property as posible to them and give women control of the game board.</li>
+        </ul>
+        <a class='next' href='#housekeeping'>↓</a>
+      </li>
+      <li id='touch'>
+        <h1>Touch:</h1>
+        <ul>
+          <li>Month: ♏ – Scorpio</li>
+          <li>Color: <b class='color'>Pink</b></li>
+          <li>Realm: 🐲 ― Níðhöggr: Dragon who gnaws at Yggdrasil's roots</li>
+          <li>Alliance: 🔴</li>
+        </ul>
+        <p>The ability to view profiles and negoatite satisfying and nurturing physical encounters.</p>
+        <ul>
+          <li>Touch encompasses sexual activity. Within the mores of the game, a gloved handjob is not considered an unreasable ask.</li>
+          <li>These tokens act as a method of contact tracing.</li>
+        </ul>
+        <a class='next' href='#home'>↓</a>
+      </li>
+      <li id='perishables'>
+        <h1>Perishables</h1>
+        <ul>
+          <li>Month: ♉ – Taurus</li>
+          <li>Color: <b class='color'>Green</b></li>
+          <li>Realm: 🦌 – Dáinn, Dvalinn, Duneyrr and Duraþrór: the stags that eat from Yggdrasil</li>
+          <li>Alliance: 🔴→🔵</li>
+        </ul>
+        <p>The ability to find things to consume depending on your want be it food, fire, or libations.</p>
+        <ul>
+          <li>This includes pretty much everthing in the world that isn't specifically allocated to another team.</li>
+          <li>The goal is to digitize the economy, make it as transparent as possible.</li>
+          <li>Green goes from Red to Blue when control over The Establishment goes to a woman.</li>
+        </ul>
+        <a class='next' href='#travel'>↓</a>
+      </li>
       <li id='substances'>
-        <p>⚪ <b>Substances:</b> the ability to get reliable quantities of specified substances.</p>
-      </li>
-      • Travel: the ability to get transport for yourself and whatever else you desire from point to point. (🔴)
-      <li id='admin'>
-        <p>⚪ <b>Admin:</b> the ability to get give feedback on the game and find aid in coordinating between teams.</p>
-      </li>
-      • Therapy: the ability to develop your mental health initially through Holotropic Therapy which involves listening to music at loud enough volume you can't hear yourself or anyone else. (🔵)
-        • Tripsitters: You meet a guide who takes you around their demense and finds drugs along the way.
-        • Night-night: Someone puffs something in your face & next thing you realize you're 10,000 miles away naked in a hotel room.
-      • Bob Leonard: the ability to tune into the Bob Show where you can check in on the status of the one person who, for sure, if it's before the Innaguration, shouldn't know about the game. (🔵)
-        • The actual person is not actually Bob Leonard, who was introduced too early to not find out, but to work to break the news of these new markets in such a way as they never hit the mainstream networks.
-        • It could be someone from another country which would be easier to arrange, but less entertaining to watch.
-      • The Establishment: the ability to interface with what will be until Jan. 21, 2027 – what should be the innaguration of the President to follow http://jo20.com – the government of the United States. (🔴)
-      <li id='vpship'>
-        <p>⚪ <b>The VPship:</b> the ability to tune into the livestreamed life of the Vice President – 24×7.</p>
+        <h1>Substances</h1>
         <ul>
-          <li>I really like the idea of doing it and think that the model could be taken up by other countries to add transparency to their function.</li>
+          <li>Month: ♎ – Libra</li>
+          <li>Color: <b class='color'>White</b></li>
+          <li>Realm: ᛁ ― Niflheimr: Ice</li>
+          <li>Alliance: ⚪</li>
         </ul>
+        <p>The ability to get reliable quantities of specified substances.</p>
+        <ul>
+          <li>The core inital focus is White. The motto is: "Safe Spaces. Reliable Substance." The Houses coordinate to limit <a href='#establishment'>Gold</a> members access and to insure that quatities and qualities are reliable.</li>
+          <li>The goal is to eventually digitize and perform quality control on the entire supply chain. As it is substances will have cryptographically verifiable reagent tests done on shipments.</li>
+          <li>Currently there are two planned mechanisms for gaining access to substances:
+            <ul>
+              <li>Possess White Tokens which are distributed through existing trust networks with the priority of them not falling into the hands of law enforcement.</li>
+              <li>Guides meet with Users who have expressed the types and quantitites of substances they desire.
+                <ul>
+                  <li>This person also acts as a tripsitter helping to compensate for and diminished capacity of the User.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <a class='next' href='#force'>↓</a>
+      </li>
+      <li id='travel'>
+        <h1>Travel</h1>
+        <ul>
+          <li>Month: ♒ – Aquarius</li>
+          <li>Color: <b class='color'>Brown</b></li>
+          <li>Realm: ᚦ ― Jötunheimr: Giants</li>
+          <li>Alliance: 🔴</li>
+        </ul>
+        <p>The ability to get transport for yourself and whatever else you desire from point to point.</p>
+        <ul>
+          <li>Travel includes shipping. One aspect of how the <a href='#substances'>Substances</a> interchange is through blind couriers with electronically locked bags.</li>
+          </li>
+        </ul>
+        <a class='next' href='#establishment'>↓</a>
+      </li>
+      <li id='admin'>
+        <h1>Admin</h1>
+        <ul>
+          <li>Month: ⛎ – Ophiuchus</li>
+          <li>Color: <b class='color'>Cyan</b></li>
+          <li>Realm: 🐿️ ― Ratatoskr: Squirrel who lives in Yggdrasil</li>
+          <li>Alliance: ⚪</li>
+        </ul>
+        <p>The ability to get give feedback on the game and find aid in coordinating between teams.</p>
+        <ul>
+          <li>It feels a little stilted, but I think heathcare falls under Admin. I have no idea what it looks like.</li>
+        </ul>
+        <a class='next' href='#touch'>↓</a>
+      </li>
+      <li id='therapy'>
+        <h1>Therapy</h1>
+        <ul>
+          <li>Month: ♊ – Gemini</li>
+          <li>Color: <b class='color'>Yellow</b></li>
+          <li>Realm: ᛃ ― Álfheimr: Elves</li>
+          <li>Alliance: 🔵</li>
+        </ul>
+        <p>The ability to develop your mental health.</p>
+        <ul>
+          <li>Tripsitters: You meet a guide who takes you around their demense and finds drugs along the way.</li>
+          <li>Holotropic Therapy: Listening to music at loud enough volume you can't hear yourself or anyone else.</li>
+        </ul>
+        <a class='next' href='#substances'>↓</a>
+      </li>
+      <li id='bob'>
+        <h1>Bob Leonard</h1>
+        <ul>
+          <li>Month: ♋ – Cancer</li>
+          <li>Color: <b class='color'>Violet</b></li>
+          <li>Realm: ᛗ ― Miðgarðr: Humans</li>
+          <li>Alliance: 🔵</li>
+        </ul>
+        <p>The ability to tune into the Bob Show where you can check in on the status of the one person who, for sure, if it's before the Innaguration, shouldn't know about the revolution.</p>
+        <ul>
+          <li>The actual person is maybe not actually <a href='https://www.linkedin.com/in/bob-leonard-4736773/'>Bob Leonard</a>, who is vulnerable being informed at the moment, but the goal is to break the news of these new markets in such a way as they don't hit the mainstream networks until after the innaguration.</li>
+          <li>The Bob Team is responsible for monitoring Bob's social network and environment to keep him in the dark.</li>
+          <li>Their other primary responsibility for the reveal. At some point, hopefully on Innaguration Day, we reveal to him that a cadre of secret societies formed about six months ago and have been running amok since. I don't know what his place in the new structure wil be, but I want him to be glad he was the chosen one.</li>
+          <li>An alternative is to keep a much larger group in the dark. All that is needed to tie the election are <a href='https://www.google.com/maps/@47.7735593,-137.1203088,4z/data=!3m1!4b1!4m2!6m1!1s1XvAvezvRjSKvptEHPf5xprtMqiwGnfBk'>the states not outlined in gold</a>.</li>
+        </ul>
+        <a class='next' href='#vpship'>↓</a>
+      </li>
+      <li id='establishment'>
+        <h1>The&nbsp;Establishment</h1>
+        <ul>
+          <li>Month: ♑ – Capricorn</li>
+          <li>Color: <b class='color'>Gold</b></li>
+          <li>Realm: ᛏ ― Hel: Corpses</li>
+          <li>Alliance: 🔵→🔴</li>
+        </ul>
+        <p>The ability to interface with what will be from Jan. 21, 2021–2028 – the government of the United States.</p>
+        <ul>
+          <li>It transitions between Blue to Red with the replacement of Trump by Jorgensen.</li>
+          <li>In exchange Red scedes Green which is represents a huge portion of the material wealth.</li>
+        </ul>
+        <a class='next' href='#bob'>↓</a>
+      </li>
+      <li id='vpship'>
+        <h1>The VPship</h1>
+        <ul>
+          <li>Month: ♌ – Leo</li>
+          <li>Color: <b class='color'>Peach</b></li>
+          <li>Realm: ᛠ ― Svartálfaheimr: Dwarves</li>
+          <li>Alliance: ⚪</li>
+        </ul>
+        <p>The ability to tune into the livestreamed life of the Vice President – 24×7.</p>
+        <ul>
+          <li>The model could be taken up by other countries to add transparency to their function.</li>
+          <li>Peach is largely responsible for developing the streaming recording technologies used also by <a href='#force'>Force</a>.</li>
+          <li>There is also some sort of filtered mass discussion allowing the public to interact with the stream.</li>
+        </ul>
+        <a class='next' href='#admin'>↓</a>
       </li>
       <li id='housekeeping'>
-        <p>⚪ <b>Housekeeping:</b> the ability get issues fixed with the gameboard i.e. Earth and its environs, currently.</p>
+        <h1>Housekeeping</h1>
+        <ul>
+          <li><a href='//gist.run/embed.html?id=e29f776b9a9b0c3d52251a28c573977c'>Month:</a> ♍ – Virgo</li>
+          <li>Color: <b class='color'>Copper</b></li>
+          <li>Realm: ᚡ ― Vanaheimr: Sages</li>
+          <li>Alliance: ⚪</li>
+        </ul>
+        <p>The ability get issues fixed with the gameboard i.e. Earth and its environs, currently.</p>
         <ul>
           <li>Anything from renovations to damage, competent help is provided by guilds.</li>
         </ul>
+        <a class='next' href='#perishables'>↓</a>
       </li>
     </ul>
   </body>
