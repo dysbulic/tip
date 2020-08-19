@@ -156,12 +156,13 @@ export CVS_RSH=ssh
 #which update-manager && update-manager -d
 
 # Include OSX specific pathes; and give them precedence
-for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin ~/.../google/adt/sdk/platform-tools ~/bin/adt-bundle-linux-*/sdk/tools/ ~/bin/adt-bundle-linux-*/sdk/platform-tools/; do
+for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin ~/.../google/adt/sdk/platform-tools ~/bin/adt-bundle-linux-*/sdk/tools/ ~/bin/adt-bundle-linux-*/sdk/platform-tools/ ~/.rbenv/bin/; do
     [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
 [[ -s "/usr/local/rvm/scripts/rvm" ]] && source /usr/local/rvm/scripts/rvm
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+which rbenv > /dev/null && eval "$(rbenv init -)"
 
 export LANG="en_US.UTF-8"
 export LC_ALL=$LANG
@@ -650,6 +651,7 @@ alias groupdini="cx ssh -s 'API' -e staging Bluejay"
 alias groupdinip="cx ssh -s 'Groupdini API' -e production Bison"
 alias himinbiorg="ssh wjholcomb@himinbi.org"
 alias dhappy="ssh wjholcomb@dhappy.org"
+alias vps="ssh wvps@ps624552.dreamhostps.com"
 alias connect_loki="ssh will@loki"
 alias fenrir="ssh will@fenrir.himinbi.org"
 alias loki="ssh will@loki.himinbi.org"
