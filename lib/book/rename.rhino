@@ -1,0 +1,117 @@
+//!/bin/js
+
+;( function() {
+    load( '.../lib/mimis/js' )
+    load( '.../lib/xregexp/js' )
+
+    importPackage( java.io )
+    importPackage( java.util )
+
+    var line = XRegExp( '(?<author> .*?) - (?<title> .*)', 'x' ) 
+
+    function mkdir( path ) {
+        console.log( 'mkdir:' + path )
+    }
+
+    var visitor = {
+        dir : {
+            pre : function( dir ) {
+                console.log( 'pre:' + dir )
+            },
+        },
+               
+        post : function( dir ) {
+            console.log( File.prototype )
+            var path = this.path
+            var match
+            if( ( match = line.exec( path ) ) !== null ) {
+                mkdir( 'by/' + match.author + '/' + match.title )
+                console.log( match.author )
+            } else {
+                console.log( 'No Match: ' + path )
+            }
+        },
+    }
+
+    function wrap( obj ) {
+        var out = {}
+        for( prop in obj ) {
+            var getter = function() { return obj[ prop ] }
+            var setter = function( val ) { return obj[ prop ] = val }
+            var get
+            if( ( get = obj.__lookupGetter__( prop ) ) !== undefined ) {
+                getter =
+                    ( function() {
+                        var getter = get
+                        return function() { getter.apply( obj, arguments ) }
+                    } )()
+            }
+            var set
+            if( ( set = obj.__lookupSetter__( prop ) ) !== undefined ) {
+                setter =
+                    ( function() {
+                        var setter = set
+                        return function() { setter.apply( obj, arguments ) }
+                    } )()
+            }
+
+            out.__defineGetter__( prop, getter )
+            out.__defineSetter__( prop, setter )
+        }
+        return out
+    }
+
+    function addPath( file ) {
+        var obj = file
+        if( typeof obj.__defineGetter__ === 'undefined' ) {
+            obj = wrap( obj )
+        }
+        obj.__defineGetter__( 'path', function() {
+            var path = file.getPath()
+            if( path.startsWith( './' ) ) {
+                path = path.substring( 2 )
+            }
+            return path
+        } )
+        return obj
+    }
+
+    var def = { visitor : {
+        pre : function() {},
+        post : function() {},
+        file : function() {},
+        dir : {
+            pre : function() {},
+            post : function() {},
+        },
+    } }
+
+    var list = new File( '.' ).listFiles()
+    
+    function spanDir( dir, visitor ) {
+        visitor = mimis.x( true, {}, def.visitor, visitor )
+        
+        var list = new File( dir ).listFiles()
+
+        list.each( function( file ) {
+            visitor.pre.call( file, list )
+            if( file.isDirectory() ) {
+                try {
+                    visitor.dir.pre.call( addPath( file ), list )
+                    spanDir( file.getAbsolutePath(), visitor )
+                    visitor.dir.post.call( addPath( file ), list )
+                } catch( e ) {
+                    if( e instanceof mimis.BubblingException ) {
+                        throw e
+                    }
+                    console.error( 'v:' + e )
+                }
+            } else {
+                visitor.file.call( addPath( file ), list )
+            }
+            visitor.post.call( addPath( file ), list )
+        } )
+    }
+    
+    spanDir( '.', visitor )
+} )()

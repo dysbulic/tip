@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+/* On ipfs-http-client v44.3.0 & go-ipfs 0.5.1 it outputs:
+ *   Inserted CID: CID(QmVYC1MXB6dXxbXEorBvVxLPPyGDr9MJWsTA5Escwd2uif)
+ *   Inserted CID: CID(QmT2SetPmAu6kmSTPncxmpiYru4ykW2a4RNHgQeRVb7h38)
+ *   Inserted CID: CID(QmPzY1au6gYozstYQd7Xx7Twx6oSS59nZhW61mB7TFfcHB)
+ *   git mode.txt: undefined
+ *   short mode.txt: undefined
+ */
+
+const IPFSProxy = require('ipfs-http-client')
+const IPFS = require('ipfs')
+
+const main = async () => {
+  //const ipfs = IPFSProxy()
+  const ipfs = await IPFS.create()
+  const fileObjs = [
+    {
+      path: 'default mode.txt',
+      content: Buffer.from('Testing Default Mode'),
+    },
+    {
+      path: 'short mode.txt',
+      content: Buffer.from('Testing Mode 644'),
+      mode: parseInt('644', 8),
+    },
+    {
+      path: 'git mode.txt',
+      content: Buffer.from('Testing Mode 100644'),
+      mode: parseInt('100644', 8),
+    },
+  ]
+  const options = { wrapWithDirectory: true }
+
+  for await (const ret of ipfs.add(fileObjs, options)) {
+    console.log('Inserted CID:', ret.cid)
+
+    for await (const file of ipfs.ls(ret.cid)) {
+      console.log(`${file.name} → mode: ${file.mode}`)
+    }
+  }
+}
+
+main()
