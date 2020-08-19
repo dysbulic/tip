@@ -68,10 +68,11 @@ alias u='git reset --soft HEAD~1'
 alias hardr='git reset --hard'
 
 function gg() { git grep --line-number "$@"; }
-alias gp='git push --tags'
-__git_complete gp _git_push
 alias pull='git pull --allow-unrelated-histories'
 __git_complete pull _git_pull
+alias gp='git push'
+__git_complete gp _git_push
+alias gpw='git push web master'
 alias aa='git add .'
 function mit() { git commit -S -m "$*"; }
 alias co='git checkout'
