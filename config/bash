@@ -83,12 +83,15 @@ alias sp='git stash pop'
 alias ggraph='git log --decorate --graph --oneline --all'
 alias ggraph="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ci) %C(bold blue)<%an>%Creset'"
 
+complete -o default code
+
 alias grate='rake db:migrate'
 alias rdb='rake db:reset'
 alias clean='git clean'
 
 alias sysstart='systemctl list-units --type service'
 
+alias dname='lsb_release -a'
 
 alias ...='p ...'
 
@@ -98,7 +101,6 @@ alias mykey='gpg --export --sender $EMAIL'
 #alias mykeys
 alias mypkey=''
 
-#alias '-'='popd'
 alias q='popd'
 alias p='pushd'
 
@@ -106,7 +108,7 @@ alias ybfd='yarn run build && firebase deploy'
 
 alias g='grep --color'
 
-function t-() { git commit --amend -m "$*"; }
+function t-() { git commit --amend -S -m "$*"; }
 function pp() { dir="$(pwd)"; popd; pushd "$dir"; cd "$@"; }
 
 alias eb='e .../config/bash'
@@ -157,12 +159,12 @@ export CVS_RSH=ssh
 #which update-manager && update-manager -d
 
 # Include OSX specific pathes; and give them precedence
-for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin ~/.../google/adt/sdk/platform-tools ~/bin/adt-bundle-linux-*/sdk/tools/ ~/bin/adt-bundle-linux-*/sdk/platform-tools/ ~/.rbenv/bin/; do
+for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin ~/.../google/adt/sdk/platform-tools ~/bin/adt-bundle-linux-*/sdk/tools/ ~/bin/adt-bundle-linux-*/sdk/platform-tools/ ~/.rbenv/bin/ "$(yarn global bin)" $HOME/.cargo/bin; do
     [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
-[[ -s "/usr/local/rvm/scripts/rvm" ]] && source /usr/local/rvm/scripts/rvm
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+#[[ -s "/usr/local/rvm/scripts/rvm" ]] && source /usr/local/rvm/scripts/rvm
+#[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 which rbenv > /dev/null && eval "$(rbenv init -)"
 
 export LANG="en_US.UTF-8"
@@ -518,7 +520,7 @@ export JAVACMD=$(which java)
 #export JAVA_HOME=${JAVACMD%/*/*}
 #export JAVA_JARPATH=.../lib/java/lib
 
-export ANDROID_HOME=~/.../google/adt/sdk/
+export ANDROID_HOME=~/code/adt/sdk/
 
 alias pauseamarok="dcop --user $USER amarok player playPause"
 
@@ -749,6 +751,7 @@ alias getextramail="fetchmail --ssl --keep --folder mail/orgs/cor,mail/dorks,mai
 alias tunnel="ssh -L :2222:wholcomb.intranet:22 root@secure.mpp.org"
 alias getwork="rsync --recursive --verbose --progress --links --rsh ssh\\ -p2222 wholcomb@localhost2:Public ~/"
 alias getmusic="rsync --recursive --verbose --progress --links --rsh ssh\\ -p2222 wholcomb@localhost2:Music/ /usr/share/music/"
+alias copypart='rsync -axHAWXS --numeric-ids --info=progress2'
 
 PROG_DIR="$WEBSITE_DIR/pcvs.org/mr/will"
 
@@ -802,11 +805,11 @@ export NVM_DIR="/home/will/.nvm"
 [ -d "/home/linuxbrew/.linuxbrew/" ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 [ -d ~/bin ] && export PATH=~/bin:"$PATH" && export GOBIN=~/bin
-[ -d ~/.cargo/bin ] && export PATH="$PATH":~/.cargo/bin
 [ -d /opt/ibm/java-x86_64-80/jre/bin/ ] && export PATH=/opt/ibm/java-x86_64-80/jre/bin/:$PATH # for neo4j
 export GOPATH=~/go
 
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
+
 eval "$(direnv hook bash)"
