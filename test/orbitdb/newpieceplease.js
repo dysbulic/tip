@@ -46,8 +46,7 @@ class NewPiecePlease {
       }}
     }
 
-    IPFS.create(config).then(_init.bind(this))
-    .catch(e => { throw e })
+    IPFS.create(config).then(_init.bind(this)).catch(e => { throw e })
   }
 
   async getIpfsPeers() {
