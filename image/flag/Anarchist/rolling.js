@@ -1,5 +1,4 @@
 function getQueryVariable(variable) {
-  console.info('Here')
   var query = window.location.search.substring(1)
   var vars = query.split('&')
   for(var i = 0; i < vars.length; i++) {
@@ -15,7 +14,7 @@ document.documentElement.addEventListener(
   () => {
     const p = new Promise((resolve, reject) => {
       const anim = document.querySelector('#animPosStart')
-      const timeout = getQueryVariable('t') || 0
+      const timeout = getQueryVariable('t') ?? 0
       setTimeout(
         () => {
           anim.beginElement()
