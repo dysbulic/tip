@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.0"
      xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:html="http://www.w3.org/1999/xhtml"
      width="100%" height="100%" viewBox="0 0 100 100">
   <title>External Use</title>
   <defs>
-    <script type="text/javascript" xlink:href="~/projects/jquery/dist/jquery.js" />
-    <script type="text/javascript" xlink:href=".../sys/lib/tip/src/$.jquery" />
-    <script type="text/javascript">
-      $.tip.$(function() {
-        var viewBox = $.tip.$('#').prop('viewBox')
-                                    .set( 'pad', '.1 * Math.max(__["height"], __["width"])' )
-                                    .add( [ 'x', 'y' ], '-__["pad"]' )
-                                    .add( [ 'width', 'height' ], '2 * __["pad"]' );
-      });
-    </script>
     <style type="text/css">
       text { text-anchor: middle; font-size: 2.5px; }
       circle { stroke: brown; }
@@ -23,12 +14,14 @@
   <use x="0" y="0" width="50" height="50" xlink:href="tree.svg"/>
   <text x="25" y="25"><![CDATA[<use xlink:href="tree.svg"/>]]></text>
 
-  <use x="50" y="0" xlink:href="#local" style="fill: green"/>
-  <text x="75" y="25"><![CDATA[<use xlink:href="#local" style="fill: green"/>]]></text>
+  <foreignObject x="50" y="0" width="50" height="50">
+    <html:object width="100%" height="100%" data=".../image/flag/MetaGame/"/>
+  </foreignObject>
+  <text x="75" y="25"><![CDATA[<object data="tree.svg"/>]]></text>
 
   <use x="0" y="50" width="50" height="50" xlink:href="tree.svg#root"/>
   <text x="25" y="90"><![CDATA[<use xlink:href="tree.svg#root"/>]]></text>
   
-  <image x="50" y="50" width="50" height="50" xlink:href="tree.svg" />
+  <image x="50" y="50" width="50" height="50" xlink:href=".../image/flag/MetaGame/" />
   <text x="75" y="90"><![CDATA[<image xlink:href="tree.svg"/>]]></text>
 </svg>
