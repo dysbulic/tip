@@ -1,0 +1,106 @@
+<svg
+  xmlns='http://www.w3.org/2000/svg'
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  viewBox='0 0 100 100'
+  preserveAspectRatio='xMidYMid meet'
+>
+  <defs>
+    <script type='application/javascript' xlink:href='rolling.js'>
+    </script>
+    <style type='text/css'><![CDATA[
+      #flag {
+        fill: url('#anarchism');
+        animation-play-state: paused;
+      }
+      #container {
+        clip-path: url('#clip');
+      }
+      #flag:hover { fill-position: 100px }
+    ]]></style>
+    <linearGradient
+      id="anarchism"
+    >
+      <animateTransform
+        id="animPosStart"
+        attributeName="gradientTransform"
+        attributeType="XML"
+        type="translate"
+        from="0"
+        to="0.5"
+        begin="indefinite"
+        dur="1s"
+      />
+      <animateTransform
+        id="animBlk2Ylw"
+        attributeName="gradientTransform"
+        attributeType="XML"
+        type="translate"
+        from="-0.5"
+        to="0.5"
+        begin="animPosStart.end; animYlw2Blk.end"
+        dur="2s"
+      />
+      <animateTransform
+        id="animYlw2Blk"
+        attributeName="gradientTransform"
+        attributeType="XML"
+        type="translate"
+        from="-0.5"
+        to="0.5"
+        begin="animBlk2Ylw.end"
+        dur="2s"
+      />
+      <animate
+        xlink:href="#left"
+        attributeName="stop-color"
+        from="black"
+        to="yellow"
+        dur="0s"
+        begin="animYlw2Blk.begin"
+      />
+      <animate 
+        xlink:href="#left"
+        attributeName="stop-color"
+        from="yellow"
+        to="black"
+        dur="0s"
+        begin="animBlk2Ylw.begin"
+      />
+      <animate
+        xlink:href="#right"
+        attributeName="stop-color"
+        from="yellow"
+        to="black"
+        dur="0s"
+        begin="animYlw2Blk.begin"
+      />
+      <animate 
+        xlink:href="#right"
+        attributeName="stop-color"
+        from="black"
+        to="blue" 
+        dur="0s"
+        begin="animBlk2Ylw.begin"
+        fill="freeze"
+      />
+      <stop id="left" offset="49.75%" stop-color="black" />
+      <stop id="right" offset="50.25%" stop-color="yellow" />
+    </linearGradient>
+    <clipPath id="clip">
+    <rect
+      x='0' y='0'
+      width='100' height='100'
+    />
+    </clipPath>
+  </defs>
+  <title>Anarchist Flag</title>
+  <g id='container'>
+  <g transform="rotate(45 50 50)">
+  <rect
+    id="flag"
+    x='-50' y='-50'
+    width='200' height='200'
+  />
+  </g>
+  </g>
+</svg>
