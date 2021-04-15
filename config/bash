@@ -29,6 +29,12 @@ export EDITOR='emacs -nw'
 alias src='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0'
 alias srceach='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0 | xargs -0'
 
+alias iotaseed='cat /dev/urandom |tr -dc A-Z9|head -c${1:-81}'
+
+function tt() {
+    fortune="$(fortune -s)"
+    git commit -am "${*:-$fortune}";
+}
 function zview() {
     zlib-flate -uncompress < "$*"
 }
@@ -812,7 +818,7 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
-eval "$(direnv hook bash)"
+command -v direnv 1>/dev/null 2>&1 && eval "$(direnv hook bash)"
 
 # tabtab source for packages
 # uninstall by removing these lines
