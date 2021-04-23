@@ -8,7 +8,7 @@ Intellectually we are dying of thirst sitting in a stream. We have the tools to 
 
 I want for a user to be able to pick an object from the category of discutable things and create a set of "paths" which refer to that concept. Paths capture both objective (`/book/by/Scott Peck/The Road Less Traveled/`) and subjective (`/favorite/books/psychology/1/`) contextualizations.
 
-The user publishes their context forest into a DAG in the Ceramic network where the leaves are IPFS resources (primarily). When a resource is requested, the [resolution algorithm](https://github.com/MetaFam/mimis/#algorithm) builds a render tree from the source tree.
+The user publishes their context forest into a DAG in the Ceramic network where the leaves are IPFS resources (primarily). When a resource is requested, the [resolution algorithm](https://github.com/MetaFam/mimis/#algorithm) builds a render tree from a path through the source forest.
 
 # Problem
 
@@ -32,11 +32,11 @@ The output for any path is available as both content and context. The context fo
 
 # Product
 
-What I can get done is highly dependent on the money. I have an increasingly complete vision for how a group of software systems could interact. Mïmis is the base of it all.
+What I can get done is highly dependent on the money. I have an increasingly complete vision for how a group of software systems could interact. [Mïmis](https://github.com/MetaFam/mimis/) is the base of it all.
 
 Mïmis houses and organizes all the data. As peers are consuming data, they are also sharing their cache of the source tree. Those source trees can be public or private
 
-In addition to Ceramic, I would like users to be able to store a set of nodes locally. These nodes are also used to generate intrefaces and manage the cache, but it is not public that the user is sharing them.
+In addition to Ceramic, I would like users to be able to store a set of nodes locally. These nodes are also used to generate interfaces and manage the cache, but it is not public that the user is sharing them.
 
 This would allow for `/book/by/Ursula K. LeGuinn/` to resolve to `ceramic://1…` and for `ceramic://1…` to be retrivable from the network reliably even though no one is explicitly hosting it.
 
@@ -53,6 +53,8 @@ Again, my stretch goal is the end of war, so what percentage of that do I have f
 # Differentiation
 
 No one else is doing this because it tramples over copyright laws, massively simplifies building a child pornography collection, and is great for doxing someone.
+
+As for the Revolution, white people don't think it can be different, and black people don't think it can be done peacefully.
 
 # Team
 
@@ -74,7 +76,7 @@ Project development takes place in terms of sprints aligned to the lunar cycle. 
 
 * $100k + mass-spectroscopy equipment, and it's full-steam ahead. We open a testing facility for drug supplies that serves as the basis for a reformed (violence, theft, and impurity-free) black market.
 
-* $100k + mass-spectroscopy equipment + an aircraft carrier, uh-oh, this is breaking too fast. Too many people are having unpleasant awakenings to the concept that Jesus is just another historical figure and looking for someone to blame. Bullets are cheap, and crazies aplenty. Time to hit the open seas and become unassassinable for a few years.
+* $100k + mass-spectroscopy equipment + an aircraft carrier, uh-oh, this is breaking too fast. Too many people are having unpleasant awakenings to the concept that Jesus or Mohammed is just another historical figure and looking for someone to blame. Bullets are cheap, and crazies aplenty. Time to hit the open seas and become unassassinable for a few years.
 
 # Help
 
@@ -82,7 +84,7 @@ How I would like to see this executed is via recorded pair programming. Eventual
 
 Help at this point, is finding money to give to other people to give to other people, I guess.
 
-Really, if you want to get my Revolutionary calendar to align with the Gregorian one, such that I'm writing on 0/♈/12 rather than -3/♉/22, because historically Joe Biden's was the first Presidency in the Revolution and not his successor, would be for him to stop the dropping of bombs, and to clear the way for us to reform the black market.
+Really, if you want to get my Revolutionary calendar to align with the Gregorian one, such that I'm writing on 0/♈/12 rather than -3/♉/22, because historically Joe Biden's was the first Presidency in the Revolution and not his successor, would be for him to stop the dropping of bombs, and clear the way for us to reform the black market.
 
 # Additional Resources
 
