@@ -48,7 +48,7 @@ I have an algorithm for converting a source tree to a render tree. I have maybe 
 
 On the larger front, I can only really focus in depth on one project at a time. I first became convinced I could be an active part of a rapid societal change over a decade ago. I've contemplated hundreds of different use cases for apps in that period, but I really only have the time to reason thoroughly through five or six.
 
-Again, my stretch goal is the end of war, so what percentage of that do I have figured out? 65‒70%. There are three independent striations – the personal, the social, and the universal – that this change will take place in, and I think I have a reasonably well grounded plan for each.
+Again, my stretch goal is the end of war, so what percentage of that do I have figured out? 65‒70%. There are three independent striations – the personal, the social, and the planetary – that this change will take place in, and I think I have a reasonably well grounded plan for each.
 
 # Differentiation
 
