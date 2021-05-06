@@ -1,2 +1,0 @@
-<div class="clear"></div></div><hr /><div id="footer"><small><a href="http://wordpress.com/" rel="generator">Get a free blog at WordPress.com</a>. <?php printf( __( 'Theme: %1$s by %2$s.' ), 'Twenty-eight Thirteen', '<span rel="designer"><a href="http://elifoner.com/">Eli</a>, <a href="http://www.pronetadvertising.com/about">Neil</a>, and <a href="http://paulstamatiou.com/">Paul</a></span>' ); ?></small></div>
-<?php wp_footer(); ?></body></html>
