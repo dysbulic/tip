@@ -1,0 +1,12 @@
+#!/bin/bash
+
+[ -d ".~" ] && echo "Hard Copy to Tipspace";
+[ -L ".~" ] && echo "Linked to Tipspace";
+
+[[ -d ".~" || -L ".~" ]] || echo "Come Back Soon" && exit
+
+echo "Resetting file permissions"
+sudo chmod -R u=rw,go=r ./
+sudo find ./ -type d -exec chmod a+rx "{}" \;
+sudo find ./ -type f -name bash -or -name python -exec chmod u+x "{}" \;
+#sudo find ./ -type f -name svg -or -name list -exec chmod go+r "{}" \;

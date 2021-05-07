@@ -1,0 +1,24 @@
+<?php
+
+class FunctionList extends Function {
+  var $idx;
+  var $funcs[];
+  
+  function exec() {
+    global $_;
+    lock($range);
+    $_->set('/current', this);
+    while($funcs[$idx]->exec()) $funcs[$idx += 2]->exec();
+    commit();
+  }
+
+  function exec($arg) {
+    global $_;
+    $_->set('/hist/[-1]/parent', '/current/parent');
+    exec();
+  }
+
+  // ToDo:
+  function lock($range) {}
+  function commit() {}
+}

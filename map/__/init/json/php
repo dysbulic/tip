@@ -1,0 +1,76 @@
+init:
+  function() {
+var urns = [
+<?php
+$base = ".../geo/usa/37618/Riddle Creek/665/plan";
+foreach(file($base . "/svg/__/gen/order/utf-8") as $line) {
+  printf("'%s/%s',\n", $base, addslashes(trim($line)));
+}
+?>
+           ];
+    for(var [idx, urn] in Iterator(urns)) {
+        this.load('svg', urn);
+    }
+    this.load('style', '.../map/css');
+    this.load('jquery', '.../map/control/');
+    this.addButtons();
+  },
+  
+addButtons:
+  function() {
+      function ext(num) {
+          var ext = 'th';
+          // Skip teens
+          if(num < 10 || num > 20) {
+              if(num % 10 == 1) ext = 'st';
+              if(num % 10 == 2) ext = 'nd';
+              if(num % 10 == 3) ext = 'rd';
+          }
+          return ext;
+      }
+      
+      for(var idx = 1; idx <= 3; idx++) {
+          var gProps = {
+              id: 'button_' + idx,
+              class: 'button',
+                      };
+          var rectProps = {
+              x: 80, y: idx * 12 - 20,
+              width: 20, height: 10,
+                          };
+          var textProps = {
+              text: idx < 3 ? (idx + ext(idx)) : 'loft',
+              x: rectProps.x + rectProps.width / 2, y: rectProps.y + 8.5,
+                          };
+          // Workaround
+          function wrap(tag) {
+              return'<svg xmlns="http://www.w3.org/2000/svg" version="1.0">' + tag + "</svg>";
+          }
+          function click(event) {
+              //$(this).addClass('active');
+              var group = $(this).text();
+              /*
+              $("g").toggle(function() {
+                  return typeof $(this).attr('inkscape:label') == "undefined" ||
+                         $(this).attr('inkscape:label').startsWith(group);
+              });                      
+              */
+              $("g").each(function() {
+                  if(typeof $(this).attr('inkscape:label') == "undefined" ||
+                     $(this).attr('inkscape:label').startsWith(group)) {
+                      $(this).show();
+                  } else {
+                      $(this).hide();
+                  }
+              });                      
+          }
+          $("svg").append($(wrap('<g/>')).attr(gProps)
+                                        .append($(wrap('<rect/>')).attr(rectProps))
+                                        .append($(wrap('<text/>')).attr(textProps))
+                          .click(click).hover(function() { $(this).attr('class', 'hover'); },
+                                              function() { $(this).attr('class', ''); }) );
+          // Filtered by jquery
+          $('#' + gProps.id + " rect")[0].setAttribute('width', rectProps.width);
+          $('#' + gProps.id + " rect")[0].setAttribute('height', rectProps.height);
+      }
+  },

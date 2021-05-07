@@ -1,0 +1,21 @@
+<?php
+  /**
+   * Author: Will Holcomb <will@dhappy.org>
+   * Date: December 2009
+   */
+class Machine {
+  $cache = {};
+
+  function set($resourceName, $val) {
+    $cache[$resourceName->val()] = $val->exec();
+  }
+
+  function get($resourceName) {
+    // Pull it from the cache if it's there
+    if(typeof($cache[$resourceName]) != "undefined") {
+      $cache[$resourceName]->val();
+    }
+    require_once(".#/src/load/php");
+    return load($resourceName);
+  }
+}

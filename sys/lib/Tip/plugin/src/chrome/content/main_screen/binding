@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<bindings xmlns="http://www.mozilla.org/xbl" 
+          xmlns:xbl="http://www.mozilla.org/xbl" 
+          xmlns:html="http://www.w3.org/1999/xhtml" 
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:svg="http://www.w3.org/2000/svg" 
+          xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!--<panel-button flex="1" id="left-button" direction="left" label="no"/>-->
+  <binding id="tip-main">
+    <implementation>
+      <field name="container"/>
+      <field name="direction"/>
+      <field name="text"/>
+      <field name="shape"/>
+      <field name="stroke_width"/>
+      <field name="is_shape_loaded"/>
+      <field name="is_window_loaded"/>
+      <field name="is_laid_out"/>
+      <property name="disabled">
+        <getter>return this.getAttribute('disabled') == 'true';</getter>
+        <setter><![CDATA[
+          if(val) {
+            this.setAttribute('disabled', 'true');
+          } else {
+            this.removeAttribute('disabled');
+          }
+          return val;
+        ]]></setter>
+      </property>
+      <property name="label">
+        <setter><![CDATA[
+          this.setText(val);
+          return val;
+        ]]></setter>
+      </property>
+      <constructor><![CDATA[
+        this.direction = this.getAttribute("direction");
+        if(!this.direction) this.direction = "meta";
+        
+        var tipElem = this;
+
+        xmlDoc = document.implementation.createDocument("", "", null)
+        xmlDoc.onload = this.postShapeLoad;
+        xmlDoc.container = this;
+        xmlDoc.load("../screen/ɑ/svg/-image/svg");
+        
+        this.is_laid_out = false;
+
+        //this.container = document.getAnonymousElementByAttribute(this, "anonid", "container");
+        this.container = document.getAnonymousElementByAttribute(this, "anonid", "center-center");
+        this.text = document.getAnonymousElementByAttribute(this, "anonid", "text");
+
+        //my_func = function myFunction(event) { window.setTimeout(function(xbl){ xbl.click(); }, 10, my_this); }
+        //this.shape.addEventListener("click", my_func, true);
+
+        postWindowLoad = function() { tipElem.is_window_loaded = true; tipElem.doLayout(); }
+        window.addEventListener("load", postWindowLoad, true);
+      ]]></constructor>
+      <method name="postShapeLoad">
+        <body><![CDATA[
+          // 'this' refers to the loaded XML document in this context
+          //this.container.shape = document.importNode(this.documentElement, true);
+          this.container.shape = this;
+          this.container.is_shape_loaded = true;
+          this.container.doLayout();
+        ]]></body>
+      </method>
+      <method name="doLayout">
+        <body><![CDATA[
+          if(!this.is_shape_loaded || !this.is_window_loaded) return;
+          if(this.is_laid_out) return;
+          this.is_laid_out = true;
+
+          this.shape.documentElement.setAttribute("flex", "1");
+          
+          //this.container.appendChild(document.createElement("button"));
+          try {
+            this.shape.getElementById("head").addEventListener("click", function() { alert("hi"); }, true);
+          } catch(exception) {
+            alert(exception);
+          }
+
+          var box = { width : this.boxObject.width,
+                      height : this.boxObject.height };
+          var center = { x : box.width / 2, y : box.height / 2 };
+
+          var stroke_w = this.stroke_width;
+          
+          //Either of the following should work, but don't
+          //var stroke_w = document.defaultView.getComputedStyle(this.svg_shape_rect, "").getPropertyCSSValue("stroke-width").getFloatValue(CSSPrimitiveValue.CSS_PX);
+          //var stroke_w = this.svg_shape_rect.getPresentationAttribute("stroke-width").getFloatValue(CSSPrimitiveValue.CSS_PX);
+          
+          this.container.setAttribute("width", box.width);
+          this.container.setAttribute("height", box.height);
+          this.shape.documentElement.setAttribute("height", box.height);
+
+          this.setText(this.getAttribute("label") + " " + box.width + ":" + box.height);
+          this.setText(this.container.getAttribute("width"));
+          this.setText(box.width);
+
+          // this.shape.getElementById returns null after this call
+          this.container.appendChild(this.shape.documentElement);
+
+          //Not used but useful to know
+          //var text_w = this.text.getComputedTextLength();
+          //var text_h = document.defaultView.getComputedStyle(this.text, "").getPropertyCSSValue("font-size").getFloatValue(CSSPrimitiveValue.CSS_PX);
+        ]]></body>
+      </method>
+      <method name="setText">
+        <parameter name="text" /> 
+        <body><![CDATA[
+          if(!text) text = "";
+          //this.text.firstChild.nodeValue = text;
+        ]]></body>
+      </method>
+    </implementation>
+    <resources>
+      <stylesheet src="css" />
+    </resources>
+    <content>
+      <xul:hbox anonid="container" class="box-inherit" xbl:inherits="align,dir,pack,orient" align="center" pack="center" flex="1">
+        <grid>
+          <columns>
+            <column flex="1"/><column flex="10"/><column flex="1"/>
+          </columns>
+          <rows>
+            <row>
+              <hbox anonid="top-left"/>
+              <hbox anonid="top-center"/>
+              <hbox anonid="top-right"/>
+            </row>
+            <row>
+              <hbox anonid="center-left"/>
+              <hbox anonid="center-center"/>
+              <hbox anonid="center-right"/>
+            </row>
+            <row>
+              <hbox anonid="bottom-left"/>
+              <hbox anonid="bottom-center"/>
+              <hbox anonid="bottom-right"/>
+            </row>
+          </rows>
+        </grid>
+      </xul:hbox>
+    </content>
+  </binding>
+</bindings>

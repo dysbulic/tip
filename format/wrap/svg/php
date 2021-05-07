@@ -1,0 +1,17 @@
+<?php function wrap($urn) { ?>
+<?php
+$line = "";
+if($handle = @fopen($urn, "r")) {
+  $line = trim(fgets($handle));
+}
+?>
+<?php if(strpos($line, "<?xml") !== 0 && strpos($line, "<svg") !== 0): ?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.0">
+<?php require($urn); ?>
+</svg>
+<?php else: ?>
+<?php rewind($handle); fpassthru($handle); ?>
+<?php endif; ?>
+<?php fclose($handle); ?>
+<?php } ?>
+<?php wrap($urn) ?>

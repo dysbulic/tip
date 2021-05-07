@@ -1,0 +1,32 @@
+<ul id="request_info">
+  <li><code>Requested <acronym title="Uniform Resource Indicator">URI</acronym></code><?php print $_SERVER['REQUEST_URI']; ?></li>
+  <?php if(isset($baseURIs)): ?>
+    <li><code>Base URIs</code>
+      <ul>
+        <?php foreach($baseURIs as $uri): ?>
+          <li><?php print $uri; ?></li>
+        <?php endforeach; ?>
+      </ul>
+    </li>
+  <?php endif; ?>
+  <?php if(function_exists("getallheaders")): ?>
+    <li><code>Headers</code>
+      <ul>
+        <?php foreach(getallheaders() as $header => $value): ?>
+          <li><strong><?php print $header; ?></strong>
+            <?php if($header == "Cookie"): ?>
+              <ul>
+                <?php foreach(split(';', $value) as $pair): ?>
+                  <li><?php print $pair ?></li>
+                <?php endforeach; ?>
+              </ul>
+            <?php else: ?>
+              <?php print $value; ?>
+            <?php endif; ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    </li>
+    <li><a href="index.phps"><code>Program Source</code></a></li>
+  <?php endif; ?>
+</ul>

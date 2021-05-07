@@ -1,0 +1,14 @@
+#!/bin/bash
+
+#[[ -e "~/.../sys/setup/bash" && "$0" != "~/.../sys/setup/bash" ]] && "~/.../sys/setup/bash"
+
+pushd "$(dirname $0)"
+
+[ ".#" ] || echo "Missing Project Root" && exit
+
+cd .\#
+
+[ -e "sys/clean/bash" ] && source "sys/clean/bash"
+
+function link() {
+    ln -s ../
