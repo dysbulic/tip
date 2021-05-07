@@ -1,0 +1,24 @@
+match:
+  function(id) {
+        var wrap = function(str) { return this.open() + str + this.close(); };
+        var chr = { open: '[', close: ']', wrap: wrap,
+                    not: function() { this.open = function() { return this.open() + "^"; }
+                                      return 
+                                    },
+                    parens: function() { return '\\(\\)'; } };
+        var group = {
+            open: '\\(', close: '\\)', wrap: wrap,
+            name: function(name) { this.open = function() { return this.open() + '\\?P<'; };
+                                   this.close = function() { return '>' + this.close(); } } };
+        //var pattern = op.not(chr.paren()).label("name");
+        //var pattern = alert(group.set.name("test"));
+        alert(chr.wrap(chr.parens());
+        var match = new RegExp(pattern).exec(id);
+        if(match) {
+            name = match[1];
+            val = match[2];
+            alert(name + " : " + val);
+        } else {
+            alert("Pattern: " + pattern);
+        }
+    },
