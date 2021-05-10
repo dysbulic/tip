@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml-stylesheet type="text/css" href="css" ?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="100%" height="100%"
+     id="tip_screen_ɑ"
+     version="1.0"
+     viewBox="0 0 650 400">
+  <defs>
+    <style type="text/css">
+#background {
+    fill: #222;
+    stroke: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+#head {
+    fill: #dfda7c;
+    stroke: black;
+    stroke-width: 1;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+}
+#exit {
+    fill: #3f020f;
+    stroke: none;
+}
+#start {
+    fill: #071d00;
+    stroke: none;
+}
+text {
+    text-align: start;
+    line-height: 125%;
+    text-anchor: middle;
+    fill: white;
+    stroke: none;
+    font-family: Rachana;
+}
+#head_text { 
+    fill: black;
+    font-family: Sansumi;
+    font-size: 39px;
+}
+[class ~= option] {
+    font-size: 40px;
+    font-weight: 300;
+    font-family: Purisa;
+}
+#border-stroke {
+    fill: none;
+    stroke: black;
+    stroke-width: 1.5;
+}
+#main_text {
+    font-family: Jet;
+    font-size: 60px;
+}
+      #content {
+        clip-path: url('#border-clip');
+      }
+    </style>
+    <rect id="border" width="100%" height="100%" rx="10" ry="10" />
+    <clipPath id="border-clip">
+      <use xlink:href="#border"/>
+    </clipPath>
+  </defs>
+  <use id="background" xlink:href="#border"/>
+  <g id="content">
+    <rect id="head" x="0" y="0" width="100%" height="10%" />
+    <text id="head_text" x="50%" y="8%">?</text>
+    <rect id="exit" x="0" y="0" width="20%" height="100%" />
+    <image x="2%" y="35%" width="15%" height="30%" xlink:href=".~/media/image/x/svg" />
+    <text class="option" transform="translate(65 300)">
+      <tspan>Exit</tspan><tspan x="0" dy="1em">Tip</tspan>
+    </text>
+    <rect id="start" x="80%" y="0" width="20%" height="100%" />
+    <image x="82%" y="35%" width="15%" height="30%" xlink:href=".~/media/image/checkmark/svg" />
+    <text class="option" transform="translate(585 300)">
+      <tspan>Start</tspan><tspan x="0" dy="1em">Tip</tspan>
+    </text>
+    <text id="main_text" transform="translate(320 170)">
+      <tspan>Would you</tspan><tspan x="0" dy="1.2em">like to Tip?</tspan>
+    </text>
+  </g>
+  <use id="border-stroke" xlink:href="#border"/>
+</svg>

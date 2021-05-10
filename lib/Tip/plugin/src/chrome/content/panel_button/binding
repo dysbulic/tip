@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<bindings xmlns="http://www.mozilla.org/xbl" 
+          xmlns:xbl="http://www.mozilla.org/xbl" 
+          xmlns:html="http://www.w3.org/1999/xhtml" 
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:svg="http://www.w3.org/2000/svg" 
+          xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!--<panel-button flex="1" id="left-button" direction="left" label="no"/>-->
+  <binding id="shape">
+    <implementation>
+      <field name="container"/>
+      <field name="direction"/>
+      <field name="text"/>
+      <field name="shape"/>
+      <field name="stroke_width"/>
+      <field name="is_loaded"/>
+      <property name="disabled">
+        <getter>return this.getAttribute('disabled') == 'true';</getter>
+        <setter><![CDATA[
+          if(val) {
+            this.setAttribute('disabled', 'true');
+          } else {
+            this.removeAttribute('disabled');
+          }
+          return val;
+        ]]></setter>
+      </property>
+      <property name="label">
+        <setter><![CDATA[
+          this.setText(val);
+          this.setAttribute("label", val);
+          return val;
+        ]]></setter>
+      </property>
+      <constructor><![CDATA[
+        var DEFAULT_STROKE_WIDTH = 10;
+
+        this.direction = this.getAttribute("direction");
+        if(!this.direction) this.direction = "meta";
+        
+        // This should not be necessary, but unfortunately getting the value
+        // from the stylesheet programmatically is not possible in current builds
+        
+        this.stroke_width = parseInt(this.getAttribute("stroke-width"));
+        if(isNaN(this.stroke_width)) this.stroke_width = DEFAULT_STROKE_WIDTH;
+
+        this.is_loaded = false;
+
+        this.container = document.getAnonymousElementByAttribute(this, "anonid", "container");
+        this.shape = document.getAnonymousElementByAttribute(this, "anonid", "rect");
+        this.text = document.getAnonymousElementByAttribute(this, "anonid", "text");
+
+        var my_this = this;
+        my_func = function myFunction(event) { window.setTimeout(function(xbl){ xbl.click(); }, 10, my_this); }
+        this.shape.addEventListener("click", my_func, true);
+
+        my_func = function myFunction() { my_this.doLayout(); }
+        window.addEventListener("load", my_func, true);
+      ]]></constructor>
+      <method name="doLayout">
+        <body><![CDATA[
+          if(this.is_loaded) return;
+          this.is_loaded = true;
+          
+          var box = { width : this.boxObject.width,
+                      height : this.boxObject.height };
+          var center = { x : box.width / 2, y : box.height / 2 };
+          
+          var stroke_w = this.stroke_width;
+          
+          //Either of the following should work, but don't
+          //var stroke_w = document.defaultView.getComputedStyle(this.svg_shape_rect, "").getPropertyCSSValue("stroke-width").getFloatValue(CSSPrimitiveValue.CSS_PX);
+          //var stroke_w = this.svg_shape_rect.getPresentationAttribute("stroke-width").getFloatValue(CSSPrimitiveValue.CSS_PX);
+          
+          //this.container.setAttribute("width", box.width);
+          this.container.setAttribute("height", box.height);
+
+          this.setText(this.getAttribute("label") + " " + box.width + ":" + box.height);
+          this.setText(this.container.getAttribute("width"));
+          this.setText(box.width);
+
+          //Not used but useful to know
+          //var text_w = this.text.getComputedTextLength();
+          //var text_h = document.defaultView.getComputedStyle(this.text, "").getPropertyCSSValue("font-size").getFloatValue(CSSPrimitiveValue.CSS_PX);
+        ]]></body>
+      </method>
+      <method name="setText">
+        <parameter name="text" /> 
+        <body><![CDATA[
+          if(!text) text = "";
+          this.text.firstChild.nodeValue = text;
+        ]]></body>
+      </method>
+    </implementation>
+    <resources>
+      <stylesheet src="css" />
+    </resources>
+    <content>
+      <xul:hbox class="box-inherit" xbl:inherits="align,dir,pack,orient" align="center" pack="center" flex="1">
+        <svg:svg anonid="container" width="100%" height="100%" flex="1">
+          <svg:g>
+            <svg:rect anonid="rect" class="rect" x="0" y="0" width="100%" height="100%" rx="2" ry="2"/>
+            <svg:text anonid="text" x="50%" y="50%" class="text">Text</svg:text>
+          </svg:g>
+        </svg:svg>
+      </xul:hbox>
+    </content>
+  </binding>
+</bindings>
