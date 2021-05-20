@@ -83,12 +83,15 @@ alias sp='git stash pop'
 alias ggraph='git log --decorate --graph --oneline --all'
 alias ggraph="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ci) %C(bold blue)<%an>%Creset'"
 
+complete -o default code
+
 alias grate='rake db:migrate'
 alias rdb='rake db:reset'
 alias clean='git clean'
 
 alias sysstart='systemctl list-units --type service'
 
+alias dname='lsb_release -a'
 
 alias ...='p ...'
 
@@ -98,7 +101,6 @@ alias mykey='gpg --export --sender $EMAIL'
 #alias mykeys
 alias mypkey=''
 
-#alias '-'='popd'
 alias q='popd'
 alias p='pushd'
 
@@ -106,7 +108,7 @@ alias ybfd='yarn run build && firebase deploy'
 
 alias g='grep --color'
 
-function t-() { git commit --amend -m "$*"; }
+function t-() { git commit --amend -S -m "$*"; }
 function pp() { dir="$(pwd)"; popd; pushd "$dir"; cd "$@"; }
 
 alias eb='e .../config/bash'
@@ -157,7 +159,7 @@ export CVS_RSH=ssh
 #which update-manager && update-manager -d
 
 # Include OSX specific pathes; and give them precedence
-for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin ~/.../google/adt/sdk/platform-tools ~/bin/adt-bundle-linux-*/sdk/tools/ ~/bin/adt-bundle-linux-*/sdk/platform-tools/ ~/.rbenv/bin/; do
+for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin ~/.../google/adt/sdk/platform-tools ~/bin/adt-bundle-linux-*/sdk/tools/ ~/bin/adt-bundle-linux-*/sdk/platform-tools/ ~/.rbenv/bin/ export "$(yarn global bin)"; do
     [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
@@ -749,6 +751,7 @@ alias getextramail="fetchmail --ssl --keep --folder mail/orgs/cor,mail/dorks,mai
 alias tunnel="ssh -L :2222:wholcomb.intranet:22 root@secure.mpp.org"
 alias getwork="rsync --recursive --verbose --progress --links --rsh ssh\\ -p2222 wholcomb@localhost2:Public ~/"
 alias getmusic="rsync --recursive --verbose --progress --links --rsh ssh\\ -p2222 wholcomb@localhost2:Music/ /usr/share/music/"
+alias copypart='rsync -axHAWXS --numeric-ids --info=progress2'
 
 PROG_DIR="$WEBSITE_DIR/pcvs.org/mr/will"
 
