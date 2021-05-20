@@ -1,0 +1,14 @@
+<set var="pre" val=".../lib/Tip/lib"/>
+<transform>
+  <set>
+    <files>$pre/*/js</files>
+    <files>$pre/*/jquery</files>
+  </set>
+  <split what="file.name" on="/"/>
+  <group pattern="$pre" where="start"/>
+  <group where="[2, -2]"/>
+  <drop what="[1,3]"/>
+  <new source="exec([2])"/>
+for(var i = 0; i < funcNames.length; i++) {
+    funcs.ADD(funcNames[i], eval(LOAD(funcNames[i])));
+}

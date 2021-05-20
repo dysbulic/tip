@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://tip/skin/prefs.css" type="text/css"?>
+ 
+<prefwindow id="tip-prefs"
+            title="Tip Options"
+            xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="tip-connection-pane" label="Connection Settings">
+    <preferences>
+      <preference id="pref_home_server" name="tip.home.server" type="string"/>
+      <preference id="pref_user_id" name="tip.user.id" type="string"/>
+    </preferences>
+    
+    <grid>
+      <columns><column/><column flex="1"/></columns>
+      <rows>
+        <row>
+          <label control="server" value="Home Tip Server: "/>
+          <textbox preference="pref_home_server"/>
+        </row>
+        <row>
+          <label control="userid" value="User Id: "/>
+          <textbox preference="pref_user_id"/>
+        </row>
+      </rows>
+    </grid>
+  </prefpane>
+</prefwindow>

@@ -1,0 +1,50 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:lxslt="http://xml.apache.org/xslt" xmlns:doc="http://docbook.org/ns/docbook">
+  <head>
+    <title><tip:var name="title"/></title>
+<!--
+    <transform>
+      <set><ls path="(*)/utf-8"/></set>
+      <tag><tip:path><val var="path"/></tip:path></tag>
+    </transform>
+    <transform>
+      <set><ls path="link/to/$this/*"/></set>
+      <link rel="$path.rel" href="$path.href" type="$path.type"/>
+    </transform>
+    <transform>
+      <set><ls path="script/for/$this/*"/></set>
+      <script type="$path.type" src="$path.src"></script>
+    </transform>
+-->
+    <link type="text/css" rel="stylesheet" href=".~/media/style/tip.css"/>
+    <script type="text/javascript" src=".../lib/jQuery/1.3.2/compressed/js"></script>
+    <script type="text/javascript" src="src/js"></script>
+  </head>
+  <body>
+    <div id="content">
+      <h1 id="greeting">Welcome to Tipspace</h1>
+
+      <noscript>
+        <p>Unfortunately, we seem to be experiencing some unexpected technical problems. Please try the <a href="http://tip.dhappy.org">homepage</a> in a different browser.</p>
+        <ul style="list-style: none;">
+          <li style="display:block; text-align: center;"><a style="font-size: 150%" href="http://tip.dhappy.org">http://tip.dhappy.org</a></li>
+        </ul>
+      </noscript>
+      
+      <div id="counter" style="display: none;">
+        <ul>
+          <li><code>Current Resource</code>: <span id="resource"/></li>
+          <li>Your resource has been loading for <span class="timer"/> <span class="typeof timer"/>.</li>
+          <li>
+            In <span id="total"/> <span class="typeof total">second</span>, you will be routed to the <span id="reason">potentially faster</span> resource at
+            <ul>
+              <li><a href="http://tip.dhappy.org">tip.dhappy.org</a></li>
+            </ul>
+          </li>
+          <li><span class="todo">ToDo: Countdown Timer: copy code from mixlist.com's seven segment counter</span></li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<?php
+header("Content-type: application/xhtml+xml");
+print '<?xml version="1.0" encoding="UTF-8" ?' . ">\n";
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:svg="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink">
+  <head>
+    <title><?php print '__/title/utf-8'?></title>
+    <script type="text/javascript" src=".../sys/lib/string/js"/>
+    <!-- <script type="text/javascript" src=".../lib/jQuery/1.3.2/compressed/js"></script> -->
+    <script type="text/javascript" src=".../sys/lib/jquery/2.0/js"></script>
+    <script type="text/javascript">//<![CDATA[
+      $(document).ready(function() {
+<?php require('.../__/jquery/php'); ?>
+                                   });
+    //]]></script>
+    <script type="application/javascript;version=1.7">//<![CDATA[
+      $(document).ready(function() {
+<?php require('jquery/php'); ?>
+                                   });
+    //]]></script>
+    <style type="text/css">
+      html, body { margin: 0; padding: 0; }
+      #canvas { width: 100%; height: 100%; }
+    </style>
+    <link rel="stylesheet" type="text/css" href="key.css" />
+  </head>
+  <body>
+    <svg:svg id="canvas" viewBox="0 -20 80 80">
+    </svg:svg>
+  </body>
+</html>

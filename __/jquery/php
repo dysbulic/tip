@@ -1,0 +1,48 @@
+__ = {
+<?php
+ // Loads in the directory where the script is being processed
+$types = array( 'php', 'json' ) ;
+$context = 'json';
+foreach(glob("__/*/") as $dir) {
+  if(file_exists("$dir/$context/php")) { require("$dir/$context/php"); }
+  elseif(file_exists("$dir/$context")) { require("$dir/$context"); } 
+  else {
+    while($types.length > 0 && $type = $types.pop()) {
+      if(file_exists("$dir/$context/$type")) {
+        require("$dir/$context/$type");
+        break;
+      }
+    }
+  }
+ }
+?>
+
+handler: {
+  svg: function(data) {
+         var appendPoint = (arguments.callee.appendPoint ? arguments.callee.appendPoint : "svg")        ;
+         $(appendPoint).append($(data));
+       },
+  jquery: function(data) { eval(data); }
+},
+
+load:
+  function(type, urn, handler) {
+    //          this.load('jquery', '.../format/' + type + '/jquery');
+    if(!handler) handler = this.handler[type];
+    if(typeof handler != "undefined") {
+      // XML documents loaded in jquery
+      if(!urn.endsWith('/')) urn += '/';
+      $.get(urn + type, {}, handler, 'text');
+    } else {
+      switch(type) {
+      case 'style':
+      document.insertBefore
+        (document.createProcessingInstruction("xml-stylesheet",
+                                              'type="text/css" href="' + urn + '"'),
+         document.firstChild);
+      }
+    }
+  }
+};
+
+$(document).ready(function() { if(__.init) __.init() });

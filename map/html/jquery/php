@@ -1,0 +1,203 @@
+var baseURN = '.../geo/usa/37618/Riddle\ Creek/665/plan/';
+
+var loadOnlyOne = false;
+
+// Needed to remove scroll bars
+$('#canvas').height($(window).height() - 4);
+
+var exception = { InvalidTypeException: {} };
+
+function KeyItem(key, layer) {
+  this.key = key;
+  this.layer = layer;
+  this.listItem = $("<li/>");
+  var checkHolder = $('<span/>').addClass('__check');
+  checkHolder.html(layer.isVisible() ? '&#x25A3;' : '&#x25A1;');
+  var textHolder = $('<span/>').addClass('__label').text(layer.name);
+ 
+  this.listItem.append($('<span/>').addClass('__line').append(checkHolder).append(textHolder));
+
+  textHolder.click(function() { $(this).parent().parent().children("ul").toggle(); });
+  checkHolder.click(function() {
+      layer.toggleVisible();
+      checkHolder.html(layer.isVisible() ? '&#x25A3;' : '&#x25A1;')
+    });
+}
+
+function Key(map) {
+  this.map = map;
+
+  let(key = this) {
+    function addLayers(layer) {
+      var root = $("<ul/>").attr("class", "__key");
+      for(var [idx, sublayer] in Iterator(layer.order)) {
+        if(!(sublayer instanceof RemoteLayer)) {
+          var item = new KeyItem(key, sublayer);
+          root.append(item.listItem);
+          if(sublayer.hasSublayers()) item.listItem.append(addLayers(sublayer));
+        }
+      }
+      if(root.children().size() > 0) return root;
+    }
+  }
+
+  this.root = addLayers(map.root).attr('id', '__key');
+  this.root.find("ul").hide();
+}
+
+function Map(baseURN) {
+  this.root = new Layer(baseURN);
+  this.key;
+  this.activeLayer;
+
+  this.attachTo = function(elem) {
+    elem.append(this.root.toSVG());
+    this.key = new Key(this);
+
+    for(var [idx, layer] in Iterator(['structure', 'space'])) {
+      //layer.bind('click', function() { this.setActiveLayer(layer); });
+    } 
+    $("body").append(this.key.root);
+  }
+
+  this.setActiveLayer = function(layer) {
+    if(this.activeLayer == layer) return;
+    if(this.activeLayer) this.activeLayer.hide();
+    this.activeLayer = layer;
+    this.activeLayer.show();
+
+    for(var [idx, layer] in Iterator(['structure', 'space'])) {
+      if(this.activeLayer.sublayer[layer]) this.activeLayer.sublayer[layer].show();
+    }
+  }
+}
+
+function Layer(name) {
+  this.sublayer = {};
+  this.order = [];
+  this.name = name;
+  this.base;
+  this.parent;
+  this.loaded = false;
+
+  this.addLayer = function(layer) {
+    if(!layer instanceof Layer) {
+      throw exception.InvalidTypeException;
+    }
+    if(this.order.indexOf(layer) < 0) {
+      this.order.push(layer);
+      this.sublayer[layer.name] = layer;
+    }
+  };
+
+  this.hasSublayers = function() { return this.order.length > 0; }
+
+  this.getLayer = function(id) {
+    if(/^__[^_]/.test(id)) {
+      var idx = -1;
+      switch(id) {
+      case '__top': idx = 0; break;
+      case '__bottom': idx = this.order.length - 1; break;
+      }
+      return (idx >=0 && idx < this.order.length) ? this.order[idx] : undefined;
+    }
+    if(typeof this.sublayer[id] != "undefined") return this.sublayer[id];
+    return new Layer(id);
+  }
+
+  this.fire = function(event, pattern) {
+    //if(!pattern) pattern = '.';
+    if(!pattern) { this.base.trigger(event); }
+    else         { this.base.find(pattern).trigger(event); }
+  }
+
+  this.toSVG = function() {
+    if(!this.base) {
+      this.base = $("<svg xmlns='http://www.w3.org/2000/svg'><g/></svg>").attr('name', this.name);
+      for(var [idx, layer] in Iterator(this.order)) {
+        this.base.append(layer.toSVG());
+      }
+    }
+    return this.base;
+  }
+
+  this.show = function() { this.setVisible(true); }
+  this.hide = function() { this.setVisible(false); }
+  this.toggleVisible = function() { this.setVisible(!this.isVisible()); }
+  this.setVisible = function(visible) {
+    if(visible && !this.loaded) {
+      this.fire('lazy_load', '*');
+      this.loaded = true;
+    }
+    visible ? this.base.show() : this.base.hide();
+  }
+
+  this.isVisible = function() { return this.loaded && this.base && this.base.is(':visible'); }
+}
+
+Layer.prototype.toString = function() {
+  return (this.parent ? this.parent.toString() + '/' : '') + this.name;
+}
+
+function RemoteLayer(name, resourceName) {
+  Layer.call(this, name);
+  this.resourceName = resourceName;
+
+  this.toSVG = function() {
+    if(!this.base) {
+      //this.base = super.toSVG(); // No superclass in javascript
+      this.base = $("<svg xmlns='http://www.w3.org/2000/svg'><g/></svg>").attr('name', this.name);
+
+      let(attachPoint = this.base, urn = this.resourceName) {
+        var loadHandler = function() {
+          __.load('svg', urn,
+                  function(data) {
+                    attachPoint.append($(data));
+                    // sometimes layers are hidden in the original drawing
+                    attachPoint.children().css('display', 'inline');
+                  });
+        }
+      };
+
+      this.base.bind('lazy_load', loadHandler);
+    }
+    return this.base;
+  }
+}
+
+RemoteLayer.protoype = Layer;
+
+// retreive a list of base uri's and transform them into an array of
+// hashes to be loaded as a map
+$.get(baseURN + 'svg/__/gen/order/utf-8',
+      function(data) {
+        var map = new Map(baseURN);
+        for(var [idx, line] in Iterator(data.split("\n"))) {
+          var root = map.root;
+          if(line != "") {
+            for(var [idx, elem] in Iterator(line.split('/'))) {
+              root.addLayer(root.getLayer(elem));
+              root = root.getLayer(elem);
+            }
+            root.addLayer(new RemoteLayer('urn', baseURN + '/' + line));
+          }
+          if(loadOnlyOne) break;
+        }
+        map.attachTo($('#canvas'));
+      },
+      'text');
+
+function walk(obj, enter, exit) {
+  if(obj instanceof Array) {
+    for(var [idx, key] in Iterator(obj)) {
+      if(enter) enter(obj, idx);
+      if(exit) exit(obj, idx);
+    }
+  } else {
+    for(var key in obj) {
+      if(enter) enter(obj, key);
+      if(obj[key] instanceof Object) walk(obj[key], enter, exit);
+      if(exit) exit(obj, key);
+    }
+  }
+}

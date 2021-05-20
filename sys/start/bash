@@ -1,0 +1,34 @@
+#!/bin/bash
+
+[ -e .~ ] || echo "Meant to be run from tiproot"
+[ -e .~ ] || exit -1
+
+# Each directory contains a special directory .~ that is used to
+# dereference forward the home directory
+
+# This should be replaced at some point either by a python script or
+# fuse driver to provide the .~ and ... filesystems
+
+IDX=0
+CHECK=('.')
+ADDED=()
+
+while [ $IDX -lt ${#CHECK[*]} ]; do
+    dir=${CHECK[$IDX]}
+    for path in "$dir/"*; do
+        file="${path##*/}"
+        if [[ "$file" != "." && "$file" != ".." && -d "$path" && ! -L "$path" ]]; then
+            CHECK[${#CHECK[*]}]="$path"
+        fi
+    done
+    IDX=$(( $IDX + 1 ))
+done
+
+for path in "${CHECK[@]}"; do
+    # This fails with too deep symlinks and there's no shell option to allow more.
+    if [ ! -a .~ ]; then
+        echo "Spawning Link Creator: $path"
+        ( pushd "$path" > /dev/null && \
+            while [[ ! -a .~ && ! -L .~ ]]; do ln -s ../.~; ln -s .~/...; cd ..; done )
+    fi
+done

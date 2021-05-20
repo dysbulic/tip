@@ -1,0 +1,32 @@
+#DirectoryIndex None
+
+RewriteEngine on
+
+RewriteCond %{REMOTE_ADDR} !^10\.
+RewriteCond %{REMOTE_ADDR} !^192\.168\.
+RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.
+RewriteCond %{REMOTE_ADDR} !^::1
+RewriteCond %{SERVER_NAME} !^ebene [NC]
+RewriteCond %{SERVER_NAME} !^tip\.dhappy\.org$ [NC]
+RewriteCond %{REQUEST_URI} ^.*tip/*(.*)$ [NC]
+RewriteRule ^(.*)$ http://tip.dhappy.org/%1 [R,L]
+
+# ToDo: Write more general logic
+RewriteCond %{REQUEST_URI} !^/~will/.../lib/Tip/index.php$
+RewriteCond %{REQUEST_URI} !^/~will/.../lib/Tip/index.xhtml$
+RewriteCond %{REQUEST_URI} !^/~will/.../lib/Tip/index.html$
+RewriteCond %{REQUEST_URI} !^/~will/.../lib/Tip/index.svg$
+RewriteCond %{REQUEST_URI} !^/~will/.../lib/Tip/$
+RewriteCond %{REQUEST_URI} !^/~will/.../lib/Tip/server/rest/index.php$
+RewriteCond %{REQUEST_URI} !^/~will/.../lib/Tip/server/rest/$
+#RewriteRule ^(.*)$ http://localhost/~will/.../lib/Tip/server/rest/?urn=%{REQUEST_URI} [L,QSA]
+RewriteCond %{REQUEST_URI} !^/~will/.../lib/Tip/server/rest/$
+#RewriteRule ^(.*)$ http://localhost/~will/.../lib/Tip/server/rest/?urn=%{REQUEST_URI} [L,QSA]
+#RewriteCond %{REQUEST_URI} ^/~will/.../lib/Tip/
+#RewriteRule ^(.*)$ http://google.com/?uri=%{REQUEST_URI} [L,QSA]
+#RewriteCond %{REQUEST_URI} !^/.../lib/Tip/$
+#RewriteRule ^(.*)$ /.../lib/Tip/server/rest/?uri=$1 [L,QSA]
+
+#RewriteCond %{REQUEST_URI} !^/(skins|stylesheets|images|config)/
+#RewriteCond %{REQUEST_URI} !^/(redirect|texvc|index).php
+#RewriteRule ^(.*)$ server/rest/?uri=$1 [L,QSA]

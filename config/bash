@@ -29,6 +29,12 @@ export EDITOR='emacs -nw'
 alias src='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0'
 alias srceach='find \( -name mimis -or -name jquery -or -name eson -or -name rhino -or -name js \) -print0 | xargs -0'
 
+alias iotaseed='cat /dev/urandom |tr -dc A-Z9|head -c${1:-81}'
+
+function tt() {
+    fortune="$(fortune -s)"
+    git commit -am "${*:-$fortune}";
+}
 function zview() {
     zlib-flate -uncompress < "$*"
 }
@@ -104,7 +110,7 @@ alias mypkey=''
 alias q='popd'
 alias p='pushd'
 
-alias ybfd='yarn run build && firebase deploy'
+alias ybyd='yarn build && yarn deploy'
 
 alias g='grep --color'
 
@@ -159,12 +165,12 @@ export CVS_RSH=ssh
 #which update-manager && update-manager -d
 
 # Include OSX specific pathes; and give them precedence
-for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin ~/.../google/adt/sdk/platform-tools ~/bin/adt-bundle-linux-*/sdk/tools/ ~/bin/adt-bundle-linux-*/sdk/platform-tools/ ~/.rbenv/bin/ export "$(yarn global bin)"; do
+for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin ~/.../google/adt/sdk/platform-tools ~/bin/adt-bundle-linux-*/sdk/tools/ ~/bin/adt-bundle-linux-*/sdk/platform-tools/ ~/.rbenv/bin/ "$(yarn global bin)" ~/.cargo/bin ~/.radicle/bin; do
     [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
-[[ -s "/usr/local/rvm/scripts/rvm" ]] && source /usr/local/rvm/scripts/rvm
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+#[[ -s "/etc/profile.d/rvm.sh" ]] && source /etc/profile.d/rvm.sh
+#[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 which rbenv > /dev/null && eval "$(rbenv init -)"
 
 export LANG="en_US.UTF-8"
@@ -520,7 +526,7 @@ export JAVACMD=$(which java)
 #export JAVA_HOME=${JAVACMD%/*/*}
 #export JAVA_JARPATH=.../lib/java/lib
 
-export ANDROID_HOME=~/.../google/adt/sdk/
+export ANDROID_HOME=~/code/adt/sdk/
 
 alias pauseamarok="dcop --user $USER amarok player playPause"
 
@@ -805,11 +811,21 @@ export NVM_DIR="/home/will/.nvm"
 [ -d "/home/linuxbrew/.linuxbrew/" ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 [ -d ~/bin ] && export PATH=~/bin:"$PATH" && export GOBIN=~/bin
-[ -d ~/.cargo/bin ] && export PATH="$PATH":~/.cargo/bin
 [ -d /opt/ibm/java-x86_64-80/jre/bin/ ] && export PATH=/opt/ibm/java-x86_64-80/jre/bin/:$PATH # for neo4j
 export GOPATH=~/go
 
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
-eval "$(direnv hook bash)"
+
+command -v direnv 1>/dev/null 2>&1 && eval "$(direnv hook bash)"
+
+# tabtab source for packages
+# uninstall by removing these lines
+[ -f ~/.config/tabtab/__tabtab.bash ] && . ~/.config/tabtab/__tabtab.bash || true
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/will/Downloads/google-cloud-sdk/path.bash.inc' ]; then . '/home/will/Downloads/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/will/Downloads/google-cloud-sdk/completion.bash.inc' ]; then . '/home/will/Downloads/google-cloud-sdk/completion.bash.inc'; fi

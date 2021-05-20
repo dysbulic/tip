@@ -1,0 +1,9 @@
+<?php
+// Called when a resource is requested with an empty name
+class EmptyAgent {
+  function __construct() {
+    require(".../lib/HTTP/error/406/php");
+  }
+}
+
+return new EmptyAgent();

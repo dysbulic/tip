@@ -11,6 +11,8 @@
     <style type="text/css">
       .result th, .result td { padding: .25em .5em; text-align: center; border: 1px solid; }
       object { width: 100% }
+      table, h1 { margin: 1rem auto }
+      h1 { text-align: center }
     </style>
     <script type="text/javascript">
       var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
@@ -21,6 +23,8 @@
       pageTracker._initData();
       pageTracker._trackPageview();
     </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async="true" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </head>
   <body>
     <h1>Comparing TF-IDF and Item:Item Similarity</h1>
@@ -664,7 +668,7 @@
 
     <p>Each method has advantages and disadvantages, and the method that is generally used with tfidf is the cosine distance. Two vectors have a similarity of 1 if the angle between them is 0&deg;, and -1 if the angle is 180&deg; (&pi; radians). The transition isn't linear, but it is constantly decreasing.</p>
 
-    <object type="image/svg" data="cosine.svg" style="height: 200px"></object>
+    <object type="image/svg+xml" data="cosine.svg" style="height: 200px"></object>
 
     <p>The cosine of the angle between two vectors can be derived from the dot product:</p>
 
@@ -1100,11 +1104,11 @@
     <pre>SELECT COUNT(user_id) AS user_count FROM listen
    GROUP BY artist_id ORDER BY user_count DESC</pre>
 
-    <object type="image/svg" data="listeners_per_artist.svg" style="height: 400px"></object>
+    <object type="image/svg+xml" data="listeners_per_artist.svg" style="height: 400px"></object>
 
     <p>This is pretty much impossible to see any differentiation in. Consider the same data <a href="log_listeners_per_artist.svg">plotted with a log scale</a>.</p>
 
-    <object type="image/svg" data="log_listeners_per_artist.svg" style="height: 400px"></object>
+    <object type="image/svg+xml" data="log_listeners_per_artist.svg" style="height: 400px"></object>
 
     <p id="listens_per_listener">Note that over half (~60%) of the artists have only a single listener. The question then is how this will affect artists that were truncated. Truncating artists that are popular will cloud the results a bit, but truncating artists for which a user is the only listener means that artist is now removed from the system. The question then is whether less popular artists are listened to less frequently. This graph of <a href="listens_per_listener.svg">number of listens per number of listeners</a> shows a mostly random distribution with a slight trend:</p>
 
@@ -1113,7 +1117,7 @@
     FROM listen GROUP BY artist_id) AS t1
    GROUP BY user_count</pre>
 
-    <object type="image/svg" data="listens_per_listener.svg" style="height: 400px"></object>
+    <object type="image/svg+xml" data="listens_per_listener.svg" style="height: 400px"></object>
 
     <p id="low_pop_listens_per_listener">Consider, however, only <a href="low_pop_listens_per_listener.svg">artists with 10 or fewer listeners</a> (which is ~87% of artists):</p>
 
@@ -1122,7 +1126,7 @@
     FROM listen GROUP BY artist_id) AS t1
    WHERE user_count &lt;= 10 GROUP BY user_count</pre>
 
-    <object type="image/svg" data="low_pop_listens_per_listener.svg" style="height: 400px"></object>
+    <object type="image/svg+xml" data="low_pop_listens_per_listener.svg" style="height: 400px"></object>
 
     <p>This means that there is likely a large percentage lower popularity artists which were truncated from the system entirely.</p>
 
@@ -1133,7 +1137,7 @@
     GROUP BY artist_id HAVING user_count = 1) as t1
    GROUP BY user_id ORDER BY user_count</pre>
 
-    <object type="image/svg" data="unique_artists_per_listener.svg" style="height: 400px"></object>
+    <object type="image/svg+xml" data="unique_artists_per_listener.svg" style="height: 400px"></object>
 
     <p>So, the majority of users have a single or no unique artists, and there is only one person with 30.</p>
   </body>

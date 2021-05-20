@@ -1,0 +1,18 @@
+server :
+<?php // Creates a json object representing the current server ?>
+{
+<?php //foreach($_SERVER as $var => $val) printf("%s : '%s',\n", $var, $val); ?>
+<?php $server = $_SERVER; ?>
+//  drop : [
+<?php
+  foreach(file(".../sys/this/drop/php/_server/list/utf-8") as $drop) {
+    if($drop[strlen($drop) - 1] == "\n") {
+      $drop = substr($drop, 0, strlen($drop) - 1); }
+//    printf("'%s',\n", $drop);
+    unset($server[$drop]); } ?>
+//         ]
+<?php
+  foreach($server as $var => $val) {
+    printf("%s : '%s',\n", $var, $val);
+  } ?>
+}
