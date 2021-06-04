@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Webcam Testing</title>
+  </head>
+  <body>
+    <input type="file" accept="video/*" capture="camera" id="recorder">
+    <video id="player" controls></video>
+    <script>
+      var recorder = document.getElementById('recorder')
+      var player = document.getElementById('player')
+
+      recorder.addEventListener('change', function(e) {
+        var file = e.target.files[0]
+        player.src = URL.createObjectURL(file)
+      })
+    </script>
+    <script>
+      var player = document.getElementById('player')
+      var handleSuccess = function(stream) {
+        player.srcObject = stream
+      }
+    
+      navigator.mediaDevices
+      .getUserMedia({ audio: true, video: true })
+      .then(handleSuccess)
+    </script>
+  </body>
+</html>

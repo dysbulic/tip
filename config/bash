@@ -43,6 +43,7 @@ function zview() {
 
 alias servehere='ruby -run -e httpd . -p 9999'
 alias portprogs='sudo ss -l -A inet -p'
+alias ddf='df -h | grep "\\(sd\\|nvme\\)"'
 
 alias idg='ipfs dag get'
 alias ils='ipfs ls'
@@ -171,8 +172,9 @@ for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/
     [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
+#[ -e "$HOME/.rvm/bin" ] && PATH=$PATH:$HOME/.rvm/bin
 #[[ -s "/etc/profile.d/rvm.sh" ]] && source /etc/profile.d/rvm.sh
-#[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+#[[ -s "/etc/profile.d/rvm.sh" ]] && source "/etc/profile.d/rvm.sh"
 which rbenv > /dev/null && eval "$(rbenv init -)"
 
 export LANG="en_US.UTF-8"
@@ -711,7 +713,7 @@ elif [ "${BASH_VERSINFO[5]/cygwin/}" != "${BASH_VERSINFO[5]}" ]; then # in windo
     # to use the python image library, use the windows binary
     pythondir=$(echo "/cygdrive/c/Program Files/"[Pp]ython*)
     [ -d "$pythondir" ] && PATH="$pythondir:$PATH"
-
+    
     # Include pathes for QT under Windows
     # QT's make system relies on make being called from QT rather than cygwin
     # export QTDIR=$(echo "/cygdrive/c/Documents and Settings/$USERNAME/My Documents/Programs/QT/"*)
@@ -748,6 +750,7 @@ fi
 
 [ -r '~/config/muttrc' ] && alias mutt="mutt -F '~/config/muttrc'"
 
+export PYTHON=$(which python3)
 [ -e /usr/local/java/lib/ant/bin/ant ] && alias ant="/usr/local/java/lib/ant/bin/ant"
 [ -e /Developer/Java/Ant/bin/ant ] && alias ant="/Developer/Java/Ant/bin/ant"
 alias recent="last -ad | head -n 15"
@@ -796,8 +799,6 @@ alias print="eval echo \$OUT"
 
 [[ "$(pwd)" == ~ && -d ... ]] && cd ...
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
 git config --global user.name "Will Holcomb"
 git config --global user.email $EMAIL
 [ $(hostname) = 'M1600261' ] && git config --global user.email "c_holcomb.william@cerner.com"
@@ -815,6 +816,17 @@ export NVM_DIR="/home/will/.nvm"
 [ -d ~/bin ] && export PATH=~/bin:"$PATH" && export GOBIN=~/bin
 [ -d /opt/ibm/java-x86_64-80/jre/bin/ ] && export PATH=/opt/ibm/java-x86_64-80/jre/bin/:$PATH # for neo4j
 export GOPATH=~/go
+
+alias neo4j="\
+  docker run \
+    --name argus \
+    -p7474:7474 -p7687:7687 \
+    -v $HOME/neo4j/data:/data \
+    -v $HOME/neo4j/logs:/logs \
+    -v $HOME/neo4j/import:/var/lib/neo4j/import \
+    -v $HOME/neo4j/plugins:/plugins \
+    --env NEO4J_AUTH=neo4j/neo4j2 \
+    neo4j:latest"
 
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
