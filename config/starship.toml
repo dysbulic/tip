@@ -1,0 +1,134 @@
+format = """
+$username\
+$hostname\
+$time\
+$shlvl\
+$kubernetes\
+${custom.enterpre}\
+${custom.git}\
+${env_var}\
+$directory\
+${custom.enterpost}\
+$vcsh\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$hg_branch\
+$docker_context\
+$package\
+$cmake\
+$dart\
+$deno\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$golang\
+$helm\
+$java\
+$julia\
+$kotlin\
+$nim\
+$nodejs\
+$ocaml\
+$perl\
+$php\
+$purescript\
+$python\
+$red\
+$ruby\
+$rust\
+$scala\
+$swift\
+$terraform\
+$vlang\
+$vagrant\
+$zig\
+$nix_shell\
+$conda\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$crystal\
+$custom\
+$cmd_duration\
+$line_break\
+$lua\
+$jobs\
+$battery\
+$status\
+$shell\
+$character"""
+
+[cmd_duration]
+min_time = 500
+
+[directory]
+truncation_symbol = '…/'
+disabled = true
+
+[env_var.TIPDIR]
+format = '[$env_value]($style) '
+style = "bold cyan"
+
+[git_branch]
+format = '[on](#EA00FF) [$symbol$branch]($style) '
+
+[git_metrics]
+disabled = false
+format = '[\(](bold blue)[+$added]($added_style)[／](bold blue)[-$deleted]($deleted_style)[\)](bold blue) '
+
+[git_status]
+format = '([\[](#C15DFF)[$all_status$ahead_behind]($style)[\]](#C15DFF) )'
+
+[hostname]
+ssh_only = false
+format = '[@](green)[$hostname]($style)'
+
+[memory_usage]
+threshold = 50
+format = 'using $symbol [${ram}(|${swap})]($style) '
+disabled = false
+
+[package]
+display_private = true
+
+[status]
+disabled = false
+format = '[$symbol \($status\)]($style) '
+
+[time]
+disabled = false
+format = '[@](#1534FF)[$time]($style) '
+
+[username]
+style_user = '#FF9900'
+show_always = true
+format = '[$user]($style)'
+
+[custom.enterpre]
+when = "test ${#TIPDIR} -gt $(($COLUMNS - 25))"
+format = "\n"
+shell = ["bash", "--noprofile", "--norc", "-i"]
+
+[custom.enterpost]
+when = "test ${#TIPDIR} -gt $(($COLUMNS - 75))"
+format = "\n"
+shell = ["bash", "--noprofile", "--norc", "-i"]
+
+[custom.git]
+when = "git rev-parse > /dev/null 2>&1"
+format = "[in](cyan) [](#FF9999)"
+shell = ["bash", "--noprofile", "--norc"]
+
+[gcloud]
+disabled = true
+
+[aws]
+disabled = true
+
+[terraform]
+format = '[via](105) [$symbol$workspace]($style) '
