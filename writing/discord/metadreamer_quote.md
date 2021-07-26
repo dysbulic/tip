@@ -1,0 +1,1 @@
+For me, there's that Steve Job's quote where things may not make sense in the moment, but you connect the dots looking backwards. looking forwards

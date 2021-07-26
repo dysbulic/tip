@@ -1,14 +1,15 @@
 # Options +Indexes
 
-HeaderName .apache.header.html
+# HeaderName /.../.apache.header.html
+IndexStyleSheet /.../style/apache.autoindex.css"
 # Header set Access-Control-Allow-Origin "*"
 
-IndexOptions Charset=UTF-8 NameWidth=* DescriptionWidth=* FancyIndexing FoldersFirst ScanHTMLTitles SuppressHTMLPreamble XHTML HTMLTable -SuppressIcon
-IndexIgnore .svn *~ .DS_Store HEADER.html svn-commit.tmp
+IndexOptions Charset=UTF-8 NameWidth=* DescriptionWidth=* IconsAreLinks IgnoreCase FancyIndexing FoldersFirst ScanHTMLTitles SuppressHTMLPreamble XHTML HTMLTable VersionSort -SuppressIcon
+IndexIgnore .svn *~ .DS_Store svn-commit.tmp
 
 AddCharset UTF-8 .html .php .css .js json
 
-DirectoryIndex php xhtml svg webm html utf-8 txt js jquery eson json mkv m4a mp3 jpg svg.svg html.html
+DirectoryIndex xhtml xhtml.xhtml svg svg.svg html html.html webm utf-8 txt js jquery eson json mkv m4a mp3 jpg
 
 RemoveHandler .sh
 RemoveHandler .py
@@ -25,7 +26,7 @@ AddEncoding x-gzip .svgz
 
 <Files "php">
   # ToDo: Make futureproof
-  SetHandler php-cgi
+  #SetHandler php-cgi
   #SetHandler php5-script
   #SetHandler php-script
   #SetHandler application/x-httpd-php

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+		<script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script>
+			const scene = new THREE.Scene()
+			const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      )
+
+			const renderer = new THREE.WebGLRenderer()
+			renderer.setSize(
+        window.innerWidth, window.innerHeight
+      )
+      const controls = new THREE.OrbitControls(
+        camera, renderer.domElement
+      )
+      document.body.appendChild(renderer.domElement)
+
+			// const geometry = new THREE.BoxGeometry()
+			// const material = new THREE.MeshBasicMaterial(
+      //   { color: 0x00F000 }
+      // )
+			// const cube = new THREE.Mesh(geometry, material)
+			// scene.add(cube)
+
+      // const material = new THREE.LineBasicMaterial(
+      //   { color: 0x0000FF }
+      // )
+      // const points = []
+      // points.push(new THREE.Vector3(-3, 0, 0))
+      // points.push(new THREE.Vector3( 0, 3, 0))
+      // points.push(new THREE.Vector3( 3, 0, 0))
+      // const geometry = (
+      //   new THREE.BufferGeometry()
+      //   .setFromPoints(points)
+      // )
+      // const line = new THREE.Line(geometry, material)
+      // scene.add(line)
+
+      const loader = new THREE.GLTFLoader()
+      loader.load(
+        'https://ipfs.io/ipfs/QmSP9VeES3wk5NoVgSFpi8DoHooxQopkmZmSo3tSTN7CHA/3eyes.glb',
+        (gltf) => {
+          console.info(gltf)
+          scene.add(gltf.scene)
+        },
+        undefined,
+        console.error,
+      )
+
+      camera.position.z = 45
+
+      const light = new THREE.DirectionalLight(
+        '#000000', 3.5
+      )
+      light.position.set(0.5, 0, 0.866); // ~60º
+      light.name = 'main_light'
+      camera.add(light)
+
+			const animate = () => {
+				requestAnimationFrame(animate)
+
+				// cube.rotation.x += 0.01
+				// cube.rotation.y += 0.01
+				// line.rotation.x += 0.01
+				// line.rotation.y += 0.01
+
+        controls.update()
+
+				renderer.render(scene, camera)
+			}
+
+			animate()
+		</script>
+	</body>
+</html>
