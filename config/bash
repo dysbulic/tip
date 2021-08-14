@@ -44,7 +44,7 @@ function zview() {
 }
 
 alias servehere='ruby -run -e httpd . -p 9999'
-alias portprogs='sudo ss -l -A inet -p'
+alias netuse='sudo ss -l -A inet -p'
 alias ddf='df -h | grep "\\(sd\\|nvme\\)"'
 alias bat='batcat'
 alias fd='fdfind --color=always'
@@ -71,22 +71,36 @@ Usage: trimtime <timestamp> <filename>
    Produces a copy of the recording with
    the first 5 minutes and 30 seconds
    removed.
+ Exe: trimtime -00:05:30 recording.mp4
+   Produces a copy of the recording with
+   the last 5 minutes and 30 seconds
+   removed.
 HELP
     else
-	TIME="${1#-}"
-	if [ "$TIME" != "$1" ]; then
-	    LEN=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$2" | sed 's/\..*//')
-	    IFS=':' read -r -a PART <<< $TIME
-	    REM=$(((((${PART[0]} * 60) + ${PART[1]}) * 60) + ${PART[2]}))
-	    NEWLEN=$(($LEN - $REM))
-	    SEXA=$(date -d@$NEWLEN -u +%H:%M:%S)
-	    OUT="${2%.*}.‒$SEXA.${2##*.}"
-	    ffmpeg -t "$SEXA" -i "$2" -map 0 -c copy -- "file:$OUT"
-	else
-	    OUT="${2%.*}.$1‒.${2##*.}"
-	    echo "Writing To: $OUT"
-	    ffmpeg -ss "$1" -i "$2" -map 0 -c copy -- "file:$OUT"
-	fi
+        TIME="${1#-}"
+        if [ "$TIME" != "$1" ]; then
+            if [ "$LEN" == "N/A" ]; then
+                echo "Couldn't find the length of '$2'" >&2
+                return -1
+            fi
+            LEN=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$2" | sed 's/\..*//')
+            IFS=':' read -r -a PART <<< $TIME
+            readarray -td '' PART < <(printf '%s\0' "${PART[@]}" | tac -s '')
+            [ -z "${PART[1]}" ] && PART[1]=0
+            [ -z "${PART[2]}" ] && PART[2]=0
+            REM=$(((((${PART[2]} * 60) + ${PART[1]}) * 60) + ${PART[0]}))
+            NEWLEN=$(($LEN - $REM))
+            SEXA=$(date -d@$NEWLEN -u +%H:%M:%S)
+            OUT="${2%.*}.‒$SEXA.${2##*.}"
+
+            echo "Writing To: $OUT"
+            ffmpeg -t "$SEXA" -i "$2" -map 0 -c copy -- "file:$OUT"
+        else
+            OUT="${2%.*}.$1‒.${2##*.}"
+
+            echo "Writing To: $OUT"
+            ffmpeg -ss "$1" -i "$2" -map 0 -c copy -- "file:$OUT"
+        fi
     fi
 }
 function joinvideos() {
@@ -99,15 +113,16 @@ Usage: joinvideos <file #1> <file #2>
   of one.
 HELP
     else
-	OUT=".${1##*.}"
-	IN="$(tempfile)"
-	for file in "$@"; do
-	    OUT="${file%%.*}$OUT"
-	    echo "file \"$PWD/$(echo $file | sed 's/"/\"/g')\"" >> "$IN"
-	done
-	echo "Writing To: $OUT"
-	ffmpeg -f concat -safe 0 -i "$IN" -c copy "$OUT"
-	echo rm "$IN"
+        OUT=".${1##*.}"
+        IN="$(tempfile)"
+        for file in "$@"; do
+            OUT="${file%%.*}$OUT"
+            echo "file \"$PWD/$(echo $file | sed 's/"/\"/g')\"" >> "$IN"
+        done
+        
+        echo "Writing To: $OUT"
+        ffmpeg -f concat -safe 0 -i "$IN" -c copy "$OUT"
+        rm "$IN"
     fi
 }
 
@@ -155,16 +170,13 @@ alias sysstart='systemctl list-units --type service'
 
 alias dname='lsb_release -a'
 
-alias ...='p ...'
+alias ...='p ~/...'
 
 alias fortune='fortune -a'
 
 alias mykey='gpg --export --sender $EMAIL'
 # alias mykeys
 # alias mypkey=''
-
-alias q='popd'
-alias p='pushd'
 
 alias ybyd='yarn build && yarn deploy'
 
@@ -187,11 +199,13 @@ alias 90pwin="sh -c 'xprop -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPA
 alias 95pwin="sh -c 'xprop -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY $(printf 0x%x $((0xffffffff * 95 / 100)))'"
 alias 99pwin="sh -c 'xprop -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY $(printf 0x%x $((0xffffffff * 99 / 100)))'"
 alias opwin="sh -c 'xprop -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY $(printf 0x%x $((0xffffffff)))'"
+alias 100pwin='opwin'
 
 alias s='git -c color.status=always status | less -REX'
 alias b='git branch'
 function d() {
     git -c color.ui=always status -v
+    git -c color.ui=always diff --staged
     git -c color.ui=always diff
     while IFS= read -r -d $'\0' file; do
         echo -e "\x1B[0;31mUntracked:\x1B[0m \x1B[1;33m$file\x1B[0m"
@@ -678,8 +692,8 @@ elif [ "${BASH_VERSINFO[5]/cygwin/}" != "${BASH_VERSINFO[5]}" ]; then # in windo
     alias dir="ls --color"
 else
     # suse aliases dir to ls -l
-    alias dir > /dev/null 2>&1 && alias dir="ls --color"
-    alias ls="dir --color=always"
+    alias dir > /dev/null 2>&1 && alias dir="lsd --color"
+    alias ls="lsd --color always"
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
@@ -748,6 +762,17 @@ alias pullhashes="rsync $ARGS \"\$REMOTE:\$__HASHDIR\" \"\$LOCAL\""
 alias print="eval echo \$OUT"
 
 [[ "$(pwd)" == ~ && -d ... ]] && cd ...
+
+alias q='popd'
+# alias p='pushd'
+
+function p() {
+    if [[ -z "$*" && -d ~/... ]]; then
+        pushd ~/...
+    else
+        pushd "$@"
+    fi
+}
 
 git config --global user.name "Will Holcomb"
 git config --global user.email $EMAIL
