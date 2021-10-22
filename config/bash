@@ -3,6 +3,7 @@
 [[ "$-" != *i* ]] && return # If not running interactively, don't do anything
 
 export EDITOR='code --wait'
+export REACT_EDITOR='code'
 EMAIL='dys@dhappy.org'
 export LANG="en_US.UTF-8"
 export LC_ALL=$LANG
@@ -125,6 +126,34 @@ HELP
         rm "$IN"
     fi
 }
+function hevc2x264() {
+    if [[ -z "$1" ]]; then
+        cat <<HELP
+Usage: hevc2x264 <file #1>
+ Exe: hevc2x264 stream.mp4
+  Produces stream.x264.mp4 which contains
+  the contents of the file as x264.
+HELP
+    else
+        IN="$1"
+        OUT="${1%.*}.x264.${1##*.}"
+        ffmpeg -i "$IN" -map 0 -c:v libx264 -crf 18 -c:a copy "$OUT"
+    fi
+}
+function extAudio() {
+    if [[ -z "$1" ]]; then
+        cat <<HELP
+Usage: extAudio <file #1>
+ Exe: extAudio stream.mp4
+  Produces stream.m4a which contains
+  the audio of the file.
+HELP
+    else
+        IN="$1"
+        OUT="${1%.*}.m4a"
+        ffmpeg -i "$IN" -vn -c:a copy "$OUT"
+    fi
+}
 
 alias cb='xclip -selection c'
 alias r='rescue rspec'
@@ -138,6 +167,7 @@ function commit-for-chrissake() {
     git commit -am "${*:-$fortune}";
 }
 function t() { git commit -S -am "$*"; }
+function tv() { git commit --no-verify -S -am "$*"; }
 
 alias m='git merge'
 __git_complete m _git_merge
@@ -233,8 +263,11 @@ export CVS_RSH=ssh
 # Will start the gui
 #which update-manager && update-manager -d
 
-# Include OSX specific pathes; and give them precedence
-for path in /usr/local/bin /opt/local/bin /opt/sfw/bin /sw/bin /usr/local/mysql/bin /usr/X11R6/bin ~/.../bin ~/.../google/adt/sdk/platform-tools ~/bin/adt-bundle-linux-*/sdk/tools/ ~/bin/adt-bundle-linux-*/sdk/platform-tools/ ~/.rbenv/bin/ "$(yarn global bin)" ~/.cargo/bin ~/.radicle/bin; do
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+for path in /usr/local/bin /opt/local/bin  ~/.cargo/bin ~/.radicle/bin ~/.local/lib/anaconda/bin ~/.rbenv/bin/ "$(dirname $(nvm which current))" "$(yarn global bin)" ~/.../bin; do
     [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
@@ -781,10 +814,6 @@ git config --global user.email $EMAIL
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 ### Added by homebrew
 #[ -d "/home/linuxbrew/.linuxbrew/" ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
@@ -851,3 +880,19 @@ precmd_set_tip_dir() {
 }
 precmd_functions+=(precmd_set_tip_dir)
 which starship > /dev/null 2>&1 && eval "$(starship init $0)"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/dys/.local/lib/anaconda/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/dys/.local/lib/anaconda/etc/profile.d/conda.sh" ]; then
+        . "/home/dys/.local/lib/anaconda/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/dys/.local/lib/anaconda/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
