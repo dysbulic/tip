@@ -532,27 +532,7 @@ export ANDROID_HOME=~/code/adt/sdk/
 
 alias pauseamarok="dcop --user $USER amarok player playPause"
 
-[ ! -z "$INSTALL" ] && sudo aptitude install klipper
-# Allows cutting and pasting from the command line
-# Usage: echo "test" | clip
-#        clip "test"
-#        clip # displays the clipboard's contents
-function clip() {
-    ps ax | sed 's/^ *[^ ]\+ \+[^ ]\+ \+[^ ]\+ \+[^ ]\+ \+//' | grep -qe '^klipper' || klipper
-    if [[ $# -eq 0 ]]; then
-        # I don't know how to do nonblocking IO
-        (
-            read -t1 LINE;
-            if [ ! -z "$LINE" ]; then
-                dcop klipper klipper setClipboardContents "$LINE$(cat)"
-            else
-                dcop klipper klipper getClipboardContents
-            fi
-        )
-    else
-        dcop klipper klipper setClipboardContents "$*"
-    fi
-}
+alias clip='xclip -sel clip'
 
 alias hornetlog='journalctl -u hornet.service -f'
 alias lotuslog='journalctl -u lotus-daemon'
@@ -657,28 +637,6 @@ if [ -r "$XSLTTRANS" ]; then
     which xsltproc > /dev/null 2>&1 || alias xsltproc="java -jar $XSLTTRANS"
 fi
 
-alias groupdini="cx ssh -s 'API' -e staging Bluejay"
-alias groupdinip="cx ssh -s 'Groupdini API' -e production Bison"
-alias himinbiorg="ssh wjholcomb@himinbi.org"
-alias dhappy="ssh wjholcomb@dhappy.org"
-alias vps="ssh wvps@ps624552.dreamhostps.com"
-alias connect_loki="ssh will@loki"
-alias fenrir="ssh will@fenrir.himinbi.org"
-alias loki="ssh will@loki.himinbi.org"
-alias odin="ssh wjholcomb@odin.himinbi.org"
-alias midgard="ssh wjholcomb@midgard.himinbi.org"
-alias cl="ssh will@loki"
-alias lab='ssh wholcol1@10.16.146.90'
-alias dhsi="ssh wholcol1@drupal-dev.welch.jhmi.edu"
-alias connect_stderr="ssh will@stderr.org"
-alias connect_honors="ssh will@honors.tntech.edu"
-alias connect_dhappy="ssh wjholcomb@dhappy.org"
-alias connect_home="ssh will@loki.himinbi.org"
-alias connect_laptop="ssh will@fenrir.himinbi.org"
-alias connect_sf="ssh -t wjholcomb,ideapool@shell.sourceforge.net create"
-alias connect_vandy_cluster="ssh holcomwj@vmplogin.accre.vanderbilt.edu"
-alias connect_vandy_lab="ssh holcomwj@hmtcomp-7.vuse.vanderbilt.edu"
-
 alias monitorsleep="sleep 1 && xset dpms force off"
 # alias rm="rm -i"
 # alias mv="mv -i"
@@ -772,19 +730,9 @@ alias days="date=\$(date +%Y/%m/%d); \
             percent=\${percent:0:\$(( \${#percent} - 2 ))}.\${percent#??}; \
             echo \$date - you have been here \$passed days and have \$left left \(\$percent%\)"
 
-alias syncfiles="find \"$WEBSITE_DIR\" \\( -name \"*~\" -or -name \".*~\" \\) -printf \"\\\"%p\\\"\\n\" | xargs rm -v; \
-                 rsync --rsh=ssh --partial --progress --verbose --recursive \
-                    --delete-after --archive --compress \
-                    --exclude=Thumbs.db --exclude=\".#*\" --exclude=\"#*\" --exclude=.xvpics \
-                    --exclude=\"sites/awstats/reports/\" --exclude=sites/awstats/data/ \
-                    --exclude=\"sites/pcvs.org/mr/links.html\" \
-                    --exclude=roster/ --exclude=carl/ \
-                    --exclude=\"sites/gallery\" --exclude=\"sites/albums\" \
-                    \"$WEBSITE_DIR\" will@himinbi.org:"
-
 export __HASHDIR=".../hashes/"
 export LOCAL="$__HASHDIR"
-export REMOTE="wjholcomb@madstones.com"
+export REMOTE="dys@madstones.com"
 ARGS="--rsh=ssh --partial --progress --verbose --recursive --archive --compress"
 
 alias hashbins="find \( -name jpg -or -name png -or -name gif -or -name odp -or -name mpeg -or -name avi -or -name webm -or -name ttf \) -print0 | xargs -0 lnhash"
@@ -807,9 +755,8 @@ function p() {
     fi
 }
 
-git config --global user.name "Will Holcomb"
+git config --global user.name "W.J. “dysbulic” H."
 git config --global user.email $EMAIL
-[ $(hostname) = 'M1600261' ] && git config --global user.email "c_holcomb.william@cerner.com"
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
@@ -839,6 +786,7 @@ which dircolors > /dev/null 2>&1 && eval $(dircolors)
 command -v direnv >/dev/null 2>&1 && eval "$(direnv hook bash)"
 which kubectl > /dev/null 2>&1 source <(kubectl completion bash)
 which rbenv > /dev/null 2>&1 && eval "$(rbenv init -)"
+which ipfs > /dev/null 2>&1 && eval "$(ipfs commands completion bash)"
 
 # tabtab source for packages
 # uninstall by removing these lines
