@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-'use strict';
+'use strict'
 
-var _ = require('lodash');
-var argv = require('yargs')
+const _ = require('lodash')
+const { argv } = (
+  require('yargs')
   .options({
     'boolean': {
       alias: 'b',
@@ -10,6 +11,5 @@ var argv = require('yargs')
       type: 'boolean'
     }
   })
-  .argv;
-
-console.log(_.pick(argv, '_', 'boolean', 'b'));
+)
+console.log(_.pick(argv, '_', 'boolean', 'b'))
