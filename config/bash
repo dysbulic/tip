@@ -166,7 +166,13 @@ function commit-for-chrissake() {
     fortune="$(fortune -s)"
     git commit -am "${*:-$fortune}";
 }
-function t() { git commit -S -am "$*"; }
+function t() {
+    if [ -z "$*" ]; then
+        git commit -S -a
+    else
+        git commit -S -am "$*"
+    fi
+}
 function tv() { git commit --no-verify -S -am "$*"; }
 
 alias m='git merge'
@@ -181,7 +187,13 @@ alias gp='git push'
 __git_complete gp _git_push
 alias gpw='git push web master'
 alias aa='git add .'
-function mit() { git commit -S -m "$*"; }
+function mit() {
+    if [ -z "$*" ]; then
+        git commit -S
+    else
+        git commit -S -m "$*"
+    fi
+}
 alias co='git checkout'
 __git_complete co _git_checkout
 alias mb='git checkout -b'
@@ -807,6 +819,17 @@ fi
 
 [ -e /usr/bin/terraform ] && complete -C /usr/bin/terraform terraform
 
+alias gcauth='gcloud auth login'
+alias gccreds='gcloud container clusters get-credentials metagame-cluster --region us-east4 --project metagame-thegame'
+alias mgnamespaces='kubectl get namespaces'
+alias mgcpods='kubectl get pods --namespace=ceramic'
+alias mgclogs='kubectl logs ceramic-0 -n ceramic'
+alias mgclogsfollow='kubectl logs ceramic-0 -n ceramic -f'
+alias mgclogsprev='kubectl logs ceramic-0 -n ceramic --previous'
+alias mgcservices='kubectl get services --namespace=ceramic'
+alias mgcall='kubectl get all -nceramic'
+alias mgcpod='kubectl describe pods ceramic-0 -nceramic'
+alias mgnodes='kubectl get nodes'
 
 [ -e ~/bin/bash-preexec.sh ] && source ~/bin/bash-preexec.sh
 precmd_set_tip_dir() {
