@@ -631,7 +631,7 @@ elif [ "${BASH_VERSINFO[5]/cygwin/}" != "${BASH_VERSINFO[5]}" ]; then # in windo
     alias dir="ls --color"
 else
     # suse aliases dir to ls -l
-    if [ $(which lsd > /dev/null) ]; then
+    if which lsd > /dev/null; then
         alias dir > /dev/null 2>&1 || alias dir="lsd --color"
         alias ls="lsd --color always"
     fi
