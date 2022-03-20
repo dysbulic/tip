@@ -269,7 +269,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-for path in /usr/local/bin /opt/local/bin  ~/.cargo/bin ~/.radicle/bin ~/.local/lib/anaconda/bin ~/.rbenv/bin/ "$(dirname $(nvm which current))" "$(yarn global bin)" ~/.../bin; do
+for path in /usr/local/bin /opt/local/bin  ~/.cargo/bin ~/.radicle/bin ~/.local/lib/anaconda/bin ~/.rbenv/bin/ "$(dirname $(nvm which current))" "$(yarn global bin)" ~/.config/yarn/global/node_modules/.bin ~/.../bin; do
     [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
@@ -784,4 +784,3 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-
