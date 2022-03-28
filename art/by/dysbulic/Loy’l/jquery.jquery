@@ -1,0 +1,35 @@
+$(function() {
+    var maxStars = 250
+
+    var $svg = $(this.documentElement)
+    var box = $svg.attr('viewBox').split(' ')
+    var width = parseFloat(box[2])
+    var height = parseFloat(box[3])
+    var $stars = []
+    
+    for(var i = 1; i <= maxStars; i++) {
+        var x = Math.random() * width
+        var y = Math.random() * height
+        var rotation = Math.random() * 360
+        var $use = $(document.createElementNS( 'http://www.w3.org/2000/svg', 'use' ))
+        $use.attr('href', '#star')
+        $svg.append($use)
+        $stars.push({ x: x, y: y, rotation: rotation, $obj: $use })
+    }
+
+    var anim = function() {
+        for(var i = 0; i < $stars.length; i++) {
+            var $star = $stars[i]
+            $star.x = $star.x + 1 * (-0.5 + Math.random())
+            $star.y = $star.y + 1
+            if($star.y > height) {
+                $star.y = -5
+            }
+            $star.rotation = $star.rotation + 5
+            $stars[i].$obj.css('transform', "translate(" + $star.x + "px, " + $star.y + "px) rotate(" + $star.rotation + "deg)")
+        }
+        setTimeout(anim, 100)
+    }
+
+    anim()
+})
