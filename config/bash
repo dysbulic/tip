@@ -38,6 +38,12 @@ function zview() {
     zlib-flate -uncompress < "$*"
 }
 
+function keccak() {
+    echo "Input: '$*'"
+    echo -n "$*" | rhash --sha3-256 -
+}
+
+alias debugchrome='google-chrome --remote-debugging-port=9222'
 alias servehere='ruby -run -e httpd . -p 9999'
 alias netuse='sudo ss -l -A inet -p'
 alias ddf='df -h | grep "\\(sd\\|nvme\\)"'
@@ -124,6 +130,22 @@ HELP
     fi
 }
 
+function mp42gif() {
+    if [[ -z "$1" ]]; then
+        cat <<HELP
+Usage: mp42gif <file #1>
+ Exe: mp42gif stream.mp4
+  Produces stream.gif which contains
+  the contents of the file an an animated GIF.
+HELP
+    else
+        IN="$1"
+        OUT="${1%.*}.gif"
+        ffmpeg -i "$IN" -vf "fps=10,scale=320:-1:flags=lanczos" -c:v pam -f image2pipe - | \
+        convert -delay 10 - -loop 0 -layers optimize "$OUT"
+    fi
+}
+
 function hevc2x264() {
     if [[ -z "$1" ]]; then
         cat <<HELP
@@ -186,7 +208,7 @@ __git_complete m _git_merge
 alias u='git reset --soft HEAD~1'
 alias hardr='git reset --hard'
 
-function gg() { git grep --line-number "$@"; }
+function gg() { git grep --line-number "$@" -- ':(exclude).yarn/**'; }
 alias pull='git pull --allow-unrelated-histories'
 __git_complete pull _git_pull
 alias gp='git push'
@@ -393,6 +415,29 @@ shopt -s globstar
 
 alias rm='rm -v'
 alias v=start
+
+function ipfspubdir() {
+  if [ -z "$1" ]; then
+    echo <<HELP
+Usage: ipfspubdir a/b/c/d/e.ext'
+
+ Will add the file to ipfs in a nested directory tree
+ matching the one used to execute the command. So, for
+ example, the root of the usage command would contain
+ a directory named "a". The normal `ipfs add -w` command
+ would have "e.ext" in the root.
+HELP
+    return 2
+  fi
+  DIR=$(dirname "$1")
+  TMP=$(mktemp -d --suffix=.ipfspubdir)
+  OUT="$TMP/$DIR"
+  mkdir "$OUT"
+  echo "Copying '$1' to '$OUT'"
+  cp "$1" "$OUT" && ipfs add -r "$TMP"
+  rm -rf "$TMP"
+}
+
 alias pin='ipfs pin add'
 alias unpin='ipfs pin rm'
 alias unpinall='ipfs pin ls -q --type recursive | xargs ipfs pin rm'
@@ -682,6 +727,11 @@ alias print="eval echo \$OUT"
 
 [[ "$(pwd)" == ~ && -d ... ]] && cd ...
 
+alias gen128key="openssl ecparam -name secp128r1 -genkey -noout | openssl ec -text -noout"
+alias gen256key="openssl ecparam -name secp256k1 -genkey -noout | openssl ec -text -noout"
+alias 128pubkey="gen128key | grep pub -A 3 | tail -n +2 | tr -d '\n[:space:]:' | sed 's/^04//'"
+alias 128privkey="gen128key | grep priv -A 2 | tail -n +2 | tr -d '\n[:space:]:' | sed 's/^00//'"
+
 alias q='popd'
 function p() {
     if [[ -z "$*" && -d ~/... ]]; then
@@ -690,6 +740,7 @@ function p() {
         pushd "$@"
     fi
 }
+complete -o nospace -F _cd p
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
@@ -699,6 +750,15 @@ export PATH="/usr/local/heroku/bin:$PATH"
 
 export GOPATH=~/go
 
+alias homeassist="\
+  docker run -d \
+    --name homeassistant \
+    --privileged \
+    --restart=unless-stopped \
+    -e TZ=America/New_York \
+    -v '/home/dys/.config/Home Assistant/config' \
+    --network=host \
+    ghcr.io/home-assistant/home-assistant:stable"
 alias neo4j="\
   docker run \
     --name argus \
@@ -770,21 +830,22 @@ precmd_set_tip_dir() {
 }
 precmd_functions+=(precmd_set_tip_dir)
 
-which starship > /dev/null 2>&1 && eval "$(starship init $0)"
+which starship > /dev/null 2>&1 && eval "$(starship init bash)"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$("$HOME/.local/lib/anaconda/bin/conda" 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/dys/.local/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "$HOME/.local/lib/anaconda/etc/profile.d/conda.sh" ]; then
-        source "$HOME/.local/lib/anaconda/etc/profile.d/conda.sh"
+    if [ -f "/home/dys/.local/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/dys/.local/anaconda3/etc/profile.d/conda.sh"
     else
-        export PATH=~/.local/lib/anaconda/bin:"$PATH"
+        export PATH="/home/dys/.local/anaconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+. "$HOME/.cargo/env"
