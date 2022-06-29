@@ -129,6 +129,19 @@ HELP
         rm "$IN"
     fi
 }
+function rotateVideo90() {
+    if [[ -z "$1" ]]; then
+        cat <<HELP
+Usage: rotateMp490 <file #1>
+ Exe: Usage: rotateMp490 stream.mp4
+  Rotates a video 90
+HELP
+    else
+        IN="$1"
+        OUT="${1%.*}.rotated.${1##*.}"
+        ffmpeg -i "$IN" -vf "transpose=1" "$OUT"
+    fi
+}
 
 function mp42gif() {
     if [[ -z "$1" ]]; then
@@ -328,7 +341,7 @@ function json() {
 }
 
 alias findbiggitfiles="git ls-files -t \$(find . -type f -size +1M -print0 | xargs -0)"
-
+alias lssize="find . -type f | cut -d/ -f2 | sort | uniq -c"
 alias ka='killall'
 
 # Setup remote login for GIT
