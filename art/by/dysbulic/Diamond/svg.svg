@@ -4,7 +4,7 @@
    viewBox="0 0 826.37 754.15"
    id="svg40"
    sodipodi:docname="svg.svg"
-   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   inkscape:version="1.1 (c4e8f9e, 2021-05-24)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -12,192 +12,267 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
-  <sodipodi:namedview
-     id="namedview42"
-     pagecolor="#505050"
-     bordercolor="#ffffff"
-     borderopacity="1"
-     inkscape:showpageshadow="0"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="1"
-     inkscape:deskcolor="#505050"
-     showgrid="false"
-     inkscape:zoom="0.88511407"
-     inkscape:cx="424.804"
-     inkscape:cy="355.88633"
-     inkscape:window-width="3440"
-     inkscape:window-height="1328"
-     inkscape:window-x="0"
-     inkscape:window-y="34"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg40" />
-  <title
-     id="title2">Diamond</title>
-  <defs
-     id="defs6">
-    <style
-       type="text/css"
-       id="style4">
-      // <![CDATA[
+  <title>Diamond</title>
+  <defs>
+    <style>
+      /* <![CDATA[ */
         :root {
-          --duration: 1s;
+          --duration: 3s;
+          --lusterless: #E9E9E9;
+          --highlight: #B3D4FFAA;
+          --peach: #FFA074;
+          --green: #009D00;
+          --copper: #9D5309;
+          --silver: #9B9AB1;
+          --orange: #FF7300;
+          --pink: #FF738D;
+          --yellow: #F4FF22;
+          --white: #FFFFFF;
+          --gray: #BBBBBB;
+          --black: #000000;
+          --cyan: #0CFBFF;
+          --brown: #8F6E22;
+          --gold: #E1B30D;
+
         }
-        path {
-          fill: green;
-          stroke: purple;
-          stroke-width: 110;
+        .facet { 
+          stroke: #002D01AA;
+          stroke-linejoin: round;
+          stroke-width: 75;
         }
         .one {
-          animation: one var(--duration, 10s) infinite;
+          animation:
+            var(--duration, 10s) infinite alternate one,
+            var(--duration, 10s) infinite alternate top
+          ;
         }
         @keyframes one {
-          0% { fill: #E9E9E9; }
-          90% { fill: blue; }
-          100% { fill: purple; }
+          0% { fill: var(--lusterless); }
+          2.5%, 5%, 7.5% { fill: var(--highlight); }
+          10%, 30% { fill: var(--lusterless); }
+          32.5%, 100% { fill: var(--peach); }
         }
         .two {
-          animation: two var(--duration, 10s) infinite;
-          animation-delay: 0.5s;
+          animation:
+            var(--duration, 10s) infinite alternate two,
+            var(--duration, 10s) infinite alternate top
+          ;
         }
         @keyframes two {
-          0% { fill: violet; }
-          90% { fill: blue; }
-          100% { fill: purple; }
+          0%, 10% { fill: var(--lusterless); }
+          12.5%, 15%, 17.5% { fill: var(--highlight); }
+          20% { fill: var(--lusterless); }
+          22.5%, 30% { fill: var(--peach); }
+          32.5%, 100% { fill: var(--gold); }
         }
         .three {
-          animation: three var(--duration, 10s) infinite;
+          animation:
+            var(--duration, 10s) infinite alternate three,
+            var(--duration, 10s) infinite alternate middle
+          ;
         }
         @keyframes three {
-          0% { fill: #BDBCBC; }
-          90% { fill: #BDBCBC; }
-          100% { fill: gold; }
+          0% { fill: var(--lusterless); }
+          2.5% { fill: var(--highlight); }
+          5%, 37.5% { fill: var(--lusterless); }
+          40%, 100% { fill: var(--green); }
         }
         .four {
-          animation: four var(--duration, 10s) infinite;
+          animation:
+            var(--duration, 10s) infinite alternate four,
+            var(--duration, 10s) infinite alternate middle
+          ;
         }
         @keyframes four {
-          0% { fill: #BDBCBC; }
-          90% { fill: #BDBCBC; }
-          100% { fill: gold; }
+          0%, 2.5% { fill: var(--lusterless); }
+          5% { fill: var(--highlight); }
+          7.5%, 35% { fill: var(--lusterless); }
+          37.5% { fill: var(--green); }
+          40%, 100% { fill: var(--copper); }
         }
         .five {
-          animation: five var(--duration, 10s) infinite;
+          animation:
+            var(--duration, 10s) infinite alternate five,
+            var(--duration, 10s) infinite alternate middle
+          ;
         }
         @keyframes five {
-          0% { fill: #BDBCBC; }
-          90% { fill: #BDBCBC; }
-          100% { fill: gold; }
+          0%, 5% { fill: var(--lusterless); }
+          7.5% { fill: var(--highlight); }
+          10%, 32.5% { fill: var(--lusterless); }
+          35% { fill: var(--green); }
+          37.5% { fill: var(--copper); }
+          40%, 100% { fill: var(--silver); }
         }
        .six {
-          animation-name: six;
-          animation-duration: 1s;
-          animation-iteration-count: infinite;
+          animation:
+            var(--duration, 10s) infinite alternate six,
+            var(--duration, 10s) infinite alternate middle
+          ;
         }
         @keyframes six {
-          0% { fill: #BDBCBC; }
-          90% { fill: #BDBCBC; }
-          100% { fill: red; }
+          0%, 7.5% { fill: var(--lusterless); }
+          10% { fill: var(--highlight); }
+          12.5%, 30% { fill: var(--lusterless); }
+          32.5% { fill: var(--green); }
+          35% { fill: var(--copper); }
+          37.5% { fill: var(--silver); }
+          40%, 100% { fill: var(--pink); }
         }
         .seven {
-          animation: seven var(--duration, 10s) infinite;
+          animation:
+            var(--duration, 10s) infinite alternate seven,
+            var(--duration, 10s) infinite alternate middle
+          ;
         }
         @keyframes seven {
-          0% { fill: #BDBCBC; }
-          90% { fill: #BDBCBC; }
-          100% { fill: gold; }
+          0%, 10% { fill: var(--lusterless); }
+          12.5% { fill: var(--highlight); }
+          15%, 27.5% { fill: var(--lusterless); }
+          30% { fill: var(--green); }
+          32.5% { fill: var(--copper); }
+          35% { fill: var(--silver); }
+          37.5% { fill: var(--pink); }
+          40%, 100% { fill: var(--yellow); }
         }
         .eight {
-          animation: eight var(--duration, 10s) infinite;
+          animation:
+            var(--duration, 10s) infinite alternate eight,
+            var(--duration, 10s) infinite alternate middle
+          ;
         }
         @keyframes eight {
-          0% { fill: #D3D2D2; }
-          90% { fill: #D3D2D2; }
-          100% { fill: yellow; }
+          0%, 12.5% { fill: var(--lusterless); }
+          15% { fill: var(--highlight); }
+          17.5%, 25% { fill: var(--lusterless); }
+          27.5% { fill: var(--green); }
+          30% { fill: var(--copper); }
+          32.5% { fill: var(--silver); }
+          35% { fill: var(--pink); }
+          37.5% { fill: var(--yellow); }
+          40%, 100% { fill: var(--gray); }
         }
         .nine {
-          animation: nine var(--duration, 10s) infinite;
+          animation:
+            var(--duration, 10s) infinite alternate nine,
+            var(--duration, 10s) infinite alternate middle
+          ;
         }
         @keyframes nine {
-          0% { fill: #E9E9E9; }
-          90% { fill: #E9E9E9; }
-          100% { fill: darkgreen; }
+          0%, 15% { fill: var(--lusterless); }
+          17.5% { fill: var(--highlight); }
+          20%, 22.5% { fill: var(--lusterless); }
+          25% { fill: var(--green); }
+          27.5% { fill: var(--copper); }
+          30% { fill: var(--silver); }
+          32.5% { fill: var(--pink); }
+          35% { fill: var(--yellow); }
+          37.5% { fill: var(--gray); }
+          40%, 100% { fill: var(--cyan); }
         }
         .a {
-          animation-name: a;
-          animation-duration: 1s;
-          animation-iteration-count: infinite;
+          animation:
+            var(--duration, 10s) infinite alternate a,
+            var(--duration, 10s) infinite alternate bottom
+          ;
         }
         @keyframes a {
-          0% { fill: #D3D2D2; }
-          90% { fill: #D3D2D2; }
-          100% { fill: orange; }
+          0% { fill: var(--lusterless); }
+          2.5% { fill: var(--highlight); }
+          5%, 35% { fill: var(--lusterless); }
+          37.5%, 100% { fill: var(--orange); }
         }
         .b {
-          animation-name: b;
-          animation-duration: 1s;
-          animation-iteration-count: infinite;
+          animation:
+            var(--duration, 10s) infinite alternate b,
+            var(--duration, 10s) infinite alternate bottom
+          ;
         }
         @keyframes b {
-          0% { fill: #D3D2D2; }
-          90% { fill: #D3D2D2; }
-          100% { fill: orange; }
+          0%, 2.5% { fill: var(--lusterless); }
+          5% { fill: var(--highlight); }
+          10%, 32.5% { fill: var(--lusterless); }
+          35% { fill: var(--orange); }
+          37.5%, 100% { fill: var(--black); }
         }
         .c {
-          animation-name: c;
-          animation-duration: 1s;
-          animation-iteration-count: infinite;
+          animation:
+            var(--duration, 10s) infinite alternate c,
+            var(--duration, 10s) infinite alternate bottom
+          ;
         }
         @keyframes c {
-          0% { fill: #D3D2D2; }
-          90% { fill: #D3D2D2; }
-          100% { fill: pink; }
+          0%, 5% { fill: var(--lusterless); }
+          7.5% { fill: var(--highlight); fill-opacity: 1; }
+          10% { fill: var(--highlight); fill-opacity: 0.5; }
+          12.5%, 30% { fill: var(--lusterless); fill-opacity: 1; }
+          32.5% { fill: var(--orange); }
+          35%, 100% { fill: var(--black); }
         }
         .d {
-          animation-name: d;
-          animation-duration: 1s;
-          animation-iteration-count: infinite;
+          animation:
+            var(--duration, 10s) infinite alternate d,
+            var(--duration, 10s) infinite alternate bottom
+          ;
         }
         @keyframes d {
-          0% { fill: #D3D2D2; }
-          90% { fill: #D3D2D2; }
-          100% { fill: orange; }
+          0%, 7.5% { fill: var(--lusterless); fill-opacity: 1; }
+          10% { fill: var(--highlight); fill-opacity: 0.5; }
+          12.5% { fill: var(--highlight); fill-opacity: 1; }
+          15%, 27.5% { fill: var(--lusterless); }
+          30% { fill: var(--orange); }
+          32.5%, 35% { fill: var(--black); }
+          37.5%, 100% { fill: var(--white); }
         }
         .e {
-          animation-name: e;
-          animation-duration: 1s;
-          animation-iteration-count: infinite;
+          animation:
+            var(--duration, 10s) infinite alternate e,
+            var(--duration, 10s) infinite alternate bottom
+          ;
         }
         @keyframes e {
-          0% { fill: #BDBCBC; }
-          90% { fill: #BDBCBC; }
-          100% { fill: cyan; }
+          0%, 12.5% { fill: var(--lusterless); }
+          15% { fill: var(--highlight); }
+          17.5%, 25% { fill: var(--lusterless); }
+          27.5% { fill: var(--orange); }
+          30%, 32.5% { fill: var(--black); }
+          35%, 100% { fill: var(--white); }
         }
         .f {
-          animation-name: f;
-          animation-duration: 1s;
-          animation-iteration-count: infinite;
+          animation:
+            var(--duration, 10s) infinite alternate f,
+            var(--duration, 10s) infinite alternate bottom
+          ;
         }
         @keyframes f {
-          0% { fill: #D3D2D2; }
-          100% { fill: teal; }
+          0%, 15% { fill: var(--lusterless); }
+          17.5% { fill: var(--highlight); }
+          20%, 22.5% { fill: var(--lusterless); }
+          25% { fill: var(--orange); }
+          27.5%, 30% { fill: var(--black); }
+          32.5%, 35% { fill: var(--white); }
+          40%, 100% { fill: var(--brown); }
         }
-      // ]]></style>
+        @keyframes top {
+          0%, 40%, 100% { stroke: #01043488; }
+          45%, 95% { stroke: #0513D6BB; }
+        }
+        @keyframes middle {
+          0%, 50%, 90% { stroke: #47044C88; }
+          55%, 85% { stroke: #B70CC3BB; }
+        }
+        @keyframes bottom {
+          0%, 60%, 80% { stroke: #4F000188; }
+          65%, 75% { stroke: #CC0003BB; }
+        }
+      /* ]]> */</style>
   </defs>
-  <metadata
-     id="metadata1007">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:title>Diamond</dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
   <g
      inkscape:groupmode="layer"
-     id="layer1"
+     id="bg"
      inkscape:label="Background">
     <path
-       style="fill:#6f6f6f;fill-opacity:1;stroke:#3c352a;stroke-width:22.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:0.924895"
+       style="fill:#6f6f6f;stroke:#3c352a;stroke-width:22.5;stroke-linejoin:round;stroke-opacity:0.925"
        d="M 418.26646,4.7129332 662.86897,61.600232 821.72939,220.63649 705.5279,373.24436 415.8821,753.63732 7.5456131,221.26475 174.73507,55.607758 Z"
        id="bg"
        sodipodi:nodetypes="cccccccc" />
@@ -207,85 +282,105 @@
      id="facets"
      inkscape:label="facets">
     <path
-       class="one"
+       class="one  facet"
        d="m 11607.7,11585.1 -1556.6,365.6 v -727.4 z"
        id="facet-1"
        sodipodi:nodetypes="cccc"
        inkscape:label="facet-1"
-       style="stroke-width:1.00190142;stroke-dasharray:none" />
+       style="" />
     <path
-       class="two"
+       class="two  facet"
        d="m 9949.28,11223.6 v 727.4 l -1556.6,-365.6 z"
        id="facet-2"
        sodipodi:nodetypes="cccc"
-       inkscape:label="facet-2" />
+       inkscape:label="facet-2"
+       style="" />
     <path
-       class="three"
-       d="m11693 10154 1240.6 273-1088.4 1041 z"
+       class="three  facet"
+       d="m 11693,10154 1240.6,273 -1088.4,1041 z"
        id="facet-3"
-       inkscape:label="facet-3" />
+       inkscape:label="facet-3"
+       sodipodi:nodetypes="cccc"
+       style="" />
     <path
-       class="four"
+       class="four  facet"
        d="m11590 10146 158.5 1368.1-1048.7-243.7 768.5-1124.4h121.7 z"
        id="facet-4"
-       inkscape:label="facet-4" />
+       inkscape:label="facet-4"
+       style="" />
     <path
-       class="five"
+       class="five  facet"
        d="m10515 11227-406.6-1081.4h1236.9l-751.6 1099.7-78.7-18.3 z"
        id="facet-5"
-       inkscape:label="facet-5" />
+       inkscape:label="facet-5"
+       style="" />
     <path
-       class="six"
+       class="six  facet"
        d="m10051 11119h-101.44l-345.75 80.4 345.98-919.5 50.51-134.3 50.5 134.3 346 919.5-345.8-80.4 z"
        id="facet-6"
-       inkscape:label="facet-6" />
+       inkscape:label="facet-6"
+       style="" />
     <path
-       class="seven"
-       d="m8654.4 10146h1236.9l-406.59 1081.4-78.67 18.3-751.64-1099.7 z"
+       class="seven  facet"
+       d="m 8654.4,10146 h 1236.9 l -406.59,1081.4 -78.67,18.3 z"
        id="facet-7"
-       inkscape:label="facet-7" />
+       inkscape:label="facet-7"
+       sodipodi:nodetypes="ccccc"
+       style="" />
     <path
-       class="eight"
-       d="m8531.5 10146 768.49 1124.4-1048.7 243.7 158.52-1368.1h121.7 z"
+       class="eight  facet"
+       d="m 9299.99,11270.4 -1048.7,243.7 158.52,-1368.1 h 121.695 z"
        id="facet-8"
-       inkscape:label="facet-8" />
+       inkscape:label="facet-8"
+       sodipodi:nodetypes="ccccc"
+       style="" />
     <path
-       class="nine"
+       class="nine  facet"
        d="m8154.4 11468-1088.4-1041 1240.6-273z"
        id="facet-9"
-       inkscape:label="facet-9" />
+       inkscape:label="facet-9"
+       style="" />
     <path
-       class="a"
-       d="m11678 10047-1467.3-3247.7 2688.3 3516.4-1218.1-268-2.9-.7 z"
-       style="fill:#e9e9e9"
+       class="a  facet"
+       d="M 10092.536,6597.0499 12899,10315.7 11679.45,10047.35 Z"
        id="facet-a"
-       inkscape:label="facet-A" />
+       inkscape:label="facet-A"
+       sodipodi:nodetypes="cccc"
+       style="" />
     <path
-       class="b"
-       d="m11538 10044h-664l-676.9-3029.1 1368.5 3029.1h-27.6 z"
-       style="fill:#bdbcbc"
+       class="b  facet"
+       d="m 11538,10044 h -664 L 10095.291,6754.4298 11565.6,10044 Z"
        id="facet-b"
-       inkscape:label="facet-B" />
+       inkscape:label="facet-B"
+       sodipodi:nodetypes="ccccc"
+       style="" />
     <path
-       class="c"
-       d="m10070 10044-19.8-52.6v-3165.7l719.3 3218.3h-699.5 z"
-       style="fill:#e9e9e9"
+       class="c  facet"
+       d="m 10070,10044 -19.8,-52.6 -11.94,-3192.423 731.24,3245.023 z"
        id="facet-c"
-       inkscape:label="facet-C" />
+       inkscape:label="facet-C"
+       sodipodi:nodetypes="ccccc"
+       style="" />
     <path
-       class="d"
-       d="m9230 10044 719.22-3218.3v3165.7l-19.79 52.6h-699.43 z"
+       class="d  facet"
+       d="M 9230,10044 9964.6773,6790.0629 9949.22,9991.4 l -19.79,52.6 z"
        id="facet-d"
-       inkscape:label="facet-D" />
+       inkscape:label="facet-D"
+       sodipodi:nodetypes="ccccc"
+       style="" />
     <path
-       class="e"
-       d="m8585 10044h-150.55l1368.5-3029.1-676.94 3029.1h-541.02 z"
+       class="e  facet"
+       d="M 8585,10044 H 8434.45 L 9927.0435,6753.5465 9126.01,10044 h -541.02 z"
        id="facet-e"
-       inkscape:label="facet-E" />
+       inkscape:label="facet-E"
+       sodipodi:nodetypes="cccccc"
+       style="" />
     <path
-       class="f"
-       d="m8319 10048-1218.1 268 2688.3-3516.4-1467.2 3247.7-2.94.7 z"
+       class="f  facet"
+       d="M 8319,10048 7100.9,10316 9932.7535,6593.5158 8322,10047.3 l -2.94,0.7 z"
        id="facet-f"
-       inkscape:label="facet-F" />
+       inkscape:label="facet-F"
+       sodipodi:nodetypes="cccccc"
+       style="" />
   </g>
 </svg>
