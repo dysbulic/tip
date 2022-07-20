@@ -189,6 +189,8 @@ HELP
     fi
 }
 
+alias fixVideo='echo "untrunc <same camera reference video> <broken video>"'
+
 alias cb='xclip -selection c'
 
 for completion in /etc/bash_completion.d/git-prompt /usr/share/bash-completion/completions/git; do
@@ -335,11 +337,11 @@ alias nopasswd="( export d=~/.ssh; [ -e $d/id_rsa.pub ] || { mkdir -p $d; cd $d;
 function randpass() {
     SIZE="${1:-32}"
     echo "Generating ${SIZE} character random password" 1>&2
-    unset PW
-    while [[ -z "$PW" || "${PW/ //}" != "$PW" ]]; do
-        PW=$(tr -cd '[:print:]' < /dev/urandom | fold -w${SIZE} | head -n1)
-    done
-    echo $PW
+    tr -cd '[:print:]' \
+        < /dev/urandom \
+        | tr -ds '[" =]' [:print:] \
+        | fold -w${SIZE} \
+        | head -n1
 }
 
 alias isotime='date +%Y-%m-%d@%H:%M:%S%:z'
@@ -781,7 +783,7 @@ export PATH="/usr/local/heroku/bin:$PATH"
 [ -d ~/bin ] && export PATH=~/bin:"$PATH" && export GOBIN=~/bin
 [ -d /opt/ibm/java-x86_64-80/jre/bin/ ] && export PATH=/opt/ibm/java-x86_64-80/jre/bin/:$PATH # for neo4j
 
-export GOPATH=~/go
+export GOPATH=~/.local/share/go
 
 alias homeassist="\
   docker run -d \
