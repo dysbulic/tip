@@ -223,8 +223,10 @@ alias m='git merge'
 __git_complete m _git_merge
 alias u='git reset --soft HEAD~1'
 alias hardr='git reset --hard'
+alias undostashpop='git reset --merge'
 
 function gg() { git grep --line-number "$@" -- ':(exclude).yarn/**'; }
+alias fetch='git fetch'
 alias pull='git pull --allow-unrelated-histories'
 __git_complete pull _git_pull
 alias gp='git push'
