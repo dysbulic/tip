@@ -17,7 +17,7 @@
 
 The Neo4j instance stores context about blobs stored in IPFS.
 
-### 4. How will you improve your project with this grant? What steps will you take to meet this objective? (max 200 words)
+### 4. How will you improve your project with this grant? What steps will you take to meet this objective?
 
 For HackFS, I did a simple app to spider an IPFS filesystem, decode symlinks, and store the structure in a Neo4j instance. There's also an interface for inputting a set of paths and displaying the images at their intersection.
 
