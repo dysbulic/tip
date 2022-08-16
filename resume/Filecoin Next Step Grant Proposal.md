@@ -31,7 +31,7 @@ Ultimately, I want to use this interface to allow users to create composites fro
 
 <p align="center">
   <img src="https://github.com/dhappy/forests/raw/main/public/cybertruck.svg" 
-  width="5rem"/>
+  width="350"/>
 </p>
 
 To this end, I want to allow for a structure where a group of images are shown in a conglomerate at higher in the tree, but then it's possible to decompose the image into accessible parts.
@@ -62,5 +62,5 @@ It does.
 An e-mail from [niki.gokani@protocol.ai](mailto:niki.gokani@protocol.ai).
 
 <p align="center">
-  <img src="https://github.com/dhappy/forests/raw/main/public/logo.svg" width="3rem"/>
+  <img src="https://github.com/dhappy/forests/raw/main/public/logo.svg" width="200"/>
 </p>
