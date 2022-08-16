@@ -4,7 +4,9 @@
 
 𝔐𝔦̈𝔪𝔦𝔰 spiders an IPFS filesystem (comprehending symlinks) into a Neo4j graph database instance in a tree rooted using the user's ENS name obtained from Sign-In With Ethereum.
 
-𝔐𝔦̈𝔪𝔦𝔰 as a “filesystem” differs from a traditional directory tree in several ways. Resources can appear at multiple paths through the tree *(akin to symlinking)*, and each location resolves to an ordered list of resources. Ideally, *any* coherent path to a resource should resolve to it. Also, selection can be done using a single path or by conglomerating several.
+𝔐𝔦̈𝔪𝔦𝔰 is a communal “filesystem” which differs from a traditional directory tree in several ways. Resources can appear at multiple paths through the tree *(akin to symlinking)*, and each location resolves to an ordered list of resources. Ideally, *any* coherent path to a resource should resolve to it. Also, selection can be done using a single path or by conglomerating several.
+
+A big feature it will ultimately offer is the ability to easily rename the location of IPFS resouces.
 
 ### 2. Project Links
 
