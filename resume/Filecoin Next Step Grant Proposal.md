@@ -29,7 +29,10 @@ This grant would cover the cost of a few months of Aura, Neo4j's cloud instances
 
 Ultimately, I want to use this interface to allow users to create composites from hundreds of thousands of SVGs to design wraps for 13 Cybertrucks which I get to have access to for a year before they go to the auction winners.
 
-<img src="https://github.com/dhappy/forests/raw/main/public/cybertruck.svg" max-width="5rem" display="block" margin="auto"/>
+<p align="center">
+  <img src="https://github.com/dhappy/forests/raw/main/public/cybertruck.svg" 
+  width="5rem"/>
+</p>
 
 To this end, I want to allow for a structure where a group of images are shown in a conglomerate at higher in the tree, but then it's possible to decompose the image into accessible parts.
 
@@ -58,4 +61,6 @@ It does.
 
 An e-mail from [niki.gokani@protocol.ai](mailto:niki.gokani@protocol.ai).
 
-<img src="https://github.com/dhappy/forests/raw/main/public/logo.svg" max-width="3rem" display="block" margin="auto"/>
+<p align="center">
+  <img src="https://github.com/dhappy/forests/raw/main/public/logo.svg" width="3rem"/>
+</p>
