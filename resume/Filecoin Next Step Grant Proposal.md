@@ -2,9 +2,9 @@
 
 ### 1. What is your project?
 
-𝔐𝔦̈𝔪𝔦𝔰 spiders an IPFS filesystem (comprehending symlinks) into a Neo4j graph database instance. Each user's import is stored in a tree of their own *(rooted using their ENS name from Sign-In With Ethereum)* and combinations of these are traversed to resolve resources.
+𝔐𝔦̈𝔪𝔦𝔰 spiders an IPFS filesystem (comprehending symlinks) into a Neo4j graph database instance in a tree rooted using their ENS name obtained from Sign-In With Ethereum.
 
-𝔐𝔦̈𝔪𝔦𝔰 as a “filesystem” differs from a traditional directory tree in several ways. Resources can appear at multiple places in the tree, and each location resolves to an ordered list of resources. Ideally, *any* coherent path to a resource should resolve to it. Also, selection can be done using a single path or by conglomerating several.
+𝔐𝔦̈𝔪𝔦𝔰 as a “filesystem” differs from a traditional directory tree in several ways. Resources can appear at multiple paths through the tree *(akin to symlinking)*, and each location resolves to an ordered list of resources. Ideally, *any* coherent path to a resource should resolve to it. Also, selection can be done using a single path or by conglomerating several.
 
 ### 2. Project Links
 
@@ -18,7 +18,20 @@
 The Neo4j instance stores context about blobs stored in IPFS.
 
 ### 4. How will you improve your project with this grant? What steps will you take to meet this objective? (max 200 words)
-<!-- Clear and concise description of the planned next step(s) or improvements for which you are seeking grant support -->
+
+For HackFS, I did a simple app to spider an IPFS filesystem, decode symlinks, and store the structure in a Neo4j instance. There's also an interface for inputting a set of paths and displaying the images at their intersection.
+
+I want to [add a page](//github.com/dhappy/forests/issues/6) giving details about a resource: which paths lead to it, and what the alternatives are for completion.
+
+I'd like for this system to serve as the basis for a proofreading framework. A Git commit history is essentially a blockchain where each commit refers to the previous one. I want to [mimic that structure](//github.com/dhappy/forests/issues/14) in Neo4j and add versioning.
+
+This grant would cover the cost of a few months of Aura, Neo4j's cloud instances which run ~$75 / month at the low end.
+
+Ultimately, I want to use this interface to allow users to create composites from hundreds of thousands of SVGs to design wraps for 13 Cybertrucks which I get to have access to for a year before they go to the auction winners.
+
+<img src="https://github.com/dhappy/forests/raw/main/public/cybertruck.svg" max-width="5rem" display="block" margin="auto"/>
+
+To this end, I want to allow for a structure where a group of images are shown in a conglomerate at higher in the tree, but then it's possible to decompose the image into accessible parts.
 
 ### 5. Do you agree to share grant reports upon request, including a final grant report at the end of the three month period?
 
@@ -45,4 +58,4 @@ It does.
 
 An e-mail from [niki.gokani@protocol.ai](mailto:niki.gokani@protocol.ai).
 
-![Logo](https://github.com/dhappy/forests/raw/main/public/logo.svg)
+<img src="https://github.com/dhappy/forests/raw/main/public/logo.svg" max-width="3rem" display="block" margin="auto"/>
