@@ -43,6 +43,11 @@ function keccak() {
     echo -n "$*" | rhash --sha3-256 -
 }
 
+alias nordc='nordvpn connect'
+alias nordd='nordvpn disconnect'
+alias nordwlport='nordvpn whitelist add port'
+alias nordset='nordvpn settings'
+alias nordstat='nordvpn status'
 alias debugchrome='google-chrome --remote-debugging-port=9222'
 alias servehere='ruby -run -e httpd . -p 9999'
 alias netuse='sudo ss -l -A inet -p'
@@ -208,6 +213,7 @@ function t() {
     if [ -z "$*" ]; then
         git commit -S -a
     else
+        echo "Commit: $*"
         git commit -S -am "$*"
     fi
 }
