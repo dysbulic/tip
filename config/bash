@@ -30,7 +30,11 @@ alias shortwave='flatpak run de.haeckerfelix.Shortwave'
 alias opendrive='flatpak run io.github.liberodark.OpenDrive'
 alias tor='flatpak run com.github.micahflee.torbrowser-launcher'
 
+alias psql-start='sudo systemctl start postgresql.service'
+alias psql-stop='sudo systemctl stop postgresql.service'
+
 function findnewer() { find -newermt "$*"; }
+function findnnm() { find -name node_modules -prune -o -name "$*" -print; }
 
 alias iotaseed='cat /dev/urandom |tr -dc A-Z9|head -c${1:-81}'
 
@@ -286,7 +290,11 @@ alias ...='p ~/...'
 alias fortune='fortune -a'
 
 alias gdec='gpg --decrypt'
-alias mykey='gpg --export --sender $EMAIL'
+alias mykeys='gpg --list-secret-keys --keyid-format=long'
+function mykey {
+    [ -z "$1" ] && echo "Usage: mykey <email address>" && return 1
+    gpg --export --armor "$1"
+}
 
 alias ybyd='yarn build && yarn deploy'
 
