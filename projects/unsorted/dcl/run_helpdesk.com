@@ -4,7 +4,7 @@ $!   and roomcount at 30 after.
 $!  If run in the background will send a reminder to do the same
 $!   at the same times
 $!
-$! Fall 2000 - Will Holcomb
+$! Fall 2000 - dysbulic
 $!
 $ if f$type(checkin) .eqs. "" .or. f$type(rmct) .eqs. "" then @USER:[labmgr.com]helpdesk.com
 $ checkin = checkin

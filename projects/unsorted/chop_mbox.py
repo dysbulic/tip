@@ -7,10 +7,10 @@ import datetime, time
 import sys, os.path, re
 
 if len(sys.argv) <= 1:
-    print __doc__
+    print(__doc__)
     sys.exit(1)
 
-# From will@himinbi.org  Sat Aug  2 11:12:14 2003 
+# From dys@dhappy.org  Sat Aug  2 11:12:14 2003 
 headerExp = re.compile("^From (?P<name>[^\\s@]+).+(?P<weekday>\\S+)\\s+(?P<month>\\S+)\\s+(?P<day>\\d+)" +
                        "\\s+(?P<hour>\\d{2}):(?P<minute>\\d{2}):(?P<second>\\d{2})" +
                        "\\s+(?P<year>\\d{2,4})\\s*$")
@@ -22,7 +22,7 @@ for month in ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oc
 
 outdir = "messages - %s" % time.strftime("%Y-%m-%d %H:%M:%S")
 os.mkdir(outdir)
-print "Wirting messages to: ", outdir
+print("Writing messages to: %s" % outdir)
 
 for file in sys.argv[1:]:
     inHandle = open(file, "r")
@@ -33,7 +33,7 @@ for file in sys.argv[1:]:
     fileDone = False
     while not fileDone:
         if headerMatch is None:
-            print "Error: [%s]: \"%s\" is not a valid start of message" % (file, header)
+            print("Error: [%s]: \"%s\" is not a valid start of message" % (file, header))
             sys.exit(-1)
         date = datetime.datetime(int(headerMatch.group("year")), months[headerMatch.group("month")],
                                  int(headerMatch.group("day")), int(headerMatch.group("hour")),
@@ -88,5 +88,5 @@ for file in sys.argv[1:]:
     # Python has no ternary operator, so I don't know how to do this elegantly
     if messageCount > 1: ses = "s"
     else: ses = ""
-    print "Wrote %s message%s from %s" % (messageCount, ses, file)
+    print("Wrote %s message%s from %s" % (messageCount, ses, file))
     inHandle.close()

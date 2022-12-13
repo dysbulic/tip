@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """
-Author: Will Holcomb <wholcomb@gmail.com>
+Author: dysbulic <dys@dhappy.org>
 Date: 2006/07/07
 Usage:
   Rips a DVD to Matroska preserving as much of the original content as

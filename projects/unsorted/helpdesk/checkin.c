@@ -16,7 +16,7 @@
    Last Revision: 4 Jan 1999 - dmb Added SH 128 to options
 
    Program gutted and completely redone January 28 - February 3 1999
-    by Will Holcomb (WJH3957) The quit_signal and check_exit functions are
+    by dysbulic. The quit_signal and check_exit functions are
     the only remnants of the original program.
 
   To add a new lab up the #defined NUMBER_LABS and add an entry at the end

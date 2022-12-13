@@ -60,6 +60,7 @@ alias bat='batcat'
 alias fd='fdfind --color=always'
 alias lls='ls -l'
 alias listio='iotop -oPa -d 2'
+alias meminfo='sudo dmidecode -t memory'
 
 alias idg='ipfs dag get'
 alias ils='ipfs ls'
@@ -79,6 +80,7 @@ alias fp="gg -E '\sp\$|\sp\s|\sp\;|binding\.pry|\sspecify\!' -- '*.rb'"
 alias spk='rspec --tag focus --tag ~focus'
 
 alias fffilters='ffmpeg -filters'
+alias framecount='ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0'
 
 function trimtime() {
     if [[ -z "$1" || -z "$2" ]]; then
@@ -187,6 +189,21 @@ HELP
     fi
 }
 
+function vid2webm() {
+    if [[ -z "$1" ]]; then
+        cat <<HELP
+Usage: vid2webm <file #1>
+    Exe: vid2webm stream.mp4
+    Produces stream.webm which contains
+    the contents of the file as webm.
+HELP
+    else
+        IN="$1"
+        OUT="${1%.*}.webm"
+        ffmpeg -i "$IN" -b:v 0 -crf 30 -pass 1 -an -f webm -y /dev/null
+        ffmpeg -i "$IN" -b:v 0 -crf 30 -pass 2 "$OUT"
+    fi
+}
 function extAudio() {
     if [[ -z "$1" ]]; then
         cat <<HELP
@@ -827,6 +844,7 @@ alias neo4j="\
     --env NEO4J_AUTH=neo4j/neo4j2 \
     neo4j:latest"
 alias dockstop='docker kill $(docker ps -q)'
+export DOCKER_HOST="unix:///run/user/$(id -u)/docker.sock"
 
 which pyenv > /dev/null 2>&1 && eval "$(pyenv init -)"
 which dircolors > /dev/null 2>&1 && eval $(dircolors)

@@ -1,4 +1,4 @@
--- Author: Will Holcomb <wholcomb@gmail.com>
+-- Author: dysbulic <dys@dhappy.org>
 -- Date: June 2008
 --
 -- Performs a consine similarity analysis on raw artist data as described in:

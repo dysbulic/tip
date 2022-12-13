@@ -2,7 +2,7 @@ $!***************************************************************************
 $!**** Process Randomizer -- Author Unknown                              ****
 $!**** Menu Function, Max Set Loop, Ability to Accept 999 Names,         ****
 $!****  Command Line Capabilities, and Help Information                  ****
-$!****                              -added April 1997 by Will Holcomb    ****
+$!****                              -added April 1997 by dysbulic        ****
 $!****                                                                   ****
 $!**** To add new names, copy the last line and change the numbers as    ****
 $!**** needed. The program will stop reading at the first empty          ****
@@ -11,7 +11,7 @@ $!**** not be considered.                                                ****
 $!****                                                                   ****
 $!**** All that is gone now. The program now reads its process names     ****
 $!****  from a file. There is no max and the original program has once   ****
-$!****  again been lost in my incesant revisions. =) 3/25/99 wjh         ****
+$!****  again been lost in my incesant revisions. =) 1999/3/25 dys       ****
 $!***************************************************************************
 $!
 $ on warning then goto end

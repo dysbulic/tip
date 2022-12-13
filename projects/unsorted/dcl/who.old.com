@@ -1,14 +1,14 @@
-$! Who.com: Will Holcomb: This program has been written in about
-$!  10 differnt ways over the last two years. This incarnation
+$! Who.com: dysbulic: This program has been written in about
+$!  10 different ways over the last two years. This incarnation
 $!  uses another program called getnames.com to define a list
 $!  of names to search for in global symbols search_line_* and
 $!  then searches for those names. The intended use is for
 $!  getnames to be run one at login and do some other work that
 $!  does and thereafter the searches are done from the global
 $!  variables which cuts the file parsing and greatly improves
-$!  run time. 10/12/99 wjh
+$!  run time. 1999/12/10 dys
 $!
-$ gn = "@user:[wjh3957.honors]getnames.com silent"
+$ gn = "@user:[dysbulic.honors]getnames.com silent"
 $ esc[0,8] = 27
 $!
 $ argument = "HELP"
@@ -253,7 +253,7 @@ $    GOSUB ARGUMENT_CHECK
 $!
 $    IF fast .eqs. "FALSE" .and. notime .eqs. "FALSE"
 $    THEN
-$       run USER:[WJH3957.PROGRAMS]time.exe
+$       run USER:[dysbulic.PROGRAMS]time.exe
 $    ENDIF   
 $!
 $ ENDIF
@@ -397,7 +397,7 @@ $!
 $ TYPE SYS$INPUT:
 
 
-   If you have any questions or bugs to report e-mail me at WJH3957.
+   If you have any questions or bugs to report e-mail me at dysbulic.
 
 $ EXIT
 $ RETURN

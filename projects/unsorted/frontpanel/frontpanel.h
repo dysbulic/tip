@@ -5,7 +5,7 @@
 
 #include <linux/list.h>
 
-MODULE_AUTHOR("Will Holcomb");
+MODULE_AUTHOR("dysbulic");
 MODULE_SUPPORTED_DEVICE("Toshiba PMD-C00l USB Front Panel");
 MODULE_DESCRIPTION("Reads from and writes to front panel");
 MODULE_LICENSE("GPL");

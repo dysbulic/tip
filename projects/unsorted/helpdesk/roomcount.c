@@ -1,17 +1,17 @@
 /***
   This program was originally written by Bill Langston in 1994 and up
-    until this point it has been maintained by Paul Tsai. I, Will
-    Holcomb, recently redid the checkin program (also originally
+    until this point it has been maintained by Paul Tsai. I, dysbulic,
+    recently redid the checkin program (also originally
     written by Bill Langston) and used the program created there as
     the basic structure for this program. With the checkin I gave
     credit to Bill as author and myself as revisor, but this program
     honestly looks nothing like what he originally had, so:
 
-  Roomcount.c written February 17 & 18 1999 by Will Holcomb. =)
+  Roomcount.c written February 17 & 18 1999 by dysbulic. =)
 
   The major changes over the checkin program is that when a new lab is
    added whoever is updating has to specify how many machines are in
-   the lab. The machies are either specified as dumb terminals or as
+   the lab. The machines are either specified as dumb terminals or as
    pcs. It took me about twice as long to write this program in order
    to allow for that distinction. It is there though (all for the sake
    of the two remaining dumb terminals in CH215.)
@@ -21,7 +21,7 @@
    conditions in the lab the next time it would give you those same
    conditions as default choices which you could select simply by
    hitting enter. Whereas the temperature and the number of reams of
-   paper in a lab stay fairly constant in a lab, the numnber of people
+   paper in a lab stay fairly constant in a lab, the number of people
    does not, so the defaults didn't make sense for roomcount. Instead
    I added a command line option where people could specify the number
    of people in the lab when they first run the program.
@@ -35,7 +35,7 @@
    Come find me and I'll show you the old code. Each lab had its own
    function. It was unique, I'll say that much.) =)
 
-						-Will Holcomb (WJH3957)
+						—dysbulic
 */
 
 /* In order for the autosensing to work HELPDESK_LAB_SET must be defined.
@@ -44,7 +44,7 @@
    define/nolog HELPDESK_LAB_SET "CH313"
 
    or whatever the lab is. This should be taken care of automatically by
-   the same program that sets the process name. (WJH3957)
+   the same program that sets the process name. (dysbulic)
 */
 
 #include <stdio.h>
@@ -743,7 +743,7 @@ void print_to(char* filename, char* lab_name,
     The first looks like this:
 
     term   date      time   count username    lab   year
-    spring TU 031699 08:23  2    WJH3957      CH313 1999
+    spring TU 031699 08:23  2     dysbulic    CH313 1999
 */
 
   #ifdef OLD_OUTPUT
@@ -763,7 +763,7 @@ void print_to(char* filename, char* lab_name,
     this:
 
     username   lab   term     date                time      count
-    WJH3957    CH313 Spring   Tue  16 March 1999, 08:25:39 12
+    dysbulic   CH313 Spring   Tue  16 March 1999, 08:25:39  12
 */
 
   #else

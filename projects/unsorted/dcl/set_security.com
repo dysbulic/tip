@@ -6,7 +6,7 @@ $!
 $ IF p1 .eqs. "" .and. p2 .eqs. ""
 $ THEN
 $    TYPE SYS$INPUT
- set_security.com  Written by Will Holcomb, February 23, 1998
+ set_security.com  Written by dysbulic, February 23, 1998
 
  Usage: set_security filename1.ext filename2.ext
 

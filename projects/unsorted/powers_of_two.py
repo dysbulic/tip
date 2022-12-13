@@ -4,7 +4,7 @@
 #
 # For: http://hoenir.himinbi.org/2009/06/22/spot-space/
 #
-# Author: Will Holcomb <will@technoanarchy.org>
+# Author: dysbulic <dys@technoanarchy.org>
 # Status:
 #   22/06/2009 - Dies on an apparent inheritance issue in python
 

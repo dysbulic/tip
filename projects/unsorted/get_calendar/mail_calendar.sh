@@ -27,7 +27,7 @@ if [ $# -eq 0 ]; then
 
   Arguments may be used multiple times...
 
-   ./mail_calendar.sh -e will@thfa.org -p pass -f -b -c MENS \\
+   ./mail_calendar.sh -e dys@thfa.org -p pass -f -b -c MENS \\
       amqad@honors.tntech.edu
 
 EOF

@@ -6,9 +6,9 @@ $! 30-Aug-93 Revision and cleanup by Bill Langston
 $!    Function: Read file named "names.dat" and form logicals and symbols
 $!    from it.  Revised to form logicals and symbols from a central default
 $!    file before using SYS$LOGIN:NAMES.DAT --wfl
-$! 01-Sep-99 Will Holcomb: E-mail addresss need not be quoted; distribution
+$! 01-Sep-99 dysbulic: E-mail addresss need not be quoted; distribution
 $!    lists not defined as symbols; searches directory tree for names.dat;
-$! 05-Sep-99 Will Holcomb: All kinds of command line options added and
+$! 05-Sep-99 dysbulic: All kinds of command line options added and
 $!    optimizations. Run "who help" for a list of the options they are too
 $!    extensive to list here. See the inline comments for more internal
 $!    information

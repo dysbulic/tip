@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Author: Will Holcomb <will@technoanarchy.org>
+Author: dysbulic <dys@technoanarchy.org>
 Date: May 2009
 License: Public Domain
 

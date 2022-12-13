@@ -12,7 +12,7 @@ REV="$2"
 
 # script runs as apache when updating via webdav
 
-[ -z "$BUILDLOGS" ] && BUILDLOGS="/home/wjholcomb/logs/subversion"
+[ -z "$BUILDLOGS" ] && BUILDLOGS="/home/dysbulic/logs/subversion"
 [ -e "$BUILDLOGS" ] || mkdir "$BUILDLOGS"
 
 LOG="$BUILDLOGS/svn.commit.log.$(date "+%Y.%m.%d.%H.%0k.%s")"

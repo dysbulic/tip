@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 ####
-# 02/2006 Will Holcomb <wholcomb@gmail.com>
+# 02/2006 dysbulic <dys@dhappy.org>
 # 
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public

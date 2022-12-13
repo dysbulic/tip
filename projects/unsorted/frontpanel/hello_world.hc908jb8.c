@@ -5,7 +5,7 @@
  * MC68HC908JB8. It brings the USB interface into the configured
  * state.
  * 
- * \author: Will Holcomb <wholcomb@gmail.com>
+ * \author: dysbulic <dys@dhappy.org>
  * \date: August 2006
  * \compiler: Small Device C Compiler (http://sdcc.sourceforge.net)
  *

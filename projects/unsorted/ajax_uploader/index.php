@@ -144,7 +144,7 @@ Accept-Encoding: gzip,deflate
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
 Keep-Alive: 300
 Connection: keep-alive
-Referer: http://wholcomb.intranet/sites/himinbi.org/odin/ajax_uploader/
+Referer: http://dysbulic.intranet/sites/himinbi.org/odin/ajax_uploader/
 Content-Type: multipart/form-data; boundary=---------------------------1019292671580723810704877633
 Content-Length: 544
 

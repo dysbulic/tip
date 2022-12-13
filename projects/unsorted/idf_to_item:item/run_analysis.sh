@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Author: Will Holcomb <wholcomb@gmail.com>
+# Author: dysbulic <dys@dhappy.org>
 # Date: July 2008
 #
 # Runs data analyses from http://odin.himinbi.org/idf_to_item:item/

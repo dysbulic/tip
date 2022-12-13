@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Author: Will Holcomb <wholcomb@gmail.com>
+Author: dysbulic <dys@dhappy.org>
 Date: June 2008
 
 Loads a LastFM data dump into a mysql database.

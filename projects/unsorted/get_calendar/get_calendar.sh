@@ -4,7 +4,7 @@
 #
 # http://page-a-day.com/pad/2003ZENN/01JAN/01/
 #
-# 2002/02/07 - wjh
+# 2002/02/07 - dys
 
 site="http://page-a-day.com"
 auth_url="$site/pub-bin/paduserlogin.pl"
@@ -38,7 +38,7 @@ if [ $# -eq 0 ]; then
 
   Arguments are processed in order and may be used multiple times...
   
-   ./get_calendar.sh MENS -e will@thfa.org -p pass -f -b ZENN -f
+   ./get_calendar.sh MENS -e dys@thfa.org -p pass -f -b ZENN -f
 
   Will retrieve the front and back of the Mensa calendar and the
   front of the zen one.

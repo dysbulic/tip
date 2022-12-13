@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20001102//EN"
  "http://www.w3.org/TR/2000/CR-SVG-20001102/DTD/svg-20001102.dtd">
-<svg viewBox="0 0 500 500" width="500" height="500" preserveAspectRatio="xMinYMin"
+<svg
+ viewBox="0 0 500 500"
+ width="100%" height="100%"
  a:scriptImplementation="Adobe"
  xmlns="http://www.w3.org/2000/svg"
  xmlns:xlink="http://www.w3.org/1999/xlink"
- xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/">
+ xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+ style="background-color: rgb(20, 219, 20)"
+>
   <title>Bézier Curve Tester</title>
   <desc>Little app to show different Bézier curves</desc>
   <defs>
@@ -13,9 +17,6 @@
       path {
         stroke: black;
         fill: none;
-      }
-      #background {
-        fill: rgb(220, 219, 220);
       }
       #curve {
         stroke-width: 4;
@@ -29,7 +30,7 @@
       [class="line"] {
         stroke-width: 2.5;
       }
-      [class="hover"] {
+      circle:hover {
         fill: red;
       }
       [class="select"] {
@@ -39,21 +40,14 @@
     <script type="text/ecmascript" a:scriptImplementation="Adobe"><![CDATA[
       var svgNS = "http://www.w3.org/2000/svg"
 
-      var background = document.createElementNS(svgNS, "rect");
-      background.setAttribute("id", "background");
       /*
       var properties = new Array("x", "y", "width", "height");
       for(i = 0; i < properties.length; i++) {
         background.setAttribute(properties[i], document.rootElement[properties[i]].baseVal.value);
       }
       */
-      background.setAttribute("x", "-500");
-      background.setAttribute("y", "-500");
-      background.setAttribute("width", "1100");
-      background.setAttribute("height", "1100");
       document.rootElement.addEventListener("mousemove", drag, false);
       document.rootElement.addEventListener("mouseup", point_release, false);
-      document.rootElement.appendChild(background);
 
       const NONE = 0;
       const BEZIER = 1;
