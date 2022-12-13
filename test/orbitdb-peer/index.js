@@ -1,1 +1,0 @@
-../orbitdb/index.js
