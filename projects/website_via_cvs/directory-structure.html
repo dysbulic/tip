@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML
+><HEAD
+><TITLE
+>Setting up the Directory Structure</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+"><LINK
+REL="HOME"
+TITLE="Website Maintenance Via CVS HOW-TO"
+HREF="website-via-cvs.html"><LINK
+REL="UP"
+TITLE="Server Setup"
+HREF="server.html"><LINK
+REL="PREVIOUS"
+TITLE="CVS Setup"
+HREF="cvs-server.html"><LINK
+REL="NEXT"
+TITLE="User Accounts"
+HREF="accounts.html"></HEAD
+><BODY
+CLASS="section"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Website Maintenance Via CVS HOW-TO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="cvs-server.html"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Server Setup</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="accounts.html"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="section"
+><H1
+CLASS="section"
+><A
+NAME="directory-structure"
+>Setting up the Directory Structure</A
+></H1
+>
+      
+      <P
+>The cvs access is going to be a little bit strange because there are two different ways that it will be accessed. On the one hand ViewCVS will be accessing the repository from one of Apache's subprocesses and thus within the chroot jail. Regular users however will be accessing the repository from outside of the jail and so it is necessary to set up a series of symlinks, so that the two directory structures appear the same. Rather than clutter the root filesystem with symlinks we will create an artificial structure inside of /home/www.</P
+>
+      <P
+>Outside of the chroot it appears as though the repository is at /home/www/files/cvs/. From within it seems as though it appears to be at /files/cvs. Therefore it is necessary to create some structure such that /home/www/home/www is a relative symlink to /home/www.</P
+>
+      <P
+>One very simple way to do it is to:</P
+>
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;        cd /home/www
+        ln -s . home
+        ln -s . www
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      <P
+>/home/www/home/www is now the same place as /home/www. This will work, but there is another setup that makes a little more sense.</P
+>
+      <P
+>In order for apache to allow access of user's home directories (<A
+HREF="http://honors.tntech.edu/~will/"
+TARGET="_top"
+>http://honors.tntech.edu/~will/</A
+>) those directories have to be inside the chroot. In order to place these files on the large storage partition they are at /home/www/files/home (or within the chroot they would appear to be at /files/home.) It makes sense to link these home directories to /home in the chroot:</P
+>
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;        cd /home/www
+        ln -s files/home
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      <P
+>Now to make the two sets of directories line up:</P
+>
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;        cd /home/www/files/home
+        ln -s ../.. www
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      <P
+>Now from within and without the chroot /home/www points to the same directory (and thus /home/www/files/cvs is the same place.)</P
+>
+    </DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="cvs-server.html"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="website-via-cvs.html"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="accounts.html"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>CVS Setup</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="server.html"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>User Accounts</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
