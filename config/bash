@@ -2,7 +2,8 @@
 
 [[ "$-" != *i* ]] && return # If not running interactively, don't do anything
 
-export EDITOR='code --wait'
+export EDITOR='emacs -nw'
+which code > /dev/null 2>&1 && export EDITOR='code --wait'
 export REACT_EDITOR='code'
 export LANG="en_US.UTF-8"
 export LC_ALL=$LANG
@@ -355,9 +356,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # ~/.local/lib/anaconda/bin
-for path in /usr/local/bin /opt/local/bin  ~/.cargo/bin ~/.radicle/bin ~/.rbenv/bin/ "$(dirname $(nvm which current))" ~/.yarn/bin/ ~/.config/yarn/global/node_modules/.bin ~/.../bin; do
+for path in /usr/local/bin /opt/local/bin  ~/.cargo/bin ~/.radicle/bin ~/.rbenv/bin/ ~/.yarn/bin/ ~/.config/yarn/global/node_modules/.bin ~/.../bin; do
     [ -d "$path" ] && export PATH="$path:$PATH"
 done
+
+which nvm > /dev/null 2>&1 && export PATH="$(dirname $(nvm which current)):$PATH"
 
 for path in /var/lib/flatpak/exports/share ~/.local/share/flatpak/exports/share; do
     [ -d "$path" ] && export XDG_DATA_DIRS="$path:$XDG_DATA_DIRS"
@@ -922,4 +925,4 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-. "$HOME/.cargo/env"
+[ -f ~/.cargo/env ] && . ~/.cargo/env
