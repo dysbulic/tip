@@ -227,6 +227,8 @@ alias cb='xclip -selection c'
 for completion in /etc/bash_completion.d/git-prompt /usr/share/bash-completion/completions/git; do
     [ -e $completion ] && source $completion
 done
+which pack > /dev/null 2>&1 && source "$(pack completion)"
+
 
 function commit-for-chrissake() {
     fortune="$(fortune -s)"
