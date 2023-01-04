@@ -1,3 +1,5 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
 format = """
 $username\
 $hostname\
@@ -49,6 +51,7 @@ $zig\
 $nix_shell\
 $conda\
 $memory_usage\
+${custom.mem}\
 $aws\
 $gcloud\
 $openstack\
@@ -75,7 +78,7 @@ format = '[$env_value]($style) '
 style = "bold cyan"
 
 [git_branch]
-format = '[on](#EA00FF) [$symbol$branch]($style) '
+format = '[on](#EA00FF italic) [$symbol$branch]($style italic) '
 
 [git_metrics]
 disabled = false
@@ -89,8 +92,25 @@ ssh_only = false
 format = '[@](green)[$hostname]($style)'
 
 [memory_usage]
-threshold = 50
-format = '[\(](#0000FF)$symbol[${ram}(|${swap})[\)](#0000FF)]($style) '
+threshold = 25
+format = '[\(](blue)$symbol[${ram}(|${swap})[\)](blue)]($style) '
+disabled = true
+
+[custom.mem]
+description = 'Shortened memory display'
+when = "true"
+command = """
+export FREE="$(free -h | tail -n2 | tr -d [A-Za-z])"; \
+export MEMFREE=$(echo $FREE | cut -f3 -d' '); \
+export MEMTOTAL=$(echo $FREE | cut -f2 -d' '); \
+export SWAPFREE=$(echo $FREE | cut -f10 -d' '); \
+export SWAPTOTAL=$(echo $FREE | cut -f9 -d' '); \
+echo -n "${MEMFREE}/${MEMTOTAL}GiB｜${SWAPFREE}/${SWAPTOTAL}GiB"
+"""
+symbol = '🐏'
+style = '#999999 bold'
+format = '[\(](blue)$symbol [${output}[\)](blue)]($style) '
+shell = ["bash", "--noprofile", "--norc"]
 disabled = false
 
 [package]

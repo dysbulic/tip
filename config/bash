@@ -30,6 +30,7 @@ alias gaupol='flatpak run io.otsaloma.gaupol'
 alias shortwave='flatpak run de.haeckerfelix.Shortwave'
 alias opendrive='flatpak run io.github.liberodark.OpenDrive'
 alias tor='flatpak run com.github.micahflee.torbrowser-launcher'
+alias inkscape='flatpak run org.inkscape.Inkscape'
 
 alias psql-start='sudo systemctl start postgresql.service'
 alias psql-stop='sudo systemctl stop postgresql.service'
@@ -172,6 +173,28 @@ HELP
         OUT="${1%.*}.gif"
         ffmpeg -i "$IN" -vf "fps=10,scale=320:-1:flags=lanczos" -c:v pam -f image2pipe - | \
         convert -delay 10 - -loop 0 -layers optimize "$OUT"
+    fi
+}
+
+function png2transparent() {
+    if [[ -z "$1" ]]; then
+        cat <<HELP
+Usage: png2transparent <file #1>
+ Exe: png2transparent 
+  Produces stream.gif which contains
+  the contents of the file an an animated GIF.
+HELP
+    else
+        IN="$1"
+        OUT="${1%.*}.transparent.png"
+        color=$(convert "$IN" -format "%[pixel:p{0,0}]" info:-)
+        convert "$IN" -alpha off -bordercolor $color -border 1 \
+            \( \
+                +clone -fuzz 30% -fill none -floodfill +0+0 $color \
+                -alpha extract -geometry 200% -blur 0x0.5 \
+                -morphology erode square:1 -geometry 50% \
+            \) \
+            -compose CopyOpacity -composite -shave 1 "$OUT"
     fi
 }
 
@@ -571,6 +594,7 @@ function sendhttpexample() {
 
 # For invoking the correct handler for files from the command line
 which xdg-open > /dev/null 2> /dev/null && alias start=xdg-open
+which gio > /dev/null 2> /dev/null && alias open='gio open' && alias launch='gio launch'
 
 # In OSX, mplayer installs to the home directory
 # That 'which' doesn't return false in OSX when the program isn't present is dumb
