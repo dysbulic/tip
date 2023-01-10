@@ -1,35 +1,61 @@
-### 1. What is your project, and what problem does it solve? (max 100 words)
-<!-- Description of your project built with Filecoin or closely related technologies (libp2p, ipfs, ipld, OrbitDB, Textile, NFT.storage, Web3.storage, Estuary, etc.) -->
+<img src="https://raw.githubusercontent.com/MetaFam/rewards/main/public/splash.paths.svg" height="300" style="display: block; margin: auto">
 
+### 1. What is your project, and what problem does it solve?
 
+[SourceCred](https://sourcecred.io) is a system for the algorithmic evaluation of contributions to an organization. A graph is generated of events in Discord, GitHub, and Discourse; then PageRank is used to determine a token distribution.
 
-### 2. Project links
+SourceCred was grant supported for the first few years of its existence, but switched to a purely volunteer basis about nine months ago for lack of a developer community. Since it has received only minimal support.
+
+My proposal is to fix some fundamental issues with the system, then add a modified version of the [Coordinape](https://coordinape.com) backed by the Ceramic network to add a more subjective component to the evaluation.
+
+### 2. Project Links
   
-Link to Github repo:
-Link to demo or website, if applicable:
-License:
+[GitHub Repo](https://github.com/MetaFam/rewards/)
+[Demo](https://coorditang.vercel.app)
+License: Creative Commons Zero
 
-<!-- This grant type is intended to support projects that have a working prototype and wish to take the next steps. MIT, APACHE2, or GPL license for code or [CC-BY-SA 3.0](https://ipfs.io/ipfs/QmVreNvKsQmQZ83T86cWSjPu2vR3yZHGPm5jnxFuunEB9u) license for content must be applied to the current project and all work funded via this microgrant. -->
-  
 ### 3. a) How is IPFS, Filecoin, or related technology used in this project? (max 200 words)
 <!-- Outline your project's technical design, including details of how it uses IPFS, Filecoin, or related technologies include any APIs, services, or tools -->
-###    b) Is this project contributing to the upcoming FVM launch? (Yes or No)
-  
-### 4. How will you improve your project with this grant? What steps will you take to meet this objective? (max 200 words)
-<!-- Clear and concise description of the planned next step(s) or improvements for which you are seeking grant support -->
+
+The Ceramic network is a distributed mutability layer backed by IPFS. I will use it to store the information about token distributions and the attestations of contributions to the organization that participants create to boost the probability they are given tokens.
+
+### 3. b) Is this project contributing to the upcoming FVM launch?
+
+No.
+
+### 4. How will you improve your project with this grant? What steps will you take to meet this objective?
+
+My first task will be to address two significant performance issues with SourceCred: the entire graph is loaded into memory to perform the token distribution and the entire history of each service is downloaded for each run.
+
+To deal with the memory usage issue, I will implement an alternative backing store in the graph database Neo4j. This will both eliminate the system taxing memory problem and allow for the development of complex visualizations and explanations of the system's operation.
+
+To reduce the traffic associated with a complete refresh, I will add parameters to the scaping script to allow a rolling window of updates which will do a complete sync over the course of say a week.
+
+The next step will be new work to create a new input to the graph using the token distribution method popularized by Coordinape. Each epoch participants are given a token allotment that they distribute to their peers based on their evaluation of the value of their contributions.
+
+Coordinape is currenly backed by Hasura. My version will be distributed using the Ceramic network. Also it will add the concept of a multitiered approach where a top-level circle decides how much tokens each guild will get, then the guild circles distribute tokens to participants.
 
 ### 5. Do you agree to share grant reports upon request, including a final grant report at the end of the three month period?
-<!-- Report content may include progress or results of your microgrant-funded work, any Filecoin technical or usage guidance requests, and a description of your experience building on Filecoin, including any challenges or shortcomings encountered. -->
-  
-### 6. Does your proposal comply with our Community Code of Conduct?
-<!-- Please read the [Filecoin Code of Conduct](https://github.com/filecoin-project/community/blob/master/CODE_OF_CONDUCT.md) and make sure your project is in compliance -->
 
-### 7. Links and submissions
-* If your project began at a hackathon, have you submitted it for the relevant Protocol Labs prizes? Include links here if available:
-  
-### Additional questions:
-* For each team member(s), please list name, email, Github account, and role in the project.
-* How did you learn about our microgrant program?
-* If your project was created as part of an event or hackathon:
-  * What was the name of the event? (e.g. ETHGlobal NFTHack, Cal Hacks hello:world, Chainlink, CivHacks, GameDevJ, ETHGlobal Scaling Ethereum)
-  * Please link to your hackathon submission
+Yes. Actually, I have an [existing grant](https://github.com/filecoin-project/devgrants/issues/873), and I would like this grant to replace that one which hasn't seen the progress I had hoped for.
+
+### 6. Does your proposal comply with our Community Code of Conduct?
+
+Yes.
+
+### 7. Links and Submissions
+
+This project is borne of [MetaGame](https://metagame.wtf)'s use of SourceCred since its inception and the issues we have encountered.
+
+### 8. Additional Questions
+
+### 8. a) Contact Information
+
+[dysbulic](https://twitter.com/dysbulic)
+[dys@dhappy.org](mailto:dysbulic%20%3Cdys@dhappy.org%3E)
+[dysbulic on GitHub](https://github.com/dysbulic)
+Sole Architect & Developer
+
+### 8. b) How did you learn about our microgrant program?
+
+I was initally contacted by [niki.gokani@protocol.ai](mailto:niki.gokani@protocol.ai) about my HackFS submission.
