@@ -9,13 +9,12 @@ SourceCred was grant supported for the first few years of its existence, but swi
 My proposal is to fix some fundamental issues with the system, then add a modified version of the [Coordinape](https://coordinape.com) backed by the Ceramic network to add a more subjective component to the evaluation.
 
 ### 2. Project Links
-  
-[GitHub Repo](https://github.com/MetaFam/rewards/)
-[Demo](https://coorditang.vercel.app)
-License: Creative Commons Zero
 
-### 3. a) How is IPFS, Filecoin, or related technology used in this project? (max 200 words)
-<!-- Outline your project's technical design, including details of how it uses IPFS, Filecoin, or related technologies include any APIs, services, or tools -->
+* [GitHub Repo](https://github.com/MetaFam/rewards/)
+* [Demo](https://coorditang.vercel.app)
+* License: Creative Commons Zero
+
+### 3. a) How is IPFS, Filecoin, or related technology used in this project?
 
 The Ceramic network is a distributed mutability layer backed by IPFS. I will use it to store the information about token distributions and the attestations of contributions to the organization that participants create to boost the probability they are given tokens.
 
@@ -51,10 +50,10 @@ This project is borne of [MetaGame](https://metagame.wtf)'s use of SourceCred si
 
 ### 8. a) Contact Information
 
-[dysbulic](https://twitter.com/dysbulic)
-[dys@dhappy.org](mailto:dysbulic%20%3Cdys@dhappy.org%3E)
-[dysbulic on GitHub](https://github.com/dysbulic)
-Sole Architect & Developer
+* [dysbulic](https://twitter.com/dysbulic)
+* [dys@dhappy.org](mailto:dysbulic%20%3Cdys@dhappy.org%3E)
+* [dysbulic on GitHub](https://github.com/dysbulic)
+* Sole Architect & Developer
 
 ### 8. b) How did you learn about our microgrant program?
 
