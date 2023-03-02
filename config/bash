@@ -7,6 +7,7 @@ which code > /dev/null 2>&1 && export EDITOR='code --wait'
 export REACT_EDITOR='code'
 export LANG="en_US.UTF-8"
 export LC_ALL=$LANG
+export LC_COLLATE="C" # case insensitive Nautulis filename sorting
 
 if [ "$PS1" ]; then
     host=$(hostname)
@@ -31,6 +32,7 @@ alias shortwave='flatpak run de.haeckerfelix.Shortwave'
 alias opendrive='flatpak run io.github.liberodark.OpenDrive'
 alias tor='flatpak run com.github.micahflee.torbrowser-launcher'
 alias inkscape='flatpak run org.inkscape.Inkscape'
+alias brave='flatpak run com.brave.Browser'
 
 alias i2pup='i2prouter start'
 alias i2pdown='i2prouter stop'
@@ -41,7 +43,8 @@ alias psql-stop='sudo systemctl stop postgresql.service'
 function findnewer() { find -newermt "$*"; }
 function findnnm() { find -name node_modules -prune -o -name "$*" -print; }
 
-alias iotaseed='cat /dev/urandom |tr -dc A-Z9|head -c${1:-81}'
+alias iotaseed='cat /dev/urandom | tr -dc A-Z9 | head -c${1:-81}'
+alias randhex='cat /dev/urandom | tr -dc A-F0-9 | head -c${1:-32}'
 
 function zview() {
     zlib-flate -uncompress < "$*"
@@ -84,6 +87,7 @@ function ff() {
 alias fp="gg -E '\sp\$|\sp\s|\sp\;|binding\.pry|\sspecify\!' -- '*.rb'"
 alias spk='rspec --tag focus --tag ~focus'
 
+alias ttf2woff=sfnt2woff
 alias fffilters='ffmpeg -filters'
 alias framecount='ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0'
 
@@ -384,7 +388,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # ~/.local/lib/anaconda/bin
-for path in /usr/local/bin /opt/local/bin  ~/.cargo/bin ~/.radicle/bin ~/.rbenv/bin/ ~/.yarn/bin/ ~/.config/yarn/global/node_modules/.bin ~/.../bin; do
+for path in /usr/local/bin /opt/local/bin  ~/.cargo/bin ~/.radicle/bin ~/.rbenv/bin/ ~/.yarn/bin/ ~/.config/yarn/global/node_modules/.bin ~/.../bin ~/.local/share/pnpm; do
     [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
