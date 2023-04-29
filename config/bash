@@ -45,6 +45,10 @@ function findnnm() { find -name node_modules -prune -o -name "$*" -print; }
 alias iotaseed='cat /dev/urandom | tr -dc A-Z9 | head -c${1:-81}'
 alias randhex='cat /dev/urandom | tr -dc A-F0-9 | head -c${1:-32}'
 
+function duoftype() {
+    find -iname "*.$1" -print0 | du --files0-from - -csh
+}
+
 function zview() {
     zlib-flate -uncompress < "$*"
 }
@@ -89,6 +93,36 @@ alias spk='rspec --tag focus --tag ~focus'
 alias ttf2woff=sfnt2woff
 alias fffilters='ffmpeg -filters'
 alias framecount='ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0'
+
+function spotmeta() {
+    SP_DEST="org.mpris.MediaPlayer2.spotify"; \
+    SP_PATH="/org/mpris/MediaPlayer2";        \
+    SP_MEMB="org.mpris.MediaPlayer2.Player";  \
+    dbus-send                                 \
+    --print-reply                                  `# We need the reply.`        \
+    --dest=$SP_DEST                                                              \
+    $SP_PATH                                                                     \
+    org.freedesktop.DBus.Properties.Get                                          \
+    string:"$SP_MEMB" string:'Metadata'                                          \
+    | grep -Ev "^method"                           `# Ignore the first line.`    \
+    | grep -Eo '("(.*)")|(\b[0-9][a-zA-Z0-9.]*\b)' `# Filter interesting fields.`\
+    | sed -E '2~2 a|'                              `# Mark odd fields.`          \
+    | tr -d '\n'                                   `# Remove all newlines.`      \
+    | sed -E 's/\|/\n/g'                           `# Restore newlines.`         \
+    | sed -E 's/(xesam:)|(mpris:)//'               `# Remove ns prefixes.`       \
+    | sed -E 's/^"//'                              `# Strip leading...`          \
+    | sed -E 's/"$//'                              `# ...and trailing quotes.`   \
+    | sed -E 's/"+/|/'                             `# Regard "" as seperator.`   \
+    | sed -E 's/ +/ /g'                            `# Merge consecutive spaces.`
+}
+function spottrack() {
+    OUT=$(spotmeta                                           \
+        | grep --color=never -E "(title)|(album)|(artist)" \
+        | sed 's/^\(.\)/\U\1/'                             \
+        | column -t -s'|'
+    )
+    notify-send -t 1000  -i gtk-dialog-info Spotify "$OUT "
+}
 
 function trimtime() {
     if [[ -z "$1" || -z "$2" ]]; then
@@ -286,6 +320,10 @@ __git_complete m _git_merge
 alias u='git reset --soft HEAD~1'
 alias hardr='git reset --hard'
 alias undostashpop='git reset --merge'
+alias pulsemixer=pavucontrol
+alias pulsemods='pactl list modules short'
+alias pulsesinks='pactl list sinks short'
+alias pulsesources='pactl list sources short'
 
 function gg() { git grep --line-number "$@" -- ':(exclude).yarn/**'; }
 alias fetch='git fetch'
@@ -438,6 +476,8 @@ function json() {
 alias findbiggitfiles="git ls-files -t \$(find . -type f -size +1M -print0 | xargs -0)"
 alias lssize="find . -type f | cut -d/ -f2 | sort | uniq -c"
 alias ka='killall'
+alias logout=gnome-session-quit
+alias rec=gnome-sound-recorder
 
 # Setup remote login for GIT
 function setupLogin {
@@ -622,6 +662,8 @@ function mplayer() {
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 alias less='less -R'
+alias ubuntu-version='lsb_release -a'
+alias ubuntu-version=neofetch
 
 # Ubuntu maps these keys properly to the XFree86 commands
 if [ ! -e /etc/debian_version ]; then
