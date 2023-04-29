@@ -94,6 +94,20 @@ alias ttf2woff=sfnt2woff
 alias fffilters='ffmpeg -filters'
 alias framecount='ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0'
 
+function togspot() {
+    wid=$(xdotool search --name 'Spotify$' | tail -1)
+    echo "Got Window ID: $wid"
+    wstate=$(xwininfo -id $wid | grep "Map State:")
+    echo "Window State: $wstate"
+
+    if [[ "$wstate" == *IsUnMapped ]]; then
+        echo "Mapping"
+        xdotool windowmap $wid windowactivate $wid
+    else
+        xdotool windowunmap $wid
+    fi
+}
+
 function spotmeta() {
     SP_DEST="org.mpris.MediaPlayer2.spotify"; \
     SP_PATH="/org/mpris/MediaPlayer2";        \
@@ -121,7 +135,8 @@ function spottrack() {
         | sed 's/^\(.\)/\U\1/'                             \
         | column -t -s'|'
     )
-    notify-send -t 1000  -i gtk-dialog-info Spotify "$OUT "
+    notify-send -t 1000 -i gtk-dialog-info Spotify "$OUT"
+    echo "$OUT"
 }
 
 function trimtime() {
@@ -292,7 +307,6 @@ for completion in /etc/bash_completion.d/git-prompt /usr/share/bash-completion/c
 done
 which pack > /dev/null 2>&1 && source "$(pack completion)"
 
-
 function commit-for-chrissake() {
     fortune="$(fortune -s)"
     git commit -am "${*:-$fortune}";
@@ -342,6 +356,7 @@ alias ggraph="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%
 alias clean='git clean'
 alias s='git -c color.status=always status | less -REX'
 alias b='git branch'
+__git_complete b _git_branch
 function d() {
     (
         git -c color.ui=always status -v
