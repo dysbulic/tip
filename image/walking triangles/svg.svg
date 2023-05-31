@@ -1,0 +1,123 @@
+<svg width="100%" height="100%"
+	xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+	 onload="startup(evt)">
+>
+<script>
+<![CDATA[
+var xmlns="http://www.w3.org/2000/svg"
+var xlinkns = "http://www.w3.org/1999/xlink";
+function getRect(){
+    try{var rect={x: Root.viewport.width,y:Root.viewport.height}}
+    catch(e){var rect={x: window.innerWidth,y:window.innerHeight}}
+    return rect
+}
+function startup() {
+	Root = document.documentElement;
+	A=getRect()
+	rightedge=A.x
+	bottomedge=A.y
+	ox=rightedge/2
+	oy=3*bottomedge/4
+	P = document.getElementById("P");
+	grad = document.getElementById("g");
+	green = document.getElementById("green");
+	DEF = document.getElementById("DEF");
+	len=90;
+	angle=15
+	P1={x:ox, y:oy}
+	P2={x:ox + len,y:oy}
+	P3={x:ox + len*Math.cos(Math.PI*angle/180),y:oy - len*Math.sin(Math.PI*angle/180)}
+	oldangle=angle
+	var c=0
+	ed=len*1.5
+	while (c<60) {
+		newone(c++)
+	}
+	animate(c)
+}
+o=-1
+angles=[144,15]
+function flip(){
+	return angles[Math.floor(Math.random()*2)]
+}
+function newone(c){
+	var clone=P.cloneNode("true")
+		clone.setAttribute("d","M "+P1.x+" "+P1.y+" "+P2.x+" "+P2.y+" "+P3.x+" "+P3.y+" z")
+		clone.id="c"+c	
+		if (c%2==0) gradclone=green.cloneNode("true")
+		else  gradclone=grad.cloneNode("true")
+		gradclone.id="g"+c			
+		DEF.appendChild(gradclone)
+		clone.setAttributeNS(null,"fill","url(#g"+c+")")
+		var r=Math.random()
+		if (Math.random()<.005) angle=flip()
+		Root.appendChild(clone);
+		if ((P3.y < ed)||(P3.y > bottomedge -ed )||(P3.x<ed)||(P3.x>rightedge - ed)) { r=0;}//attempted turn near edge
+		if (r <.5) {
+			gradclone.setAttributeNS(null,"gradientTransform","rotate("+(180 - oldangle )+" .5 .5)")
+			holdx=P3.x
+			holdy=P3.y
+			oldangle=oldangle+angle;
+			P3.x=P1.x + len*Math.cos(Math.PI*oldangle/180)
+			P3.y=P1.y - len*Math.sin(Math.PI*oldangle/180)
+		}
+		else {
+			gradclone.setAttributeNS(null,"gradientTransform","rotate("+(180 - oldangle - angle/2)+" .5 .5)")
+			holdx=P1.x
+			holdy=P1.y
+			oldangle=oldangle-angle;
+			P1.x=P3.x - len*Math.cos(Math.PI*oldangle/180)
+			P1.y=P3.y + len*Math.sin(Math.PI*oldangle/180)
+		}
+		P2.x=holdx
+		P2.y=holdy
+		
+		if (oldangle>2*Math.PI){oldangle=oldangle-2*Math.PI;}
+}
+
+count=0
+
+function animate(n){
+	var C=document.getElementById("c"+count)
+	Root.removeChild(C)
+	count=count+1
+	if (count>n-1) count=0
+	newone(count)
+	window.setTimeout("animate("+n+")", 10)
+}
+
+
+//]]>
+</script>
+
+<defs id="DEF">
+<linearGradient id="green"  fy="0" gradientTransform="rotate(90 .5 .5)">
+
+	<stop id="offa" offset="0" stop-color="#200"/>
+	<stop id="offb" offset=".5" stop-color="#0f0">
+	<animate id="AN" attributeName="offset" dur="2s" values=".2;.8;.2"
+		repeatCount="indefinite" />-->
+	</stop>
+	<stop id="offc" offset="1" stop-color="#200"/>
+	
+</linearGradient> 
+<linearGradient id="g"  fy="0" gradientTransform="rotate(90 .5 .5)">
+
+	<stop id="offa" offset="0" stop-color="#200"/>
+	<stop id="offb" offset=".5" stop-color="#f00">
+	<animate id="AN" attributeName="offset" dur="2s" values=".2;.8;.2"
+		repeatCount="indefinite" />-->
+	</stop>
+	<stop id="offc" offset="1" stop-color="#200"/>
+	
+</linearGradient> <path id="P" d="M 0 -350 132 -350 66 0 z" fill="url(#g)" opacity="1"/>  
+</defs>
+<g id="group">
+<rect x="0" y="0" height="100%" width="100%" fill="black"/>
+</g>
+
+</svg>
+
+
+

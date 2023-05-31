@@ -3,21 +3,21 @@
 [[ "$-" != *i* ]] && return # If not running interactively, don't do anything
 
 export EDITOR='emacs -nw'
-which code > /dev/null 2>&1 && export EDITOR='code --wait'
+which code >/dev/null 2>&1 && export EDITOR='code --wait'
 export REACT_EDITOR='code'
 export LANG="en_US.UTF-8"
 export LC_ALL=$LANG
 export LC_COLLATE="C" # case insensitive Nautulis filename sorting
 
 if [ "$PS1" ]; then
-    host=$(hostname)
-    PS1='\n\u@\h\[\033[1;35m\]:\[\033[0m\]\w\[\033[1;33m\]\$\[\033[0m\] '
-    PS1='$(stty echo)\n\[\033[1;33m\]@\[\033[0m\]$host\[\033[35m\]\$\[\033[0m\]$(
-dir=$(pwd)
-[ "$dir" != "${dir#$(echo ~)}" ] && dir="~${dir#$(echo ~)}"
-[ "$dir" != "${dir##*/...}" ] && dir="\[\033[34m\]∅\[\033[0m\]${dir##*/...}"
-echo $dir
-)\[\033[1;33m\]:\[\033[0m\] '
+  host=$(hostname)
+  PS1='\n\u@\h\[\033[1;35m\]:\[\033[0m\]\w\[\033[1;33m\]\$\[\033[0m\] '
+  PS1='$(stty echo)\n\[\033[1;33m\]@\[\033[0m\]$host\[\033[35m\]\$\[\033[0m\]$(
+    dir=$(pwd)
+    [ "$dir" != "${dir#$(echo ~)}" ] && dir="~${dir#$(echo ~)}"
+    [ "$dir" != "${dir##*/...}" ] && dir="\[\033[34m\]∅\[\033[0m\]${dir##*/...}"
+    echo $dir
+    )\[\033[1;33m\]:\[\033[0m\] '
 fi
 
 # If the default debian config is available, load it
@@ -31,7 +31,7 @@ alias gaupol='flatpak run io.otsaloma.gaupol'
 alias shortwave='flatpak run de.haeckerfelix.Shortwave'
 alias opendrive='flatpak run io.github.liberodark.OpenDrive'
 alias tor='flatpak run com.github.micahflee.torbrowser-launcher'
-alias brave='flatpak run com.brave.Browser'
+alias brave='brave-browser'
 
 alias i2pup='i2prouter start'
 alias i2pdown='i2prouter stop'
@@ -46,16 +46,16 @@ alias iotaseed='cat /dev/urandom | tr -dc A-Z9 | head -c${1:-81}'
 alias randhex='cat /dev/urandom | tr -dc A-F0-9 | head -c${1:-32}'
 
 function duoftype() {
-    find -iname "*.$1" -print0 | du --files0-from - -csh
+  find -iname "*.$1" -print0 | du --files0-from - -csh
 }
 
 function zview() {
-    zlib-flate -uncompress < "$*"
+  zlib-flate -uncompress <"$*"
 }
 
 function keccak() {
-    echo "Input: '$*'"
-    echo -n "$*" | rhash --sha3-256 -
+  echo "Input: '$*'"
+  echo -n "$*" | rhash --sha3-256 -
 }
 
 alias nordc='nordvpn connect'
@@ -63,10 +63,14 @@ alias nordd='nordvpn disconnect'
 alias nordwlport='nordvpn whitelist add port'
 alias nordset='nordvpn settings'
 alias nordstat='nordvpn status'
+
 alias debugchrome='google-chrome --remote-debugging-port=9222'
+
 alias servehere='ruby -run -e httpd . -p 9999'
 alias netuse='sudo ss -l -A inet -p'
+
 alias ddf='df -h | grep "\\(sd\\|nvme\\)"'
+
 alias bat='batcat'
 alias fd='fdfind --color=always'
 alias lls='ls -l'
@@ -81,67 +85,70 @@ alias v1cid='ipfs cid format -v 1'
 # commands for finding lingering debug statements in Rails apps
 FIT_EXPR='\sfit\s|\sfocus:\s*true\s|\sbinding.pry[[:space:]]|^\+\+\+'
 function f() {
-    git status -v | egrep '^\+' | egrep "$FIT_EXPR"
-    git diff | egrep '^\+' | egrep "$FIT_EXPR"
+  git status -v | egrep '^\+' | egrep "$FIT_EXPR"
+  git diff | egrep '^\+' | egrep "$FIT_EXPR"
 }
 function ff() {
-    find -type f -name \*rb -print0 | xargs -0 egrep -e $EXPR -v --color
+  find -type f -name \*rb -print0 | xargs -0 egrep -e $EXPR -v --color
 }
 alias fp="gg -E '\sp\$|\sp\s|\sp\;|binding\.pry|\sspecify\!' -- '*.rb'"
 alias spk='rspec --tag focus --tag ~focus'
 
+alias img2svg=vtrace
 alias ttf2woff=sfnt2woff
+alias otf2woff=sfnt2woff
 alias fffilters='ffmpeg -filters'
 alias framecount='ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0'
 
 function togspot() {
-    wid=$(xdotool search --name 'Spotify$' | tail -1)
-    echo "Got Window ID: $wid"
-    wstate=$(xwininfo -id $wid | grep "Map State:")
-    echo "Window State: $wstate"
+  wid=$(xdotool search --name 'Spotify$' | tail -1)
+  echo "Got Window ID: $wid"
+  wstate=$(xwininfo -id $wid | grep "Map State:")
+  echo "Window State: $wstate"
 
-    if [[ "$wstate" == *IsUnMapped ]]; then
-        echo "Mapping"
-        xdotool windowmap $wid windowactivate $wid
-    else
-        xdotool windowunmap $wid
-    fi
+  if [[ "$wstate" == *IsUnMapped ]]; then
+    echo "Mapping"
+    xdotool windowmap $wid windowactivate $wid
+  else
+    xdotool windowunmap $wid
+  fi
 }
 
 function spotmeta() {
-    SP_DEST="org.mpris.MediaPlayer2.spotify"; \
-    SP_PATH="/org/mpris/MediaPlayer2";        \
-    SP_MEMB="org.mpris.MediaPlayer2.Player";  \
-    dbus-send                                 \
-    --print-reply                                  `# We need the reply.`        \
-    --dest=$SP_DEST                                                              \
-    $SP_PATH                                                                     \
-    org.freedesktop.DBus.Properties.Get                                          \
-    string:"$SP_MEMB" string:'Metadata'                                          \
-    | grep -Ev "^method"                           `# Ignore the first line.`    \
-    | grep -Eo '("(.*)")|(\b[0-9][a-zA-Z0-9.]*\b)' `# Filter interesting fields.`\
-    | sed -E '2~2 a|'                              `# Mark odd fields.`          \
-    | tr -d '\n'                                   `# Remove all newlines.`      \
-    | sed -E 's/\|/\n/g'                           `# Restore newlines.`         \
-    | sed -E 's/(xesam:)|(mpris:)//'               `# Remove ns prefixes.`       \
-    | sed -E 's/^"//'                              `# Strip leading...`          \
-    | sed -E 's/"$//'                              `# ...and trailing quotes.`   \
-    | sed -E 's/"+/|/'                             `# Regard "" as seperator.`   \
-    | sed -E 's/ +/ /g'                            `# Merge consecutive spaces.`
+  SP_DEST="org.mpris.MediaPlayer2.spotify"
+  SP_PATH="/org/mpris/MediaPlayer2"
+  SP_MEMB="org.mpris.MediaPlayer2.Player"
+  dbus-send \
+    --print-reply `# We need the reply.` \
+    --dest=$SP_DEST \
+    $SP_PATH \
+    org.freedesktop.DBus.Properties.Get \
+    string:"$SP_MEMB" string:'Metadata' |
+    grep -Ev "^method" `# Ignore the first line.` |
+    grep -Eo '("(.*)")|(\b[0-9][a-zA-Z0-9.]*\b)' `# Filter interesting fields.` |
+    sed -E '2~2 a|' `# Mark odd fields.` |
+    tr -d '\n' `# Remove all newlines.` |
+    sed -E 's/\|/\n/g' `# Restore newlines.` |
+    sed -E 's/(xesam:)|(mpris:)//' `# Remove ns prefixes.` |
+    sed -E 's/^"//' `# Strip leading...` |
+    sed -E 's/"$//' `# ...and trailing quotes.` |
+    sed -E 's/"+/|/' `# Regard "" as seperator.` |
+    sed -E 's/ +/ /g' `# Merge consecutive spaces.`
 }
 function spottrack() {
-    OUT=$(spotmeta                                           \
-        | grep --color=never -E "(title)|(album)|(artist)" \
-        | sed 's/^\(.\)/\U\1/'                             \
-        | column -t -s'|'
-    )
-    notify-send -t 1000 -i gtk-dialog-info Spotify "$OUT"
-    echo "$OUT"
+  OUT=$(
+    spotmeta |
+      grep --color=never -E "(title)|(album)|(artist)" |
+      sed 's/^\(.\)/\U\1/' |
+      column -t -s'|'
+  )
+  notify-send -t 1000 -i gtk-dialog-info Spotify "$OUT"
+  echo "$OUT"
 }
 
 function trimtime() {
-    if [[ -z "$1" || -z "$2" ]]; then
-        cat <<HELP
+  if [[ -z "$1" || -z "$2" ]]; then
+    cat <<HELP
 Usage: trimtime <timestamp> <filename>
  Exe: trimtime 00:05:30 recording.mp4
    Produces a copy of the recording with
@@ -152,150 +159,170 @@ Usage: trimtime <timestamp> <filename>
    the last 5 minutes and 30 seconds
    removed.
 HELP
-    else
-        TIME="${1#-}"
-        if [ "$TIME" != "$1" ]; then
-            if [ "$LEN" == "N/A" ]; then
-                echo "Couldn't find the length of '$2'" >&2
-                return -1
-            fi
-            LEN=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$2" | sed 's/\..*//')
-            IFS=':' read -r -a PART <<< $TIME
-            readarray -td '' PART < <(printf '%s\0' "${PART[@]}" | tac -s '')
-            [ -z "${PART[1]}" ] && PART[1]=0
-            [ -z "${PART[2]}" ] && PART[2]=0
-            REM=$(((((${PART[2]} * 60) + ${PART[1]}) * 60) + ${PART[0]}))
-            NEWLEN=$(($LEN - $REM))
-            SEXA=$(date -d@$NEWLEN -u +%H:%M:%S)
-            OUT="${2%.*}.‒$SEXA.${2##*.}"
-
-            echo "Writing To: $OUT"
-            ffmpeg -t "$SEXA" -i "$2" -map 0 -c copy -- "file:$OUT"
-        else
-            OUT="${2%.*}.$1‒.${2##*.}"
-
-            echo "Writing To: $OUT"
-            ffmpeg -ss "$1" -i "$2" -map 0 -c copy -- "file:$OUT"
-        fi
+   return 2
+  fi
+  TIME="${1#-}"
+  if [ "$TIME" != "$1" ]; then
+    if [ "$LEN" == "N/A" ]; then
+      echo "Couldn't find the length of '$2'" >&2
+      return 3
     fi
+    LEN=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$2" | sed 's/\..*//')
+    IFS=':' read -r -a PART <<<$TIME
+    readarray -td '' PART < <(printf '%s\0' "${PART[@]}" | tac -s '')
+    [ -z "${PART[1]}" ] && PART[1]=0
+    [ -z "${PART[2]}" ] && PART[2]=0
+    REM=$(((((${PART[2]} * 60) + ${PART[1]}) * 60) + ${PART[0]}))
+    NEWLEN=$(($LEN - $REM))
+    SEXA=$(date -d@$NEWLEN -u +%H:%M:%S)
+    OUT="${2%.*}.‒$SEXA.${2##*.}"
+
+    echo "Writing To: $OUT"
+    ffmpeg -t "$SEXA" -i "$2" -map 0 -c copy -- "file:$OUT"
+  else
+    OUT="${2%.*}.$1‒.${2##*.}"
+
+    echo "Writing To: $OUT"
+    ffmpeg -ss "$1" -i "$2" -map 0 -c copy -- "file:$OUT"
+  fi
 }
 function joinvideos() {
-    if [[ -z "$1" || -z "$2" ]]; then
-        cat <<HELP
+  if [[ -z "$1" || -z "$2" ]]; then
+    cat <<HELP
 Usage: joinvideos <file #1> <file #2>
  Exe: joinvideos one.mp4 two.named.mp4
   Produces one.two.mp4 which contains
   the contents of two following those
   of one.
 HELP
-    else
-        OUT=".${1##*.}"
-        IN="$(tempfile)"
-        for file in "$@"; do
-            OUT="${file%%.*}$OUT"
-            echo "file \"$PWD/$(echo $file | sed 's/"/\"/g')\"" >> "$IN"
-        done
-        
-        echo "Writing To: $OUT"
-        ffmpeg -f concat -safe 0 -i "$IN" -c copy "$OUT"
-        rm "$IN"
-    fi
+   return 2
+  fi
+  OUT=".${1##*.}"
+  IN="$(tempfile)"
+  for file in "$@"; do
+    OUT="${file%%.*}$OUT"
+    echo "file \"$PWD/$(echo $file | sed 's/"/\"/g')\"" >>"$IN"
+  done
+
+  echo "Writing To: $OUT"
+  ffmpeg -f concat -safe 0 -i "$IN" -c copy "$OUT"
+  rm "$IN"
 }
 function rotateVideo90() {
-    if [[ -z "$1" ]]; then
-        cat <<HELP
+  if [[ -z "$1" ]]; then
+    cat <<HELP
 Usage: rotateMp490 <file #1>
  Exe: Usage: rotateMp490 stream.mp4
   Rotates a video 90
 HELP
-    else
-        IN="$1"
-        OUT="${1%.*}.rotated.${1##*.}"
-        ffmpeg -i "$IN" -vf "transpose=1" "$OUT"
-    fi
+   return 2
+  fi
+  IN="$1"
+  OUT="${1%.*}.rotated.${1##*.}"
+  ffmpeg -i "$IN" -vf "transpose=1" "$OUT"
 }
 
 function mp42gif() {
-    if [[ -z "$1" ]]; then
-        cat <<HELP
+  if [[ -z "$1" ]]; then
+    cat <<HELP
 Usage: mp42gif <file #1>
  Exe: mp42gif stream.mp4
   Produces stream.gif which contains
   the contents of the file an an animated GIF.
 HELP
-    else
-        IN="$1"
-        OUT="${1%.*}.gif"
-        ffmpeg -i "$IN" -vf "fps=10,scale=320:-1:flags=lanczos" -c:v pam -f image2pipe - | \
-        convert -delay 10 - -loop 0 -layers optimize "$OUT"
-    fi
+   return 2
+  fi
+  IN="$1"
+  OUT="${1%.*}.gif"
+  ffmpeg -i "$IN" -vf "fps=10,scale=320:-1:flags=lanczos" -c:v pam -f image2pipe - |
+    convert -delay 10 - -loop 0 -layers optimize "$OUT"
 }
 
 function png2transparent() {
-    if [[ -z "$1" ]]; then
-        cat <<HELP
+  if [[ -z "$1" ]]; then
+    cat <<HELP
 Usage: png2transparent <file #1>
  Exe: png2transparent 
   Produces stream.gif which contains
   the contents of the file an an animated GIF.
 HELP
-    else
-        IN="$1"
-        OUT="${1%.*}.transparent.png"
-        color=$(convert "$IN" -format "%[pixel:p{0,0}]" info:-)
-        convert "$IN" -alpha off -bordercolor $color -border 1 \
-            \( \
-                +clone -fuzz 30% -fill none -floodfill +0+0 $color \
-                -alpha extract -geometry 200% -blur 0x0.5 \
-                -morphology erode square:1 -geometry 50% \
-            \) \
-            -compose CopyOpacity -composite -shave 1 "$OUT"
-    fi
+   return 2
+  fi
+  IN="$1"
+  OUT="${1%.*}.transparent.png"
+  color=$(convert "$IN" -format "%[pixel:p{0,0}]" info:-)
+  convert "$IN" -alpha off -bordercolor $color -border 1 \
+    \( \
+    +clone -fuzz 30% -fill none -floodfill +0+0 $color \
+    -alpha extract -geometry 200% -blur 0x0.5 \
+    -morphology erode square:1 -geometry 50% \
+    \) \
+    -compose CopyOpacity -composite -shave 1 "$OUT"
 }
 
 function hevc2x264() {
-    if [[ -z "$1" ]]; then
-        cat <<HELP
+  if [[ -z "$1" ]]; then
+    cat <<HELP
 Usage: hevc2x264 <file #1>
- Exe: hevc2x264 stream.mp4
+ Exe: hevc2x264 stream.mkv
   Produces stream.x264.mp4 which contains
   the contents of the file as x264.
 HELP
-    else
-        IN="$1"
-        OUT="${1%.*}.x264.${1##*.}"
-        ffmpeg -i "$IN" -map 0 -c:v libx264 -crf 18 -c:a copy "$OUT"
-    fi
+   return 2
+  fi
+  IN="$1"
+  OUT="${1%.*}.x264.mp4"
+  ffmpeg -i "$IN" -map 0 -c:v libx264 -crf 18 -c:a copy "$OUT"
 }
 
 function vid2webm() {
-    if [[ -z "$1" ]]; then
-        cat <<HELP
+  if [[ -z "$1" ]]; then
+    cat <<HELP
 Usage: vid2webm <file #1>
     Exe: vid2webm stream.mp4
-    Produces stream.webm which contains
-    the contents of the file as webm.
+    Produces libvpx encoded webm with Vorbis
+    encoded audio.
 HELP
-    else
-        IN="$1"
-        OUT="${1%.*}.webm"
-        ffmpeg -i "$IN" -b:v 0 -crf 30 -pass 1 -an -f webm -y /dev/null
-        ffmpeg -i "$IN" -b:v 0 -crf 30 -pass 2 "$OUT"
-    fi
+   return 2
+  fi
+  IN="$1"
+  OUT="${1%.*}.webm"
+  ffmpeg -i "$IN" -c:v libvpx-vp9 -pass 1 \
+          -qmin 7 -qmax 39 -crf 10 -an "$OUT"
+  ffmpeg -i "$IN" -c:v libvpx-vp9 -pass 2 \
+          -qmin 7 -qmax 39 -crf 10 -c:a libvorbis "$OUT"
 }
+function vid2VP8Webm() {
+  if [[ -z "$1" ]]; then
+    cat <<HELP
+Usage: vid2VP8webm <file #1>
+  Exe: vid2VP8Webm  stream.mp4
+  Produces stream.webm encoded using VP8 which is conpatible
+  with Safari on iOS. Audio is Vorbis encoded.
+HELP
+   return 2
+  fi
+  IN="$1"
+  OUT="${1%.*}.webm"
+  ffmpeg -i "$IN" -c:v libvpx -pass 1 \
+          -qmin 7 -qmax 39 -crf 10 -an "$OUT"
+  ffmpeg -i "$IN" -c:v libvpx -pass 2 \
+          -qmin 7 -qmax 39 -crf 10 -c:a libvorbis "$OUT"
+}
+
 function extAudio() {
-    if [[ -z "$1" ]]; then
-        cat <<HELP
+  if [[ -z "$1" ]]; then
+    cat <<HELP
 Usage: extAudio <file #1>
  Exe: extAudio stream.mp4
   Produces stream.m4a which contains
   the audio of the file.
 HELP
-    else
-        IN="$1"
-        OUT="${1%.*}.m4a"
-        ffmpeg -i "$IN" -vn -c:a copy "$OUT"
-    fi
+   return 2
+  fi
+  IN="$1"
+  OUT="${1%.*}.m4a"
+  ffmpeg -i "$IN" -vn -c:a copy "$OUT"
 }
 
 alias fixVideo='echo "untrunc <same camera reference video> <broken video>"'
@@ -303,29 +330,29 @@ alias fixVideo='echo "untrunc <same camera reference video> <broken video>"'
 alias cb='xclip -selection c'
 
 for completion in /etc/bash_completion.d/git-prompt /usr/share/bash-completion/completions/git; do
-    [ -e $completion ] && source $completion
+  [ -e $completion ] && source $completion
 done
-which pack > /dev/null 2>&1 && source "$(pack completion)"
+which pack >/dev/null 2>&1 && source "$(pack completion)"
 
 function commit-for-chrissake() {
-    fortune="$(fortune -s)"
-    git commit -am "${*:-$fortune}";
+  fortune="$(fortune -s)"
+  git commit -am "${*:-$fortune}"
 }
 function t() {
-    if [ -z "$*" ]; then
-        git commit -S -a
-    else
-        echo "Commit: $*"
-        git commit -S -am "$*"
-    fi
+  if [ -z "$*" ]; then
+    git commit -S -a
+  else
+    echo "Commit: $*"
+    git commit -S -am "$*"
+  fi
 }
 function tv() { git commit --no-verify -S -am "$*"; }
 function mit() {
-    if [ -z "$*" ]; then
-        git commit -S
-    else
-        git commit -S -m "$*"
-    fi
+  if [ -z "$*" ]; then
+    git commit -S
+  else
+    git commit -S -m "$*"
+  fi
 }
 function t-() { git commit --amend -S -m "$*"; }
 
@@ -358,27 +385,49 @@ alias s='git -c color.status=always status | less -REX'
 alias b='git branch'
 __git_complete b _git_branch
 function d() {
-    (
-        git -c color.ui=always status -v
-        git -c color.ui=always diff --staged
-        git -c color.ui=always diff
-        while IFS= read -r -d $'\0' file; do
-            isutf8 "$file" 2>&1 > /dev/null
-            IS_TEXT=$?
-            if [ -f "$file" ]; then
-                echo -e "\x1B[0;31mUntracked:\x1B[0m \x1B[1;33m$file\x1B[0m"
-                if [ $IS_TEXT -eq 0 ]; then
-                    awk '{ print "  " $0 }' "$file"
-                else
-                    echo -e "  \x1B[1;35mNot Printing Binary…\x1B[0m"
-                fi
-            fi
-        done < <(git ls-files --others --exclude-standard -z)
-    ) | bat
+  (
+    git -c color.ui=always status -v
+    git -c color.ui=always diff --staged
+    git -c color.ui=always diff
+    while IFS= read -r -d $'\0' file; do
+      isutf8 "$file" 2>&1 >/dev/null
+      IS_TEXT=$?
+      if [ -f "$file" ]; then
+        echo -e "\x1B[0;31mUntracked:\x1B[0m \x1B[1;33m$file\x1B[0m"
+        if [ $IS_TEXT -eq 0 ]; then
+          awk '{ print "  " $0 }' "$file"
+        else
+          echo -e "  \x1B[1;35mNot Printing Binary…\x1B[0m"
+        fi
+      fi
+    done < <(git ls-files --others --exclude-standard -z)
+  ) | bat
 }
 alias l='git log -p'
 
 complete -o default code
+
+function ghclearcache() {
+  if [[ -z "$1" || -z "$2" ]]; then
+    cat <<HELP
+Usage: ghclearcache <repo> <pr number>
+Exe: ghclearcache metafam/thegame 1542
+HELP
+   return 2
+  fi
+  gh extension list | grep -q "actions-cache" || \
+    gh extension install actions/gh-actions-cache
+
+  REPO=${1}
+  BRANCH="refs/pull/${2}/merge"
+
+  cacheKeys=$(gh actions-cache list -R $REPO -B $BRANCH | cut -f 1 )
+
+  set +e # Setting this to not fail the workflow while deleting
+  for cacheKey in $cacheKeys; do
+      gh actions-cache delete $cacheKey -R $REPO -B $BRANCH --confirm
+  done
+}
 
 alias grate='rake db:migrate'
 alias rdb='rake db:reset'
@@ -394,15 +443,19 @@ alias fortune='fortune -a'
 alias gdec='gpg --decrypt'
 alias mykeys='gpg --list-secret-keys --keyid-format=long'
 function mykey {
-    [ -z "$1" ] && echo "Usage: mykey <email address>" && return 1
-    gpg --export --armor "$1"
+  [ -z "$1" ] && echo "Usage: mykey <email address>" && return 1
+  gpg --export --armor "$1"
 }
 
 alias ybyd='yarn build && yarn deploy'
 
 alias g='grep --color'
 
-function pp() { popd; pushd "$PWD"; cd "$@"; }
+function pp() {
+  popd
+  pushd "$PWD"
+  cd "$@"
+}
 
 function eb() { $EDITOR ~/.bashrc && source ~/.bashrc; }
 alias rb='source ~/.bashrc' # reload bash
@@ -436,23 +489,23 @@ export RSYNC_RSH=ssh
 export CVS_RSH=ssh
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
 # ~/.local/lib/anaconda/bin
-for path in /usr/local/bin /opt/local/bin  ~/.cargo/bin ~/.radicle/bin ~/.rbenv/bin/ ~/.yarn/bin/ ~/.config/yarn/global/node_modules/.bin ~/.../bin ~/.local/share/pnpm; do
-    [ -d "$path" ] && export PATH="$path:$PATH"
+for path in /usr/local/bin /opt/local/bin ~/.cargo/bin ~/.radicle/bin ~/.rbenv/bin/ ~/.yarn/bin/ ~/.config/yarn/global/node_modules/.bin ~/.../bin ~/.local/share/pnpm; do
+  [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
-which nvm > /dev/null 2>&1 && export PATH="$(dirname $(nvm which current)):$PATH"
+which nvm >/dev/null 2>&1 && export PATH="$(dirname $(nvm which current)):$PATH"
 
 for path in /var/lib/flatpak/exports/share ~/.local/share/flatpak/exports/share; do
-    [ -d "$path" ] && export XDG_DATA_DIRS="$path:$XDG_DATA_DIRS"
+  [ -d "$path" ] && export XDG_DATA_DIRS="$path:$XDG_DATA_DIRS"
 done
-    
+
 # Make javascripts executable #ToDo: shorten
 function reg_javascript() {
-    sudo sh -c "echo ':javascript:M:://!::$(echo ~)/.../bin/js:' > /proc/sys/fs/binfmt_misc/register"
+  sudo sh -c "echo ':javascript:M:://!::$(echo ~)/.../bin/js:' > /proc/sys/fs/binfmt_misc/register"
 }
 alias unreg_javascript="sudo sh -c \"echo -1 > /proc/sys/fs/binfmt_misc/javascript\""
 
@@ -461,31 +514,31 @@ export VERBOSE="t"
 alias nopasswd="( export d=~/.ssh; [ -e $d/id_rsa.pub ] || { mkdir -p $d; cd $d; ssh-keygen -t rsa; }; ssh-copy-id \$REMOTE )"
 
 function randpass() {
-    SIZE="${1:-32}"
-    echo "Generating ${SIZE} character random password" 1>&2
-    tr -cd '[:print:]' \
-        < /dev/urandom \
-        | tr -ds '[" =]' [:print:] \
-        | fold -w${SIZE} \
-        | head -n1
+  SIZE="${1:-32}"
+  echo "Generating ${SIZE} character random password" 1>&2
+  tr -cd '[:print:]' \
+    </dev/urandom |
+    tr -ds '[" =]' [:print:] |
+    fold -w${SIZE} |
+    head -n1
 }
 
 alias isotime='date +%Y-%m-%d@%H:%M:%S%:z'
 function rlog() {
-    log="log/$1.$(isotime).log"
-    echo "Logging rake $1 | $log"
-    rake $1 2>&1 >> "$log" &
-    tail -f "$log"
+  log="log/$1.$(isotime).log"
+  echo "Logging rake $1 | $log"
+  rake $1 2>&1 >>"$log" &
+  tail -f "$log"
 }
 
 alias xmlpp="xmllint --format"
 
 # Verify a json file
 function json() {
-    for file in "$@"; do
-        echo "Checking: $file"
-        cat "$file" | python -mjson.tool
-    done
+  for file in "$@"; do
+    echo "Checking: $file"
+    cat "$file" | python -mjson.tool
+  done
 }
 
 alias findbiggitfiles="git ls-files -t \$(find . -type f -size +1M -print0 | xargs -0)"
@@ -496,63 +549,69 @@ alias rec=gnome-sound-recorder
 
 # Setup remote login for GIT
 function setupLogin {
-    KEYDIR=~/"personal/keys/$REMOTE"; [ -e "$KEYDIR" ] || mkdir --parents "$KEYDIR"
-    for KEY in "$KEYDIR"/*; do
-        if [ -e "$KEY" ]; then  # Loops even with no matches
-            echo "Testing: $KEY: "
-            ssh -o PasswordAuthentication=no -i "$KEY" $REMOTE "exit 0" && break || echo "  Fail"
-        fi
-    done
-    if [ ! -e "$KEY" ]; then
-        echo "Generating ${KEYLENGTH:=3096}-bit key:"
-        USER=$(whoami)  ; echo "   User: ${user:=USER}"
-        PASSWORD=       ; echo "   Pass: ${PASSWORD:=00000}"
-        unset PASSWORD;
-        HOST=$(hostname); echo "   Host: $host"
-        timestamp=$(date +'%Y-%m-%d@%H:%m:%S'); echo "   Time: $timestamp" 
-        Key="$KEYDIR/$timestamp.rsa key"  ; echo "   Out: $KEY(.pub)?"
-        
-        if [ -e "$KEY" ]; then
-            backup="$KEYDIR/"$(tempfile --prefix 'bak: ' --suffix " ${KEY##*/}")
-            mv -v "$KEY" "$backup"
-        fi
-        if [ -e "$KEY.pub" ]; then
-            backup="$KEYDIR/"$(tempfile --prefix 'bak: ' --suffix " ${KEY##*/}.pub")
-            mv -v "$KEY.pub" "$backup"
-        fi
-        rm -fv "$KEY" "$KEY.pub"
+  KEYDIR=~/"personal/keys/$REMOTE"
+  [ -e "$KEYDIR" ] || mkdir --parents "$KEYDIR"
+  for KEY in "$KEYDIR"/*; do
+    if [ -e "$KEY" ]; then # Loops even with no matches
+      echo "Testing: $KEY: "
+      ssh -o PasswordAuthentication=no -i "$KEY" $REMOTE "exit 0" && break || echo "  Fail"
+    fi
+  done
+  if [ ! -e "$KEY" ]; then
+    echo "Generating ${KEYLENGTH:=3096}-bit key:"
+    USER=$(whoami)
+    echo "   User: ${user:=USER}"
+    PASSWORD=
+    echo "   Pass: ${PASSWORD:=00000}"
+    unset PASSWORD
+    HOST=$(hostname)
+    echo "   Host: $host"
+    timestamp=$(date +'%Y-%m-%d@%H:%m:%S')
+    echo "   Time: $timestamp"
+    Key="$KEYDIR/$timestamp.rsa key"
+    echo "   Out: $KEY(.pub)?"
 
-        ssh-keygen -t rsa -b $KEYLENGTH -C "$USER@$HOST:$KEY" -f "$KEY" -P "$PASSWORD" \
-            | tee "$KEY.out.utf-8" $OUTPUT
-        REMOTE_KEYS=.ssh/authorized_keys
-        echo "Appending $KEY to $REMOTE:$REMOTE_KEYS" && \
-            cat "$KEY.pub" | tee - | ssh $REMOTE "cat >> '$REMOTE_KEYS'"
+    if [ -e "$KEY" ]; then
+      backup="$KEYDIR/"$(tempfile --prefix 'bak: ' --suffix " ${KEY##*/}")
+      mv -v "$KEY" "$backup"
+    fi
+    if [ -e "$KEY.pub" ]; then
+      backup="$KEYDIR/"$(tempfile --prefix 'bak: ' --suffix " ${KEY##*/}.pub")
+      mv -v "$KEY.pub" "$backup"
+    fi
+    rm -fv "$KEY" "$KEY.pub"
+
+    ssh-keygen -t rsa -b $KEYLENGTH -C "$USER@$HOST:$KEY" -f "$KEY" -P "$PASSWORD" |
+      tee "$KEY.out.utf-8" $OUTPUT
+    REMOTE_KEYS=.ssh/authorized_keys
+    echo "Appending $KEY to $REMOTE:$REMOTE_KEYS" &&
+      cat "$KEY.pub" | tee - | ssh $REMOTE "cat >> '$REMOTE_KEYS'"
 
     # Add tipspace make script to add git permissions and drop full access
-        echo "   Bootstrap: ${BOOTSTRAP:=.../sys/lib/tip/drop/permission/ssh/bash}"
-        [ -e "${BOOTSTRAP}" ] && \
-            ssh -i "$KEY" $REMOTE "mkdir --parents ${BOOTSTRAP%/*}" && \
-            scp -i "$KEY" -r "${BOOTSTRAP}" "$REMOTE:${BOOTSTRAP%/*}" && \
-            ssh -i "$KEY" $REMOTE "${BOOTSTRAP##*/} '${BOOTSTRAP}'"
-    fi
+    echo "   Bootstrap: ${BOOTSTRAP:=.../sys/lib/tip/drop/permission/ssh/bash}"
+    [ -e "${BOOTSTRAP}" ] &&
+      ssh -i "$KEY" $REMOTE "mkdir --parents ${BOOTSTRAP%/*}" &&
+      scp -i "$KEY" -r "${BOOTSTRAP}" "$REMOTE:${BOOTSTRAP%/*}" &&
+      ssh -i "$KEY" $REMOTE "${BOOTSTRAP##*/} '${BOOTSTRAP}'"
+  fi
 }
 
 function git-fold() {
-    [ $# != 2 ] && {
-        cat <<HELP
+  [ $# != 2 ] && {
+    cat <<HELP
 Usage: git-fold <repo> <dir>
   Folds <repo> into the current repository at <dir>
 HELP
-        return -1
-    }
-    repo="$1"
-    dir="$2"
-    git remote rm git-fold-merge-project
-    git remote add -f git-fold-merge-project "$repo"
-    git merge -s ours --no-commit git-fold-merge-project/master
-    git read-tree --prefix="$dir" -u git-fold-merge-project/master
-    git commit -m "Folding in $repo @ $dir"
-    git pull -s subtree git-fold-merge-project master
+    return -1
+  }
+  repo="$1"
+  dir="$2"
+  git remote rm git-fold-merge-project
+  git remote add -f git-fold-merge-project "$repo"
+  git merge -s ours --no-commit git-fold-merge-project/master
+  git read-tree --prefix="$dir" -u git-fold-merge-project/master
+  git commit -m "Folding in $repo @ $dir"
+  git pull -s subtree git-fold-merge-project master
 }
 
 # To remove language selection menus from windows in Solaris
@@ -587,7 +646,7 @@ Usage: ipfspubdir a/b/c/d/e.ext'
  Will add the file to ipfs in a nested directory tree
  matching the one used to execute the command. So, for
  example, the root of the usage command would contain
- a directory named "a". The normal `ipfs add -w` command
+ a directory named "a". The normal $(ipfs add -w) command
  would have "e.ext" in the root.
 HELP
     return 2
@@ -606,72 +665,72 @@ alias unpin='ipfs pin rm'
 alias unpinall='ipfs pin ls -q --type recursive | xargs ipfs pin rm'
 alias ipnskey='ipfs key gen --type=rsa --size=2048'
 function ipnspub() {
-    if [ -z "$1" ]; then
-    	echo "Usage: ipnspub <key name> <hash>"
-    else
-	    ipfs name publish --key=$1 "$2"
-    fi
+  if [ -z "$1" ]; then
+    echo "Usage: ipnspub <key name> <hash>"
+    return 2
+  fi
+  ipfs name publish --key=$1 "$2"
 }
 
 # Always create intermediate directories
 alias mkdir="mkdir -p"
 
 [ ! -z "$INSTALL" ] && (
-    sudo apt install fortune libnotify-bin
+  sudo apt install fortune libnotify-bin
 )
 [ -z "$PS1" ] || (
-    which fortune > /dev/null 2>&1 && (
-        which notify-send > /dev/null 2>&1 && (
-            fortune=$(fortune | sed -z 's/\n/ /g;s/[ \t][ \t]*/ /g')
-            notify-send -t 1000 -u low -i gtk-dialog-info Fortune "$fortune"
-        ) || (
-            setterm -underline on
-            fortune
-            setterm -underline off
-        )
+  which fortune >/dev/null 2>&1 && (
+    which notify-send >/dev/null 2>&1 && (
+      fortune=$(fortune | sed -z 's/\n/ /g;s/[ \t][ \t]*/ /g')
+      notify-send -t 1000 -u low -i gtk-dialog-info Fortune "$fortune"
+    ) || (
+      setterm -underline on
+      fortune
+      setterm -underline off
     )
+  )
 )
 
 # From: http://www.cyberciti.biz/tips/spice-up-your-unix-linux-shell-scripts.html
 function openports() {
-    for port in {1..1023}; do
-        (echo >/dev/tcp/localhost/$port) >/dev/null 2>&1 && echo "$port open"
-    done
+  for port in {1..1023}; do
+    (echo >/dev/tcp/localhost/$port) >/dev/null 2>&1 && echo "$port open"
+  done
 }
 
 function sendhttpexample() {
-    exec 3<> /dev/tcp/${1:-will.dhappy.org}/80
- 
-    printf "GET /~/config/bash HTTP/1.0\r\n" >&3
-    printf "Accept: text/html, text/plain\r\n" >&3
-    printf "Accept-Language: en\r\n" >&3
-    printf "User-Agent: bash_script v.%s\r\n" "${BASH_VERSION}" >&3
-    printf "\r\n" >&3
-    
-    while read LINE <&3; do
-        echo $LINE
-    done
+  exec 3<>/dev/tcp/${1:-will.dhappy.org}/80
+
+  printf "GET /~/config/bash HTTP/1.0\r\n" >&3
+  printf "Accept: text/html, text/plain\r\n" >&3
+  printf "Accept-Language: en\r\n" >&3
+  printf "User-Agent: bash_script v.%s\r\n" "${BASH_VERSION}" >&3
+  printf "\r\n" >&3
+
+  while read LINE <&3; do
+    echo $LINE
+  done
 }
 
 # For invoking the correct handler for files from the command line
-which xdg-open > /dev/null 2> /dev/null && alias start=xdg-open
-which gio > /dev/null 2> /dev/null && alias open='gio open' && alias launch='gio launch'
+which xdg-open >/dev/null 2>/dev/null && alias start=xdg-open
+which gio >/dev/null 2>/dev/null && alias open='gio open' && alias launch='gio launch'
 
 # In OSX, mplayer installs to the home directory
 # That 'which' doesn't return false in OSX when the program isn't present is dumb
 function mplayer() {
-    if [ -z "$MPLAYERCMD" ]; then
-        if [ -e /usr/bin/mplayer ]; then
-            MPLAYERCMD=/usr/bin/mplayer
-        else
-            MPLAYERCMD="$(find ~ -name mplayer | head -n1)"
-        fi
+  if [ -z "$MPLAYERCMD" ]; then
+    if [ -e /usr/bin/mplayer ]; then
+      MPLAYERCMD=/usr/bin/mplayer
+    else
+      MPLAYERCMD="$(find ~ -name mplayer | head -n1)"
     fi
-    if [ "$0" == "-2ndaudio" ]; then
-        shift
-        MPLAYERARGS="-ao alsa:device=hw=1,0"
-    fi
-    "$MPLAYERCMD" $MPLAYERARGS "$@"
+  fi
+  if [ "$0" == "-2ndaudio" ]; then
+    shift
+    MPLAYERARGS="-ao alsa:device=hw=1,0"
+  fi
+  "$MPLAYERCMD" $MPLAYERARGS "$@"
 }
 
 # make less more friendly for non-text input files, see lesspipe(1)
@@ -684,21 +743,21 @@ alias ubuntu-version=neofetch
 if [ ! -e /etc/debian_version ]; then
   USBDEVICES=/proc/bus/usb/devices
   [ -e $USBDEVICES ] && grep --silent "Ergonomic Keyboard 4000" $USBDEVICES && {
-    xmodmap -e 'keycode 162=F22' 2> /dev/null; # Play/Pause key on Microsoft's Natural Keyboard
-    xmodmap -e 'keycode 234=F20' 2> /dev/null; # Back key on Microsoft's Natural Keyboard
-    xmodmap -e 'keycode 233=F21' 2> /dev/null; # Forward key on Microsoft's Natural Keyboard
-    xmodmap -e 'keycode 176=F19' 2> /dev/null; # Volume increase key on Microsoft's Natural Keyboard
-    xmodmap -e 'keycode 174=F18' 2> /dev/null; # Volume decrease key on Microsoft's Natural Keyboard
-    xmodmap -e 'keycode 160=F18' 2> /dev/null; # Mute key on Microsoft's Natural Keyboard
+    xmodmap -e 'keycode 162=F22' 2>/dev/null # Play/Pause key on Microsoft's Natural Keyboard
+    xmodmap -e 'keycode 234=F20' 2>/dev/null # Back key on Microsoft's Natural Keyboard
+    xmodmap -e 'keycode 233=F21' 2>/dev/null # Forward key on Microsoft's Natural Keyboard
+    xmodmap -e 'keycode 176=F19' 2>/dev/null # Volume increase key on Microsoft's Natural Keyboard
+    xmodmap -e 'keycode 174=F18' 2>/dev/null # Volume decrease key on Microsoft's Natural Keyboard
+    xmodmap -e 'keycode 160=F18' 2>/dev/null # Mute key on Microsoft's Natural Keyboard
   }
 fi
 
 # Allow override use of sun's jdk
 for JDK in /usr/lib/kaffe/bin/ /usr/java/jdk*/bin/ /usr/lib/jdk*/bin/ "/cygdrive/c/Program Files/Java/jdk"*/bin/; do
-    if [[ -e "${JDK}java" || -e "${JDK}java.exe" ]]; then
-        export PATH="$JDK:$PATH"
-        break
-    fi
+  if [[ -e "${JDK}java" || -e "${JDK}java.exe" ]]; then
+    export PATH="$JDK:$PATH"
+    break
+  fi
 done
 export JAVACMD=$(which java)
 
@@ -711,92 +770,98 @@ alias lotuslog='journalctl -u lotus-daemon'
 
 # Power down the monitor and unpause Amarok for exiting music on a blog post
 function timeblog() {
-    TIME=${1:-60} # Number of seconds to wait
-    sleep 1 && xset dpms force off && sleep $TIME && qdbus org.kde.amarok /Player org.freedesktop.MediaPlayer.Play
+  TIME=${1:-60} # Number of seconds to wait
+  sleep 1 && xset dpms force off && sleep $TIME && qdbus org.kde.amarok /Player org.freedesktop.MediaPlayer.Play
 }
 
 alias xscreensaver-disable='xscreensaver-command -restart'
 alias ssaver='xscreensaver-command -activate'
 
 function suspend() {
-    ( sudo sleep 30 && sudo sh -c 'echo -n S3 > /sys/power/state' ) &
-    echo "Suspending in 30 seconds"
+  (sudo sleep 30 && sudo sh -c 'echo -n S3 > /sys/power/state') &
+  echo "Suspending in 30 seconds"
 }
 
 function settitle() {
-    printf "\033]0;$*\007";
+  printf "\033]0;$*\007"
 }
 alias st='settitle'
 
 function mp3reencode() {
-    newfile="${1%mp3}new.mp3";
-    lame --mp3input --preset standard "$1" "$newfile" && (du -h "$1" "$newfile"; mv -i "$newfile" "$1");
+  newfile="${1%mp3}new.mp3"
+  lame --mp3input --preset standard "$1" "$newfile" && (
+    du -h "$1" "$newfile"
+    mv -i "$newfile" "$1"
+  )
 }
 
 function mp3oggify() {
-    artist=${1% - *};
-    track=${1#* - };
-    newfile="${1%mp3}ogg";
-    lame --mp3input --decode --silent "$1" - | oggenc -o "$newfile" -a "$artist" -t "$track" - && (du -h "$1" "$newfile");
+  artist=${1% - *}
+  track=${1#* - }
+  newfile="${1%mp3}ogg"
+  lame --mp3input --decode --silent "$1" - | oggenc -o "$newfile" -a "$artist" -t "$track" - && (du -h "$1" "$newfile")
 }
 
 function wmaoggify() {
-    track=${1#* - };
-    newfile="${1%wma}ogg";
-    mplayer -ao pcm -ao pcm:file="$newfile.temp" "$1";
-    oggenc -o "$newfile" -a "$artist" -t "$track" "$newfile.temp" && (du -h "$1" "$newfile");
-    rm -fv "$newfile.temp"
+  track=${1#* - }
+  newfile="${1%wma}ogg"
+  mplayer -ao pcm -ao pcm:file="$newfile.temp" "$1"
+  oggenc -o "$newfile" -a "$artist" -t "$track" "$newfile.temp" && (du -h "$1" "$newfile")
+  rm -fv "$newfile.temp"
 }
 
 function reencode() {
-    BASENAME="${1%%.*}"
-    [ -e "$BASENAME.mkv" ] && { echo "$BASENAME.mkv already exists"; return 1; }
+  BASENAME="${1%%.*}"
+  [ -e "$BASENAME.mkv" ] && {
+    echo "$BASENAME.mkv already exists"
+    return 1
+  }
 
-    # mencoder is missing the -x264encopts option so I'm dumping the
-    # sources to files and reencoding, not idea, but I'm clueless
-    
-    if [ ! -e "$BASENAME.h264.mkv" ]; then
-        # the framerate has to be set on active streaming files
-    
-        mplayer -ao null -fps 25 -fixed-vo -noframedrop -vo yuv4mpeg -vo yuv4mpeg:file="$BASENAME.tmp.y4m" $*
-    
-        # from: http://odin.himinbi.org/Makefile.Coupling
+  # mencoder is missing the -x264encopts option so I'm dumping the
+  # sources to files and reencoding, not idea, but I'm clueless
 
-        ENCOPTS="--progress --subme 7 --analyse all --me umh --8x8dct"
-        ENCOPTS="$ENCOPTS --qp 23 --min-keyint 12 --keyint 125 --bime"
-        ENCOPTS="$ENCOPTS --direct auto --filter 1:1 --ref 16 --mixed-refs"
-        ENCOPTS="$ENCOPTS --bframes 5 --b-pyramid --weightb --b-rdo"
-        ENCOPTS="$ENCOPTS --trellis 2 --cqm jvt"
+  if [ ! -e "$BASENAME.h264.mkv" ]; then
+    # the framerate has to be set on active streaming files
 
-        eval x264 -o "$BASENAME.h264.mkv" $ENCOPTS --fps 21.78927 --pass 1 --stats "$BASENAME.x264.stats" "$BASENAME.tmp.y4m"
-        eval x264 -o "$BASENAME.h264.mkv" $ENCOPTS --fps 21.78927 --pass 2 --stats "$BASENAME.x264.stats" "$BASENAME.tmp.y4m"
-    fi
+    mplayer -ao null -fps 25 -fixed-vo -noframedrop -vo yuv4mpeg -vo yuv4mpeg:file="$BASENAME.tmp.y4m" $*
 
-    if [ ! -e "$BASENAME.tmp.ogg" ]; then
-        COUNT=0
-        for file in "$@"; do
-            COUNT=$(( COUNT + 1 ))
-            mplayer -ao pcm -ao pcm:nowaveheader -ao pcm:file="$BASENAME.tmp.$COUNT.wav" -vo null "$file"
-        done
-        sox "$BASENAME".tmp.*.wav -t wav "$BASENAME.tmp.wav"
-        oggenc -o "$BASENAME.tmp.ogg" "$BASENAME.tmp.wav"
-        rm -f "$BASENAME".tmp*.wav
-    fi
+    # from: http://odin.himinbi.org/Makefile.Coupling
 
-    mkvmerge -o "$BASENAME.mkv" "$BASENAME.h264.mkv" "$BASENAME.tmp.ogg"
+    ENCOPTS="--progress --subme 7 --analyse all --me umh --8x8dct"
+    ENCOPTS="$ENCOPTS --qp 23 --min-keyint 12 --keyint 125 --bime"
+    ENCOPTS="$ENCOPTS --direct auto --filter 1:1 --ref 16 --mixed-refs"
+    ENCOPTS="$ENCOPTS --bframes 5 --b-pyramid --weightb --b-rdo"
+    ENCOPTS="$ENCOPTS --trellis 2 --cqm jvt"
+
+    eval x264 -o "$BASENAME.h264.mkv" $ENCOPTS --fps 21.78927 --pass 1 --stats "$BASENAME.x264.stats" "$BASENAME.tmp.y4m"
+    eval x264 -o "$BASENAME.h264.mkv" $ENCOPTS --fps 21.78927 --pass 2 --stats "$BASENAME.x264.stats" "$BASENAME.tmp.y4m"
+  fi
+
+  if [ ! -e "$BASENAME.tmp.ogg" ]; then
+    COUNT=0
+    for file in "$@"; do
+      COUNT=$((COUNT + 1))
+      mplayer -ao pcm -ao pcm:nowaveheader -ao pcm:file="$BASENAME.tmp.$COUNT.wav" -vo null "$file"
+    done
+    sox "$BASENAME".tmp.*.wav -t wav "$BASENAME.tmp.wav"
+    oggenc -o "$BASENAME.tmp.ogg" "$BASENAME.tmp.wav"
+    rm -f "$BASENAME".tmp*.wav
+  fi
+
+  mkvmerge -o "$BASENAME.mkv" "$BASENAME.h264.mkv" "$BASENAME.tmp.ogg"
 }
 
 function playmp3s() {
-    file=$(date "+/tmp/%Y_%m_%d.m3u");
-    if [ ! -e $file ]; then
-        dirs=$(echo /mnt/media/ ~/.mldonkey/incoming/ /usr/share/music/)
-        # [ -e "${dirs%* }" ] || dirs=$(echo ~/)
-        echo "Finding media in $dirs"
-        find $dirs \( -name \*.mp3 -or -name \*.ogg -or -name \*.wma -or -name \*.m4a \) \
-            -size +1k -printf "%p\n" > $file;
-    fi
-    settitle Music
-    mplayer -shuffle -playlist $file;
+  file=$(date "+/tmp/%Y_%m_%d.m3u")
+  if [ ! -e $file ]; then
+    dirs=$(echo /mnt/media/ ~/.mldonkey/incoming/ /usr/share/music/)
+    # [ -e "${dirs%* }" ] || dirs=$(echo ~/)
+    echo "Finding media in $dirs"
+    find $dirs \( -name \*.mp3 -or -name \*.ogg -or -name \*.wma -or -name \*.m4a \) \
+      -size +1k -printf "%p\n" >$file
+  fi
+  settitle Music
+  mplayer -shuffle -playlist $file
 }
 
 [ -r ".../config/inputrc" ] && export INPUTRC=".../config/inputrc"
@@ -804,66 +869,66 @@ function playmp3s() {
 alias monitorsleep="sleep 1 && xset dpms force off"
 
 if [ "${BASH_VERSINFO[5]/apple/}" != "${BASH_VERSINFO[5]}" ]; then # in OSX
-    alias dir="ls -G"
-    alias flushdns="lookupd -flushcache"
-    tset -i
+  alias dir="ls -G"
+  alias flushdns="lookupd -flushcache"
+  tset -i
 elif [ "${BASH_VERSINFO[5]/solaris/}" != "${BASH_VERSINFO[5]}" ]; then # in solaris
-    alias ls=dir
+  alias ls=dir
 elif [ "${BASH_VERSINFO[5]/cygwin/}" != "${BASH_VERSINFO[5]}" ]; then # in windows
-    KEY=CurrentInstallFolder
-    WINDOWSSDK=$(reg query "HKLM\SOFTWARE\Microsoft\Microsoft SDKs\Windows" /v $KEY 2> /dev/null | grep $KEY | sed -e 's/.*REG_SZ[[:space:]]*//')
-    if [ ! -z "$WINDOWSSDK" ]; then
-    	WINDOWSSDK=$(cygpath -p "$WINDOWSSDK\bin")
-	    [ -e "$WINDOWSSDK" ] && PATH="$PATH:$WINDOWSSDK"
-    fi
+  KEY=CurrentInstallFolder
+  WINDOWSSDK=$(reg query "HKLM\SOFTWARE\Microsoft\Microsoft SDKs\Windows" /v $KEY 2>/dev/null | grep $KEY | sed -e 's/.*REG_SZ[[:space:]]*//')
+  if [ ! -z "$WINDOWSSDK" ]; then
+    WINDOWSSDK=$(cygpath -p "$WINDOWSSDK\bin")
+    [ -e "$WINDOWSSDK" ] && PATH="$PATH:$WINDOWSSDK"
+  fi
 
-    # this fixes a problem with emacs not exiting properly
-    # it will cause the terminal to break though if it is set here rather than in the global env
-    [ -z "$CYGWIN" ] && export CYGWIN=tty
-    export CYGWIN="$CYGWIN winsymlinks"
+  # this fixes a problem with emacs not exiting properly
+  # it will cause the terminal to break though if it is set here rather than in the global env
+  [ -z "$CYGWIN" ] && export CYGWIN=tty
+  export CYGWIN="$CYGWIN winsymlinks"
 
-    # mingw's compiler needs to be used before cwywin's to compile QT stuff
-    mingwdir="/cygdrive/c/Documents and Settings/$USERNAME/My Documents/Programs/mingw32/bin/"
-    [ -d "$mingwdir" ] && export PATH="$mingwdir:$PATH"
+  # mingw's compiler needs to be used before cwywin's to compile QT stuff
+  mingwdir="/cygdrive/c/Documents and Settings/$USERNAME/My Documents/Programs/mingw32/bin/"
+  [ -d "$mingwdir" ] && export PATH="$mingwdir:$PATH"
 
-    # to use the python image library, use the windows binary
-    pythondir=$(echo "/cygdrive/c/Program Files/"[Pp]ython*)
-    [ -d "$pythondir" ] && PATH="$pythondir:$PATH"
-    
-    # Include pathes for QT under Windows
-    # QT's make system relies on make being called from QT rather than cygwin
-    # export QTDIR=$(echo "/cygdrive/c/Documents and Settings/$USERNAME/My Documents/Programs/QT/"*)
-    export QTDIR=$(echo "/cygdrive/c/Qt/"*)
-    [ -d "$QTDIR" ] && export PATH="$QTDIR/bin/:$PATH"
-    which make.bat > /dev/null 2>&1 && alias make="make.bat"
+  # to use the python image library, use the windows binary
+  pythondir=$(echo "/cygdrive/c/Program Files/"[Pp]ython*)
+  [ -d "$pythondir" ] && PATH="$pythondir:$PATH"
 
-    PROGRAMS=${ProgramW6432}
-    sevenzipdir="$(cygpath "$PROGRAMS")/7-Zip"
-    [ -d "$sevenzipdir" ] && export PATH="$PATH:$sevenzipdir"
+  # Include pathes for QT under Windows
+  # QT's make system relies on make being called from QT rather than cygwin
+  # export QTDIR=$(echo "/cygdrive/c/Documents and Settings/$USERNAME/My Documents/Programs/QT/"*)
+  export QTDIR=$(echo "/cygdrive/c/Qt/"*)
+  [ -d "$QTDIR" ] && export PATH="$QTDIR/bin/:$PATH"
+  which make.bat >/dev/null 2>&1 && alias make="make.bat"
 
-    alias dir="ls --color"
+  PROGRAMS=${ProgramW6432}
+  sevenzipdir="$(cygpath "$PROGRAMS")/7-Zip"
+  [ -d "$sevenzipdir" ] && export PATH="$PATH:$sevenzipdir"
+
+  alias dir="ls --color"
 else
-    # suse aliases dir to ls -l
-    if which lsd > /dev/null; then
-        alias dir > /dev/null 2>&1 || alias dir="lsd --color"
-        alias ls="lsd --color always"
-    fi
+  # suse aliases dir to ls -l
+  if which lsd >/dev/null; then
+    alias dir >/dev/null 2>&1 || alias dir="lsd --color"
+    alias ls="lsd --color always"
+  fi
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-    color_prompt=yes
+  color_prompt=yes
 fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    source /etc/bash_completion
+  source /etc/bash_completion
 fi
 
 if [ ! "${BASH_VERSINFO[5]/solaris/}" != "${BASH_VERSINFO[5]}" ]; then # not in solaris
-    alias emacs="emacs -nw"
+  alias emacs="emacs -nw"
 fi
 
 [ -r '~/config/muttrc' ] && alias mutt="mutt -F '~/config/muttrc'"
@@ -900,11 +965,11 @@ alias 128privkey="gen128key | grep priv -A 2 | tail -n +2 | tr -d '\n[:space:]:'
 
 alias q='popd'
 function p() {
-    if [[ -z "$*" && -d ~/... ]]; then
-        pushd ~/...
-    else
-        pushd "$@"
-    fi
+  if [[ -z "$*" && -d ~/... ]]; then
+    pushd ~/...
+  else
+    pushd "$@"
+  fi
 }
 complete -o nospace -F _cd p
 
@@ -935,15 +1000,41 @@ alias neo4j="\
     -v $HOME/neo4j/plugins:/plugins \
     --env NEO4J_AUTH=neo4j/neo4j2 \
     neo4j:latest"
-alias dockstop='docker kill $(docker ps -q)'
+alias ds='docker stop'
+function dsname() {
+  if [ -z "$1" ]; then
+    echo "Usage: dsname <container name>"
+    return 1
+  fi
+  id=$(docker ps | grep "$1" | cut -d ' ' -f 1)
+  if [ -z "$id" ]; then
+    echo "Couldn't find container: '$1'"
+    return 3
+  fi
+  echo "Stopping container '$1' ($id)"
+  docker stop $id
+}
+alias dsall='docker kill $(docker ps -q)'
+function dshell() {
+  if [ -z "$1" ]; then
+    echo "Usage: dshell <container name>"
+    return 1
+  fi
+  id=$(docker ps | grep "$1" | cut -d ' ' -f 1)
+  if [ -z "$id" ]; then
+    echo "Couldn't find container: '$1'"
+    return 3
+  fi
+  docker exec -it $id /bin/bash
+}
 export DOCKER_HOST="unix:///run/user/$(id -u)/docker.sock"
 
-which pyenv > /dev/null 2>&1 && eval "$(pyenv init -)"
-which dircolors > /dev/null 2>&1 && eval $(dircolors)
+which pyenv >/dev/null 2>&1 && eval "$(pyenv init -)"
+which dircolors >/dev/null 2>&1 && eval $(dircolors)
 command -v direnv >/dev/null 2>&1 && eval "$(direnv hook bash)"
-which kubectl > /dev/null 2>&1 && source <(kubectl completion bash)
-which rbenv > /dev/null 2>&1 && eval "$(rbenv init -)"
-which ipfs > /dev/null 2>&1 && eval "$(ipfs commands completion bash)"
+which kubectl >/dev/null 2>&1 && source <(kubectl completion bash)
+which rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
+which ipfs >/dev/null 2>&1 && eval "$(ipfs commands completion bash)"
 
 # tabtab source for packages
 # uninstall by removing these lines
@@ -951,12 +1042,12 @@ which ipfs > /dev/null 2>&1 && eval "$(ipfs commands completion bash)"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f ~/bin/google-cloud-sdk/path.bash.inc ]; then
-    source ~/bin/google-cloud-sdk/path.bash.inc
+  source ~/bin/google-cloud-sdk/path.bash.inc
 fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f ~/bin/google-cloud-sdk/completion.bash.inc ]; then
-    source ~/bin/google-cloud-sdk/completion.bash.inc
+  source ~/bin/google-cloud-sdk/completion.bash.inc
 fi
 
 # include Mycroft commands
@@ -979,37 +1070,37 @@ alias mgnodes='kubectl get nodes'
 
 [ -e ~/bin/bash-preexec.sh ] && source ~/bin/bash-preexec.sh
 precmd_set_tip_dir() {
-    TIPDIR="${PWD}/"
-    if [[ "$TIPDIR" =~ .*/\.\.\./(.*) ]]; then
-        TIPDIR="∅/${BASH_REMATCH[1]}"
-    fi
-    FROMGIT="$(git rev-parse --show-prefix 2> /dev/null)"
-    if [[ $? -eq 0 ]]; then
-        GITDIR="${TIPDIR%$FROMGIT}"
-        GITDIR="${GITDIR%/}"
-        TIPDIR="/${GITDIR##*/}/${FROMGIT}"
-    fi
-    FROMHOME="${TIPDIR#$HOME}"
-    if [[ "$FROMHOME" != "$TIPDIR" ]]; then
-        TIPDIR="~${FROMHOME}"
-    fi
-    export TIPDIR
+  TIPDIR="${PWD}/"
+  if [[ "$TIPDIR" =~ .*/\.\.\./(.*) ]]; then
+    TIPDIR="∅/${BASH_REMATCH[1]}"
+  fi
+  FROMGIT="$(git rev-parse --show-prefix 2>/dev/null)"
+  if [[ $? -eq 0 ]]; then
+    GITDIR="${TIPDIR%$FROMGIT}"
+    GITDIR="${GITDIR%/}"
+    TIPDIR="/${GITDIR##*/}/${FROMGIT}"
+  fi
+  FROMHOME="${TIPDIR#$HOME}"
+  if [[ "$FROMHOME" != "$TIPDIR" ]]; then
+    TIPDIR="~${FROMHOME}"
+  fi
+  export TIPDIR
 }
 precmd_functions+=(precmd_set_tip_dir)
 
-which starship > /dev/null 2>&1 && eval "$(starship init bash)"
+which starship >/dev/null 2>&1 && eval "$(starship init bash)"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$(~'/.local/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$(~'/.local/anaconda3/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
 if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
+  eval "$__conda_setup"
 else
-    if [ -f ~"/.local/anaconda3/etc/profile.d/conda.sh" ]; then
-        . ~"/.local/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/dys/.local/anaconda3/bin:$PATH"
-    fi
+  if [ -f ~"/.local/anaconda3/etc/profile.d/conda.sh" ]; then
+    . ~"/.local/anaconda3/etc/profile.d/conda.sh"
+  else
+    export PATH="/home/dys/.local/anaconda3/bin:$PATH"
+  fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
