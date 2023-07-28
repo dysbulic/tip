@@ -58,9 +58,7 @@ for completion in /etc/bash_completion.d/git-prompt \
  ~/bin/google-cloud-sdk/path.bash.inc \
  ~/bin/google-cloud-sdk/completion.bash.inc \
  ~/.cargo/env \
- ~/.profile_mycroft \
- "$NVM_DIR/nvm.sh" \
- "$NVM_DIR/bash_completion"; do
+ ~/.profile_mycroft; do
   [ -f $completion ] && source $completion
 done
 
@@ -72,6 +70,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 complete -o default code
+complete -o default jq
 
 [ -e /usr/bin/terraform ] && complete -C /usr/bin/terraform terraform
 
@@ -106,7 +105,8 @@ for path in /usr/local/bin /opt/local/bin ~/.cargo/bin ~/.radicle/bin \
   [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
-which nvm >/dev/null 2>&1 && export PATH="$(dirname $(nvm which current)):$PATH"
+# which nvm > /dev/null 2>&1 && export PATH="$(dirname $(nvm which current)):$PATH"
+which nodenv > /dev/null 2>&1 && eval "$(nodenv init - bash)"
 
 for path in /var/lib/flatpak/exports/share ~/.local/share/flatpak/exports/share; do
   [ -d "$path" ] && export XDG_DATA_DIRS="$path:$XDG_DATA_DIRS"
@@ -194,6 +194,10 @@ export JAVACMD=$(which java)
 
 alias pauseamarok="dcop --user $USER amarok player playPause"
 
+alias disable-ipv6='sudo sysctl \
+-w net.ipv6.conf.lo.disable_ipv6=1 \
+-w net.ipv6.conf.all.disable_ipv6=1 \
+-w net.ipv6.conf.default.disable_ipv6=1'
 alias clip='xclip -sel clip'
 
 alias hornetlog='journalctl -u hornet.service -f'
@@ -203,6 +207,7 @@ alias lotuslog='journalctl -u lotus-daemon'
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 alias less='less -R'
 
+alias cpu-version=cpufetch
 alias ubuntu-version='lsb_release -a'
 alias ubuntu-version=neofetch
 
@@ -245,6 +250,7 @@ alias psql-stop='sudo systemctl stop postgresql.service'
 
 function findnewer() { find -newermt "$*"; }
 function findnnm() { find -name node_modules -prune -o -name "$*" -print; }
+function grepnnm() { rg --iglob '!node_modules' "$*"; }
 
 alias iotaseed='cat /dev/urandom | tr -dc A-Z9 | head -c${1:-81}'
 alias randhex='cat /dev/urandom | tr -dc A-F0-9 | head -c${1:-32}'
@@ -501,7 +507,7 @@ alias neo4j="\
     --env NEO4J_AUTH=neo4j/neo4j2 \
     neo4j:latest"
 
-function togspot() {
+function spottoggle() {
   wid=$(xdotool search --name 'Spotify$' | tail -1)
   echo "Got Window ID: $wid"
   wstate=$(xwininfo -id $wid | grep "Map State:")
