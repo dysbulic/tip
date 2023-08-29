@@ -337,6 +337,7 @@ alias ybyd='yarn build && yarn deploy'
 alias g='grep --color'
 
 function eb() { $EDITOR ~/.bashrc && source ~/.bashrc; }
+function tb() { which bat > /dev/null && bat ~/.bashrc || less ~/.bashrc; }
 alias rb='source ~/.bashrc' # reload bash
 
 alias wins="wmctrl -l"
@@ -366,6 +367,7 @@ function ipnspub() {
 # Always create intermediate directories
 alias mkdir="mkdir -p"
 
+function x2wav() { ffmpeg -i "$1" -c:a pcm_s16le -ar 16000 "${1%.*}.wav"; }
 alias img2svg=vtrace
 alias ttf2woff=sfnt2woff
 alias otf2woff=sfnt2woff
