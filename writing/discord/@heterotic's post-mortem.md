@@ -19,7 +19,7 @@ I make some unhappy noises at this and @metaverda chimes in to tell me to suck i
 @heterotic starts talking about removing people from the community. Everything is so oblique though that someone tries to contribute thinking @NeoPreacher is the one on trial.
 
 I never spoke on the call. I dislike not being able to edit. I have a deep seated belief that if I don't carefully manage other's perceptions of me, things can go horribly awry very quickly. Getting fired for posting a Confederate Flag to Slack, getting booted from the Futurist Party Slack for talking about learning yoga from dogs, and getting doxxed by @heterotic all stand as points in reality I believe reinforce my belief.
-fg
+
 The call ends and there is some back and forth in the chat with @heterotic repeatedly telling me (& my emojis) to "fuck off". Things quiet down and seem resolved. A few hours later, I posted a piece by DeMello on the futility of telling someone to wake up. @heterotic responded calling for me to be banned. Then she starts digging through my social media and posting it.
 
 She makes it through a bunch of Reddit posts, then found a picture of my house, then into Swarm. I post a piece by Rumi, _Moses and the Shepherd_ about radical expression and judging other's processes. She calls me an asshole. After about five hours of doxx, @METADREAMER comes in to say that @heterotic has been banned for being abusive, and deletes the bulk of what transpired from the server.

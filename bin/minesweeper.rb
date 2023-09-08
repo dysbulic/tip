@@ -2,7 +2,7 @@
 
 # Simple minesweeper program to prep for Triplebyte interview
 #
-# Author: Will Holcomb <w@dhappy.org>
+# Author: dysbulic <dys@dhappy.org>
 # Date: 2019/09/11
 
 require 'arg-parser'
