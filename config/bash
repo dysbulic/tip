@@ -98,10 +98,12 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+export BUN_INSTALL="$HOME/.bun"
+
 # ~/.local/lib/anaconda/bin
 for path in /usr/local/bin /opt/local/bin ~/.cargo/bin ~/.radicle/bin \
  ~/.rbenv/bin/ ~/.yarn/bin/ ~/.config/yarn/global/node_modules/.bin \
- ~/.../bin ~/.local/share/pnpm /usr/local/heroku/bin; do
+ ~/.../bin ~/.local/share/pnpm /usr/local/heroku/bin $BUN_INSTALL/bin; do
   [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
