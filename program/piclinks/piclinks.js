@@ -13,9 +13,9 @@ for await (const file of iter) {
   to = `${outdir}/${to}`
   const from = `${outdir.replace(/[^/]+/g, '..')}/${file}`
   try {
-    fs.access(to, fs.constants.F_OK)
+    await fs.promises.access(to, fs.constants.F_OK)
     console.debug(`Exists: ${to}`)
-  } catch {
+  } catch(err) {
     console.debug(`Link: ${from} → ${to}`)
     await fs.promises.symlink(from, to)
   }
