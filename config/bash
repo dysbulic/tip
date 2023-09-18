@@ -243,7 +243,13 @@ alias brave='brave-browser'
 alias i2pup='i2prouter start'
 alias i2pdown='i2prouter stop'
 
-alias fixVideo='echo "untrunc <same camera reference video> <broken video>"'
+function fixvideo() {
+  if [[ -z "$1" || -z "$2" ]]; then
+    echo "Usage: fixvideo <same camera reference video> <broken video>"
+    return 5
+  fi
+  untrunc -s "$1" "$2"
+}
 
 alias cb='xclip -selection c'
 
@@ -906,6 +912,20 @@ function sendhttpexample() {
 which xdg-open >/dev/null 2>/dev/null && alias start=xdg-open
 which gio >/dev/null 2>/dev/null && alias open='gio open' && alias launch='gio launch'
 
+function startweb() {
+  LOCALHOST=http://localhost:88
+  if [ -n "$1" ]; then
+    pushd "$1" > /dev/null || return 10
+  fi
+  DIR=$(pwd)
+  if [ -n "$1" ]; then
+    popd > /dev/null
+  fi
+  SHORT=${DIR//*\/...\//}
+  [ "$DIR" == "$SHORT" ] && SHORT=${DIR//*\/tip\/}
+  start "$LOCALHOST/$SHORT"
+}
+
 # In OSX, mplayer installs to the home directory
 # That `which` doesn't return false in OSX when the program isn't present is dumb
 function mplayer() {
@@ -966,7 +986,7 @@ function reencode() {
   }
 
   # mencoder is missing the -x264encopts option so I'm dumping the
-  # sources to files and reencoding, not idea, but I'm clueless
+  # sources to files and reencoding, not ideal, but I'm clueless
 
   if [ ! -e "$BASENAME.h264.mkv" ]; then
     # the framerate has to be set on active streaming files
