@@ -99,11 +99,24 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 export BUN_INSTALL="$HOME/.bun"
+export ANDROID_HOME="$HOME/Android/Sdk"
 
 # ~/.local/lib/anaconda/bin
-for path in /usr/local/bin /opt/local/bin ~/.cargo/bin ~/.radicle/bin \
- ~/.rbenv/bin/ ~/.yarn/bin/ ~/.config/yarn/global/node_modules/.bin \
- ~/.../bin ~/.local/share/pnpm /usr/local/heroku/bin $BUN_INSTALL/bin; do
+for path in \
+  ~/.../bin \
+  /usr/local/bin \
+  /opt/local/bin \
+  ~/.cargo/bin \
+  ~/.radicle/bin \
+  ~/.rbenv/bin/ \
+  ~/.yarn/bin/ \
+  ~/.config/yarn/global/node_modules/.bin \
+  ~/.local/share/pnpm \
+  /usr/local/heroku/bin \
+  $ANDROID_HOME/tools \
+  $ANDROID_HOME/tools/bin \
+  $BUN_INSTALL/bin
+do
   [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
@@ -131,6 +144,8 @@ done
 
 alias rm='rm -v'
 alias v=start
+
+alias vram="glxinfo | grep -E '(video|available) memory'"
 
 alias which-pkg='dpkg -S'
 
@@ -914,15 +929,15 @@ which gio >/dev/null 2>/dev/null && alias open='gio open' && alias launch='gio l
 
 function startweb() {
   LOCALHOST=http://localhost:88
-  if [ -n "$1" ]; then
+  if [[ -n "$1" && -d "$1" ]]; then
     pushd "$1" > /dev/null || return 10
   fi
   DIR=$(pwd)
-  if [ -n "$1" ]; then
-    popd > /dev/null
-  fi
-  SHORT=${DIR//*\/...\//}
+  SHORT=${DIR//*\/.../}
+  SHORT=${SHORT//\//}
   [ "$DIR" == "$SHORT" ] && SHORT=${DIR//*\/tip\/}
+  [ -n "$SHORT" ] SHORT="$SHORT/"
+  [[ -n "$1" && -f "$1" ]] && SHORT="$SHORT$1"
   start "$LOCALHOST/$SHORT"
 }
 
@@ -1108,3 +1123,4 @@ precmd_set_tip_dir() {
 # precmd_functions+=(precmd_set_tip_dir)
 
 [[ "$(pwd)" == ~ && -d ... ]] && cd ...
+. "$HOME/.cargo/env"
