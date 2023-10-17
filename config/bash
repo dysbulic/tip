@@ -101,7 +101,12 @@ unset __conda_setup
 export BUN_INSTALL="$HOME/.bun"
 export ANDROID_HOME="$HOME/Android/Sdk"
 
-# ~/.local/lib/anaconda/bin
+# which nvm > /dev/null 2>&1 && export PATH="$(dirname $(nvm which current)):$PATH"
+if which nodenv > /dev/null 2>&1; then
+  eval "$(nodenv init - bash)"
+  nodenv global > /dev/null
+fi
+
 for path in \
   ~/.../bin \
   /usr/local/bin \
@@ -109,19 +114,15 @@ for path in \
   ~/.cargo/bin \
   ~/.radicle/bin \
   ~/.rbenv/bin/ \
-  ~/.yarn/bin/ \
-  ~/.config/yarn/global/node_modules/.bin \
-  ~/.local/share/pnpm \
-  /usr/local/heroku/bin \
   $ANDROID_HOME/tools \
   $ANDROID_HOME/tools/bin \
+  ~/.local/share/pnpm \
+  $(npm list -g | head -n1) \
+  $(yarn global bin) \
   $BUN_INSTALL/bin
 do
   [ -d "$path" ] && export PATH="$path:$PATH"
 done
-
-# which nvm > /dev/null 2>&1 && export PATH="$(dirname $(nvm which current)):$PATH"
-which nodenv > /dev/null 2>&1 && eval "$(nodenv init - bash)"
 
 for path in /var/lib/flatpak/exports/share ~/.local/share/flatpak/exports/share; do
   [ -d "$path" ] && export XDG_DATA_DIRS="$path:$XDG_DATA_DIRS"
@@ -253,6 +254,7 @@ alias gaupol='flatpak run io.otsaloma.gaupol'
 alias shortwave='flatpak run de.haeckerfelix.Shortwave'
 alias opendrive='flatpak run io.github.liberodark.OpenDrive'
 alias tor='flatpak run com.github.micahflee.torbrowser-launcher'
+alias wezterm='flatpak run org.wezfurlong.wezterm'
 alias brave='brave-browser'
 
 alias i2pup='i2prouter start'
@@ -485,6 +487,13 @@ function d() {
 alias l='git log -p'
 
 alias ds='docker stop'
+function dconnect() {
+  if [ -z "$1" ]; then
+    echo "Usage: dconnect <container name> # to start a shell"
+    return 1
+  fi
+  docker exec -it "$1" bash
+}
 function dsname() {
   if [ -z "$1" ]; then
     echo "Usage: dsname <container name>"
@@ -518,7 +527,7 @@ alias homeassist="\
     --privileged \
     --restart=unless-stopped \
     -e TZ=America/New_York \
-    -v '/home/dys/.config/Home Assistant/' \
+    -v '/home/dys/.config/Home Assistant/:/config' \
     --network=host \
     ghcr.io/home-assistant/home-assistant:stable"
 alias neo4j="\
@@ -934,11 +943,13 @@ function startweb() {
   fi
   DIR=$(pwd)
   SHORT=${DIR//*\/.../}
-  SHORT=${SHORT//\//}
   [ "$DIR" == "$SHORT" ] && SHORT=${DIR//*\/tip\/}
-  [ -n "$SHORT" ] SHORT="$SHORT/"
+  [ -n "$SHORT" ] && SHORT="$SHORT/"
   [[ -n "$1" && -f "$1" ]] && SHORT="$SHORT$1"
   start "$LOCALHOST/$SHORT"
+  if [[ -n "$1" && -d "$1" ]]; then
+    popd > /dev/null
+  fi
 }
 
 # In OSX, mplayer installs to the home directory

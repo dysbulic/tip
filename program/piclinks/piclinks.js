@@ -10,7 +10,7 @@ const iter = new Glob('**/*.svg', { ignore: ['**/node_modules/**', '**/build/**'
 for await (const file of iter) {
   let to = file.replace(/(\/)?(svg)?\.svg$/, '')
   to = to.replace(/\//g, '⁄')
-  to = `${outdir}/${to}`
+  to = `${outdir}/${to}.svg`
   const from = `${outdir.replace(/[^/]+/g, '..')}/${file}`
   try {
     await fs.promises.access(to, fs.constants.F_OK)
