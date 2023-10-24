@@ -100,6 +100,8 @@ unset __conda_setup
 
 export BUN_INSTALL="$HOME/.bun"
 export ANDROID_HOME="$HOME/Android/Sdk"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk/$(ls $ANDROID_SDK_ROOT/ndk/ -1 --color=never | tail -n1 | tr -d " \n")"
 
 # which nvm > /dev/null 2>&1 && export PATH="$(dirname $(nvm which current)):$PATH"
 if which nodenv > /dev/null 2>&1; then
@@ -147,7 +149,7 @@ alias rm='rm -v'
 alias v=start
 
 alias vram="glxinfo | grep -E '(video|available) memory'"
-
+alias dbus-gui=d-feet
 alias which-pkg='dpkg -S'
 
 alias recent="last -ad | head -n 15"
@@ -255,6 +257,7 @@ alias shortwave='flatpak run de.haeckerfelix.Shortwave'
 alias opendrive='flatpak run io.github.liberodark.OpenDrive'
 alias tor='flatpak run com.github.micahflee.torbrowser-launcher'
 alias wezterm='flatpak run org.wezfurlong.wezterm'
+alias inkscape='flatpak run org.inkscape.Inkscape'
 alias brave='brave-browser'
 
 alias i2pup='i2prouter start'
@@ -533,13 +536,14 @@ alias homeassist="\
 alias neo4j="\
   docker run \
     --name argus \
-    -p7474:7474 -p7687:7687 \
-    -v $HOME/neo4j/data:/data \
-    -v $HOME/neo4j/logs:/logs \
-    -v $HOME/neo4j/import:/var/lib/neo4j/import \
-    -v $HOME/neo4j/plugins:/plugins \
-    --env NEO4J_AUTH=neo4j/neo4j2 \
+    --publish 7474:7474 --publish 7687:7687 \
+    --volume neo4j_data:/data \
+    --env NEO4J_AUTH=neo4j/password \
     neo4j:latest"
+    # -v $HOME/neo4j/logs:/logs \
+    # -v $HOME/neo4j/import:/import \
+    # -v $HOME/neo4j/plugins:/plugins \
+    # --user="$(id -u):$(getent group users | awk -F: '{ print $3 }')" \
 
 function spottoggle() {
   wid=$(xdotool search --name 'Spotify$' | tail -1)
