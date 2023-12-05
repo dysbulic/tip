@@ -85,15 +85,15 @@ which ipfs > /dev/null 2>&1 && eval "$(ipfs commands completion bash)"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-  __conda_setup="$(~'/.local/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/dys/.local/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
-  eval "$__conda_setup"
+    eval "$__conda_setup"
 else
-  if [ -f ~"/.local/anaconda3/etc/profile.d/conda.sh" ]; then
-    . ~"/.local/anaconda3/etc/profile.d/conda.sh"
-  else
-    export PATH="/home/dys/.local/anaconda3/bin:$PATH"
-  fi
+    if [ -f "/home/dys/.local/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/dys/.local/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/dys/.local/anaconda3/bin:$PATH"
+    fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
@@ -252,6 +252,8 @@ alias st='settitle'
 
 alias edit="$EDITOR" # Mistype: 8/12/2009
 
+alias monerod="$HOME/bin/monero/monerod --data-dir=$HOME/ssd/Monero\\ blockchain/"
+
 alias gaupol='flatpak run io.otsaloma.gaupol'
 alias shortwave='flatpak run de.haeckerfelix.Shortwave'
 alias opendrive='flatpak run io.github.liberodark.OpenDrive'
@@ -262,6 +264,8 @@ alias brave='brave-browser'
 
 alias i2pup='i2prouter start'
 alias i2pdown='i2prouter stop'
+
+alias restart-network='sudo systemctl restart NetworkManager.service'
 
 function fixvideo() {
   if [[ -z "$1" || -z "$2" ]]; then
@@ -432,10 +436,22 @@ function t() {
 }
 function tv() { git commit --no-verify -S -am "$*"; }
 function mit() {
+
   if [ -z "$*" ]; then
     git commit -S
   else
-    git commit -S -m "$*"
+    allfiles=1
+    for file in "$@"; do
+      if [ ! -f "$file" ]; then
+        allfiles=0
+        break
+      fi
+    done
+    if [ $allfiles -eq 1 ]; then
+      git commit -S -a "$@"
+    else
+      git commit -S -m "$*"
+    fi
   fi
 }
 function t-() { git commit --amend -S -m "$*"; }

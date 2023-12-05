@@ -1,0 +1,285 @@
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Animated WebVTT Test</title>
+    <style>
+      html, body {
+        margin: 0;
+      }
+      video {
+        width: 100%;
+        max-width: 100%;
+        max-height: 100vh;
+        position: relative;
+      }
+      .drifting {
+        position: absolute;
+        inset: 0;
+        font-size: max(7vw, 10vh);
+        translate: -50% -50%;
+        width: min-content;
+        height: min-content;
+      }
+      em-emoji-picker {
+        position: absolute;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <video controls muted autoplay>
+      <source src="Big Buck Bunny trailer.webm" type="video/webm"/>
+      <track default src="animated.vtt" kind="subtitles" label="Animated"/>
+    </video>
+    <div id="overlay">
+      <span class="drifting" data-start="2000" data-height="80">🦀</span>
+<!--
+      <span class="drifting" data-start="4000" data-height="80">🦀</span>
+      <span class="drifting" data-start="6000" data-height="80">🐎</span>
+      <span class="drifting" data-start="8000" data-height="80">🐞</span>
+      <span class="drifting" data-start="10000" data-height="80">🦞</span>
+      <span class="drifting" data-start="12000" data-height="80">🎡</span>
+      <span class="drifting" data-start="14000" data-height="80">🎸</span>
+      <span class="drifting" data-start="16000" data-height="80">🍥</span>
+      <span class="drifting" data-start="18000" data-height="80">🚨</span>
+      <span class="drifting" data-start="20000" data-height="80">🥎</span>
+      <span class="drifting" data-start="22000" data-height="80">⛺</span>
+      <span class="drifting" data-start="24000" data-height="80">😻</span>
+      <span class="drifting" data-start="26000" data-height="80">🧲</span>
+      <span class="drifting" data-start="28000" data-height="80">⛔</span>
+      <span class="drifting" data-start="30000" data-height="80">🧦</span>
+-->
+    </div>
+    <script>
+      const video = document.querySelector('video')
+      const overlay = document.querySelector('#overlay')
+    </script>
+    <script>
+      class Drifter {
+        constructor({ drifter, start, end, initial, height }) {
+          drifter ??= (() => {
+            const newElem = document.createElement('span')
+            newElem.classList.add('drifting')
+            overlay.appendChild(newElem)
+            return newElem
+          })()
+          this.elem = drifter
+
+          this.start = start ?? Number(drifter.dataset.start)
+          if(isNaN(this.start)) {
+            throw new Error(
+              '`.drifting` must have a `data-start` time or '
+              + '`Drifting` must have `{start}`.'
+            )
+          }
+
+          this.end = end ?? Number(drifter.dataset.end ?? this.start + 2500)
+
+          drifter.dataset.x ??= 20 + Math.random() * 60
+          this.initial = {
+            x: initial?.x ?? Number(drifter.dataset.x),
+            y: initial?.y ?? Number(drifter.dataset.y ?? 0),
+          }
+
+          this.height = height ?? Number(drifter.dataset.height ?? 40)
+        }
+
+        set left(x) {
+          this.elem.style.left = x
+        }
+
+        set top(y) {
+          this.elem.style.top = y
+        }
+
+        set opacity(o) {
+          this.elem.style.opacity = o
+        }
+
+        set content(content) {
+          this.elem.textContent = content
+        }
+
+        toString() {
+          return (
+            'Drifter('
+            + `${this.start}–${this.end}, `
+            + `<${this.initial.x}, ${this.initial.y}>, `
+            + `${this.elem.textContent})`
+          )
+        }
+      }
+    </script>
+    <script>
+      const drifting = document.querySelectorAll('.drifting')
+      const drifters = Array.from(drifting).map(
+        (drifter) => new Drifter({ drifter })
+      )
+
+      const updatePositions = () => {
+        const time = video.currentTime * 1000
+        drifters.forEach((drifter) => {
+          if(time >= drifter.start && time <= drifter.end) {
+            const progress = (time - drifter.start) / (drifter.end - drifter.start)
+            const x = `${drifter.initial.x + Math.cos(6 * Math.PI * progress)}%`
+            drifter.left = x
+            const y = `${-drifter.initial.y + 100 - (drifter.height * progress)}%`
+            drifter.top = y
+            drifter.opacity = 1 - progress
+          } else {
+            drifter.opacity = 0
+          }
+        })
+        requestAnimationFrame(updatePositions)
+      }
+      updatePositions()
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
+    <script>
+      let picker
+      let initialClick = true
+      let initialConfig
+      let wasPlaying = false
+      const startDrop = (at) => {
+        const max = {
+          x: document.documentElement.clientWidth,
+          y: document.documentElement.clientHeight,
+        }
+        picker.style.display = 'inline-block'
+        const box = {
+          w: picker.clientWidth, h: picker.clientHeight,
+        }
+        console.debug({
+          picker, max, at, box, dis: picker.style.display,
+        })
+        picker.style.left = `${at.x - picker.clientWidth / 2}px`
+        picker.style.top = (
+          `${Math.min(max.y - box.h, Math.max(0, at.y - picker.clientHeight / 2))}px`
+        )
+        picker.shadowRoot.querySelector('input').focus()
+        initialConfig = { at, time: video.currentTime * 1000 }
+        wasPlaying = !video.paused
+        video.pause()
+      }
+
+      const onClick = (evt) => {
+        evt.preventDefault()
+
+        const click = { x: evt.clientX, y: evt.clientY }
+        const max = {
+          x: document.documentElement.clientWidth,
+          y: document.documentElement.clientHeight,
+        }
+        const controlsHeight = 16 * 4
+        if(click.y > max.y - controlsHeight) return
+
+        startDrop(click)
+
+        console.debug('Removing Listener')
+        document.removeEventListener('click', onClick)
+      }
+
+      onEmojiSelect = (emoji, evt) => {
+        console.debug({ evt, initialConfig })
+        const drifter = new Drifter({
+          start: initialConfig.time,
+          initial: {
+            x: initialConfig.at.x / video.clientWidth * 100,
+            y: 100 - initialConfig.at.y / video.clientHeight * 100,
+          }
+        })
+        drifter.content = emoji.native
+        drifters.push(drifter)
+
+        console.debug({ new: drifter.toString() })
+
+        picker.style.display = 'none'
+        evt.cancelBubble = true
+        console.debug('Adding Listener')
+        document.addEventListener('click', onClick)
+        if(wasPlaying) video.play()
+      }
+
+      const onClickOutside = () => {
+        console.debug('click outside', initialClick)
+        if(!initialClick) {
+          picker.style.display = 'none'
+          console.debug('Adding Listener')
+          document.addEventListener('click', onClick)
+        }
+        initialClick = false
+      }
+      picker = new EmojiMart.Picker({ onEmojiSelect, onClickOutside })
+      const sheet = new CSSStyleSheet()
+      sheet.replaceSync('#root { height: max(50vh, 35ch) }')
+      picker.shadowRoot.adoptedStyleSheets.push(sheet)
+      document.body.appendChild(picker)
+      console.debug('Adding Listener')
+      document.addEventListener('click', onClick)
+    </script>
+    <script>
+      const keys = [
+        [...'`1234567890-='.split(''), 'Backspace'],
+        ['Tab', ...'qwertyuiop[]\\'.split('')],
+        ['Caps', ...'asdfghjkl;\''.split(''), 'Enter'],
+        ['Shift', ...'zxcvbnm,./'.split(''), 'Shift'],
+        ['Control', 'Alt', 'Meta', ' ', 'AltGraph', 'Meta', 'Ctrl'],
+      ]
+      const place = (key) => {
+        let iIdx = null
+        let jIdx = null
+        for(let i = 0; iIdx == null && i < keys.length; i++) {
+          jIdx = keys[i].indexOf(key)
+          if(jIdx >= 0) {
+            iIdx = i
+          }
+        }
+        if(iIdx == null) {
+          console.debug(`Key "${key}" not found.`)
+        } else {
+          const max = {
+            x: document.documentElement.clientWidth,
+            y: document.documentElement.clientHeight,
+          }
+          const position = {
+            x: max.x * jIdx / (keys[iIdx].length - 1),
+            y: max.y * iIdx / (keys.length - 1),
+          }
+          startDrop(position)
+        }
+      }
+      const onKeyDown = (evt) => {
+        if(evt.key === 'Escape') {
+          picker.style.display = 'none'
+        } else if(evt.key.startsWith('Arrow')) {
+          evt.preventDefault()
+          if(evt.key === 'ArrowLeft') {
+            video.currentTime -= 5
+          } else if(evt.key === 'ArrowRight') {
+            video.currentTime += 5
+          } else if(evt.key === 'ArrowUp') {
+            video.currentTime = (
+              Math.min(
+                video.duration,
+                video.currentTime + video.duration * 0.05
+              )
+            )
+          } else if(evt.key === 'ArrowDown') {
+            video.currentTime = (
+              Math.max(0, video.currentTime - video.duration * 0.05)
+            )
+          }
+        } else if(evt.key === ' ') {
+          if(video.paused) {
+            video.play()
+          } else {
+            video.pause()
+          }
+        } else {
+          evt.preventDefault()
+          place(evt.key)
+        }
+      }
+      document.addEventListener('keydown', onKeyDown)
+    </script>
+  </body>
