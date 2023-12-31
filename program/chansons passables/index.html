@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>iTunes Song List Processing</title>
+    <link rel="stylesheet" href="../styles/main.css" type="text/css" />
+    <style type="text/css">
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <p>This is a little project to help me with making a DVD of songs. I organized the list in <a href="http://www.apple.com/itunes/">iTunes</a>, but then needed both to publish a HTML list for review and change the file names from iTunes <code>%artist%/%album%/%track% - %title%</code> format. Since it isn't much to do, I put it all in a <a href="Makefile.iTunes">makefile</a>. Using my songs DVD, <a href="chansons_passables.txt">chansons passables</a>, as an example, the available targets are:</p>
+    <ul>
+      <li><code>make "chansons passables"</code> &bull; is equivalent to <code>make "chansons passables.songs.txt"</code></li>
+      <li><code>make "chansons passables.songs.txt"</code> &bull; will list one song per line in <code>%artist% - %title%</code> format</li>
+      <li><code>make "chansons passables.table.html"</code> &bull; will generate a HTML table of the songs</li>
+      <li><code>make "chansons passables-dir"</code> &bull; will generate a directory of hard links to the files in the playlist with the names changed to <code>%artist% - %title%.%ext%</code> format</li>
+      <li><code>make "chansons passables-compressed"</code> &bull; is like <code>-dir</code>, but will use <a href="http://lame.sourceforge.net"><acronym title="LAME Ain't an Mp3 Encoder">LAME</acronym></a> and <a href="http://id3lib.sourceforge.net">id3lib</a> to convert all fixed rate files above a certain bitrate to <acronym title="Variable Bitrate">VBR</acronym> instead of hard linking them. (<em>As a word of warning, id3lib uses v2.3 tags and iTunes uses v2.2, and cover art doesn't display in iTunes for the compressed files.</em>)</li>
+    </ul>
+    <p>The HTML table is minimalistic, for example, <a href="chansons_passables.table.html">chansons_passables.table.html</a>.</p>
+  </body>
+</html>

@@ -1,6 +1,0 @@
-create table subjects (id int auto_increment primary key,
-                       name text not null, time TIMESTAMP);
-create table hashes (id int auto_increment primary key,
-                     key int not null references subjects(id),
-                     value int not null references subjects(id),
-                     time TIMESTAMP);

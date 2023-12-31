@@ -156,6 +156,11 @@ alias recent="last -ad | head -n 15"
 alias mailq="sudo mailq -Ac; sudo mailq"
 alias putmail="sudo /usr/sbin/sendmail -q"
 
+alias do-backup="cd ~ && \
+rsync --archive --acls \
+  --info=progress1,stats3,del,symsafe,backup,name1 \
+  --xattrs --atimes --hard-links \
+  --exclude=backup/ . backup"
 alias copypart='rsync -axHAWXS --numeric-ids --info=progress2'
 
 alias days="date=\$(date +%Y/%m/%d); \
@@ -953,13 +958,19 @@ function sendhttpexample() {
 }
 
 # For invoking the correct handler for files from the command line
-which xdg-open >/dev/null 2>/dev/null && alias start=xdg-open
+which xdg-open >/dev/null 2>/dev/null && \
+  function start() {
+    for file in "$@"; do
+      xdg-open "$file"
+    done
+  }
 which gio >/dev/null 2>/dev/null && alias open='gio open' && alias launch='gio launch'
 
 function startweb() {
   LOCALHOST=http://localhost:88
   if [[ -n "$1" && -d "$1" ]]; then
     pushd "$1" > /dev/null || return 10
+    _lweb_descended=1
   fi
   DIR=$(pwd)
   SHORT=${DIR//*\/.../}
@@ -967,8 +978,18 @@ function startweb() {
   [ -n "$SHORT" ] && SHORT="$SHORT/"
   [[ -n "$1" && -f "$1" ]] && SHORT="$SHORT$1"
   start "$LOCALHOST/$SHORT"
-  if [[ -n "$1" && -d "$1" ]]; then
+  if [ -n "$_lweb_descended" ]; then
     popd > /dev/null
+    unset _lweb_descended
+  fi
+}
+function lweb() {
+  if [ -z "$1" ]; then
+    startweb
+  else
+    for file in "$@"; do
+      startweb "$file"
+    done
   fi
 }
 

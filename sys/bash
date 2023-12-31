@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Do I have a line?
+
+[ -e ".~" ] || echo "Error: Couldn't get a line." && exit
+
+# Is it live?
+
+#[ -d ".~" ] || cat -A .~
+
+# Can I get a prompt?
+#[ -d '.../sys/command/' ] && for file in '.../sys/command/*'; do echo "$file"; exec "$file"; done
+
+CMD=".~/.../sys/command/py"
+[ -e "$CMD" ] && "$CMD"
+
+
