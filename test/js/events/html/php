@@ -1,0 +1,24 @@
+<?php
+header("Content-type: application/xhtml+xml");
+print '<?xml version="1.0" encoding="UTF-8" standalone="no" ?' . ">\n"
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Events Test</title>
+    <style type="text/css">/*<![CDATA[*/
+    /*]]>*/</style>
+    <script type="application/javascript;version=1.7" src="ActiveObject.js" />
+    <script type="application/javascript;version=1.7">//<![CDATA[
+var testObj = new ActiveObject();
+testObj.add('testProp');
+testObj.testProp = 4;
+testObj.bind('change', function(propName, val) { alert("Changed: " + propName + " = " + val); });
+testObj.testProp = 5;
+    //]]></script>
+  </head>
+  <body>
+<?php //require_once('.../sys/lib/urchin/tracker/php') ?>
+  </body>
+</html>

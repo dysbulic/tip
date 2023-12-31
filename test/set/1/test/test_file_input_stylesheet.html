@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>File Input Test</title>
+    <style type="text/css">
+      input, textarea {
+        border: solid;
+        border-width: 1px;
+        width: 100%;
+      }
+      input:hover, textarea:hover {
+        background-color: rgb(149, 155, 179);
+      }
+      table {
+        margin-right: auto;
+        margin-left: auto;
+        width: 75%;
+      }
+      td, th {
+        background-color: rgb(202, 205, 217);
+      }
+    </style>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <form enctype="multipart/form-data" method="post" action="">
+      <table>
+        <tr>
+          <th>Title:</th>
+          <td colspan="2"><input type="text" name="title" /></td>
+        </tr>
+        <tr>
+          <th>Description:</th>
+          <td colspan="2"><textarea name="description" rows="3" cols="3"></textarea></td>
+        </tr>
+        <tr>
+          <th>Time Taken:</th>
+          <td colspan="2"><input type="text" name="taken_time" /></td>
+        </tr>
+        <tr>
+          <th>File:</th>
+          <td colspan="2"><input type="file" name="file" /></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td><input class="button" type="reset"/></td>
+          <td><input class="button" type="submit" value="Add Picture"/></td>
+        </tr>
+      </table>
+    </form>
+    <p>The stylesheet associated with this page is:</p>
+    <pre>      input, textarea {
+        border: solid;
+        border-width: 1px;
+        width: 100%;
+      }
+      input:hover, textarea:hover {
+        background-color: rgb(149, 155, 179);
+      }
+      table {
+        margin-right: auto;
+        margin-left: auto;
+        width: 75%;
+      }
+      td, th {
+        background-color: rgb(202, 205, 217);
+      }</pre>
+    <p>There are what I believe to be the following errors in how this
+    form is rendered in mozilla 0.99.</p>
+    <ol>
+      <li>The :hover pseudo elements for input and text area only
+      triggered when the cursor is on the border and not when it is
+      over the actual element</li>
+      <li>The :hover pseudo element is triggered when text is typed
+      into an input regardless of the position of the cursor. By <a
+      href="http://www.w3.org/TR/REC-CSS2/selector.html#dynamic-pseudo-classes">the
+      definition</a> it seems as though the :focus element should be
+      triggered, but not :hover</li>
+      <li>The browse button of the file input has an extra ~15% on the
+      bottom. The text is not vertically centered in the text box or
+      on the button</li>
+      <li>The reset button does not affect the file input</li>
+      <li>The file input element seems to be responding to the width:
+      100% (as evidinced by the trigger of the :hover), but the text
+      area and button are not resized</li>
+    </ol>
+    <p>Additionally some sort of mechanism for styling the elements in
+    the form input would be very useful to developers using
+    stylesheets to alter form appearances. In the css3 spec it alludes
+    to this issue being one of document architecture, but whatever the
+    case some way to make that file dialogue match the appearance of
+    the other elements would be nice.</p>
+  </body>
+</html>

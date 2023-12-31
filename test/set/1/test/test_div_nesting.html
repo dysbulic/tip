@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Div Nesting Test</title>
+    <style type="text/css">
+      div {
+        border: thin solid black;
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+      div:hover {
+        color: white;
+        background-color: blue;
+      }
+    </style>
+    <script type="text/javascript">
+    </script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <h1>Test Nesting Divs:</h1>
+    <p>I would like to have one of those little context menus that drop down, but I don't really want to have to muck about specifying the length and width and what not. I am hoping that it is posible to nest some divs in such a way that the browser can handle the layout...</p>
+    <div style="float: left;">
+      <div style="">Parent</div>
+      <div style="position: bottom;">
+        <div style="position: bottom;">One</div>
+        <div style="position: bottom;">Two</div>
+        <div style="position: bottom;">Three is long</div>
+      </div>
+    </div>
+    <div style="float: left;">
+      Parent
+      <div style="float: left;">One</div>
+      <div style="float: left;">Two</div>
+      <div style="float: left;">Three</div>
+    </div>
+    <!-- The floated element has no height, so this text is misplaced -->
+    <br />
+    <br />
+    <br />
+    <br />
+    <p>Actually, for the layout to work the child menus have to be positioned absolutely to avoid causing a change in the layout whenever a submenu is dropped down... I guess that I'll just have to place the menus using javascript to get the rendered sizes.</p>
+    <hr  />
+    <div id="testing-1" style="float: left;"><a>Blah</a></div>
+    <div id="testing-2" style="float: left;"><a>Blah</a></div>
+    <div id="testing-3" style="float: right; clear: right;"><a>Blah</a></div>
+    <div id="sub" style="position: absolute; text-align: center; left: 50%; top: 35%; height: 15%; vertical-align: middle;"><span style="vertical-align: middle;">Absolutely Not Vertically Aligned</span></div>
+    <script type="text/javascript">
+      var items = ["testing-1", "testing-2", "testing-3"];
+      for(var i = 0; i < items.length; i++) {
+        var element = document.getElementById(items[i]);
+        if(this.addEventListener) {
+          element.addEventListener("mouseover", moveMenu, false);
+        } else if(this.attachEvent) {
+          element.attachEvent("onmouseover", moveMenu);
+        } else {
+          alert("Could not set up event listener");
+        }
+      }
+      function moveMenu(event) {
+        if(event.target) {
+          var source = event.target;
+        } else if(event.srcElement) {
+          var source = event.srcElement;
+        } else {
+          alert("Could not get event target");
+          return false;
+        }
+        if(source.tagName.toLowerCase() == "div") {
+          var sub = document.getElementById("sub");
+          // Width Top Height Left // scroll Width Height
+          sub.style.left = source.offsetLeft + "px";
+          sub.style.top = source.offsetTop + source.offsetHeight + "px";
+        }
+      }
+    </script>
+    <p>I think that is can be done; I just have to mess with creating the hierarchy...</p>
+  </body>
+</html>

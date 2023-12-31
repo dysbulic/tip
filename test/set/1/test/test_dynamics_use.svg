@@ -1,0 +1,24 @@
+<svg viewBox="0 0 10 10" width="100%" height="100%" onload="add_use()"
+ xmlns="http://www.w3.org/2000/svg"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+ a:scriptImplementation="Adobe">
+  <script type="text/ecmascript" a:scriptImplementation="Adobe">
+    // Doesn't exist
+    // document.addEventListener("load", function () { alert("d") }, false);
+    // this.addEventListener("load", function () { alert("t") }, false);
+    // Doesn't do anything
+    document.rootElement.addEventListener("load", function () { alert("r") }, false);
+    function add_use() {
+      var use_elm = document.createElement("use");
+      use_elm.setAttribute("x", "5");
+      use_elm.setAttribute("y", "5");
+      use_elm.setAttribute("xlink:href", "#target");
+      document.rootElement.appendChild(use_elm);
+    }
+  </script>
+  <defs>
+    <circle id="target" r="2.5" style="fill: none; stroke: black;"/>
+  </defs>
+  <use x="5" y="2.5" xlink:href="#target"/>
+</svg>

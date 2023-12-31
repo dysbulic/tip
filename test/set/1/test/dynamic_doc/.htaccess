@@ -1,0 +1,20 @@
+AddType application/x-httpd-php-source .phps
+AddType text/plain .htaccess
+
+<Files ".htaccess">
+  Order allow,deny
+  Allow from all
+</Files>
+
+RewriteEngine on
+RewriteOptions inherit
+
+# RewriteLog logs/rewrite.log
+# RewriteLogLevel 3
+
+RewriteCond %{REQUEST_FILENAME} !.htaccess$
+RewriteCond %{REQUEST_FILENAME} !index.phps?$
+RewriteCond %{REQUEST_URI} ^(.*)/([^/]*)$
+#RewriteCond %{REQUEST_FILENAME} ^(.*)/([^/]*)$
+
+RewriteRule ^.*$ %1/index.php

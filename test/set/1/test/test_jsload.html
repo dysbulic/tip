@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Script Load Test</title>
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+      function loadScript(filename) {
+        alert("Loading script: " + filename);
+
+        var script = document.createElement("script");
+        script.setAttribute("type", "text/javascript");
+        script.setAttribute("src", filename);
+        document.getElementsByTagName("head")[0].appendChild(script);
+        
+        alert("Done loading: " + typeof(num));
+      }
+    </script>
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-939849-1";
+      urchinTracker();
+    </script>
+  </head>
+  <body>
+    <form action="" onsubmit="loadScript(getElementById('file').value); return false;">
+      <input type="submit" value="Load" />
+      <input id="file" type="text" value="sayhi.js" />
+    </form>
+  </body>
+</html>
