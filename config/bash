@@ -258,6 +258,8 @@ alias edit="$EDITOR" # Mistype: 8/12/2009
 
 alias monerod="$HOME/bin/monero/monerod --data-dir=$HOME/ssd/Monero\\ blockchain/"
 
+alias sandbox-permissions='flatpak run com.github.tchx84.Flatseal'
+alias helvum='flatpak run org.pipewire.Helvum'
 alias gaupol='flatpak run io.otsaloma.gaupol'
 alias shortwave='flatpak run de.haeckerfelix.Shortwave'
 alias opendrive='flatpak run io.github.liberodark.OpenDrive'
@@ -321,7 +323,9 @@ alias bat='batcat'
 alias fd='fdfind --color=always'
 alias lls='ls -l'
 alias listio='iotop -oPa -d 2'
+alias listurls='katana -u'
 alias meminfo='sudo dmidecode -t memory'
+alias ipinfo='netlas host'
 
 alias idg='ipfs dag get'
 alias ils='ipfs ls'
@@ -407,6 +411,7 @@ function x2wav() { ffmpeg -i "$1" -c:a pcm_s16le -ar 16000 "${1%.*}.wav"; }
 alias img2svg=vtrace
 alias ttf2woff=sfnt2woff
 alias otf2woff=sfnt2woff
+function 2french() { cat "$*" | trans :fr; }
 alias fffilters='ffmpeg -filters'
 alias framecount='ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0'
 
@@ -965,6 +970,8 @@ which xdg-open >/dev/null 2>/dev/null && \
   }
 alias r=start
 which gio >/dev/null 2>/dev/null && alias open='gio open' && alias launch='gio launch'
+
+alias duck-duck-go='ddgr'
 
 function startweb() {
   LOCALHOST=http://localhost:88
