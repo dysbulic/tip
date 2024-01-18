@@ -33,22 +33,6 @@
     </video>
     <div id="overlay">
       <span class="drifting" data-start="2000" data-height="80">🦀</span>
-<!--
-      <span class="drifting" data-start="4000" data-height="80">🦀</span>
-      <span class="drifting" data-start="6000" data-height="80">🐎</span>
-      <span class="drifting" data-start="8000" data-height="80">🐞</span>
-      <span class="drifting" data-start="10000" data-height="80">🦞</span>
-      <span class="drifting" data-start="12000" data-height="80">🎡</span>
-      <span class="drifting" data-start="14000" data-height="80">🎸</span>
-      <span class="drifting" data-start="16000" data-height="80">🍥</span>
-      <span class="drifting" data-start="18000" data-height="80">🚨</span>
-      <span class="drifting" data-start="20000" data-height="80">🥎</span>
-      <span class="drifting" data-start="22000" data-height="80">⛺</span>
-      <span class="drifting" data-start="24000" data-height="80">😻</span>
-      <span class="drifting" data-start="26000" data-height="80">🧲</span>
-      <span class="drifting" data-start="28000" data-height="80">⛔</span>
-      <span class="drifting" data-start="30000" data-height="80">🧦</span>
--->
     </div>
     <script>
       const video = document.querySelector('video')
@@ -152,7 +136,7 @@
         console.debug({
           picker, max, at, box, dis: picker.style.display,
         })
-        picker.style.left = `${at.x - picker.clientWidth / 2}px`
+        picker.style.left = `${at.x/* - picker.clientWidth / 2*/}px`
         picker.style.top = (
           `${Math.min(max.y - box.h, Math.max(0, at.y - picker.clientHeight / 2))}px`
         )
