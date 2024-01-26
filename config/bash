@@ -1,4 +1,4 @@
-#!/bin/bash
+  #!/bin/bash
 
 [[ "$-" != *i* ]] && return # If not running interactively, don't do anything
 
@@ -151,11 +151,13 @@ alias vram="glxinfo | grep -E '(video|available) memory'"
 alias dbus-gui=d-feet
 alias which-pkg='dpkg -S'
 
+alias nr="npm run"
+alias ni="npm install"
 alias recent="last -ad | head -n 15"
 alias mailq="sudo mailq -Ac; sudo mailq"
 alias putmail="sudo /usr/sbin/sendmail -q"
 
-alias do-backup="cd ~ && \
+alias sync-backup="cd ~ && \
 rsync --archive --acls \
   --info=progress1,stats3,del,symsafe,backup,name1 \
   --xattrs --atimes --hard-links \
@@ -690,6 +692,44 @@ HELP
   IN="$1"
   OUT="${1%.*}.rotated.${1##*.}"
   ffmpeg -i "$IN" -vf "transpose=1" "$OUT"
+}
+
+function timeToSeconds() {
+  if [[ -z "$1" ]]; then
+    cat <<HELP
+Usage: timeToSeconds <timestamp>
+ Exe: timeToSeconds 00:05:30
+   Prints 330, the number of seconds
+   in five minutes & 30 seconds.
+HELP
+   return 4
+  fi
+  IFS=':' read -r -a PART <<<$1
+  readarray -td '' PART < <(printf '%s\0' "${PART[@]}" | tac -s '')
+  [ -z "${PART[1]}" ] && PART[1]=0
+  [ -z "${PART[2]}" ] && PART[2]=0
+  SECS=$(((((${PART[2]} * 60) + ${PART[1]}) * 60) + ${PART[0]}))
+  echo $SECS
+}
+function blur() {
+  if [[ -z "$1" || -z "$2" || -z "$3" ]]; then
+    cat <<HELP
+Usage: blur <timestamp> <duration> <file>
+ Exe: blur 00:05:30 20 recording.mp4
+   Produces a copy of the recording with
+   the entire frame blurred out for 20
+   seconds stating at 5 minutes and 30
+   seconds.
+HELP
+   return 4
+  fi
+  START=$(timeToSeconds "$1")
+  DUR=$(timeToSeconds "$2")
+  END=$(($START + $DUR))
+  OUT="${3%.*}.blurred.${3##*.}"
+
+  echo "Writing To: $OUT"
+  ffmpeg -i "$3" -filter_complex "[0:v]boxblur=30:enable='between(t,$START,$END)'" -- "file:$OUT"
 }
 
 function mp42gif() {
