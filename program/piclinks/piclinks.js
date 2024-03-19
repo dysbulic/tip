@@ -16,7 +16,11 @@ for await (const file of iter) {
     await fs.promises.access(to, fs.constants.F_OK)
     console.debug(`Exists: ${to}`)
   } catch(err) {
-    console.debug(`Link: ${from} → ${to}`)
-    await fs.promises.symlink(from, to)
+    try {
+      console.debug(`Link: ${from} → ${to}`)
+      await fs.promises.symlink(from, to)
+    } catch(err) {
+      console.error(`Error: ${err.message}`)
+    }
   }
 }

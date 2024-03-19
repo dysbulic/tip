@@ -1,4 +1,5 @@
-  #!/bin/bash
+
+#!/bin/bash
 
 [[ "$-" != *i* ]] && return # If not running interactively, don't do anything
 
@@ -10,10 +11,62 @@ export LC_ALL=$LANG
 export LC_COLLATE="C" # case insensitive Nautulis filename sorting
 export DOCKER_HOST="unix:///run/user/$(id -u)/docker.sock"
 export GOPATH=~/.local/share/go
+export PNPM_HOME="/home/dys/.local/share/pnpm"
 export NVM_DIR="$HOME/.nvm"
+
+export BUN_INSTALL="$HOME/.bun"
+export ANDROID_HOME="$HOME/Android/Sdk"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk/$(ls $ANDROID_SDK_ROOT/ndk/ -1 --color=never | tail -n1 | tr -d " \n")"
 
 export RSYNC_RSH=ssh
 export CVS_RSH=ssh
+
+for path in \
+ /usr/local/bin/ \
+ /opt/local/bin/ \
+ ~/.cargo/bin/ \
+ ~/.radicle/bin/ \
+ ~/.rbenv/bin/ \
+ $ANDROID_HOME/tools \
+ $ANDROID_HOME/tools/bin \
+ $BUN_INSTALL/bin/ \
+ $PNPM_HOME \
+ ~/.local/bin/ \
+ ~/.../bin/ \
+ ~/bin/; do
+  [ -d "$path" ] && export PATH="$path:$PATH"
+done
+
+# which nvm > /dev/null 2>&1 && export PATH="$(dirname $(nvm which current)):$PATH"
+if which nodenv > /dev/null 2>&1; then
+  eval "$(nodenv init - bash)"
+  nodenv global > /dev/null
+fi
+
+for path in \
+  $(npm list -g | head -n1) \
+  $(yarn global bin)
+  do
+  [ -d "$path" ] && export PATH="$path:$PATH"
+done
+
+
+__conda_setup="$('/home/dys/.local/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+  if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/dys/.local/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/dys/.local/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/dys/.local/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+
+for path in /var/lib/flatpak/exports/share ~/.local/share/flatpak/exports/share; do
+  [ -d "$path" ] && export XDG_DATA_DIRS="$path:$XDG_DATA_DIRS"
+done
 
 if [ "$PS1" ]; then
   host=$(hostname)
@@ -51,9 +104,10 @@ shopt -s globstar
 
 bind 'set match-hidden-files off' # Ignore hidden files in tab completion
 
-for completion in /etc/bash_completion.d/git-prompt \
+for completion in \
+ /etc/bash_completion.d/git-prompt \
  /usr/share/bash-completion/completions/git \
- .../linux/distro/ubuntu/shell/config/bash \
+ ~/.../linux/distro/ubuntu/shell/config/bash \
  ~/.config/tabtab/__tabtab.bash \
  ~/bin/google-cloud-sdk/path.bash.inc \
  ~/bin/google-cloud-sdk/completion.bash.inc \
@@ -62,8 +116,9 @@ for completion in /etc/bash_completion.d/git-prompt \
   [ -f $completion ] && source $completion
 done
 
-which pack >/dev/null 2>&1 && source "$(pack completion)"
-which starship >/dev/null 2>&1 && eval "$(starship init bash)"
+which npm > /dev/null 2>&1 && source <(npm completion)
+which pack > /dev/null 2>&1 && source "$(pack completion)"
+which starship > /dev/null 2>&1 && eval "$(starship init bash)"
 
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
   source /etc/bash_completion
@@ -82,53 +137,6 @@ command -v direnv > /dev/null 2>&1 && eval "$(direnv hook bash)"
 which kubectl > /dev/null 2>&1 && source <(kubectl completion bash)
 which rbenv > /dev/null 2>&1 && eval "$(rbenv init -)"
 which ipfs > /dev/null 2>&1 && eval "$(ipfs commands completion bash)"
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/dys/.local/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/dys/.local/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/dys/.local/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/dys/.local/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
-export BUN_INSTALL="$HOME/.bun"
-export ANDROID_HOME="$HOME/Android/Sdk"
-export ANDROID_SDK_ROOT="$ANDROID_HOME"
-export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk/$(ls $ANDROID_SDK_ROOT/ndk/ -1 --color=never | tail -n1 | tr -d " \n")"
-
-# which nvm > /dev/null 2>&1 && export PATH="$(dirname $(nvm which current)):$PATH"
-if which nodenv > /dev/null 2>&1; then
-  eval "$(nodenv init - bash)"
-  nodenv global > /dev/null
-fi
-
-for path in \
-  ~/.../bin \
-  /usr/local/bin \
-  /opt/local/bin \
-  ~/.cargo/bin \
-  ~/.radicle/bin \
-  ~/.rbenv/bin/ \
-  $ANDROID_HOME/tools \
-  $ANDROID_HOME/tools/bin \
-  ~/.local/share/pnpm \
-  $(npm list -g | head -n1) \
-  $(yarn global bin) \
-  $BUN_INSTALL/bin
-do
-  [ -d "$path" ] && export PATH="$path:$PATH"
-done
-
-for path in /var/lib/flatpak/exports/share ~/.local/share/flatpak/exports/share; do
-  [ -d "$path" ] && export XDG_DATA_DIRS="$path:$XDG_DATA_DIRS"
-done
 
 [ -z "$PS1" ] || (
   which fortune >/dev/null 2>&1 && (
@@ -150,6 +158,7 @@ alias rm='rm -v'
 alias vram="glxinfo | grep -E '(video|available) memory'"
 alias dbus-gui=d-feet
 alias which-pkg='dpkg -S'
+alias pw-graph=qpwgraph
 
 alias nr="npm run"
 alias ni="npm install"
@@ -261,13 +270,16 @@ alias edit="$EDITOR" # Mistype: 8/12/2009
 alias monerod="$HOME/bin/monero/monerod --data-dir=$HOME/ssd/Monero\\ blockchain/"
 
 alias sandbox-permissions='flatpak run com.github.tchx84.Flatseal'
-alias helvum='flatpak run org.pipewire.Helvum'
 alias gaupol='flatpak run io.otsaloma.gaupol'
 alias shortwave='flatpak run de.haeckerfelix.Shortwave'
 alias opendrive='flatpak run io.github.liberodark.OpenDrive'
 alias tor='flatpak run com.github.micahflee.torbrowser-launcher'
 alias wezterm='flatpak run org.wezfurlong.wezterm'
 alias inkscape='flatpak run org.inkscape.Inkscape'
+alias pw-helvum='flatpak run org.pipewire.Helvum'
+alias pw-coppwr='flatpak run io.github.dimtpap.coppwr'
+alias pw-effects='flatpak run com.github.wwmm.easyeffects'
+alias vpup='flatpak run pro.vpup.vpuppr'
 alias brave='brave-browser'
 
 alias i2pup='i2prouter start'
@@ -515,6 +527,7 @@ function d() {
   ) | bat
 }
 alias l='git log -p'
+alias lf='git log --name-status'
 
 alias ds='docker stop'
 function dconnect() {
@@ -1222,4 +1235,3 @@ precmd_set_tip_dir() {
 # precmd_functions+=(precmd_set_tip_dir)
 
 [[ "$(pwd)" == ~ && -d ... ]] && cd ...
-. "$HOME/.cargo/env"
