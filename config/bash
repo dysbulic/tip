@@ -129,6 +129,7 @@ complete -o default jq
 
 [ -e /usr/bin/terraform ] && complete -C /usr/bin/terraform terraform
 
+[ -e ~/bin/export-esp.sh ] && source ~/bin/export-esp.sh
 [ -e ~/bin/bash-preexec.sh ] && source ~/bin/bash-preexec.sh
 
 which pyenv > /dev/null 2>&1 && eval "$(pyenv init -)"
@@ -166,11 +167,11 @@ alias recent="last -ad | head -n 15"
 alias mailq="sudo mailq -Ac; sudo mailq"
 alias putmail="sudo /usr/sbin/sendmail -q"
 
-alias sync-backup="cd ~ && \
-rsync --archive --acls \
-  --info=progress1,stats3,del,symsafe,backup,name1 \
-  --xattrs --atimes --hard-links \
-  --exclude=backup/ . backup"
+alias sync-backup="sudo rsync --archive --acls \
+   --info=progress2,stats3,copy,del,symsafe,backup,name2,skip2,misc2 \
+   --xattrs --atimes --hard-links --delete-after \
+   --exclude={'/dev/*','/proc/*','/sys/*','/tmp/*','/run/*','/mnt/*','/media/*','/snap/*','/lost+found'} \
+   --exclude=$HOME/backup/ / $HOME/backup"
 alias copypart='rsync -axHAWXS --numeric-ids --info=progress2'
 
 alias days="date=\$(date +%Y/%m/%d); \
