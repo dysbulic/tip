@@ -749,8 +749,8 @@ HELP
 function mp42gif() {
   if [[ -z "$1" ]]; then
     cat <<HELP
-Usage: mp42gif <file #1>
- Exe: mp42gif stream.mp4
+Usage: vid2gif <file #1>
+ Exe: vid2gif stream.mp4
   Produces stream.gif which contains
   the contents of the file an an animated GIF.
 HELP
@@ -834,11 +834,11 @@ HELP
           -qmin 7 -qmax 39 -crf 10 -c:a libvorbis "$OUT"
 }
 
-function extAudio() {
+function vid2m4a() {
   if [[ -z "$1" ]]; then
     cat <<HELP
-Usage: extAudio <file #1>
- Exe: extAudio stream.mp4
+Usage: vid2m4a <file #1>
+ Exe: vid2m4a stream.mp4
   Produces stream.m4a which contains
   the audio of the file.
 HELP
@@ -1025,7 +1025,7 @@ which xdg-open >/dev/null 2>/dev/null && \
 alias r=start
 which gio >/dev/null 2>/dev/null && alias open='gio open' && alias launch='gio launch'
 
-alias duck-duck-go='ddgr'
+alias duck-duck-go='ddg'
 
 function startweb() {
   LOCALHOST=http://localhost:88
