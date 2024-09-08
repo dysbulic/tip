@@ -16,7 +16,7 @@ export NVM_DIR="$HOME/.nvm"
 export BUN_INSTALL="$HOME/.bun"
 export ANDROID_HOME="$HOME/Android/Sdk"
 export ANDROID_SDK_ROOT="$ANDROID_HOME"
-export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk/$(ls $ANDROID_SDK_ROOT/ndk/ -1 --color=never | tail -n1 | tr -d " \n")"
+export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk/$(ls $ANDROID_SDK_ROOT/ndk/ -1 --color=never 2> /dev/null | tail -n1 | tr -d " \n")"
 
 export RSYNC_RSH=ssh
 export CVS_RSH=ssh
@@ -39,10 +39,11 @@ for path in \
 done
 
 # which nvm > /dev/null 2>&1 && export PATH="$(dirname $(nvm which current)):$PATH"
-if which nodenv > /dev/null 2>&1; then
-  eval "$(nodenv init - bash)"
-  nodenv global > /dev/null
-fi
+# if which nodenv > /dev/null 2>&1; then
+#   eval "$(nodenv init - bash)"
+#   nodenv global > /dev/null
+# fi
+eval "$(fnm env --use-on-cd)"
 
 for path in \
   $(npm list -g | head -n1) \
@@ -161,6 +162,8 @@ alias dbus-gui=d-feet
 alias which-pkg='dpkg -S'
 alias pw-graph=qpwgraph
 
+alias search-pkgs='find -name package.json -not -path "**/node_modules/**" | xargs grep --color=always'
+
 alias nr="npm run"
 alias ni="npm install"
 alias recent="last -ad | head -n 15"
@@ -169,9 +172,10 @@ alias putmail="sudo /usr/sbin/sendmail -q"
 
 alias sync-backup="sudo rsync --archive --acls \
    --info=progress2,stats3,copy,del,symsafe,backup,name2,skip2,misc2 \
-   --xattrs --atimes --hard-links --delete-after \
-   --exclude={'/dev/*','/proc/*','/sys/*','/tmp/*','/run/*','/mnt/*','/media/*','/snap/*','/lost+found'} \
-   --exclude=$HOME/backup/ / $HOME/backup"
+   --delete --progress --stats \
+   --xattrs --atimes --hard-links \
+   --exclude={'/dev','/proc','/sys','/tmp','/run','/mnt','/media','/snap','/lost+found'} \
+   --exclude=$HOME/backup/ --exclude=$HOME/ssd/ / $HOME/backup"
 alias copypart='rsync -axHAWXS --numeric-ids --info=progress2'
 
 alias days="date=\$(date +%Y/%m/%d); \
