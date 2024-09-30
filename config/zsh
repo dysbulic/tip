@@ -251,11 +251,9 @@ Usage: timeToSeconds <timestamp>
 HELP
    return 4
   fi
-  IFS=':' read -r -a PART <<<$1
-  readarray -td '' PART < <(printf '%s\0' "${PART[@]}" | tac -s '')
-  [ -z "${PART[1]}" ] && PART[1]=0
-  [ -z "${PART[2]}" ] && PART[2]=0
-  SECS=$(((((${PART[2]} * 60) + ${PART[1]}) * 60) + ${PART[0]}))
+  IFS=':' read -r -A PART <<<$1
+  # readarray -td '' PART < <(printf '%s\0' "${PART[@]}" | tac -s '')
+  SECS=$(((((${PART[-3]:-0} * 60) + ${PART[-2]:-0}) * 60) + ${PART[-1]:-0}))
   echo $SECS
 }
 
@@ -281,7 +279,10 @@ HELP
 }
 
 function trimtime() {
-  if [[ -z "$1" || -z "$2" ]]; then
+  if [[ ! -z "$2" && ! -e "$2" ]]; then
+    echo "File Does Not Exist: \"$2\""
+  fi
+  if [[ -z "$1" || -z "$2" || ! -z "$3" || ! -e "$2" ]]; then
     cat <<HELP
 Usage: trimtime <timestamp> <filename>
  Exe: trimtime 00:05:30 recording.mp4
@@ -297,28 +298,23 @@ HELP
   fi
   TIME="${1#-}"
   if [ "$TIME" != "$1" ]; then
-    if [ "$LEN" == "N/A" ]; then
+    LEN=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$2" | sed 's/\..*//')
+    if [ "$LEN" = "N/A" ]; then
       echo "Couldn't find the length of '$2'" >&2
       return 3
     fi
-    LEN=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$2" | sed 's/\..*//')
-    IFS=':' read -r -a PART <<<$TIME
-    readarray -td '' PART < <(printf '%s\0' "${PART[@]}" | tac -s '')
-    [ -z "${PART[1]}" ] && PART[1]=0
-    [ -z "${PART[2]}" ] && PART[2]=0
-    REM=$(((((${PART[2]} * 60) + ${PART[1]}) * 60) + ${PART[0]}))
+    REM=$(timeToSeconds $TIME)
     NEWLEN=$(($LEN - $REM))
     SEXA=$(date -d@$NEWLEN -u +%H:%M:%S)
+    echo "Trimming \"$2\" from $LEN by $REM to $NEWLEN ($SEXA)."
     OUT="${2%.*}.‒$SEXA.${2##*.}"
-
-    echo "Writing To: $OUT"
-    ffmpeg -t "$SEXA" -i "$2" -map 0 -c copy -- "file:$OUT"
+    ARG=("-t" "$SEXA")
   else
     OUT="${2%.*}.$1‒.${2##*.}"
-
-    echo "Writing To: $OUT"
-    ffmpeg -ss "$1" -i "$2" -map 0 -c copy -- "file:$OUT"
+    ARG=("-ss" "$1")
   fi
+  echo "Writing To: $OUT"
+  ffmpeg $ARG -i "$2" -map 0 -c copy -- "file:$OUT"
 }
 
 function joinvideos() {
@@ -341,7 +337,6 @@ HELP
 
   echo "Writing To: $OUT"
   ffmpeg -f concat -safe 0 -i "$IN" -c copy "$OUT"
-  rm "$IN"
 }
 
 function rotateVideo90() {
