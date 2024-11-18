@@ -117,6 +117,19 @@ compdef _path_files inkscape
 
 alias base64url='basenc --base64url'
 
+alias disable-ipv6='sudo sysctl \
+-w net.ipv6.conf.lo.disable_ipv6=1 \
+-w net.ipv6.conf.all.disable_ipv6=1 \
+-w net.ipv6.conf.default.disable_ipv6=1'
+
+alias google-chrome='flatpak run com.google.Chrome'
+alias debugchrome='google-chrome --remote-debugging-port=9222'
+
+alias listio='iotop -oPa -d 2'
+alias listurls='katana -u'
+alias meminfo='sudo dmidecode -t memory'
+alias ipinfo='netlas host'
+
 # Add flags to existing aliases.
 # alias ls="${aliases[ls]:-ls} -A"
 alias ls='lsd --hyperlink always --icon always'
@@ -124,7 +137,7 @@ alias ls='lsd --hyperlink always --icon always'
 alias mkdir='mkdir -p'
 alias cb='xclip -selection c'
 
-alias monerod="$HOME/bin/monero/monerod --data-dir=$HOME/Monero/blockchain/"
+alias monerod="$HOME/bin/monero/monerod --data-dir=/var/cache/monerod/"
 
 alias q='popd'
 function p() {

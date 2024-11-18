@@ -11,6 +11,6 @@ KEY="0x$(cat /dev/urandom | tr -dc A-F0-9 | head -c64)"
 while [[ $COUNT -gt 0 ]]; do
   SALT=$(cat /dev/urandom | tr -dc 0-9 | head -c${2:-25})
   ADDR=$(docker run -it safe-cli:testing safe-creator --threshold 2 --owners ${OWNERS[@]} --salt-nonce $SALT --dry-run --quiet https://mainnet.optimism.io $KEY)
-  echo "$(printf '%4d' $COUNT): $SALT: $ADDR"
+  echo -n "$(printf '%4d' $COUNT): $SALT: $ADDR"
   COUNT=$((COUNT - 1))
 done
