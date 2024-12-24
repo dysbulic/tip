@@ -59,6 +59,10 @@ z4h init || return
 
 # Extend PATH.
 path=(~/bin $path)
+path+=(~/.local/bin)
+path+=(~/go/bin)
+path+=(~/.console-ninja/.bin)
+eval "$(mise activate zsh)"
 
 # Export environment variables.
 export GPG_TTY=$TTY
