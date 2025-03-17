@@ -397,18 +397,62 @@ HELP
   ffmpeg -f concat -safe 0 -i "$IN" -c copy "$OUT"
 }
 
-function rotateVideo90() {
+function rotateVideo() {
   if [[ -z "$1" ]]; then
     cat <<HELP
-Usage: rotateMp490 <file #1>
- Exe: Usage: rotateMp490 stream.mp4
-  Rotates a video 90
+Usage: rotateVideo <file #1> [transpose = clock]
+ Exe: Usage: rotateVideo stream.mp4
+  Rotates a video 90°
+ Exe: Usage: rotateVideo stream.mp4 cclock
+  Rotates a video -90°
 HELP
    return 2
   fi
+  TRANS=${2:-clock}
+  DEG="unknown"
+  case "$TRANS" in
+    "0" | "cclock_flip")
+      DEG="-90°.flip"
+      ;;
+    "1" | "clock")
+      DEG="90°"
+      ;;
+    "2" | "cclock")
+      DEG="-90°"
+      ;;
+    "3" | "clock_flip")
+      DEG="90°.flip"
+      ;;
+    "4" | "hflip")
+      DEG="180°.flip"
+      ;;
+    "5")
+      DEG="-90°⨯180°.flip"
+      ;;
+    "6")
+      DEG="90°⨯180°.flip"
+      ;;
+    "7")
+      DEG="270°.flip"
+      ;;
+    *)
+      cat <<ARGS
+Valid values for the transpose argument are:
+ • 0 or cclock_flip: Rotate by 90° counterclockwise and vertically flip.
+ • 1 or clock: Rotate by 90° clockwise. (default)
+ • 2 or cclock: Rotate by 90° counterclockwise.
+ • 3 or clock_flip: Rotate by 90° clockwise and vertically flip.
+ • 4 or hflip: Horizontal flip.
+ • 5: 90° counter-clockwise rotate, horizontal flip
+ • 6: 90° clockwise rotate, horizontal flip
+ • 7: 270° clockwise rotate, vertical flip
+ARGS
+    return 3
+    ;;
+  esac
   IN="$1"
-  OUT="${1%.*}.rotated.${1##*.}"
-  ffmpeg -i "$IN" -vf "transpose=1" "$OUT"
+  OUT="${1%.*}.rotated.$DEG.${1##*.}"
+  ffmpeg -i "$IN" -vf "transpose=$TRANS" "$OUT"
 }
 
 function settitle() {
