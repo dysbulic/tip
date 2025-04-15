@@ -1,6 +1,7 @@
 #!/bin/bash
 
-[[ "$-" != *i* ]] && return # If not running interactively, don't do anything
+# If not running interactively, don't do anything
+# [[ "$-" != *i* ]] && echo "\"$-\" != *i*" && exit 34
 
 export EDITOR='emacs -nw'
 which code >/dev/null 2>&1 && export EDITOR='code --wait'
@@ -43,25 +44,19 @@ done
 #   eval "$(nodenv init - bash)"
 #   nodenv global > /dev/null
 # fi
-eval "$(fnm env --use-on-cd)"
+which fnm > /dev/null && eval "$(fnm env --use-on-cd)"
 
 for path in \
-  $(npm list -g | head -n1) \
-  $(yarn global bin)
+  $(which npm > /dev/null && npm list -g | head -n1) \
+  $(which yarn > /dev/null && yarn global bin)
   do
   [ -d "$path" ] && export PATH="$path:$PATH"
 done
 
 
-__conda_setup="$('/home/dys/.local/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-  if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/dys/.local/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/dys/.local/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/dys/.local/anaconda3/bin:$PATH"
-    fi
+__conda_setup="$(~/.local/anaconda3/bin/conda shell.bash hook 2> /dev/null)"
+if [ $? -eq 0 ]; then
+  eval "$__conda_setup"
 fi
 unset __conda_setup
 
@@ -72,12 +67,12 @@ done
 if [ "$PS1" ]; then
   host=$(hostname)
   PS1='\n\u@\h\[\033[1;35m\]:\[\033[0m\]\w\[\033[1;33m\]\$\[\033[0m\] '
-  PS1='$(stty echo)\n\[\033[1;33m\]@\[\033[0m\]$host\[\033[35m\]\$\[\033[0m\]$(
-    dir=$(pwd)
-    [ "$dir" != "${dir#$(echo ~)}" ] && dir="~${dir#$(echo ~)}"
-    [ "$dir" != "${dir##*/...}" ] && dir="\[\033[34m\]∅\[\033[0m\]${dir##*/...}"
-    echo $dir
-    )\[\033[1;33m\]:\[\033[0m\] '
+  # PS1='$(stty echo)\n\[\033[1;33m\]@\[\033[0m\]$host\[\033[35m\]\$\[\033[0m\]$(
+  #   dir=$(pwd)
+  #   [ "$dir" != "${dir#$(echo ~)}" ] && dir="~${dir#$(echo ~)}"
+  #   [ "$dir" != "${dir##*/...}" ] && dir="\[\033[34m\]∅\[\033[0m\]${dir##*/...}"
+  #   echo $dir
+  #   )\[\033[1;33m\]:\[\033[0m\] '
 fi
 
 # To remove language selection menus from windows in Solaris
@@ -104,6 +99,7 @@ shopt -s globstar
 [ -r ".../config/inputrc" ] && export INPUTRC=".../config/inputrc"
 
 bind 'set match-hidden-files off' # Ignore hidden files in tab completion
+bind 'set colored-stats on'
 
 for completion in \
  /etc/bash_completion.d/git-prompt \
@@ -280,13 +276,14 @@ alias shortwave='flatpak run de.haeckerfelix.Shortwave'
 alias opendrive='flatpak run io.github.liberodark.OpenDrive'
 alias tor='flatpak run com.github.micahflee.torbrowser-launcher'
 alias wezterm='flatpak run org.wezfurlong.wezterm'
-alias inkscape='flatpak run org.inkscape.Inkscape'
+# alias inkscape='flatpak run org.inkscape.Inkscape'
 alias pw-helvum='flatpak run org.pipewire.Helvum'
 alias pw-coppwr='flatpak run io.github.dimtpap.coppwr'
 alias pw-effects='flatpak run com.github.wwmm.easyeffects'
 alias vpup='flatpak run pro.vpup.vpuppr'
 alias brave='brave-browser'
-alias csr="$(/bin/ls ~/bin/cursor* -rt | tail -n1)"
+CURSORPROG="$(/bin/ls ~/bin/cursor* -rt 2> /dev/null | tail -n1)"
+[ ! -z "$CURSORPROG" ] && alias csr="$CURSORPROG"
 
 alias i2pup='i2prouter start'
 alias i2pdown='i2prouter stop'
@@ -1386,3 +1383,7 @@ precmd_set_tip_dir() {
 # precmd_functions+=(precmd_set_tip_dir)
 
 [[ "$(pwd)" == ~ && -d ... ]] && cd ...
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
