@@ -116,7 +116,6 @@ compdef _directories md
 # Define aliases.
 alias ttf2woff=sfnt2woff
 alias tree='tree -a -I .git'
-alias inkscape="flatpak run org.inkscape.Inkscape"
 compdef _path_files inkscape
 
 alias base64url='basenc --base64url'
@@ -203,6 +202,7 @@ alias gs='git stash --include-untracked'
 alias sp='git stash pop'
 alias ggraph='git log --decorate --graph --oneline --all'
 alias ggraph="git log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ci) %C(bold blue)<%an>%Creset'"
+alias glo="git log --pretty=format:'%C(yellow)%h%Creset : %C(blue)%ad%creset %C(red)-%Creset %C(cyan)%s%Creset' --date=short"
 alias clean='git clean'
 alias s='git -c color.status=always status | less -REX'
 alias b='git branch'
