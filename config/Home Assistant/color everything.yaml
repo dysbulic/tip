@@ -1,0 +1,20 @@
+alias: Red Out
+target:
+  entity_id: >-
+    {% set domains = ['light'] %}
+
+    {% set exclude = ['light.awtrix_matrix', 'light.elgato_right',
+    'light.elgato_left', 'light.front'] %} {%
+      for device in states
+      | selectattr('domain', 'in', domains)
+      | rejectattr('entity_id', 'in', exclude)
+    %}
+      {{- device.entity_id }}{% if not loop.last %},{% endif %}
+    {% endfor %}
+action: homeassistant.turn_on
+data:
+  rgb_color:
+    - 255
+    - 0
+    - 0
+  transition: 1
