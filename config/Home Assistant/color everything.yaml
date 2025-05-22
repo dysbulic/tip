@@ -1,20 +1,29 @@
-alias: Red Out
-target:
-  entity_id: >-
-    {% set domains = ['light'] %}
+blueprint:
+  name: Red Out
+  description: Change all lights except specific ones to a selected color
+  domain: script
+  input:
+    color_name:
+      name: Color
+      description: Select a color for all lights
+      selector:
+        color_rgb: {}
 
-    {% set exclude = ['light.awtrix_matrix', 'light.elgato_right',
-    'light.elgato_left', 'light.front'] %} {%
-      for device in states
-      | selectattr('domain', 'in', domains)
-      | rejectattr('entity_id', 'in', exclude)
-    %}
-      {{- device.entity_id }}{% if not loop.last %},{% endif %}
-    {% endfor %}
-action: homeassistant.turn_on
-data:
-  rgb_color:
-    - 255
-    - 0
-    - 0
-  transition: 1
+script:
+  sequence:
+    - service: light.turn_on
+      target:
+        entity_id: >-
+          {% set domains = ['light'] %}
+          {% set exclude = ['light.awtrix_matrix', 'light.elgato_right', 'light.elgato_left', 'light.front'] %}
+          {% for device in states
+            | selectattr('domain', 'in', domains)
+            | rejectattr('entity_id', 'in', exclude)
+          %}
+            {{- device.entity_id }}{% if not loop.last %},{% endif %}
+          {% endfor %}
+      action:
+        homeassistant.turn_on
+      data:
+        rgb_color: "{{ color_name }}"
+        transition: 1
