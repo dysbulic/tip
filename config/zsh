@@ -95,6 +95,8 @@ bindkey '^[[Z' autosuggest-accept  # shift + tab  | autosuggest
 autoload -Uz zmv
 autoload -Uz compinit && compinit
 
+source ~/code/fzf-tab/fzf-tab.plugin.zsh
+
 # Define named directories: ~w <=> Windows home directory on WSL.
 [[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
 
@@ -397,6 +399,37 @@ HELP
   ffmpeg -f concat -safe 0 -i "$IN" -c copy "$OUT"
 }
 
+function reverseVideo() {
+  if [[ -z "$1" ]]; then
+    cat <<HELP
+Usage: reverseVideo <file #1>
+ Exe: Usage: reverseVideo stream.mp4
+  Produces stream.reversed.mp4
+HELP
+   return 2
+  fi
+  IN="$1"
+  VNAME="${1%.*}"
+  DIR="${VNAME}.reversed"
+  EXT="${1##*.}"
+  OUT="${DIR}.${EXT}"
+  [ -e "$DIR" ] \
+    && echo "Working directory, \"$DIR\", already exists" \
+    && return 3
+  echo "Creating working directory: \"$DIR\""
+  mkdir "$DIR"
+  ffmpeg -i "$IN" -map 0 -c copy -f segment -segment_time 100 \
+    -reset_timestamps 1 "$DIR/$VNAME.%03d.$EXT"
+  for vid in "$DIR/*"; do
+    ffmpeg -i "$vid" -vf reverse -af areverse "${DIR}/${vid%.*}.reversed.$EXT"
+  done
+  FLIST="$DIR/forward_list.txt"
+  printf "file '%s'\n" "$DIR"*".reversed.$EXT" > "$FLIST"
+  RLIST="$DIR/reverse_list.txt"
+  tac "$FLIST" > "$RLIST"
+  ffmpeg -f concat -safe 0 -i "$RLIST" -c copy "$OUT"
+}
+
 function rotateVideo() {
   if [[ -z "$1" ]]; then
     cat <<HELP
@@ -457,6 +490,12 @@ ARGS
 
 function settitle() {
   echo -ne "\e]0;""$*""\a"
+}
+
+function timer () {
+  total=$1
+  for ((i=total; i>0; i--)); do sleep 1; printf "Time remaining %s secs \r" "$i"; done
+  echo -e "\a"
 }
 
 # pnpm
