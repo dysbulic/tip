@@ -58,10 +58,11 @@ z4h install ohmyzsh/ohmyzsh || return
 z4h init || return
 
 # Extend PATH.
-path=(~/bin $path)
-path+=(~/.local/bin)
-path+=(~/go/bin)
-path+=(~/.console-ninja/.bin)
+path=(~/bin/ $path)
+path+=(~/.deno/bin/)
+path+=(~/.local/bin/)
+path+=(~/go/bin/)
+path+=(~/.console-ninja/.bin/)
 eval "$(mise activate zsh)"
 
 # Export environment variables.
@@ -233,6 +234,8 @@ alias lf='git log --name-status'
 
 alias nodepath="NODE_PATH=\"$(npm root -g)\" echo $NODE_PATH"
 alias bip39="echo \"import('bip39').then((bip) => bip.generateMnemonic()).then((mne) => console.info(mne))\" | NODE_PATH=\"$(npm root -g):$NODE_PATH\" node"
+alias bip39="electrum --offline create --seed_type=standard"
+alias bip39="python3 -c \"from mnemonic import Mnemonic; print(Mnemonic('english').generate())\""
 
 alias randkey="head -n 2048 /dev/urandom | sha256sum | cut -f1 -d' '"
 alias gen128key="openssl ecparam -name secp128r1 -genkey -noout | openssl ec -text -noout"
@@ -418,15 +421,19 @@ HELP
     && return 3
   echo "Creating working directory: \"$DIR\""
   mkdir "$DIR"
+  echo "Segmenting: \"$IN\""
   ffmpeg -i "$IN" -map 0 -c copy -f segment -segment_time 100 \
     -reset_timestamps 1 "$DIR/$VNAME.%03d.$EXT"
   for vid in "$DIR/*"; do
-    ffmpeg -i "$vid" -vf reverse -af areverse "${DIR}/${vid%.*}.reversed.$EXT"
+    echo "Reversing Segment: \"$vid\""
+    ffmpeg -i "$vid" -vf reverse -af areverse \
+      "${DIR}/${vid%.*}.reversed.$EXT"
   done
   FLIST="$DIR/forward_list.txt"
   printf "file '%s'\n" "$DIR"*".reversed.$EXT" > "$FLIST"
   RLIST="$DIR/reverse_list.txt"
   tac "$FLIST" > "$RLIST"
+  echo "Generating: \"$OUT\""
   ffmpeg -f concat -safe 0 -i "$RLIST" -c copy "$OUT"
 }
 
