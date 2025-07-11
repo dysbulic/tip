@@ -128,7 +128,7 @@ alias disable-ipv6='sudo sysctl \
 -w net.ipv6.conf.all.disable_ipv6=1 \
 -w net.ipv6.conf.default.disable_ipv6=1'
 
-alias google-chrome='flatpak run com.google.Chrome'
+# alias google-chrome='flatpak run com.google.Chrome'
 alias debugchrome='google-chrome --remote-debugging-port=9222'
 
 alias listio='iotop -oPa -d 2'
@@ -140,8 +140,23 @@ alias ipinfo='netlas host'
 # alias ls="${aliases[ls]:-ls} -A"
 alias ls='lsd --hyperlink always --icon always'
 
+function gpgpkcb() {
+  if [[ -z "$1" ]]; then
+    cat <<HELP
+Usage: gpgpkcp <email address>
+ Exe: gpgpkcp elon@tesla.com
+  Copies the public key for elon@tesla.com
+  to the clipboard.
+HELP
+   return 28
+  fi
+
+  gpg --armor --export "$@" | cb
+}
+
 alias mkdir='mkdir -p'
-alias cb='xclip -selection c'
+# replaced with `clipboard`
+# alias cb='xclip -selection c'
 
 alias monerod="$HOME/bin/monero/monerod --data-dir=/var/cache/monerod/"
 
@@ -512,3 +527,19 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/dys/.local/share/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/dys/.local/share/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/dys/.local/share/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/dys/.local/share/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
