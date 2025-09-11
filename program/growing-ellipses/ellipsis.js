@@ -3,7 +3,7 @@ class GrowingEllipsis extends HTMLElement {
   character = '.'
   timeout = 1_000
   count = 0
-  display = null
+  #display = null
 
   constructor() {
     super()
@@ -12,8 +12,8 @@ class GrowingEllipsis extends HTMLElement {
 
   connectedCallback() {
     const shadow = this.attachShadow({ mode: 'open' })
-    this.display = document.createElement('span')
-    shadow.appendChild(this.display)
+    this.#display = document.createElement('span')
+    shadow.appendChild(this.#display)
 
     this.max = Number(this.attributes.count?.value ?? this.max)
     this.character = (
@@ -25,11 +25,11 @@ class GrowingEllipsis extends HTMLElement {
   }
 
   render() {
-    this.display.textContent = (
+    this.#display.textContent = (
       this.character.repeat((++this.count % this.max) + 1)
     )
     setTimeout(this.loop, this.timeout)
   }
 }
 
-customElements.define("growing-ellipsis", GrowingEllipsis);
+customElements.define('growing-ellipsis', GrowingEllipsis)
