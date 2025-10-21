@@ -1,22 +1,25 @@
 {
-  "name": "spotify-playlist-exporter",
+  "name": "music-playlist-exporters",
   "version": "1.0.0",
-  "description": "Export Spotify playlists to JSON and CSV formats",
+  "description": "Export Spotify and YouTube Music playlists to JSON and CSV formats",
   "main": "spotify-export.ts",
   "scripts": {
-    "start": "ts-node spotify-export.ts",
+    "spotify": "ts-node spotify-export.ts",
+    "youtube": "ts-node youtube-export.ts",
+    "import": "ts-node youtube-import.ts",
     "build": "tsc",
-    "dev": "ts-node-dev --respawn spotify-export.ts",
-    "export": "ts-node spotify-export.ts"
+    "dev": "ts-node-dev --respawn spotify-export.ts"
   },
   "keywords": [
     "spotify",
+    "youtube",
+    "youtube-music",
     "playlist",
     "export",
     "api"
   ],
   "author": "",
-  "license": "MIT",
+  "license": "CC0-1.0",
   "dependencies": {
     "dotenv": "^16.0.3",
     "yargs": "^17.7.2"
