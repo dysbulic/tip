@@ -196,12 +196,14 @@ class SpotifyPlaylistExporter {
 async function main() {
   // Parse command line arguments with yargs
   const argv = await yargs(hideBin(process.argv))
-    .option('playlist', {
-      alias: 'p',
-      type: 'string',
-      description: 'Spotify playlist ID to export',
-      demandOption: true
-    })
+    .command('$0 <playlist>', 'Export a Spotify playlist', (yargs) => (
+      yargs
+      .positional('playlist', {
+        describe: 'Spotify playlist ID to export',
+        type: 'string',
+        demandOption: true
+      })
+    ))
     .option('format', {
       alias: 'f',
       type: 'string',
@@ -215,16 +217,16 @@ async function main() {
       description: 'Output filename (without extension)',
       default: undefined
     })
-    .example('$0 -p 37i9dQZF1DXcBWIGoYBM5M', 'Export playlist to both JSON and CSV')
-    .example('$0 --playlist 37i9dQZF1DXcBWIGoYBM5M --format json', 'Export only to JSON')
-    .example('$0 -p 37i9dQZF1DXcBWIGoYBM5M -o my-playlist', 'Export with custom filename')
+    .example('$0 37i9dQZF1DXcBWIGoYBM5M', 'Export playlist to both JSON and CSV')
+    .example('$0 37i9dQZF1DXcBWIGoYBM5M --format json', 'Export only to JSON')
+    .example('$0 37i9dQZF1DXcBWIGoYBM5M -o my-playlist', 'Export with custom filename')
     .help()
     .alias('help', 'h')
     .version('1.0.0')
     .alias('version', 'v')
     .argv
 
-  const playlistId = argv.playlist
+  const playlistId = argv.playlist as string
   const format = argv.format
   const outputBase = argv.output || `playlist_${playlistId}`
 
