@@ -20,6 +20,12 @@ interface FailedTrack {
   reason: string
 }
 
+interface PlaylistVideo {
+  videoId: string
+  title: string
+  channel: string
+}
+
 interface SearchResult {
   videoId: string
   title: string
@@ -490,6 +496,93 @@ class YouTubeMusicPlaylistImporter {
   }
 
   /**
+   * Get all videos from a playlist with metadata
+   */
+  async getPlaylistVideos(playlistId: string): Promise<PlaylistVideo[]> {
+    const videos: PlaylistVideo[] = []
+    let pageToken: string | undefined = undefined
+
+    do {
+      const pageParam = pageToken ? `&pageToken=${pageToken}` : ''
+      const endpoint = `/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=50${pageParam}`
+
+      try {
+        const response = await this.apiRequest(endpoint)
+
+        for (const item of response.items) {
+          if (item.snippet?.resourceId?.videoId) {
+            videos.push({
+              videoId: item.snippet.resourceId.videoId,
+              title: item.snippet.title,
+              channel: item.snippet.videoOwnerChannelTitle || item.snippet.channelTitle
+            })
+          }
+        }
+
+        pageToken = response.nextPageToken
+      } catch (error) {
+        console.error(`Error fetching playlist videos: ${error}`)
+        break
+      }
+    } while (pageToken)
+
+    return videos
+  }
+
+  /**
+   * Normalize string for fuzzy matching (lowercase, remove special chars, extra spaces)
+   */
+  private normalizeForMatching(str: string): string {
+    return str
+      .toLowerCase()
+      .replace(/[^\w\s]/g, ' ')  // Replace special chars with spaces
+      .replace(/\s+/g, ' ')       // Collapse multiple spaces
+      .trim()
+  }
+
+  /**
+   * Check if a track likely matches an existing video
+   * Returns the matching video if found
+   */
+  private findMatchingVideo(trackName: string, artist: string, existingVideos: PlaylistVideo[]): PlaylistVideo | null {
+    const normalizedTrack = this.normalizeForMatching(trackName)
+    const normalizedArtist = this.normalizeForMatching(artist)
+
+    for (const video of existingVideos) {
+      const normalizedTitle = this.normalizeForMatching(video.title)
+      const normalizedChannel = this.normalizeForMatching(video.channel)
+
+      // Check various common patterns
+      const patterns = [
+        // "Artist - Track"
+        `${normalizedArtist} ${normalizedTrack}`,
+        // "Track - Artist" (less common but happens)
+        `${normalizedTrack} ${normalizedArtist}`,
+        // Just track name (if channel matches artist)
+        normalizedTrack,
+      ]
+
+      for (const pattern of patterns) {
+        // Check if title contains this pattern
+        if (normalizedTitle.includes(pattern)) {
+          // Additional check: artist name should be in title or channel
+          if (normalizedTitle.includes(normalizedArtist) || normalizedChannel.includes(normalizedArtist)) {
+            return video
+          }
+        }
+      }
+
+      // Also check reverse: does title contain both track and artist somewhere?
+      if (normalizedTitle.includes(normalizedTrack) &&
+          (normalizedTitle.includes(normalizedArtist) || normalizedChannel.includes(normalizedArtist))) {
+        return video
+      }
+    }
+
+    return null
+  }
+
+  /**
    * Create a new playlist
    */
   async createPlaylist(name: string, description: string = ''): Promise<string> {
@@ -565,30 +658,53 @@ class YouTubeMusicPlaylistImporter {
     console.log(`View at: https://www.youtube.com/playlist?list=${playlistId}\n`)
 
     // Get existing videos in playlist if it already existed
+    let existingVideos: PlaylistVideo[] = []
     let existingVideoIds = new Set<string>()
     if (existed) {
       console.log('Fetching existing videos in playlist...')
-      existingVideoIds = await this.getPlaylistVideoIds(playlistId)
-      console.log(`  Found ${existingVideoIds.size} existing videos\n`)
+      existingVideos = await this.getPlaylistVideos(playlistId)
+      existingVideoIds = new Set(existingVideos.map(v => v.videoId))
+      console.log(`  Found ${existingVideos.length} existing videos\n`)
     }
 
     let added = 0
     let skipped = 0
     let notFound = 0
     const failedTracks: FailedTrack[] = []
+    const skippedTracks: FailedTrack[] = []
 
     for (let i = 0; i < tracks.length; i++) {
       const track = tracks[i]
-      console.log(`[${i + 1}/${tracks.length}] Searching: ${track.artist} - ${track.trackName}`)
+      console.log(`[${i + 1}/${tracks.length}] Checking: ${track.artist} - ${track.trackName}`)
 
+      // First, check if track matches an existing video
+      const matchingVideo = this.findMatchingVideo(track.trackName, track.artist, existingVideos)
+      if (matchingVideo) {
+        console.log(`  ⊘ Already in playlist: ${matchingVideo.title}`)
+        skipped++
+        skippedTracks.push({
+          trackName: track.trackName,
+          artist: track.artist,
+          reason: `Already in playlist as: ${matchingVideo.title}`
+        })
+        continue
+      }
+
+      // Not found in existing videos, search for it
+      console.log(`  Searching...`)
       const result = await this.searchTrack(track.trackName, track.artist)
 
       if (result) {
-        // Check if video already exists in playlist
+        // Double-check the video isn't already there (by ID)
         if (existingVideoIds.has(result.videoId)) {
           console.log(`  Found: ${result.title} (${result.channelTitle})`)
           console.log(`  ⊘ Already in playlist, skipping`)
           skipped++
+          skippedTracks.push({
+            trackName: track.trackName,
+            artist: track.artist,
+            reason: `Already in playlist as: ${result.title}`
+          })
         } else {
           console.log(`  Found: ${result.title} (${result.channelTitle})`)
           try {
@@ -596,6 +712,11 @@ class YouTubeMusicPlaylistImporter {
             console.log(`  ✓ Added to playlist`)
             added++
             existingVideoIds.add(result.videoId) // Update our local cache
+            existingVideos.push({
+              videoId: result.videoId,
+              title: result.title,
+              channel: result.channelTitle
+            })
           } catch (error) {
             console.error(`  ✗ Failed to add: ${error}`)
             failedTracks.push({
@@ -630,10 +751,10 @@ class YouTubeMusicPlaylistImporter {
     console.log(`  Total: ${tracks.length}`)
     console.log(`\nPlaylist: https://www.youtube.com/playlist?list=${playlistId}`)
 
-    // Write failed tracks log if any
-    if (failedTracks.length > 0) {
-      const logFile = this.writeFailedTracksLog(failedTracks, playlistName)
-      console.log(`\nFailed tracks log written to: ${logFile}`)
+    // Write log file if any failed or skipped tracks
+    if (failedTracks.length > 0 || skippedTracks.length > 0) {
+      const logFile = this.writeImportLog(failedTracks, skippedTracks, playlistName)
+      console.log(`\nImport log written to: ${logFile}`)
     }
   }
 
@@ -687,30 +808,53 @@ class YouTubeMusicPlaylistImporter {
     console.log(`View at: https://www.youtube.com/playlist?list=${playlistId}\n`)
 
     // Get existing videos in playlist if it already existed
+    let existingVideos: PlaylistVideo[] = []
     let existingVideoIds = new Set<string>()
     if (existed) {
       console.log('Fetching existing videos in playlist...')
-      existingVideoIds = await this.getPlaylistVideoIds(playlistId)
-      console.log(`  Found ${existingVideoIds.size} existing videos\n`)
+      existingVideos = await this.getPlaylistVideos(playlistId)
+      existingVideoIds = new Set(existingVideos.map(v => v.videoId))
+      console.log(`  Found ${existingVideos.length} existing videos\n`)
     }
 
     let added = 0
     let skipped = 0
     let notFound = 0
     const failedTracks: FailedTrack[] = []
+    const skippedTracks: FailedTrack[] = []
 
     for (let i = 0; i < uniqueTracks.length; i++) {
       const track = uniqueTracks[i]
-      console.log(`[${i + 1}/${uniqueTracks.length}] Searching: ${track.artist} - ${track.trackName}`)
+      console.log(`[${i + 1}/${uniqueTracks.length}] Checking: ${track.artist} - ${track.trackName}`)
 
+      // First, check if track matches an existing video
+      const matchingVideo = this.findMatchingVideo(track.trackName, track.artist, existingVideos)
+      if (matchingVideo) {
+        console.log(`  ⊘ Already in playlist: ${matchingVideo.title}`)
+        skipped++
+        skippedTracks.push({
+          trackName: track.trackName,
+          artist: track.artist,
+          reason: `Already in playlist as: ${matchingVideo.title}`
+        })
+        continue
+      }
+
+      // Not found in existing videos, search for it
+      console.log(`  Searching...`)
       const result = await this.searchTrack(track.trackName, track.artist)
 
       if (result) {
-        // Check if video already exists in playlist
+        // Double-check the video isn't already there (by ID)
         if (existingVideoIds.has(result.videoId)) {
           console.log(`  Found: ${result.title} (${result.channelTitle})`)
           console.log(`  ⊘ Already in playlist, skipping`)
           skipped++
+          skippedTracks.push({
+            trackName: track.trackName,
+            artist: track.artist,
+            reason: `Already in playlist as: ${result.title}`
+          })
         } else {
           console.log(`  Found: ${result.title} (${result.channelTitle})`)
           try {
@@ -718,6 +862,11 @@ class YouTubeMusicPlaylistImporter {
             console.log(`  ✓ Added to playlist`)
             added++
             existingVideoIds.add(result.videoId) // Update our local cache
+            existingVideos.push({
+              videoId: result.videoId,
+              title: result.title,
+              channel: result.channelTitle
+            })
           } catch (error) {
             console.error(`  ✗ Failed to add: ${error}`)
             failedTracks.push({
@@ -752,10 +901,10 @@ class YouTubeMusicPlaylistImporter {
     console.log(`  Total: ${uniqueTracks.length}`)
     console.log(`\nPlaylist: https://www.youtube.com/playlist?list=${playlistId}`)
 
-    // Write failed tracks log if any
-    if (failedTracks.length > 0) {
-      const logFile = this.writeFailedTracksLog(failedTracks, playlistName)
-      console.log(`\nFailed tracks log written to: ${logFile}`)
+    // Write log file if any failed or skipped tracks
+    if (failedTracks.length > 0 || skippedTracks.length > 0) {
+      const logFile = this.writeImportLog(failedTracks, skippedTracks, playlistName)
+      console.log(`\nImport log written to: ${logFile}`)
     }
   }
 
@@ -778,36 +927,61 @@ class YouTubeMusicPlaylistImporter {
   }
 
   /**
-   * Write failed tracks to log file
+   * Write import log with failed and skipped tracks
    */
-  private writeFailedTracksLog(failedTracks: FailedTrack[], playlistName: string): string {
-    if (failedTracks.length === 0) {
+  private writeImportLog(failedTracks: FailedTrack[], skippedTracks: FailedTrack[], playlistName: string): string {
+    if (failedTracks.length === 0 && skippedTracks.length === 0) {
       return ''
     }
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5)
     const sanitizedName = playlistName.replace(/[^a-z0-9]/gi, '_').toLowerCase()
-    const logFileName = `failed_tracks_${sanitizedName}_${timestamp}.txt`
+    const logFileName = `import_log_${sanitizedName}_${timestamp}.txt`
 
     const logContent: string[] = [
-      `Failed Tracks Log`,
+      `Import Log`,
       `Playlist: ${playlistName}`,
       `Date: ${new Date().toISOString()}`,
+      `Total Skipped: ${skippedTracks.length}`,
       `Total Failed: ${failedTracks.length}`,
       '',
       '='.repeat(80),
       ''
     ]
 
-    for (const failed of failedTracks) {
-      logContent.push(`Artist: ${failed.artist}`)
-      logContent.push(`Track: ${failed.trackName}`)
-      logContent.push(`Reason: ${failed.reason}`)
+    if (skippedTracks.length > 0) {
+      logContent.push(`SKIPPED TRACKS (already in playlist)`)
       logContent.push('')
+      for (const skipped of skippedTracks) {
+        logContent.push(`Artist: ${skipped.artist}`)
+        logContent.push(`Track: ${skipped.trackName}`)
+        logContent.push(`Reason: ${skipped.reason}`)
+        logContent.push('')
+      }
+      logContent.push('='.repeat(80))
+      logContent.push('')
+    }
+
+    if (failedTracks.length > 0) {
+      logContent.push(`FAILED TRACKS (not found or errors)`)
+      logContent.push('')
+      for (const failed of failedTracks) {
+        logContent.push(`Artist: ${failed.artist}`)
+        logContent.push(`Track: ${failed.trackName}`)
+        logContent.push(`Reason: ${failed.reason}`)
+        logContent.push('')
+      }
     }
 
     fs.writeFileSync(logFileName, logContent.join('\n'))
     return logFileName
+  }
+
+  /**
+   * Write failed tracks to log file (legacy method for backward compatibility)
+   */
+  private writeFailedTracksLog(failedTracks: FailedTrack[], playlistName: string): string {
+    return this.writeImportLog(failedTracks, [], playlistName)
   }
 }
 
