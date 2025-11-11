@@ -114,6 +114,7 @@ setopt HIST_FIND_NO_DUPS # don't show duplicates in the autocomplete menu
 source "$HOME/.cargo/env"
 eval "$(fnm env --use-on-cd)"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+eval "$(zoxide init zsh)"
 
 zstyle ':completion:*:*:git:*' script ~/.config/zsh/git-completion.bash
 fpath=(~/.config/zsh $fpath)

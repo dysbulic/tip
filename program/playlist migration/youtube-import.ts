@@ -1,10 +1,10 @@
-import * as fs from 'fs'
-import * as https from 'https'
-import * as http from 'http'
+import * as fs from 'node:fs'
+import * as https from 'node:https'
+import * as http from 'node:http'
 import * as dotenv from 'dotenv'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import { URL } from 'url'
+import { URL } from 'node:url'
 
 // Load environment variables from .env file
 dotenv.config()
@@ -431,6 +431,65 @@ class YouTubeMusicPlaylistImporter {
   }
 
   /**
+   * Find playlist by name
+   */
+  async findPlaylistByName(name: string): Promise<string | null> {
+    let pageToken: string | undefined = undefined
+
+    do {
+      const pageParam = pageToken ? `&pageToken=${pageToken}` : ''
+      const endpoint = `/youtube/v3/playlists?part=snippet&mine=true&maxResults=50${pageParam}`
+
+      try {
+        const response = await this.apiRequest(endpoint)
+
+        for (const playlist of response.items) {
+          if (playlist.snippet.title === name) {
+            return playlist.id
+          }
+        }
+
+        pageToken = response.nextPageToken
+      } catch (error) {
+        console.error(`Error searching for playlist: ${error}`)
+        return null
+      }
+    } while (pageToken)
+
+    return null
+  }
+
+  /**
+   * Get all video IDs from a playlist
+   */
+  async getPlaylistVideoIds(playlistId: string): Promise<Set<string>> {
+    const videoIds = new Set<string>()
+    let pageToken: string | undefined = undefined
+
+    do {
+      const pageParam = pageToken ? `&pageToken=${pageToken}` : ''
+      const endpoint = `/youtube/v3/playlistItems?part=contentDetails&playlistId=${playlistId}&maxResults=50${pageParam}`
+
+      try {
+        const response = await this.apiRequest(endpoint)
+
+        for (const item of response.items) {
+          if (item.contentDetails?.videoId) {
+            videoIds.add(item.contentDetails.videoId)
+          }
+        }
+
+        pageToken = response.nextPageToken
+      } catch (error) {
+        console.error(`Error fetching playlist videos: ${error}`)
+        break
+      }
+    } while (pageToken)
+
+    return videoIds
+  }
+
+  /**
    * Create a new playlist
    */
   async createPlaylist(name: string, description: string = ''): Promise<string> {
@@ -446,6 +505,26 @@ class YouTubeMusicPlaylistImporter {
 
     const response = await this.apiRequest('/youtube/v3/playlists?part=snippet,status', 'POST', body)
     return response.id
+  }
+
+  /**
+   * Find or create playlist
+   */
+  async findOrCreatePlaylist(name: string, description: string = '', useExisting: boolean = true): Promise<{ id: string, existed: boolean }> {
+    if (useExisting) {
+      console.log(`Checking if playlist "${name}" already exists...`)
+      const existingId = await this.findPlaylistByName(name)
+
+      if (existingId) {
+        console.log(`Found existing playlist: ${existingId}`)
+        return { id: existingId, existed: true }
+      }
+
+      console.log('Playlist not found, creating new one...')
+    }
+
+    const newId = await this.createPlaylist(name, description)
+    return { id: newId, existed: false }
   }
 
   /**
@@ -468,17 +547,33 @@ class YouTubeMusicPlaylistImporter {
   /**
    * Import tracks from CSV to playlist
    */
-  async importFromCSV(csvPath: string, playlistName: string): Promise<void> {
+  async importFromCSV(csvPath: string, playlistName: string, useExisting: boolean = true): Promise<void> {
     console.log(`Reading CSV file: ${csvPath}`)
     const tracks = this.parseCSV(csvPath)
     console.log(`Found ${tracks.length} tracks in CSV\n`)
 
-    console.log('Creating playlist...')
-    const playlistId = await this.createPlaylist(playlistName, `Imported from ${csvPath}`)
-    console.log(`Playlist created: ${playlistId}`)
+    // Find or create playlist
+    const { id: playlistId, existed } = await this.findOrCreatePlaylist(
+      playlistName,
+      `Imported from ${csvPath}`,
+      useExisting
+    )
+
+    if (!existed) {
+      console.log(`Playlist created: ${playlistId}`)
+    }
     console.log(`View at: https://www.youtube.com/playlist?list=${playlistId}\n`)
 
+    // Get existing videos in playlist if it already existed
+    let existingVideoIds = new Set<string>()
+    if (existed) {
+      console.log('Fetching existing videos in playlist...')
+      existingVideoIds = await this.getPlaylistVideoIds(playlistId)
+      console.log(`  Found ${existingVideoIds.size} existing videos\n`)
+    }
+
     let added = 0
+    let skipped = 0
     let notFound = 0
     const failedTracks: FailedTrack[] = []
 
@@ -489,18 +584,26 @@ class YouTubeMusicPlaylistImporter {
       const result = await this.searchTrack(track.trackName, track.artist)
 
       if (result) {
-        console.log(`  Found: ${result.title} (${result.channelTitle})`)
-        try {
-          await this.addToPlaylist(playlistId, result.videoId)
-          console.log(`  ✓ Added to playlist`)
-          added++
-        } catch (error) {
-          console.error(`  ✗ Failed to add: ${error}`)
-          failedTracks.push({
-            trackName: track.trackName,
-            artist: track.artist,
-            reason: `Failed to add to playlist: ${error}`
-          })
+        // Check if video already exists in playlist
+        if (existingVideoIds.has(result.videoId)) {
+          console.log(`  Found: ${result.title} (${result.channelTitle})`)
+          console.log(`  ⊘ Already in playlist, skipping`)
+          skipped++
+        } else {
+          console.log(`  Found: ${result.title} (${result.channelTitle})`)
+          try {
+            await this.addToPlaylist(playlistId, result.videoId)
+            console.log(`  ✓ Added to playlist`)
+            added++
+            existingVideoIds.add(result.videoId) // Update our local cache
+          } catch (error) {
+            console.error(`  ✗ Failed to add: ${error}`)
+            failedTracks.push({
+              trackName: track.trackName,
+              artist: track.artist,
+              reason: `Failed to add to playlist: ${error}`
+            })
+          }
         }
       } else {
         console.log(`  ✗ Not found`)
@@ -520,6 +623,9 @@ class YouTubeMusicPlaylistImporter {
 
     console.log(`\nImport complete!`)
     console.log(`  Added: ${added}`)
+    if (skipped > 0) {
+      console.log(`  Skipped (already in playlist): ${skipped}`)
+    }
     console.log(`  Not found: ${notFound}`)
     console.log(`  Total: ${tracks.length}`)
     console.log(`\nPlaylist: https://www.youtube.com/playlist?list=${playlistId}`)
@@ -534,7 +640,7 @@ class YouTubeMusicPlaylistImporter {
   /**
    * Import tracks from multiple CSV files to a single playlist
    */
-  async importFromMultipleCSVs(csvPaths: string[], playlistName: string): Promise<void> {
+  async importFromMultipleCSVs(csvPaths: string[], playlistName: string, useExisting: boolean = true): Promise<void> {
     console.log(`Reading ${csvPaths.length} CSV file(s)...\n`)
 
     // Parse all CSV files
@@ -565,15 +671,31 @@ class YouTubeMusicPlaylistImporter {
       console.log(`Unique tracks: ${uniqueTracks.length}`)
     }
 
-    console.log('\nCreating playlist...')
+    // Find or create playlist
     const sources = csvPaths.length > 3
       ? `${csvPaths.length} CSV files`
       : csvPaths.join(', ')
-    const playlistId = await this.createPlaylist(playlistName, `Imported from ${sources}`)
-    console.log(`Playlist created: ${playlistId}`)
+    const { id: playlistId, existed } = await this.findOrCreatePlaylist(
+      playlistName,
+      `Imported from ${sources}`,
+      useExisting
+    )
+
+    if (!existed) {
+      console.log(`Playlist created: ${playlistId}`)
+    }
     console.log(`View at: https://www.youtube.com/playlist?list=${playlistId}\n`)
 
+    // Get existing videos in playlist if it already existed
+    let existingVideoIds = new Set<string>()
+    if (existed) {
+      console.log('Fetching existing videos in playlist...')
+      existingVideoIds = await this.getPlaylistVideoIds(playlistId)
+      console.log(`  Found ${existingVideoIds.size} existing videos\n`)
+    }
+
     let added = 0
+    let skipped = 0
     let notFound = 0
     const failedTracks: FailedTrack[] = []
 
@@ -584,18 +706,26 @@ class YouTubeMusicPlaylistImporter {
       const result = await this.searchTrack(track.trackName, track.artist)
 
       if (result) {
-        console.log(`  Found: ${result.title} (${result.channelTitle})`)
-        try {
-          await this.addToPlaylist(playlistId, result.videoId)
-          console.log(`  ✓ Added to playlist`)
-          added++
-        } catch (error) {
-          console.error(`  ✗ Failed to add: ${error}`)
-          failedTracks.push({
-            trackName: track.trackName,
-            artist: track.artist,
-            reason: `Failed to add to playlist: ${error}`
-          })
+        // Check if video already exists in playlist
+        if (existingVideoIds.has(result.videoId)) {
+          console.log(`  Found: ${result.title} (${result.channelTitle})`)
+          console.log(`  ⊘ Already in playlist, skipping`)
+          skipped++
+        } else {
+          console.log(`  Found: ${result.title} (${result.channelTitle})`)
+          try {
+            await this.addToPlaylist(playlistId, result.videoId)
+            console.log(`  ✓ Added to playlist`)
+            added++
+            existingVideoIds.add(result.videoId) // Update our local cache
+          } catch (error) {
+            console.error(`  ✗ Failed to add: ${error}`)
+            failedTracks.push({
+              trackName: track.trackName,
+              artist: track.artist,
+              reason: `Failed to add to playlist: ${error}`
+            })
+          }
         }
       } else {
         console.log(`  ✗ Not found`)
@@ -615,6 +745,9 @@ class YouTubeMusicPlaylistImporter {
 
     console.log(`\nImport complete!`)
     console.log(`  Added: ${added}`)
+    if (skipped > 0) {
+      console.log(`  Skipped (already in playlist): ${skipped}`)
+    }
     console.log(`  Not found: ${notFound}`)
     console.log(`  Total: ${uniqueTracks.length}`)
     console.log(`\nPlaylist: https://www.youtube.com/playlist?list=${playlistId}`)
@@ -696,10 +829,17 @@ async function main() {
     .option('playlist', {
       alias: 'p',
       type: 'string',
-      description: 'Name for the new playlist',
+      description: 'Name for the playlist',
       demandOption: true
     })
-    .example('$0 tracks.csv -p "My Playlist"', 'Import single CSV')
+    .option('new', {
+      alias: 'n',
+      type: 'boolean',
+      description: 'Always create a new playlist (do not use existing)',
+      default: false
+    })
+    .example('$0 tracks.csv -p "My Playlist"', 'Import to existing or create new playlist')
+    .example('$0 tracks.csv -p "My Playlist" --new', 'Always create new playlist')
     .example('$0 tracks1.csv tracks2.csv -p "Combined"', 'Import multiple CSVs')
     .example('$0 *.csv --playlist "All Songs"', 'Import all CSV files in directory')
     .help()
@@ -710,6 +850,7 @@ async function main() {
 
   const csvPaths = argv.csv as string[]
   const playlistName = argv.playlist
+  const useExisting = !argv.new
 
   // Check if CSV files exist
   for (const csvPath of csvPaths) {
@@ -737,7 +878,7 @@ async function main() {
   try {
     const importer = new YouTubeMusicPlaylistImporter(clientId, clientSecret)
     await importer.authenticate()
-    await importer.importFromMultipleCSVs(csvPaths, playlistName)
+    await importer.importFromMultipleCSVs(csvPaths, playlistName, useExisting)
   } catch (error) {
     console.error('Import failed:', error)
     process.exit(1)
@@ -745,7 +886,7 @@ async function main() {
 }
 
 // Run if called directly
-if (require.main === module) {
+if (typeof(require) === 'undefined' || require.main === module) {
   main()
 }
 
