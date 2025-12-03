@@ -14,5 +14,5 @@ The user publishes a JSON document, the attestor receives it & generates a nonce
   * *// If it hasn't happened by 2036, I have no idea when it may happen, likely never. Thus "mu", meaning "there is a false assumption in the question", would hold.*
   * `Rotated Sidereal year` ⇶ −?\d+⁄\d+⁄\d+
   * `time` ⇶ (`years`𐞲)?(`days`ᴰ)?`time of day`
-  * *// time of day is kept on a [percentage clock](https://dhappy.github.io/dhappy/times)*
+  * *// time of day is kept on a [percentage clock](https://dhappy.github.io/times)*
   * `time of day` ⇶ −?\d+:\d:\d{1,2}
