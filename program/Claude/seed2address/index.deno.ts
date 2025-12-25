@@ -4,6 +4,17 @@ import { keccak_256 } from 'npm:@noble/hashes/sha3.js'
 import { bytesToHex } from 'npm:@noble/hashes/utils.js'
 import { secp256k1 } from 'npm:@noble/curves/secp256k1.js'
 
+const { args } = Deno
+
+if(args.length === 0) {
+  console.log('Usage: deno run index.ts <seed phrase> [count] [passphrase]')
+  console.log('\nExample:')
+  console.log(
+    '  deno run index.ts "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about" 5'
+  )
+  Deno.exit(1)
+}
+
 function publicKeyToAddress(publicKey: Uint8Array): string {
   const pubKeyWithoutPrefix = publicKey.slice(1)
   const hash = keccak_256(pubKeyWithoutPrefix)
@@ -54,17 +65,6 @@ function deriveAddresses(
   }
 
   return results
-}
-
-const args = Deno.args
-
-if(args.length === 0) {
-  console.log('Usage: deno run index.ts <seed phrase> [count] [passphrase]')
-  console.log('\nExample:')
-  console.log(
-    '  deno run index.ts "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about" 5'
-  )
-  Deno.exit(1)
 }
 
 const mnemonic = args[0]
