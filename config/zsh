@@ -63,8 +63,8 @@ path+=(~/.deno/bin/)
 path+=(~/.local/bin/)
 path+=(~/go/bin/)
 path+=(~/.console-ninja/.bin/)
-path+=(~/.local/share/flutter/bin/)
-eval "$(mise activate zsh)"
+# path+=(~/.local/share/flutter/bin/)
+# eval "$(mise activate zsh)"
 
 # Export environment variables.
 export GPG_TTY=$TTY
@@ -98,7 +98,7 @@ bindkey '^[[Z' autosuggest-accept  # shift + tab  | autosuggest
 autoload -Uz zmv
 autoload -Uz compinit && compinit
 
-source ~/code/fzf-tab/fzf-tab.plugin.zsh
+# source ~/code/fzf-tab/fzf-tab.plugin.zsh
 
 # Define named directories: ~w <=> Windows home directory on WSL.
 [[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
@@ -112,8 +112,8 @@ setopt HIST_NO_STORE # enable $HISTORY_IGNORE
 setopt HIST_FIND_NO_DUPS # don't show duplicates in the autocomplete menu
 
 source "$HOME/.cargo/env"
-eval "$(fnm env --use-on-cd)"
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# eval "$(fnm env --use-on-cd)"
+# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 eval "$(zoxide init zsh)"
 
 zstyle ':completion:*:*:git:*' script ~/.config/zsh/git-completion.bash
@@ -168,7 +168,7 @@ alias mkdir='mkdir -p'
 # replaced with `clipboard`
 # alias cb='xclip -selection c'
 
-alias monerod="$HOME/bin/monero/monerod --data-dir=/var/cache/monerod/"
+alias monerod="monerod --data-dir=/var/cache/monerod/"
 
 alias q='popd'
 function p() {
@@ -541,15 +541,15 @@ esac
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/dys/.local/share/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/dys/.local/share/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/dys/.local/share/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/dys/.local/share/anaconda3/bin:$PATH"
-    fi
-fi
+# if [ $? -eq 0 ]; then
+#     eval "$__conda_setup"
+# else
+#     if [ -f "/home/dys/.local/share/anaconda3/etc/profile.d/conda.sh" ]; then
+#         . "/home/dys/.local/share/anaconda3/etc/profile.d/conda.sh"
+#     else
+#         export PATH="/home/dys/.local/share/anaconda3/bin:$PATH"
+#     fi
+# fi
 unset __conda_setup
 # <<< conda initialize <<<
 
