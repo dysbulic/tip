@@ -45,6 +45,13 @@ class YouTubeMusicPlaylistImporter {
   private accessToken: string = ''
   private refreshToken: string = ''
   private tokenFile: string = '.youtube-tokens.json'
+  private currentStats = {
+    added: 0,
+    skipped: 0,
+    notFound: 0,
+    processed: 0,
+    total: 0
+  }
 
   constructor(clientId: string, clientSecret: string) {
     this.clientId = clientId
@@ -246,28 +253,25 @@ class YouTubeMusicPlaylistImporter {
    * Make an API request to YouTube Data API with OAuth token
    */
   private async apiRequest(endpoint: string, method: string = 'GET', body?: string): Promise<any> {
-    const maxRetries = 3
-    let retryCount = 0
+    try {
+      return await this.makeRequest(endpoint, method, body)
+    } catch (error: any) {
+      const isRateLimited = this.isRateLimitError(error)
 
-    while (retryCount <= maxRetries) {
-      try {
-        return await this.makeRequest(endpoint, method, body)
-      } catch (error: any) {
-        const isRateLimited = this.isRateLimitError(error)
-
-        if (isRateLimited && retryCount < maxRetries) {
-          retryCount++
-          const waitTime = this.getRetryWaitTime(retryCount)
-          console.log(`\n⚠️  Rate limit detected. Waiting ${waitTime / 1000} seconds before retry ${retryCount}/${maxRetries}...`)
-          await new Promise(resolve => setTimeout(resolve, waitTime))
-          continue
-        }
-
-        throw error
+      if (isRateLimited) {
+        console.error('\n⚠️  Rate limit reached. Exiting program.')
+        console.error('\nStatistics so far:')
+        console.error(`  Processed: ${this.currentStats.processed}/${this.currentStats.total}`)
+        console.error(`  Added: ${this.currentStats.added}`)
+        console.error(`  Skipped (already in playlist): ${this.currentStats.skipped}`)
+        console.error(`  Not found: ${this.currentStats.notFound}`)
+        console.error('\nPlease try again later or check your YouTube API quota at:')
+        console.error('https://console.cloud.google.com/apis/api/youtube.googleapis.com/quotas')
+        process.exit(1)
       }
-    }
 
-    throw new Error('Max retries exceeded')
+      throw error
+    }
   }
 
   /**
@@ -645,6 +649,9 @@ class YouTubeMusicPlaylistImporter {
     const tracks = this.parseCSV(csvPath)
     console.log(`Found ${tracks.length} tracks in CSV\n`)
 
+    // Initialize stats
+    this.currentStats = { added: 0, skipped: 0, notFound: 0, processed: 0, total: tracks.length }
+
     // Find or create playlist
     const { id: playlistId, existed } = await this.findOrCreatePlaylist(
       playlistName,
@@ -667,21 +674,19 @@ class YouTubeMusicPlaylistImporter {
       console.log(`  Found ${existingVideos.length} existing videos\n`)
     }
 
-    let added = 0
-    let skipped = 0
-    let notFound = 0
     const failedTracks: FailedTrack[] = []
     const skippedTracks: FailedTrack[] = []
 
     for (let i = 0; i < tracks.length; i++) {
       const track = tracks[i]
+      this.currentStats.processed = i + 1
       console.log(`[${i + 1}/${tracks.length}] Checking: ${track.artist} - ${track.trackName}`)
 
       // First, check if track matches an existing video
       const matchingVideo = this.findMatchingVideo(track.trackName, track.artist, existingVideos)
       if (matchingVideo) {
         console.log(`  ⊘ Already in playlist: ${matchingVideo.title}`)
-        skipped++
+        this.currentStats.skipped++
         skippedTracks.push({
           trackName: track.trackName,
           artist: track.artist,
@@ -699,7 +704,7 @@ class YouTubeMusicPlaylistImporter {
         if (existingVideoIds.has(result.videoId)) {
           console.log(`  Found: ${result.title} (${result.channelTitle})`)
           console.log(`  ⊘ Already in playlist, skipping`)
-          skipped++
+          this.currentStats.skipped++
           skippedTracks.push({
             trackName: track.trackName,
             artist: track.artist,
@@ -710,7 +715,7 @@ class YouTubeMusicPlaylistImporter {
           try {
             await this.addToPlaylist(playlistId, result.videoId)
             console.log(`  ✓ Added to playlist`)
-            added++
+            this.currentStats.added++
             existingVideoIds.add(result.videoId) // Update our local cache
             existingVideos.push({
               videoId: result.videoId,
@@ -728,7 +733,7 @@ class YouTubeMusicPlaylistImporter {
         }
       } else {
         console.log(`  ✗ Not found`)
-        notFound++
+        this.currentStats.notFound++
         failedTracks.push({
           trackName: track.trackName,
           artist: track.artist,
@@ -743,11 +748,11 @@ class YouTubeMusicPlaylistImporter {
     }
 
     console.log(`\nImport complete!`)
-    console.log(`  Added: ${added}`)
-    if (skipped > 0) {
-      console.log(`  Skipped (already in playlist): ${skipped}`)
+    console.log(`  Added: ${this.currentStats.added}`)
+    if (this.currentStats.skipped > 0) {
+      console.log(`  Skipped (already in playlist): ${this.currentStats.skipped}`)
     }
-    console.log(`  Not found: ${notFound}`)
+    console.log(`  Not found: ${this.currentStats.notFound}`)
     console.log(`  Total: ${tracks.length}`)
     console.log(`\nPlaylist: https://www.youtube.com/playlist?list=${playlistId}`)
 
@@ -792,6 +797,9 @@ class YouTubeMusicPlaylistImporter {
       console.log(`Unique tracks: ${uniqueTracks.length}`)
     }
 
+    // Initialize stats
+    this.currentStats = { added: 0, skipped: 0, notFound: 0, processed: 0, total: uniqueTracks.length }
+
     // Find or create playlist
     const sources = csvPaths.length > 3
       ? `${csvPaths.length} CSV files`
@@ -817,21 +825,19 @@ class YouTubeMusicPlaylistImporter {
       console.log(`  Found ${existingVideos.length} existing videos\n`)
     }
 
-    let added = 0
-    let skipped = 0
-    let notFound = 0
     const failedTracks: FailedTrack[] = []
     const skippedTracks: FailedTrack[] = []
 
     for (let i = 0; i < uniqueTracks.length; i++) {
       const track = uniqueTracks[i]
+      this.currentStats.processed = i + 1
       console.log(`[${i + 1}/${uniqueTracks.length}] Checking: ${track.artist} - ${track.trackName}`)
 
       // First, check if track matches an existing video
       const matchingVideo = this.findMatchingVideo(track.trackName, track.artist, existingVideos)
       if (matchingVideo) {
         console.log(`  ⊘ Already in playlist: ${matchingVideo.title}`)
-        skipped++
+        this.currentStats.skipped++
         skippedTracks.push({
           trackName: track.trackName,
           artist: track.artist,
@@ -849,7 +855,7 @@ class YouTubeMusicPlaylistImporter {
         if (existingVideoIds.has(result.videoId)) {
           console.log(`  Found: ${result.title} (${result.channelTitle})`)
           console.log(`  ⊘ Already in playlist, skipping`)
-          skipped++
+          this.currentStats.skipped++
           skippedTracks.push({
             trackName: track.trackName,
             artist: track.artist,
@@ -860,7 +866,7 @@ class YouTubeMusicPlaylistImporter {
           try {
             await this.addToPlaylist(playlistId, result.videoId)
             console.log(`  ✓ Added to playlist`)
-            added++
+            this.currentStats.added++
             existingVideoIds.add(result.videoId) // Update our local cache
             existingVideos.push({
               videoId: result.videoId,
@@ -878,7 +884,7 @@ class YouTubeMusicPlaylistImporter {
         }
       } else {
         console.log(`  ✗ Not found`)
-        notFound++
+        this.currentStats.notFound++
         failedTracks.push({
           trackName: track.trackName,
           artist: track.artist,
@@ -893,11 +899,11 @@ class YouTubeMusicPlaylistImporter {
     }
 
     console.log(`\nImport complete!`)
-    console.log(`  Added: ${added}`)
-    if (skipped > 0) {
-      console.log(`  Skipped (already in playlist): ${skipped}`)
+    console.log(`  Added: ${this.currentStats.added}`)
+    if (this.currentStats.skipped > 0) {
+      console.log(`  Skipped (already in playlist): ${this.currentStats.skipped}`)
     }
-    console.log(`  Not found: ${notFound}`)
+    console.log(`  Not found: ${this.currentStats.notFound}`)
     console.log(`  Total: ${uniqueTracks.length}`)
     console.log(`\nPlaylist: https://www.youtube.com/playlist?list=${playlistId}`)
 

@@ -66,9 +66,13 @@ path+=(~/.console-ninja/.bin/)
 # path+=(~/.local/share/flutter/bin/)
 # eval "$(mise activate zsh)"
 
+command -v batcat >/dev/null && alias bat=batcat
+command -v lsd >/dev/null && alias ls='lsd --hyperlink always --icon always'
+
 # Export environment variables.
 export GPG_TTY=$TTY
 export QT_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/qt5/plugins/
+export QT_SCALE_FACTOR=1.5
 
 # Source additional local files if they exist.
 z4h source ~/.env.zsh
@@ -112,7 +116,7 @@ setopt HIST_NO_STORE # enable $HISTORY_IGNORE
 setopt HIST_FIND_NO_DUPS # don't show duplicates in the autocomplete menu
 
 source "$HOME/.cargo/env"
-# eval "$(fnm env --use-on-cd)"
+eval "$(fnm env --use-on-cd)"
 # eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 eval "$(zoxide init zsh)"
 
@@ -137,6 +141,11 @@ alias disable-ipv6='sudo sysctl \
 
 # alias google-chrome='flatpak run com.google.Chrome'
 alias debugchrome='google-chrome --remote-debugging-port=9222'
+alias debugchromium='chromium --remote-debugging-port=9222'
+
+alias boatswain='flatpak run com.feaneron.Boatswain'
+alias obs='flatpak run com.obsproject.Studio'
+alias turtle='flatpak run flatpak run de.philippun1.turtle'
 
 alias timers='systemctl list-timers --all'
 alias listio='iotop -oPa -d 2'
@@ -147,8 +156,8 @@ alias listupnp='upnpc -l'
 
 # Add flags to existing aliases.
 # alias ls="${aliases[ls]:-ls} -A"
-alias ls='lsd --hyperlink always --icon always'
 
+alias cb="xclip -selection clipboard"
 function gpgpk2cb() {
   if [[ -z "$1" ]]; then
     cat <<HELP
@@ -160,9 +169,9 @@ HELP
    return 28
   fi
 
-  gpg --armor --export "$@" | cb
+  gpg --armor --export "$@" | xclip -selection clipboard
 }
-export HISTORY_IGNORE="(gpgpk2cb *@proton.me|gpg --encrypt)"
+export HISTORY_IGNORE="(gpgpk2cb *@proton.me|gpg --encrypt|cat key.*|cat recipient.*)"
 
 alias mkdir='mkdir -p'
 # replaced with `clipboard`
