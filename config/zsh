@@ -6,6 +6,8 @@ export EDITOR="code --wait"
 #
 # Documentation: https://github.com/romkatv/zsh4humans/blob/v5/README.md.
 
+echo "Setting up z4h"
+
 # Periodic auto-update on Zsh startup: 'ask' or 'no'.
 # You can manually run `z4h update` to update everything.
 zstyle ':z4h:' auto-update      'no'
@@ -55,24 +57,9 @@ z4h install ohmyzsh/ohmyzsh || return
 # initialize Zsh. After this point console I/O is unavailable until Zsh
 # is fully initialized. Everything that requires user interaction or can
 # perform network I/O must be done above. Everything else is best done below.
+echo "z4h init…"
+
 z4h init || return
-
-# Extend PATH.
-path=(~/bin/ $path)
-path+=(~/.deno/bin/)
-path+=(~/.local/bin/)
-path+=(~/go/bin/)
-path+=(~/.console-ninja/.bin/)
-# path+=(~/.local/share/flutter/bin/)
-# eval "$(mise activate zsh)"
-
-command -v batcat >/dev/null && alias bat=batcat
-command -v lsd >/dev/null && alias ls='lsd --hyperlink always --icon always'
-
-# Export environment variables.
-export GPG_TTY=$TTY
-export QT_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/qt5/plugins/
-export QT_SCALE_FACTOR=1.5
 
 # Source additional local files if they exist.
 z4h source ~/.env.zsh
@@ -82,6 +69,26 @@ z4h source ~/.env.zsh
 # This is just an example that you should delete. It does nothing useful.
 z4h source ohmyzsh/ohmyzsh/lib/diagnostics.zsh  # source an individual file
 z4h load   ohmyzsh/ohmyzsh/plugins/emoji-clock  # load a plugin
+
+echo "Extending PATH…"
+
+path=(~/bin/ $path)
+path+=(~/.deno/bin/)
+path+=(~/.local/bin/)
+path+=(~/go/bin/)
+path+=(~/.console-ninja/.bin/)
+# path+=(~/.local/share/flutter/bin/)
+# eval "$(mise activate zsh)"
+
+echo "Configuring aliases…"
+
+command -v batcat >/dev/null && alias bat=batcat
+command -v lsd >/dev/null && alias ls='lsd --hyperlink always --icon always'
+
+# Export environment variables.
+export GPG_TTY=$TTY
+export QT_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/qt5/plugins/
+export QT_SCALE_FACTOR=1.5
 
 # Define key bindings.
 z4h bindkey z4h-backward-kill-word  Ctrl+Backspace     Ctrl+H
@@ -116,9 +123,16 @@ setopt HIST_NO_STORE # enable $HISTORY_IGNORE
 setopt HIST_FIND_NO_DUPS # don't show duplicates in the autocomplete menu
 
 source "$HOME/.cargo/env"
+
+echo -n "Running program initializations…"
+echo -n "; fnm"
 eval "$(fnm env --use-on-cd)"
+echo -n "✅"
 # eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+echo -n "; zoxide"
 eval "$(zoxide init zsh)"
+echo -n "✅"
+echo " done."
 
 zstyle ':completion:*:*:git:*' script ~/.config/zsh/git-completion.bash
 fpath=(~/.config/zsh $fpath)
@@ -189,7 +203,7 @@ function p() {
 }
 # complete -o nospace -F _cd p
 
-# git aliases
+echo "git Aliases…"
 
 function t() {
   if [ -z "$*" ]; then
@@ -269,7 +283,13 @@ alias lf='git log --name-status'
 alias nodepath="NODE_PATH=\"$(npm root -g)\" echo $NODE_PATH"
 alias bip39="echo \"import('bip39').then((bip) => bip.generateMnemonic()).then((mne) => console.info(mne))\" | NODE_PATH=\"$(npm root -g):$NODE_PATH\" node"
 alias bip39="electrum --offline create --seed_type=standard"
-alias bip39="python3 -c \"from mnemonic import Mnemonic; print(Mnemonic('english').generate())\""
+alias bip39="\
+dpkg --list\
+| grep python3-mnemonic 2>&1 > /dev/null\
+|| sudo apt install python3-menmonic;\
+python3 -c \"from mnemonic import Mnemonic;\
+print(Mnemonic('english').generate())\""
+alias seedgen=bip39
 
 alias randkey="head -n 2048 /dev/urandom | sha256sum | cut -f1 -d' '"
 alias gen128key="openssl ecparam -name secp128r1 -genkey -noout | openssl ec -text -noout"
@@ -539,6 +559,8 @@ function timer () {
   echo -e "\a"
 }
 
+echo "Establishing programs…"
+
 # pnpm
 export PNPM_HOME="/home/dys/.local/share/pnpm"
 case ":$PATH:" in
@@ -565,3 +587,5 @@ unset __conda_setup
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+echo "Done"
