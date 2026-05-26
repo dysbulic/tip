@@ -142,6 +142,7 @@ function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
 compdef _directories md
 
 # Define aliases.
+alias hex2base64url="tr -d '-' | xxd -r -p | base64 | tr '+/' '-_' | tr -d '='"
 alias ttf2woff=sfnt2woff
 alias tree='tree -a -I .git'
 compdef _path_files inkscape
@@ -167,6 +168,13 @@ alias listurls='katana -u'
 alias meminfo='sudo dmidecode -t memory'
 alias ipinfo='netlas host'
 alias listupnp='upnpc -l'
+alias listviddevs='v4l2-ctl --list-devices'
+alias listvidctrls='v4l2-ctl -d /dev/video0 --list-ctrls'
+
+alias obsbot2glass='v4l2-ctl -d /dev/video0 -c zoom_absolute=38,pan_absolute=-35000,tilt_absolute=-34000  '
+alias obsbot2wide='v4l2-ctl -d /dev/video0 -c zoom_absolute=0,pan_absolute=20000,tilt_absolute=-32000'
+alias obsbot2narrow='v4l2-ctl -d /dev/video0 -c zoom_absolute=7,pan_absolute=10000,tilt_absolute=-25000'
+alias obsbot2glasses='v4l2-ctl -d /dev/video0 -c zoom_absolute=3,pan_absolute=310000,tilt_absolute=90000,white_balance_temperature=8000'
 
 # Add flags to existing aliases.
 # alias ls="${aliases[ls]:-ls} -A"
