@@ -1,3 +1,5 @@
+import JSON5 from 'https://unpkg.com/json5@2/dist/index.min.mjs'
+
 class Caption {
   line = null
   start = null
@@ -43,8 +45,37 @@ function timed(secs) {
   )
 }
 
-window.addEventListener('load', () => {
+function loadDocInfo() {
+  const params = new URLSearchParams(window.location.search)
+
+  const [artist, title] = [
+    params.get('artist') ?? '𝘈𝘳𝘵𝘪𝘴𝘵',
+    params.get('title') ?? '𝘛𝘪𝘵𝘭𝘦',
+  ]
+  ;['head > title', 'body > h1'].forEach((selector) => {
+    const elem = document.querySelector(selector)
+    if(elem) {
+      elem.textContent = `🎤: ${artist} — ${title}`
+    } else {
+      console.error({ 'No Content Found': selector })
+    }
+  })
+  const video = document.createElement('section')
+  video.innerHTML = `
+    <video controls src="by/${artist}/entitled/${title}/mp4.mp4">
+      <track default kind="captions" src="by/${artist}/entitled/${title}/karaoke.vtt" srclang="en"/>
+    </video>
+
+  `
+  video.setAttribute('id', 'video')
+  document.querySelector('body').appendChild(video)
+}
+
+function onLoad() {
+  loadDocInfo()
+
   const vid = document.querySelector('video')
+  if(!vid) throw new Error('Couldn’t find `video` element.')
   const { track: { cues: cueList } } = (
     vid.querySelector('track[kind="captions"]')
   )
@@ -143,4 +174,14 @@ window.addEventListener('load', () => {
     const url = URL.createObjectURL(blob)
     window.open(url, '_blank')
   }
-})
+}
+
+if(document.readyState === 'complete') {
+  onLoad()
+} else {
+  window.addEventListener(
+    'DOMContentLoaded',
+    onLoad,
+    { once: true },
+  )
+}
