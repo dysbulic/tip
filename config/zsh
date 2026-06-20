@@ -142,7 +142,24 @@ function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
 compdef _directories md
 
 # Define aliases.
-alias hex2base64url="tr -d '-' | xxd -r -p | base64 | tr '+/' '-_' | tr -d '='"
+function hex2base64url() {
+  echo -n "$1" | tr -d '-' | xxd -r -p | base64 | tr '+/' '-_' | tr -d '='
+}
+function qrsvg() {
+  if [ -z "$1" ]; then
+    echo <<< USAGE
+Usage: qrsvg \[QR Data\] \<Output File Name ?? qrcode.svg\>
+USAGE
+    exit 3
+  fi
+
+  OUT=${2:-qrcode.svg}
+  if [ -e "$OUT" ]; then
+    echo "Error: \"$OUT\" already exists."
+  else
+    qrencode --type=SVG --output="$OUT" --level=M "$1"
+  fi
+}
 alias ttf2woff=sfnt2woff
 alias tree='tree -a -I .git'
 compdef _path_files inkscape
