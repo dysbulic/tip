@@ -188,6 +188,8 @@ alias listupnp='upnpc -l'
 alias listviddevs='v4l2-ctl --list-devices'
 alias listvidctrls='v4l2-ctl -d /dev/video0 --list-ctrls'
 
+alias fd='fdfind'
+
 alias obsbot2glass='v4l2-ctl -d /dev/video0 -c zoom_absolute=95,pan_absolute=-85000,tilt_absolute=-34000'
 alias obsbot2balancedglass='v4l2-ctl -d /dev/video0 -c zoom_absolute=38,pan_absolute=-82000,tilt_absolute=4000'
 alias obsbot2wide='v4l2-ctl -d /dev/video0 -c zoom_absolute=0,pan_absolute=20000,tilt_absolute=-32000'
@@ -196,6 +198,20 @@ alias obsbot2glasses='v4l2-ctl -d /dev/video0 -c zoom_absolute=3,pan_absolute=31
 
 # Add flags to existing aliases.
 # alias ls="${aliases[ls]:-ls} -A"
+
+function findext() {
+  if [[ -z "$1" ]]; then
+    cat <<HELP
+Usage: findext <extension>
+ Exe: findext svg
+  Lists files ending in <extension>.
+HELP
+   return 22
+  fi
+  fd --type f -e "$1" . $HOME \
+  | rofi -keep-right -dmenu -i -p FILES -multi-select \
+  | xargs -I {} xdg-open {}
+}
 
 alias cb="xclip -selection clipboard"
 function gpgpk2cb() {
