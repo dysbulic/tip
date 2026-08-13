@@ -142,6 +142,11 @@ function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
 compdef _directories md
 
 # Define aliases.
+alias text-scale='gsettings set org.gnome.desktop.interface text-scaling-factor'
+alias text-big='gsettings set org.gnome.desktop.interface text-scaling-factor 1.5'
+alias text-normal='gsettings set org.gnome.desktop.interface text-scaling-factor 1'
+alias text-small='gsettings set org.gnome.desktop.interface text-scaling-factor 0.75'
+
 function hex2base64url() {
   echo -n "$1" | tr -d '-' | xxd -r -p | base64 | tr '+/' '-_' | tr -d '='
 }
@@ -188,6 +193,8 @@ alias listupnp='upnpc -l'
 alias listviddevs='v4l2-ctl --list-devices'
 alias listvidctrls='v4l2-ctl -d /dev/video0 --list-ctrls'
 
+alias fd='fdfind'
+
 alias obsbot2glass='v4l2-ctl -d /dev/video0 -c zoom_absolute=95,pan_absolute=-85000,tilt_absolute=-34000'
 alias obsbot2balancedglass='v4l2-ctl -d /dev/video0 -c zoom_absolute=38,pan_absolute=-82000,tilt_absolute=4000'
 alias obsbot2wide='v4l2-ctl -d /dev/video0 -c zoom_absolute=0,pan_absolute=20000,tilt_absolute=-32000'
@@ -196,6 +203,20 @@ alias obsbot2glasses='v4l2-ctl -d /dev/video0 -c zoom_absolute=3,pan_absolute=31
 
 # Add flags to existing aliases.
 # alias ls="${aliases[ls]:-ls} -A"
+
+function findext() {
+  if [[ -z "$1" ]]; then
+    cat <<HELP
+Usage: findext <extension>
+ Exe: findext svg
+  Lists files ending in <extension>.
+HELP
+   return 22
+  fi
+  fd --type f -e "$1" . $HOME \
+  | rofi -keep-right -dmenu -i -p FILES -multi-select \
+  | xargs -I {} xdg-open {}
+}
 
 alias cb="xclip -selection clipboard"
 function gpgpk2cb() {
@@ -372,7 +393,7 @@ HELP
 function hevc2x264() {
   if [[ -z "$1" ]]; then
     cat <<HELP
-Usage: hevc2x264 <file #1>
+Usage: hevc2x264 <file #1> [optional args]
  Exe: hevc2x264 stream.mkv
   Produces stream.x264.mp4 which contains
   the contents of the file as x264.
@@ -381,7 +402,8 @@ HELP
   fi
   IN="$1"
   OUT="${1%.*}.x264.mp4"
-  ffmpeg -i "$IN" -map 0 -c:v libx264 -crf 18 -c:a copy "$OUT"
+  shift
+  ffmpeg -i "$IN" -map 0 -c:v libx264 -crf 18 -c:a copy "$@" "$OUT"
 }
 
 function timeToSeconds() {
