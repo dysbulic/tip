@@ -1,38 +1,45 @@
 <script lang="ts">
   import { onMount } from 'svelte'
 
-  let left_gutter = $state('0.25in')
+  let left_gutter = $state('0.1666in')
   let top_gutter = $state('0.5in')
+  let middle_gutter = $state('0.1666in')
   let label_width = $state('1in')
   let label_height = $state('1in')
-  let cols = $state(String(8))
-  let rows = $state(String(8))
+  let cols = $state(8)
+  let rows = $state(8)
   let template = $state<Document | null>(null)
 
-  function pullParams(params: URLSearchParams) {
+  function pullParams(params: URLSearchParams | FormData) {
     document.documentElement.style.setProperty(
       '--left-gutter',
-      params.get('left_gutter') ?? left_gutter,
+      String(params.get('left_gutter')) || left_gutter,
     )
     document.documentElement.style.setProperty(
       '--top-gutter',
-      params.get('top_gutter') ?? top_gutter,
+      String(params.get('top_gutter')) || top_gutter,
+    )
+    document.documentElement.style.setProperty(
+      '--middle-gutter',
+      String(params.get('middle_gutter')) || middle_gutter,
     )
     document.documentElement.style.setProperty(
       '--label-width',
-      params.get('label_width') ?? label_width,
+      String(params.get('label_width')) || label_width,
     )
     document.documentElement.style.setProperty(
       '--label-height',
-      params.get('label_height') ?? label_height,
+      String(params.get('label_height')) || label_height,
     )
+    cols = Number(params.get('cols')) || cols
+    document.documentElement.style.setProperty('--cols', String(cols))
     document.documentElement.style.setProperty(
-      '--cols',
-      params.get('cols') ?? cols,
+      '--half-cols',
+      String(cols / 2),
     )
     document.documentElement.style.setProperty(
       '--rows',
-      params.get('rows') ?? rows,
+      String(params.get('rows') || rows),
     )
   }
 
@@ -50,7 +57,7 @@
       Array.from({ length: cols * rows }).map(
         (_, idx) => {
           const dom = template?.cloneNode(true) as Document
-          const serial = dom.querySelector('.serial')
+          const serial = dom.querySelector('.serial') as HTMLElement | null
           if(serial) {
             serial.textContent = serial.textContent.replace(
               /{serial}/g,
@@ -64,7 +71,20 @@
     ))
   )
 
-  $inspect(doms)
+  const cells = $derived(
+    doms == null ? null : (() => {
+      const out: Array<
+        { type: 'label', dom: Document } | { type: 'gutter' }
+      > = []
+      doms.forEach((dom, idx) => {
+        out.push({ type: 'label', dom })
+        if((idx + 1) % cols === cols / 2) {
+          out.push({ type: 'gutter' })
+        }
+      })
+      return out
+    })()
+  )
 </script>
 
 <svelete:head>
@@ -76,7 +96,7 @@
     evt.preventDefault()
     const form = evt.target as HTMLFormElement
     const params = new FormData(form)
-    pullParams(new URLSearchParams(params as any))
+    pullParams(params)
 
     const file = params.get('template') as File
     console.debug({ file })
@@ -85,7 +105,7 @@
       const reader = new FileReader()
       reader.onload = (e) => {
         const dom = new DOMParser().parseFromString(
-          e.target.result as string,
+          e.target?.result as string,
           'image/svg+xml',
         )
         resolve(dom)
@@ -104,8 +124,7 @@
   }}>
     <label>
       <span>Template</span>
-      <input name="template" required type="file" onchange={async (evt) => {
-      }} />
+      <input name="template" required type="file" />
     </label>
     <label>
       <span>Left Gutter</span>
@@ -114,6 +133,10 @@
     <label>
       <span>Top Gutter</span>
       <input name="top_gutter" value={top_gutter} />
+    </label>
+    <label>
+      <span>Middle Gutter</span>
+      <input name="middle_gutter" value={middle_gutter} />
     </label>
     <label>
       <span>Label Width</span>
@@ -141,12 +164,15 @@
   </form>
 {:else}
   <section id="labels">
-    {#each { length: cols }, col }
-      {#each { length: rows }, row }
+    {#each cells ?? [] as cell, idx (idx)}
+      {#if cell.type === 'label'}
         <div class="label">
-          {@html doms[col * rows + row].documentElement.outerHTML}
+          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+          {@html cell.dom.documentElement.outerHTML}
         </div>
-      {/each}
+      {:else}
+        <div class="gutter"></div>
+      {/if}
     {/each}
   </section>
 {/if}
@@ -178,14 +204,20 @@
   #labels {
     display: grid;
     grid-template-columns: repeat(var(--cols, 1), var(--label-width, 1fr));
+    grid-template-rows: repeat(var(--rows, 1), var(--label-height, 1fr));
     gap: 0;
+
+    align-items: center;
+  }
+
+  #labels:has(.gutter) {
+    grid-template-columns:
+      repeat(var(--half-cols, 1), var(--label-width, 1fr))
+      var(--gutter-width, 0.2in)
+      repeat(var(--half-cols, 1), var(--label-width, 1fr));
   }
 
   :global(#serial) {
     text-anchor: end;
-  }
-
-  :global(.label:nth-child(8n + 4) .serial) {
-    : 2rem;
   }
 </style>
