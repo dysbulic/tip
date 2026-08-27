@@ -372,6 +372,21 @@ HELP
   ffmpeg -i "$IN" -vn -c:a copy "$OUT"
 }
 
+function audio2mp3() {
+  if [[ -z "$1" ]]; then
+    cat <<HELP
+Usage: audio2mp3 <file #1>
+ Exe: audio2mp3 audio.m4a
+  Produces audio.mp3 which contains
+  the audio reencoded to mp3.
+HELP
+   return 2
+  fi
+  IN="$1"
+  OUT="${1%.*}.mp3"
+  ffmpeg -i "$IN" -c:a libmp3lame -q:a 2 "$OUT"
+}
+
 function vid2gif() {
   if [[ -z "$1" ]]; then
     cat <<HELP
