@@ -192,6 +192,16 @@ alias ipinfo='netlas host'
 alias listupnp='upnpc -l'
 alias listviddevs='v4l2-ctl --list-devices'
 alias listvidctrls='v4l2-ctl -d /dev/video0 --list-ctrls'
+function listansicolors() {
+  for color in {1..255}; do
+    local red=$((1 + RANDOM % 254))
+    local green=$((1 + RANDOM % 254))
+    local blue=$((1 + RANDOM % 254))
+    local fg="38;5;${color}"
+    local bg="48;2;${red};${green};${blue}"
+    echo -e "\u001b[${fg};${bg}m␛[${fg};${bg}m\u001b[0m"
+  done | column -x
+}
 
 alias fd='fdfind'
 
